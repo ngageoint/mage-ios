@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
+		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
@@ -23,9 +25,7 @@
 		F7A94D8B18AD9CB000CB9EE0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */; };
 		F7A94D9318AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */; };
 		F7A94D9518AD9CB000CB9EE0 /* MageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D9418AD9CB000CB9EE0 /* MageTests.m */; };
-		F7A94D9F18AD9CF500CB9EE0 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D9E18AD9CF500CB9EE0 /* Storyboard.storyboard */; };
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
-		F7A94DA318AE89E300CB9EE0 /* Storyboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DA218AE89E300CB9EE0 /* Storyboard_iPad.storyboard */; };
 		F7A94DA918B50FF600CB9EE0 /* LeftToRightSeque.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DA818B50FF600CB9EE0 /* LeftToRightSeque.m */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
@@ -43,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		7E2901AEF10B4754A517226F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D6618AD9CB000CB9EE0 /* Mage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,9 +65,7 @@
 		F7A94D9018AD9CB000CB9EE0 /* MageTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MageTests-Info.plist"; sourceTree = "<group>"; };
 		F7A94D9218AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F7A94D9418AD9CB000CB9EE0 /* MageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTests.m; sourceTree = "<group>"; };
-		F7A94D9E18AD9CF500CB9EE0 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		F7A94DA218AE89E300CB9EE0 /* Storyboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard_iPad.storyboard; path = ../Storyboard_iPad.storyboard; sourceTree = "<group>"; };
 		F7A94DA718B50FF600CB9EE0 /* LeftToRightSeque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftToRightSeque.h; sourceTree = "<group>"; };
 		F7A94DA818B50FF600CB9EE0 /* LeftToRightSeque.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftToRightSeque.m; sourceTree = "<group>"; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -143,18 +143,18 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
+				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
-				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
-				F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */,
-				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
-				F7A94D9E18AD9CF500CB9EE0 /* Storyboard.storyboard */,
-				F7A94DA218AE89E300CB9EE0 /* Storyboard_iPad.storyboard */,
 				F7A94DA718B50FF600CB9EE0 /* LeftToRightSeque.h */,
 				F7A94DA818B50FF600CB9EE0 /* LeftToRightSeque.m */,
 				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
 				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
+				F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */,
+				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
+				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -248,6 +248,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
@@ -265,11 +266,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
+				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
-				F7A94D9F18AD9CF500CB9EE0 /* Storyboard.storyboard in Resources */,
-				F7A94DA318AE89E300CB9EE0 /* Storyboard_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +349,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C3A805E18B6F67B00B1BA12 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C3A806018B6F67B00B1BA12 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
 		F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
