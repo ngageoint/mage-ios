@@ -14,22 +14,17 @@
 
 @implementation LocalAuthentication
 
-- (id) initWithURL: (NSURL *) baseURL andParameters: (NSDictionary *) parameters {
+@synthesize delegate;
+
+- (id) initWithURL: (NSURL *) url {
 	if (self = [super init]) {
-		_baseURL = baseURL;
-		_parameters = parameters;
+		_baseURL = url;
 	}
 	
 	return self;
 }
 
-- (void) login {
-	NSString *username = [_parameters objectForKey:@"username"];
-	NSString *password = [_parameters objectForKey:@"password"];
-	NSString *uid = [_parameters objectForKey:@"uid"];
-	
-	NSDictionary *parameters = @{@"username": username, @"password": password, @"uid": uid};
-  
+- (void) loginWithParameters: (NSDictionary *) parameters {
 	AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 	manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
 	manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONReadingAllowFragments];
@@ -38,16 +33,14 @@
 	[manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		User *user = [[User alloc] initWithJSON:responseObject];
 		
-		if (_delegate) {
-			[_delegate loginSuccess:user];
+		if (delegate) {
+			[delegate authenticationWasSuccessful:user];
 		}
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		if (_delegate) {
-			[_delegate loginFailure];
+		if (delegate) {
+			[delegate authenticationHadFailure];
 		}
 	}];
 }
-
-
 
 @end
