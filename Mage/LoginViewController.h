@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LocalAuthentication.h"
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController<LoginDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *usernameField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;
