@@ -1,7 +1,8 @@
 .DS_Store
 
-Mage/Mage.xcworkspace/
+Mage.xcworkspace
 
-Mage/Podfile.lock
+Podfile.lock
 
-Mage/Pods/
+Pods
+
