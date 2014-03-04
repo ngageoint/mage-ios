@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "LocalAuthentication.h"
 
 @interface LoginViewController ()
 
@@ -14,15 +15,33 @@
 
 @implementation LoginViewController
 
-- (BOOL) verifyLogin {
-    NSString *username = [_usernameField text];
-    NSString *password = [_passwordField text];
-    
-    if ([username isEqualToString:@"drbarela"] && [password isEqualToString:@"derp"]) {
-        // good to go
-        return TRUE;
-    }
-    return FALSE;
+LocalAuthentication *authentication;
+
+- (void) loginSuccess:(User *)token {
+	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+}
+
+- (void) loginFailure {
+	// do something on failed login
+}
+
+- (void) verifyLogin {
+	// setup authentication
+	// TODO this is the right way to grab device uid, but we do not have registration stuff done yet
+	// so for now jsut use hardcoded uid of 12345.
+//	NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
+//	NSString *uidString = uid.UUIDString;
+	NSString *uidString = @"12345";
+	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+														 _usernameField.text, @"username",
+														 _passwordField.text, @"password",
+														 uidString, @"uid",
+														 nil];
+	authentication = [[LocalAuthentication alloc] initWithURL:[NSURL URLWithString:_serverField.text] andParameters:parameters];
+	authentication.delegate = self;
+	
+	// TODO might want to mask here or put a spinner on the login button
+	[authentication login];
 }
 
 - (void) focusOnCorrectField: (id)sender {
@@ -48,14 +67,14 @@
 - (IBAction)resignAndLogin:(id)sender
 {
     [self focusOnCorrectField: sender];
-    if ([self verifyLogin]) {
-        [self performSegueWithIdentifier:@"LoginSegue" sender:sender];
-    }
+		[self verifyLogin];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     [self focusOnCorrectField: sender];
-    return [self verifyLogin];
+	[self verifyLogin];
+	
+	return NO;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
@@ -63,7 +82,7 @@
 {
     [_usernameField setText:@""];
     [_passwordField setText:@""];
-    [_serverField setText:@"http://***REMOVED***"];
+    [_serverField setText:@"https://***REMOVED***"];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -79,6 +98,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+		
 }
 
 - (void)didReceiveMemoryWarning

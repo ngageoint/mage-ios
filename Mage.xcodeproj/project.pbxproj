@@ -10,8 +10,6 @@
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
-		F783AD3018B7F50800BCED14 /* SANSB___.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F783AD2F18B7F50800BCED14 /* SANSB___.TTF */; };
-		F783AD3218B7F52D00BCED14 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F783AD3118B7F52D00BCED14 /* fontawesome-webfont.ttf */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
@@ -50,8 +48,6 @@
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		7E2901AEF10B4754A517226F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		F783AD2F18B7F50800BCED14 /* SANSB___.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SANSB___.TTF"; path = "../../../../../svn/mage/server/branches/dev/public/fonts/SANSB___.TTF"; sourceTree = "<group>"; };
-		F783AD3118B7F52D00BCED14 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../../../../../svn/mage/server/branches/dev/public/vendor/font-awesome/font/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* Mage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,35 +107,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F783AD2C18B7E44500BCED14 /* ThrowawayModules */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ThrowawayModules;
-			sourceTree = "<group>";
-		};
-		F783AD2D18B7F48E00BCED14 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F783AD2E18B7F49800BCED14 /* Fonts */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		F783AD2E18B7F49800BCED14 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				F783AD3118B7F52D00BCED14 /* fontawesome-webfont.ttf */,
-				F783AD2F18B7F50800BCED14 /* SANSB___.TTF */,
-			);
-			name = Fonts;
-			sourceTree = "<group>";
-		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
-				F783AD2D18B7F48E00BCED14 /* Resources */,
-				F783AD2C18B7E44500BCED14 /* ThrowawayModules */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
@@ -301,9 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F783AD3018B7F50800BCED14 /* SANSB___.TTF in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
-				F783AD3218B7F52D00BCED14 /* fontawesome-webfont.ttf in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
