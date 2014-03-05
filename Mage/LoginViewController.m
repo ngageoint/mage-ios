@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "LocalAuthentication.h"
+#import "User.h"
 
 @interface LoginViewController ()
 
@@ -15,20 +16,31 @@
 
 @implementation LoginViewController
 
-LocalAuthentication *authentication;
+id<Authentication> _authentication;
 
-- (void) loginSuccess:(User *)token {
+User *_user;
+
+- (void) authenticationWasSuccessful:(User *) user {
+	_user = user;
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
-- (void) loginFailure {
+- (void) authenticationHadFailure {
 	// do something on failed login
+	UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Login failure"
+                          message:@"The username or password you entered is incorrect"
+                          delegate:nil
+                          cancelButtonTitle:@"Dismiss"
+                          otherButtonTitles:nil];
+	
+	[alert show];
 }
 
 - (void) verifyLogin {
 	// setup authentication
 	// TODO this is the right way to grab device uid, but we do not have registration stuff done yet
-	// so for now jsut use hardcoded uid of 12345.
+	// so for now just use hardcoded uid of 12345.
 //	NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
 //	NSString *uidString = uid.UUIDString;
 	NSString *uidString = @"12345";
@@ -37,11 +49,10 @@ LocalAuthentication *authentication;
 														 _passwordField.text, @"password",
 														 uidString, @"uid",
 														 nil];
-	authentication = [[LocalAuthentication alloc] initWithURL:[NSURL URLWithString:_serverField.text] andParameters:parameters];
-	authentication.delegate = self;
+
 	
 	// TODO might want to mask here or put a spinner on the login button
-	[authentication login];
+	[_authentication loginWithParameters: parameters];
 }
 
 - (void) focusOnCorrectField: (id)sender {
@@ -57,6 +68,11 @@ LocalAuthentication *authentication;
     if (_serverField.enabled) {
         [_serverField setEnabled:NO];
         button.selected = NO;
+		
+		// TODO need a better way to reset url
+		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
+		_authentication = [Authentication authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]];
+		_authentication.delegate = self;
     } else {
         [_serverField setEnabled:YES];
         button.selected = YES;
@@ -83,6 +99,9 @@ LocalAuthentication *authentication;
     [_usernameField setText:@""];
     [_passwordField setText:@""];
     [_serverField setText:@"https://***REMOVED***"];
+	
+	authentication = [Authentication authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]];
+	authentication.delegate = self;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -98,7 +117,6 @@ LocalAuthentication *authentication;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-		
 }
 
 - (void)didReceiveMemoryWarning
