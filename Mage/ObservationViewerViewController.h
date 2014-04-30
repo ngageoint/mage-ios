@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "RESideMenu.h"
+#import <MapKit/MapKit.h>
 
 @interface ObservationViewerViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
+@property (weak, nonatomic) IBOutlet MKMapView *map;
 
 @end
