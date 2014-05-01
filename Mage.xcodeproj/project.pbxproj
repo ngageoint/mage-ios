@@ -16,6 +16,7 @@
 		F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationsViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
+		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
@@ -37,6 +38,7 @@
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
+		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +69,8 @@
 		F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewerViewController.m; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
+		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageRootViewController.h; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageRootViewController.m; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* Mage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +99,8 @@
 		F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
+		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageFilterMenuViewController.h; sourceTree = "<group>"; };
 		F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageFilterMenuViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,6 +201,10 @@
 				F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */,
 				F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */,
 				F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */,
+				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
+				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
+				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -363,11 +373,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */,
+				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F7A94DA918B50FF600CB9EE0 /* LeftToRightSeque.m in Sources */,
 				F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */,
 				F7531EDF190FDF8D00CA084C /* MageTabViewController.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
+				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewerViewController.m in Sources */,
