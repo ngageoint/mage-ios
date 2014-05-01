@@ -24,6 +24,9 @@
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)];
         [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    [defaults setObject: _locationServicesSwitch.isOn ? @"YES" : @"NO" forKey:@"locationServiceEnabled"];
+    [defaults synchronize];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -38,6 +41,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    [self.locationServicesSwitch setOn:[[defaults objectForKey:@"locationServiceEnabled"] boolValue] animated:NO];
+    [self.locationServicesSwitch addTarget:self action:@selector(locationServicesSwitched:) forControlEvents:UIControlEventValueChanged];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;

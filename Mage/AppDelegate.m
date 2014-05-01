@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <User.h>
 
 @implementation AppDelegate
 
@@ -16,6 +17,24 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+    NSURL *sdkPrefsFile = [[NSBundle mainBundle]
+                               URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
+    NSDictionary *sdkPrefs =
+    [NSDictionary dictionaryWithContentsOfURL:sdkPrefsFile];
+    //[[NSUserDefaults standardUserDefaults] registerDefaults:sdkPrefs];
+    
+    NSURL *defaultPrefsFile = [[NSBundle mainBundle]
+                               URLForResource:@"preferences" withExtension:@"plist"];
+    NSDictionary *defaultPrefs =
+    [NSDictionary dictionaryWithContentsOfURL:defaultPrefsFile];
+    
+    NSMutableDictionary *allPrefs = [[NSMutableDictionary alloc] initWithDictionary:sdkPrefs];
+    [allPrefs addEntriesFromDictionary:defaultPrefs];
+    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPrefs];
+    
+    
+    
 //    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 //    // Override point for customization after application launch.
 //    self.window.backgroundColor = [UIColor whiteColor];

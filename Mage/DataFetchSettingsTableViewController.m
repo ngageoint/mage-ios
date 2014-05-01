@@ -24,6 +24,9 @@
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:1];
         [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    [defaults setObject: _dataFetchSwitch.isOn ? @"YES" : @"NO" forKey:@"dataFetchEnabled"];
+    [defaults synchronize];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -38,6 +41,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    [self.dataFetchSwitch setOn:[[defaults objectForKey:@"dataFetchEnabled"] boolValue] animated:NO];
+    [self.dataFetchSwitch addTarget:self action:@selector(dataFetchSwitched:) forControlEvents:UIControlEventValueChanged];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;

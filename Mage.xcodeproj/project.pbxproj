@@ -39,6 +39,7 @@
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
+		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +102,7 @@
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
+		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageFilterMenuViewController.h; sourceTree = "<group>"; };
 		F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageFilterMenuViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -216,6 +218,7 @@
 				F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */,
 				F7A94D7718AD9CB000CB9EE0 /* main.m */,
 				F7A94D7918AD9CB000CB9EE0 /* Mage-Prefix.pch */,
+				F7DEF91C1912A6940026B9D0 /* preferences.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
+				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 			);

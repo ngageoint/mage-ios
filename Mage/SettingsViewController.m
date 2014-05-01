@@ -10,6 +10,9 @@
 
 @interface SettingsViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
+@property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+
 @end
 
 @implementation SettingsViewController
@@ -26,7 +29,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
 	// Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    if ([[defaults objectForKey:@"locationServiceEnabled"] boolValue]) {
+        [self.locationServicesStatus setText:@"On"];
+    } else {
+        [self.locationServicesStatus setText:@"Off"];
+    }
+    
+    if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
+        [self.dataFetchStatus setText:@"On"];
+    } else {
+        [self.dataFetchStatus setText:@"Off"];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning
