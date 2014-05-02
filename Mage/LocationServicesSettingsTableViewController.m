@@ -92,13 +92,13 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([segue.identifier hasPrefix:@"time_"]) {
-        TimePickerTableViewController *vc = [segue destinationViewController];
-        NSDictionary *timeDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:5]];
-        NSDictionary *frequencies = [timeDictionary valueForKey:@"frequencies"];
-        vc.times = [frequencies allKeys];
+    if([segue.identifier hasPrefix:@"value_"]) {
+        ValuePickerTableViewController *vc = [segue destinationViewController];
+        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
+        NSDictionary *frequencies = [valueDictionary valueForKey:@"values"];
+        vc.displayValues = [frequencies allKeys];
         vc.values = [frequencies allValues];
-        vc.preferenceKey = [timeDictionary valueForKey:@"preferenceKey"];
+        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
 }
 

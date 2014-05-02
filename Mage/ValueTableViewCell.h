@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TimeTableViewCell : UITableViewCell
+@interface ValueTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (nonatomic, strong) NSString *preferenceValue;
 
 @end

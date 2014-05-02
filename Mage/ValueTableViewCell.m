@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
-#import "TimeTableViewCell.h"
+#import "ValueTableViewCell.h"
 
-@implementation TimeTableViewCell
+@implementation ValueTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

@@ -10,8 +10,8 @@
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
-		F721B3661913E61B00F1CAB4 /* TimePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* TimePickerTableViewController.m */; };
-		F721B3691913E6E000F1CAB4 /* TimeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* TimeTableViewCell.m */; };
+		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
+		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationsViewController.m */; };
@@ -58,10 +58,10 @@
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		7E2901AEF10B4754A517226F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		F721B3641913E61B00F1CAB4 /* TimePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimePickerTableViewController.h; sourceTree = "<group>"; };
-		F721B3651913E61B00F1CAB4 /* TimePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimePickerTableViewController.m; sourceTree = "<group>"; };
-		F721B3671913E6E000F1CAB4 /* TimeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTableViewCell.h; sourceTree = "<group>"; };
-		F721B3681913E6E000F1CAB4 /* TimeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTableViewCell.m; sourceTree = "<group>"; };
+		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
+		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
+		F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
+		F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTableViewCell.m; sourceTree = "<group>"; };
 		F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageNavigationMenuViewController.h; sourceTree = "<group>"; };
 		F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationMenuViewController.m; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -203,10 +203,10 @@
 				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
 				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
 				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
-				F721B3641913E61B00F1CAB4 /* TimePickerTableViewController.h */,
-				F721B3651913E61B00F1CAB4 /* TimePickerTableViewController.m */,
-				F721B3671913E6E000F1CAB4 /* TimeTableViewCell.h */,
-				F721B3681913E6E000F1CAB4 /* TimeTableViewCell.m */,
+				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
+				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
+				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
+				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -378,10 +378,10 @@
 			files = (
 				F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
-				F721B3661913E61B00F1CAB4 /* TimePickerTableViewController.m in Sources */,
+				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */,
 				F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */,
-				F721B3691913E6E000F1CAB4 /* TimeTableViewCell.m in Sources */,
+				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,

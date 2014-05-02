@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
-#import "TimePickerTableViewController.h"
-#import "TimeTableViewCell.h"
+#import "ValuePickerTableViewController.h"
+#import "ValueTableViewCell.h"
 
-@interface TimePickerTableViewController ()
+@interface ValuePickerTableViewController ()
 
 @end
 
-@implementation TimePickerTableViewController
+@implementation ValuePickerTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -46,25 +46,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _times.count;
+    return _values.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"timeTableCell";
-    TimeTableViewCell *cell = [tableView
+    static NSString *CellIdentifier = @"valueTableCell";
+    ValueTableViewCell *cell = [tableView
                               dequeueReusableCellWithIdentifier:CellIdentifier
                               forIndexPath:indexPath];
     
     long row = [indexPath row];
     
-    cell.timeLabel.text = _times[row];
+    cell.valueLabel.text = _displayValues[row];
     cell.preferenceValue = _values[row];
     
     NSLog(@"Selected is %@", _selected);
     NSLog(@"Row: %@", _values[row]);
-    NSLog(@"times row: %@", _times[row]);
+    NSLog(@"times row: %@", _displayValues[row]);
     
     if ([_values[row] unsignedLongLongValue] == [_selected unsignedLongLongValue]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -82,7 +82,7 @@
     long row = [indexPath row];
     _selected = _values[row];
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    TimeTableViewCell *cell = (TimeTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    ValueTableViewCell *cell = (ValueTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     [defaults setObject: cell.preferenceValue forKey:_preferenceKey];
     [defaults synchronize];
     
