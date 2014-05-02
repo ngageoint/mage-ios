@@ -62,16 +62,10 @@
     cell.valueLabel.text = _displayValues[row];
     cell.preferenceValue = _values[row];
     
-    NSLog(@"Selected is %@", _selected);
-    NSLog(@"Row: %@", _values[row]);
-    NSLog(@"times row: %@", _displayValues[row]);
-    
     if ([_values[row] unsignedLongLongValue] == [_selected unsignedLongLongValue]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        NSLog(@"the same");
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        NSLog(@"different");
     }
     
     return cell;
