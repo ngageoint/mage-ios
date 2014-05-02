@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TimePickerTableViewController.h"
 
 @interface DataFetchSettingsTableViewController : UITableViewController
 
