@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "RESideMenu.h"
+#import "ValuePickerTableViewController.h"
+
 
 @interface SettingsViewController : UITableViewController
 

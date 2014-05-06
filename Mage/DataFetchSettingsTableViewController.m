@@ -11,6 +11,8 @@
 @interface DataFetchSettingsTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UISwitch *dataFetchSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *userFetchFrequencyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *observationFetchFrequencyLabel;
 
 @end
 
@@ -51,6 +53,32 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setPreferenceDisplayLabel:self.observationFetchFrequencyLabel forPreference:@"observationFetch"];
+    [self setPreferenceDisplayLabel:self.userFetchFrequencyLabel forPreference:@"userFetch"];
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
+{
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
+    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    
+    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    NSLog(@"frequency %@", frequency);
+    
+    for (id key in frequencies) {
+        NSLog(@"key: %@", key);
+        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
+            [label setText:key];
+        }
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning

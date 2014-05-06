@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+@property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
 
 @end
 
@@ -49,6 +50,8 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
+    
+    [self.imageUploadSizeLabel setText:[defaults objectForKey:@"imageUploadSizeDisplay"]];
 
 }
 
@@ -60,10 +63,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"timeSettingSegue"]) {
-        UIViewController *nav = [segue destinationViewController];
-//        FirmyVC *firmyVC = (FirmyVC *)nav.topViewController;
-//        firmyVC.tabFirmy = self.tabFirmy;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([segue.identifier hasPrefix:@"value_"]) {
+        ValuePickerTableViewController *vc = [segue destinationViewController];
+        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
+        NSDictionary *frequencies = [valueDictionary valueForKey:@"values"];
+        vc.displayValues = [frequencies allKeys];
+        vc.values = [frequencies allValues];
+        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
 }
 

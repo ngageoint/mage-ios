@@ -11,6 +11,8 @@
 @interface LocationServicesSettingsTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UISwitch *locationServicesSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *gpsSensitivityLabel;
 
 @end
 
@@ -53,6 +55,33 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
+    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
+{
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
+    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    
+    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    NSLog(@"frequency %@", frequency);
+    
+    for (id key in frequencies) {
+        NSLog(@"key: %@", key);
+        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
+            [label setText:key];
+        }
+    }
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -89,8 +118,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
