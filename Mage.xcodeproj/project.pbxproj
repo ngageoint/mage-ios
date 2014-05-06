@@ -26,7 +26,6 @@
 		F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */; };
 		F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */; };
-		F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */; };
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
 		F7A94D8818AD9CB000CB9EE0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */; };
 		F7A94D8918AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
@@ -87,7 +86,6 @@
 		F7A94D7918AD9CB000CB9EE0 /* Mage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mage-Prefix.pch"; sourceTree = "<group>"; };
 		F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mage.xcdatamodel; sourceTree = "<group>"; };
 		F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F7A94D8618AD9CB000CB9EE0 /* MageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -181,7 +179,6 @@
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
 				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
 				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
-				F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */,
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
@@ -379,7 +376,6 @@
 				F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
-				F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */,
 				F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
@@ -625,19 +621,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */,
-			);
-			currentVersion = F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */;
-			path = Mage.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
 }

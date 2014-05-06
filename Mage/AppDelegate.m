@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import <User.h>
+#import <Observation.h>
+#import <ObservationProperty.h>
 
 @implementation AppDelegate
 
@@ -32,6 +34,56 @@
     NSMutableDictionary *allPrefs = [[NSMutableDictionary alloc] initWithDictionary:sdkPrefs];
     [allPrefs addEntriesFromDictionary:defaultPrefs];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPrefs];
+    
+    
+    
+//    NSManagedObjectContext *context = [self managedObjectContext];
+//    Observation *observation = [NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:context];
+//    [observation setDeviceId:@"test"];
+//    
+//    ObservationProperty *type = [NSEntityDescription insertNewObjectForEntityForName:@"ObservationProperty" inManagedObjectContext:context];
+//    [type setKey:@"TYPE"];
+//    [type setValue:@"Fire"];
+//    
+//    [observation setProperties:[NSSet setWithObject:type]];
+//    
+//    NSError *error;
+//    if (![context save:&error]) {
+//        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+//    }
+//
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription
+//                                   entityForName:@"Observation" inManagedObjectContext:context];
+//    [fetchRequest setEntity:entity];
+//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+//    for (Observation *fetchObs in fetchedObjects) {
+//        NSLog(@"id is: %@", fetchObs.objectID);
+//        
+//        for(ObservationProperty* property in fetchObs.properties) {
+//            NSLog(@"Key: %@", property.key);
+//            NSLog(@"Value: %@", property.value);
+//        }
+//        
+//    }
+
+    
+    
+//    NSManagedObject *failedBankInfo = [NSEntityDescription
+//                                       insertNewObjectForEntityForName:@"FailedBankInfo"
+//                                       inManagedObjectContext:context];
+//    [failedBankInfo setValue:@"Test Bank" forKey:@"name"];
+//    [failedBankInfo setValue:@"Testville" forKey:@"city"];
+//    [failedBankInfo setValue:@"Testland" forKey:@"state"];
+//    NSManagedObject *failedBankDetails = [NSEntityDescription
+//                                          insertNewObjectForEntityForName:@"FailedBankDetails"
+//                                          inManagedObjectContext:context];
+//    [failedBankDetails setValue:[NSDate date] forKey:@"closeDate"];
+//    [failedBankDetails setValue:[NSDate date] forKey:@"updateDate"];
+//    [failedBankDetails setValue:[NSNumber numberWithInt:12345] forKey:@"zip"];
+//    [failedBankDetails setValue:failedBankInfo forKey:@"info"];
+//    [failedBankInfo setValue:failedBankDetails forKey:@"details"];
+//
     
     
     
@@ -109,8 +161,14 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Mage" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
+    NSURL *modelURL = [[NSBundle mainBundle]
+     URLForResource:@"MageSDK.bundle" withExtension:@"momd"];
+    
+    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+     //[[NSBundle mainBundle] URLForResource:@"Mage" withExtension:@"momd"];
+    //_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
 
