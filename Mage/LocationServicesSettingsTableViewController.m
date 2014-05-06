@@ -71,10 +71,8 @@
     NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
     
     NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
-    NSLog(@"frequency %@", frequency);
     
     for (id key in frequencies) {
-        NSLog(@"key: %@", key);
         if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
             [label setText:key];
         }

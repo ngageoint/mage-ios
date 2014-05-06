@@ -50,9 +50,26 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
-    
-    [self.imageUploadSizeLabel setText:[defaults objectForKey:@"imageUploadSizeDisplay"]];
 
+    [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
+{
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
+    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    
+    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    
+    for (id key in frequencies) {
+        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
+            [label setText:key];
+        }
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
