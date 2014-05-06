@@ -30,9 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-	// Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -50,7 +47,6 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
-
     [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
 
 }
