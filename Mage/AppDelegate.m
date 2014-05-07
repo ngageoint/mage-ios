@@ -10,6 +10,8 @@
 #import <User.h>
 #import <Observation.h>
 #import <ObservationProperty.h>
+#import <GeoPoint.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation AppDelegate
 
@@ -34,64 +36,49 @@
     NSMutableDictionary *allPrefs = [[NSMutableDictionary alloc] initWithDictionary:sdkPrefs];
     [allPrefs addEntriesFromDictionary:defaultPrefs];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPrefs];
-    
-    
-    
-//    NSManagedObjectContext *context = [self managedObjectContext];
-//    Observation *observation = [NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:context];
-//    [observation setDeviceId:@"test"];
-//    
-//    ObservationProperty *type = [NSEntityDescription insertNewObjectForEntityForName:@"ObservationProperty" inManagedObjectContext:context];
-//    [type setKey:@"TYPE"];
-//    [type setValue:@"Fire"];
-//    
-//    [observation setProperties:[NSSet setWithObject:type]];
-//    
-//    NSError *error;
-//    if (![context save:&error]) {
-//        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-//    }
-//
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription
-//                                   entityForName:@"Observation" inManagedObjectContext:context];
-//    [fetchRequest setEntity:entity];
-//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-//    for (Observation *fetchObs in fetchedObjects) {
-//        NSLog(@"id is: %@", fetchObs.objectID);
-//        
-//        for(ObservationProperty* property in fetchObs.properties) {
-//            NSLog(@"Key: %@", property.key);
-//            NSLog(@"Value: %@", property.value);
-//        }
-//        
-//    }
+     return YES;
+}
 
+- (void) testing {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    Observation *observation = [NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:context];
+    [observation setDeviceId:@"test"];
     
+    ObservationProperty *type = [NSEntityDescription insertNewObjectForEntityForName:@"ObservationProperty" inManagedObjectContext:context];
+    [type setKey:@"TYPE"];
+    [type setValue:@"Fire"];
     
-//    NSManagedObject *failedBankInfo = [NSEntityDescription
-//                                       insertNewObjectForEntityForName:@"FailedBankInfo"
-//                                       inManagedObjectContext:context];
-//    [failedBankInfo setValue:@"Test Bank" forKey:@"name"];
-//    [failedBankInfo setValue:@"Testville" forKey:@"city"];
-//    [failedBankInfo setValue:@"Testland" forKey:@"state"];
-//    NSManagedObject *failedBankDetails = [NSEntityDescription
-//                                          insertNewObjectForEntityForName:@"FailedBankDetails"
-//                                          inManagedObjectContext:context];
-//    [failedBankDetails setValue:[NSDate date] forKey:@"closeDate"];
-//    [failedBankDetails setValue:[NSDate date] forKey:@"updateDate"];
-//    [failedBankDetails setValue:[NSNumber numberWithInt:12345] forKey:@"zip"];
-//    [failedBankDetails setValue:failedBankInfo forKey:@"info"];
-//    [failedBankInfo setValue:failedBankDetails forKey:@"details"];
-//
+    [observation setProperties:[NSSet setWithObject:type]];
     
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:1.0 longitude:1.0];
+    GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+    [observation setGeometry:point];
     
+    NSError *error;
+    if (![context save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+    }
     
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    // Override point for customization after application launch.
-//    self.window.backgroundColor = [UIColor whiteColor];
-//    [self.window makeKeyAndVisible];
-    return YES;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Observation" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    for (Observation *fetchObs in fetchedObjects) {
+        NSLog(@"id is: %@", fetchObs.objectID);
+        
+        for(ObservationProperty* property in fetchObs.properties) {
+            NSLog(@"Key: %@", property.key);
+            NSLog(@"Value: %@", property.value);
+        }
+        
+        NSLog(@"Location: %@", fetchObs.geometry);
+        if ([fetchObs.geometry isKindOfClass:[GeoPoint class]]) {
+            GeoPoint *fetchedGeometry = (GeoPoint *)fetchObs.geometry;
+            NSLog(@"CLLocation %@", fetchedGeometry.location);
+        }
+    }
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
