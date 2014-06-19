@@ -11,6 +11,19 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" syncable="YES"/>
     </entity>
+    <entity name="Location" representedClassName="Location" syncable="YES">
+        <attribute name="geometry" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="properties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocationProperty" syncable="YES"/>
+    </entity>
+    <entity name="LocationProperty" representedClassName="LocationProperty" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" syncable="YES"/>
+    </entity>
     <entity name="Observation" representedClassName="Observation" syncable="YES">
         <attribute name="deviceId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dirty" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
@@ -31,5 +44,7 @@
         <element name="Attachment" positionX="-1667" positionY="-1017" width="128" height="178"/>
         <element name="Observation" positionX="-1971" positionY="-1008" width="128" height="178"/>
         <element name="ObservationProperty" positionX="-2216" positionY="-1090" width="128" height="88"/>
+        <element name="Location" positionX="-2007" positionY="-972" width="128" height="133"/>
+        <element name="LocationProperty" positionX="-1998" positionY="-963" width="128" height="88"/>
     </elements>
 </model>

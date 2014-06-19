@@ -44,9 +44,9 @@
         
         for (id feature in features) {
             Observation *o = [Observation initWithJson:feature inManagedObjectContext:context];
-            NSLog(@"url is: %@", o.url);
+//            NSLog(@"url is: %@", o.url);
             for (id property in [feature objectForKey: @"properties"]) {
-                NSLog(@"property json is: %@", property);
+//                NSLog(@"property json is: %@", property);
                 ObservationProperty *prop = [ObservationProperty initWithJson:property inManagedObjectContext:context];
                 
             }

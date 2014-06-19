@@ -12,7 +12,7 @@
 @implementation ObservationProperty (ObservationProperty_helper)
 
 - (id) populateObjectFromJson: (NSDictionary *) json {
-    NSLog(@"Json is: %@", json);
+//    NSLog(@"Json is: %@", json);
 //    [self setRemoteId:[json objectForKey:@"id"]];
 //    [self setUserId:[json objectForKey:@"userId"]];
 //    [self setDeviceId:[json objectForKey:@"deviceId"]];
