@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <User.h>
-#import <Observation.h>
+#import <Observation+Observation_helper.h>
 #import <ObservationProperty.h>
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>

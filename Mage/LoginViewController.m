@@ -9,6 +9,8 @@
 #import "LoginViewController.h"
 #import "LocalAuthentication.h"
 #import "User.h"
+#import <Observation+Observation_helper.h>
+#import "AppDelegate.h"
 
 @interface LoginViewController ()
 
@@ -22,7 +24,12 @@ User *_user;
 
 - (void) authenticationWasSuccessful:(User *) user {
 	_user = user;
+    [self communicationTesting];
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+}
+
+- (void) communicationTesting {
+    [Observation fetchObservationsFromServerWithManagedObjectContext:((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext];
 }
 
 - (void) authenticationHadFailure {
