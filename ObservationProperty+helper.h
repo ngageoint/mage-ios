@@ -13,6 +13,6 @@
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 
-+ (ObservationProperty*) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
++ (id) initWithKey: (NSString*) key andValue: (NSString*) value inManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end
