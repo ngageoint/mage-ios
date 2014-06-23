@@ -10,7 +10,7 @@
 
 @interface Location (helper)
 
-+ (Location*) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
++ (Location*) locationWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
 + (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context;
 

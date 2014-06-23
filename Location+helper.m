@@ -44,12 +44,14 @@
 }
 
 + (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
-	NSLog(@"Trying to fetch locations from server");
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
+	NSURL *url = [serverUrl URLByAppendingPathComponent:@"api/locations/users"];
+	
+	NSLog(@"Trying to fetch locations from server %@", url);
 	
     HttpManager *http = [HttpManager singleton];
-	// TODO need to pull server url from somewhere
-    NSString *url = [NSString stringWithFormat:@"%@/%@", @"https://magetpm.***REMOVED***", @"api/locations/users"];
-    [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [http.manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Location JSON: %@", responseObject);
         NSArray *locations = (NSArray *) responseObject;
         

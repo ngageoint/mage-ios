@@ -24,7 +24,7 @@
     return self;
 }
 
-+ (id) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) locationWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     LocationProperty *property =
 		(LocationProperty *) [NSEntityDescription insertNewObjectForEntityForName:@"LocationProperty" inManagedObjectContext:context];
     [property populateFromJson:json];
