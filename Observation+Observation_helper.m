@@ -13,6 +13,19 @@
 
 @implementation Observation (Observation_helper)
 
+typedef enum {
+    Active = 0,
+    Archive = 1
+} State;
+
+-(State) stateRaw {
+    return (State)[[self state] intValue];
+}
+
+-(void)setStateRaw:(State)type {
+    [self setState:[NSNumber numberWithInt:type]];
+}
+
     - (id) populateObjectFromJson: (NSDictionary *) json {
         [self setRemoteId:[json objectForKey:@"id"]];
         [self setUserId:[json objectForKey:@"userId"]];
@@ -26,9 +39,11 @@
         return self;
     }
 
-+ (id) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     
-    Observation *observation = (Observation*)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:context];
+    Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
+    
+//    Observation *observation = (Observation*)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:nil];
     
     [observation populateObjectFromJson:json];
     
@@ -41,15 +56,10 @@
     [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"JSON: %@", responseObject);
         NSArray *features = [responseObject objectForKey:@"features"];
-        
-        NSArray *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", @"5388d287d9ec70c43e000b94"];
-        NSLog(@"there are %d observations", existingObservations.count);
-        NSLog(@"obs %@", existingObservations);
 
-        
         for (id feature in features) {
-            Observation *o = [Observation initWithJson:feature inManagedObjectContext:context];
-            NSLog(@"url is: %@", o.url);
+            Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
+            NSLog(@"feature is: %@", feature);
             NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
             NSDictionary *properties = [feature objectForKey: @"properties"];
             for (NSString* property in properties) {
@@ -62,14 +72,17 @@
             NSLog(@"there are %d observations", existingObservations.count);
             NSLog(@"obs %@", existingObservations);
             if (existingObservations.count == 0) {
+                [context insertObject:o];
                 NSLog(@"New observation, saving");
-                NSError *error = nil;
-                if (! [context save:&error]) {
-                    NSLog(@"Error inserting Observation: %@", error);
-                }
+                
             } else {
                 NSLog(@"Not new, ignore for now: %@", o.remoteId);
             }
+        }
+        
+        NSError *error = nil;
+        if (! [context save:&error]) {
+            NSLog(@"Error inserting Observation: %@", error);
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
