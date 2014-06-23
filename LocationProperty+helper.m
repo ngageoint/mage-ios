@@ -32,4 +32,12 @@
     return property;
 }
 
++ (id) initWithKey: (NSString*) key andValue: (NSString*) value inManagedObjectContext: (NSManagedObjectContext *) context {
+    LocationProperty *property = (LocationProperty *) [NSEntityDescription insertNewObjectForEntityForName:@"LocationProperty" inManagedObjectContext:context];
+    property.key = key;
+    property.value = value;
+	
+    return property;
+}
+
 @end

@@ -25,9 +25,10 @@
     return self;
 }
 
-+ (id) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) initWithKey: (NSString*) key andValue: (NSString*) value inManagedObjectContext: (NSManagedObjectContext *) context {
     ObservationProperty *property = (ObservationProperty*)[NSEntityDescription insertNewObjectForEntityForName:@"ObservationProperty" inManagedObjectContext:context];
-    [property populateObjectFromJson:json];
+    property.key = key;
+    property.value = value;
     return property;
 }
 

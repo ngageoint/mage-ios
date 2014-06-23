@@ -7,6 +7,7 @@
 //
 
 #import "Observation.h"
+#import "NSManagedObjectContext+Extra.h"
 
 @interface Observation (Observation_helper)
 

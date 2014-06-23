@@ -25,15 +25,18 @@
 		[location setRemoteId:[jsonLocation objectForKey:@"_id"]];
 		[location setType:[jsonLocation objectForKey:@"type"]];
 		
-		//		NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-		//		[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-		//		NSDate *date = [dateFormat dateFromString:[l objectForKey:@"lastModified"]];
-		//		[self setTimestamp:date];
-		
-		for (id property in [jsonLocation objectForKey: @"properties"]) {
-			NSLog(@"location property json is: %@", property);
+		NSDictionary *properties = [jsonLocation objectForKey: @"properties"];
+		for (NSString* key in properties) {
+			NSLog(@"property json is: %@ value is: %@", key, properties[key]);
+			if ([key isEqualToString:@"timestamp"]) {
+				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+				[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+				NSDate *date = [dateFormat dateFromString:properties[key]];
+				[location setTimestamp:date];
+			}
 			
-			LocationProperty *locationProperty = [LocationProperty initWithJson:property inManagedObjectContext:context];
+			LocationProperty *property = [LocationProperty initWithKey:key andValue:properties[key] inManagedObjectContext:context];
+			[location addPropertiesObject:property];
 		}
 	}
     

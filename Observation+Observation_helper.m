@@ -42,13 +42,33 @@
         //NSLog(@"JSON: %@", responseObject);
         NSArray *features = [responseObject objectForKey:@"features"];
         
+        NSArray *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", @"5388d287d9ec70c43e000b94"];
+        NSLog(@"there are %d observations", existingObservations.count);
+        NSLog(@"obs %@", existingObservations);
+
+        
         for (id feature in features) {
             Observation *o = [Observation initWithJson:feature inManagedObjectContext:context];
-//            NSLog(@"url is: %@", o.url);
-            for (id property in [feature objectForKey: @"properties"]) {
-//                NSLog(@"property json is: %@", property);
-                ObservationProperty *prop = [ObservationProperty initWithJson:property inManagedObjectContext:context];
-                
+            NSLog(@"url is: %@", o.url);
+            NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
+            NSDictionary *properties = [feature objectForKey: @"properties"];
+            for (NSString* property in properties) {
+                NSLog(@"property json is: %@ value is: %@", property, properties[property]);
+                ObservationProperty *prop = [ObservationProperty initWithKey:property andValue:properties[property] inManagedObjectContext:context];
+                [o addPropertiesObject:prop];
+            }
+            
+            NSArray *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
+            NSLog(@"there are %d observations", existingObservations.count);
+            NSLog(@"obs %@", existingObservations);
+            if (existingObservations.count == 0) {
+                NSLog(@"New observation, saving");
+                NSError *error = nil;
+                if (! [context save:&error]) {
+                    NSLog(@"Error inserting Observation: %@", error);
+                }
+            } else {
+                NSLog(@"Not new, ignore for now: %@", o.remoteId);
             }
         }
         
