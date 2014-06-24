@@ -22,21 +22,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-    NSURL *sdkPrefsFile = [[NSBundle mainBundle]
-                               URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
-    NSDictionary *sdkPrefs =
-    [NSDictionary dictionaryWithContentsOfURL:sdkPrefsFile];
+    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
+    NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     //[[NSUserDefaults standardUserDefaults] registerDefaults:sdkPrefs];
     
-    NSURL *defaultPrefsFile = [[NSBundle mainBundle]
-                               URLForResource:@"preferences" withExtension:@"plist"];
-    NSDictionary *defaultPrefs =
-    [NSDictionary dictionaryWithContentsOfURL:defaultPrefsFile];
+    NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
+    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
     
-    NSMutableDictionary *allPrefs = [[NSMutableDictionary alloc] initWithDictionary:sdkPrefs];
-    [allPrefs addEntriesFromDictionary:defaultPrefs];
-    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPrefs];
-     return YES;
+    NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
+    [allPreferences addEntriesFromDictionary:defaultPreferences];
+    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
+	
+	return YES;
 }
 
 - (void) testing {

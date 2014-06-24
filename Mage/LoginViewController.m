@@ -10,6 +10,8 @@
 #import "LocalAuthentication.h"
 #import "User.h"
 #import <Observation+Observation_helper.h>
+#import <Location+helper.h>
+
 #import "AppDelegate.h"
 
 @interface LoginViewController ()
@@ -29,7 +31,9 @@ User *_user;
 }
 
 - (void) communicationTesting {
-    [Observation fetchObservationsFromServerWithManagedObjectContext:((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext];
+	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
+    [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+	[Location fetchLocationsWithManagedObjectContext:context];
 }
 
 - (void) authenticationHadFailure {
@@ -78,8 +82,12 @@ User *_user;
 		
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
-		_authentication = [Authentication authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]];
+		NSURL *url = [NSURL URLWithString:_serverField.text];
+		_authentication = [Authentication authenticationWithType:LOCAL url:url];
 		_authentication.delegate = self;
+		
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setURL:url forKey:@"serverUrl"];
     } else {
         [_serverField setEnabled:YES];
         button.selected = YES;
@@ -93,7 +101,7 @@ User *_user;
 		[self verifyLogin];
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     [self focusOnCorrectField: sender];
 	[self verifyLogin];
 	
@@ -103,9 +111,13 @@ User *_user;
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated
 {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSURL *url = [defaults URLForKey:@"serverUrl"];
+	NSString *urlText = url != nil ? [url absoluteString] : @"Please enter a server URL";
+	
     [_usernameField setText:@""];
     [_passwordField setText:@""];
-    [_serverField setText:@"https://magetpm.***REMOVED***"];
+    [_serverField setText:urlText];
 	
 	_authentication = [Authentication authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]];
 	_authentication.delegate = self;
