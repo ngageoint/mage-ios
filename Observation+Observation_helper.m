@@ -10,21 +10,22 @@
 #import <AFNetworking.h>
 #import "HttpManager.h"
 #import "ObservationProperty+helper.h"
+#import "MageEnums.h"
 
 @implementation Observation (Observation_helper)
 
-typedef enum {
-    Active = 0,
-    Archive = 1
-} State;
-
--(State) stateRaw {
-    return (State)[[self state] intValue];
-}
-
--(void)setStateRaw:(State)type {
-    [self setState:[NSNumber numberWithInt:type]];
-}
+//typedef enum {
+//    Archive = 0,
+//    Active = 1
+//} State;
+//
+//-(State) stateRaw {
+//    return (State)[[self state] intValue];
+//}
+//
+//-(void)setStateRaw:(State)type {
+//    [self setState:[NSNumber numberWithInt:type]];
+//}
 
     - (id) populateObjectFromJson: (NSDictionary *) json {
         [self setRemoteId:[json objectForKey:@"id"]];
@@ -36,6 +37,10 @@ typedef enum {
         NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
         [self setLastModified:date];
         [self setUrl:[json objectForKey:@"url"]];
+        NSDictionary *jsonState = [json objectForKey: @"state"];
+        NSString *stateName = [jsonState objectForKey: @"name"];
+        State enumValue = [stateName StateEnumFromString];
+        [self setState:[NSNumber numberWithInt:(int)enumValue]];
         return self;
     }
 
@@ -59,8 +64,9 @@ typedef enum {
 
         for (id feature in features) {
             Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
-            NSLog(@"feature is: %@", feature);
-            NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
+            //NSLog(@"feature is: %@", feature);
+            //NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
+            NSLog(@"state is: %@", o.state);
             NSDictionary *properties = [feature objectForKey: @"properties"];
             for (NSString* property in properties) {
                 NSLog(@"property json is: %@ value is: %@", property, properties[property]);
