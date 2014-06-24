@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class LocationProperty;
 
 @interface Location : NSManagedObject
 
@@ -18,15 +17,6 @@
 @property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSString * userId;
-@property (nonatomic, retain) NSDictionary * info;
-@property (nonatomic, retain) NSSet *properties;
-@end
-
-@interface Location (CoreDataGeneratedAccessors)
-
-- (void)addPropertiesObject:(LocationProperty *)value;
-- (void)removePropertiesObject:(LocationProperty *)value;
-- (void)addProperties:(NSSet *)values;
-- (void)removeProperties:(NSSet *)values;
+@property (nonatomic, retain) NSDictionary * properties;
 
 @end

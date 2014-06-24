@@ -14,25 +14,25 @@
 
 @implementation Location (helper)
 
-+ (id) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
-    
-	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
-    
-	[location setUserId:[json objectForKey:@"user"]];
-	
++ (void) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
 	NSArray *jsonLocations = [json objectForKey:@"locations"];
+	if (!jsonLocations.count) return;
+	
+	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
+	
+	[location setUserId:[json objectForKey:@"user"]];
 	for (NSDictionary* jsonLocation in jsonLocations) {
 		[location setRemoteId:[jsonLocation objectForKey:@"_id"]];
 		[location setType:[jsonLocation objectForKey:@"type"]];
 		
 		NSDictionary *properties = [jsonLocation objectForKey: @"properties"];
-		[location setInfo:properties];
+		[location setProperties:properties];
 		
 		for (NSString* key in properties) {
 			NSLog(@"property json is: %@ value is: %@", key, properties[key]);
 			if ([key isEqualToString:@"timestamp"]) {
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-				[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+				[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'sss'Z'"];
 				NSDate *date = [dateFormat dateFromString:properties[key]];
 				[location setTimestamp:date];
 			}
@@ -41,12 +41,31 @@
 	}
 	
 	[context insertObject:location];
-	
-    return location;
 }
 
 - (void) updateLocationForJson: (NSDictionary *) json {
+	NSArray *jsonLocations = [json objectForKey:@"locations"];
+	NSDictionary *properties = [self properties];
 	
+	if (jsonLocations.count) {
+		for (NSDictionary* jsonLocation in jsonLocations) {
+			NSDictionary *properties = [jsonLocation objectForKey: @"properties"];
+			
+			[self setProperties:properties];
+			for (NSString* key in properties) {
+				NSLog(@"property json is: %@ value is: %@", key, properties[key]);
+				if ([key isEqualToString:@"timestamp"]) {
+					NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+					[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+					NSString * dateString = properties[key];
+					NSDate *date = [dateFormat dateFromString:properties[key]];
+					[self setTimestamp:date];
+				}
+			}
+		}
+	} else {
+		// delete user record from core data
+	}
 }
 
 + (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
@@ -82,7 +101,7 @@
 			if (location == nil) {
 				// not in core data yet need to create a new managed object
 				NSLog(@"Inserting new user location into database");
-				location = [Location locationForJson:jsonLocation inManagedObjectContext:context];
+				[Location locationForJson:jsonLocation inManagedObjectContext:context];
 			} else {
 				// already exists in core data, lets update the object we have
 				NSLog(@"Updating user location in the database");

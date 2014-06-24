@@ -7,7 +7,6 @@
 //
 
 #import "Location.h"
-#import "LocationProperty.h"
 
 
 @implementation Location
@@ -17,7 +16,6 @@
 @dynamic timestamp;
 @dynamic type;
 @dynamic userId;
-@dynamic info;
 @dynamic properties;
 
 @end
