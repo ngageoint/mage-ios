@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "Observation+Observation_helper.h"
+#import "Observation+helper.h"
 #import <AFNetworking.h>
 #import "HttpManager.h"
 #import "ObservationProperty+helper.h"
@@ -26,18 +26,18 @@ typedef enum {
     [self setState:[NSNumber numberWithInt:type]];
 }
 
-    - (id) populateObjectFromJson: (NSDictionary *) json {
-        [self setRemoteId:[json objectForKey:@"id"]];
-        [self setUserId:[json objectForKey:@"userId"]];
-        [self setDeviceId:[json objectForKey:@"deviceId"]];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-        NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
-        [self setLastModified:date];
-        [self setUrl:[json objectForKey:@"url"]];
-        return self;
-    }
+- (id) populateObjectFromJson: (NSDictionary *) json {
+	[self setRemoteId:[json objectForKey:@"id"]];
+	[self setUserId:[json objectForKey:@"userId"]];
+	[self setDeviceId:[json objectForKey:@"deviceId"]];
+	
+	NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+	[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+	NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
+	[self setLastModified:date];
+	[self setUrl:[json objectForKey:@"url"]];
+	return self;
+}
 
 + (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     

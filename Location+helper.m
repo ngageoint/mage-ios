@@ -14,9 +14,9 @@
 
 @implementation Location (helper)
 
-+ (id) initWithJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     
-    Location *location = (Location *) [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
+	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
     
 	[location setUserId:[json objectForKey:@"user"]];
 	
@@ -39,8 +39,14 @@
 			[location addPropertiesObject:property];
 		}
 	}
-    
+	
+	[context insertObject:location];
+	
     return location;
+}
+
+- (void) updateLocationForJson: (NSDictionary *) json {
+	
 }
 
 + (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
@@ -51,12 +57,40 @@
 	NSLog(@"Trying to fetch locations from server %@", url);
 	
     HttpManager *http = [HttpManager singleton];
-    [http.manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Location JSON: %@", responseObject);
-        NSArray *locations = (NSArray *) responseObject;
-        
-        for (id location in locations) {
-            Location *l = [Location initWithJson:location inManagedObjectContext:context];
+    [http.manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id jsonLocations) {
+		// Get the user ids to query
+		NSMutableArray *userIds = [[NSMutableArray alloc] init];
+		for (NSDictionary *jsonLocation in jsonLocations) {
+			[userIds addObject:[jsonLocation objectForKey:@"user"]];
+		}
+		
+		// Create the fetch request to get all users IDs from server response.
+		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+		[fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:context]];
+		[fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(userId IN %@)", userIds]];
+		NSError *error;
+		NSArray *usersMatchingIDs = [context executeFetchRequest:fetchRequest error:&error];
+		NSMutableDictionary *userIdMap = [[NSMutableDictionary alloc] init];
+		for (Location* location in usersMatchingIDs) {
+			[userIdMap setObject:location forKey:[location  userId]];
+		}
+		
+		for (NSDictionary *jsonLocation in jsonLocations) {
+			// pull from query map
+			NSString *userId = [jsonLocation objectForKey:@"user"];
+			Location *location = [userIdMap objectForKey:userId];
+			if (location == nil) {
+				// not in core data yet need to create a new managed object
+				location = [Location locationForJson:jsonLocation inManagedObjectContext:context];
+			} else {
+				// already exists in core data, lets update the object we have
+				[location updateLocationForJson:jsonLocation];
+			}
+			
+			NSError *error = nil;
+			if (! [context save:&error]) {
+				NSLog(@"Error inserting location: %@", error);
+			}
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
