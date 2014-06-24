@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#import "Geometry.h"
+
 
 @interface Location : NSManagedObject
 
-@property (nonatomic, retain) id geometry;
+@property (nonatomic, retain) Geometry *  geometry;
 @property (nonatomic, retain) NSString * remoteId;
 @property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * type;

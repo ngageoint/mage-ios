@@ -12,6 +12,7 @@
 @interface GeoPoint : Geometry
 
 @property(strong) CLLocation *location;
+
 - (id)initWithLocation: (CLLocation *) location;
 
 @end
