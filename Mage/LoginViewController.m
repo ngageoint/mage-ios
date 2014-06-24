@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "LocalAuthentication.h"
 #import "User.h"
-#import <Observation+Observation_helper.h>
+#import <Observation+helper.h>
 #import <Location+helper.h>
 
 #import "AppDelegate.h"
@@ -113,7 +113,7 @@ User *_user;
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *url = [defaults URLForKey:@"serverUrl"];
-	NSString *urlText = url != nil ? [url absoluteString] : @"Please enter a server URL";
+	NSString *urlText = url != nil ? [url absoluteString] : @"";
 	
     [_usernameField setText:@""];
     [_passwordField setText:@""];
