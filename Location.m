@@ -2,7 +2,7 @@
 //  Location.m
 //  mage-ios-sdk
 //
-//  Created by Billy Newman on 6/20/14.
+//  Created by Billy Newman on 6/24/14.
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @dynamic timestamp;
 @dynamic type;
 @dynamic userId;
+@dynamic info;
 @dynamic properties;
 
 @end

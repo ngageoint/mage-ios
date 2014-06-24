@@ -2,7 +2,7 @@
 //  Location.h
 //  mage-ios-sdk
 //
-//  Created by Billy Newman on 6/20/14.
+//  Created by Billy Newman on 6/24/14.
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSString * userId;
+@property (nonatomic, retain) NSDictionary * info;
 @property (nonatomic, retain) NSSet *properties;
 @end
 

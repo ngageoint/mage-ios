@@ -26,6 +26,8 @@
 		[location setType:[jsonLocation objectForKey:@"type"]];
 		
 		NSDictionary *properties = [jsonLocation objectForKey: @"properties"];
+		[location setInfo:properties];
+		
 		for (NSString* key in properties) {
 			NSLog(@"property json is: %@ value is: %@", key, properties[key]);
 			if ([key isEqualToString:@"timestamp"]) {
@@ -34,10 +36,8 @@
 				NSDate *date = [dateFormat dateFromString:properties[key]];
 				[location setTimestamp:date];
 			}
-			
-			LocationProperty *property = [LocationProperty initWithKey:key andValue:properties[key] inManagedObjectContext:context];
-			[location addPropertiesObject:property];
 		}
+
 	}
 	
 	[context insertObject:location];
@@ -81,9 +81,11 @@
 			Location *location = [userIdMap objectForKey:userId];
 			if (location == nil) {
 				// not in core data yet need to create a new managed object
+				NSLog(@"Inserting new user location into database");
 				location = [Location locationForJson:jsonLocation inManagedObjectContext:context];
 			} else {
 				// already exists in core data, lets update the object we have
+				NSLog(@"Updating user location in the database");
 				[location updateLocationForJson:jsonLocation];
 			}
 			
