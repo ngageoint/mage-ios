@@ -1,9 +1,9 @@
 //
 //  Location.m
-//  mage-ios-sdk
+//  Pods
 //
 //  Created by Billy Newman on 6/24/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//
 //
 
 #import "Location.h"
