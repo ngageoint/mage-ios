@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "Observation+Observation_helper.h"
+#import "Observation+helper.h"
 #import <AFNetworking.h>
 #import "HttpManager.h"
 #import "ObservationProperty+helper.h"
