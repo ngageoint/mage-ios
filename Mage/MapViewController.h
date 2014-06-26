@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 #import "RESideMenu.h"
 
-@interface MapViewController : UIViewController
+@interface MapViewController : UIViewController<MKMapViewDelegate, NSFetchedResultsControllerDelegate>
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (strong, nonatomic) NSFetchedResultsController *locationResultsController;
 
 @end
