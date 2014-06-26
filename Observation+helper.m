@@ -11,6 +11,7 @@
 #import "HttpManager.h"
 #import "ObservationProperty+helper.h"
 #import "MageEnums.h"
+#import "GeoPoint.h"
 
 @implementation Observation (Observation_helper)
 
@@ -28,6 +29,13 @@
     NSString *stateName = [jsonState objectForKey: @"name"];
     State enumValue = [stateName StateEnumFromString];
     [self setState:[NSNumber numberWithInt:(int)enumValue]];
+    
+    NSArray *coordinates = [json valueForKeyPath:@"geometry.coordinates"];
+    NSLog(@"coordinate array: %@", coordinates);
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
+    
+    [self setGeometry:[[GeoPoint alloc] initWithLocation:location]];
+    
     return self;
 }
 
@@ -51,16 +59,16 @@
             Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
             //NSLog(@"feature is: %@", feature);
             //NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
-            NSLog(@"state is: %@", o.state);
+            //NSLog(@"state is: %@", o.state);
             NSDictionary *properties = [feature objectForKey: @"properties"];
             for (NSString* property in properties) {
-                NSLog(@"property json is: %@ value is: %@", property, properties[property]);
+                //NSLog(@"property json is: %@ value is: %@", property, properties[property]);
                 ObservationProperty *prop = [ObservationProperty initWithKey:property andValue:properties[property] inManagedObjectContext:context];
                 [o addPropertiesObject:prop];
             }
             
             NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
-            NSLog(@"there are %d observations", existingObservations.count);
+            //NSLog(@"there are %d observations", existingObservations.count);
             int archive = [@"archive" IntFromStateEnum];
             // if the Observation is archived and used to exist on this device, delete it
             if ([o.state intValue] == archive && existingObservations.count != 0) {
