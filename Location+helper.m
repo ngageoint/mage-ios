@@ -6,14 +6,24 @@
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "Location+helper.h"
 #import <AFNetworking.h>
+#import "Location+helper.h"
 #import "HttpManager.h"
-#import "LocationProperty+helper.h"
 #import "GeoPoint.h"
 
-
 @implementation Location (helper)
+
++ (void) tmpAddLocation: (CLLocation *) location inManagedObjectContext: (NSManagedObjectContext *) context {
+	Location *l = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
+	
+	[l setGeometry:[[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:0 longitude:0]]];
+	[context insertObject:l];
+	
+	NSError *error = nil;
+	if (! [context save:&error]) {
+		NSLog(@"Error inserting location: %@", error);
+	}
+}
 
 + (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
 	NSArray *locations = [json objectForKey:@"locations"];

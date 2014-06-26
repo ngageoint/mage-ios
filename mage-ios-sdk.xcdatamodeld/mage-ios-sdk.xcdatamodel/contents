@@ -19,11 +19,6 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="LocationProperty" representedClassName="LocationProperty" syncable="YES">
-        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <relationship name="location" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="Location" syncable="YES"/>
-    </entity>
     <entity name="Observation" representedClassName="Observation" syncable="YES">
         <attribute name="deviceId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dirty" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
@@ -44,7 +39,6 @@
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="178"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="135"/>
-        <element name="LocationProperty" positionX="-1854" positionY="-621" width="128" height="88"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="178"/>
         <element name="ObservationProperty" positionX="-2216" positionY="-1090" width="128" height="88"/>
     </elements>
