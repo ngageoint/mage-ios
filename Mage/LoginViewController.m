@@ -32,7 +32,7 @@ User *_user;
 
 - (void) communicationTesting {
 	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
-//    [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+    [Observation fetchObservationsFromServerWithManagedObjectContext:context];
 	[Location fetchLocationsWithManagedObjectContext:context];
 }
 
