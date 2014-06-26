@@ -14,41 +14,26 @@
 
 @implementation Observation (Observation_helper)
 
-//typedef enum {
-//    Archive = 0,
-//    Active = 1
-//} State;
-//
-//-(State) stateRaw {
-//    return (State)[[self state] intValue];
-//}
-//
-//-(void)setStateRaw:(State)type {
-//    [self setState:[NSNumber numberWithInt:type]];
-//}
-
-    - (id) populateObjectFromJson: (NSDictionary *) json {
-        [self setRemoteId:[json objectForKey:@"id"]];
-        [self setUserId:[json objectForKey:@"userId"]];
-        [self setDeviceId:[json objectForKey:@"deviceId"]];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-        NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
-        [self setLastModified:date];
-        [self setUrl:[json objectForKey:@"url"]];
-        NSDictionary *jsonState = [json objectForKey: @"state"];
-        NSString *stateName = [jsonState objectForKey: @"name"];
-        State enumValue = [stateName StateEnumFromString];
-        [self setState:[NSNumber numberWithInt:(int)enumValue]];
-        return self;
-    }
+- (id) populateObjectFromJson: (NSDictionary *) json {
+    [self setRemoteId:[json objectForKey:@"id"]];
+    [self setUserId:[json objectForKey:@"userId"]];
+    [self setDeviceId:[json objectForKey:@"deviceId"]];
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
+    [self setLastModified:date];
+    [self setUrl:[json objectForKey:@"url"]];
+    NSDictionary *jsonState = [json objectForKey: @"state"];
+    NSString *stateName = [jsonState objectForKey: @"name"];
+    State enumValue = [stateName StateEnumFromString];
+    [self setState:[NSNumber numberWithInt:(int)enumValue]];
+    return self;
+}
 
 + (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     
     Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
-    
-//    Observation *observation = (Observation*)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:nil];
     
     [observation populateObjectFromJson:json];
     
@@ -74,15 +59,23 @@
                 [o addPropertiesObject:prop];
             }
             
-            NSArray *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
+            NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
             NSLog(@"there are %d observations", existingObservations.count);
-            NSLog(@"obs %@", existingObservations);
-            if (existingObservations.count == 0) {
+            int archive = [@"archive" IntFromStateEnum];
+            // if the Observation is archived and used to exist on this device, delete it
+            if ([o.state intValue] == archive && existingObservations.count != 0) {
+                [context deleteObject:o];
+                NSLog(@"Deleting observation with id: %@", o.remoteId);
+            }
+            // else if the observation is not archived and doesn't exist, insert it
+            else if ([o.state intValue] != archive && existingObservations.count == 0) {
                 [context insertObject:o];
-                NSLog(@"New observation, saving");
-                
-            } else {
-                NSLog(@"Not new, ignore for now: %@", o.remoteId);
+                NSLog(@"Saving new observation with id: %@", o.remoteId);
+            }
+            // else if the observation is not archived, and not dirty and exists, update it
+            else if ([o.state intValue] != archive && [o.dirty boolValue]) {
+                [o populateObjectFromJson:feature];
+                NSLog(@"Updating object with id: %@", o.remoteId);
             }
         }
         

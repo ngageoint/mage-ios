@@ -21,4 +21,14 @@
     return (State)[[states objectForKey:self] intValue];
 }
 
+- (int)IntFromStateEnum {
+    NSDictionary *states = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithInteger:Active], @"active",
+                            [NSNumber numberWithInteger:Archive], @"archive",
+                            nil
+                            ];
+    return [[states objectForKey:self] intValue];
+}
+
+
 @end
