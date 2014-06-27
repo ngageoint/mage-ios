@@ -14,9 +14,7 @@
 // name in the context, optionally limiting by a predicate or by a predicate
 // made from a format NSString and variable arguments.
 //
-- (NSArray *)fetchObjectsForEntityName:(NSString *)newEntityName
-                       withPredicate:(id)stringOrPredicate, ...
-{
+- (NSArray *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ... {
     NSEntityDescription *entity = [NSEntityDescription
                                    entityForName:newEntityName inManagedObjectContext:self];
     
@@ -50,7 +48,6 @@
         [NSException raise:NSGenericException format:[error description]];
     }
     return results;
-    //return [NSSet setWithArray:results];
 }
 
 @end

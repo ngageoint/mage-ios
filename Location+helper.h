@@ -7,14 +7,14 @@
 //
 
 #import "Location.h"
-#import <CoreLocation/CoreLocation.h>
+#import "Geometry.h"
 
 @interface Location (helper)
 
 + (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-+ (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context;
+- (void) updateLocationsForUserId:(NSString *) userId locations: (NSArray *) locations;
 
-+ (void) tmpAddLocation: (CLLocation *) location inManagedObjectContext: (NSManagedObjectContext *) context;
+@property (nonatomic, retain) Geometry* geometry;
 
 @end

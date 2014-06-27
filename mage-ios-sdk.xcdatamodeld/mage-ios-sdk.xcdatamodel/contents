@@ -36,10 +36,18 @@
         <attribute name="value" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" syncable="YES"/>
     </entity>
+    <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="currentUser" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="178"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="135"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="178"/>
         <element name="ObservationProperty" positionX="-2216" positionY="-1090" width="128" height="88"/>
+        <element name="User" positionX="-1989" positionY="-918" width="128" height="120"/>
     </elements>
 </model>

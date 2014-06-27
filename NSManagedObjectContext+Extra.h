@@ -10,7 +10,6 @@
 
 @interface NSManagedObjectContext (Extra)
 
-- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName
-                       withPredicate:(id)stringOrPredicate, ...;
+- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...;
 
 @end

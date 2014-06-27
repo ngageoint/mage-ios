@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 @protocol AuthenticationDelegate <NSObject>
 
 @optional
-- (void) authenticationWasSuccessful: (User *) token;
+- (void) authenticationWasSuccessful: (User *) user;
 - (void) authenticationHadFailure;
 
 @end
@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 @protocol Authentication <NSObject>
 
 @required
-- (id<Authentication>) initWithURL: (NSURL *) url;
+- (id<Authentication>) initWithURL: (NSURL *) url inManagedObjectContext: (NSManagedObjectContext *) context;
 
 - (void) loginWithParameters: (NSDictionary *) parameters;
 
@@ -33,6 +33,6 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 
 @interface Authentication : NSObject
 
-+ (id) authenticationWithType: (AuthenticationType) type url: (NSURL *) url;
++ (id) authenticationWithType: (AuthenticationType) type url: (NSURL *) url inManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end
