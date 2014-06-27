@@ -8,8 +8,6 @@
 
 #import "AppDelegate.h"
 #import <User.h>
-#import <Observation+helper.h>
-#import <ObservationProperty.h>
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -34,48 +32,6 @@
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
 	
 	return YES;
-}
-
-- (void) testing {
-    NSManagedObjectContext *context = [self managedObjectContext];
-    Observation *observation = [NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:context];
-    [observation setDeviceId:@"test"];
-    
-    ObservationProperty *type = [NSEntityDescription insertNewObjectForEntityForName:@"ObservationProperty" inManagedObjectContext:context];
-    [type setKey:@"TYPE"];
-    [type setValue:@"Fire"];
-    
-    [observation setProperties:[NSSet setWithObject:type]];
-    
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:1.0 longitude:1.0];
-    GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-    [observation setGeometry:point];
-    
-    NSError *error;
-    if (![context save:&error]) {
-        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-    }
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Observation" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-    for (Observation *fetchObs in fetchedObjects) {
-        NSLog(@"id is: %@", fetchObs.objectID);
-        
-        for(ObservationProperty* property in fetchObs.properties) {
-            NSLog(@"Key: %@", property.key);
-            NSLog(@"Value: %@", property.value);
-        }
-        
-        NSLog(@"Location: %@", fetchObs.geometry);
-        if ([fetchObs.geometry isKindOfClass:[GeoPoint class]]) {
-            GeoPoint *fetchedGeometry = (GeoPoint *)fetchObs.geometry;
-            NSLog(@"CLLocation %@", fetchedGeometry.location);
-        }
-    }
-
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
