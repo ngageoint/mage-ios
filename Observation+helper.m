@@ -59,21 +59,23 @@
             [o setProperties:properties];
             
             NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
+            Observation *dbObs = [existingObservations anyObject];
+            
             //NSLog(@"there are %d observations", existingObservations.count);
             int archive = [@"archive" IntFromStateEnum];
             // if the Observation is archived and used to exist on this device, delete it
-            if ([o.state intValue] == archive && existingObservations.count != 0) {
-                [context deleteObject:o];
+            if ([o.state intValue] == archive && dbObs != nil) {
+                [context deleteObject:dbObs];
                 NSLog(@"Deleting observation with id: %@", o.remoteId);
             }
             // else if the observation is not archived and doesn't exist, insert it
-            else if ([o.state intValue] != archive && existingObservations.count == 0) {
+            else if ([o.state intValue] != archive && dbObs == nil) {
                 [context insertObject:o];
                 NSLog(@"Saving new observation with id: %@", o.remoteId);
             }
             // else if the observation is not archived, and not dirty and exists, update it
             else if ([o.state intValue] != archive && [o.dirty boolValue]) {
-                [o populateObjectFromJson:feature];
+                [dbObs populateObjectFromJson:feature];
                 NSLog(@"Updating object with id: %@", o.remoteId);
             }
         }
