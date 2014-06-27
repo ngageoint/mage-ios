@@ -7,41 +7,25 @@
 
 #import "LocationAnnotation.h"
 #import "GeoPoint.h"
+#import "User+helper.h"
 
 @implementation LocationAnnotation
 
--(id) initWithLocation:(Location *) location {
+-(id) initWithLocation:(Location *) location inManagedObjectContext: (NSManagedObjectContext *) context {
 	if ((self = [super init])) {
         _coordinate = ((GeoPoint *) location.geometry).location.coordinate;
 		_timestamp = location.timestamp;
+		
+		User *user = [User fetchUserForId:location.userId inManagedObjectContext:context];
+		_title = user.name;
+		_subtitle = user.username;
     }
 		
     return self;
 }
 
--(NSString *) title {
-	return _username ? _username : @"Uknown";
-}
-
--(NSString *) subtitle {
-	return _name ? _name : nil;
-}
-
 -(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
 	_coordinate = coordinate;
 }
-
-//- (MKMapItem *) mapItem {
-//    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey : _address};
-//	
-//    MKPlacemark *placemark = [[MKPlacemark alloc]
-//                              initWithCoordinate:self.coordinate
-//                              addressDictionary:addressDict];
-//	
-//    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-//    mapItem.name = self.title;
-//	
-//    return mapItem;
-//}
 
 @end
