@@ -33,17 +33,17 @@
 
 + (void) fetchFeatureLayersFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
     HttpManager *http = [HttpManager singleton];
-    NSString *url = [NSString stringWithFormat:@"%@/%@?%@", @"https://magetpm.***REMOVED***", @"api/layers", @"type=Feature"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
+    
+    NSString *url = [NSString stringWithFormat:@"%@/%@?%@", serverUrl, @"api/layers", @"type=Feature"];
     [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
         NSArray *layers = responseObject;
         
         for (id layer in layers) {
-            NSLog(@"layer: %@", layer);
             Layer *l = [Layer layerForJson:layer inManagedObjectContext:context];
 
             NSSet *existingLayers = [context fetchObjectsForEntityName:@"Layer" withPredicate:@"(remoteId == %@)", l.remoteId];
-            NSLog(@"existing layers is %@", existingLayers);
             // should only ever be one layer with the id so this will work fine
             Layer *dbLayer = [existingLayers anyObject];
             

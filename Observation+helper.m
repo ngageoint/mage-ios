@@ -48,7 +48,9 @@
 
 + (void) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
     HttpManager *http = [HttpManager singleton];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", @"https://magetpm.***REMOVED***", @"FeatureServer/3/features"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"FeatureServer/3/features"];
     [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"JSON: %@", responseObject);
         NSArray *features = [responseObject objectForKey:@"features"];

@@ -49,7 +49,6 @@
     {
         [NSException raise:NSGenericException format:[error description]];
     }
-    //return results;
     return [NSSet setWithArray:results];
 }
 
