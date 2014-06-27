@@ -163,7 +163,7 @@
         return annotationView;
     }
     else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-
+		NSString *identifier = @"Observation";
         MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         if (annotationView == nil) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];

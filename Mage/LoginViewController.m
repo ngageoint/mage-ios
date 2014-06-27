@@ -45,8 +45,6 @@ id<Authentication> _authentication;
 	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
     [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
     [Observation fetchObservationsFromServerWithManagedObjectContext:context];
-	[Location fetchLocationsWithManagedObjectContext:context];
-//    [Observation fetchObservationsFromServerWithManagedObjectContext:self.managedObjectContext];
 	[UserResource fetchUsersWithManagedObjectContext:self.managedObjectContext];
 	[LocationResource fetchLocationsWithManagedObjectContext:self.managedObjectContext];
 }
