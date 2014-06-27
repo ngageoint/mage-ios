@@ -8,6 +8,7 @@
 
 #import "Observation.h"
 #import "NSManagedObjectContext+Extra.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface Observation (Observation_helper)
 

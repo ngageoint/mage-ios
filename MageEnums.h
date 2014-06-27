@@ -16,5 +16,6 @@ typedef enum state {
 @interface NSString (MageEnums)
 
 - (State)StateEnumFromString;
+- (int)IntFromStateEnum;
 
 @end

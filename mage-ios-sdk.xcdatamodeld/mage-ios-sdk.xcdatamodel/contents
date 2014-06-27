@@ -11,6 +11,14 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" syncable="YES"/>
     </entity>
+    <entity name="Layer" representedClassName="Layer" syncable="YES">
+        <attribute name="formId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="loaded" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Location" representedClassName="Location" syncable="YES">
         <attribute name="geometry" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -24,17 +32,12 @@
         <attribute name="dirty" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="geometry" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Attachment" syncable="YES"/>
-        <relationship name="properties" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ObservationProperty" syncable="YES"/>
-    </entity>
-    <entity name="ObservationProperty" representedClassName="ObservationProperty" syncable="YES">
-        <attribute name="key" attributeType="String" syncable="YES"/>
-        <attribute name="value" attributeType="String" syncable="YES"/>
-        <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="currentUser" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -45,9 +48,9 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="178"/>
+        <element name="Layer" positionX="-1998" positionY="-873" width="128" height="135"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="135"/>
-        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="178"/>
-        <element name="ObservationProperty" positionX="-2216" positionY="-1090" width="128" height="88"/>
+        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="195"/>
         <element name="User" positionX="-1989" positionY="-918" width="128" height="120"/>
     </elements>
 </model>
