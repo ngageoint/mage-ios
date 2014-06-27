@@ -14,6 +14,8 @@
 #import <UserResource.h>
 
 
+#import <Location+helper.h>
+#import <Layer+helper.h>
 #import "AppDelegate.h"
 
 @interface LoginViewController ()
@@ -40,6 +42,10 @@ id<Authentication> _authentication;
 }
 
 - (void) communicationTesting {
+	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
+    [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
+    [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+	[Location fetchLocationsWithManagedObjectContext:context];
 //    [Observation fetchObservationsFromServerWithManagedObjectContext:self.managedObjectContext];
 	[UserResource fetchUsersWithManagedObjectContext:self.managedObjectContext];
 	[LocationResource fetchLocationsWithManagedObjectContext:self.managedObjectContext];

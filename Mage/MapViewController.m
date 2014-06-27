@@ -14,9 +14,13 @@
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "LocationAnnotation.h"
+#import "ObservationAnnotation.h"
+#import "Observation.h"
+#import <MapKit/MapKit.h>
 
 @interface MapViewController ()
 	@property (nonatomic) NSMutableDictionary *locationAnnotations;
+    @property (nonatomic) NSMutableDictionary *observationAnnotations;
 @end
 
 @implementation MapViewController
@@ -29,6 +33,28 @@
     }
 	
     return context;
+}
+
+- (NSFetchedResultsController *) observationResultsController {
+	
+	if (_observationResultsController != nil) {
+		return _observationResultsController;
+	}
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:self.managedObjectContext]];
+    // TODO look at this, I think we changed Android to timestamp or something
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastModified" ascending:NO]]];
+    
+	_observationResultsController = [[NSFetchedResultsController alloc]
+								  initWithFetchRequest:fetchRequest
+								  managedObjectContext:self.managedObjectContext
+								  sectionNameKeyPath:nil
+								  cacheName:nil];
+    
+	[_observationResultsController setDelegate:self];
+	
+	return _observationResultsController;
 }
 
 - (NSFetchedResultsController *) locationResultsController {
@@ -50,7 +76,6 @@
 	[_locationResultsController setDelegate:self];
 	
 	return _locationResultsController;
-	
 }
 
 - (NSMutableDictionary *) locationAnnotations {
@@ -84,9 +109,22 @@
         exit(-1);  // Fail
     }
 	
-	NSArray *locations = [_locationResultsController fetchedObjects];
-	for (Location *location in locations) {
-		[self updateLocation:location];
+//	NSArray *locations = [_locationResultsController fetchedObjects];
+//	for (Location *location in locations) {
+//		[self updateLocation:location];
+//	}
+    
+    NSError *oerror;
+    if (![[self observationResultsController] performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+	
+	NSArray *observations = [_observationResultsController fetchedObjects];
+    NSLog(@"we initially found %lu observations", (unsigned long)observations.count);
+	for (Observation *observation in observations) {
+		[self updateObservation:observation];
 	}
 }
 
@@ -124,6 +162,20 @@
 		
         return annotationView;
     }
+    else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
+
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (annotationView == nil) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = YES;
+		} else {
+            annotationView.annotation = annotation;
+        }
+		
+        return annotationView;
+    }
+
 	
     return nil;
 }
@@ -149,25 +201,42 @@
 	atIndexPath:(NSIndexPath *) indexPath
 	forChangeType:(NSFetchedResultsChangeType) type
 	newIndexPath:(NSIndexPath *)newIndexPath {
-		
-    switch(type) {
-			
-        case NSFetchedResultsChangeInsert:
-			[self updateLocation:object];
-            break;
-			
-        case NSFetchedResultsChangeDelete:
-			NSLog(@"Got delete for location");
-            break;
-			
-        case NSFetchedResultsChangeUpdate:
-			[self updateLocation:object];
-            break;
+    
+    if ([object isKindOfClass:[Observation class]]) {
+        switch(type) {
+                
+            case NSFetchedResultsChangeInsert:
+                [self updateObservation:object];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                NSLog(@"Got delete for observation");
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self updateObservation:object];
+                break;
+        }
+
+    } else {
+        switch(type) {
+                
+            case NSFetchedResultsChangeInsert:
+                [self updateLocation:object];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                NSLog(@"Got delete for location");
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self updateLocation:object];
+                break;
+        }
     }
 }
 
 - (void) updateLocation:(Location *) location {
-	NSLog(@"update location");
 	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.userId];
 	if (annotation == nil) {
 		annotation = [[LocationAnnotation alloc] initWithLocation:location inManagedObjectContext:self.managedObjectContext];
@@ -176,6 +245,19 @@
 	} else {
 		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}
+}
+
+- (void) updateObservation: (Observation *) observation {
+	ObservationAnnotation *annotation = [_observationAnnotations objectForKey:observation.remoteId];
+	if (annotation == nil) {
+		annotation = [[ObservationAnnotation alloc] init];
+		[_observationAnnotations setObject:annotation forKey:observation.remoteId];
+	}
+	
+	GeoPoint *point = observation.geometry;
+    [annotation setCoordinate:point.location.coordinate];
+	
+	[_mapView addAnnotation:annotation];
 }
 
 @end
