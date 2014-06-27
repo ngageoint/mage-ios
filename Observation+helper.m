@@ -30,7 +30,6 @@
     [self setState:[NSNumber numberWithInt:(int)enumValue]];
     
     NSArray *coordinates = [json valueForKeyPath:@"geometry.coordinates"];
-    NSLog(@"coordinate array: %@", coordinates);
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
     
     [self setGeometry:[[GeoPoint alloc] initWithLocation:location]];
