@@ -9,7 +9,6 @@
 #import "Observation+helper.h"
 #import <AFNetworking.h>
 #import "HttpManager.h"
-#import "ObservationProperty+helper.h"
 #import "MageEnums.h"
 #import "GeoPoint.h"
 
@@ -57,15 +56,8 @@
 
         for (id feature in features) {
             Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
-            //NSLog(@"feature is: %@", feature);
-            //NSLog(@"feature properties: %@", [feature objectForKey: @"properties"]);
-            //NSLog(@"state is: %@", o.state);
             NSDictionary *properties = [feature objectForKey: @"properties"];
-            for (NSString* property in properties) {
-                //NSLog(@"property json is: %@ value is: %@", property, properties[property]);
-                ObservationProperty *prop = [ObservationProperty initWithKey:property andValue:properties[property] inManagedObjectContext:context];
-                [o addPropertiesObject:prop];
-            }
+            [o setProperties:properties];
             
             NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
             //NSLog(@"there are %d observations", existingObservations.count);
