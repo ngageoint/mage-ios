@@ -11,7 +11,7 @@
 #import "User.h"
 #import <Observation+helper.h>
 #import <Location+helper.h>
-
+#import <Layer+helper.h>
 #import "AppDelegate.h"
 
 @interface LoginViewController ()
@@ -32,6 +32,7 @@ User *_user;
 
 - (void) communicationTesting {
 	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
+    [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
     [Observation fetchObservationsFromServerWithManagedObjectContext:context];
 	[Location fetchLocationsWithManagedObjectContext:context];
 }

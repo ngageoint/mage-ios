@@ -237,7 +237,6 @@
 }
 
 - (void) updateLocation:(Location *) location {
-	NSLog(@"update location");
 	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.userId];
 	if (annotation == nil) {
 		annotation = [[LocationAnnotation alloc] init];
@@ -252,7 +251,6 @@
 }
 
 - (void) updateObservation: (Observation *) observation {
-	NSLog(@"update observation");
 	ObservationAnnotation *annotation = [_observationAnnotations objectForKey:observation.remoteId];
 	if (annotation == nil) {
 		annotation = [[ObservationAnnotation alloc] init];
