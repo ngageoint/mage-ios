@@ -11,11 +11,11 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" syncable="YES"/>
     </entity>
-    <entity name="Layer" syncable="YES">
+    <entity name="Layer" representedClassName="Layer" syncable="YES">
         <attribute name="formId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="loaded" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>

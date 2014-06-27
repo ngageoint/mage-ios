@@ -43,6 +43,7 @@
             Layer *l = [Layer layerForJson:layer inManagedObjectContext:context];
 
             NSSet *existingLayers = [context fetchObjectsForEntityName:@"Layer" withPredicate:@"(remoteId == %@)", l.remoteId];
+            NSLog(@"existing layers is %@", existingLayers);
             // should only ever be one layer with the id so this will work fine
             Layer *dbLayer = [existingLayers anyObject];
             
