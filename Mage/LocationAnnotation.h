@@ -22,6 +22,6 @@
 @property (nonatomic) NSString *username;
 @property (nonatomic) NSString *name;
 
-- (id)initWithLocation:(Location *) location;
+- (id)initWithLocation:(Location *) location inManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end

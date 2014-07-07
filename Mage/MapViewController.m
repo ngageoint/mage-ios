@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "Geometry.h"
 #import "GeoPoint.h"
+#import "User+helper.h"
+#import "Location+helper.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "Observation.h"
@@ -145,14 +147,12 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
 	
-    static NSString *identifier = @"LocationAnnotation";
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
 		NSString *imageName = [self imageNameForTimestamp:locationAnnotation.timestamp];
-
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imageName];
         if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             annotationView.image = [UIImage imageNamed:imageName];
@@ -163,7 +163,7 @@
         return annotationView;
     }
     else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-
+		NSString *identifier = @"Observation";
         MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         if (annotationView == nil) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
@@ -239,15 +239,12 @@
 - (void) updateLocation:(Location *) location {
 	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.userId];
 	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] init];
+		annotation = [[LocationAnnotation alloc] initWithLocation:location inManagedObjectContext:self.managedObjectContext];
+		[_mapView addAnnotation:annotation];
 		[_locationAnnotations setObject:annotation forKey:location.userId];
+	} else {
+		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}
-	
-	GeoPoint *point = location.geometry;
-	[annotation setCoordinate:point.location.coordinate];
-	[annotation setTimestamp:location.timestamp];
-	
-	[_mapView addAnnotation:annotation];
 }
 
 - (void) updateObservation: (Observation *) observation {

@@ -8,8 +8,12 @@
 
 #import "LoginViewController.h"
 #import "LocalAuthentication.h"
-#import "User.h"
+#import "User+helper.h"
 #import <Observation+helper.h>
+#import <LocationResource.h>
+#import <UserResource.h>
+
+
 #import <Location+helper.h>
 #import <Layer+helper.h>
 #import <Form.h>
@@ -23,10 +27,17 @@
 
 id<Authentication> _authentication;
 
-User *_user;
+- (NSManagedObjectContext *) managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+	
+    return context;
+}
 
 - (void) authenticationWasSuccessful:(User *) user {
-	_user = user;
     [self communicationTesting];
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
@@ -35,8 +46,9 @@ User *_user;
 	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
     [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
     [Observation fetchObservationsFromServerWithManagedObjectContext:context];
-	[Location fetchLocationsWithManagedObjectContext:context];
     [Form fetchFormInUse];
+	[UserResource fetchUsersWithManagedObjectContext:self.managedObjectContext];
+	[LocationResource fetchLocationsWithManagedObjectContext:self.managedObjectContext];
 }
 
 - (void) authenticationHadFailure {
@@ -86,7 +98,7 @@ User *_user;
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
 		NSURL *url = [NSURL URLWithString:_serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url];
+		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.managedObjectContext];
 		_authentication.delegate = self;
 		
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -122,7 +134,9 @@ User *_user;
     [_passwordField setText:@""];
     [_serverField setText:urlText];
 	
-	_authentication = [Authentication authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]];
+	_authentication = [Authentication
+					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
+					   inManagedObjectContext:self.managedObjectContext];
 	_authentication.delegate = self;
 }
 
