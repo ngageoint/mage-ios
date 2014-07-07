@@ -18,6 +18,7 @@
 #import <Layer+helper.h>
 #import <Form.h>
 #import "AppDelegate.h"
+#import <HttpManager.h>
 
 @interface LoginViewController ()
 
@@ -43,12 +44,55 @@ id<Authentication> _authentication;
 }
 
 - (void) communicationTesting {
+    HttpManager *http = [HttpManager singleton];
 	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
-    [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
-    [Observation fetchObservationsFromServerWithManagedObjectContext:context];
-    [Form fetchFormInUse];
-	[UserResource fetchUsersWithManagedObjectContext:self.managedObjectContext];
-	[LocationResource fetchLocationsWithManagedObjectContext:self.managedObjectContext];
+    
+    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
+    
+//    NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock:^{
+//        NSLog(@"block operation going");
+//        NSOperation* formOp = [Form fetchFormInUseOperation];
+//        NSOperation* observationOp = [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+//        [observationOp addDependency:formOp];
+//        [http.manager.operationQueue addOperations:@[formOp, observationOp] waitUntilFinished: NO];
+//    }];
+    
+//    NSBlockOperation *blockOp = [NSBlockOperation new];
+//    
+//    [blockOp addExecutionBlock:^{
+//        NSLog(@"block operation going");
+//        NSOperation* formOp = [Form fetchFormInUseOperation];
+//        NSOperation* observationOp = [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+//        [observationOp addDependency:formOp];
+//        [http.manager.operationQueue addOperations:@[formOp, observationOp] waitUntilFinished: NO];
+//    }];
+    
+    //NSOperation *op = [[NSOperation alloc] init];
+    
+    
+//    [blockOp addDependency:layerOp];
+    
+    
+//    [layerOp setCompletionBlock:^{
+//        NSLog(@"block operation going");
+//        NSOperation* formOp = [Form fetchFormInUseOperation];
+//        NSOperation* observationOp = [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+//        [observationOp addDependency:formOp];
+//        [http.manager.operationQueue addOperations:@[formOp, observationOp] waitUntilFinished: NO];
+//    }];
+
+    [http.manager.operationQueue setSuspended:YES];
+    NSLog(@"add the operations");
+
+//    [http.manager.operationQueue addOperations:@[layerOp, blockOp] waitUntilFinished:NO];
+    [http.manager.operationQueue addOperation:layerOp];
+//    [http.manager.operationQueue addOperation:blockOp];
+    [http.manager.operationQueue setSuspended:NO];
+    
+    NSLog(@"Told them to go");
+//    
+//    [UserResource fetchUsersWithManagedObjectContext:self.managedObjectContext];
+//	[LocationResource fetchLocationsWithManagedObjectContext:self.managedObjectContext];
 }
 
 - (void) authenticationHadFailure {
