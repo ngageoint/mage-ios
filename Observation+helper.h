@@ -16,6 +16,6 @@
 
 + (Observation*) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-+ (void) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (NSOperation*) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end

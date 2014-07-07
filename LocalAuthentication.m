@@ -44,6 +44,8 @@
         [defaults setObject: token forKey:@"token"];
         [defaults synchronize];
         
+        NSLog(@"Set the authorization token to: %@", token);
+        
         [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
 		
 		if (delegate) {

@@ -7,7 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NSManagedObjectContext+Extra.h"
 
 @interface Form : NSObject
+
+//- (id) populateObjectFromJson: (NSDictionary *) json;
+//
+//+ (Form *) formForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
+//
+//+ (void) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
+
++ (NSOperation *) fetchFormInUseOperation;
 
 @end

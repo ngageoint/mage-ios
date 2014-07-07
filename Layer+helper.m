@@ -10,6 +10,8 @@
 #import <AFNetworking.h>
 #import "HttpManager.h"
 #import "NSManagedObjectContext+Extra.h"
+#import <Form.h>
+#import <Observation+helper.h>
 
 @implementation Layer (helper)
 
@@ -18,6 +20,7 @@
     [self setName:[json objectForKey:@"name"]];
     [self setType:[json objectForKey:@"type"]];
     [self setUrl:[json objectForKey:@"url"]];
+    [self setFormId:[json objectForKey:@"formId"]];
    
     return self;
 }
@@ -31,18 +34,26 @@
     return layer;
 }
 
-+ (void) fetchFeatureLayersFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
-    HttpManager *http = [HttpManager singleton];
++ (NSOperation *) fetchFeatureLayersFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/layers"];
+    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"Feature", @"type", nil];
     
-    NSString *url = [NSString stringWithFormat:@"%@/%@?%@", serverUrl, @"api/layers", @"type=Feature"];
-    [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: params error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Layer request complete %@", responseObject);
         NSArray *layers = responseObject;
-        
         for (id layer in layers) {
             Layer *l = [Layer layerForJson:layer inManagedObjectContext:context];
-
+            [defaults setObject:l.formId forKey:@"formId"];
+            [defaults setObject:l.remoteId forKey:@"layerId"];
+            [defaults synchronize];
+            NSLog(@"Form id is %@", l.formId);
+            
             NSSet *existingLayers = [context fetchObjectsForEntityName:@"Layer" withPredicate:@"(remoteId == %@)", l.remoteId];
             // should only ever be one layer with the id so this will work fine
             Layer *dbLayer = [existingLayers anyObject];
@@ -61,9 +72,15 @@
             NSLog(@"Error inserting Observation: %@", error);
         }
         
+        NSOperation* formOp = [Form fetchFormInUseOperation];
+        NSOperation* observationOp = [Observation fetchObservationsFromServerWithManagedObjectContext:context];
+        [observationOp addDependency:formOp];
+        [http.manager.operationQueue addOperations:@[formOp, observationOp] waitUntilFinished: NO];
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    return operation;
 }
 
 

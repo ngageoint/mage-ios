@@ -7,7 +7,6 @@
 //
 
 #import "Observation+helper.h"
-#import <AFNetworking.h>
 #import "HttpManager.h"
 #import "MageEnums.h"
 #import "GeoPoint.h"
@@ -46,15 +45,20 @@
     return observation;
 }
 
-+ (void) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
-    HttpManager *http = [HttpManager singleton];
++ (NSOperation*) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"FeatureServer/3/features"];
-    [http.manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"JSON: %@", responseObject);
+    NSString *layerId = [defaults stringForKey:@"layerId"];
+    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", serverUrl, layerId];
+    NSLog(@"Fetching from layer %@", layerId);
+    
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Observation request complete");
         NSArray *features = [responseObject objectForKey:@"features"];
-
+        
         for (id feature in features) {
             Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
             NSDictionary *properties = [feature objectForKey: @"properties"];
@@ -90,6 +94,8 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    
+    return operation;
 }
 
 @end
