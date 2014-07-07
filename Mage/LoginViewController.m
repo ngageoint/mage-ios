@@ -12,6 +12,7 @@
 #import <Observation+helper.h>
 #import <Location+helper.h>
 #import <Layer+helper.h>
+#import <Form.h>
 #import "AppDelegate.h"
 
 @interface LoginViewController ()
@@ -35,6 +36,7 @@ User *_user;
     [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
     [Observation fetchObservationsFromServerWithManagedObjectContext:context];
 	[Location fetchLocationsWithManagedObjectContext:context];
+    [Form fetchFormInUse];
 }
 
 - (void) authenticationHadFailure {
