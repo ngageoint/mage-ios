@@ -236,14 +236,12 @@
     while(!foundIcon) {
         NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
         NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
-        NSLog(@"searching directory %@", directoryToSearch);
         if ([fileManager fileExistsAtPath:directoryToSearch]) {
             NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
             if ([directoryContents count] != 0) {
                 for (NSString *path in directoryContents) {
                     NSString *filename = [path lastPathComponent];
                     if ([filename hasPrefix:@"icon"]) {
-                        NSLog(@"Returning path to icon %@", [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path]);
                         return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
                     }
                 }
@@ -256,7 +254,6 @@
             [iconProperties removeLastObject];
         }
     }
-    // could return a super default here from the phone if we want
     return nil;
 }
 
