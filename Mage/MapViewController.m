@@ -114,7 +114,7 @@
 //		[self updateLocation:location];
 //	}
     
-    NSError *oerror;
+//    NSError *oerror;
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -163,21 +163,42 @@
         return annotationView;
     }
     else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-		NSString *identifier = @"Observation";
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        ObservationAnnotation *observationAnnotation = annotation;
+        NSString *imagePath = [self imagePathForObservation:observationAnnotation.observation];
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imagePath];
+        
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imagePath];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
+            if (imagePath == nil) {
+                annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
+            } else {
+                annotationView.image = [self imageWithImage:[UIImage imageWithContentsOfFile:imagePath] scaledToWidth:35];
+            }
 		} else {
             annotationView.annotation = annotation;
         }
 		
         return annotationView;
     }
-
 	
     return nil;
+}
+
+-(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
+{
+    float oldWidth = sourceImage.size.width;
+    float scaleFactor = i_width / oldWidth;
+    
+    float newHeight = sourceImage.size.height * scaleFactor;
+    float newWidth = oldWidth * scaleFactor;
+    
+    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
+    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 - (NSString *) imageNameForTimestamp:(NSDate *) timestamp {
@@ -192,6 +213,51 @@
 	} else {
 		return [NSString stringWithFormat:format, @"high"];
 	}
+}
+
+- (NSString *) imagePathForObservation:(Observation *) observation {
+	if (!observation) return nil;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *formId = [defaults objectForKey: @"formId"];
+    NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/form-%@/form/icons", formId]];
+    
+    NSString *type = [observation.properties objectForKey:@"type"];
+    
+    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSString *variantField = [form objectForKey:@"variantField"];
+    NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
+    if (variantField != nil) {
+        [iconProperties addObject: [observation.properties objectForKey:variantField]];
+    }
+
+    BOOL foundIcon = NO;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    while(!foundIcon) {
+        NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
+        NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
+        NSLog(@"searching directory %@", directoryToSearch);
+        if ([fileManager fileExistsAtPath:directoryToSearch]) {
+            NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
+            if ([directoryContents count] != 0) {
+                for (NSString *path in directoryContents) {
+                    NSString *filename = [path lastPathComponent];
+                    if ([filename hasPrefix:@"icon"]) {
+                        NSLog(@"Returning path to icon %@", [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path]);
+                        return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
+                    }
+                }
+            }
+        } else {
+            if ([iconProperties count] == 0) {
+                
+                foundIcon = YES;
+            }
+            [iconProperties removeLastObject];
+        }
+    }
+    // could return a super default here from the phone if we want
+    return nil;
 }
 
 #pragma mark - NSFetchResultsController
@@ -256,6 +322,7 @@
 	
 	GeoPoint *point = observation.geometry;
     [annotation setCoordinate:point.location.coordinate];
+    annotation.observation = observation;
 	
 	[_mapView addAnnotation:annotation];
 }

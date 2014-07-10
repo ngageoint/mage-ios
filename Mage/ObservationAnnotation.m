@@ -15,7 +15,7 @@
 	if ((self = [super init])) {
         _coordinate = ((GeoPoint *) observation.geometry).location.coordinate;
     }
-    
+    self.observation = observation;
     return self;
 }
 

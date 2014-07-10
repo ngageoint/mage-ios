@@ -21,6 +21,8 @@
 @property (nonatomic) NSString *username;
 @property (nonatomic) NSString *name;
 
+@property (nonatomic) Observation *observation;
+
 - (id)initWithObservation:(Observation *) observation;
 
 @end
