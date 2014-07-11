@@ -11,6 +11,6 @@
 
 @interface LocationResource : NSObject
 
-+ (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (NSOperation *) operationToFetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end

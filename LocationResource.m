@@ -13,15 +13,18 @@
 
 @implementation LocationResource
 
-+ (void) fetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSOperation *) operationToFetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
-	NSURL *url = [serverUrl URLByAppendingPathComponent:@"api/locations/users"];
-	
+	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
+
 	
     HttpManager *http = [HttpManager singleton];
-    [http.manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id userLocations) {
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
+
 		// Get the user ids to query
 		NSMutableArray *userIds = [[NSMutableArray alloc] init];
 		for (NSDictionary *userLocation in userLocations) {
@@ -57,6 +60,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    return operation;
 }
 
 

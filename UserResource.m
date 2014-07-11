@@ -14,15 +14,17 @@
 
 @implementation UserResource
 
-+ (void) fetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
-	NSURL *url = [serverUrl URLByAppendingPathComponent:@"api/users"];
+	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/users"];
 	
 	NSLog(@"Trying to fetch users from server %@", url);
 	
     HttpManager *http = [HttpManager singleton];
-    [http.manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id users) {
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id users) {
 		// Get the user ids to query
 		NSMutableArray *userIds = [[NSMutableArray alloc] init];
 		for (NSDictionary *userJson in users) {
@@ -58,6 +60,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    return operation;
 }
 
 @end

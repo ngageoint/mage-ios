@@ -11,6 +11,6 @@
 
 @interface UserResource : NSObject
 
-+ (void) fetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context;
 
 @end
