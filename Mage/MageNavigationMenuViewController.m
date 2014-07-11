@@ -8,6 +8,7 @@
 
 #import "MageNavigationMenuViewController.h"
 #import "UIViewController+RESideMenu.h"
+#import "MapViewController.h"
 
 @interface MageNavigationMenuViewController ()
 
@@ -43,11 +44,13 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
-        case 0:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"]]
-                                                         animated:YES];
+        case 0: {
+			MapViewController *mapViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
+			mapViewController.managedObjectContext = _managedObjectContext;
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:mapViewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+		}
         case 1:
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationsViewController"]]
                                                          animated:YES];
