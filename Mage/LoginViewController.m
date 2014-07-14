@@ -54,15 +54,14 @@ id<Authentication> _authentication;
     [layerOp addDependency:userOp];
 
     [http.manager.operationQueue setSuspended:YES];
-    NSLog(@"add the operations");
+
+    // Add the operations to the queue
 
     [http.manager.operationQueue addOperation:layerOp];
     [http.manager.operationQueue addOperation:userOp];
     [http.manager.operationQueue addOperation:locationOp];
     
     [http.manager.operationQueue setSuspended:NO];
-    
-    NSLog(@"Told them to go");
 }
 
 - (void) authenticationHadFailure {
@@ -81,15 +80,14 @@ id<Authentication> _authentication;
 	// setup authentication
 	// TODO this is the right way to grab device uid, but we do not have registration stuff done yet
 	// so for now just use hardcoded uid of 12345.
-//	NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
-//	NSString *uidString = uid.UUIDString;
-	NSString *uidString = @"12345";
+	NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
+	NSString *uidString = uid.UUIDString;
+    NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
 														 _usernameField.text, @"username",
 														 _passwordField.text, @"password",
 														 uidString, @"uid",
 														 nil];
-
 	
 	// TODO might want to mask here or put a spinner on the login button
 	[_authentication loginWithParameters: parameters];

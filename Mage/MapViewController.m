@@ -109,10 +109,10 @@
         exit(-1);  // Fail
     }
 	
-//	NSArray *locations = [_locationResultsController fetchedObjects];
-//	for (Location *location in locations) {
-//		[self updateLocation:location];
-//	}
+	NSArray *locations = [_locationResultsController fetchedObjects];
+	for (Location *location in locations) {
+		[self updateLocation:location];
+	}
     
 //    NSError *oerror;
     if (![[self observationResultsController] performFetch:&error]) {
