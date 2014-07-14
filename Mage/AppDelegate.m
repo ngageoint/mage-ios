@@ -11,6 +11,8 @@
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import "LoginViewController.h"
+
 @implementation AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -30,6 +32,9 @@
     NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
+	
+	LoginViewController *rootView = (LoginViewController *) self.window.rootViewController;
+    rootView.managedObjectContext = self.managedObjectContext;
 	
 	return YES;
 }

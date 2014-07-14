@@ -7,6 +7,9 @@
 //
 
 #import "MageRootViewController.h"
+#import "MageNavigationController.h"
+#import "MapViewController.h"
+#import "MageNavigationMenuViewController.h"
 
 @interface MageRootViewController ()
 
@@ -14,17 +17,23 @@
 
 @implementation MageRootViewController
 
-- (void)awakeFromNib
-{
-    self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
+- (void) viewDidLoad {
+	self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
     self.contentViewShadowColor = [UIColor blackColor];
     self.contentViewShadowOffset = CGSizeMake(0, 0);
     self.contentViewShadowOpacity = 0.6;
     self.contentViewShadowRadius = 12;
     self.contentViewShadowEnabled = YES;
     
-    self.contentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"contentViewController"];
-    self.leftMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mageNavigationMenuViewController"];
+	MageNavigationController *mageNavigationController = [self.storyboard instantiateViewControllerWithIdentifier:@"contentViewController"];
+	MapViewController *mapViewController = [mageNavigationController.viewControllers objectAtIndex:0];
+	mapViewController.managedObjectContext = _managedObjectContext;
+    self.contentViewController = mageNavigationController;
+	
+	MageNavigationMenuViewController *leftMenuController = [self.storyboard instantiateViewControllerWithIdentifier:@"mageNavigationMenuViewController"];
+	leftMenuController.managedObjectContext = _managedObjectContext;
+    self.leftMenuViewController = leftMenuController;
+	
     self.rightMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mageFilterMenuViewController"];
     
     NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
@@ -39,6 +48,8 @@
     UIGraphicsEndImageContext();
     self.backgroundImage = gradientImage;
     self.delegate = self;
+	
+	[super viewDidLoad];
 }
 
 - (void)sideMenu:(RESideMenu *)sideMenu willShowMenuViewController:(UIViewController *)menuViewController

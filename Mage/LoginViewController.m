@@ -19,6 +19,7 @@
 #import <Form.h>
 #import "AppDelegate.h"
 #import <HttpManager.h>
+#import "MageRootViewController.h"
 
 @interface LoginViewController ()
 
@@ -28,28 +29,25 @@
 
 id<Authentication> _authentication;
 
-- (NSManagedObjectContext *) managedObjectContext {
-    NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-	
-    return context;
-}
-
 - (void) authenticationWasSuccessful:(User *) user {
     [self communicationTesting];
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSString *segueIdentifier = [segue identifier];
+    if ([segueIdentifier isEqualToString:@"LoginSegue"]) {
+        MageRootViewController *rootViewController = [segue destinationViewController];
+		rootViewController.managedObjectContext = self.managedObjectContext;
+    }
+}
+
 - (void) communicationTesting {
     HttpManager *http = [HttpManager singleton];
-	NSManagedObjectContext *context = ((AppDelegate *)[UIApplication sharedApplication].delegate).managedObjectContext;
     
-    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:context];
-    NSOperation* userOp = [UserResource operationToFetchUsersWithManagedObjectContext:self.managedObjectContext];
-	NSOperation* locationOp = [LocationResource operationToFetchLocationsWithManagedObjectContext:self.managedObjectContext];
+    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
+    NSOperation* userOp = [UserResource operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
+	NSOperation* locationOp = [LocationResource operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
     [locationOp addDependency:userOp];
     [layerOp addDependency:userOp];
 
@@ -110,7 +108,7 @@ id<Authentication> _authentication;
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
 		NSURL *url = [NSURL URLWithString:_serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.managedObjectContext];
+		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:_managedObjectContext];
 		_authentication.delegate = self;
 		
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

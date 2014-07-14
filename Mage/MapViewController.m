@@ -25,16 +25,6 @@
 
 @implementation MapViewController
 
-- (NSManagedObjectContext *) managedObjectContext {
-    NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-	
-    return context;
-}
-
 - (NSFetchedResultsController *) observationResultsController {
 	
 	if (_observationResultsController != nil) {
@@ -42,13 +32,13 @@
 	}
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:self.managedObjectContext]];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:_managedObjectContext]];
     // TODO look at this, I think we changed Android to timestamp or something
 	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastModified" ascending:NO]]];
     
 	_observationResultsController = [[NSFetchedResultsController alloc]
 								  initWithFetchRequest:fetchRequest
-								  managedObjectContext:self.managedObjectContext
+								  managedObjectContext:_managedObjectContext
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
     
@@ -64,12 +54,12 @@
 	}
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:self.managedObjectContext]];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
 	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
 		
 	_locationResultsController = [[NSFetchedResultsController alloc]
 								  initWithFetchRequest:fetchRequest
-								  managedObjectContext:self.managedObjectContext
+								  managedObjectContext:_managedObjectContext
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
 		
@@ -114,7 +104,6 @@
 		[self updateLocation:location];
 	}
     
-//    NSError *oerror;
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -302,7 +291,7 @@
 - (void) updateLocation:(Location *) location {
 	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.userId];
 	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] initWithLocation:location inManagedObjectContext:self.managedObjectContext];
+		annotation = [[LocationAnnotation alloc] initWithLocation:location inManagedObjectContext:_managedObjectContext];
 		[_mapView addAnnotation:annotation];
 		[_locationAnnotations setObject:annotation forKey:location.userId];
 	} else {
