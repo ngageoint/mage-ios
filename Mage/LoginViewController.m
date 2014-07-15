@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import <HttpManager.h>
 #import "MageRootViewController.h"
+#import <UserUtility.h>
 
 @interface LoginViewController ()
 
@@ -30,7 +31,7 @@
 id<Authentication> _authentication;
 
 - (void) authenticationWasSuccessful:(User *) user {
-    [self communicationTesting];
+    [self initialFetch];
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
@@ -42,7 +43,7 @@ id<Authentication> _authentication;
     }
 }
 
-- (void) communicationTesting {
+- (void) initialFetch {
     HttpManager *http = [HttpManager singleton];
     
     NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
@@ -94,8 +95,6 @@ id<Authentication> _authentication;
     #else
         uid = [[UIDevice currentDevice] identifierForVendor];
     #endif
-    
-	//NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
 	NSString *uidString = uid.UUIDString;
     NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -169,9 +168,6 @@ id<Authentication> _authentication;
     // show disclaimer?
     // TODO: code for disclaimer checking
     
-    // if the token is not expired skip the login module
-    
-    
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -186,12 +182,20 @@ id<Authentication> _authentication;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view.
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    // if the token is not expired skip the login module
+    if (![UserUtility isTokenExpired]) {
+        [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
+        [self authenticationWasSuccessful:nil];
+    }
     
     NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
     
