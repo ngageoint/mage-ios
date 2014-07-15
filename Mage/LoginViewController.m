@@ -74,6 +74,17 @@ id<Authentication> _authentication;
 	[alert show];
 }
 
+- (void) registrationWasSuccessful {
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Registration Sent"
+                          message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
+                          delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+	
+	[alert show];
+}
+
 - (void) verifyLogin {
 	// setup authentication
 	// TODO this is the right way to grab device uid, but we do not have registration stuff done yet
