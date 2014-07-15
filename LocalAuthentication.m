@@ -55,7 +55,7 @@
         NSString *token = [response objectForKey:@"token"];
 		User *user = [self fetchUser:[response objectForKey:@"user"]];
 		
-        
+        [defaults setObject:[response objectForKey:@"expirationDate"] forKey:@"tokenExpirationDate"];
         [defaults setObject: token forKey:@"token"];
         [defaults synchronize];
         
