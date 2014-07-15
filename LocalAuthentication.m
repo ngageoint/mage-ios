@@ -31,16 +31,31 @@
 }
 
 - (void) loginWithParameters: (NSDictionary *) parameters {
-	NSString *url = [NSString stringWithFormat:@"%@/%@", [_baseURL absoluteString], @"api/login"];
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
+    BOOL registered = [defaults boolForKey:@"deviceRegistered"];
+    NSLog(@"registered? %hhd", registered);
+    
+    // if we think we need to register, go do it
+    if (![defaults boolForKey:@"deviceRegistered"]) {
+        NSLog(@"Not registered");
+        [self registerDevice:parameters];
+     } else {
+         NSLog(@"Registered in theory, just log in");
+        [self performLogin:parameters];
+    }
+}
 
+- (void) performLogin: (NSDictionary *) parameters {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     HttpManager *http = [HttpManager singleton];
-
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [_baseURL absoluteString], @"api/login"];
+    
     [http.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
         NSString *token = [response objectForKey:@"token"];
 		User *user = [self fetchUser:[response objectForKey:@"user"]];
 		
-        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+        
         [defaults setObject: token forKey:@"token"];
         [defaults synchronize];
         
@@ -52,12 +67,38 @@
 			[delegate authenticationWasSuccessful:user];
 		}
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        
-        if (delegate) {
-			[delegate authenticationHadFailure];
-		}
+        NSLog(@"Error logging in: %@", error);
+        // try to register again
+        [defaults setBool:NO forKey:@"deviceRegistered"];
+        [self registerDevice:parameters];
     }];
+
+}
+
+- (void) registerDevice: (NSDictionary *) parameters {
+    NSLog(@"Registering device");
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    HttpManager *http = [HttpManager singleton];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [_baseURL absoluteString], @"api/devices"];
+    [http.manager POST: url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+        BOOL registered = [[response objectForKey:@"registered"] boolValue];
+        if (registered) {
+            NSLog(@"Device was registered already, logging in");
+            [defaults setBool:YES forKey:@"deviceRegistered"];
+            // device was already registered, log in
+            [self performLogin:parameters];
+        } else {
+            NSLog(@"Registration was successful");
+            if (delegate) {
+                [delegate registrationWasSuccessful];
+            }
+        }
+    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (delegate) {
+            [delegate authenticationHadFailure];
+        }
+    }];
+
 }
 
 - (User *) fetchUser:(NSDictionary *) userJson {
