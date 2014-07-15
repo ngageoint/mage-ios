@@ -45,9 +45,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
         case 0: {
-			MapViewController *mapViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
-			mapViewController.managedObjectContext = _managedObjectContext;
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:mapViewController] animated:YES];
+			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
 		}
@@ -56,11 +56,13 @@
                                                          animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
-        case 2:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"]]
-                                                         animated:YES];
+        case 2: {
+			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"peopleViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+		}
         case 3:
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"]]
                                                          animated:YES];

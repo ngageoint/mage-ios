@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "Geometry.h"
 #import "GeoPoint.h"
+#import "PersonImage.h"
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "LocationAnnotation.h"
@@ -138,7 +139,7 @@
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
-		NSString *imageName = [self imageNameForTimestamp:locationAnnotation.timestamp];
+		NSString *imageName = [PersonImage imageNameForTimestamp:locationAnnotation.timestamp];
         MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imageName];
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
@@ -188,20 +189,6 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
-}
-
-- (NSString *) imageNameForTimestamp:(NSDate *) timestamp {
-	if (!timestamp) return @"person";
-	
-	NSString *format = @"person_%@";
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:timestamp];
-	if (interval <= 600) {
-		return [NSString stringWithFormat:format, @"low"];
-	} else if (interval <= 1200) {
-		return [NSString stringWithFormat:format, @"medium"];
-	} else {
-		return [NSString stringWithFormat:format, @"high"];
-	}
 }
 
 - (NSString *) imagePathForObservation:(Observation *) observation {
