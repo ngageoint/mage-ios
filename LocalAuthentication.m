@@ -55,7 +55,17 @@
         NSString *token = [response objectForKey:@"token"];
 		User *user = [self fetchUser:[response objectForKey:@"user"]];
 		
-        [defaults setObject:[response objectForKey:@"expirationDate"] forKey:@"tokenExpirationDate"];
+        NSString *expireString = [response objectForKey:@"expirationDate"];
+        
+        NSDateFormatter *dateFormat = [NSDateFormatter new];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        // Always use this locale when parsing fixed format date strings
+        NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        dateFormat.locale = posix;
+        NSDate* output = [dateFormat dateFromString:expireString];
+        
+        
+        [defaults setObject: output forKey:@"tokenExpirationDate"];
         [defaults setObject: token forKey:@"token"];
         [defaults synchronize];
         
