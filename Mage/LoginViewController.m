@@ -87,9 +87,15 @@ id<Authentication> _authentication;
 
 - (void) verifyLogin {
 	// setup authentication
-	// TODO this is the right way to grab device uid, but we do not have registration stuff done yet
-	// so for now just use hardcoded uid of 12345.
-	NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
+    
+    NSUUID *uid;
+    #if TARGET_IPHONE_SIMULATOR
+        uid = [[NSUUID alloc]initWithUUIDString:@"0cbdbd05-e99d-46b3-badd-505a31f5911f"];
+    #else
+        uid = [[UIDevice currentDevice] identifierForVendor];
+    #endif
+    
+	//NSUUID *uid = [[UIDevice currentDevice] identifierForVendor];
 	NSString *uidString = uid.UUIDString;
     NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -159,6 +165,13 @@ id<Authentication> _authentication;
 					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
 					   inManagedObjectContext:self.managedObjectContext];
 	_authentication.delegate = self;
+    
+    // show disclaimer?
+    // TODO: code for disclaimer checking
+    
+    // if the token is not expired skip the login module
+    
+    
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
