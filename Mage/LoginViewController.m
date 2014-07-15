@@ -31,7 +31,6 @@
 id<Authentication> _authentication;
 
 - (void) authenticationWasSuccessful:(User *) user {
-    [self initialFetch];
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
@@ -41,26 +40,6 @@ id<Authentication> _authentication;
         MageRootViewController *rootViewController = [segue destinationViewController];
 		rootViewController.managedObjectContext = self.managedObjectContext;
     }
-}
-
-- (void) initialFetch {
-    HttpManager *http = [HttpManager singleton];
-    
-    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
-    NSOperation* userOp = [UserResource operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
-	NSOperation* locationOp = [LocationResource operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
-    [locationOp addDependency:userOp];
-    [layerOp addDependency:userOp];
-
-    [http.manager.operationQueue setSuspended:YES];
-
-    // Add the operations to the queue
-
-    [http.manager.operationQueue addOperation:layerOp];
-    [http.manager.operationQueue addOperation:userOp];
-    [http.manager.operationQueue addOperation:locationOp];
-    
-    [http.manager.operationQueue setSuspended:NO];
 }
 
 - (void) authenticationHadFailure {
@@ -152,6 +131,20 @@ id<Authentication> _authentication;
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated
 {
+    NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
+    
+    CGGradientRef gradient;
+    gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, NULL);
+    CGPoint startPoint;
+    startPoint.x = self.view.frame.size.width/2;
+    startPoint.y = self.view.frame.size.height/2;
+    UIGraphicsBeginImageContext(self.view.bounds.size);
+    CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, startPoint, 0, startPoint, 5000, 0);
+    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    UIImageView *gradientView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    gradientView.image = gradientImage;
+    [self.view insertSubview:gradientView atIndex:0];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *url = [defaults URLForKey:@"serverUrl"];
 	NSString *urlText = url != nil ? [url absoluteString] : @"";
@@ -188,29 +181,10 @@ id<Authentication> _authentication;
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    
+    
     [super viewDidAppear:animated];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    // if the token is not expired skip the login module
-    if (![UserUtility isTokenExpired]) {
-        [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
-        [self authenticationWasSuccessful:nil];
-    }
-    
-    NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
-    
-    CGGradientRef gradient;
-    gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, NULL);
-    CGPoint startPoint;
-    startPoint.x = self.view.frame.size.width/2;
-    startPoint.y = self.view.frame.size.height/2;
-    UIGraphicsBeginImageContext(self.view.bounds.size);
-    CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, startPoint, 0, startPoint, 5000, 0);
-    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    UIImageView *gradientView = [[UIImageView alloc] initWithFrame:self.view.frame];
-    gradientView.image = gradientImage;
-    [self.view insertSubview:gradientView atIndex:0];
 }
 
 - (void)didReceiveMemoryWarning

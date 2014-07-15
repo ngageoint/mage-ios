@@ -10,6 +10,17 @@
 #import "MageNavigationController.h"
 #import "MapViewController.h"
 #import "MageNavigationMenuViewController.h"
+#import <HttpManager.h>
+
+#import "User+helper.h"
+#import <Observation+helper.h>
+#import <LocationResource.h>
+#import <UserResource.h>
+
+
+#import <Location+helper.h>
+#import <Layer+helper.h>
+#import <Form.h>
 
 @interface MageRootViewController ()
 
@@ -18,6 +29,8 @@
 @implementation MageRootViewController
 
 - (void) viewDidLoad {
+    [self initialFetch];
+    
 	self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
     self.contentViewShadowColor = [UIColor blackColor];
     self.contentViewShadowOffset = CGSizeMake(0, 0);
@@ -50,6 +63,26 @@
     self.delegate = self;
 	
 	[super viewDidLoad];
+}
+
+- (void) initialFetch {
+    HttpManager *http = [HttpManager singleton];
+    
+    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
+    NSOperation* userOp = [UserResource operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
+	NSOperation* locationOp = [LocationResource operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
+    [locationOp addDependency:userOp];
+    [layerOp addDependency:userOp];
+    
+    [http.manager.operationQueue setSuspended:YES];
+    
+    // Add the operations to the queue
+    
+    [http.manager.operationQueue addOperation:layerOp];
+    [http.manager.operationQueue addOperation:userOp];
+    [http.manager.operationQueue addOperation:locationOp];
+    
+    [http.manager.operationQueue setSuspended:NO];
 }
 
 - (void)sideMenu:(RESideMenu *)sideMenu willShowMenuViewController:(UIViewController *)menuViewController

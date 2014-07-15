@@ -11,7 +11,7 @@
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import "LoginViewController.h"
+#import "MageInitialViewController.h"
 
 @implementation AppDelegate
 
@@ -33,7 +33,7 @@
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
 	
-	LoginViewController *rootView = (LoginViewController *) self.window.rootViewController;
+	MageInitialViewController *rootView = (MageInitialViewController *) self.window.rootViewController;
     rootView.managedObjectContext = self.managedObjectContext;
 	
 	return YES;

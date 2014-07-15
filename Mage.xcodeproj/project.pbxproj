@@ -44,6 +44,7 @@
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
+		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */; };
@@ -119,6 +120,8 @@
 		F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
+		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
 		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 				4C790F7519704DE300886E58 /* MageNavigationController.m */,
 				4C790F7719742CEC00886E58 /* DisclaimerNavigationController.h */,
 				4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */,
+				F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */,
+				F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
+				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewerViewController.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
