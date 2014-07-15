@@ -13,7 +13,7 @@
 
 + (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-- (void) updateLocationsForUserId:(NSString *) userId locations: (NSArray *) locations;
+- (void) populateLocationFromJson:(NSArray *) locations;
 
 @property (nonatomic, retain) Geometry* geometry;
 

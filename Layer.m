@@ -2,7 +2,7 @@
 //  Layer.m
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 6/27/14.
+//  Created by Billy Newman on 7/15/14.
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 
 @implementation Layer
 
+@dynamic formId;
+@dynamic loaded;
+@dynamic name;
 @dynamic remoteId;
 @dynamic type;
-@dynamic name;
-@dynamic loaded;
-@dynamic formId;
 @dynamic url;
 
 @end

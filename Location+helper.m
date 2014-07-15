@@ -19,15 +19,13 @@
 	if (!locations.count) return nil;
 
 	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
-	[location updateLocationsForUserId:[json objectForKey:@"user"] locations:locations];
+	[location populateLocationFromJson:locations];
 	
 	return location;
 }
 
-- (void) updateLocationsForUserId:(NSString *) userId locations: (NSArray *) locations {
+- (void) populateLocationFromJson:(NSArray *) locations {
 	if (locations.count) {
-		[self setUserId:userId];
-		
 		for (NSDictionary* jsonLocation in locations) {
 			[self setRemoteId:[jsonLocation objectForKey:@"_id"]];
 			[self setType:[jsonLocation objectForKey:@"type"]];
