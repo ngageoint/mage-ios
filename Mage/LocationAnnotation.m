@@ -11,12 +11,12 @@
 
 @implementation LocationAnnotation
 
--(id) initWithLocation:(Location *) location inManagedObjectContext: (NSManagedObjectContext *) context {
+-(id) initWithLocation:(Location *) location {
 	if ((self = [super init])) {
         _coordinate = ((GeoPoint *) location.geometry).location.coordinate;
 		_timestamp = location.timestamp;
 		
-		User *user = [User fetchUserForId:location.userId inManagedObjectContext:context];
+		User *user = location.user;
 		_title = user.name;
 		_subtitle = user.username;
     }

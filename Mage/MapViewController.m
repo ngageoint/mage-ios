@@ -276,11 +276,11 @@
 }
 
 - (void) updateLocation:(Location *) location {
-	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.userId];
+	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.user.remoteId];
 	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] initWithLocation:location inManagedObjectContext:_managedObjectContext];
+		annotation = [[LocationAnnotation alloc] initWithLocation:location];
 		[_mapView addAnnotation:annotation];
-		[_locationAnnotations setObject:annotation forKey:location.userId];
+		[_locationAnnotations setObject:annotation forKey:location.user.remoteId];
 	} else {
 		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}

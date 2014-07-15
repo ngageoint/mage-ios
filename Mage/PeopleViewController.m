@@ -55,11 +55,7 @@
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
 	
 	Location *location = [_locationResultsController objectAtIndexPath:indexPath];
-	User *user = [User fetchUserForId:location.userId inManagedObjectContext:_managedObjectContext];
-	[personCell.icon setImage:[PersonImage imageForTimestamp:location.timestamp]];
-	personCell.name.text = user.name;
-	personCell.email.text = user.email;
-	personCell.timestamp.text = location.timestamp.timeAgoSinceNow;
+	[personCell populateCellWithLocation:location];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
