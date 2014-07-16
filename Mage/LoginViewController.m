@@ -159,6 +159,9 @@ id<Authentication> _authentication;
 	_authentication.delegate = self;
     
 }
+- (IBAction)showPasswordSwitchAction:(id)sender {
+    [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
