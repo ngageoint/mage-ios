@@ -29,4 +29,12 @@
     [self.view insertSubview:gradientView atIndex:0];
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSString *segueIdentifier = [segue identifier];
+    if ([segueIdentifier isEqualToString:@"DisplayLoginSegue"]) {
+        id destinationController = [segue destinationViewController];
+		[destinationController setManagedObjectContext:_managedObjectContext];
+    }
+}
+
 @end
