@@ -42,8 +42,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"selected row at path row: %ld", (long)indexPath.row);
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
+        // Map
         case 0: {
 			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
 			[viewController setManagedObjectContext:_managedObjectContext];
@@ -51,11 +53,13 @@
             [self.sideMenuViewController hideMenuViewController];
             break;
 		}
+        // Observations
         case 1:
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationsViewController"]]
                                                          animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+        // People
         case 2: {
 			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"peopleViewController"];
 			[viewController setManagedObjectContext:_managedObjectContext];
@@ -63,10 +67,15 @@
             [self.sideMenuViewController hideMenuViewController];
             break;
 		}
+        // Settings
         case 3:
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"]]
                                                          animated:YES];
             [self.sideMenuViewController hideMenuViewController];
+            break;
+        // Logout
+        case 4:
+            [self performSegueWithIdentifier:@"unwindToInitialViewSegue" sender:self];
             break;
 
         default:

@@ -158,9 +158,6 @@ id<Authentication> _authentication;
 					   inManagedObjectContext:self.managedObjectContext];
 	_authentication.delegate = self;
     
-    // show disclaimer?
-    // TODO: code for disclaimer checking
-    
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

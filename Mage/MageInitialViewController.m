@@ -58,14 +58,14 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    // if they have not accepted the disclaimer
-    if (![defaults boolForKey:@"disclaimerAccpted"]) {
-        double delayInSeconds = 1.5;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
-        });
-    }
+//    // if they have not accepted the disclaimer
+//    if (![defaults boolForKey:@"disclaimerAccpted"]) {
+//        double delayInSeconds = 1.5;
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//            [self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
+//        });
+//    }
     
     // if the token is not expired skip the login module
     if (![UserUtility isTokenExpired]) {
@@ -94,5 +94,12 @@
          navViewController.managedObjectContext = self.managedObjectContext;
      }
  }
+
+- (IBAction)unwindToInitial:(UIStoryboardSegue *)unwindSegue {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"token"];
+    [defaults removeObjectForKey:@"tokenExpiration"];
+    [defaults removeObjectForKey:@"disclaimerAccepted"];
+}
 
 @end
