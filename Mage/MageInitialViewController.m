@@ -7,8 +7,6 @@
 //
 
 #import "MageInitialViewController.h"
-#import "LoginViewController.h"
-#import "MageRootViewController.h"
 #import <UserUtility.h>
 #import <HttpManager.h>
 
@@ -58,15 +56,6 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    // if they have not accepted the disclaimer
-    if (![defaults boolForKey:@"disclaimerAccepted"]) {
-        double delayInSeconds = 1.5;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
-        });
-    }
-    
     // if the token is not expired skip the login module
     if (![UserUtility isTokenExpired]) {
         [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
@@ -79,19 +68,19 @@
         double delayInSeconds = 1.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [self performSegueWithIdentifier:@"DisplayLoginSegue" sender:nil];
+            [self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
         });
     }
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSString *segueIdentifier = [segue identifier];
-    if ([segueIdentifier isEqualToString:@"DisplayLoginSegue"]) {
-        LoginViewController *loginViewController = [segue destinationViewController];
-        loginViewController.managedObjectContext = self.managedObjectContext;
+    if ([segueIdentifier isEqualToString:@"DisplayDisclaimerViewSegue"]) {
+        id destinationController = [segue destinationViewController];
+		[destinationController setManagedObjectContext:_managedObjectContext];
     } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
-        MageRootViewController *navViewController = [segue destinationViewController];
-        navViewController.managedObjectContext = self.managedObjectContext;
+        id destinationController = [segue destinationViewController];
+		[destinationController setManagedObjectContext:_managedObjectContext];
     }
 }
 
