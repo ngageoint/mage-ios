@@ -84,16 +84,16 @@
     }
 }
 
- - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     NSString *segueIdentifier = [segue identifier];
-     if ([segueIdentifier isEqualToString:@"DisplayLoginSegue"]) {
-         LoginViewController *loginViewController = [segue destinationViewController];
-         loginViewController.managedObjectContext = self.managedObjectContext;
-     } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
-         MageRootViewController *navViewController = [segue destinationViewController];
-         navViewController.managedObjectContext = self.managedObjectContext;
-     }
- }
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSString *segueIdentifier = [segue identifier];
+    if ([segueIdentifier isEqualToString:@"DisplayLoginSegue"]) {
+        LoginViewController *loginViewController = [segue destinationViewController];
+        loginViewController.managedObjectContext = self.managedObjectContext;
+    } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
+        MageRootViewController *navViewController = [segue destinationViewController];
+        navViewController.managedObjectContext = self.managedObjectContext;
+    }
+}
 
 - (IBAction)unwindToInitial:(UIStoryboardSegue *)unwindSegue {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
