@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C2A38E919744FBC00E7470A /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleViewController.m */; };
+		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
+		4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C390F3E1978376B00AB3CCB /* PersonViewController.m */; };
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
@@ -61,12 +62,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C2A38E719744FBC00E7470A /* PeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
-		4C2A38E819744FBC00E7470A /* PeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
+		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
+		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
 		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
 		4C2A38EE1974803700E7470A /* PersonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonImage.h; sourceTree = "<group>"; };
 		4C2A38EF1974803700E7470A /* PersonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonImage.m; sourceTree = "<group>"; };
+		4C390F3D1978376B00AB3CCB /* PersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonViewController.h; sourceTree = "<group>"; };
+		4C390F3E1978376B00AB3CCB /* PersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonViewController.m; sourceTree = "<group>"; };
 		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
@@ -161,12 +164,14 @@
 		4C2A38ED19745C0D00E7470A /* People */ = {
 			isa = PBXGroup;
 			children = (
-				4C2A38E719744FBC00E7470A /* PeopleViewController.h */,
-				4C2A38E819744FBC00E7470A /* PeopleViewController.m */,
+				4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */,
+				4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */,
 				4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */,
 				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
 				4C2A38EE1974803700E7470A /* PersonImage.h */,
 				4C2A38EF1974803700E7470A /* PersonImage.m */,
+				4C390F3D1978376B00AB3CCB /* PersonViewController.h */,
+				4C390F3E1978376B00AB3CCB /* PersonViewController.m */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -430,7 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */,
-				4C2A38E919744FBC00E7470A /* PeopleViewController.m in Sources */,
+				4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				4C2A38F01974803700E7470A /* PersonImage.m in Sources */,
@@ -448,6 +453,7 @@
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
+				4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
 				F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */,
