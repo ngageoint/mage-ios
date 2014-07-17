@@ -54,11 +54,13 @@
             break;
 		}
         // Observations
-        case 1:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationsViewController"]]
-                                                         animated:YES];
+        case 1: {
+            id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+        }
         // People
         case 2: {
 			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"peopleViewController"];

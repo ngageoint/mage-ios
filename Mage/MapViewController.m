@@ -17,6 +17,7 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "Observation.h"
+#import "ObservationImage.h"
 #import <MapKit/MapKit.h>
 
 @interface MapViewController ()
@@ -124,17 +125,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
@@ -154,17 +144,17 @@
     }
     else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        NSString *imagePath = [self imagePathForObservation:observationAnnotation.observation];
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imagePath];
+        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imagePath];
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
-            if (imagePath == nil) {
+            if (image == nil) {
                 annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
             } else {
-                annotationView.image = [self imageWithImage:[UIImage imageWithContentsOfFile:imagePath] scaledToWidth:35];
+                annotationView.image = image;
             }
 		} else {
             annotationView.annotation = annotation;
@@ -189,48 +179,6 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
-}
-
-- (NSString *) imagePathForObservation:(Observation *) observation {
-	if (!observation) return nil;
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *formId = [defaults objectForKey: @"formId"];
-    NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/form-%@/form/icons", formId]];
-    
-    NSString *type = [observation.properties objectForKey:@"type"];
-    
-    NSDictionary *form = [defaults objectForKey:@"form"];
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
-    if (variantField != nil) {
-        [iconProperties addObject: [observation.properties objectForKey:variantField]];
-    }
-
-    BOOL foundIcon = NO;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    while(!foundIcon) {
-        NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
-        NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
-        if ([fileManager fileExistsAtPath:directoryToSearch]) {
-            NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
-            if ([directoryContents count] != 0) {
-                for (NSString *path in directoryContents) {
-                    NSString *filename = [path lastPathComponent];
-                    if ([filename hasPrefix:@"icon"]) {
-                        return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
-                    }
-                }
-            }
-        } else {
-            if ([iconProperties count] == 0) {
-                
-                foundIcon = YES;
-            }
-            [iconProperties removeLastObject];
-        }
-    }
-    return nil;
 }
 
 #pragma mark - NSFetchResultsController
