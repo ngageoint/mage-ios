@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Authentication.h"
 
-@interface LoginViewController : UIViewController<AuthenticationDelegate>
+@interface LoginViewController : UIViewController<AuthenticationDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 

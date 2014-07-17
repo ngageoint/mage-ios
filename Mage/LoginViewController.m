@@ -152,6 +152,7 @@ id<Authentication> _authentication;
     [_usernameField setText:@""];
     [_passwordField setText:@""];
     [_serverField setText:urlText];
+    [_passwordField setDelegate:self];
 	
 	_authentication = [Authentication
 					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
@@ -161,6 +162,16 @@ id<Authentication> _authentication;
 }
 - (IBAction)showPasswordSwitchAction:(id)sender {
     [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
+    self.passwordField.clearsOnBeginEditing = NO;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    NSString *updatedString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    textField.text = updatedString;
+    
+    return NO;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
