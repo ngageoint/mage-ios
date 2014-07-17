@@ -17,11 +17,17 @@
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setUserId:[json objectForKey:@"userId"]];
     [self setDeviceId:[json objectForKey:@"deviceId"]];
+    NSDictionary *properties = [json objectForKey: @"properties"];
+    [self setProperties:properties];
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
     [self setLastModified:date];
+    
+    NSDate *timestamp = [dateFormat dateFromString:[self.properties objectForKey:@"timestamp"]];
+    [self setTimestamp:timestamp];
+    
     [self setUrl:[json objectForKey:@"url"]];
     NSDictionary *jsonState = [json objectForKey: @"state"];
     NSString *stateName = [jsonState objectForKey: @"name"];
@@ -61,8 +67,11 @@
         
         for (id feature in features) {
             Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
-            NSDictionary *properties = [feature objectForKey: @"properties"];
-            [o setProperties:properties];
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
+            [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(remoteId = %@)", o.userId]];
+            NSError *error;
+            NSArray *usersMatchingIDs = [context executeFetchRequest:fetchRequest error:&error];
             
             NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
             Observation *dbObs = [existingObservations anyObject];
@@ -77,11 +86,13 @@
             // else if the observation is not archived and doesn't exist, insert it
             else if ([o.state intValue] != archive && dbObs == nil) {
                 [context insertObject:o];
+                o.user = [usersMatchingIDs objectAtIndex:0];
                 NSLog(@"Saving new observation with id: %@", o.remoteId);
             }
             // else if the observation is not archived, and not dirty and exists, update it
             else if ([o.state intValue] != archive && [o.dirty boolValue]) {
                 [dbObs populateObjectFromJson:feature];
+                dbObs.user = [usersMatchingIDs objectAtIndex:0];
                 NSLog(@"Updating object with id: %@", o.remoteId);
             }
         }
