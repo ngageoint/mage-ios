@@ -24,7 +24,11 @@
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    UIView *view = [[UIView alloc] initWithFrame:self.frame];
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:207/255.0 green:207/255.0 blue:207/255.0 alpha:51/255.0] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+    [self.layer insertSublayer:gradient atIndex:0];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -40,7 +44,9 @@
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
     self.primaryField.text = type;
-    self.variantField.text = [observation.properties objectForKey:variantField];
+    if (variantField != nil) {
+        self.variantField.text = [observation.properties objectForKey:variantField];
+    }
     self.icon.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
     
     NSString *timestamp = [observation.properties objectForKey:@"timestamp"];
@@ -54,14 +60,15 @@
     self.timeField.text = output.shortTimeAgoSinceNow;
     
     self.userField.text = observation.user.name;
-    
-//	User *user = location.user;
-//	NSDate *date = location.timestamp;
-//	
-//	[self.icon setImage:[PersonImage imageForTimestamp:date]];
-//	self.name.text = user.name;
-//	self.email.text = user.email;
-//	self.timestamp.text = date.timeAgoSinceNow;
+    if ([observation.attachments count] != 0) {
+        self.numberOfAttachmentsLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)[observation.attachments count]];
+        self.paperClipImage.image = [self.paperClipImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self.numberOfAttachmentsLabel setHidden:NO];
+        [self.paperClipImage setHidden:NO];
+    } else {
+        [self.paperClipImage setHidden:YES];
+        [self.numberOfAttachmentsLabel setHidden:YES];
+    }
 }
 
 @end

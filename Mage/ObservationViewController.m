@@ -16,6 +16,8 @@
 
 @implementation ObservationViewController
 
+NSString *variantField;
+
 - (NSFetchedResultsController *) observationResultsController {
 	
 	if (_observationResultsController != nil) {
@@ -39,6 +41,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *form = [defaults objectForKey:@"form"];
+    variantField = [form objectForKey:@"variantField"];
     
 	NSError *error;
     if (![[self observationResultsController] performFetch:&error]) {
@@ -60,18 +65,28 @@
 	[observationCell populateCellWithObservation:observation];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-    static NSString *CellIdentifier = @"observationCell";
-	
-    ObservationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-        cell = [[ObservationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+- (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
+    Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
+    NSString *CellIdentifier = @"observationCell";
+    if (variantField != nil && [[observation.properties objectForKey:variantField] length] != 0) {
+        CellIdentifier = @"observationVariantCell";
     }
 	
-	[self configureCell:cell atIndexPath:indexPath];
+    ObservationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+	[self configureCell: cell atIndexPath:indexPath];
 	
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+    
+    return cell.bounds.size.height;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
