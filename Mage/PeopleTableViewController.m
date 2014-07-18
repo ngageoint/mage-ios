@@ -120,7 +120,7 @@
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
         id destination = [segue destinationViewController];
-		NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [_locationResultsController objectAtIndexPath:indexPath];
 		[destination setLocation:location];
     }
