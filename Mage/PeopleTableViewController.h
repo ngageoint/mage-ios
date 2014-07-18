@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PeopleViewController : UITableViewController<NSFetchedResultsControllerDelegate>
+@interface PeopleTableViewController : UITableViewController<NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSFetchedResultsController *locationResultsController;

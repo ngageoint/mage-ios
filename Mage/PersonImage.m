@@ -22,9 +22,7 @@
 	} else {
 		return [NSString stringWithFormat:format, @"high"];
 	}
-	
 }
-
 	
 + (UIImage *) imageForTimestamp:(NSDate *) timestamp {
 	return [UIImage imageNamed:[PersonImage imageNameForTimestamp:timestamp]];

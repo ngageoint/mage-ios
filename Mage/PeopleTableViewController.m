@@ -5,14 +5,14 @@
 //  Created by Billy Newman on 7/14/14.
 //
 
-#import "PeopleViewController.h"
+#import "PeopleTableViewController.h"
 #import "PersonImage.h"
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "NSDate+DateTools.h"
 #import "PersonTableViewCell.h"
 
-@implementation PeopleViewController
+@implementation PeopleTableViewController
 
 - (NSFetchedResultsController *) locationResultsController {
 	
@@ -118,6 +118,14 @@
 - (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
     [self.tableView endUpdates];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
+        id destination = [segue destinationViewController];
+		PersonTableViewCell *cell = sender;
+		[destination setLocation:cell.location];
+    }
 }
 
 

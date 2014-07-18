@@ -9,11 +9,13 @@
 #import "Location+helper.h"
 
 @interface PersonTableViewCell : UITableViewCell
+@property (weak, nonatomic) Location *location;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UILabel *name;
-@property (weak, nonatomic) IBOutlet UILabel *email;
+@property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;
 
-- (void) populateCellWithLocation:(Location *) location;
+
+- (id) populateCellWithLocation:(Location *) location;
 
 @end

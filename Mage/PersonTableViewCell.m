@@ -12,15 +12,18 @@
 
 @implementation PersonTableViewCell
 
-- (void) populateCellWithLocation:(Location *) location {
+- (id) populateCellWithLocation:(Location *) location {
+	self.location = location;
+	
 	User *user = location.user;
 	NSDate *date = location.timestamp;
 	
 	[self.icon setImage:[PersonImage imageForTimestamp:date]];
 	self.name.text = user.name;
-	self.email.text = user.email;
+	self.username.text = user.username;
 	self.timestamp.text = date.timeAgoSinceNow;
+	
+	return self;
 }
-
 
 @end
