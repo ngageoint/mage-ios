@@ -9,6 +9,7 @@
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
 #import <Observation.h>
+#import "ObservationViewerViewController.h"
 
 @interface ObservationViewController ()
 
@@ -135,6 +136,16 @@ NSString *variantField;
 - (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
     [self.tableView endUpdates];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
+        id destination = [segue destinationViewController];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+		Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
+		[destination setObservation:observation];
+        
+    }
 }
 
 
