@@ -51,7 +51,7 @@
     return [sectionInfo numberOfObjects];
 }
 
-- (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void) configureCell:(UITableViewCell *) cell atIndexPath:(NSIndexPath *)indexPath {
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
 	
 	Location *location = [_locationResultsController objectAtIndexPath:indexPath];
@@ -60,9 +60,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    static NSString *CellIdentifier = @"personCell";
-	
-    PersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"personCell"];
 	
 	[self configureCell:cell atIndexPath:indexPath];
 	

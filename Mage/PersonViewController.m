@@ -11,11 +11,43 @@
 #import "User+helper.h"
 #import "PersonImage.h"
 #import "GeoPoint.h"
+#import "NSDate+DateTools.h"
+
+@interface PersonViewController()
+	@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@end
 
 @implementation PersonViewController
 
+- (NSDateFormatter *) dateFormatter {
+	if (_dateFormatter == nil) {
+		_dateFormatter = [[NSDateFormatter alloc] init];
+		[_dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+		[_dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+	}
+	
+	return _dateFormatter;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+	
+	User *user = _location.user;
+	_name.text = user.name;
+	_username.text = user.username;
+	_timestamp.text = [@"@" stringByAppendingFormat: @" %@", [self.dateFormatter stringFromDate:_location.timestamp]];
+	
+	if (user.email == nil) {
+		_email.hidden = YES;
+	} else {
+		_email.text = user.email;
+	}
+	
+	if (user.phone == nil) {
+		_phone.hidden = YES;
+	} else {
+		_phone.text = user.phone;
+	}
 	
 	NSString *name = _location.user.name.length ? _location.user.name : _location.user.username;
 	self.navigationItem.title = name;
