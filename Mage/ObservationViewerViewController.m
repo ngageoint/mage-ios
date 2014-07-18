@@ -10,6 +10,7 @@
 #import "GeoPoint.h"
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
+#import "ObservationPropertyTableViewCell.h"
 #import <User.h>
 
 @interface ObservationViewerViewController ()
@@ -72,6 +73,9 @@
     
     self.userLabel.text = _observation.user.name;
     self.locationLabel.text = [NSString stringWithFormat:@"%f, %f", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    [self.propertyTable setDelegate:self];
+    [self.propertyTable setDataSource:self];
+    
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -133,5 +137,49 @@
 	
 	return renderer;
 }
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_observation.properties count];
+}
+
+- (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+	ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
+    id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    NSLog(@"object at index %@",[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]);
+	
+    observationCell.keyLabel.text = key;
+    observationCell.valueLabel.text = value;
+//	Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
+//	[observationCell populateCellWithObservation:observation];
+    
+    
+}
+
+- (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
+//    Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
+    NSString *CellIdentifier = @"observationPropertyCell";
+//    if (variantField != nil && [[observation.properties objectForKey:variantField] length] != 0) {
+//        CellIdentifier = @"observationVariantCell";
+//    }
+	
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+	[self configureCell: cell atIndexPath:indexPath];
+	
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+    
+    return cell.bounds.size.height;
+}
+
+
 
 @end
