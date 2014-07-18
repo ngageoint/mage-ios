@@ -7,6 +7,10 @@
 //
 
 #import "ObservationViewerViewController.h"
+#import "GeoPoint.h"
+#import "ObservationAnnotation.h"
+#import "ObservationImage.h"
+#import <User.h>
 
 @interface ObservationViewerViewController ()
 
@@ -14,71 +18,120 @@
 
 @implementation ObservationViewerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void) viewDidLoad {
     [super viewDidLoad];
-    
-//    UIGraphicsBeginImageContext(self.view.bounds.size);
-//    CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, startPoint, 0, startPoint, 5000, 0);
-//    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-    
+	
+	NSString *name = [_observation.properties valueForKey:@"type"];
+	self.navigationItem.title = name;
     
     CAGradientLayer *maskLayer = [CAGradientLayer layer];
     
     //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
     
     maskLayer.anchorPoint = CGPointZero;
-
     
     //setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha. A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
     UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:0.1];
     UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-
-    
-//android:startColor="#DD111111"
-//android:endColor="#00CCCCCC"
     
     //an array of colors that dictatates the gradient(s)
     maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
     
     //these are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array. The gradient will shift between the colors between these percentage points.
     maskLayer.locations = @[@0.0, @0.0, @1.0, @1.0f];
-    maskLayer.bounds = CGRectMake(self.map.frame.origin.x, self.map.frame.origin.y, CGRectGetWidth(self.map.bounds), CGRectGetHeight(self.map.bounds));
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.map.frame.origin.x, self.map.frame.origin.y, CGRectGetWidth(self.map.bounds), CGRectGetHeight(self.map.bounds))];
-
+    maskLayer.bounds = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds));
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds))];
+    
     view.backgroundColor = [UIColor blackColor];
     
     
-    [self.view insertSubview:view belowSubview:self.map];
-    self.map.layer.mask = maskLayer;
+    [self.view insertSubview:view belowSubview:self.mapView];
+    self.mapView.layer.mask = maskLayer;
+
+	[_mapView setDelegate:self];
+	CLLocationDistance latitudeMeters = 500;
+	CLLocationDistance longitudeMeters = 500;
+	GeoPoint *point = _observation.geometry;
+	NSDictionary *properties = _observation.properties;
+	id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+	if (accuracyProperty != nil) {
+		double accuracy = [accuracyProperty doubleValue];
+		latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+		longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+		
+		MKCircle *circle = [MKCircle circleWithCenterCoordinate:point.location.coordinate radius:accuracy];
+		[_mapView addOverlay:circle];
+	}
+
+	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point.location.coordinate, latitudeMeters, longitudeMeters);
+	MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+	[_mapView setRegion:viewRegion];
+	
+	ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:_observation];
+	[_mapView addAnnotation:annotation];
     
+    self.userLabel.text = _observation.user.name;
+    self.locationLabel.text = [NSString stringWithFormat:@"%f, %f", point.location.coordinate.latitude, point.location.coordinate.longitude];
 }
 
-- (void)didReceiveMemoryWarning
+- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+	
+    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
+		ObservationAnnotation *observationAnnotation = annotation;
+        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        
+        if (annotationView == nil) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = YES;
+            if (image == nil) {
+                annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
+            } else {
+                annotationView.image = image;
+            }
+		} else {
+            annotationView.annotation = annotation;
+        }
+		
+        return annotationView;
+    }
+	
+    return nil;
+}
+
+-(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    float oldWidth = sourceImage.size.width;
+    float scaleFactor = i_width / oldWidth;
+    
+    float newHeight = sourceImage.size.height * scaleFactor;
+    float newWidth = oldWidth * scaleFactor;
+    
+    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
+    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
+	MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
+	renderer.lineWidth = 1.0f;
+	
+	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:_observation.timestamp];
+	if (interval <= 600) {
+		renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
+		renderer.strokeColor = [UIColor blueColor];
+	} else if (interval <= 1200) {
+		renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
+		renderer.strokeColor = [UIColor yellowColor];
+	} else {
+		renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
+		renderer.strokeColor = [UIColor orangeColor];
+	}
+	
+	return renderer;
 }
-*/
 
 @end

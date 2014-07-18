@@ -198,6 +198,8 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7531EFE1910131C00CA084C /* ObservationViewerViewController.h */,
+				F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */,
 				F7531EFB191010A600CA084C /* ObservationViewController.h */,
 				F7531EFC191010A600CA084C /* ObservationViewController.m */,
 				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
@@ -265,8 +267,6 @@
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */,
 				F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */,
 				F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */,
-				F7531EFE1910131C00CA084C /* ObservationViewerViewController.h */,
-				F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */,
 				F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */,
 				F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */,
 				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,

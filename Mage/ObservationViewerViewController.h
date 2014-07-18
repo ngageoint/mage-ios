@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "RESideMenu.h"
 #import <MapKit/MapKit.h>
+#import "Observation.h"
 
-@interface ObservationViewerViewController : UIViewController
+@interface ObservationViewerViewController : UIViewController<MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
-@property (weak, nonatomic) IBOutlet MKMapView *map;
+@property (strong, nonatomic) Observation *observation;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UILabel *userLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 
 @end
