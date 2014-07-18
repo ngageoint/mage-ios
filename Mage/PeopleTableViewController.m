@@ -121,6 +121,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [_locationResultsController objectAtIndexPath:indexPath];
 		[destination setLocation:location];
+		[destination setManagedObjectContext:_managedObjectContext];
     }
 }
 

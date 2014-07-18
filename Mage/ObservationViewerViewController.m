@@ -32,14 +32,14 @@
     maskLayer.anchorPoint = CGPointZero;
     
     //setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha. A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
-    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:0.1];
+    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
     UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
     //an array of colors that dictatates the gradient(s)
     maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
     
     //these are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array. The gradient will shift between the colors between these percentage points.
-    maskLayer.locations = @[@0.0, @0.0, @1.0, @1.0f];
+    maskLayer.locations = @[@0.0, @0.0, @.25, @.25f];
     maskLayer.bounds = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds));
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds))];
     
