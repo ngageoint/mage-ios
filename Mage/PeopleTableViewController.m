@@ -63,9 +63,6 @@
     static NSString *CellIdentifier = @"personCell";
 	
     PersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-        cell = [[PersonTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
 	
 	[self configureCell:cell atIndexPath:indexPath];
 	
@@ -123,8 +120,9 @@
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
         id destination = [segue destinationViewController];
-		PersonTableViewCell *cell = sender;
-		[destination setLocation:cell.location];
+		NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+		Location *location = [_locationResultsController objectAtIndexPath:indexPath];
+		[destination setLocation:location];
     }
 }
 
