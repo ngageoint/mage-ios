@@ -1,9 +1,9 @@
 //
 //  User.m
-//  mage-ios-sdk
+//  Pods
 //
-//  Created by Billy Newman on 7/15/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//  Created by Billy Newman on 7/18/14.
+//
 //
 
 #import "User.h"
@@ -17,6 +17,7 @@
 @dynamic name;
 @dynamic remoteId;
 @dynamic username;
+@dynamic phone;
 @dynamic location;
 
 @end

@@ -45,6 +45,7 @@
         <attribute name="currentUser" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="user" inverseEntity="Location" syncable="YES"/>
@@ -54,6 +55,6 @@
         <element name="Layer" positionX="-1998" positionY="-873" width="128" height="135"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="133"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="223"/>
-        <element name="User" positionX="-1989" positionY="-918" width="128" height="133"/>
+        <element name="User" positionX="-1989" positionY="-918" width="128" height="150"/>
     </elements>
 </model>

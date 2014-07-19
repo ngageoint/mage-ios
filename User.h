@@ -1,9 +1,9 @@
 //
 //  User.h
-//  mage-ios-sdk
+//  Pods
 //
-//  Created by Billy Newman on 7/15/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//  Created by Billy Newman on 7/18/14.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * remoteId;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSString * phone;
 @property (nonatomic, retain) Location *location;
 
 @end
