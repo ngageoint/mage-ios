@@ -10,18 +10,23 @@
 #import "HttpManager.h"
 #import "MageEnums.h"
 #import "GeoPoint.h"
+#import "Attachment+helper.h"
+
 
 @implementation Observation (Observation_helper)
 
-- (id) populateObjectFromJson: (NSDictionary *) json {
+- (id) populateObjectFromJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setUserId:[json objectForKey:@"userId"]];
     [self setDeviceId:[json objectForKey:@"deviceId"]];
     NSDictionary *properties = [json objectForKey: @"properties"];
     [self setProperties:properties];
     
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // Always use this locale when parsing fixed format date strings
+    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormat.locale = posix;
     NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
     [self setLastModified:date];
     
@@ -43,10 +48,8 @@
 }
 
 + (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
-    
     Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
-    
-    [observation populateObjectFromJson:json];
+    [observation populateObjectFromJson:json inManagedObjectContext: context];
     
     return observation;
 }
@@ -87,12 +90,26 @@
             else if ([o.state intValue] != archive && dbObs == nil) {
                 [context insertObject:o];
                 o.user = [usersMatchingIDs objectAtIndex:0];
+                NSArray *attachments = [feature objectForKey:@"attachments"];
+                for (id attachment in attachments) {
+                    Attachment * a = [Attachment attachmentForJson:attachment inManagedObjectContext:context];
+                    [context insertObject:a];
+                    [o addAttachmentsObject:a];
+                }
                 NSLog(@"Saving new observation with id: %@", o.remoteId);
             }
             // else if the observation is not archived, and not dirty and exists, update it
             else if ([o.state intValue] != archive && [o.dirty boolValue]) {
-                [dbObs populateObjectFromJson:feature];
+                [dbObs populateObjectFromJson:feature inManagedObjectContext:context];
                 dbObs.user = [usersMatchingIDs objectAtIndex:0];
+                NSArray *attachments = [feature objectForKey:@"attachments"];
+                // stupid but for now just do this
+                [dbObs setAttachments:nil];
+                for (id attachment in attachments) {
+                    Attachment * a = [Attachment attachmentForJson:attachment inManagedObjectContext:context];
+                    [context insertObject:a];
+                    [dbObs addAttachmentsObject:a];
+                }
                 NSLog(@"Updating object with id: %@", o.remoteId);
             }
         }
