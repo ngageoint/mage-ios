@@ -13,6 +13,8 @@
 
 -(id) initWithLocation:(Location *) location {
 	if ((self = [super init])) {
+		_location = location;
+		
         _coordinate = ((GeoPoint *) location.geometry).location.coordinate;
 		_timestamp = location.timestamp;
 		
