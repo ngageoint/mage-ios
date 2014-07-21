@@ -13,11 +13,11 @@
 
 @interface ObservationViewerViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
 @property (strong, nonatomic) Observation *observation;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *userLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UITableView *propertyTable;
+@property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
 
 @end

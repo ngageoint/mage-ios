@@ -15,9 +15,21 @@
 
 @interface ObservationViewerViewController ()
 
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
 @end
 
 @implementation ObservationViewerViewController
+
+- (NSDateFormatter *) dateFormatter {
+	if (_dateFormatter == nil) {
+		_dateFormatter = [[NSDateFormatter alloc] init];
+		[_dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+		[_dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+	}
+	
+	return _dateFormatter;
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -73,6 +85,12 @@
     
     self.userLabel.text = _observation.user.name;
     self.locationLabel.text = [NSString stringWithFormat:@"%f, %f", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    
+    self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
+	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
+	
+	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    
     [self.propertyTable setDelegate:self];
     [self.propertyTable setDataSource:self];
     
