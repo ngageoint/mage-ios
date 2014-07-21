@@ -18,6 +18,8 @@
 #import "ObservationAnnotation.h"
 #import "Observation.h"
 #import "ObservationImage.h"
+#import "PersonViewController.h"
+#import "ObservationViewerViewController.h"
 #import <MapKit/MapKit.h>
 
 @interface MapViewController ()
@@ -78,8 +80,7 @@
 	return _locationAnnotations;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -87,12 +88,12 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	
 	[_mapView setDelegate:self];
+	[_mapView setShowsUserLocation:YES];
 	
 	NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
@@ -119,8 +120,7 @@
 	}
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -136,6 +136,10 @@
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             annotationView.image = [UIImage imageNamed:imageName];
+			
+			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+			annotationView.rightCalloutAccessoryView = rightButton;
 		} else {
             annotationView.annotation = annotation;
         }
@@ -151,6 +155,11 @@
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
+			
+			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+			annotationView.rightCalloutAccessoryView = rightButton;
+			
             if (image == nil) {
                 annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
             } else {
@@ -246,6 +255,29 @@
     annotation.observation = observation;
 	
 	[_mapView addAnnotation:annotation];
+}
+
+- (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
+	if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
+		[self performSegueWithIdentifier:@"DisplayPersonSegue" sender:view];
+	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
+		[self performSegueWithIdentifier:@"DisplayObservationSegue" sender:view];
+	}
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
+		LocationAnnotation *annotation = [sender annotation];
+		
+		PersonViewController *destinationViewController = segue.destinationViewController;
+		[destinationViewController setLocation:annotation.location];
+		[destinationViewController setManagedObjectContext:_managedObjectContext];
+    } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
+		ObservationAnnotation *annotation = [sender annotation];
+		
+		ObservationViewerViewController *destinationViewController = segue.destinationViewController;
+		[destinationViewController setObservation:annotation.observation];
+    }
 }
 
 @end

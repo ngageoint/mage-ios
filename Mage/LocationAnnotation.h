@@ -13,6 +13,7 @@
 
 @interface LocationAnnotation : NSObject <MKAnnotation>
 
+@property (weak, nonatomic) Location *location;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSDate *timestamp;
 

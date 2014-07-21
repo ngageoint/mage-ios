@@ -65,12 +65,13 @@
 	CAGradientLayer *maskLayer = [CAGradientLayer layer];
     
     //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
+
     maskLayer.anchorPoint = CGPointZero;
     
     // Setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha.
 	// A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
     UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
-    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:.1];
+    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
     // An array of colors that dictatates the gradient(s)
     maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
@@ -151,7 +152,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = NO;
             annotationView.image = [UIImage imageNamed:imageName];
 		} else {
             annotationView.annotation = annotation;
