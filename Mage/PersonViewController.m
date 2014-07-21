@@ -152,7 +152,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = NO;
             annotationView.image = [UIImage imageNamed:imageName];
 		} else {
             annotationView.annotation = annotation;
