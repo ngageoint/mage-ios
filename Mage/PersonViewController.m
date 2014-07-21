@@ -13,7 +13,7 @@
 #import "GeoPoint.h"
 #import "NSDate+DateTools.h"
 #import "ObservationTableViewCell.h"
-#import "ObservationViewerViewController.h"
+#import "ObservationViewController.h"
 
 @interface PersonViewController()
 	@property (nonatomic, strong) NSDateFormatter *dateFormatter;

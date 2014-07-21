@@ -19,7 +19,7 @@
 #import "Observation.h"
 #import "ObservationImage.h"
 #import "PersonViewController.h"
-#import "ObservationViewerViewController.h"
+#import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
 
 @interface MapViewController ()
@@ -275,7 +275,7 @@
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationAnnotation *annotation = [sender annotation];
 		
-		ObservationViewerViewController *destinationViewController = segue.destinationViewController;
+		ObservationViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:annotation.observation];
     }
 }
