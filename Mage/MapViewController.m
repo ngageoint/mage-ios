@@ -80,8 +80,7 @@
 	return _locationAnnotations;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -89,12 +88,12 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	
 	[_mapView setDelegate:self];
+	[_mapView setShowsUserLocation:YES];
 	
 	NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
@@ -121,8 +120,7 @@
 	}
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
