@@ -6,7 +6,6 @@
 //
 
 #import "PersonViewController.h"
-
 #import "LocationAnnotation.h"
 #import "User+helper.h"
 #import "PersonImage.h"
@@ -62,46 +61,18 @@
 	GeoPoint *point = _location.geometry;
 	CLLocationCoordinate2D coordinate = point.location.coordinate;
 	
-	CAGradientLayer *maskLayer = [CAGradientLayer layer];
-    
-    //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
-
-    maskLayer.anchorPoint = CGPointZero;
-    
-    // Setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha.
-	// A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
-    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
-    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-    
-    // An array of colors that dictatates the gradient(s)
-    maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
-    
-    // These are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array.
-	// The gradient will shift between the colors between these percentage points.
-    maskLayer.locations = @[@0.0, @0.0, @.25, @.25f];
-    maskLayer.bounds = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds));
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds))];
-    
-    view.backgroundColor = [UIColor blackColor];
-    
-    [self.view insertSubview:view belowSubview:self.mapView];
-    self.mapView.layer.mask = maskLayer;
-	
 	_name.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
 	_timestamp.text = [self.dateFormatter stringFromDate:_location.timestamp];
 	
 	_latLng.text = [NSString stringWithFormat:@"%.6f, %.6f", coordinate.latitude, coordinate.longitude];
-
-	if (user.email == nil) {
-		_email.hidden = YES;
-	} else {
-		_email.text = user.email;
-	}
 	
-	if (user.phone == nil) {
-		_phone.hidden = YES;
-	} else {
-		_phone.text = user.phone;
+	if (user.email.length != 0 && user.phone.length != 0) {
+		_contact1.text = user.email;
+		_contact2.text = user.phone;
+	} else if (user.email.length != 0) {
+		_contact1.text = user.email;
+	} else if (user.phone.length != 0) {
+		_contact1.text = user.phone;
 	}
 
 	[_mapView setDelegate:self];
@@ -141,6 +112,34 @@
 	NSArray *observations = [[self observationResultsController] fetchedObjects];
 	NSLog(@"Got observations %lu", (unsigned long)[observations count]);
 
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	CAGradientLayer *maskLayer = [CAGradientLayer layer];
+    
+    //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
+    maskLayer.anchorPoint = CGPointZero;
+    
+    // Setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha.
+	// A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
+    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
+    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    // An array of colors that dictatates the gradient(s)
+    maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
+    
+    // These are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array.
+	// The gradient will shift between the colors between these percentage points.
+    maskLayer.locations = @[@0.0, @0.0, @.35, @.35f];
+    maskLayer.bounds = _mapView.frame;
+	UIView *view = [[UIView alloc] initWithFrame:_mapView.frame];
+    
+    view.backgroundColor = [UIColor blackColor];
+    
+    [self.view insertSubview:view belowSubview:self.mapView];
+    self.mapView.layer.mask = maskLayer;
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -273,6 +272,30 @@
 		Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
 		[destination setObservation:observation];
     }
+}
+
+- (IBAction)emailOnTap:(id)sender {
+	if ([MFMailComposeViewController canSendMail]) {
+		
+		MFMailComposeViewController* mailController = [[MFMailComposeViewController alloc] init];
+		[mailController setToRecipients:@[_location.user.email]];
+		mailController.mailComposeDelegate = self;
+		[self presentModalViewController:mailController animated:YES];
+	}
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error; {	
+	[self dismissModalViewControllerAnimated:YES];
+}
+
+- (IBAction)phoneOnTap:(id)sender {
+//	NSString *cleanedString = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789-+()"] invertedSet]] componentsJoinedByString:@""];
+	NSURL *phone = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", @"3035175896"]];
+	[[UIApplication sharedApplication] openURL:phone];
+
+
 }
 
 

@@ -36,30 +36,6 @@
 	
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
-    
-    CAGradientLayer *maskLayer = [CAGradientLayer layer];
-    
-    //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
-    
-    maskLayer.anchorPoint = CGPointZero;
-    
-    //setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha. A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
-    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
-    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-    
-    //an array of colors that dictatates the gradient(s)
-    maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
-    
-    //these are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array. The gradient will shift between the colors between these percentage points.
-    maskLayer.locations = @[@0.0, @0.0, @.25, @.25f];
-    maskLayer.bounds = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds));
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, CGRectGetWidth(self.mapView.bounds), CGRectGetHeight(self.mapView.bounds))];
-    
-    view.backgroundColor = [UIColor blackColor];
-    
-    
-    [self.view insertSubview:view belowSubview:self.mapView];
-    self.mapView.layer.mask = maskLayer;
 
 	[_mapView setDelegate:self];
 	CLLocationDistance latitudeMeters = 500;
@@ -94,6 +70,34 @@
     [self.propertyTable setDelegate:self];
     [self.propertyTable setDataSource:self];
     
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	CAGradientLayer *maskLayer = [CAGradientLayer layer];
+    
+    //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
+    maskLayer.anchorPoint = CGPointZero;
+    
+    // Setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha.
+	// A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
+    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
+    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    // An array of colors that dictatates the gradient(s)
+    maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
+    
+    // These are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array.
+	// The gradient will shift between the colors between these percentage points.
+    maskLayer.locations = @[@0.0, @0.0, @.35, @.35f];
+    maskLayer.bounds = _mapView.frame;
+	UIView *view = [[UIView alloc] initWithFrame:_mapView.frame];
+    
+    view.backgroundColor = [UIColor blackColor];
+    
+    [self.view insertSubview:view belowSubview:self.mapView];
+    self.mapView.layer.mask = maskLayer;
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
