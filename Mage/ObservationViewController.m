@@ -163,33 +163,7 @@
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
     id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    NSLog(@"object at index %@",[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]);
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
-    
-    for (id field in [form objectForKey:@"fields"]) {
-        NSString *fieldName = [field objectForKey:@"name"];
-        NSLog(@"field name %@ key %@", fieldName, key);
-        if ([key isEqualToString: fieldName]) {
-            //observationCell.keyLabel.text = @"derp";
-            observationCell.keyLabel.text = [field objectForKey:@"title"];
-//            observationCell.keyLabel.text = @"derp";
-//            NSString *type = [field objectForKey:@"type"];
-//            NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-//            ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//            return cell;
-        }
-    }
-    NSLog(@"value %@", value);
-	observationCell.valueLabel.text = [NSString stringWithFormat:@"%@", value];
-//    observationCell.keyLabel.text = key;
-//    observationCell.valueLabel.text = value;
-//	Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
-//	[observationCell populateCellWithObservation:observation];
-    
-    
+    [observationCell populateCellWithKey:[observationCell.fieldDefinition objectForKey:@"title"] andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -199,25 +173,20 @@
     
     for (id field in [form objectForKey:@"fields"]) {
         NSString *fieldName = [field objectForKey:@"name"];
-        NSLog(@"field name %@ key %@", fieldName, key);
         if ([key isEqualToString: fieldName]) {
             NSString *type = [field objectForKey:@"type"];
-            if ([type isEqualToString:@"hidden"]) {
-                type = @"textfield";
-            }
             NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-            NSLog(@"looking for cell identifier %@", CellIdentifier);
             ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                CellIdentifier = @"observationCell-generic";
+                cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            }
+            cell.fieldDefinition = field;
             return cell;
         }
     }
     
-//    Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
-    NSString *CellIdentifier = @"observationCell-textfield";
-//    if (variantField != nil && [[observation.properties objectForKey:variantField] length] != 0) {
-//        CellIdentifier = @"observationVariantCell";
-//    }
-	
+    NSString *CellIdentifier = @"observationCell-generic";
     ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     return cell;
 }
@@ -230,8 +199,17 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
     
+    ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+    if ([[cell.fieldDefinition objectForKey:@"type"] isEqualToString:@"textarea"]) {
+        id cellText = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];;
+        UIFont *cellFont = cell.valueTextView.font;
+        CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
+        CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+        [cell.valueTextView setFrame:CGRectMake(cell.valueTextView.frame.origin.x, cell.valueTextView.frame.origin.y, labelSize.width, labelSize.height)];
+        return labelSize.height;
+
+    }
     return cell.bounds.size.height;
 }
 
