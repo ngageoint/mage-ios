@@ -18,13 +18,20 @@
     if ([token length] == 0) {
         return YES;
     }
-    NSDate *tokenExpirationDate= [defaults objectForKey:@"tokenExpirationDate"];
+    NSDate *tokenExpirationDate = [defaults objectForKey:@"tokenExpirationDate"];
     if (tokenExpirationDate != nil && [tokenExpirationDate isKindOfClass:NSDate.class]) {
         NSDate *currentDate = [NSDate date];
         NSLog(@"current date %@ token expiration %@", currentDate, tokenExpirationDate);
         return [currentDate isLaterThan:tokenExpirationDate];
     }
     return YES;
+}
+
++ (void) expireToken {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+    [defaults removeObjectForKey:@"token"];
+    [defaults removeObjectForKey:@"tokenExpirationDate"];
 }
 
 @end

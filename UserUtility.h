@@ -11,5 +11,7 @@
 @interface UserUtility : NSObject
 
 + (BOOL) isTokenExpired;
++ (void) expireToken;
+
 
 @end
