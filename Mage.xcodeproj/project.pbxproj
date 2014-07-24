@@ -201,6 +201,19 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		4C6A9BBD19813C64004A6205 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
+				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
+				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
+				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
+				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +271,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				4C6A9BBD19813C64004A6205 /* Settings */,
 				F70E6EE719781585002D66F6 /* Observation */,
 				4C2A38ED19745C0D00E7470A /* People */,
 				4C546FE9195A27D1000CF230 /* Map */,
@@ -270,18 +284,12 @@
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
-				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
-				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
 				F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */,
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */,
 				F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */,
 				F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */,
 				F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */,
 				F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */,
-				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
-				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
-				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
-				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
 				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
 				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,

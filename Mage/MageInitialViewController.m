@@ -3,7 +3,6 @@
 //  Mage
 //
 //  Created by Dan Barela on 7/15/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import "MageInitialViewController.h"
@@ -16,8 +15,7 @@
 
 @implementation MageInitialViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -25,8 +23,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	
 	NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
@@ -45,13 +42,12 @@
     [self.view insertSubview:gradientView atIndex:0];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -76,11 +72,8 @@
     }
 }
 
-- (IBAction)unwindToInitial:(UIStoryboardSegue *)unwindSegue {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"token"];
-    [defaults removeObjectForKey:@"tokenExpirationDate"];
-    [defaults removeObjectForKey:@"disclaimerAccepted"];
+- (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
+    [UserUtility expireToken];
 }
 
 @end
