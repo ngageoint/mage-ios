@@ -14,9 +14,6 @@
 
 #import "User+helper.h"
 #import <Observation+helper.h>
-#import <LocationResource.h>
-#import <UserResource.h>
-
 
 #import <Location+helper.h>
 #import <Layer+helper.h>
@@ -68,19 +65,22 @@
 - (void) initialFetch {
     HttpManager *http = [HttpManager singleton];
     
-    NSOperation* layerOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
-    NSOperation* userOp = [UserResource operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
-	NSOperation* locationOp = [LocationResource operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
-    [locationOp addDependency:userOp];
-    [layerOp addDependency:userOp];
+    NSOperation* layersOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
+	NSOperation* userOp = [User operationToFetchMyselfWithManagedObjectContext:_managedObjectContext];
+    NSOperation* usersOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
+	NSOperation* locationsOp = [Location operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
+	[usersOp addDependency:userOp];
+    [locationsOp addDependency:usersOp];
+    [layersOp addDependency:usersOp];
     
     [http.manager.operationQueue setSuspended:YES];
     
     // Add the operations to the queue
     
-    [http.manager.operationQueue addOperation:layerOp];
-    [http.manager.operationQueue addOperation:userOp];
-    [http.manager.operationQueue addOperation:locationOp];
+    [http.manager.operationQueue addOperation:layersOp];
+	[http.manager.operationQueue addOperation:userOp];
+    [http.manager.operationQueue addOperation:usersOp];
+    [http.manager.operationQueue addOperation:locationsOp];
     
     [http.manager.operationQueue setSuspended:NO];
 }

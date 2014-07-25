@@ -3,16 +3,12 @@
 //  Mage
 //
 //  Created by Dan Barela on 2/19/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import "LoginViewController.h"
 #import "LocalAuthentication.h"
 #import "User+helper.h"
 #import <Observation+helper.h>
-#import <LocationResource.h>
-#import <UserResource.h>
-
 
 #import <Location+helper.h>
 #import <Layer+helper.h>
@@ -115,8 +111,7 @@ id<Authentication> _authentication;
 }
 
 //  When we are done editing on the keyboard
-- (IBAction)resignAndLogin:(id)sender
-{
+- (IBAction)resignAndLogin:(id)sender {
     [self focusOnCorrectField: sender];
 		[self verifyLogin];
 }
@@ -129,8 +124,7 @@ id<Authentication> _authentication;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
     
     CGGradientRef gradient;
@@ -160,6 +154,7 @@ id<Authentication> _authentication;
 	_authentication.delegate = self;
     
 }
+
 - (IBAction)showPasswordSwitchAction:(id)sender {
     [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
     self.passwordField.clearsOnBeginEditing = NO;
@@ -174,32 +169,7 @@ id<Authentication> _authentication;
     return NO;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-	// Do any additional setup after loading the view.
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    
-    
-    [super viewDidAppear:animated];
-    
-}
-
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
