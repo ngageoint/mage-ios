@@ -11,10 +11,11 @@
 
 @implementation User (helper)
 
-+ (User *) currentUser {
-	return nil;
-}
+static User *currentUser = nil;
 
++ (User *) currentUser {
+	return currentUser;
+}
 
 + (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
 	User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
@@ -129,18 +130,19 @@
 		NSError *error;
 		NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
 		
+		User *user = nil;
 		if ([users count] == 0) {
 			// not in core data yet need to create a new managed object
 			NSLog(@"Inserting myself into database");
-			User *user = [User insertUserForJson:myself inManagedObjectContext:context];
+			user = [User insertUserForJson:myself inManagedObjectContext:context];
 		} else {
 			// already exists in core data, lets update the object we have
-			User *user = [users objectAtIndex:0];
+			user = [users objectAtIndex:0];
 			NSLog(@"Updating user location in the database");
 			[user updateUserForJson:myself inManagedObjectContext:context];
 		}
-
-        
+		
+		currentUser = user;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];

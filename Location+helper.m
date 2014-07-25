@@ -83,11 +83,12 @@
 			[userIdMap setObject:user forKey:user.remoteId];
 		}
 		
+		User *currentUser = [User currentUser];
 		for (NSDictionary *userLocation in userLocations) {
 			// pull from query map
 			NSString *userId = [userLocation objectForKey:@"user"];
 			User *user = [userIdMap objectForKey:userId];
-			if (user == nil) continue;
+			if (user == nil || [user.remoteId isEqualToString:currentUser.remoteId]) continue;
 			
 			Location *location = user.location;
 			if (location == nil) {
@@ -101,7 +102,6 @@
 				[location populateLocationFromJson:[userLocation objectForKey:@"locations"]];
 			}
         }
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
