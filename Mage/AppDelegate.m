@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 #import <User.h>
+#import <GeoPoint.h>
+#import <CoreLocation/CoreLocation.h>
+
+#import "MageInitialViewController.h"
 
 @implementation AppDelegate
 
@@ -18,28 +22,21 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-    NSURL *sdkPrefsFile = [[NSBundle mainBundle]
-                               URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
-    NSDictionary *sdkPrefs =
-    [NSDictionary dictionaryWithContentsOfURL:sdkPrefsFile];
+    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
+    NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     //[[NSUserDefaults standardUserDefaults] registerDefaults:sdkPrefs];
     
-    NSURL *defaultPrefsFile = [[NSBundle mainBundle]
-                               URLForResource:@"preferences" withExtension:@"plist"];
-    NSDictionary *defaultPrefs =
-    [NSDictionary dictionaryWithContentsOfURL:defaultPrefsFile];
+    NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
+    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
     
-    NSMutableDictionary *allPrefs = [[NSMutableDictionary alloc] initWithDictionary:sdkPrefs];
-    [allPrefs addEntriesFromDictionary:defaultPrefs];
-    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPrefs];
-    
-    
-    
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    // Override point for customization after application launch.
-//    self.window.backgroundColor = [UIColor whiteColor];
-//    [self.window makeKeyAndVisible];
-    return YES;
+    NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
+    [allPreferences addEntriesFromDictionary:defaultPreferences];
+    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
+	
+	MageInitialViewController *rootView = (MageInitialViewController *) self.window.rootViewController;
+    rootView.managedObjectContext = self.managedObjectContext;
+	
+	return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -109,8 +106,14 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Mage" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
+    NSURL *modelURL = [[NSBundle mainBundle]
+     URLForResource:@"MageSDK.bundle" withExtension:@"momd"];
+    
+    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+     //[[NSBundle mainBundle] URLForResource:@"Mage" withExtension:@"momd"];
+    //_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
 

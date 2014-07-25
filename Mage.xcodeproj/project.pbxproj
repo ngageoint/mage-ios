@@ -7,13 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
+		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
+		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
+		4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C390F3E1978376B00AB3CCB /* PersonViewController.m */; };
+		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
+		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
+		4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C790F7519704DE300886E58 /* MageNavigationController.m */; };
+		4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
+		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
+		F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EEC19781D37002D66F6 /* ObservationImage.m */; };
+		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
+		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
+		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
+		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
+		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
-		F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationsViewController.m */; };
-		F7531F001910131C00CA084C /* ObservationViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */; };
+		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
+		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */; };
@@ -24,7 +39,6 @@
 		F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */; };
 		F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */; };
-		F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */; };
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
 		F7A94D8818AD9CB000CB9EE0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */; };
 		F7A94D8918AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
@@ -36,6 +50,10 @@
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
+		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
+		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
+		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
+		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */; };
@@ -52,18 +70,47 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
+		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
+		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
+		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
+		4C2A38EE1974803700E7470A /* PersonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonImage.h; sourceTree = "<group>"; };
+		4C2A38EF1974803700E7470A /* PersonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonImage.m; sourceTree = "<group>"; };
+		4C390F3D1978376B00AB3CCB /* PersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonViewController.h; sourceTree = "<group>"; };
+		4C390F3E1978376B00AB3CCB /* PersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonViewController.m; sourceTree = "<group>"; };
+		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
+		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
+		4C790F7419704DE300886E58 /* MageNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageNavigationController.h; sourceTree = "<group>"; };
+		4C790F7519704DE300886E58 /* MageNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationController.m; sourceTree = "<group>"; };
+		4C790F7719742CEC00886E58 /* DisclaimerNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerNavigationController.h; sourceTree = "<group>"; };
+		4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerNavigationController.m; sourceTree = "<group>"; };
 		7E2901AEF10B4754A517226F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewCell.h; sourceTree = "<group>"; };
+		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
+		F70E6EEB19781D37002D66F6 /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
+		F70E6EEC19781D37002D66F6 /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
+		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
+		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
+		F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
+		F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTableViewCell.m; sourceTree = "<group>"; };
+		F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertyTableViewCell.h; sourceTree = "<group>"; };
+		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
+		F725A9CA195CB819002A699C /* ObservationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotation.h; sourceTree = "<group>"; };
+		F725A9CB195CB819002A699C /* ObservationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotation.m; sourceTree = "<group>"; };
+		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
+		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageNavigationMenuViewController.h; sourceTree = "<group>"; };
 		F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationMenuViewController.m; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		F7531EF919100E7D00CA084C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		F7531EFB191010A600CA084C /* ObservationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationsViewController.h; sourceTree = "<group>"; };
-		F7531EFC191010A600CA084C /* ObservationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationsViewController.m; sourceTree = "<group>"; };
-		F7531EFE1910131C00CA084C /* ObservationViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewerViewController.h; sourceTree = "<group>"; };
-		F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewerViewController.m; sourceTree = "<group>"; };
+		F7531EFB191010A600CA084C /* ObservationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewController.h; sourceTree = "<group>"; };
+		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
+		F7531EFE1910131C00CA084C /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
+		F7531EFF1910131C00CA084C /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -81,7 +128,6 @@
 		F7A94D7918AD9CB000CB9EE0 /* Mage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mage-Prefix.pch"; sourceTree = "<group>"; };
 		F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mage.xcdatamodel; sourceTree = "<group>"; };
 		F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F7A94D8618AD9CB000CB9EE0 /* MageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -94,6 +140,14 @@
 		F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
+		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
+		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
+		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
+		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
+		F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPasswordTableViewCell.m; sourceTree = "<group>"; };
+		F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDateTableViewCell.h; sourceTree = "<group>"; };
+		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
 		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
@@ -106,8 +160,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
+				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
+				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
@@ -130,6 +185,72 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C2A38ED19745C0D00E7470A /* People */ = {
+			isa = PBXGroup;
+			children = (
+				4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */,
+				4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */,
+				4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */,
+				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
+				4C2A38EE1974803700E7470A /* PersonImage.h */,
+				4C2A38EF1974803700E7470A /* PersonImage.m */,
+				4C390F3D1978376B00AB3CCB /* PersonViewController.h */,
+				4C390F3E1978376B00AB3CCB /* PersonViewController.m */,
+			);
+			name = People;
+			sourceTree = "<group>";
+		};
+		4C546FE9195A27D1000CF230 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F7531EF819100E7D00CA084C /* MapViewController.h */,
+				F7531EF919100E7D00CA084C /* MapViewController.m */,
+				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
+				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
+				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
+				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
+		4C6A9BBD19813C64004A6205 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
+				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
+				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
+				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
+				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		F70E6EE719781585002D66F6 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F7531EFE1910131C00CA084C /* ObservationViewController.h */,
+				F7531EFF1910131C00CA084C /* ObservationViewController.m */,
+				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
+				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
+				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
+				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
+				F70E6EEB19781D37002D66F6 /* ObservationImage.h */,
+				F70E6EEC19781D37002D66F6 /* ObservationImage.m */,
+				F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */,
+				F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */,
+				F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */,
+				F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */,
+				F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */,
+				F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */,
+				F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */,
+				F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */,
+				F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */,
+				F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */,
+			);
+			name = Observation;
+			sourceTree = "<group>";
+		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +274,7 @@
 		F7A94D6818AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C390F49197DB7B000AB3CCB /* MessageUI.framework */,
 				F7A94DAC18B5196600CB9EE0 /* libPods-JVFloatLabeledTextField.a */,
 				F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */,
 				F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */,
@@ -169,34 +291,35 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				4C6A9BBD19813C64004A6205 /* Settings */,
+				F70E6EE719781585002D66F6 /* Observation */,
+				4C2A38ED19745C0D00E7470A /* People */,
+				4C546FE9195A27D1000CF230 /* Map */,
 				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
 				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
 				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
 				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
-				F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */,
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
-				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
-				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
 				F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */,
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */,
 				F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */,
 				F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */,
-				F7531EF819100E7D00CA084C /* MapViewController.h */,
-				F7531EF919100E7D00CA084C /* MapViewController.m */,
-				F7531EFB191010A600CA084C /* ObservationsViewController.h */,
-				F7531EFC191010A600CA084C /* ObservationsViewController.m */,
-				F7531EFE1910131C00CA084C /* ObservationViewerViewController.h */,
-				F7531EFF1910131C00CA084C /* ObservationViewerViewController.m */,
 				F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */,
 				F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */,
-				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
-				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
-				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
-				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
+				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
+				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
+				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
+				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
+				4C790F7419704DE300886E58 /* MageNavigationController.h */,
+				4C790F7519704DE300886E58 /* MageNavigationController.m */,
+				4C790F7719742CEC00886E58 /* DisclaimerNavigationController.h */,
+				4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */,
+				F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */,
+				F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -278,8 +401,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = "Dan Barela";
+				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
+					F7A94D6518AD9CB000CB9EE0 = {
+						DevelopmentTeam = PDRAS7XQ3Y;
+					};
 					F7A94D8518AD9CB000CB9EE0 = {
 						TestTargetID = F7A94D6518AD9CB000CB9EE0;
 					};
@@ -367,17 +493,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */,
+				4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */,
+				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
-				F7A94D7F18AD9CB000CB9EE0 /* Mage.xcdatamodeld in Sources */,
-				F7531EFD191010A600CA084C /* ObservationsViewController.m in Sources */,
+				4C2A38F01974803700E7470A /* PersonImage.m in Sources */,
+				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
+				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
+				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
+				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
+				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
+				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
+				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
+				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
+				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
-				F7531F001910131C00CA084C /* ObservationViewerViewController.m in Sources */,
+				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
+				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
+				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
+				4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
+				4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */,
+				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
+				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,11 +659,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/Mage-Prefix.pch";
 				INFOPLIST_FILE = "Mage/Mage-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -531,11 +677,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/Mage-Prefix.pch";
 				INFOPLIST_FILE = "Mage/Mage-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -613,19 +762,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		F7A94D7D18AD9CB000CB9EE0 /* Mage.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */,
-			);
-			currentVersion = F7A94D7E18AD9CB000CB9EE0 /* Mage.xcdatamodel */;
-			path = Mage.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
 }

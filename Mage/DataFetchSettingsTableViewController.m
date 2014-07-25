@@ -11,6 +11,8 @@
 @interface DataFetchSettingsTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UISwitch *dataFetchSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *userFetchFrequencyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *observationFetchFrequencyLabel;
 
 @end
 
@@ -53,6 +55,30 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setPreferenceDisplayLabel:self.observationFetchFrequencyLabel forPreference:@"observationFetch"];
+    [self setPreferenceDisplayLabel:self.userFetchFrequencyLabel forPreference:@"userFetch"];
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
+{
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
+    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    
+    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    
+    for (id key in frequencies) {
+        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
+            [label setText:key];
+        }
+    }
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -84,64 +110,19 @@
     return 0;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([segue.identifier hasPrefix:@"value_"]) {
+        ValuePickerTableViewController *vc = [segue destinationViewController];
+        NSDictionary *timeDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
+        NSDictionary *frequencies = [timeDictionary valueForKey:@"values"];
+        vc.displayValues = [frequencies allKeys];
+        vc.values = [frequencies allValues];
+        vc.preferenceKey = [timeDictionary valueForKey:@"preferenceKey"];
+    }
 }
-*/
 
 @end

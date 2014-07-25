@@ -8,6 +8,7 @@
 
 #import "MageNavigationMenuViewController.h"
 #import "UIViewController+RESideMenu.h"
+#import "MapViewController.h"
 
 @interface MageNavigationMenuViewController ()
 
@@ -41,27 +42,42 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"selected row at path row: %ld", (long)indexPath.row);
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
-        case 0:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"]]
-                                                         animated:YES];
+        // Map
+        case 0: {
+			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
-        case 1:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationsViewController"]]
-                                                         animated:YES];
+		}
+        // Observations
+        case 1: {
+            id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
-        case 2:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"]]
-                                                         animated:YES];
+        }
+        // People
+        case 2: {
+			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"peopleViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+		}
+        // Settings
         case 3:
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"]]
                                                          animated:YES];
             [self.sideMenuViewController hideMenuViewController];
+            break;
+        // Logout
+        case 4:
+            [self performSegueWithIdentifier:@"unwindToInitialViewSegue" sender:self];
             break;
 
         default:

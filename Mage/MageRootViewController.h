@@ -10,4 +10,6 @@
 
 @interface MageRootViewController : RESideMenu <RESideMenuDelegate>
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end

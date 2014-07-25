@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+@property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
 
 @end
 
@@ -29,9 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-	// Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,7 +47,25 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
+    [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
 
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
+{
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
+    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    
+    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    
+    for (id key in frequencies) {
+        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
+            [label setText:key];
+        }
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,10 +76,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"timeSettingSegue"]) {
-        UIViewController *nav = [segue destinationViewController];
-//        FirmyVC *firmyVC = (FirmyVC *)nav.topViewController;
-//        firmyVC.tabFirmy = self.tabFirmy;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([segue.identifier hasPrefix:@"value_"]) {
+        ValuePickerTableViewController *vc = [segue destinationViewController];
+        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
+        NSDictionary *frequencies = [valueDictionary valueForKey:@"values"];
+        vc.displayValues = [frequencies allKeys];
+        vc.values = [frequencies allValues];
+        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
 }
 

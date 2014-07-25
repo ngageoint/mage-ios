@@ -11,4 +11,6 @@
 
 @interface MageNavigationMenuViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RESideMenuDelegate>
 
+@property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
