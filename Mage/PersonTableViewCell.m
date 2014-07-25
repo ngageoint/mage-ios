@@ -13,13 +13,35 @@
 @implementation PersonTableViewCell
 
 - (void) awakeFromNib {
-    UIView *view = [[UIView alloc] initWithFrame:self.frame];
+    UIView *view = [[UIView alloc] initWithFrame:self.bounds];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = view.bounds;
 	gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor colorWithRed:207/255.0 green:207/255.0 blue:207/255.0 alpha:51/255.0] CGColor], nil];
 
     [self.layer insertSublayer:gradient atIndex:0];
 }
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+	NSLog(@"in view did load");
+
+	return [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+}
+
+
+- (void)viewDidLoad {
+	NSLog(@"in view did load");
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state {
+	NSLog(@"in view did load");
+
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
+    NSLog(@"didRotateFromInterfaceOrientation:%ld",fromInterfaceOrientation);
+//    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 
 - (id) populateCellWithLocation:(Location *) location {	
 	User *user = location.user;
