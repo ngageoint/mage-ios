@@ -9,11 +9,11 @@
 #import <MapKit/MapKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-#import "Location+helper.h"
+#import "User+helper.h"
 
-@interface PersonViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, MFMailComposeViewControllerDelegate>
+@interface PersonViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) Location *location;
+@property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *latLng;

@@ -120,7 +120,7 @@
         id destination = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [_locationResultsController objectAtIndexPath:indexPath];
-		[destination setLocation:location];
+		[destination setUser:location.user];
 		[destination setManagedObjectContext:_managedObjectContext];
     }
 }

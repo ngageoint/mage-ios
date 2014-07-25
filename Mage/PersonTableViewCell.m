@@ -21,9 +21,7 @@
     [self.layer insertSublayer:gradient atIndex:0];
 }
 
-- (id) populateCellWithLocation:(Location *) location {
-	self.location = location;
-	
+- (id) populateCellWithLocation:(Location *) location {	
 	User *user = location.user;
 	NSDate *date = location.timestamp;
 	

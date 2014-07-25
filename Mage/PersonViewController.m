@@ -40,7 +40,7 @@
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:_managedObjectContext]];
 	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@", _location.user.remoteId];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@", _user.remoteId];
 	[fetchRequest setPredicate:predicate];
 	
 	_observationResultsController = [[NSFetchedResultsController alloc]
@@ -57,28 +57,27 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
 	
-	User *user = _location.user;
-	GeoPoint *point = _location.geometry;
+	GeoPoint *point = _user.location.geometry;
 	CLLocationCoordinate2D coordinate = point.location.coordinate;
 	
-	_name.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
-	_timestamp.text = [self.dateFormatter stringFromDate:_location.timestamp];
+	_name.text = [NSString stringWithFormat:@"%@ (%@)", _user.name, _user.username];
+	_timestamp.text = [self.dateFormatter stringFromDate:_user.location.timestamp];
 	
 	_latLng.text = [NSString stringWithFormat:@"%.6f, %.6f", coordinate.latitude, coordinate.longitude];
 	
-	if (user.email.length != 0 && user.phone.length != 0) {
-		_contact1.text = user.email;
-		_contact2.text = user.phone;
-	} else if (user.email.length != 0) {
-		_contact1.text = user.email;
-	} else if (user.phone.length != 0) {
-		_contact1.text = user.phone;
+	if (_user.email.length != 0 && _user.phone.length != 0) {
+		_contact1.text = _user.email;
+		_contact2.text = _user.phone;
+	} else if (_user.email.length != 0) {
+		_contact1.text = _user.email;
+	} else if (_user.phone.length != 0) {
+		_contact1.text = _user.phone;
 	}
 
 	[_mapView setDelegate:self];
 	CLLocationDistance latitudeMeters = 500;
 	CLLocationDistance longitudeMeters = 500;
-	NSDictionary *properties = _location.properties;
+	NSDictionary *properties = _user.location.properties;
 	id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
 	if (accuracyProperty != nil) {
 		double accuracy = [accuracyProperty doubleValue];
@@ -93,7 +92,7 @@
 	MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
 	[_mapView setRegion:viewRegion];
 	
-	LocationAnnotation *annotation = [[LocationAnnotation alloc] initWithLocation:_location];
+	LocationAnnotation *annotation = [[LocationAnnotation alloc] initWithLocation:_user.location];
 	[_mapView addAnnotation:annotation];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -167,7 +166,7 @@
 	MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
 	renderer.lineWidth = 1.0f;
 	
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:_location.timestamp];
+	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:_user.location.timestamp];
 	if (interval <= 600) {
 		renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
 		renderer.strokeColor = [UIColor blueColor];
@@ -273,30 +272,5 @@
 		[destination setObservation:observation];
     }
 }
-
-- (IBAction)emailOnTap:(id)sender {
-	if ([MFMailComposeViewController canSendMail]) {
-		
-		MFMailComposeViewController* mailController = [[MFMailComposeViewController alloc] init];
-		[mailController setToRecipients:@[_location.user.email]];
-		mailController.mailComposeDelegate = self;
-		[self presentModalViewController:mailController animated:YES];
-	}
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError*)error; {	
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-- (IBAction)phoneOnTap:(id)sender {
-//	NSString *cleanedString = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789-+()"] invertedSet]] componentsJoinedByString:@""];
-	NSURL *phone = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", @"3035175896"]];
-	[[UIApplication sharedApplication] openURL:phone];
-
-
-}
-
 
 @end

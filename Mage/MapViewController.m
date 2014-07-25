@@ -94,6 +94,7 @@
 	
 	[_mapView setDelegate:self];
 	[_mapView setShowsUserLocation:YES];
+	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 	
 	NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
@@ -270,7 +271,7 @@
 		LocationAnnotation *annotation = [sender annotation];
 		
 		PersonViewController *destinationViewController = segue.destinationViewController;
-		[destinationViewController setLocation:annotation.location];
+		[destinationViewController setUser:annotation.location.user];
 		[destinationViewController setManagedObjectContext:_managedObjectContext];
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationAnnotation *annotation = [sender annotation];
