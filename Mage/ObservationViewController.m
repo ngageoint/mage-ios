@@ -203,18 +203,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
-    if ([[cell.fieldDefinition objectForKey:@"type"] isEqualToString:@"textarea"]) {
-        id cellText = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];;
-        UIFont *cellFont = cell.valueTextView.font;
-        CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-        CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-        [cell.valueTextView setFrame:CGRectMake(cell.valueTextView.frame.origin.x, cell.valueTextView.frame.origin.y, labelSize.width, labelSize.height)];
-        return labelSize.height;
-
-    }
-    return cell.bounds.size.height;
+    return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
 }
 
 

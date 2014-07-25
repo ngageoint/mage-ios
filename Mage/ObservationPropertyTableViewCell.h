@@ -16,5 +16,6 @@
 @property (weak, nonatomic) NSDictionary *fieldDefinition;
 
 - (void) populateCellWithKey: (id) key andValue: (id) value;
+- (CGFloat) getCellHeightForValue: (id) value;
 
 @end

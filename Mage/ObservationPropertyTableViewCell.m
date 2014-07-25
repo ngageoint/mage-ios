@@ -37,4 +37,8 @@
     [self.valueTextView setSecureTextEntry:YES];
 }
 
+- (CGFloat) getCellHeightForValue:(id)value {
+    return self.bounds.size.height;
+}
+
 @end

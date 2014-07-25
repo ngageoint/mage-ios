@@ -24,6 +24,7 @@
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
+		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7531EE2190FEE5D00CA084C /* MageNavigationMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
@@ -100,6 +101,8 @@
 		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
 		F725A9CA195CB819002A699C /* ObservationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotation.h; sourceTree = "<group>"; };
 		F725A9CB195CB819002A699C /* ObservationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotation.m; sourceTree = "<group>"; };
+		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
+		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7531EE0190FEE5D00CA084C /* MageNavigationMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageNavigationMenuViewController.h; sourceTree = "<group>"; };
 		F7531EE1190FEE5D00CA084C /* MageNavigationMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationMenuViewController.m; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -229,6 +232,8 @@
 				F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */,
 				F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */,
 				F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */,
+				F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */,
+				F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -507,6 +512,7 @@
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
+				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

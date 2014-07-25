@@ -7,8 +7,37 @@
 //
 
 #import "ObservationDateTableViewCell.h"
+#import <NSDate+DateTools.h>
+
+@interface ObservationDateTableViewCell()
+@property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
+@property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
+@end
 
 @implementation ObservationDateTableViewCell
+
+- (NSDateFormatter *) dateDisplayFormatter {
+	if (_dateDisplayFormatter == nil) {
+		_dateDisplayFormatter = [[NSDateFormatter alloc] init];
+		[_dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+		[_dateDisplayFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        
+	}
+	
+	return _dateDisplayFormatter;
+}
+
+- (NSDateFormatter *) dateParseFormatter {
+	if (_dateParseFormatter == nil) {
+		_dateParseFormatter = [[NSDateFormatter alloc] init];
+		[_dateParseFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+		[_dateParseFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z"];
+        NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        _dateParseFormatter.locale = posix;
+	}
+	
+	return _dateParseFormatter;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -20,7 +49,9 @@
 }
 
 - (void) populateCellWithKey:(id) key andValue:(id) value {
-    self.valueTextView.text = [NSString stringWithFormat:@"%@", value];
+    NSDate* output = [self.dateParseFormatter dateFromString:value];
+    
+    self.valueTextView.text = [NSString stringWithFormat:@"%@", [self.dateDisplayFormatter stringFromDate:output]];
     self.keyLabel.text = [NSString stringWithFormat:@"%@", key];
 }
 
