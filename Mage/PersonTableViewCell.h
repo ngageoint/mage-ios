@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Location+helper.h"
+#import "User+helper.h"
 
 @interface PersonTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;
 
 
-- (id) populateCellWithLocation:(Location *) location;
+- (id) populateCellWithUser:(User *) user;
 
 @end
