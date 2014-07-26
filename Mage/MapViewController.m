@@ -51,25 +51,27 @@
 	return _observationResultsController;
 }
 
-- (NSFetchedResultsController *) locationResultsController {
+- (NSFetchedResultsController *) userResultsController {
 	
-	if (_locationResultsController != nil) {
-		return _locationResultsController;
+	if (_userResultsController != nil) {
+		return _userResultsController;
 	}
 	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-		
-	_locationResultsController = [[NSFetchedResultsController alloc]
-								  initWithFetchRequest:fetchRequest
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:_managedObjectContext]];
+	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"location.timestamp" ascending:NO]]];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"remoteId != %@", [User currentUser].remoteId];
+	[request setPredicate:predicate];
+	
+	_userResultsController = [[NSFetchedResultsController alloc]
+								  initWithFetchRequest:request
 								  managedObjectContext:_managedObjectContext
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
 		
-	[_locationResultsController setDelegate:self];
+	[_userResultsController setDelegate:self];
 	
-	return _locationResultsController;
+	return _userResultsController;
 }
 
 - (NSMutableDictionary *) locationAnnotations {
@@ -97,15 +99,15 @@
 	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 	
 	NSError *error;
-    if (![[self locationResultsController] performFetch:&error]) {
+    if (![[self userResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
 	
-	NSArray *locations = [_locationResultsController fetchedObjects];
-	for (Location *location in locations) {
-		[self updateLocation:location];
+	NSArray *users = [_userResultsController fetchedObjects];
+	for (User *user in users) {
+		[self updateUser:user];
 	}
     
     if (![[self observationResultsController] performFetch:&error]) {
@@ -219,7 +221,7 @@
         switch(type) {
                 
             case NSFetchedResultsChangeInsert:
-                [self updateLocation:object];
+                [self updateUser:object];
                 break;
                 
             case NSFetchedResultsChangeDelete:
@@ -227,20 +229,20 @@
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [self updateLocation:object];
+                [self updateUser:object];
                 break;
         }
     }
 }
 
-- (void) updateLocation:(Location *) location {
-	LocationAnnotation *annotation = [_locationAnnotations objectForKey:location.user.remoteId];
+- (void) updateUser:(User *) user {
+	LocationAnnotation *annotation = [_locationAnnotations objectForKey:user.remoteId];
 	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] initWithLocation:location];
+		annotation = [[LocationAnnotation alloc] initWithLocation:user.location];
 		[_mapView addAnnotation:annotation];
-		[_locationAnnotations setObject:annotation forKey:location.user.remoteId];
+		[_locationAnnotations setObject:annotation forKey:user.remoteId];
 	} else {
-		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
+		[annotation setCoordinate:((GeoPoint *) user.location.geometry).location.coordinate];
 	}
 }
 

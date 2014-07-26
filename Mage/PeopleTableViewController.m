@@ -14,32 +14,34 @@
 
 @implementation PeopleTableViewController
 
-- (NSFetchedResultsController *) locationResultsController {
+- (NSFetchedResultsController *) userResultsController {
 	
-	if (_locationResultsController != nil) {
-		return _locationResultsController;
+	if (_userResultsController != nil) {
+		return _userResultsController;
 	}
 	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:_managedObjectContext]];
+	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"location.timestamp" ascending:NO]]];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"remoteId != %@", [User currentUser].remoteId];
+	[request setPredicate:predicate];
 	
-	_locationResultsController = [[NSFetchedResultsController alloc]
-								  initWithFetchRequest:fetchRequest
+	_userResultsController = [[NSFetchedResultsController alloc]
+								  initWithFetchRequest:request
 								  managedObjectContext:_managedObjectContext
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
 	
-	[_locationResultsController setDelegate:self];
+	[_userResultsController setDelegate:self];
 	
-	return _locationResultsController;
+	return _userResultsController;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
 	NSError *error;
-    if (![[self locationResultsController] performFetch:&error]) {
+    if (![[self userResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
@@ -47,15 +49,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id  sectionInfo = [[_locationResultsController sections] objectAtIndex:section];
+    id  sectionInfo = [[_userResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
 }
 
 - (void) configureCell:(UITableViewCell *) cell atIndexPath:(NSIndexPath *)indexPath {
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
 	
-	Location *location = [_locationResultsController objectAtIndexPath:indexPath];
-	[personCell populateCellWithLocation:location];
+	User *user = [_userResultsController objectAtIndexPath:indexPath];
+	[personCell populateCellWithUser:user];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -119,8 +121,8 @@
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
         id destination = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Location *location = [_locationResultsController objectAtIndexPath:indexPath];
-		[destination setUser:location.user];
+		User *user = [_userResultsController objectAtIndexPath:indexPath];
+		[destination setUser:user];
 		[destination setManagedObjectContext:_managedObjectContext];
     }
 }

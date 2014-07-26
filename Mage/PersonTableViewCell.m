@@ -7,6 +7,7 @@
 
 #import "PersonTableViewCell.h"
 #import "User+helper.h"
+#import "Location+helper.h"
 #import "NSDate+DateTools.h"
 #import "PersonImage.h"
 
@@ -24,9 +25,8 @@
 	[super layoutSubviews];
 }
 
-- (id) populateCellWithLocation:(Location *) location {	
-	User *user = location.user;
-	NSDate *date = location.timestamp;
+- (id) populateCellWithUser:(User *) user {
+	NSDate *date = user.location.timestamp;
 	
 	[self.icon setImage:[PersonImage imageForTimestamp:date]];
 	self.name.text = user.name;
