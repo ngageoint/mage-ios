@@ -93,7 +93,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	
+
 	[_mapView setDelegate:self];
 	[_mapView setShowsUserLocation:YES];
 	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
