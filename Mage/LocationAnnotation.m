@@ -8,6 +8,7 @@
 #import "LocationAnnotation.h"
 #import "GeoPoint.h"
 #import "User+helper.h"
+#import "NSDate+DateTools.h"
 
 @implementation LocationAnnotation
 
@@ -19,8 +20,8 @@
 		_timestamp = location.timestamp;
 		
 		User *user = location.user;
-		_title = user.name;
-		_subtitle = user.username;
+		_title = user.name != nil ? user.name : user.username;
+		_subtitle = location.timestamp.timeAgoSinceNow;
     }
 		
     return self;

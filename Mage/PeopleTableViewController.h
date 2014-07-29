@@ -10,6 +10,6 @@
 @interface PeopleTableViewController : UITableViewController<NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) NSFetchedResultsController *userResultsController;
+@property (strong, nonatomic) NSFetchedResultsController *locationResultsController;
 
 @end
