@@ -152,10 +152,10 @@
     else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        MKAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
 			
@@ -249,7 +249,7 @@
 - (void) updateObservation: (Observation *) observation {
 	ObservationAnnotation *annotation = [_observationAnnotations objectForKey:observation.remoteId];
 	if (annotation == nil) {
-		annotation = [[ObservationAnnotation alloc] init];
+		annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
 		[_observationAnnotations setObject:annotation forKey:observation.remoteId];
 	}
 	
