@@ -131,7 +131,7 @@
     
     // These are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array.
 	// The gradient will shift between the colors between these percentage points.
-    maskLayer.locations = @[@0.0, @0.0, @.35, @.35f];
+    maskLayer.locations = @[@0.0, @0.0, @0.35, @0.35f];
     maskLayer.bounds = _mapView.frame;
 	UIView *view = [[UIView alloc] initWithFrame:_mapView.frame];
     
