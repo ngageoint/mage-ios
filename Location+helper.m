@@ -83,12 +83,11 @@
 			[userIdMap setObject:user forKey:user.remoteId];
 		}
 		
-		User *currentUser = [User currentUser];
 		for (NSDictionary *userLocation in userLocations) {
 			// pull from query map
 			NSString *userId = [userLocation objectForKey:@"user"];
 			User *user = [userIdMap objectForKey:userId];
-			if (user == nil || [user.remoteId isEqualToString:currentUser.remoteId]) continue;
+			if (user == nil) continue;
 			
 			Location *location = user.location;
 			if (location == nil) {
