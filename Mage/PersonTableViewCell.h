@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;
+@property (weak, nonatomic) IBOutlet UILabel *myself;
 
 
 - (id) populateCellWithUser:(User *) user;
