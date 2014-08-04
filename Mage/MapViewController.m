@@ -51,27 +51,27 @@
 	return _observationResultsController;
 }
 
-- (NSFetchedResultsController *) userResultsController {
+- (NSFetchedResultsController *) locationResultsController {
 	
-	if (_userResultsController != nil) {
-		return _userResultsController;
+	if (_locationResultsController != nil) {
+		return _locationResultsController;
 	}
 	
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:_managedObjectContext]];
-	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"location.timestamp" ascending:NO]]];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"remoteId != %@", [User currentUser].remoteId];
+	[request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
+	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.remoteId != %@", [User currentUser].remoteId];
 	[request setPredicate:predicate];
 	
-	_userResultsController = [[NSFetchedResultsController alloc]
+	_locationResultsController = [[NSFetchedResultsController alloc]
 								  initWithFetchRequest:request
 								  managedObjectContext:_managedObjectContext
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
 		
-	[_userResultsController setDelegate:self];
+	[_locationResultsController setDelegate:self];
 	
-	return _userResultsController;
+	return _locationResultsController;
 }
 
 - (NSMutableDictionary *) locationAnnotations {
@@ -99,13 +99,13 @@
 	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 	
 	NSError *error;
-    if (![[self userResultsController] performFetch:&error]) {
+    if (![[self locationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
 	
-	NSArray *users = [_userResultsController fetchedObjects];
+	NSArray *users = [_locationResultsController fetchedObjects];
 	for (User *user in users) {
 		[self updateUser:user];
 	}
@@ -148,14 +148,13 @@
         }
 		
         return annotationView;
-    }
-    else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
+    } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        MKAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
 			
@@ -178,8 +177,15 @@
     return nil;
 }
 
--(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
-{
+- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+	if (view == [_mapView viewForAnnotation:_mapView.userLocation]) {
+		UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+		[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+		view.rightCalloutAccessoryView = rightButton;
+	}
+}
+
+-(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
     float oldWidth = sourceImage.size.width;
     float scaleFactor = i_width / oldWidth;
     
@@ -235,21 +241,22 @@
     }
 }
 
-- (void) updateUser:(User *) user {
+- (void) updateUser:(Location *) location {
+	User *user = location.user;
 	LocationAnnotation *annotation = [_locationAnnotations objectForKey:user.remoteId];
 	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] initWithLocation:user.location];
+		annotation = [[LocationAnnotation alloc] initWithLocation:location];
 		[_mapView addAnnotation:annotation];
 		[_locationAnnotations setObject:annotation forKey:user.remoteId];
 	} else {
-		[annotation setCoordinate:((GeoPoint *) user.location.geometry).location.coordinate];
+		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}
 }
 
 - (void) updateObservation: (Observation *) observation {
 	ObservationAnnotation *annotation = [_observationAnnotations objectForKey:observation.remoteId];
 	if (annotation == nil) {
-		annotation = [[ObservationAnnotation alloc] init];
+		annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
 		[_observationAnnotations setObject:annotation forKey:observation.remoteId];
 	}
 	
@@ -261,7 +268,7 @@
 }
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
-	if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
+	if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == _mapView.userLocation) {
 		[self performSegueWithIdentifier:@"DisplayPersonSegue" sender:view];
 	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
 		[self performSegueWithIdentifier:@"DisplayObservationSegue" sender:view];
@@ -270,11 +277,18 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
-		LocationAnnotation *annotation = [sender annotation];
+		User *user = nil;
+		if ([sender annotation] == _mapView.userLocation) {
+			user = [User currentUser];
+		} else {
+			LocationAnnotation *annotation = [sender annotation];
+			user = annotation.location.user;
+		}
 		
 		PersonViewController *destinationViewController = segue.destinationViewController;
-		[destinationViewController setUser:annotation.location.user];
+		[destinationViewController setUser:user];
 		[destinationViewController setManagedObjectContext:_managedObjectContext];
+
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationAnnotation *annotation = [sender annotation];
 		
