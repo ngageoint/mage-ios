@@ -122,6 +122,18 @@ id<Authentication> _authentication;
 	}
 }
 
+- (IBAction)characterTypedInLoginFields:(id)sender {
+    if (([[_usernameField text] length] != 0) && ([[_passwordField text] length] != 0)) {
+        [_usernameField setReturnKeyType:UIReturnKeyGo];
+        [_passwordField setReturnKeyType:UIReturnKeyGo];
+        [sender reloadInputViews];
+    } else {
+        [_usernameField setReturnKeyType:UIReturnKeyNext];
+        [_passwordField setReturnKeyType:UIReturnKeyNext];
+        [sender reloadInputViews];
+    }
+}
+
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (![self changeTextViewFocus: sender]) {
 		[sender resignFirstResponder];
@@ -174,8 +186,7 @@ id<Authentication> _authentication;
     self.passwordField.clearsOnBeginEditing = NO;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {    
     NSString *updatedString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
 	// if we override this we need to check if its \n
@@ -183,6 +194,7 @@ id<Authentication> _authentication;
 		[textField resignFirstResponder];
 	} else {
 		textField.text = updatedString;
+        [self characterTypedInLoginFields:textField];
 	}
     
     return NO;
