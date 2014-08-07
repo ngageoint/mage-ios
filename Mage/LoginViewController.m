@@ -17,6 +17,7 @@
 #import <HttpManager.h>
 #import "MageRootViewController.h"
 #import <UserUtility.h>
+#import "DeviceUUID.h"
 
 @interface LoginViewController ()
 
@@ -63,14 +64,9 @@ id<Authentication> _authentication;
 
 - (void) verifyLogin {
 	// setup authentication
-    
-    NSUUID *uid;
-    #if TARGET_IPHONE_SIMULATOR
-        uid = [[NSUUID alloc]initWithUUIDString:@"0cbdbd05-e99d-46b3-badd-505a31f5911f"];
-    #else
-        uid = [[UIDevice currentDevice] identifierForVendor];
-    #endif
-	NSString *uidString = uid.UUIDString;
+
+    NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
+	NSString *uidString = deviceUUID.UUIDString;
     NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
 														 _usernameField.text, @"username",
