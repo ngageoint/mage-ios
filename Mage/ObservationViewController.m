@@ -12,6 +12,7 @@
 #import "ObservationImage.h"
 #import "ObservationPropertyTableViewCell.h"
 #import <User.h>
+#import "AttachmentCell.h"
 
 @interface ObservationViewController ()
 
@@ -69,7 +70,7 @@
     
     [self.propertyTable setDelegate:self];
     [self.propertyTable setDataSource:self];
-    
+    [self.attachmentCollection setDataSource:self];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -167,7 +168,13 @@
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
     id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    [observationCell populateCellWithKey:[observationCell.fieldDefinition objectForKey:@"title"] andValue:value];
+    id title = [observationCell.fieldDefinition objectForKey:@"title"];
+    if (title == nil) {
+        
+        title = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+//        [_propertyTable deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
+    }
+    [observationCell populateCellWithKey:title andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -207,6 +214,23 @@
     return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
 }
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
+    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    if ([attachment.contentType hasPrefix:@"image"]) {
+        [cell.image setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",attachment.url, [defaults objectForKey:@"token"]]]]]];
+    } else if ([attachment.contentType hasPrefix:@"video"]) {
+        [cell.image setImage: [UIImage imageNamed:@"video"]];
+    } else {
+        [cell.image setImage: [UIImage imageNamed:@"download"]];
+    }
+    
+    return cell;
+}
 
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return _observation.attachments.count;
+}
 
 @end
