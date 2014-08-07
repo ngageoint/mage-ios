@@ -17,6 +17,7 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C790F7519704DE300886E58 /* MageNavigationController.m */; };
 		4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */; };
+		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
 		F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EEC19781D37002D66F6 /* ObservationImage.m */; };
@@ -88,6 +89,8 @@
 		4C790F7519704DE300886E58 /* MageNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationController.m; sourceTree = "<group>"; };
 		4C790F7719742CEC00886E58 /* DisclaimerNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerNavigationController.h; sourceTree = "<group>"; };
 		4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerNavigationController.m; sourceTree = "<group>"; };
+		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
+		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		7E2901AEF10B4754A517226F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewCell.h; sourceTree = "<group>"; };
@@ -325,6 +328,8 @@
 				4C790F7819742CEC00886E58 /* DisclaimerNavigationController.m */,
 				F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */,
 				F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */,
+				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
+				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -516,6 +521,7 @@
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
+				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
