@@ -10,6 +10,8 @@
 #import <User.h>
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
+#import <FICImageCache.h>
+#import "Attachment+FICAttachment.h"
 
 #import "MageInitialViewController.h"
 
@@ -45,6 +47,34 @@
                                                            [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
                                                            nil, nil,
                                                            [UIFont fontWithName:@"HelveticaNeue" size:26.0], NSFontAttributeName, nil]];
+    
+    static NSString *XXImageFormatNameUserThumbnailSmall = @"com.mycompany.myapp.XXImageFormatNameUserThumbnailSmall";
+    static NSString *XXImageFormatNameUserThumbnailMedium = @"com.mycompany.myapp.XXImageFormatNameUserThumbnailMedium";
+    static NSString *XXImageFormatFamilyUserThumbnails = @"com.mycompany.myapp.XXImageFormatFamilyUserThumbnails";
+    
+    FICImageFormat *smallUserThumbnailImageFormat = [[FICImageFormat alloc] init];
+    smallUserThumbnailImageFormat.name = XXImageFormatNameUserThumbnailSmall;
+    smallUserThumbnailImageFormat.family = XXImageFormatFamilyUserThumbnails;
+    smallUserThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    smallUserThumbnailImageFormat.imageSize = CGSizeMake(50, 50);
+    smallUserThumbnailImageFormat.maximumCount = 250;
+    smallUserThumbnailImageFormat.devices = FICImageFormatDevicePhone;
+    smallUserThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+    
+    FICImageFormat *mediumUserThumbnailImageFormat = [[FICImageFormat alloc] init];
+    mediumUserThumbnailImageFormat.name = XXImageFormatNameUserThumbnailMedium;
+    mediumUserThumbnailImageFormat.family = XXImageFormatFamilyUserThumbnails;
+    mediumUserThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
+    mediumUserThumbnailImageFormat.imageSize = CGSizeMake(100, 100);
+    mediumUserThumbnailImageFormat.maximumCount = 250;
+    mediumUserThumbnailImageFormat.devices = FICImageFormatDevicePhone;
+    mediumUserThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+    
+    NSArray *imageFormats = @[smallUserThumbnailImageFormat, mediumUserThumbnailImageFormat];
+    
+    _imageCache = [FICImageCache sharedImageCache];
+    _imageCache.delegate = self;
+    _imageCache.formats = imageFormats;
 	 
 	return YES;
 }
@@ -176,6 +206,30 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Fetch the desired source image by making a network request
+        Attachment *attachment = (Attachment *)entity;
+        UIImage *sourceImage = nil;
+        NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
+        if ([attachment.contentType hasPrefix:@"image"]) {
+            
+            NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+            NSString *tokenUrl = [NSString stringWithFormat:@"%@?access_token=%@", requestURL, [defaults objectForKey:@"token"]];
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:tokenUrl]];
+            sourceImage = [UIImage imageWithData:data];
+        } else if ([attachment.contentType hasPrefix:@"video"]) {
+            sourceImage = [UIImage imageNamed:@"video"];
+        } else {
+            sourceImage = [UIImage imageNamed:@"download"];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(sourceImage);
+        });
+    });
 }
 
 @end

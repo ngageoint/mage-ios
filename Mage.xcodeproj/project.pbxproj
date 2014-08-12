@@ -58,6 +58,7 @@
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
+		F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */; };
 		F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -157,6 +158,8 @@
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380A1992948A007CCF6C /* AttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCell.h; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCell.m; sourceTree = "<group>"; };
+		F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+FICAttachment.h"; sourceTree = "<group>"; };
+		F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+FICAttachment.m"; sourceTree = "<group>"; };
 		F7F840E91910151E0009C493 /* MageFilterMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageFilterMenuViewController.h; sourceTree = "<group>"; };
 		F7F840EA1910151E0009C493 /* MageFilterMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageFilterMenuViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -255,6 +258,8 @@
 				F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */,
 				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
+				F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */,
+				F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -534,6 +539,7 @@
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
 				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */,
+				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
