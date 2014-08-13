@@ -33,6 +33,12 @@
 	self.username.text = user.username;
 	self.timestamp.text = date.timeAgoSinceNow;
 	
+	if ([user.remoteId isEqualToString:[User currentUser].remoteId]) {
+		self.myself.hidden = NO;
+	} else {
+		self.myself.hidden = YES;
+	}
+	
 	return self;
 }
 

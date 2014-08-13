@@ -17,6 +17,7 @@
 #import <HttpManager.h>
 #import "MageRootViewController.h"
 #import <UserUtility.h>
+#import "DeviceUUID.h"
 
 @interface LoginViewController ()
 
@@ -63,14 +64,9 @@ id<Authentication> _authentication;
 
 - (void) verifyLogin {
 	// setup authentication
-    
-    NSUUID *uid;
-    #if TARGET_IPHONE_SIMULATOR
-        uid = [[NSUUID alloc]initWithUUIDString:@"0cbdbd05-e99d-46b3-badd-505a31f5911f"];
-    #else
-        uid = [[UIDevice currentDevice] identifierForVendor];
-    #endif
-	NSString *uidString = uid.UUIDString;
+
+    NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
+	NSString *uidString = deviceUUID.UUIDString;
     NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
 														 _usernameField.text, @"username",
@@ -122,19 +118,34 @@ id<Authentication> _authentication;
 	}
 }
 
+- (IBAction)characterTypedInLoginFields:(id)sender {
+    if (([[_usernameField text] length] != 0) && ([[_passwordField text] length] != 0)) {
+        [_usernameField setReturnKeyType:UIReturnKeyGo];
+        [_passwordField setReturnKeyType:UIReturnKeyGo];
+        [sender reloadInputViews];
+    } else {
+        [_usernameField setReturnKeyType:UIReturnKeyNext];
+        [_passwordField setReturnKeyType:UIReturnKeyNext];
+        [sender reloadInputViews];
+    }
+}
+
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if (![self changeTextViewFocus: sender]) {
-		[sender resignFirstResponder];
-		if ([_usernameField isFirstResponder]) {
-			[_usernameField resignFirstResponder];
-		} else if([_passwordField isFirstResponder]) {
-			[_passwordField resignFirstResponder];
+	if ([identifier isEqualToString:@"LoginSegue"]) {
+		if (![self changeTextViewFocus: sender]) {
+			[sender resignFirstResponder];
+			if ([_usernameField isFirstResponder]) {
+				[_usernameField resignFirstResponder];
+			} else if([_passwordField isFirstResponder]) {
+				[_passwordField resignFirstResponder];
+			}
+			
+			[self verifyLogin];
 		}
-		
-		[self verifyLogin];
+		return NO;
 	}
-	
-	return NO;
+
+	return YES;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
@@ -169,13 +180,24 @@ id<Authentication> _authentication;
     
 }
 
+- (void) viewDidLoad {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+}
+
 - (IBAction)showPasswordSwitchAction:(id)sender {
     [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
     self.passwordField.clearsOnBeginEditing = NO;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     NSString *updatedString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
 	// if we override this we need to check if its \n
@@ -183,6 +205,7 @@ id<Authentication> _authentication;
 		[textField resignFirstResponder];
 	} else {
 		textField.text = updatedString;
+        [self characterTypedInLoginFields:textField];
 	}
     
     return NO;
