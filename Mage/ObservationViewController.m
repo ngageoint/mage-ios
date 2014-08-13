@@ -12,6 +12,10 @@
 #import "ObservationImage.h"
 #import "ObservationPropertyTableViewCell.h"
 #import <User.h>
+#import "AttachmentCell.h"
+#import "Attachment+FICAttachment.h"
+#import <FICImageCache.h>
+#import "AppDelegate.h"
 
 @interface ObservationViewController ()
 
@@ -69,7 +73,7 @@
     
     [self.propertyTable setDelegate:self];
     [self.propertyTable setDataSource:self];
-    
+    [self.attachmentCollection setDataSource:self];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -167,7 +171,13 @@
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
     id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    [observationCell populateCellWithKey:[observationCell.fieldDefinition objectForKey:@"title"] andValue:value];
+    id title = [observationCell.fieldDefinition objectForKey:@"title"];
+    if (title == nil) {
+        
+        title = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+//        [_propertyTable deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
+    }
+    [observationCell populateCellWithKey:title andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -207,6 +217,28 @@
     return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
 }
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
+    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+ 
+    FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
+        cell.image.image = image;
+        [cell.image.layer addAnimation:[CATransition animation] forKey:kCATransition];
+        cell.image.layer.cornerRadius = 5;
+        cell.image.clipsToBounds = YES;
+    };
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentSmallSquare completionBlock:completionBlock];
+    
+    if (imageExists == NO) {
+        cell.image.image = [UIImage imageNamed:@"download"];
+    }
+    return cell;
+}
 
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return _observation.attachments.count;
+}
 
 @end
