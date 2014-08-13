@@ -32,6 +32,7 @@
 			[self setType:[jsonLocation objectForKey:@"type"]];
 			
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+			[dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
 			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
 			NSDate *date = [dateFormat dateFromString:[jsonLocation valueForKeyPath:@"properties.timestamp"]];
 			[self setTimestamp:date];
@@ -88,7 +89,7 @@
 			NSString *userId = [userLocation objectForKey:@"user"];
 			User *user = [userIdMap objectForKey:userId];
 			if (user == nil) continue;
-			
+	
 			Location *location = user.location;
 			if (location == nil) {
 				// not in core data yet need to create a new managed object
@@ -101,6 +102,10 @@
 				[location populateLocationFromJson:[userLocation objectForKey:@"locations"]];
 			}
         }
+		
+		if (! [context save:&error]) {
+			NSLog(@"Error updating locations: %@", error);
+		}
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
