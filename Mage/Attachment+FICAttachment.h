@@ -9,6 +9,11 @@
 #import "Attachment.h"
 #import <FICEntity.h>
 
+extern NSString *const AttachmentFamily;
+extern NSString *const AttachmentSmallSquare;
+extern NSString *const AttachmentLarge;
+extern CGSize const AttachmentSquareImageSize;
+
 @interface Attachment (FICAttachment) <FICEntity>
 
 @end

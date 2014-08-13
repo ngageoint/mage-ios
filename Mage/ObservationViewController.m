@@ -218,32 +218,22 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
     Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    
-    //XXUser *user = [self _currentUser];
-    NSString *formatName = @"com.mycompany.myapp.XXImageFormatNameUserThumbnailSmall";
+ 
     FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
         cell.image.image = image;
-        //[cell.image.layer addAnimation:[CATransition animation] forKey:kCATransition];
+        [cell.image.layer addAnimation:[CATransition animation] forKey:kCATransition];
+        cell.image.layer.cornerRadius = 5;
+        cell.image.clipsToBounds = YES;
     };
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:formatName completionBlock:completionBlock];
+    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentSmallSquare completionBlock:completionBlock];
     
     if (imageExists == NO) {
         cell.image.image = [UIImage imageNamed:@"download"];
     }
-    
-//    if ([attachment.contentType hasPrefix:@"image"]) {
-//        [cell.image setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",attachment.url, [defaults objectForKey:@"token"]]]]]];
-//    } else if ([attachment.contentType hasPrefix:@"video"]) {
-//        [cell.image setImage: [UIImage imageNamed:@"video"]];
-//    } else {
-//        [cell.image setImage: [UIImage imageNamed:@"download"]];
-//    }
-    
     return cell;
 }
 

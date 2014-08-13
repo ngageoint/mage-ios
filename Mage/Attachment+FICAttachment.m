@@ -10,21 +10,20 @@
 #import <FICImageCache.h>
 #import "FICUtilities.h"
 
+#pragma mark External Definitions
+
+NSString *const AttachmentFamily = @"AttachmentFamily";
+
+NSString *const AttachmentSmallSquare = @"AttachmentSmallSquare";
+NSString *const AttachmentLarge = @"AttachmentLarge";
+CGSize const AttachmentSquareImageSize = {50, 50};
+
+
 @implementation Attachment (FICAttachment)
 
-NSString *_UUID;
-
 - (NSString *)UUID {
-    
-    if (_UUID == nil) {
-        CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self url]);
-        _UUID = FICStringWithUUIDBytes(UUIDBytes);
-    }
-    
-    return _UUID;
-    
-    
-    return [self remoteId];
+    CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self url]);
+    return FICStringWithUUIDBytes(UUIDBytes);
 }
 
 - (NSString *)sourceImageUUID {
@@ -37,18 +36,28 @@ NSString *_UUID;
 
 - (FICEntityImageDrawingBlock)drawingBlockForImage:(UIImage *)image withFormatName:(NSString *)formatName {
     FICEntityImageDrawingBlock drawingBlock = ^(CGContextRef context, CGSize contextSize) {
+        UIImage *imageToUse = image;
         CGRect contextBounds = CGRectZero;
         contextBounds.size = contextSize;
+        if ([formatName isEqualToString:AttachmentSmallSquare]) {
+            CGRect cropRect = CGRectZero;
+            if (image.size.width < image.size.height) {
+                // portrait mode, crop off the top and bottom
+                cropRect = CGRectMake(0, (image.size.height - image.size.width)/2.0, image.size.width, image.size.width);
+            } else {
+                // landscape, crop the sides
+                cropRect = CGRectMake((image.size.width - image.size.height)/2.0, 0, image.size.height, image.size.height);
+            }
+            
+            CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+            
+            imageToUse = [UIImage imageWithCGImage:imageRef];
+            CGImageRelease(imageRef);
+        }
+        
         CGContextClearRect(context, contextBounds);
-        
-        //        // Clip medium thumbnails so they have rounded corners
-        //        if ([formatName isEqualToString:XXImageFormatNameUserThumbnailMedium]) {
-        //            UIBezierPath clippingPath = [self _clippingPath];
-        //            [clippingPath addClip];
-        //        }
-        
         UIGraphicsPushContext(context);
-        [image drawInRect:contextBounds];
+        [imageToUse drawInRect:contextBounds];
         UIGraphicsPopContext();
     };
     

@@ -48,29 +48,25 @@
                                                            nil, nil,
                                                            [UIFont fontWithName:@"HelveticaNeue" size:26.0], NSFontAttributeName, nil]];
     
-    static NSString *XXImageFormatNameUserThumbnailSmall = @"com.mycompany.myapp.XXImageFormatNameUserThumbnailSmall";
-    static NSString *XXImageFormatNameUserThumbnailMedium = @"com.mycompany.myapp.XXImageFormatNameUserThumbnailMedium";
-    static NSString *XXImageFormatFamilyUserThumbnails = @"com.mycompany.myapp.XXImageFormatFamilyUserThumbnails";
+    FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
+    thumbnailImageFormat.name = AttachmentSmallSquare;
+    thumbnailImageFormat.family = AttachmentFamily;
+    thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
+    thumbnailImageFormat.maximumCount = 250;
+    thumbnailImageFormat.devices = FICImageFormatDevicePhone;
+    thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    FICImageFormat *smallUserThumbnailImageFormat = [[FICImageFormat alloc] init];
-    smallUserThumbnailImageFormat.name = XXImageFormatNameUserThumbnailSmall;
-    smallUserThumbnailImageFormat.family = XXImageFormatFamilyUserThumbnails;
-    smallUserThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
-    smallUserThumbnailImageFormat.imageSize = CGSizeMake(50, 50);
-    smallUserThumbnailImageFormat.maximumCount = 250;
-    smallUserThumbnailImageFormat.devices = FICImageFormatDevicePhone;
-    smallUserThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+    FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
+    largeImageFormat.name = AttachmentLarge;
+    largeImageFormat.family = AttachmentFamily;
+    largeImageFormat.style = FICImageFormatStyle32BitBGRA;
+    largeImageFormat.imageSize = CGSizeMake(100, 100);
+    largeImageFormat.maximumCount = 250;
+    largeImageFormat.devices = FICImageFormatDevicePhone;
+    largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    FICImageFormat *mediumUserThumbnailImageFormat = [[FICImageFormat alloc] init];
-    mediumUserThumbnailImageFormat.name = XXImageFormatNameUserThumbnailMedium;
-    mediumUserThumbnailImageFormat.family = XXImageFormatFamilyUserThumbnails;
-    mediumUserThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
-    mediumUserThumbnailImageFormat.imageSize = CGSizeMake(100, 100);
-    mediumUserThumbnailImageFormat.maximumCount = 250;
-    mediumUserThumbnailImageFormat.devices = FICImageFormatDevicePhone;
-    mediumUserThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[smallUserThumbnailImageFormat, mediumUserThumbnailImageFormat];
+    NSArray *imageFormats = @[thumbnailImageFormat, largeImageFormat];
     
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;
