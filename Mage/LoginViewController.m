@@ -131,18 +131,21 @@ id<Authentication> _authentication;
 }
 
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if (![self changeTextViewFocus: sender]) {
-		[sender resignFirstResponder];
-		if ([_usernameField isFirstResponder]) {
-			[_usernameField resignFirstResponder];
-		} else if([_passwordField isFirstResponder]) {
-			[_passwordField resignFirstResponder];
+	if ([identifier isEqualToString:@"LoginSegue"]) {
+		if (![self changeTextViewFocus: sender]) {
+			[sender resignFirstResponder];
+			if ([_usernameField isFirstResponder]) {
+				[_usernameField resignFirstResponder];
+			} else if([_passwordField isFirstResponder]) {
+				[_passwordField resignFirstResponder];
+			}
+			
+			[self verifyLogin];
 		}
-		
-		[self verifyLogin];
+		return NO;
 	}
-	
-	return NO;
+
+	return YES;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
