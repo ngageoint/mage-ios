@@ -16,6 +16,7 @@
 #import "Attachment+FICAttachment.h"
 #import <FICImageCache.h>
 #import "AppDelegate.h"
+#import "ImageViewerViewController.h"
 
 @interface ObservationViewController ()
 
@@ -239,6 +240,25 @@
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return _observation.attachments.count;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
+    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    NSLog(@"clicked attachment %@", attachment.url);
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"viewImageSegue"])
+    {
+        // Get reference to the destination view controller
+        ImageViewerViewController *vc = [segue destinationViewController];
+        
+        // Pass any objects to the view controller here, like...
+        [vc setAttachment:sender];
+    }
 }
 
 @end

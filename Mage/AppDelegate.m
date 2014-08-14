@@ -61,7 +61,7 @@
     largeImageFormat.name = AttachmentLarge;
     largeImageFormat.family = AttachmentFamily;
     largeImageFormat.style = FICImageFormatStyle32BitBGRA;
-    largeImageFormat.imageSize = CGSizeMake(100, 100);
+    largeImageFormat.imageSize = [[UIScreen mainScreen] bounds].size;
     largeImageFormat.maximumCount = 250;
     largeImageFormat.devices = FICImageFormatDevicePhone;
     largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;

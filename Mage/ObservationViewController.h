@@ -12,7 +12,7 @@
 #import "Observation.h"
 #import "Attachment.h"
 
-@interface ObservationViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource>
+@interface ObservationViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) Observation *observation;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
