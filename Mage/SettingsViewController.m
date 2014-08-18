@@ -7,34 +7,24 @@
 //
 
 #import "SettingsViewController.h"
+#import "User+helper.h"
 
 @interface SettingsViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
-@property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
-@property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
-
+    @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
+    @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+    @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
+    @property (weak, nonatomic) IBOutlet UILabel *user;
 @end
 
 @implementation SettingsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    User *user = [User fetchCurrentUserForManagedObjectContext:_managedObjectContext];
+    _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
+    
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     if ([[defaults objectForKey:@"locationServiceEnabled"] boolValue]) {
         [self.locationServicesStatus setText:@"On"];
@@ -47,12 +37,11 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
+    
     [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
-
 }
 
-- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
-{
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
@@ -70,14 +59,12 @@
     
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
