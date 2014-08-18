@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    _selected = [defaults objectForKey:_preferenceKey];
+    _selected = [defaults objectForKey:_preferenceKey];    
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,6 +48,11 @@
     return _values.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Frequencies";
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -57,8 +62,7 @@
                               forIndexPath:indexPath];
     
     long row = [indexPath row];
-    
-    cell.valueLabel.text = _displayValues[row];
+    cell.valueLabel.text = _labels[row];
     cell.preferenceValue = _values[row];
     
     if ([_values[row] unsignedLongLongValue] == [_selected unsignedLongLongValue]) {

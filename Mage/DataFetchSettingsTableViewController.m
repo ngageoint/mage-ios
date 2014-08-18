@@ -47,12 +47,6 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     [self.dataFetchSwitch setOn:[[defaults objectForKey:@"dataFetchEnabled"] boolValue] animated:NO];
     [self.dataFetchSwitch addTarget:self action:@selector(dataFetchSwitched:) forControlEvents:UIControlEventValueChanged];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,16 +61,17 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
-    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
+    NSArray *values = [frequencyDictionary valueForKey:@"values"];
     
     NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
     
-    for (id key in frequencies) {
-        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
-            [label setText:key];
+    for (int i = 0; i < values.count; i++) {
+        if ([frequency integerValue] == [[values objectAtIndex:i] integerValue]) {
+            [label setText:[labels objectAtIndex:i]];
+            break;
         }
     }
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -118,9 +113,9 @@
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
         NSDictionary *timeDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        NSDictionary *frequencies = [timeDictionary valueForKey:@"values"];
-        vc.displayValues = [frequencies allKeys];
-        vc.values = [frequencies allValues];
+        vc.title = [timeDictionary valueForKey:@"title"];
+        vc.labels = [timeDictionary valueForKey:@"labels"];
+        vc.values = [timeDictionary valueForKey:@"values"];
         vc.preferenceKey = [timeDictionary valueForKey:@"preferenceKey"];
     }
 }
