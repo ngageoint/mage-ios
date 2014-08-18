@@ -18,7 +18,6 @@ NSString *const AttachmentSmallSquare = @"AttachmentSmallSquare";
 NSString *const AttachmentLarge = @"AttachmentLarge";
 CGSize const AttachmentSquareImageSize = {50, 50};
 
-
 @implementation Attachment (FICAttachment)
 
 - (NSString *)UUID {
@@ -41,7 +40,9 @@ CGSize const AttachmentSquareImageSize = {50, 50};
         contextBounds.size = contextSize;
         if ([formatName isEqualToString:AttachmentSmallSquare]) {
             CGRect cropRect = CGRectZero;
-            if (image.size.width < image.size.height) {
+            if (image.size.width <= contextSize.width && image.size.height <= contextSize.height) {
+                cropRect = CGRectMake((contextSize.width - image.size.width)/2.0, (contextSize.height - image.size.height)/2.0, contextSize.width, contextSize.height);
+            } else if (image.size.width < image.size.height) {
                 // portrait mode, crop off the top and bottom
                 cropRect = CGRectMake(0, (image.size.height - image.size.width)/2.0, image.size.width, image.size.width);
             } else {
