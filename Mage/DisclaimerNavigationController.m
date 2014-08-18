@@ -34,6 +34,7 @@
     if ([segueIdentifier isEqualToString:@"DisplayLoginSegue"]) {
         id destinationController = [segue destinationViewController];
 		[destinationController setManagedObjectContext:_managedObjectContext];
+        [destinationController setLocationFetchService:_locationFetchService];
     }
 }
 

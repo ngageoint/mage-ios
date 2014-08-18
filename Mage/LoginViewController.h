@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Authentication.h"
+#import "LocationFetchService.h"
 
 @interface LoginViewController : UIViewController<AuthenticationDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) LocationFetchService *locationFetchService;
 
 @property (strong, nonatomic) IBOutlet UITextField *usernameField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;

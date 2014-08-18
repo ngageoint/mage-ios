@@ -23,8 +23,6 @@
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
 	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-//	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.remoteId != %@", [User currentUser].remoteId];
-//	[request setPredicate:predicate];
 	
 	_locationResultsController = [[NSFetchedResultsController alloc]
 								  initWithFetchRequest:request

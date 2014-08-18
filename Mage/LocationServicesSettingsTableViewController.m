@@ -68,13 +68,15 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
-    NSDictionary *frequencies = [frequencyDictionary valueForKey:@"values"];
+    NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
+    NSArray *values = [frequencyDictionary valueForKey:@"values"];
     
     NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
     
-    for (id key in frequencies) {
-        if ([frequency unsignedLongLongValue] == [[frequencies valueForKey: key] unsignedLongLongValue]) {
-            [label setText:key];
+    for (int i = 0; i < values.count; i++) {
+        if ([frequency integerValue] == [[values objectAtIndex:i] integerValue]) {
+            [label setText:[labels objectAtIndex:i]];
+            break;
         }
     }
     
@@ -120,9 +122,9 @@
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
         NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        NSDictionary *frequencies = [valueDictionary valueForKey:@"values"];
-        vc.displayValues = [frequencies allKeys];
-        vc.values = [frequencies allValues];
+        vc.title = [valueDictionary valueForKey:@"title"];
+        vc.labels = [valueDictionary valueForKey:@"labels"];
+        vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
 }
