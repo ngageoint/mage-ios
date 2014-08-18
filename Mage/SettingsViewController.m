@@ -82,6 +82,8 @@
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
         NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
+        vc.title = [valueDictionary valueForKey:@"title"];
+        vc.section = [valueDictionary valueForKey:@"section"];
         vc.labels = [valueDictionary valueForKey:@"labels"];
         vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
