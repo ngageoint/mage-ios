@@ -269,27 +269,33 @@ AVPlayer *player;
     Observation *obs = (Observation *)attachment.observation;
     
     NSString *downloadPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
-    NSLog(@"Downloading to %@", downloadPath);
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
-            // save the local path
-            [self playMediaFromDocumentsFolder:downloadPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
+        // save the local path
+        NSLog(@"playing locally");
+        [self playMediaFromDocumentsFolder:downloadPath];
+    } else {
+        NSLog(@"Downloading to %@", downloadPath);
+        NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
+        AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
+                // save the local path
+                [self playMediaFromDocumentsFolder:downloadPath];
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            
+        }];
+        NSError *error;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[downloadPath stringByDeletingLastPathComponent]]) {
+            NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
+            [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
         
-    }];
-    NSError *error;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[downloadPath stringByDeletingLastPathComponent]]) {
-        NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
-        [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+        [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
+        operation.responseSerializer = [AFHTTPResponseSerializer serializer];
+        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
+        [operation start];
     }
-    
-    [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
-    operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
-    [operation start];
 }
 
 
