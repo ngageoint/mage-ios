@@ -36,6 +36,7 @@ id<Authentication> _authentication;
     if ([segueIdentifier isEqualToString:@"LoginSegue"]) {
         MageRootViewController *rootViewController = [segue destinationViewController];
 		rootViewController.managedObjectContext = self.managedObjectContext;
+        [rootViewController setLocationFetchService:_locationFetchService];
     }
 }
 

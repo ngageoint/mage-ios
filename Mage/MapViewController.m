@@ -53,14 +53,14 @@
 
 - (NSFetchedResultsController *) locationResultsController {
 	
-	if (_locationResultsController != nil) {
-		return _locationResultsController;
-	}
-	
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
 	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.remoteId != %@", [User currentUser].remoteId];
+	
+	if (_locationResultsController != nil) {
+		return _locationResultsController;
+	}
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]];
 	[request setPredicate:predicate];
 	
 	_locationResultsController = [[NSFetchedResultsController alloc]
@@ -82,14 +82,6 @@
 	return _locationAnnotations;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -98,16 +90,16 @@
 	[_mapView setShowsUserLocation:YES];
 	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 	
-	NSError *error;
+    NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
 	
-	NSArray *users = [_locationResultsController fetchedObjects];
-	for (User *user in users) {
-		[self updateUser:user];
+	NSArray *locations = [self.locationResultsController fetchedObjects];
+	for (Location *location in locations) {
+		[self updateLocation:location];
 	}
     
     if (![[self observationResultsController] performFetch:&error]) {
@@ -116,7 +108,7 @@
         exit(-1);  // Fail
     }
 	
-	NSArray *observations = [_observationResultsController fetchedObjects];
+	NSArray *observations = [self.observationResultsController fetchedObjects];
     NSLog(@"we initially found %lu observations", (unsigned long)observations.count);
 	for (Observation *observation in observations) {
 		[self updateObservation:observation];
@@ -227,7 +219,7 @@
         switch(type) {
                 
             case NSFetchedResultsChangeInsert:
-                [self updateUser:object];
+                [self updateLocation:object];
                 break;
                 
             case NSFetchedResultsChangeDelete:
@@ -235,29 +227,30 @@
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [self updateUser:object];
+                [self updateLocation:object];
                 break;
         }
     }
 }
 
-- (void) updateUser:(Location *) location {
+- (void) updateLocation:(Location *) location {
 	User *user = location.user;
-	LocationAnnotation *annotation = [_locationAnnotations objectForKey:user.remoteId];
+    
+	LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
 	if (annotation == nil) {
 		annotation = [[LocationAnnotation alloc] initWithLocation:location];
 		[_mapView addAnnotation:annotation];
-		[_locationAnnotations setObject:annotation forKey:user.remoteId];
+		[self.locationAnnotations setObject:annotation forKey:user.remoteId];
 	} else {
 		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}
 }
 
 - (void) updateObservation: (Observation *) observation {
-	ObservationAnnotation *annotation = [_observationAnnotations objectForKey:observation.remoteId];
+	ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
 	if (annotation == nil) {
 		annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-		[_observationAnnotations setObject:annotation forKey:observation.remoteId];
+		[self.observationAnnotations setObject:annotation forKey:observation.remoteId];
 	}
 	
 	GeoPoint *point = observation.geometry;
@@ -279,7 +272,7 @@
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
 		User *user = nil;
 		if ([sender annotation] == _mapView.userLocation) {
-			user = [User currentUser];
+			user = [User fetchCurrentUserForManagedObjectContext:_managedObjectContext];
 		} else {
 			LocationAnnotation *annotation = [sender annotation];
 			user = annotation.location.user;

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <FICImageCache.h>
+#import <LocationFetchService.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, FICImageCacheDelegate>
 
@@ -17,6 +18,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) FICImageCache *imageCache;
+@property (readonly, strong, nonatomic) LocationFetchService *locationFetchService;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

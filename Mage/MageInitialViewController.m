@@ -50,14 +50,17 @@
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
+    // stop the location fetch service
+    [_locationFetchService stop];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     // if the token is not expired skip the login module
-    if (![UserUtility isTokenExpired]) {
+    if ([UserUtility isTokenExpired]) {
+		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
+    } else {
         [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
 		[self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:nil];
-    } else {
-		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
     }
 }
 
@@ -66,9 +69,11 @@
     if ([segueIdentifier isEqualToString:@"DisplayDisclaimerViewSegue"]) {
         id destinationController = [segue destinationViewController];
 		[destinationController setManagedObjectContext:_managedObjectContext];
+        [destinationController setLocationFetchService:_locationFetchService];
     } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
         id destinationController = [segue destinationViewController];
 		[destinationController setManagedObjectContext:_managedObjectContext];
+        [destinationController setLocationFetchService:_locationFetchService];
     }
 }
 

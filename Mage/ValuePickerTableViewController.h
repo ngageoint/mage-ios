@@ -10,7 +10,7 @@
 
 @interface ValuePickerTableViewController : UITableViewController <UITableViewDelegate>
 
-@property (nonatomic, strong) NSArray *displayValues;
+@property (nonatomic, strong) NSArray *labels;
 @property (nonatomic, strong) NSArray *values;
 @property (nonatomic) NSNumber *selected;
 @property (nonatomic, strong) NSString *preferenceKey;

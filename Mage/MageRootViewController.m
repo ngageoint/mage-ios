@@ -18,10 +18,7 @@
 #import <Location+helper.h>
 #import <Layer+helper.h>
 #import <Form.h>
-
-@interface MageRootViewController ()
-
-@end
+#import <LocationFetchService.h>
 
 @implementation MageRootViewController
 
@@ -66,21 +63,22 @@
     HttpManager *http = [HttpManager singleton];
     
     NSOperation* layersOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
-	NSOperation* userOp = [User operationToFetchMyselfWithManagedObjectContext:_managedObjectContext];
     NSOperation* usersOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
-	NSOperation* locationsOp = [Location operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
-	[usersOp addDependency:userOp];
-    [locationsOp addDependency:usersOp];
+    NSOperation* startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
+        NSLog(@"done with intial location fetch, lets start the location fetch service");
+        [_locationFetchService start];
+    }];
+    
     [layersOp addDependency:usersOp];
+    [startLocationFetchOp addDependency:usersOp];
     
     [http.manager.operationQueue setSuspended:YES];
     
     // Add the operations to the queue
     
     [http.manager.operationQueue addOperation:layersOp];
-	[http.manager.operationQueue addOperation:userOp];
     [http.manager.operationQueue addOperation:usersOp];
-    [http.manager.operationQueue addOperation:locationsOp];
+    [http.manager.operationQueue addOperation:startLocationFetchOp];
     
     [http.manager.operationQueue setSuspended:NO];
 }
