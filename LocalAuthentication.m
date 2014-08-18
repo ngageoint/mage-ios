@@ -34,7 +34,7 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     BOOL registered = [defaults boolForKey:@"deviceRegistered"];
-    NSLog(@"registered? %hhd", registered);
+    NSLog(@"registered? %d", registered);
     
     // if we think we need to register, go do it
     if (![defaults boolForKey:@"deviceRegistered"]) {
@@ -72,7 +72,7 @@
         NSLog(@"Set the authorization token to: %@", token);
         
         [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-		
+		      
 		if (delegate) {
 			[delegate authenticationWasSuccessful:user];
 		}
@@ -116,7 +116,7 @@
 	User *user = [User fetchUserForId:userId inManagedObjectContext:_context];
 	
 	if (!user) {
-		user = [User insertUserForJson:userJson inManagedObjectContext:_context];
+		user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:_context];
 	}
 		
 	return user;

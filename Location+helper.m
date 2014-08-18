@@ -61,12 +61,12 @@
 	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
 	
-	
     HttpManager *http = [HttpManager singleton];
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
-		
+		NSLog(@"Fetched locations from the server, saving to location storage");
+        
 		// Get the user ids to query
 		NSMutableArray *userIds = [[NSMutableArray alloc] init];
 		for (NSDictionary *userLocation in userLocations) {
@@ -84,31 +84,47 @@
 			[userIdMap setObject:user forKey:user.remoteId];
 		}
 		
+        BOOL newUserFound = NO;
 		for (NSDictionary *userLocation in userLocations) {
 			// pull from query map
 			NSString *userId = [userLocation objectForKey:@"user"];
+            NSArray *locations = [userLocation objectForKey:@"locations"];
 			User *user = [userIdMap objectForKey:userId];
-			if (user == nil) continue;
+			if (user == nil && [locations count] != 0) {
+                NSLog(@"Could not find user for id");
+                newUserFound = YES;
+                NSDictionary *userDictionary = @{
+                    @"_id": userId,
+                    @"username": userId,
+                    @"firstname": @"unknown",
+                    @"lastname": @"unkown"
+                };
+                user = [User insertUserForJson:userDictionary inManagedObjectContext:context];
+            };
 	
 			Location *location = user.location;
 			if (location == nil) {
 				// not in core data yet need to create a new managed object
-				NSLog(@"Inserting new user location into database");
 				location = [Location locationForJson:userLocation inManagedObjectContext:context];
 				user.location = location;
 			} else {
 				// already exists in core data, lets update the object we have
-				NSLog(@"Updating user location in the database");
-				[location populateLocationFromJson:[userLocation objectForKey:@"locations"]];
+				[location populateLocationFromJson:locations];
 			}
         }
 		
 		if (! [context save:&error]) {
 			NSLog(@"Error updating locations: %@", error);
 		}
+        
+        if (newUserFound) {
+            // For now if we find at least one new user let just go grab the users again
+            [[User operationToFetchUsersWithManagedObjectContext:context] start];
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    
     return operation;
 }
 

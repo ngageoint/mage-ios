@@ -11,24 +11,39 @@
 
 @implementation User (helper)
 
-static User *currentUser = nil;
-
-+ (User *) currentUser {
-	return currentUser;
++ (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext: (NSManagedObjectContext *) context {
+	User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
+    [user setCurrentUser:[NSNumber numberWithBool:myself]];
+	[user updateUserForJson:json inManagedObjectContext:context];
+    
+	return user;
 }
 
 + (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
-	User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
+	return [User insertUserForJson:json myself:NO inManagedObjectContext:context];
+}
 
-	[user updateUserForJson:json inManagedObjectContext:context];
-		
-	return user;
++ (User *) fetchCurrentUserForManagedObjectContext: (NSManagedObjectContext *) context {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
+	[request setPredicate: [NSPredicate predicateWithFormat:@"currentUser = %@", [NSNumber numberWithBool:YES]]];
+	[request setFetchLimit:1];
+	
+	NSError *error;
+	NSArray *users = [context executeFetchRequest:request error:&error];
+	
+	if (error || users.count < 1) {
+		NSLog(@"Error getting current user (myself) from database");
+		return nil;
+	}
+    
+	return [users objectAtIndex:0];
 }
 
 + (User *) fetchUserForId:(NSString *) userId  inManagedObjectContext: (NSManagedObjectContext *) context {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
-	[request setPredicate: [NSPredicate predicateWithFormat:@"(remoteId = %@)", userId]];
+	[request setPredicate: [NSPredicate predicateWithFormat:@"remoteId = %@", userId]];
 	[request setFetchLimit:1];
 	
 	NSError *error;
@@ -108,46 +123,5 @@ static User *currentUser = nil;
     }];
     return operation;
 }
-
-+ (NSOperation *) operationToFetchMyselfWithManagedObjectContext: (NSManagedObjectContext *) context {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
-	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/users/myself"];
-	
-	NSLog(@"Trying to fetch myself from server %@", url);
-	
-    HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, NSDictionary* myself) {
-		NSString *userId = [myself objectForKey:@"_id"];
-		
-		// Create the fetch request to get all users IDs from server response.
-		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-		[fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
-		[fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(remoteId = %@)", userId]];
-		[fetchRequest setFetchLimit:1];
-		NSError *error;
-		NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
-		
-		User *user = nil;
-		if ([users count] == 0) {
-			// not in core data yet need to create a new managed object
-			NSLog(@"Inserting myself into database");
-			user = [User insertUserForJson:myself inManagedObjectContext:context];
-		} else {
-			// already exists in core data, lets update the object we have
-			user = [users objectAtIndex:0];
-			NSLog(@"Updating user location in the database");
-			[user updateUserForJson:myself inManagedObjectContext:context];
-		}
-		
-		currentUser = user;
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    return operation;
-}
-
 
 @end
