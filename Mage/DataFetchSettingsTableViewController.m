@@ -114,6 +114,7 @@
         ValuePickerTableViewController *vc = [segue destinationViewController];
         NSDictionary *timeDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
         vc.title = [timeDictionary valueForKey:@"title"];
+        vc.section = [timeDictionary valueForKey:@"section"];
         vc.labels = [timeDictionary valueForKey:@"labels"];
         vc.values = [timeDictionary valueForKey:@"values"];
         vc.preferenceKey = [timeDictionary valueForKey:@"preferenceKey"];

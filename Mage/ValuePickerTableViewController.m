@@ -50,7 +50,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Frequencies";
+    return _section;
 }
 
 

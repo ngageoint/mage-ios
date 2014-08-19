@@ -105,7 +105,7 @@
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
+        exit(-1);  // Fail/Users/wnewman/Downloads/ios_development (1).cer
     }
 	
 	NSArray *observations = [self.observationResultsController fetchedObjects];
