@@ -81,7 +81,6 @@ AVPlayer *player;
     
     [self.propertyTable setDelegate:self];
     [self.propertyTable setDataSource:self];
-    [self.attachmentCollection setDataSource:self];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
