@@ -22,6 +22,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AFNetworking/AFNetworking.h>
 #import <HttpManager.h>
+#import "ObservationEditViewController.h"
 
 @interface ObservationViewController ()
 
@@ -78,9 +79,6 @@ AVPlayer *player;
 	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
 	
 	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
-    
-    [self.propertyTable setDelegate:self];
-    [self.propertyTable setDataSource:self];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -368,6 +366,9 @@ AVPlayer *player;
         
         // Pass any objects to the view controller here, like...
         [vc setAttachment:sender];
+    } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {
+        ObservationEditViewController *oevc = [segue destinationViewController];
+        [oevc setObservation:_observation];
     }
 }
 
