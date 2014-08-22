@@ -66,6 +66,7 @@
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
 		NSLog(@"Fetched locations from the server, saving to location storage");
+        User *currentUser = [User fetchCurrentUserForManagedObjectContext:context];
         
 		// Get the user ids to query
 		NSMutableArray *userIds = [[NSMutableArray alloc] init];
@@ -101,6 +102,7 @@
                 };
                 user = [User insertUserForJson:userDictionary inManagedObjectContext:context];
             };
+            if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
             
 			Location *location = user.location;
 			if (location == nil) {

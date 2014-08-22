@@ -21,4 +21,6 @@ extern NSString * const kLocationReportingFrequencyKey;
 - (void) start;
 - (void) stop;
 
+- (CLLocation *) location;
+
 @end
