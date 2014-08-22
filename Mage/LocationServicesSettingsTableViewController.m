@@ -7,27 +7,31 @@
 //
 
 #import "LocationServicesSettingsTableViewController.h"
+#import "LocationService.h"
 
 @interface LocationServicesSettingsTableViewController ()
 
-@property (weak, nonatomic) IBOutlet UISwitch *locationServicesSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *reportLocationSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gpsSensitivityLabel;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
 
 @implementation LocationServicesSettingsTableViewController
 
-- (IBAction)locationServicesSwitched:(id)sender {
-    if (!_locationServicesSwitch.on) {
-        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)];
-        [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
-    } else {
-        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)];
+- (IBAction) reportLocationChanged:(id)sender {
+    BOOL isOn = [sender isOn];
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:2];
+
+    if (isOn) {
         [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+    } else {
+        [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
+    
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [defaults setObject: _locationServicesSwitch.isOn ? @"YES" : @"NO" forKey:@"locationServiceEnabled"];
+    [defaults setBool:isOn forKey:kReportLocationKey];
     [defaults synchronize];
 }
 
@@ -45,20 +49,16 @@
     [super viewDidLoad];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [self.locationServicesSwitch setOn:[[defaults objectForKey:@"locationServiceEnabled"] boolValue] animated:NO];
-    [self.locationServicesSwitch addTarget:self action:@selector(locationServicesSwitched:) forControlEvents:UIControlEventValueChanged];
+    [_reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
     [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
 }
@@ -92,28 +92,35 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_locationServicesSwitch.on) {
-        return 3;
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+        return [_reportLocationSwitch isOn] ? 3 : 2;
     }
+    
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    switch (section) {
-        case 0:
-            return 1;
-            break;
-        case 1:
-            return 1;
-            break;
-        case 2:
-            return 2;
-            break;
-        default:
-            break;
+-(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
+    if (section == 1) {
+        return .1f;
     }
-    return 0;
+    
+    return UITableViewAutomaticDimension;
+}
+
+-(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
+    if (section == 0) {
+        return [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ? 65.0 : .1f;
+    }
+    
+    return UITableViewAutomaticDimension;
+}
+
+-(UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger) section {
+    if (section == 0 && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    }
+    
+    return nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -128,6 +135,10 @@
         vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
+}
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self.tableView reloadData];
 }
 
 @end

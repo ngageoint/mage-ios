@@ -8,11 +8,14 @@
 
 #import "RESideMenu.h"
 #import "LocationFetchService.h"
+#import "LocationService.h"
 
 @interface MageRootViewController : RESideMenu <RESideMenuDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) LocationService *locationService;
 @property (strong, nonatomic) LocationFetchService *locationFetchService;
+
 
 
 @end

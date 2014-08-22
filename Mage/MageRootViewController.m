@@ -18,12 +18,11 @@
 #import <Location+helper.h>
 #import <Layer+helper.h>
 #import <Form.h>
-#import <LocationFetchService.h>
 
 @implementation MageRootViewController
 
 - (void) viewDidLoad {
-    [self initialFetch];
+    [self startServices];
     
 	self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
     self.contentViewShadowColor = [UIColor blackColor];
@@ -59,10 +58,13 @@
 	[super viewDidLoad];
 }
 
-- (void) initialFetch {
+- (void) startServices {
+    _locationService = [[LocationService alloc] initWithManagedObjectContext:_managedObjectContext];
+    [_locationService start];
+    
     HttpManager *http = [HttpManager singleton];
     
-    NSOperation* layersOp = [Layer fetchFeatureLayersFromServerWithManagedObjectContext:_managedObjectContext];
+    NSOperation* layersOp = [Layer pullFeatureLayersWithManagedObjectContext:_managedObjectContext];
     NSOperation* usersOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
     NSOperation* startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
         NSLog(@"done with intial location fetch, lets start the location fetch service");
