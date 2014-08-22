@@ -55,7 +55,7 @@
 	}
 }
 
-+ (NSOperation *) operationToFetchLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
 	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
@@ -101,7 +101,7 @@
                 };
                 user = [User insertUserForJson:userDictionary inManagedObjectContext:context];
             };
-	
+            
 			Location *location = user.location;
 			if (location == nil) {
 				// not in core data yet need to create a new managed object

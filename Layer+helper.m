@@ -34,7 +34,7 @@
     return layer;
 }
 
-+ (NSOperation *) fetchFeatureLayersFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSOperation *) pullFeatureLayersWithManagedObjectContext: (NSManagedObjectContext *) context {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];

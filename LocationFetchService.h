@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+extern NSString * const kLocationFetchFrequencyKey;
 
 @interface LocationFetchService : NSObject
-- (id) initWithManagedObjcetContext:(NSManagedObjectContext *) managedObjectContext;
+- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 
 - (void) start;
 - (void) stop;

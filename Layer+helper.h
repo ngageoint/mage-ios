@@ -14,7 +14,7 @@
 
 + (Layer*) layerForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-+ (NSOperation *) fetchFeatureLayersFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (NSOperation *) pullFeatureLayersWithManagedObjectContext: (NSManagedObjectContext *) context;
 
 
 @end

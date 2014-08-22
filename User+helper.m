@@ -11,6 +11,8 @@
 
 @implementation User (helper)
 
+static User *currentUser = nil;
+
 + (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext: (NSManagedObjectContext *) context {
 	User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
     [user setCurrentUser:[NSNumber numberWithBool:myself]];
@@ -24,20 +26,24 @@
 }
 
 + (User *) fetchCurrentUserForManagedObjectContext: (NSManagedObjectContext *) context {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
-	[request setPredicate: [NSPredicate predicateWithFormat:@"currentUser = %@", [NSNumber numberWithBool:YES]]];
-	[request setFetchLimit:1];
-	
-	NSError *error;
-	NSArray *users = [context executeFetchRequest:request error:&error];
-	
-	if (error || users.count < 1) {
-		NSLog(@"Error getting current user (myself) from database");
-		return nil;
-	}
-    
-	return [users objectAtIndex:0];
+    if (currentUser == nil) {
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
+        [request setPredicate: [NSPredicate predicateWithFormat:@"currentUser = %@", [NSNumber numberWithBool:YES]]];
+        [request setFetchLimit:1];
+        
+        NSError *error;
+        NSArray *users = [context executeFetchRequest:request error:&error];
+        
+        if (error || users.count < 1) {
+            NSLog(@"Error getting current user (myself) from database");
+            return nil;
+        }
+        
+        currentUser = [users objectAtIndex:0];
+    }
+
+    return currentUser;
 }
 
 + (User *) fetchUserForId:(NSString *) userId  inManagedObjectContext: (NSManagedObjectContext *) context {

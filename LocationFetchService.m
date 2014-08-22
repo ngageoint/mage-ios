@@ -10,6 +10,8 @@
 #import "Location+helper.h"
 #import "HttpManager.h"
 
+NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
+
 @interface LocationFetchService ()
     @property (nonatomic) NSTimeInterval interval;
     @property (nonatomic, strong) NSTimer* locationFetchTimer;
@@ -18,19 +20,17 @@
 
 @implementation LocationFetchService
 
-- (id) initWithManagedObjcetContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
     if (self = [super init]) {
 		_managedObjectContext = managedObjectContext;
 	}
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:@"userFetch"];
-    NSString *key = [frequencyDictionary valueForKey:@"preferenceKey"];
-    _interval = [[defaults valueForKey:key] doubleValue];
+    _interval = [[defaults valueForKey:kLocationFetchFrequencyKey] doubleValue];
     
     [[NSUserDefaults standardUserDefaults] addObserver:self
-                                            forKeyPath:key
+                                            forKeyPath:kLocationFetchFrequencyKey
                                                options:NSKeyValueObservingOptionNew
                                                context:NULL];
 	
@@ -58,7 +58,7 @@
 }
 
 - (void) fetchLocationsWithBlock:(void (^)()) block {
-    NSOperation *locationFetchOperation = [Location operationToFetchLocationsWithManagedObjectContext:_managedObjectContext];
+    NSOperation *locationFetchOperation = [Location operationToPullLocationsWithManagedObjectContext:_managedObjectContext];
     NSOperation *doneOperation = [NSBlockOperation blockOperationWithBlock:^{
         block();
     }];
