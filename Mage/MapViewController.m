@@ -179,13 +179,15 @@
     return nil;
 }
 
-- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-	if (view == [_mapView viewForAnnotation:_mapView.userLocation]) {
-		UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-		[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-		view.rightCalloutAccessoryView = rightButton;
-	}
-}
+// TODO once we get a 'me' page we will segue to that page from here
+//- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+//    
+//	if (view == [_mapView viewForAnnotation:_mapView.userLocation]) {
+//		UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+//		[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+//		view.rightCalloutAccessoryView = rightButton;
+//	}
+//}
 
 -(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
     float oldWidth = sourceImage.size.width;
