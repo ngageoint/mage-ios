@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "RESideMenu.h"
 #import "ValuePickerTableViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
+@interface SettingsViewController : UITableViewController<CLLocationManagerDelegate>
 
-@interface SettingsViewController : UITableViewController
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

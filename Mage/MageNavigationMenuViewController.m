@@ -70,11 +70,13 @@
             break;
 		}
         // Settings
-        case 3:
-            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"]]
-                                                         animated:YES];
+        case 3: {
+            id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"];
+			[viewController setManagedObjectContext:_managedObjectContext];
+            [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
+        }
         // Logout
         case 4:
             [self performSegueWithIdentifier:@"unwindToInitialViewSegue" sender:self];
