@@ -8,6 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "User+helper.h"
+#import "LocationService.h"
 
 @interface SettingsViewController ()
 
@@ -15,9 +16,18 @@
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
     @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
     @property (weak, nonatomic) IBOutlet UILabel *user;
+    @property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation SettingsViewController
+
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
+}
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -25,20 +35,29 @@
     User *user = [User fetchCurrentUserForManagedObjectContext:_managedObjectContext];
     _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    if ([[defaults objectForKey:@"locationServiceEnabled"] boolValue]) {
-        [self.locationServicesStatus setText:@"On"];
-    } else {
-        [self.locationServicesStatus setText:@"Off"];
-    }
+    [self setLocationServicesLabel];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
     
-    [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+    [self setPreferenceDisplayLabel:_imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+}
+
+- (void) setLocationServicesLabel {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+        if ([defaults boolForKey:kReportLocationKey]) {
+            [self.locationServicesStatus setText:@"On"];
+        } else {
+            [self.locationServicesStatus setText:@"Off"];
+        }
+    } else {
+        [self.locationServicesStatus setText:@"Disabled"];
+    }
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
@@ -75,6 +94,10 @@
         vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
     }
+}
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self setLocationServicesLabel];
 }
 
 @end

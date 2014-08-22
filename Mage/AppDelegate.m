@@ -27,7 +27,6 @@
 
     NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
-    //[[NSUserDefaults standardUserDefaults] registerDefaults:sdkPrefs];
     
     NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
     NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
@@ -39,7 +38,7 @@
 	MageInitialViewController *rootView = (MageInitialViewController *) self.window.rootViewController;
     rootView.managedObjectContext = self.managedObjectContext;
     
-    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjcetContext:_managedObjectContext];
+    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
     [rootView setLocationFetchService:_locationFetchService];
 	
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];

@@ -15,6 +15,7 @@
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "LocationAnnotation.h"
+#import "LocationService.h"
 #import "ObservationAnnotation.h"
 #import "Observation.h"
 #import "ObservationImage.h"
@@ -87,9 +88,16 @@
     // Do any additional setup after loading the view.
 
 	[_mapView setDelegate:self];
-	[_mapView setShowsUserLocation:YES];
-	[_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-	
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:kReportLocationKey]) {
+        [_mapView setShowsUserLocation:YES];
+        [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+    } else {
+        [_mapView setShowsUserLocation:NO];
+        [_mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+    }
+    
     NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
@@ -113,6 +121,8 @@
 	for (Observation *observation in observations) {
 		[self updateObservation:observation];
 	}
+    
+
 }
 
 - (void)didReceiveMemoryWarning {
