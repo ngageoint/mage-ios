@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <Observation.h>
+#import "ObservationEditListener.h"
 
-@interface ObservationEditViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface ObservationEditViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, ObservationEditListener>
 
 @property (strong, nonatomic) Observation *observation;
 

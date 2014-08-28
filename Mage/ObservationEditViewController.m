@@ -11,6 +11,7 @@
 #import "DropdownEditTableViewController.h"
 #import "ObservationPickerTableViewCell.h"
 #import "DatePickerViewController.h"
+#import "DatePickerTableViewCell.h"
 #import "ObservationDatePickerTableViewCell.h"
 
 @interface ObservationEditViewController ()
@@ -21,6 +22,10 @@
 @end
 
 @implementation ObservationEditViewController
+
+NSArray *_rowToCellType;
+NSArray *_rowToField;
+NSInteger expandedRow = -1;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,6 +42,39 @@
     // Do any additional setup after loading the view.
 }
 
+- (NSArray *)rowToCellType {
+    if (_rowToCellType != nil) {
+        return _rowToCellType;
+    }
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *form = [defaults objectForKey:@"form"];
+    
+    NSMutableArray *cells = [[NSMutableArray alloc] init];
+    NSMutableArray *fields = [[NSMutableArray alloc] init];
+    // run through the form and map the row indexes to fields
+    for (id field in [form objectForKey:@"fields"]) {
+        NSString *type = [field objectForKey:@"type"];
+        [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
+        [fields addObject:field];
+        if ([type isEqualToString:@"date"]) {
+            [cells addObject:@"observationEdit-dateSpinner"];
+            [fields addObject:field];
+        }
+    }
+    _rowToCellType = cells;
+    _rowToField = fields;
+    
+    return _rowToCellType;
+}
+
+- (NSArray *) rowToField {
+    if (_rowToField != nil) {
+        return _rowToField;
+    }
+    [self rowToCellType];
+    return _rowToField;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -44,10 +82,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
-    //id fields = [form objectForKey: @"fields"];
-    return ((NSArray *)[form objectForKey:@"fields"]).count;
+    return [self rowToField].count;
 }
 
 //- (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
@@ -89,10 +124,9 @@
 //}
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
-    id field = ((NSArray *)[form objectForKey:@"fields"])[indexPath.row];
-    NSString *cellType = [NSString stringWithFormat:@"observationEdit-%@", [field objectForKey:@"type"]];
+    NSString *cellType = (NSString *)[self rowToCellType][indexPath.row];
+    id field = [self rowToField][indexPath.row];
+    
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
     if (cell == nil) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"observationEdit-generic"];
@@ -104,20 +138,35 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
-    
+    cell.delegate = self;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
+    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"]) {
+        return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
+    }
     return [cell getCellHeightForValue:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView beginUpdates];
 
-    ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    [cell selectRow];
+    if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"]) {
+        
+        if (expandedRow != indexPath.row +1) {
+            expandedRow = indexPath.row + 1;
+            NSIndexPath *path = [NSIndexPath indexPathForRow:expandedRow inSection:indexPath.section];
+            DatePickerTableViewCell *cell = (DatePickerTableViewCell*)[tableView cellForRowAtIndexPath:path];
+            cell.datePicker.hidden = YES;
+        } else {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:expandedRow inSection:indexPath.section];
+            DatePickerTableViewCell *cell = (DatePickerTableViewCell*)[tableView cellForRowAtIndexPath:path];
+            cell.datePicker.hidden = NO;
+            expandedRow = -1;
+        }
+    }
     
     [tableView endUpdates];
 }
@@ -152,16 +201,15 @@
     
 }
 
-- (IBAction)unwindFromDatePickerController: (UIStoryboardSegue *) segue {
-    DatePickerViewController *vc = [segue sourceViewController];
-    NSString *fieldKey = (NSString *)[vc.fieldDefinition objectForKey:@"name"];
+- (void) observationField:(id)field valueChangedTo:(id)value {
+    NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
     NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
-    [newProperties setObject:vc.value forKey:fieldKey];
+    [newProperties setObject:value forKey:fieldKey];
     _observation.properties = newProperties;
     
     [self.editTable reloadData];
-    NSLog(@"choose %@", vc.value);
-    
+    NSLog(@"choose %@", value);
+
 }
 
 
