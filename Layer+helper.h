@@ -12,9 +12,8 @@
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 
-+ (Layer*) layerForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
++ (Layer *) layerForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-+ (NSOperation *) pullFeatureLayersWithManagedObjectContext: (NSManagedObjectContext *) context;
-
++ (NSOperation *) operationToPullLayersWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
 
 @end

@@ -13,7 +13,7 @@
 #import "Attachment+helper.h"
 
 
-@implementation Observation (Observation_helper)
+@implementation Observation (helper)
 
 - (id) populateObjectFromJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     [self setRemoteId:[json objectForKey:@"id"]];
@@ -54,7 +54,8 @@
     return observation;
 }
 
-+ (NSOperation*) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSOperation *) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
     NSString *layerId = [defaults stringForKey:@"layerId"];
@@ -119,8 +120,11 @@
             NSLog(@"Error inserting Observation: %@", error);
         }
         
+        complete(YES);
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        complete(NO);
     }];
     
     return operation;

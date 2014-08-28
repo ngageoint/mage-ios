@@ -34,8 +34,8 @@
     return layer;
 }
 
-+ (NSOperation *) pullFeatureLayersWithManagedObjectContext: (NSManagedObjectContext *) context {
-    
++ (NSOperation *) operationToPullLayersWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
     NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/layers"];
@@ -72,13 +72,11 @@
             NSLog(@"Error inserting Observation: %@", error);
         }
         
-        NSOperation* formOp = [Form fetchFormInUseOperation];
-        NSOperation* observationOp = [Observation fetchObservationsFromServerWithManagedObjectContext:context];
-        [observationOp addDependency:formOp];
-        [http.manager.operationQueue addOperations:@[formOp, observationOp] waitUntilFinished: NO];
+        complete(YES);
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        complete(NO);
     }];
     return operation;
 }

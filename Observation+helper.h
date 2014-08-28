@@ -10,7 +10,7 @@
 #import "NSManagedObjectContext+Extra.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface Observation (Observation_helper)
+@interface Observation (helper)
 
 
 
@@ -18,6 +18,7 @@
 
 + (Observation*) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
-+ (NSOperation*) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (NSOperation*) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
+
 
 @end

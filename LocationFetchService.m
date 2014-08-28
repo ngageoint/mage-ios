@@ -40,9 +40,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 - (void) start {
     [self stop];
 
-    [self fetchLocationsWithBlock:^{
-        [self scheduleTimer];
-    }];
+    [self pullLocations];
 }
 
 - (void) scheduleTimer {
@@ -51,24 +49,15 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) onTimerFire {
-    [self fetchLocationsWithBlock:^() {
-        NSLog(@"request done schedule timer again");
-        [self scheduleTimer];
-    }];
+    [self pullLocations];
 }
 
-- (void) fetchLocationsWithBlock:(void (^)()) block {
-    NSOperation *locationFetchOperation = [Location operationToPullLocationsWithManagedObjectContext:_managedObjectContext];
-    NSOperation *doneOperation = [NSBlockOperation blockOperationWithBlock:^{
-        block();
+- (void) pullLocations{
+    NSOperation *locationFetchOperation = [Location operationToPullLocationsWithManagedObjectContext:_managedObjectContext complete:^(BOOL success) {
+        [self scheduleTimer];
     }];
-    [doneOperation addDependency:locationFetchOperation];
-        
-    HttpManager *http = [HttpManager singleton];
-    [http.manager.operationQueue setSuspended:YES];
-    [http.manager.operationQueue addOperation:locationFetchOperation];
-	[http.manager.operationQueue addOperation:doneOperation];
-    [http.manager.operationQueue setSuspended:NO];
+    
+    [[HttpManager singleton].manager.operationQueue addOperation:locationFetchOperation];
 }
 
 -(void) stop {

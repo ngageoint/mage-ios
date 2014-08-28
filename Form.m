@@ -14,6 +14,7 @@
 #import "ZipReadStream.h"
 #import "ZipException.h"
 #import "FileInZipInfo.h"
+#import "ObservationFetchService.h"
 
 static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
     if ([JSONObject isKindOfClass:[NSArray class]]) {
@@ -42,8 +43,8 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
 @implementation Form
 
-+ (NSOperation *) fetchFormInUseOperation {
-    
++ (NSOperation *) operationToPullFormWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
 
@@ -110,9 +111,11 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             [defaults setObject:json forKey:@"form"];
         }
         
+        complete(YES);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        complete(NO);
     }];
     
     NSError *error = nil;

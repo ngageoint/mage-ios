@@ -11,12 +11,6 @@
 
 @interface Form : NSObject
 
-//- (id) populateObjectFromJson: (NSDictionary *) json;
-//
-//+ (Form *) formForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
-//
-//+ (void) fetchObservationsFromServerWithManagedObjectContext: (NSManagedObjectContext *) context;
-
-+ (NSOperation *) fetchFormInUseOperation;
++ (NSOperation *) operationToPullFormWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
 
 @end

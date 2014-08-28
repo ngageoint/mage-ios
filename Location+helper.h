@@ -16,8 +16,7 @@
 
 - (void) populateLocationFromJson:(NSArray *) locations;
 
-+ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context;
-+ (NSOperation *) operationToPushLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure;
++ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
 
 @property (nonatomic, retain) Geometry* geometry;
 

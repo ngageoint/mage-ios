@@ -55,7 +55,8 @@
 	}
 }
 
-+ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context {
+
++ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
 	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
@@ -123,8 +124,11 @@
             // For now if we find at least one new user let just go grab the users again
             [[User operationToFetchUsersWithManagedObjectContext:context] start];
         }
+        
+        complete(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        complete(NO);
     }];
     
     return operation;
