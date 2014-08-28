@@ -8,6 +8,8 @@
 #import "MageInitialViewController.h"
 #import <UserUtility.h>
 #import <HttpManager.h>
+#import "MageRootViewController.h"
+#import "DisclaimerNavigationController.h"
 
 @interface MageInitialViewController ()
 
@@ -67,13 +69,15 @@
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSString *segueIdentifier = [segue identifier];
     if ([segueIdentifier isEqualToString:@"DisplayDisclaimerViewSegue"]) {
-        id destinationController = [segue destinationViewController];
-		[destinationController setManagedObjectContext:_managedObjectContext];
-        [destinationController setLocationFetchService:_locationFetchService];
+        DisclaimerNavigationController *disclaimer = [segue destinationViewController];
+		[disclaimer setManagedObjectContext:_managedObjectContext];
+        [disclaimer setLocationFetchService:_locationFetchService];
+        [disclaimer setObservationFetchService:_observationFetchService];
     } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
-        id destinationController = [segue destinationViewController];
-		[destinationController setManagedObjectContext:_managedObjectContext];
-        [destinationController setLocationFetchService:_locationFetchService];
+        MageRootViewController *rootView = [segue destinationViewController];
+		[rootView setManagedObjectContext:_managedObjectContext];
+        [rootView setLocationFetchService:_locationFetchService];
+        [rootView setObservationFetchService:_observationFetchService];
     }
 }
 

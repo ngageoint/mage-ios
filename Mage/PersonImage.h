@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Location+helper.h"
 
 @interface PersonImage : NSObject
 
-+ (NSString *) imageNameForTimestamp:(NSDate *) timestamp;
-+ (UIImage *) imageForTimestamp:(NSDate *) timestamp;
++ (UIImage *) imageForLocation:(Location *) location;
 
 @end
