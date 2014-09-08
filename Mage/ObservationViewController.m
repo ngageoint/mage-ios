@@ -27,6 +27,7 @@
 @interface ObservationViewController ()
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end
 
@@ -46,6 +47,8 @@ AVPlayer *player;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.editButton setEnabled:NO];
 	
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
