@@ -54,6 +54,10 @@
 + (UIImage *) imageForObservation:(Observation *) observation scaledToWidth: (NSNumber *) width {
     NSString *imagePath = [ObservationImage imageNameForObservation:observation];
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    if (image == nil) {
+        image = [UIImage imageNamed:@"defaultMarker"];
+    }
+    
     [image setAccessibilityIdentifier:imagePath];
     
     if (width != nil && image != nil) {
@@ -70,6 +74,7 @@
         [newImage setAccessibilityIdentifier:[image accessibilityIdentifier]];
         return newImage;
     }
+    
 	return image;
 }
 

@@ -37,6 +37,7 @@ id<Authentication> _authentication;
         MageRootViewController *rootViewController = [segue destinationViewController];
 		rootViewController.managedObjectContext = self.managedObjectContext;
         [rootViewController setLocationFetchService:_locationFetchService];
+        [rootViewController setObservationFetchService:_observationFetchService];
     }
 }
 

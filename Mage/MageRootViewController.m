@@ -62,27 +62,22 @@
     _locationService = [[LocationService alloc] initWithManagedObjectContext:_managedObjectContext];
     [_locationService start];
     
-    HttpManager *http = [HttpManager singleton];
-    
-    NSOperation* layersOp = [Layer pullFeatureLayersWithManagedObjectContext:_managedObjectContext];
-    NSOperation* usersOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
-    NSOperation* startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial location fetch, lets start the location fetch service");
+    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
+    NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
+        NSLog(@"done with intial user fetch, lets start the location fetch service");
         [_locationFetchService start];
     }];
     
-    [layersOp addDependency:usersOp];
-    [startLocationFetchOp addDependency:usersOp];
+    NSOperation *startObservationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
+        NSLog(@"done with intial user fetch, lets start the observation fetch service");
+        [_observationFetchService start];
+    }];
     
-    [http.manager.operationQueue setSuspended:YES];
+    [startObservationFetchOp addDependency:usersPullOp];
+    [startLocationFetchOp addDependency:usersPullOp];
     
     // Add the operations to the queue
-    
-    [http.manager.operationQueue addOperation:layersOp];
-    [http.manager.operationQueue addOperation:usersOp];
-    [http.manager.operationQueue addOperation:startLocationFetchOp];
-    
-    [http.manager.operationQueue setSuspended:NO];
+    [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
 }
 
 - (void)sideMenu:(RESideMenu *)sideMenu willShowMenuViewController:(UIViewController *)menuViewController {
