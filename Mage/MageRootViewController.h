@@ -7,6 +7,7 @@
 //
 
 #import "RESideMenu.h"
+#import "ObservationFetchService.h"
 #import "LocationFetchService.h"
 #import "LocationService.h"
 
@@ -14,8 +15,7 @@
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) LocationService *locationService;
+@property (strong, nonatomic) ObservationFetchService *observationFetchService;
 @property (strong, nonatomic) LocationFetchService *locationFetchService;
-
-
 
 @end

@@ -83,6 +83,14 @@
 	return _locationAnnotations;
 }
 
+- (NSMutableDictionary *) observationAnnotations {
+	if (!_observationAnnotations) {
+		_observationAnnotations = [[NSMutableDictionary alloc] init];
+	}
+	
+	return _observationAnnotations;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -134,13 +142,13 @@
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
-		NSString *imageName = [PersonImage imageNameForTimestamp:locationAnnotation.timestamp];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imageName];
+		UIImage *image = [PersonImage imageForLocation:locationAnnotation.location];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
-            annotationView.image = [UIImage imageNamed:imageName];
+            annotationView.image = image;
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -163,12 +171,7 @@
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
 			annotationView.rightCalloutAccessoryView = rightButton;
-			
-            if (image == nil) {
-                annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
-            } else {
-                annotationView.image = image;
-            }
+            annotationView.image = image;
 		} else {
             annotationView.annotation = annotation;
         }
@@ -254,6 +257,8 @@
 		[_mapView addAnnotation:annotation];
 		[self.locationAnnotations setObject:annotation forKey:user.remoteId];
 	} else {
+        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
+        annotationView.image = [PersonImage imageForLocation:annotation.location];
 		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 	}
 }
@@ -262,14 +267,13 @@
 	ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
 	if (annotation == nil) {
 		annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        [_mapView addAnnotation:annotation];
 		[self.observationAnnotations setObject:annotation forKey:observation.remoteId];
-	}
-	
-	GeoPoint *point = observation.geometry;
-    [annotation setCoordinate:point.location.coordinate];
-    annotation.observation = observation;
-	
-	[_mapView addAnnotation:annotation];
+	} else {
+        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
+        annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        [annotation setCoordinate:((GeoPoint *) observation.geometry).location.coordinate];
+    }
 }
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {

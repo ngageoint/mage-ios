@@ -40,6 +40,9 @@
     
     _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
     [rootView setLocationFetchService:_locationFetchService];
+    
+    _observationFetchService = [[ObservationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
+    [rootView setObservationFetchService:_observationFetchService];
 	
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
 	[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0]];

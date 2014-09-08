@@ -26,12 +26,10 @@
 }
 
 - (id) populateCellWithUser:(User *) user {
-	NSDate *date = user.location.timestamp;
-	
-	[self.icon setImage:[PersonImage imageForTimestamp:date]];
+	[self.icon setImage:[PersonImage imageForLocation:user.location]];
 	self.name.text = user.name;
 	self.username.text = user.username;
-	self.timestamp.text = date.timeAgoSinceNow;
+	self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
 	
 	if ([user.currentUser boolValue]) {
 		self.myself.hidden = NO;

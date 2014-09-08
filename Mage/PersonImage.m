@@ -9,23 +9,26 @@
 #import "PersonImage.h"
 
 @implementation PersonImage
-
-+ (NSString *) imageNameForTimestamp:(NSDate *) timestamp {
-	if (!timestamp) return @"person";
+	
++ (UIImage *) imageForLocation:(Location *) location {
+    NSString *imageName = nil;
+    
+    if (!location || !location.timestamp) imageName = @"person";
 	
 	NSString *format = @"person_%@";
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:timestamp];
+	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:location.timestamp];
 	if (interval <= 600) {
-		return [NSString stringWithFormat:format, @"low"];
+		imageName = [NSString stringWithFormat:format, @"low"];
 	} else if (interval <= 1200) {
-		return [NSString stringWithFormat:format, @"medium"];
+		imageName = [NSString stringWithFormat:format, @"medium"];
 	} else {
-		return [NSString stringWithFormat:format, @"high"];
+		imageName = [NSString stringWithFormat:format, @"high"];
 	}
-}
-	
-+ (UIImage *) imageForTimestamp:(NSDate *) timestamp {
-	return [UIImage imageNamed:[PersonImage imageNameForTimestamp:timestamp]];
+    
+    UIImage *image = [UIImage imageNamed:imageName];
+    [image setAccessibilityIdentifier:imageName];
+    
+	return image;
 }
 
 @end

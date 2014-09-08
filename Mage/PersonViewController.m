@@ -145,13 +145,14 @@
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
-		NSString *imageName = [PersonImage imageNameForTimestamp:locationAnnotation.timestamp];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:imageName];
+        UIImage *image = [PersonImage imageForLocation:locationAnnotation.location];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:imageName];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = NO;
-            annotationView.image = [UIImage imageNamed:imageName];
+            annotationView.image = image;
+
 		} else {
             annotationView.annotation = annotation;
         }
