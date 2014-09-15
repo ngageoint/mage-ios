@@ -21,7 +21,7 @@
     NSDictionary *form = [defaults objectForKey:@"form"];
     NSString *variantField = [form objectForKey:@"variantField"];
     NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
-    if (variantField != nil) {
+    if (variantField != nil && [observation.properties objectForKey:variantField] != nil) {
         [iconProperties addObject: [observation.properties objectForKey:variantField]];
     }
     
