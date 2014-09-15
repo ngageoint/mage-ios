@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ObservationDataStore.h"
 
-@interface ObservationTableViewController : UITableViewController<NSFetchedResultsControllerDelegate>
+@interface ObservationTableViewController : UITableViewController
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) NSFetchedResultsController *observationResultsController;
+@property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 
 @end

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F7A94D6518AD9CB000CB9EE0"
-               BuildableName = "Mage.app"
-               BlueprintName = "Mage"
-               ReferencedContainer = "container:Mage.xcodeproj">
+               BuildableName = "MAGE.app"
+               BlueprintName = "MAGE"
+               ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F7A94D8518AD9CB000CB9EE0"
-               BuildableName = "MageTests.xctest"
-               BlueprintName = "MageTests"
-               ReferencedContainer = "container:Mage.xcodeproj">
+               BuildableName = "MAGETests.xctest"
+               BlueprintName = "MAGETests"
+               ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F7A94D6518AD9CB000CB9EE0"
-            BuildableName = "Mage.app"
-            BlueprintName = "Mage"
-            ReferencedContainer = "container:Mage.xcodeproj">
+            BuildableName = "MAGE.app"
+            BlueprintName = "MAGE"
+            ReferencedContainer = "container:MAGE.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F7A94D6518AD9CB000CB9EE0"
-            BuildableName = "Mage.app"
-            BlueprintName = "Mage"
-            ReferencedContainer = "container:Mage.xcodeproj">
+            BuildableName = "MAGE.app"
+            BlueprintName = "MAGE"
+            ReferencedContainer = "container:MAGE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F7A94D6518AD9CB000CB9EE0"
-            BuildableName = "Mage.app"
-            BlueprintName = "Mage"
-            ReferencedContainer = "container:Mage.xcodeproj">
+            BuildableName = "MAGE.app"
+            BlueprintName = "MAGE"
+            ReferencedContainer = "container:MAGE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
