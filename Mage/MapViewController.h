@@ -11,7 +11,7 @@
 #import "RESideMenu.h"
 
 @interface MapViewController : UIViewController
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @end

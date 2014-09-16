@@ -8,6 +8,7 @@
 
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
+#import "ObservationFetchedResultsController.h"
 
 @implementation ObservationDataStore
 
@@ -35,24 +36,13 @@
 }
 
 - (NSFetchedResultsController *) observationResultsController {
-	
-	if (_observationResultsController != nil) {
-		return _observationResultsController;
-	}
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:_managedObjectContext]];
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-	
-	_observationResultsController = [[NSFetchedResultsController alloc]
-                                     initWithFetchRequest:fetchRequest
-                                     managedObjectContext:_managedObjectContext
-                                     sectionNameKeyPath:nil
-                                     cacheName:nil];
-	
-	[_observationResultsController setDelegate:self];
-	
-	return _observationResultsController;
+    
+    if (_observationResultsController != nil) {
+        return _observationResultsController;
+    }
+    _observationResultsController = [[ObservationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
+    [_observationResultsController setDelegate:self];
+    return _observationResultsController;
 }
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath {

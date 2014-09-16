@@ -24,59 +24,35 @@
 #import <MapKit/MapKit.h>
 #import "MapFetchedResultsDelegate.h"
 #import "MapDelegate.h"
+#import "LocationFetchedResultsController.h"
+#import "ObservationFetchedResultsController.h"
 
 @interface MapViewController ()
     @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
     @property (nonatomic) IBOutlet MapDelegate *mapDelegate;
-    @property (strong, nonatomic) NSFetchedResultsController *locationResultsController;
-    @property (strong, nonatomic) NSFetchedResultsController *observationResultsController;
+    @property (strong, nonatomic) LocationFetchedResultsController *locationResultsController;
+    @property (strong, nonatomic) ObservationFetchedResultsController *observationResultsController;
 @end
 
 @implementation MapViewController
 
 - (NSFetchedResultsController *) observationResultsController {
-	
-	if (_observationResultsController != nil) {
+    
+    if (_observationResultsController != nil) {
 		return _observationResultsController;
 	}
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:_managedObjectContext]];
-    // TODO look at this, I think we changed Android to timestamp or something
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastModified" ascending:NO]]];
-    
-	_observationResultsController = [[NSFetchedResultsController alloc]
-								  initWithFetchRequest:fetchRequest
-								  managedObjectContext:_managedObjectContext
-								  sectionNameKeyPath:nil
-								  cacheName:nil];
-    
-	[_observationResultsController setDelegate:self.mapFetchedResultsDelegate];
-	
-	return _observationResultsController;
+    _observationResultsController = [[ObservationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
+    [_observationResultsController setDelegate:self.mapFetchedResultsDelegate];
+    return _observationResultsController;
 }
 
 - (NSFetchedResultsController *) locationResultsController {
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
-	[request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
-	
-	if (_locationResultsController != nil) {
+    if (_locationResultsController != nil) {
 		return _locationResultsController;
 	}
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]];
-	[request setPredicate:predicate];
-	
-	_locationResultsController = [[NSFetchedResultsController alloc]
-								  initWithFetchRequest:request
-								  managedObjectContext:_managedObjectContext
-								  sectionNameKeyPath:nil
-								  cacheName:nil];
-		
-	[_locationResultsController setDelegate:self.mapFetchedResultsDelegate];
-	
-	return _locationResultsController;
+    _locationResultsController = [[LocationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
+    [_locationResultsController setDelegate:self.mapFetchedResultsDelegate];
+    return _locationResultsController;
 }
 
 - (void) viewDidLoad {

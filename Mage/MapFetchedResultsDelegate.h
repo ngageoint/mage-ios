@@ -12,7 +12,6 @@
 
 @interface MapFetchedResultsDelegate : NSObject <NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 - (void) updateLocations:(NSArray *) locations;
