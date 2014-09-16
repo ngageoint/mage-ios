@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "RESideMenu.h"
 
 @interface MapViewController : UIViewController
 @property (strong, nonatomic) IBOutlet NSManagedObjectContext *managedObjectContext;

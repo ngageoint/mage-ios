@@ -12,13 +12,27 @@
 #import "NSDate+DateTools.h"
 #import "PersonTableViewCell.h"
 #import "PersonViewController.h"
+#import "MageRootViewController.h"
 
 @implementation PeopleTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MageRootViewController *tabBarController = (MageRootViewController *)self.tabBarController;
+    self.managedObjectContext = tabBarController.managedObjectContext;
 		
 	[self.peopleDataStore startFetchControllerWithManagedObjectContext:self.managedObjectContext];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

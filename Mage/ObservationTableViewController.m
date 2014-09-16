@@ -10,6 +10,7 @@
 #import "ObservationTableViewCell.h"
 #import <Observation.h>
 #import "ObservationViewController.h"
+#import "MageRootViewController.h"
 
 @interface ObservationTableViewController ()
 
@@ -19,8 +20,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    MageRootViewController *tabBarController = (MageRootViewController *)self.tabBarController;
+    self.managedObjectContext = tabBarController.managedObjectContext;
     [self.observationDataStore startFetchControllerWithManagedObjectContext:self.managedObjectContext];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

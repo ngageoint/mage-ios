@@ -26,6 +26,7 @@
 #import "MapDelegate.h"
 #import "LocationFetchedResultsController.h"
 #import "ObservationFetchedResultsController.h"
+#import "MageRootViewController.h"
 
 @interface MapViewController ()
     @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
@@ -58,6 +59,9 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    MageRootViewController *tabBarController = (MageRootViewController *)self.tabBarController;
+    self.managedObjectContext = tabBarController.managedObjectContext;
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:kReportLocationKey]) {
         [_mapView setShowsUserLocation:YES];
@@ -86,6 +90,16 @@
 	NSArray *observations = [self.observationResultsController fetchedObjects];
     NSLog(@"we initially found %lu observations", (unsigned long)observations.count);
 	[self.mapFetchedResultsDelegate updateObservations:observations];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

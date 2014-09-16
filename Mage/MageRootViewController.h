@@ -6,12 +6,11 @@
 //  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
-#import "RESideMenu.h"
 #import "ObservationFetchService.h"
 #import "LocationFetchService.h"
 #import "LocationService.h"
 
-@interface MageRootViewController : RESideMenu <RESideMenuDelegate>
+@interface MageRootViewController : UITabBarController
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) LocationService *locationService;
