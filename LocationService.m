@@ -148,5 +148,4 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
     return [self.locationManager location];
 }
 
-
 @end
