@@ -22,10 +22,14 @@
 #import "PersonViewController.h"
 #import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
+#import "MapFetchedResultsDelegate.h"
+#import "MapDelegate.h"
 
 @interface MapViewController ()
-	@property (nonatomic) NSMutableDictionary *locationAnnotations;
-    @property (nonatomic) NSMutableDictionary *observationAnnotations;
+    @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
+    @property (nonatomic) IBOutlet MapDelegate *mapDelegate;
+    @property (strong, nonatomic) NSFetchedResultsController *locationResultsController;
+    @property (strong, nonatomic) NSFetchedResultsController *observationResultsController;
 @end
 
 @implementation MapViewController
@@ -47,7 +51,7 @@
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
     
-	[_observationResultsController setDelegate:self];
+	[_observationResultsController setDelegate:self.mapFetchedResultsDelegate];
 	
 	return _observationResultsController;
 }
@@ -70,32 +74,13 @@
 								  sectionNameKeyPath:nil
 								  cacheName:nil];
 		
-	[_locationResultsController setDelegate:self];
+	[_locationResultsController setDelegate:self.mapFetchedResultsDelegate];
 	
 	return _locationResultsController;
 }
 
-- (NSMutableDictionary *) locationAnnotations {
-	if (!_locationAnnotations) {
-		_locationAnnotations = [[NSMutableDictionary alloc] init];
-	}
-	
-	return _locationAnnotations;
-}
-
-- (NSMutableDictionary *) observationAnnotations {
-	if (!_observationAnnotations) {
-		_observationAnnotations = [[NSMutableDictionary alloc] init];
-	}
-	
-	return _observationAnnotations;
-}
-
 - (void) viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-
-	[_mapView setDelegate:self];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:kReportLocationKey]) {
@@ -114,9 +99,7 @@
     }
 	
 	NSArray *locations = [self.locationResultsController fetchedObjects];
-	for (Location *location in locations) {
-		[self updateLocation:location];
-	}
+	[self.mapFetchedResultsDelegate updateLocations:locations];
     
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
@@ -126,162 +109,12 @@
 	
 	NSArray *observations = [self.observationResultsController fetchedObjects];
     NSLog(@"we initially found %lu observations", (unsigned long)observations.count);
-	for (Observation *observation in observations) {
-		[self updateObservation:observation];
-	}
-    
-
+	[self.mapFetchedResultsDelegate updateObservations:observations];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-	
-    if ([annotation isKindOfClass:[LocationAnnotation class]]) {
-		LocationAnnotation *locationAnnotation = annotation;
-		UIImage *image = [PersonImage imageForLocation:locationAnnotation.location];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-            annotationView.image = image;
-			
-			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-			annotationView.rightCalloutAccessoryView = rightButton;
-		} else {
-            annotationView.annotation = annotation;
-        }
-		
-        return annotationView;
-    } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-        ObservationAnnotation *observationAnnotation = annotation;
-        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-			
-			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-			annotationView.rightCalloutAccessoryView = rightButton;
-            annotationView.image = image;
-		} else {
-            annotationView.annotation = annotation;
-        }
-		
-        return annotationView;
-    }
-	
-    return nil;
-}
-
-// TODO once we get a 'me' page we will segue to that page from here
-//- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-//    
-//	if (view == [_mapView viewForAnnotation:_mapView.userLocation]) {
-//		UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-//		[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-//		view.rightCalloutAccessoryView = rightButton;
-//	}
-//}
-
--(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
-    float oldWidth = sourceImage.size.width;
-    float scaleFactor = i_width / oldWidth;
-    
-    float newHeight = sourceImage.size.height * scaleFactor;
-    float newWidth = oldWidth * scaleFactor;
-    
-    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
-    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
-#pragma mark - NSFetchResultsController
-
-- (void) controller:(NSFetchedResultsController *) controller
-    didChangeObject:(id) object
-	atIndexPath:(NSIndexPath *) indexPath
-	forChangeType:(NSFetchedResultsChangeType) type
-	newIndexPath:(NSIndexPath *)newIndexPath {
-    
-    if ([object isKindOfClass:[Observation class]]) {
-        switch(type) {
-                
-            case NSFetchedResultsChangeInsert:
-                [self updateObservation:object];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                NSLog(@"Got delete for observation");
-                break;
-                
-            case NSFetchedResultsChangeUpdate:
-                [self updateObservation:object];
-                break;
-        }
-
-    } else {
-        switch(type) {
-                
-            case NSFetchedResultsChangeInsert:
-                [self updateLocation:object];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                NSLog(@"Got delete for location");
-                break;
-                
-            case NSFetchedResultsChangeUpdate:
-                [self updateLocation:object];
-                break;
-        }
-    }
-}
-
-- (void) updateLocation:(Location *) location {
-	User *user = location.user;
-    
-	LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
-	if (annotation == nil) {
-		annotation = [[LocationAnnotation alloc] initWithLocation:location];
-		[_mapView addAnnotation:annotation];
-		[self.locationAnnotations setObject:annotation forKey:user.remoteId];
-	} else {
-        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [PersonImage imageForLocation:annotation.location];
-		[annotation setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
-	}
-}
-
-- (void) updateObservation: (Observation *) observation {
-	ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
-	if (annotation == nil) {
-		annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [_mapView addAnnotation:annotation];
-		[self.observationAnnotations setObject:annotation forKey:observation.remoteId];
-	} else {
-        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        [annotation setCoordinate:((GeoPoint *) observation.geometry).location.coordinate];
-    }
-}
-
-- (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
-	if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == _mapView.userLocation) {
-		[self performSegueWithIdentifier:@"DisplayPersonSegue" sender:view];
-	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
-		[self performSegueWithIdentifier:@"DisplayObservationSegue" sender:view];
-	}
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

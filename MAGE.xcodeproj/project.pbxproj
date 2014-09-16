@@ -32,6 +32,8 @@
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
+		F727516719C78238006C63CB /* MapFetchedResultsDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */; };
+		F727516A19C87B27006C63CB /* MapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516919C87B27006C63CB /* MapDelegate.m */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */; };
 		F7481F0119A663AA00E9C56D /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481F0019A663AA00E9C56D /* DatePickerViewController.m */; };
@@ -131,6 +133,10 @@
 		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
 		F725A9CA195CB819002A699C /* ObservationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotation.h; sourceTree = "<group>"; };
 		F725A9CB195CB819002A699C /* ObservationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotation.m; sourceTree = "<group>"; };
+		F727516519C78238006C63CB /* MapFetchedResultsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapFetchedResultsDelegate.h; sourceTree = "<group>"; };
+		F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapFetchedResultsDelegate.m; sourceTree = "<group>"; };
+		F727516819C87B27006C63CB /* MapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelegate.h; sourceTree = "<group>"; };
+		F727516919C87B27006C63CB /* MapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapDelegate.m; sourceTree = "<group>"; };
 		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7481EFC19A6372C00E9C56D /* DropdownEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropdownEditTableViewController.h; sourceTree = "<group>"; };
@@ -255,6 +261,10 @@
 				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
 				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
+				F727516519C78238006C63CB /* MapFetchedResultsDelegate.h */,
+				F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */,
+				F727516819C87B27006C63CB /* MapDelegate.h */,
+				F727516919C87B27006C63CB /* MapDelegate.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -581,6 +591,7 @@
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				4C2A38F01974803700E7470A /* PersonImage.m in Sources */,
+				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
@@ -607,6 +618,7 @@
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
+				F727516719C78238006C63CB /* MapFetchedResultsDelegate.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,

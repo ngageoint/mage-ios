@@ -15,8 +15,6 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *form = [defaults objectForKey:@"form"];
     self.variantField = [form objectForKey:@"variantField"];
-    
-   
     return self;
 }
 
