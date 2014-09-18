@@ -24,6 +24,15 @@
 - (void) viewDidLoad {
     [self startServices];
     
+    UITabBarItem *mapTabBar = [[self.tabBar items] objectAtIndex:0];
+    [mapTabBar setSelectedImage:[UIImage imageNamed:@"map_selected.png"]];
+    
+    UITabBarItem *observationsTabBar = [[self.tabBar items] objectAtIndex:1];
+    [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
+    
+    UITabBarItem *peopleTabBar = [[self.tabBar items] objectAtIndex:2];
+    [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
+    
 //	self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
 //    self.contentViewShadowColor = [UIColor blackColor];
 //    self.contentViewShadowOffset = CGSizeMake(0, 0);
