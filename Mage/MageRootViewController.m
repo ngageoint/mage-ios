@@ -33,6 +33,13 @@
     UITabBarItem *peopleTabBar = [[self.tabBar items] objectAtIndex:2];
     [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
     
+    for (UINavigationController *navigationController in self.viewControllers) {
+        id viewController = navigationController.topViewController;
+        if ([viewController respondsToSelector:@selector(setManagedObjectContext:)]) {
+            [viewController setManagedObjectContext:self.managedObjectContext];
+        }
+    }
+    
 //	self.menuPreferredStatusBarStyle = UIStatusBarStyleLightContent;
 //    self.contentViewShadowColor = [UIColor blackColor];
 //    self.contentViewShadowOffset = CGSizeMake(0, 0);

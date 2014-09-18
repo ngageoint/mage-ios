@@ -20,8 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    MageRootViewController *tabBarController = (MageRootViewController *)self.tabBarController;
-    self.managedObjectContext = tabBarController.managedObjectContext;
     [self.observationDataStore startFetchControllerWithManagedObjectContext:self.managedObjectContext];
 }
 

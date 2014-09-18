@@ -59,9 +59,6 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    MageRootViewController *tabBarController = (MageRootViewController *)self.tabBarController;
-    self.managedObjectContext = tabBarController.managedObjectContext;
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:kReportLocationKey]) {
         [_mapView setShowsUserLocation:YES];
