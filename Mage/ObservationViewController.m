@@ -53,7 +53,6 @@ AVPlayer *player;
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
 
-	[_mapView setDelegate:self];
 	CLLocationDistance latitudeMeters = 500;
 	CLLocationDistance longitudeMeters = 500;
 	GeoPoint *point = _observation.geometry;
@@ -117,10 +116,10 @@ AVPlayer *player;
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
 		ObservationAnnotation *observationAnnotation = annotation;
         UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             if (image == nil) {
@@ -131,7 +130,7 @@ AVPlayer *player;
 		} else {
             annotationView.annotation = annotation;
         }
-		
+		annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
         return annotationView;
     }
 	
