@@ -195,7 +195,6 @@ id<Authentication> _authentication;
 		[textField resignFirstResponder];
 	} else {
 		textField.text = updatedString;
-        [self characterTypedInLoginFields:textField];
 	}
     
     return NO;
