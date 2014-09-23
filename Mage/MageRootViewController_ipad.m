@@ -27,7 +27,7 @@
     
     UINavigationController *detailViewController = [splitViewController.viewControllers lastObject];
     id detailNavigationController = detailViewController.topViewController;
-    detailViewController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
+//    detailViewController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
 
     [detailNavigationController setManagedObjectContext:self.managedObjectContext];
     
