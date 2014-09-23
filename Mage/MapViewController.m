@@ -72,7 +72,7 @@
     if (![[self locationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
+        exit(-1);
     }
 	
 	NSArray *locations = [self.locationResultsController fetchedObjects];
@@ -81,7 +81,7 @@
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail/Users/wnewman/Downloads/ios_development (1).cer
+        exit(-1);
     }
 	
 	NSArray *observations = [self.observationResultsController fetchedObjects];

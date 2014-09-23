@@ -83,6 +83,11 @@ AVPlayer *player;
 	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
+}
+
 - (void) viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	

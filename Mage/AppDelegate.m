@@ -35,8 +35,8 @@
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
 	
-	MageInitialViewController *rootView = (MageInitialViewController *) self.window.rootViewController;
-    rootView.managedObjectContext = self.managedObjectContext;
+	id rootView = (MageInitialViewController *) self.window.rootViewController;
+    [rootView setManagedObjectContext:self.managedObjectContext];
     
     _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
     [rootView setLocationFetchService:_locationFetchService];

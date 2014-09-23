@@ -26,11 +26,6 @@
     [super viewWillAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewWillDisappear:animated];
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
         PersonViewController *destination = (PersonViewController *)[segue destinationViewController];
