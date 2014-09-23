@@ -21,7 +21,15 @@
     [super viewDidLoad];
 
     // stop the location fetch service
-    //[_locationFetchService stop];
+    [_locationFetchService stop];
+    
+    UITabBarController *tabBarController = (UITabBarController *) [[self.viewControllers firstObject] topViewController];
+
+    UITabBarItem *observationsTabBar = [[tabBarController.tabBar items] objectAtIndex:0];
+    [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
+    
+    UITabBarItem *peopleTabBar = [[tabBarController.tabBar items] objectAtIndex:1];
+    [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
 }
 
 
