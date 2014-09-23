@@ -37,7 +37,7 @@
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKAnnotationView *annotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
@@ -48,6 +48,7 @@
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
 			annotationView.rightCalloutAccessoryView = rightButton;
             annotationView.image = image;
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
 		} else {
             annotationView.annotation = annotation;
         }

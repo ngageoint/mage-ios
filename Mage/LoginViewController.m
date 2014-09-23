@@ -120,18 +120,6 @@ id<Authentication> _authentication;
 	}
 }
 
-- (IBAction)characterTypedInLoginFields:(id)sender {
-    if (([[_usernameField text] length] != 0) && ([[_passwordField text] length] != 0)) {
-        [_usernameField setReturnKeyType:UIReturnKeyGo];
-        [_passwordField setReturnKeyType:UIReturnKeyGo];
-        [sender reloadInputViews];
-    } else {
-        [_usernameField setReturnKeyType:UIReturnKeyNext];
-        [_passwordField setReturnKeyType:UIReturnKeyNext];
-        [sender reloadInputViews];
-    }
-}
-
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
 	if ([identifier isEqualToString:@"LoginSegue"]) {
 		if (![self changeTextViewFocus: sender]) {
@@ -194,7 +182,6 @@ id<Authentication> _authentication;
 		[textField resignFirstResponder];
 	} else {
 		textField.text = updatedString;
-        [self characterTypedInLoginFields:textField];
 	}
     
     return NO;
