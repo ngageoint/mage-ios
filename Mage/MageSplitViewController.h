@@ -8,15 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LocationService.h"
-#import "LocationFetchService.h"
-#import "ObservationFetchService.h"
-#import "ManagedObjectContextHolder.h"
 
 @interface MageSplitViewController : UISplitViewController
 
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) LocationService *locationService;
-@property (strong, nonatomic) ObservationFetchService *observationFetchService;
-@property (strong, nonatomic) LocationFetchService *locationFetchService;
 
 @end

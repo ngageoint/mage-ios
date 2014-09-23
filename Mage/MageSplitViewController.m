@@ -21,7 +21,7 @@
     [super viewDidLoad];
 
     // stop the location fetch service
-    [_locationFetchService stop];
+//    [_locationFetchService stop];
     
     UITabBarController *tabBarController = (UITabBarController *) [[self.viewControllers firstObject] topViewController];
 

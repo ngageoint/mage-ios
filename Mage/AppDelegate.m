@@ -20,6 +20,8 @@
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
+@synthesize locationFetchService = _locationFetchService;
+@synthesize observationFetchService = _observationFetchService;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -35,13 +37,6 @@
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
 	
-	id rootView = (MageInitialViewController *) self.window.rootViewController;
-    
-    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
-    [rootView setLocationFetchService:_locationFetchService];
-    
-    _observationFetchService = [[ObservationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
-    [rootView setObservationFetchService:_observationFetchService];
 	
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
 	[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0]];
@@ -76,6 +71,10 @@
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
+    
+    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
+    
+    _observationFetchService = [[ObservationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
 	 
 	return YES;
 }

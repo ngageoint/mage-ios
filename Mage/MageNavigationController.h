@@ -11,6 +11,4 @@
 
 @interface MageNavigationController : UINavigationController
 
-@property(strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
-
 @end

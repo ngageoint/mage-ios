@@ -31,16 +31,6 @@ id<Authentication> _authentication;
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSString *segueIdentifier = [segue identifier];
-    if ([segueIdentifier isEqualToString:@"LoginSegue"]) {
-        MageRootViewController *rootViewController = [segue destinationViewController];
-		//rootViewController.managedObjectContext = self.managedObjectContext;
-        [rootViewController setLocationFetchService:_locationFetchService];
-        [rootViewController setObservationFetchService:_observationFetchService];
-    }
-}
-
 - (void) authenticationHadFailure {
 	// do something on failed login
 	UIAlertView *alert = [[UIAlertView alloc]
