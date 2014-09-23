@@ -43,12 +43,12 @@
     NSString *segueIdentifier = [segue identifier];
     if ([segueIdentifier isEqualToString:@"DisplayDisclaimerViewSegue"]) {
         DisclaimerNavigationController *disclaimer = [segue destinationViewController];
-		[disclaimer setManagedObjectContext:_managedObjectContext];
+		//[disclaimer setManagedObjectContext:_managedObjectContext];
         [disclaimer setLocationFetchService:_locationFetchService];
         [disclaimer setObservationFetchService:_observationFetchService];
     } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
         MageRootViewController *rootView = [segue destinationViewController];
-		[rootView setManagedObjectContext:_managedObjectContext];
+		//[rootView setManagedObjectContext:_managedObjectContext];
         [rootView setLocationFetchService:_locationFetchService];
         [rootView setObservationFetchService:_observationFetchService];
     }

@@ -8,10 +8,11 @@
 #import <UIKit/UIKit.h>
 #import "LocationFetchedResultsController.h"
 #import "PeopleDataStore.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface PeopleTableViewController : UITableViewController<NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) IBOutlet PeopleDataStore *peopleDataStore;
 
 @end

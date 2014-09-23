@@ -42,7 +42,7 @@
     if (_observationResultsController != nil) {
 		return _observationResultsController;
 	}
-    _observationResultsController = [[ObservationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
+    _observationResultsController = [[ObservationFetchedResultsController alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
     [_observationResultsController setDelegate:self.mapFetchedResultsDelegate];
     return _observationResultsController;
 }
@@ -51,7 +51,7 @@
     if (_locationResultsController != nil) {
 		return _locationResultsController;
 	}
-    _locationResultsController = [[LocationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
+    _locationResultsController = [[LocationFetchedResultsController alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
     [_locationResultsController setDelegate:self.mapFetchedResultsDelegate];
     return _locationResultsController;
 }
@@ -108,7 +108,7 @@
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
 		User *user = nil;
 		if ([sender annotation] == _mapView.userLocation) {
-			user = [User fetchCurrentUserForManagedObjectContext:_managedObjectContext];
+			user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
 		} else {
 			LocationAnnotation *annotation = [sender annotation];
 			user = annotation.location.user;
@@ -116,7 +116,7 @@
 		
 		PersonViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setUser:user];
-		[destinationViewController setManagedObjectContext:_managedObjectContext];
+		//[destinationViewController setManagedObjectContext:_managedObjectContext];
 
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationAnnotation *annotation = [sender annotation];

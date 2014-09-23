@@ -11,6 +11,7 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "Attachment.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface ObservationViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -21,5 +22,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 @property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
+@property (weak, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @end

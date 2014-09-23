@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "LocationFetchService.h"
 #import "ObservationFetchService.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface DisclaimerNavigationController : UIViewController
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) LocationFetchService *locationFetchService;
 @property (strong, nonatomic) ObservationFetchService *observationFetchService;
 

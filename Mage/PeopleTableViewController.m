@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[self.peopleDataStore startFetchControllerWithManagedObjectContext:self.managedObjectContext];
+	[self.peopleDataStore startFetchControllerWithManagedObjectContext:self.contextHolder.managedObjectContext];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -32,7 +32,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [self.peopleDataStore locationAtIndexPath:indexPath];
 		[destination setUser:location.user];
-		[destination setManagedObjectContext:_managedObjectContext];
+//		[destination setManagedObjectContext:_managedObjectContext];
     }
 }
 

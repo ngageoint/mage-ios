@@ -23,29 +23,29 @@
     
     MageSplitViewController *splitViewController = [self.viewControllers firstObject];
     splitViewController.delegate = self;
-    [splitViewController setManagedObjectContext:self.managedObjectContext];
+//    [splitViewController setManagedObjectContext:self.managedObjectContext];
     
-    UINavigationController *detailViewController = [splitViewController.viewControllers lastObject];
-    id detailNavigationController = detailViewController.topViewController;
+//    UINavigationController *detailViewController = [splitViewController.viewControllers lastObject];
+//    id detailNavigationController = detailViewController.topViewController;
 //    detailViewController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
 
-    [detailNavigationController setManagedObjectContext:self.managedObjectContext];
-    
-    UINavigationController *navigationViewController = [splitViewController.viewControllers firstObject];
-    for (id viewController in navigationViewController.topViewController.childViewControllers) {
-        if ([viewController respondsToSelector:@selector(setManagedObjectContext:)]) {
-            [viewController setManagedObjectContext:self.managedObjectContext];
-        }
-    }
+//    [detailNavigationController setManagedObjectContext:self.managedObjectContext];
+//    
+//    UINavigationController *navigationViewController = [splitViewController.viewControllers firstObject];
+//    for (id viewController in navigationViewController.topViewController.childViewControllers) {
+//        if ([viewController respondsToSelector:@selector(setManagedObjectContext:)]) {
+//            [viewController setManagedObjectContext:self.managedObjectContext];
+//        }
+//    }
     
     [super viewDidLoad];
 }
 
 - (void) startServices {
-    _locationService = [[LocationService alloc] initWithManagedObjectContext:self.managedObjectContext];
+    _locationService = [[LocationService alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
     [_locationService start];
     
-    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.managedObjectContext];
+    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.contextHolder.managedObjectContext];
     NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
         NSLog(@"done with intial user fetch, lets start the location fetch service");
         [_locationFetchService start];

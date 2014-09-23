@@ -10,6 +10,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 
 #import "User+helper.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface PersonViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
@@ -22,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *contact2;
 @property (weak, nonatomic) IBOutlet UITableView *observationTableView;
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) NSFetchedResultsController *observationResultsController;
 
 @end

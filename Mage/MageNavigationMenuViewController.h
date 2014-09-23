@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "RESideMenu.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface MageNavigationMenuViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, RESideMenuDelegate>
 
-@property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property(strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @end

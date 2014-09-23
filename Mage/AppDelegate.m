@@ -36,12 +36,11 @@
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
 	
 	id rootView = (MageInitialViewController *) self.window.rootViewController;
-    [rootView setManagedObjectContext:self.managedObjectContext];
     
-    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
+    _locationFetchService = [[LocationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
     [rootView setLocationFetchService:_locationFetchService];
     
-    _observationFetchService = [[ObservationFetchService alloc] initWithManagedObjectContext:_managedObjectContext];
+    _observationFetchService = [[ObservationFetchService alloc] initWithManagedObjectContext:[self managedObjectContext]];
     [rootView setObservationFetchService:_observationFetchService];
 	
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];

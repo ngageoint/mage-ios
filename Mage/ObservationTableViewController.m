@@ -20,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.observationDataStore startFetchControllerWithManagedObjectContext:self.managedObjectContext];
+    [self.observationDataStore startFetchControllerWithManagedObjectContext:self.contextHolder.managedObjectContext];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

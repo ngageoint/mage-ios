@@ -33,21 +33,21 @@
     UITabBarItem *peopleTabBar = [[self.tabBar items] objectAtIndex:2];
     [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
     
-    for (UINavigationController *navigationController in self.viewControllers) {
-        id viewController = navigationController.topViewController;
-        if ([viewController respondsToSelector:@selector(setManagedObjectContext:)]) {
-            [viewController setManagedObjectContext:self.managedObjectContext];
-        }
-    }
+//    for (UINavigationController *navigationController in self.viewControllers) {
+//        id viewController = navigationController.topViewController;
+//        if ([viewController respondsToSelector:@selector(setManagedObjectContext:)]) {
+//            [viewController setManagedObjectContext:self.managedObjectContext];
+//        }
+//    }
 	
 	[super viewDidLoad];
 }
 
 - (void) startServices {
-    _locationService = [[LocationService alloc] initWithManagedObjectContext:_managedObjectContext];
+    _locationService = [[LocationService alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
     [_locationService start];
     
-    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:_managedObjectContext];
+    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.contextHolder.managedObjectContext];
     NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
         NSLog(@"done with intial user fetch, lets start the location fetch service");
         [_locationFetchService start];

@@ -48,7 +48,7 @@
         // Map
         case 0: {
 			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mapViewController"];
-			[viewController setManagedObjectContext:_managedObjectContext];
+			[viewController setManagedObjectContext:self.contextHolder.managedObjectContext];
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
@@ -56,7 +56,7 @@
         // Observations
         case 1: {
             id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewController"];
-			[viewController setManagedObjectContext:_managedObjectContext];
+			[viewController setManagedObjectContext:self.contextHolder.managedObjectContext];
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
@@ -64,7 +64,7 @@
         // People
         case 2: {
 			id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"peopleViewController"];
-			[viewController setManagedObjectContext:_managedObjectContext];
+			[viewController setManagedObjectContext:self.contextHolder.managedObjectContext];
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
@@ -72,7 +72,7 @@
         // Settings
         case 3: {
             id viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"];
-			[viewController setManagedObjectContext:_managedObjectContext];
+			[viewController setManagedObjectContext:self.contextHolder.managedObjectContext];
             [self.sideMenuViewController setContentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES];
             [self.sideMenuViewController hideMenuViewController];
             break;
