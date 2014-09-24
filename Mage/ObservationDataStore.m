@@ -10,6 +10,9 @@
 #import "ObservationTableViewCell.h"
 #import "ObservationFetchedResultsController.h"
 
+@interface ObservationDataStore ()
+@end
+
 @implementation ObservationDataStore
 
 - (id) init {
@@ -125,6 +128,13 @@
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
     [self.tableView beginUpdates];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
+    if (self.observationSelectionDelegate) {
+        [self.observationSelectionDelegate selectedObservation:observation];
+    }
 }
 
 

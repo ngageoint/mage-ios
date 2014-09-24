@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "MapDelegate.h"
+#import "ObservationSelectionDelegate.h"
 
-@interface MapViewController : UIViewController
+@interface MapViewController : UIViewController<ObservationSelectionDelegate>
 @property (strong, nonatomic) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
