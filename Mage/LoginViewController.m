@@ -31,16 +31,6 @@ id<Authentication> _authentication;
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSString *segueIdentifier = [segue identifier];
-    if ([segueIdentifier isEqualToString:@"LoginSegue"]) {
-        MageRootViewController *rootViewController = [segue destinationViewController];
-		rootViewController.managedObjectContext = self.managedObjectContext;
-        [rootViewController setLocationFetchService:_locationFetchService];
-        [rootViewController setObservationFetchService:_observationFetchService];
-    }
-}
-
 - (void) authenticationHadFailure {
 	// do something on failed login
 	UIAlertView *alert = [[UIAlertView alloc]
@@ -101,7 +91,7 @@ id<Authentication> _authentication;
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
 		NSURL *url = [NSURL URLWithString:_serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:_managedObjectContext];
+		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.contextHolder.managedObjectContext];
 		_authentication.delegate = self;
 		
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -152,7 +142,7 @@ id<Authentication> _authentication;
 	
 	_authentication = [Authentication
 					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
-					   inManagedObjectContext:self.managedObjectContext];
+					   inManagedObjectContext:self.contextHolder.managedObjectContext];
 	_authentication.delegate = self;
     
 }

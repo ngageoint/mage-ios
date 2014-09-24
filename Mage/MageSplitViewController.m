@@ -24,7 +24,7 @@
     [super viewDidLoad];
 
     // stop the location fetch service
-    [_locationFetchService stop];
+//    [_locationFetchService stop];
     
     UINavigationController *masterViewController = [self.viewControllers firstObject];
     UINavigationController *detailViewController = [self.viewControllers lastObject];

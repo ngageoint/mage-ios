@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ObservationDataStore.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface ObservationTableViewController : UITableViewController
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
+@property (readwrite, strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @end

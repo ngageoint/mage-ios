@@ -7,13 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LocationFetchService.h"
-#import "ObservationFetchService.h"
+#import "ManagedObjectContextHolder.h"
+#import "FetchServicesHolder.h"
 
 @interface MageInitialViewController : UIViewController
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) LocationFetchService *locationFetchService;
-@property (strong, nonatomic) ObservationFetchService *observationFetchService;
+@property (strong, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
 
 @end

@@ -26,7 +26,8 @@
     [super viewDidAppear:animated];
     
     // stop the location fetch service
-    [_locationFetchService stop];
+    [self.fetchServicesHolder.locationFetchService stop];
+    [self.fetchServicesHolder.observationFetchService stop];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -36,21 +37,6 @@
     } else {
         [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
 		[self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:nil];
-    }
-}
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSString *segueIdentifier = [segue identifier];
-    if ([segueIdentifier isEqualToString:@"DisplayDisclaimerViewSegue"]) {
-        DisclaimerNavigationController *disclaimer = [segue destinationViewController];
-		[disclaimer setManagedObjectContext:_managedObjectContext];
-        [disclaimer setLocationFetchService:_locationFetchService];
-        [disclaimer setObservationFetchService:_observationFetchService];
-    } else if ([segueIdentifier isEqualToString:@"DisplayRootViewSegue"]) {
-        MageRootViewController *rootView = [segue destinationViewController];
-		[rootView setManagedObjectContext:_managedObjectContext];
-        [rootView setLocationFetchService:_locationFetchService];
-        [rootView setObservationFetchService:_observationFetchService];
     }
 }
 

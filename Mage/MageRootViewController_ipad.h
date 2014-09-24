@@ -12,12 +12,13 @@
 #import "ObservationFetchService.h"
 #import "LocationFetchService.h"
 #import "LocationService.h"
+#import "ManagedObjectContextHolder.h"
+#import "FetchServicesHolder.h"
 
 @interface MageRootViewController_ipad : UINavigationController
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
+@property (strong, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
 @property (strong, nonatomic) LocationService *locationService;
-@property (strong, nonatomic) ObservationFetchService *observationFetchService;
-@property (strong, nonatomic) LocationFetchService *locationFetchService;
 
 @end
