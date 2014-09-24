@@ -23,14 +23,13 @@
 #import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
 #import "MapFetchedResultsDelegate.h"
-#import "MapDelegate.h"
 #import "LocationFetchedResultsController.h"
 #import "ObservationFetchedResultsController.h"
 #import "MageRootViewController.h"
 
 @interface MapViewController ()
-    @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
     @property (nonatomic) IBOutlet MapDelegate *mapDelegate;
+    @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
     @property (strong, nonatomic) LocationFetchedResultsController *locationResultsController;
     @property (strong, nonatomic) ObservationFetchedResultsController *observationResultsController;
 @end
@@ -123,6 +122,16 @@
 		ObservationViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:annotation.observation];
     }
+}
+
+- (void)selectedObservation:(Observation *) observation {
+    NSLog(@"selected observation");
+    
+    GeoPoint *point = (GeoPoint *) observation.geometry;
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(point.location.coordinate, 500, 500);
+    
+    // 3
+    [_mapView setRegion:viewRegion animated:YES];
 }
 
 @end

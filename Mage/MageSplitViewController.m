@@ -9,6 +9,9 @@
 #import "MageSplitViewController.h"
 #import "UserUtility.h"
 #import "HttpManager.h"
+#import "MapViewController.h"
+#import "ObservationTableViewController.h"
+#import "PeopleTableViewController.h"
 
 @interface MageSplitViewController ()
 
@@ -23,12 +26,20 @@
     // stop the location fetch service
 //    [_locationFetchService stop];
     
-    UITabBarController *tabBarController = (UITabBarController *) [[self.viewControllers firstObject] topViewController];
+    UINavigationController *masterViewController = [self.viewControllers firstObject];
+    UINavigationController *detailViewController = [self.viewControllers lastObject];
+    
+    UITabBarController *tabBarController = (UITabBarController *) [masterViewController topViewController];
+    MapViewController *mapViewController = (MapViewController *) [detailViewController topViewController];
+    ObservationTableViewController *observationTableViewController = [tabBarController.viewControllers objectAtIndex:0];
+    observationTableViewController.observationDataStore.observationSelectionDelegate = mapViewController;
+    
+    PeopleTableViewController *peopleTableViewController = [tabBarController.viewControllers objectAtIndex:1];
 
-    UITabBarItem *observationsTabBar = [[tabBarController.tabBar items] objectAtIndex:0];
+    UITabBarItem *observationsTabBar = [[[tabBarController tabBar] items] objectAtIndex:0];
     [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
     
-    UITabBarItem *peopleTabBar = [[tabBarController.tabBar items] objectAtIndex:1];
+    UITabBarItem *peopleTabBar = [[[tabBarController tabBar] items] objectAtIndex:1];
     [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
 }
 
