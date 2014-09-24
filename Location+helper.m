@@ -12,6 +12,7 @@
 #import "User+helper.h"
 #import "GeoPoint.h"
 #import "HttpManager.h"
+#import <NSDate+DateTools.h>
 
 @implementation Location (helper)
 
@@ -132,6 +133,11 @@
     }];
     
     return operation;
+}
+
+- (NSString *)sectionIdentifier
+{
+    return [self timestamp].timeAgoSinceNow;
 }
 
 
