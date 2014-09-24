@@ -116,7 +116,6 @@
 		
 		PersonViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setUser:user];
-		//[destinationViewController setManagedObjectContext:_managedObjectContext];
 
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationAnnotation *annotation = [sender annotation];
