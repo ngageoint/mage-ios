@@ -26,6 +26,7 @@
 #import "LocationFetchedResultsController.h"
 #import "ObservationFetchedResultsController.h"
 #import "MageRootViewController.h"
+#import "MapDelegate.h"
 
 @interface MapViewController ()
     @property (nonatomic) IBOutlet MapDelegate *mapDelegate;

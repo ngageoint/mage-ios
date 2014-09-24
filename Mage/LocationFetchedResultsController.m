@@ -20,7 +20,7 @@
 	
     self = [super initWithFetchRequest:request
            managedObjectContext:context
-             sectionNameKeyPath:nil
+             sectionNameKeyPath:@"sectionIdentifier"
                       cacheName:nil];
 
     return self;

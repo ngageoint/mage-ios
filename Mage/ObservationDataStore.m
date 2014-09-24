@@ -9,6 +9,7 @@
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
 #import "ObservationFetchedResultsController.h"
+#import <NSDate+DateTools.h>
 
 @interface ObservationDataStore ()
 @end
@@ -59,6 +60,10 @@
 	[observationCell populateCellWithObservation:observation];
 }
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[_observationResultsController sections] count];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id  sectionInfo = [[_observationResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
@@ -69,6 +74,12 @@
 	[self configureCell: cell atIndexPath:indexPath];
 	
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    id <NSFetchedResultsSectionInfo> theSection = [[_observationResultsController sections] objectAtIndex:section];
+    return [theSection name];
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
