@@ -41,7 +41,6 @@
 		F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* PeopleDataStore.m */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */; };
-		F7481F0119A663AA00E9C56D /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481F0019A663AA00E9C56D /* DatePickerViewController.m */; };
 		F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F232919A77A7B0068DE1B /* DatePickerTableViewCell.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
@@ -53,6 +52,10 @@
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
 		F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAB119A4E5200010B052 /* ObservationPickerTableViewCell.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */; };
+		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
+		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
+		F79E9D4419D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */; };
+		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
 		F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */; };
@@ -158,8 +161,6 @@
 		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7481EFC19A6372C00E9C56D /* DropdownEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropdownEditTableViewController.h; sourceTree = "<group>"; };
 		F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropdownEditTableViewController.m; sourceTree = "<group>"; };
-		F7481EFF19A663AA00E9C56D /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
-		F7481F0019A663AA00E9C56D /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		F74F232819A77A7B0068DE1B /* DatePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerTableViewCell.h; sourceTree = "<group>"; };
 		F74F232919A77A7B0068DE1B /* DatePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerTableViewCell.m; sourceTree = "<group>"; };
 		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
@@ -183,6 +184,14 @@
 		F798FAB119A4E5200010B052 /* ObservationPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPickerTableViewCell.m; sourceTree = "<group>"; };
 		F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageRootViewController.h; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageRootViewController.m; sourceTree = "<group>"; };
+		F79E9D3C19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxTableViewCell.h; sourceTree = "<group>"; };
+		F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxTableViewCell.m; sourceTree = "<group>"; };
+		F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditGeometryTableViewCell.h; sourceTree = "<group>"; };
+		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
+		F79E9D4219D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
+		F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditRadioTableViewCell.m; sourceTree = "<group>"; };
+		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* MAGE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAGE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -377,11 +386,17 @@
 				F798FAB119A4E5200010B052 /* ObservationPickerTableViewCell.m */,
 				F7481EFC19A6372C00E9C56D /* DropdownEditTableViewController.h */,
 				F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */,
-				F7481EFF19A663AA00E9C56D /* DatePickerViewController.h */,
-				F7481F0019A663AA00E9C56D /* DatePickerViewController.m */,
 				F74F232819A77A7B0068DE1B /* DatePickerTableViewCell.h */,
 				F74F232919A77A7B0068DE1B /* DatePickerTableViewCell.m */,
 				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
+				F79E9D3C19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.h */,
+				F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */,
+				F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */,
+				F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */,
+				F79E9D4219D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.h */,
+				F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */,
+				F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */,
+				F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -637,12 +652,15 @@
 				4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
+				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
 				4C2A38F01974803700E7470A /* PersonImage.m in Sources */,
+				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */,
+				F79E9D4419D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m in Sources */,
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */,
@@ -663,7 +681,6 @@
 				F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
-				F7481F0119A663AA00E9C56D /* DatePickerViewController.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
@@ -671,6 +688,7 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F727516719C78238006C63CB /* MapFetchedResultsDelegate.m in Sources */,
+				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,

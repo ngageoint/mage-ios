@@ -47,9 +47,7 @@ AVPlayer *player;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    [self.editButton setEnabled:NO];
-	
+    	
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
 

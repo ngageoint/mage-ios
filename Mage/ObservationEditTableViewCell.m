@@ -38,6 +38,8 @@
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {
+    NSLog([NSString stringWithFormat:@"cell height bounds: %f", self.bounds.size.height]);
+    NSLog([NSString stringWithFormat:@"cell height frame: %f", self.contentView.frame.size.height]);
     return self.bounds.size.height;
 }
 

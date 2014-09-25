@@ -10,7 +10,6 @@
 #import "ObservationEditTableViewCell.h"
 #import "DropdownEditTableViewController.h"
 #import "ObservationPickerTableViewCell.h"
-#import "DatePickerViewController.h"
 #import "DatePickerTableViewCell.h"
 #import "ObservationDatePickerTableViewCell.h"
 
@@ -157,13 +156,7 @@ NSInteger expandedRow = -1;
         
         if (expandedRow != indexPath.row +1) {
             expandedRow = indexPath.row + 1;
-            NSIndexPath *path = [NSIndexPath indexPathForRow:expandedRow inSection:indexPath.section];
-            DatePickerTableViewCell *cell = (DatePickerTableViewCell*)[tableView cellForRowAtIndexPath:path];
-            cell.datePicker.hidden = YES;
         } else {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:expandedRow inSection:indexPath.section];
-            DatePickerTableViewCell *cell = (DatePickerTableViewCell*)[tableView cellForRowAtIndexPath:path];
-            cell.datePicker.hidden = NO;
             expandedRow = -1;
         }
     }
@@ -181,11 +174,6 @@ NSInteger expandedRow = -1;
         
         [vc setFieldDefinition:cell.fieldDefinition];
         [vc setValue:cell.valueLabel.text];
-    } else if ([segue.identifier isEqualToString:@"datePickerSegue"]) {
-        DatePickerViewController *dpvc = [segue destinationViewController];
-        ObservationDatePickerTableViewCell *dpCell = sender;
-        [dpvc setFieldDefinition:dpCell.fieldDefinition];
-        [dpvc setValue:[_observation.properties objectForKey:(NSString *)[dpCell.fieldDefinition objectForKey:@"name"]]];
     }
 }
 
