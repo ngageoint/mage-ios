@@ -25,6 +25,11 @@
 	return location;
 }
 
+- (CLLocation *) location {
+    GeoPoint *point = (GeoPoint *) self.geometry;
+    return point.location;
+}
+
 - (void) populateLocationFromJson:(NSArray *) locations {
 	if (locations.count) {
 		for (NSDictionary* jsonLocation in locations) {

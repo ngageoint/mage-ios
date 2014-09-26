@@ -47,6 +47,11 @@
     return self;
 }
 
+- (CLLocation *) location {
+    GeoPoint *point = (GeoPoint *) self.geometry;
+    return point.location;
+}
+
 + (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
     [observation populateObjectFromJson:json inManagedObjectContext: context];
