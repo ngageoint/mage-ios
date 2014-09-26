@@ -43,7 +43,6 @@
     if (self) {
         // Initialization code
         [_datePicker addTarget:self action:@selector(pickerDateChanged:) forControlEvents:UIControlEventValueChanged];
-        
     }
     return self;
 }
@@ -51,12 +50,11 @@
 - (void)awakeFromNib
 {
     [_datePicker addTarget:self action:@selector(pickerDateChanged:) forControlEvents:UIControlEventValueChanged];
-    
 }
 
 - (CGFloat) getCellHeightForValue:(id)value {
     BOOL boolValue = [value boolValue];
-    if (boolValue == NO) {
+    if (boolValue == YES) {
         return 162.0;
     } else {
         return 0;
@@ -64,8 +62,11 @@
 }
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
+    
     NSString *dateStr = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    _datePicker.date = [[self dateParseFormatter] dateFromString:dateStr];
+    if (dateStr != nil) {
+        _datePicker.date = [[self dateParseFormatter] dateFromString:dateStr];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

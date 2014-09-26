@@ -18,7 +18,7 @@
 	
     self = [super initWithFetchRequest:fetchRequest
                   managedObjectContext:context
-                    sectionNameKeyPath:nil
+                    sectionNameKeyPath:@"sectionIdentifier"
                              cacheName:nil];
     
     return self;

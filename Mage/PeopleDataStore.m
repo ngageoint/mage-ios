@@ -62,6 +62,16 @@
     return cell;
 }
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[_locationResultsController sections] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    id <NSFetchedResultsSectionInfo> theSection = [[_locationResultsController sections] objectAtIndex:section];
+    return [theSection name];
+}
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
     [self.tableView beginUpdates];
