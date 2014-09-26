@@ -1,8 +1,8 @@
 //
-//  ObservationSelectionDelegate.h
+//  ObservationItemSelectionDelegate.h
 //  MAGE
 //
-//  Created by William Newman on 9/23/14.
+//  Created by William Newman on 9/24/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 

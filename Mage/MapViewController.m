@@ -22,14 +22,11 @@
 #import "PersonViewController.h"
 #import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
-#import "MapFetchedResultsDelegate.h"
 #import "LocationFetchedResultsController.h"
 #import "ObservationFetchedResultsController.h"
 #import "MageRootViewController.h"
 
 @interface MapViewController ()
-    @property (nonatomic) IBOutlet MapDelegate *mapDelegate;
-    @property (nonatomic) IBOutlet MapFetchedResultsDelegate *mapFetchedResultsDelegate;
     @property (strong, nonatomic) LocationFetchedResultsController *locationResultsController;
     @property (strong, nonatomic) ObservationFetchedResultsController *observationResultsController;
 @end
@@ -42,7 +39,7 @@
 		return _observationResultsController;
 	}
     _observationResultsController = [[ObservationFetchedResultsController alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
-    [_observationResultsController setDelegate:self.mapFetchedResultsDelegate];
+    [_observationResultsController setDelegate:self.mapDelegate];
     return _observationResultsController;
 }
 
@@ -51,7 +48,7 @@
 		return _locationResultsController;
 	}
     _locationResultsController = [[LocationFetchedResultsController alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
-    [_locationResultsController setDelegate:self.mapFetchedResultsDelegate];
+    [_locationResultsController setDelegate:self.mapDelegate];
     return _locationResultsController;
 }
 
@@ -75,7 +72,7 @@
     }
 	
 	NSArray *locations = [self.locationResultsController fetchedObjects];
-	[self.mapFetchedResultsDelegate updateLocations:locations];
+	[self.mapDelegate updateLocations:locations];
     
     if (![[self observationResultsController] performFetch:&error]) {
         // Update to handle the error appropriately.
@@ -85,7 +82,7 @@
 	
 	NSArray *observations = [self.observationResultsController fetchedObjects];
     NSLog(@"we initially found %lu observations", (unsigned long)observations.count);
-	[self.mapFetchedResultsDelegate updateObservations:observations];
+	[self.mapDelegate updateObservations:observations];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -105,34 +102,12 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
-		User *user = nil;
-		if ([sender annotation] == _mapView.userLocation) {
-			user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
-		} else {
-			LocationAnnotation *annotation = [sender annotation];
-			user = annotation.location.user;
-		}
-		
 		PersonViewController *destinationViewController = segue.destinationViewController;
-		[destinationViewController setUser:user];
-		//[destinationViewController setManagedObjectContext:_managedObjectContext];
-
+		[destinationViewController setUser:sender];
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
-		ObservationAnnotation *annotation = [sender annotation];
-		
 		ObservationViewController *destinationViewController = segue.destinationViewController;
-		[destinationViewController setObservation:annotation.observation];
+		[destinationViewController setObservation:sender];
     }
-}
-
-- (void)selectedObservation:(Observation *) observation {
-    NSLog(@"selected observation");
-    
-    GeoPoint *point = (GeoPoint *) observation.geometry;
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(point.location.coordinate, 500, 500);
-    
-    // 3
-    [_mapView setRegion:viewRegion animated:YES];
 }
 
 @end

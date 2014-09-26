@@ -8,8 +8,12 @@
 
 #import "PeopleDataStore.h"
 #import "PersonTableViewCell.h"
-#import "Location.h"
+#import "Location+helper.h"
 #import "LocationFetchedResultsController.h"
+
+@interface PeopleDataStore ()
+    @property (strong, nonatomic) IBOutlet UIViewController *viewController;
+@end
 
 @implementation PeopleDataStore
 
@@ -104,6 +108,13 @@
 - (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
     [self.tableView endUpdates];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Location *location = [_locationResultsController objectAtIndexPath:indexPath];
+    if (self.personSelectionDelegate) {
+        [self.personSelectionDelegate selectedUser:location.user];
+    }
 }
 
 @end

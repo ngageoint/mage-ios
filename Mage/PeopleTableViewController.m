@@ -32,7 +32,6 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [self.peopleDataStore locationAtIndexPath:indexPath];
 		[destination setUser:location.user];
-//		[destination setManagedObjectContext:_managedObjectContext];
     }
 }
 
