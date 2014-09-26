@@ -11,7 +11,13 @@
 #import "MageEnums.h"
 #import "GeoPoint.h"
 #import "Attachment+helper.h"
+#import <NSDate+DateTools.h>
 
+@interface Observation ()
+
+@property (nonatomic) NSString *primitiveSectionIdentifier;
+
+@end
 
 @implementation Observation (helper)
 
@@ -133,6 +139,11 @@
     }];
     
     return operation;
+}
+
+- (NSString *)sectionIdentifier
+{
+    return [self timestamp].timeAgoSinceNow;
 }
 
 @end
