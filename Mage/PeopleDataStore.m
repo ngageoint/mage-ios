@@ -25,6 +25,9 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
+    
+    NSArray *results = [self.locationResultsController fetchedObjects];
+    NSLog(@"found %lu users", (unsigned long)results.count);
 }
 
 - (NSFetchedResultsController *) locationResultsController {

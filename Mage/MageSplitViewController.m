@@ -31,11 +31,11 @@
     MageTabBarController *tabBarController = (MageTabBarController *) [masterViewController topViewController];
     MapViewController *mapViewController = (MapViewController *) [detailViewController topViewController];
     
-    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [[tabBarController.viewControllers objectAtIndex:0] topViewController];
+    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [tabBarController.viewControllers objectAtIndex:0];
     observationTableViewController.observationDataStore.observationSelectionDelegate = mapViewController.mapDelegate;
     mapViewController.mapDelegate.mapObservationCalloutDelegate = tabBarController.observationCalloutDelegate;
     
-    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [[tabBarController.viewControllers objectAtIndex:1] topViewController];
+    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [tabBarController.viewControllers objectAtIndex:1];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = mapViewController.mapDelegate;
     mapViewController.mapDelegate.mapUserCalloutDelegate = tabBarController.userCalloutDelegate;
 

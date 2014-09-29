@@ -10,8 +10,9 @@
 #import "ObservationDataStore.h"
 #import "ManagedObjectContextHolder.h"
 
-@interface ObservationTableViewController : UITableViewController
+@interface ObservationTableViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (readwrite, strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
