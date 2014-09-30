@@ -14,6 +14,8 @@
 
 + (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
+-(CLLocation *) location;
+
 - (void) populateLocationFromJson:(NSArray *) locations;
 
 + (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
