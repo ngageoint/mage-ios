@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Attachment" representedClassName="Attachment" syncable="YES">
         <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dirty" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
@@ -57,10 +57,10 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="178"/>
+        <element name="GPSLocation" positionX="-2007" positionY="-882" width="128" height="88"/>
         <element name="Layer" positionX="-1998" positionY="-873" width="128" height="135"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="133"/>
-        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="223"/>
+        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="225"/>
         <element name="User" positionX="-1989" positionY="-918" width="128" height="150"/>
-        <element name="GPSLocation" positionX="-2007" positionY="-882" width="128" height="88"/>
     </elements>
 </model>
