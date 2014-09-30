@@ -8,9 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "ObservationSelectionDelegate.h"
+#import "UserSelectionDelegate.h"
+#import "MapCalloutDelegate.h"
 
-@interface MapDelegate : NSObject <MKMapViewDelegate>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
 
-@property (strong, nonatomic) IBOutlet UIViewController *viewController;
+@property (weak, nonatomic) IBOutlet MapCalloutDelegate *mapUserCalloutDelegate;
+@property (weak, nonatomic) IBOutlet MapCalloutDelegate *mapObservationCalloutDelegate;
+
+
+- (void) updateLocations:(NSArray *) locations;
+- (void) updateObservations:(NSArray *) observations;
 
 @end

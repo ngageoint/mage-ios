@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "ManagedObjectContextHolder.h"
+#import "MapDelegate.h"
 
 @interface MapViewController : UIViewController
 @property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (nonatomic) IBOutlet MapDelegate *mapDelegate;
 
 @end

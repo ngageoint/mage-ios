@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Observation.h"
 #import "ObservationTableViewCell.h"
 #import "ObservationFetchedResultsController.h"
 #import "ObservationSelectionDelegate.h"
@@ -19,7 +18,7 @@
 @property (strong, nonatomic) NSDictionary *form;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSString *variantField;
-@property (nonatomic, strong) IBOutlet id<ObservationSelectionDelegate> observationSelectionDelegate;
+@property (nonatomic, strong) id<ObservationSelectionDelegate> observationSelectionDelegate;
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView;

@@ -8,10 +8,12 @@
 
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
+#import "Observation+helper.h"
 #import "ObservationFetchedResultsController.h"
 #import <NSDate+DateTools.h>
 
 @interface ObservationDataStore ()
+    @property (strong, nonatomic) IBOutlet UIViewController *viewController;
 @end
 
 @implementation ObservationDataStore
@@ -147,6 +149,5 @@
         [self.observationSelectionDelegate selectedObservation:observation];
     }
 }
-
 
 @end

@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
-		2F87BF6819CC911600EE40BA /* MageRootViewController_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F87BF6719CC911600EE40BA /* MageRootViewController_ipad.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
+		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
+		2FFDDB0C19D603650012C6A7 /* MapCalloutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
@@ -34,7 +35,6 @@
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
-		F727516719C78238006C63CB /* MapFetchedResultsDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */; };
 		F727516A19C87B27006C63CB /* MapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516919C87B27006C63CB /* MapDelegate.m */; };
 		F727516E19C888DB006C63CB /* LocationFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* LocationFetchedResultsController.m */; };
 		F727517119C88CAE006C63CB /* ObservationFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* ObservationFetchedResultsController.m */; };
@@ -98,11 +98,14 @@
 /* Begin PBXFileReference section */
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
-		2F87BF6619CC911600EE40BA /* MageRootViewController_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageRootViewController_ipad.h; sourceTree = "<group>"; };
-		2F87BF6719CC911600EE40BA /* MageRootViewController_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageRootViewController_ipad.m; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
-		2FFDDB0319D1FA5C0012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
+		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
+		2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
+		2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageTabBarController.h; sourceTree = "<group>"; };
+		2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageTabBarController.m; sourceTree = "<group>"; };
+		2FFDDB0A19D603650012C6A7 /* MapCalloutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutDelegate.h; sourceTree = "<group>"; };
+		2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutDelegate.m; sourceTree = "<group>"; };
 		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
@@ -147,8 +150,6 @@
 		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
 		F725A9CA195CB819002A699C /* ObservationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotation.h; sourceTree = "<group>"; };
 		F725A9CB195CB819002A699C /* ObservationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotation.m; sourceTree = "<group>"; };
-		F727516519C78238006C63CB /* MapFetchedResultsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapFetchedResultsDelegate.h; sourceTree = "<group>"; };
-		F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapFetchedResultsDelegate.m; sourceTree = "<group>"; };
 		F727516819C87B27006C63CB /* MapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelegate.h; sourceTree = "<group>"; };
 		F727516919C87B27006C63CB /* MapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapDelegate.m; sourceTree = "<group>"; };
 		F727516C19C888DB006C63CB /* LocationFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchedResultsController.h; sourceTree = "<group>"; };
@@ -270,9 +271,10 @@
 			children = (
 				2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */,
 				2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */,
-				2F87BF6619CC911600EE40BA /* MageRootViewController_ipad.h */,
-				2F87BF6719CC911600EE40BA /* MageRootViewController_ipad.m */,
-				2FFDDB0319D1FA5C0012C6A7 /* ObservationSelectionDelegate.h */,
+				2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */,
+				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
+				2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */,
+				2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -303,10 +305,10 @@
 				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
 				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
-				F727516519C78238006C63CB /* MapFetchedResultsDelegate.h */,
-				F727516619C78238006C63CB /* MapFetchedResultsDelegate.m */,
 				F727516819C87B27006C63CB /* MapDelegate.h */,
 				F727516919C87B27006C63CB /* MapDelegate.m */,
+				2FFDDB0A19D603650012C6A7 /* MapCalloutDelegate.h */,
+				2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -668,8 +670,8 @@
 				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F727516E19C888DB006C63CB /* LocationFetchedResultsController.m in Sources */,
+				2FFDDB0C19D603650012C6A7 /* MapCalloutDelegate.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
-				2F87BF6819CC911600EE40BA /* MageRootViewController_ipad.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
@@ -679,6 +681,7 @@
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */,
+				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
