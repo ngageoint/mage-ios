@@ -10,13 +10,11 @@
 #import <MapKit/MapKit.h>
 #import "ObservationSelectionDelegate.h"
 #import "UserSelectionDelegate.h"
-#import "MapCalloutDelegate.h"
+#import "MapCalloutTappedSegueDelegate.h"
 
 @interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
 
-@property (weak, nonatomic) IBOutlet MapCalloutDelegate *mapUserCalloutDelegate;
-@property (weak, nonatomic) IBOutlet MapCalloutDelegate *mapObservationCalloutDelegate;
-
+@property (weak, nonatomic) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;

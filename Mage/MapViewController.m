@@ -56,14 +56,14 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults boolForKey:kReportLocationKey]) {
-        [_mapView setShowsUserLocation:YES];
-        [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-    } else {
-        [_mapView setShowsUserLocation:NO];
-        [_mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-    }
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    if ([defaults boolForKey:kReportLocationKey]) {
+//        [_mapView setShowsUserLocation:YES];
+//        [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+//    } else {
+//        [_mapView setShowsUserLocation:NO];
+//        [_mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+//    }
     
     NSError *error;
     if (![[self locationResultsController] performFetch:&error]) {
@@ -88,12 +88,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
     [super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

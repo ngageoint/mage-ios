@@ -78,15 +78,16 @@
 //}
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
+
 	if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == mapView.userLocation) {
-        if (self.mapUserCalloutDelegate) {
+        if (self.mapCalloutDelegate) {
             LocationAnnotation *annotation = view.annotation;
-            [self.mapUserCalloutDelegate calloutTapped:annotation.location.user];
+            [self.mapCalloutDelegate calloutTapped:annotation.location.user];
         }
 	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
-        if (self.mapObservationCalloutDelegate) {
+        if (self.mapCalloutDelegate) {
             ObservationAnnotation *annotation = view.annotation;
-            [self.mapObservationCalloutDelegate calloutTapped:annotation.observation];
+            [self.mapCalloutDelegate calloutTapped:annotation.observation];
         }
 	}
 }

@@ -1,16 +1,16 @@
 //
-//  MapCalloutDelegate.m
+//  MapCalloutTappedDelegate_iPhone.m
 //  MAGE
 //
-//  Created by William Newman on 9/26/14.
+//  Created by William Newman on 10/2/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "MapCalloutDelegate.h"
-#import "User+helper.h"
-#import "Observation+helper.h"
+#import "MapCalloutTappedSegueDelegate.h"
+#import "User.h"
+#import "observation.h"
 
-@implementation MapCalloutDelegate
+@implementation MapCalloutTappedSegueDelegate
 
 -(void) calloutTapped:(id) calloutItem {
     [self.viewController performSegueWithIdentifier:self.segueIdentifier sender:calloutItem];

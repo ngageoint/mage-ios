@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
+		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
+		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
+		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
-		2FFDDB0C19D603650012C6A7 /* MapCalloutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
@@ -100,14 +102,19 @@
 /* Begin PBXFileReference section */
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
+		2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedSegueDelegate.h; sourceTree = "<group>"; };
+		2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedSegueDelegate.m; sourceTree = "<group>"; };
+		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
+		2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedDelegate_iPhone.h; sourceTree = "<group>"; };
+		2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedDelegate_iPhone.m; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
+		2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController_iPad.h; sourceTree = "<group>"; };
+		2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController_iPad.m; sourceTree = "<group>"; };
 		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageTabBarController.h; sourceTree = "<group>"; };
 		2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageTabBarController.m; sourceTree = "<group>"; };
-		2FFDDB0A19D603650012C6A7 /* MapCalloutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutDelegate.h; sourceTree = "<group>"; };
-		2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutDelegate.m; sourceTree = "<group>"; };
 		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
@@ -272,6 +279,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F5F2E9819DDE87D005BA157 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */,
+				2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */,
+			);
+			name = iPhone;
+			sourceTree = "<group>";
+		};
 		2FE24CDB19C79B850019688B /* iPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +297,15 @@
 				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
 				2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */,
 				2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */,
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
+		2FFBCA0E19DB43C80033132F /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */,
+				2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -305,6 +330,8 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				2F5F2E9819DDE87D005BA157 /* iPhone */,
+				2FFBCA0E19DB43C80033132F /* iPad */,
 				F7531EF819100E7D00CA084C /* MapViewController.h */,
 				F7531EF919100E7D00CA084C /* MapViewController.m */,
 				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
@@ -313,8 +340,9 @@
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
 				F727516819C87B27006C63CB /* MapDelegate.h */,
 				F727516919C87B27006C63CB /* MapDelegate.m */,
-				2FFDDB0A19D603650012C6A7 /* MapCalloutDelegate.h */,
-				2FFDDB0B19D603650012C6A7 /* MapCalloutDelegate.m */,
+				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
+				2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */,
+				2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -677,12 +705,13 @@
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */,
+				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F727516E19C888DB006C63CB /* LocationFetchedResultsController.m in Sources */,
-				2FFDDB0C19D603650012C6A7 /* MapCalloutDelegate.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
+				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
@@ -698,6 +727,7 @@
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
+				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
