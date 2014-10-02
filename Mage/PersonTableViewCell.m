@@ -13,18 +13,6 @@
 
 @implementation PersonTableViewCell
 
-- (void) layoutSubviews {
-    UIView *view = [[UIView alloc] initWithFrame:self.bounds];
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = view.bounds;
-	gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor colorWithRed:207/255.0 green:207/255.0 blue:207/255.0 alpha:51/255.0] CGColor], nil];
-	
-	[self setBackgroundView:[[UIView alloc] init]];
-	[self.backgroundView.layer insertSublayer:gradient atIndex:0];
-	
-	[super layoutSubviews];
-}
-
 - (id) populateCellWithUser:(User *) user {
 	[self.icon setImage:[PersonImage imageForLocation:user.location]];
 	self.name.text = user.name;
