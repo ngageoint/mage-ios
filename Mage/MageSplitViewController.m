@@ -9,13 +9,18 @@
 #import "MageSplitViewController.h"
 #import "UserUtility.h"
 #import "HttpManager.h"
-#import "MapViewController.h"
+#import "MapViewController_iPad.h"
 #import "MageTabBarController.h"
 #import "ObservationTableViewController.h"
 #import "PeopleTableViewController.h"
+#import "MapCalloutTappedSegueDelegate.h"
 
-@interface MageSplitViewController ()
-
+@interface MageSplitViewController () <MapCalloutTapped>
+    @property(nonatomic, weak) MageTabBarController *tabBarController;
+    @property(nonatomic, weak) MapViewController_iPad *mapViewController;
+    @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
+    @property(nonatomic, weak) UIPopoverController *masterViewPopover;
+    @property(nonatomic, strong) NSArray *mapCalloutDelegates;
 @end
 
 @implementation MageSplitViewController
@@ -25,24 +30,24 @@
     
     [self startServices];
     
+    self.delegate = self;
+    
     UINavigationController *masterViewController = [self.viewControllers firstObject];
-    UINavigationController *detailViewController = [self.viewControllers lastObject];
+    self.mapViewController = [self.viewControllers lastObject];
+    self.tabBarController = (MageTabBarController *) [masterViewController topViewController];
     
-    MageTabBarController *tabBarController = (MageTabBarController *) [masterViewController topViewController];
-    MapViewController *mapViewController = (MapViewController *) [detailViewController topViewController];
+    self.mapViewController.mapDelegate.mapCalloutDelegate = self;
     
-    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [tabBarController.viewControllers objectAtIndex:0];
-    observationTableViewController.observationDataStore.observationSelectionDelegate = mapViewController.mapDelegate;
-    mapViewController.mapDelegate.mapObservationCalloutDelegate = tabBarController.observationCalloutDelegate;
+    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
+    observationTableViewController.observationDataStore.observationSelectionDelegate = self.mapViewController.mapDelegate;
     
-    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [tabBarController.viewControllers objectAtIndex:1];
-    peopleTableViewController.peopleDataStore.personSelectionDelegate = mapViewController.mapDelegate;
-    mapViewController.mapDelegate.mapUserCalloutDelegate = tabBarController.userCalloutDelegate;
+    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
+    peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController.mapDelegate;
 
-    UITabBarItem *observationsTabBar = [[[tabBarController tabBar] items] objectAtIndex:0];
+    UITabBarItem *observationsTabBar = [[[self.tabBarController tabBar] items] objectAtIndex:0];
     [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
     
-    UITabBarItem *peopleTabBar = [[[tabBarController tabBar] items] objectAtIndex:1];
+    UITabBarItem *peopleTabBar = [[[self.tabBarController tabBar] items] objectAtIndex:1];
     [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
 }
 
@@ -74,14 +79,42 @@
     [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
 }
 
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void) calloutTapped:(id) calloutItem {
+    if ([calloutItem isKindOfClass:[User class]]) {
+        [self.tabBarController.userMapCalloutTappedDelegate calloutTapped:calloutItem];
+    } else if ([calloutItem isKindOfClass:[Observation class]]) {
+        [self.tabBarController.observationMapCalloutTappedDelegate calloutTapped:calloutItem];
+    }
+    
+    if (self.masterViewButton && self.masterViewPopover) {
+        [self.masterViewPopover presentPopoverFromBarButtonItem:self.masterViewButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
 }
 
+-(void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *) button {
+    self.masterViewButton = nil;
+    self.masterViewPopover = nil;
+    
+    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
+    [items removeObject:button];
+    [self.mapViewController.toolbar setItems:items];
+}
+
+
+-(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)button forPopoverController:(UIPopoverController *) pc {
+    self.masterViewButton = button;
+    self.masterViewPopover = pc;
+    
+    button.image = [UIImage imageNamed:@"bars"];
+    
+    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
+    if (!items) {
+        items = [NSMutableArray arrayWithObject:button];
+    } else {
+        [items insertObject:button atIndex:0];
+    }
+    
+    [self.mapViewController.toolbar setItems:items];
+}
 
 @end

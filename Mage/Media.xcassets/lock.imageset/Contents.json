@@ -10,6 +10,10 @@
       "filename" : "lock.png"
     },
     {
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
       "idiom" : "iphone",
       "scale" : "1x"
     },
@@ -21,6 +25,10 @@
       "idiom" : "iphone",
       "subtype" : "retina4",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x"
     },
     {
       "idiom" : "ipad",

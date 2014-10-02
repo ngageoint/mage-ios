@@ -12,8 +12,8 @@
 #import "MapDelegate.h"
 
 @interface MapViewController : UIViewController
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic) IBOutlet MapDelegate *mapDelegate;
+@property (nonatomic, weak) IBOutlet ManagedObjectContextHolder *contextHolder;
+@property (nonatomic, weak) IBOutlet MKMapView *mapView;
+@property (nonatomic, weak) IBOutlet MapDelegate *mapDelegate;
 
 @end
