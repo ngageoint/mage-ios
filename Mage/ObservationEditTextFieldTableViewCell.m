@@ -11,7 +11,6 @@
 @implementation ObservationEditTextFieldTableViewCell
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    NSLog(@"field name: %@, observation properties for field name: %@", (NSString *)[field objectForKey:@"name"], [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]);
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
     [self.textField setText:value];
     [self.keyLabel setText:[field objectForKey:@"title"]];
