@@ -220,8 +220,8 @@
     }
 }
 
-- (void)selectedUser:(User *) user {    
-    [self.mapView setRegion:MKCoordinateRegionMakeWithDistance([user.location location].coordinate, 5000, 5000) animated:YES];
+- (void)selectedUser:(User *) user {
+    [self.mapView setCenterCoordinate:[user.location location].coordinate];
     
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     [self.mapView selectAnnotation:annotation animated:YES];
