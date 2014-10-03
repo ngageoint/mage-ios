@@ -35,14 +35,15 @@ NSInteger expandedRow = -1;
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
+        [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
         [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
         [fields addObject:field];
         if ([type isEqualToString:@"date"]) {
             [cells addObject:@"observationEdit-dateSpinner"];
             [fields addObject:field];
-            [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:field];
         }
     }
+    _fieldToRow = fieldToRowMap;
     _rowToCellType = cells;
     _rowToField = fields;
     
@@ -126,14 +127,12 @@ NSInteger expandedRow = -1;
     self.observation.properties = newProperties;
     
     if (reload == YES) {
-        NSInteger row = [[[self fieldToRow] objectForKey:field] integerValue];
+        NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
         [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
     }
     
     [self.editTable endUpdates];
-//
-//    [self.editTable reloadData];    
 }
 
 

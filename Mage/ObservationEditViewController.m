@@ -59,13 +59,16 @@
 
 - (IBAction)unwindFromDropdownController: (UIStoryboardSegue *) segue {
     DropdownEditTableViewController *vc = [segue sourceViewController];
-    NSString *fieldKey = (NSString *)[vc.fieldDefinition objectForKey:@"name"];
-    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
-    [newProperties setObject:vc.value forKey:fieldKey];
-    _observation.properties = newProperties;
+    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
     
-    [self.editDataStore.editTable reloadData];
-    NSLog(@"choose %@", vc.value);
+//    
+//    NSString *fieldKey = (NSString *)[vc.fieldDefinition objectForKey:@"name"];
+//    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
+//    [newProperties setObject:vc.value forKey:fieldKey];
+//    _observation.properties = newProperties;
+//    
+//    [self.editDataStore.editTable reloadData];
+//    NSLog(@"choose %@", vc.value);
     
 }
 
