@@ -35,12 +35,14 @@ NSInteger expandedRow = -1;
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
-        [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
-        [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
-        [fields addObject:field];
-        if ([type isEqualToString:@"date"]) {
-            [cells addObject:@"observationEdit-dateSpinner"];
+        if (![type isEqualToString:@"hidden"]) {
+            [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
+            [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
             [fields addObject:field];
+            if ([type isEqualToString:@"date"]) {
+                [cells addObject:@"observationEdit-dateSpinner"];
+                [fields addObject:field];
+            }
         }
     }
     _fieldToRow = fieldToRowMap;
