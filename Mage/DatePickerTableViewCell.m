@@ -78,8 +78,8 @@
 
 - (void) pickerDateChanged: (id) sender {
     NSString *newValue = [[self dateParseFormatter] stringFromDate:_datePicker.date];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+        [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:YES];
     }
 
 }

@@ -19,6 +19,7 @@
 
 NSArray *_rowToCellType;
 NSArray *_rowToField;
+NSDictionary *_fieldToRow;
 NSInteger expandedRow = -1;
 
 - (NSArray *)rowToCellType {
@@ -30,6 +31,7 @@ NSInteger expandedRow = -1;
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];
+    NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
@@ -38,6 +40,7 @@ NSInteger expandedRow = -1;
         if ([type isEqualToString:@"date"]) {
             [cells addObject:@"observationEdit-dateSpinner"];
             [fields addObject:field];
+            [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:field];
         }
     }
     _rowToCellType = cells;
@@ -52,6 +55,13 @@ NSInteger expandedRow = -1;
     }
     [self rowToCellType];
     return _rowToField;
+}
+
+- (NSDictionary *) fieldToRow {
+    if (_fieldToRow != nil) {
+        return _fieldToRow;
+    }
+    return [[NSDictionary alloc] init];
 }
 
 - (id) valueForIndexPath: (NSIndexPath *) indexPath {
@@ -107,13 +117,20 @@ NSInteger expandedRow = -1;
     [tableView endUpdates];
 }
 
-- (void) observationField:(id)field valueChangedTo:(id)value {
+- (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     [self.editTable beginUpdates];
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
     NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
     [newProperties setObject:value forKey:fieldKey];
     self.observation.properties = newProperties;
+    
+    if (reload == YES) {
+        NSInteger row = [[[self fieldToRow] objectForKey:field] integerValue];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
+        [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+    }
+    
     [self.editTable endUpdates];
 //
 //    [self.editTable reloadData];    

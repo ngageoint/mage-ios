@@ -28,7 +28,7 @@
 
 - (void) textViewDidChange:(UITextView *)textView {
     
-    [self.delegate observationField:self.fieldDefinition valueChangedTo:textView.text];
+    [self.delegate observationField:self.fieldDefinition valueChangedTo:textView.text reloadCell:NO];
 }
 
 
