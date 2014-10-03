@@ -20,6 +20,7 @@
 - (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
     self.managedObjectContext = managedObjectContext;
     self.locations = [Locations locationsForAllUsersInManagedObjectContext:self.managedObjectContext];
+    self.locations.delegate = self;
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
@@ -27,9 +28,6 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
-    
-    NSArray *results = [self.locations.fetchedResultsController fetchedObjects];
-    NSLog(@"found %lu users", (unsigned long)results.count);
 }
 
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath {

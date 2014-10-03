@@ -11,7 +11,7 @@
 @interface Observations : NSObject
 
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
-@property(nonatomic, assign) IBOutlet id< NSFetchedResultsControllerDelegate > delegate;
+@property(nonatomic, assign) id< NSFetchedResultsControllerDelegate > delegate;
 
 + (id) observationsInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 

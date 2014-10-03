@@ -28,10 +28,13 @@
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController {
     if (self = [super init]) {
         self.fetchedResultsController = fetchedResultsController;
-        self.delegate = self.fetchedResultsController.delegate;
     }
     
     return self;
+}
+
+-(void) setDelegate:(id<NSFetchedResultsControllerDelegate>)delegate {
+    self.fetchedResultsController.delegate = delegate;
 }
 
 @end

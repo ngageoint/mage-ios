@@ -34,7 +34,6 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
 		[destination setObservation:observation];
-        
     }
 }
 
