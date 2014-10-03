@@ -24,6 +24,7 @@
 
 - (void) setLocations:(Locations *)locations {
     _locations = locations;
+    _locations.delegate = self;
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
@@ -37,6 +38,7 @@
 
 - (void) setObservations:(Observations *)observations {
     _observations = observations;
+    _observations.delegate = self;
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
