@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LocationFetchedResultsController.h"
+#import "Locations.h"
 #import "PeopleDataStore.h"
 #import "ManagedObjectContextHolder.h"
 

@@ -38,8 +38,8 @@
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
 		F727516A19C87B27006C63CB /* MapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516919C87B27006C63CB /* MapDelegate.m */; };
-		F727516E19C888DB006C63CB /* LocationFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* LocationFetchedResultsController.m */; };
-		F727517119C88CAE006C63CB /* ObservationFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* ObservationFetchedResultsController.m */; };
+		F727516E19C888DB006C63CB /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* Locations.m */; };
+		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* PeopleDataStore.m */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */; };
@@ -159,10 +159,10 @@
 		F725A9CB195CB819002A699C /* ObservationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotation.m; sourceTree = "<group>"; };
 		F727516819C87B27006C63CB /* MapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelegate.h; sourceTree = "<group>"; };
 		F727516919C87B27006C63CB /* MapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapDelegate.m; sourceTree = "<group>"; };
-		F727516C19C888DB006C63CB /* LocationFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchedResultsController.h; sourceTree = "<group>"; };
-		F727516D19C888DB006C63CB /* LocationFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchedResultsController.m; sourceTree = "<group>"; };
-		F727516F19C88CAE006C63CB /* ObservationFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchedResultsController.h; sourceTree = "<group>"; };
-		F727517019C88CAE006C63CB /* ObservationFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchedResultsController.m; sourceTree = "<group>"; };
+		F727516C19C888DB006C63CB /* Locations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locations.h; sourceTree = "<group>"; };
+		F727516D19C888DB006C63CB /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
+		F727516F19C88CAE006C63CB /* Observations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observations.h; sourceTree = "<group>"; };
+		F727517019C88CAE006C63CB /* Observations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observations.m; sourceTree = "<group>"; };
 		F727517519C895CA006C63CB /* PeopleDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleDataStore.h; sourceTree = "<group>"; };
 		F727517619C895CA006C63CB /* PeopleDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleDataStore.m; sourceTree = "<group>"; };
 		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
@@ -392,15 +392,15 @@
 			name = Observation;
 			sourceTree = "<group>";
 		};
-		F727516B19C888A3006C63CB /* Fetch Controllers */ = {
+		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
-				F727516C19C888DB006C63CB /* LocationFetchedResultsController.h */,
-				F727516D19C888DB006C63CB /* LocationFetchedResultsController.m */,
-				F727516F19C88CAE006C63CB /* ObservationFetchedResultsController.h */,
-				F727517019C88CAE006C63CB /* ObservationFetchedResultsController.m */,
+				F727516C19C888DB006C63CB /* Locations.h */,
+				F727516D19C888DB006C63CB /* Locations.m */,
+				F727516F19C88CAE006C63CB /* Observations.h */,
+				F727517019C88CAE006C63CB /* Observations.m */,
 			);
-			name = "Fetch Controllers";
+			name = Fetch;
 			sourceTree = "<group>";
 		};
 		F7481F0219A663B100E9C56D /* Edit */ = {
@@ -472,7 +472,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
-				F727516B19C888A3006C63CB /* Fetch Controllers */,
+				F727516B19C888A3006C63CB /* Fetch */,
 				2FE24CDB19C79B850019688B /* iPad */,
 				4C6A9BBD19813C64004A6205 /* Settings */,
 				F70E6EE719781585002D66F6 /* Observation */,
@@ -698,7 +698,7 @@
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
-				F727516E19C888DB006C63CB /* LocationFetchedResultsController.m in Sources */,
+				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
@@ -724,7 +724,7 @@
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
-				F727517119C88CAE006C63CB /* ObservationFetchedResultsController.m in Sources */,
+				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,

@@ -22,6 +22,32 @@
 
 @implementation MapDelegate
 
+- (void) setLocations:(Locations *)locations {
+    _locations = locations;
+    
+    NSError *error;
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+    
+    [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
+}
+
+- (void) setObservations:(Observations *)observations {
+    _observations = observations;
+    
+    NSError *error;
+    if (![self.observations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+
+    [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
@@ -194,7 +220,7 @@
     }
 }
 
-- (void)selectedUser:(User *) user {
+- (void)selectedUser:(User *) user {    
     [self.mapView setRegion:MKCoordinateRegionMakeWithDistance([user.location location].coordinate, 5000, 5000) animated:YES];
     
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];

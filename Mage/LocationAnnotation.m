@@ -31,4 +31,8 @@
 	_coordinate = coordinate;
 }
 
+-(void) setLocation:(Location *)location {
+    self.location = location;
+}
+
 @end

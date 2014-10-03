@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "ObservationTableViewCell.h"
-#import "ObservationFetchedResultsController.h"
+#import "Observations.h"
 #import "ObservationSelectionDelegate.h"
 
 @interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) ObservationFetchedResultsController *observationResultsController;
+@property (strong, nonatomic) Observations *observations;
 @property (strong, nonatomic) NSDictionary *form;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSString *variantField;

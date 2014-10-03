@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "Location.h"
 #import "PersonTableViewCell.h"
-#import "LocationFetchedResultsController.h"
+#import "Locations.h"
 #import "UserSelectionDelegate.h"
 
 @interface PeopleDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) LocationFetchedResultsController *locationResultsController;
+@property (strong, nonatomic) Locations *locations;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) id<UserSelectionDelegate> personSelectionDelegate;
 

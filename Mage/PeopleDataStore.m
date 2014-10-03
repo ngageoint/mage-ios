@@ -9,7 +9,7 @@
 #import "PeopleDataStore.h"
 #import "PersonTableViewCell.h"
 #import "Location+helper.h"
-#import "LocationFetchedResultsController.h"
+#import "Locations.h"
 
 @interface PeopleDataStore ()
     @property (strong, nonatomic) IBOutlet UIViewController *viewController;
@@ -19,40 +19,32 @@
 
 - (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
     self.managedObjectContext = managedObjectContext;
+    self.locations = [Locations locationsForAllUsersInManagedObjectContext:self.managedObjectContext];
+    
     NSError *error;
-    if (![[self locationResultsController] performFetch:&error]) {
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
     
-    NSArray *results = [self.locationResultsController fetchedObjects];
+    NSArray *results = [self.locations.fetchedResultsController fetchedObjects];
     NSLog(@"found %lu users", (unsigned long)results.count);
 }
 
-- (NSFetchedResultsController *) locationResultsController {
-    
-    if (_locationResultsController != nil) {
-        return _locationResultsController;
-    }
-    _locationResultsController = [[LocationFetchedResultsController alloc] initWithManagedObjectContext:_managedObjectContext];
-    [_locationResultsController setDelegate:self];
-    return _locationResultsController;
-}
-
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath {
-    return [_locationResultsController objectAtIndexPath:indexPath];
+    return [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id  sectionInfo = [[_locationResultsController sections] objectAtIndex:section];
+    id  sectionInfo = [[self.locations.fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
 }
 
 - (void) configureCell:(UITableViewCell *) cell atIndexPath:(NSIndexPath *)indexPath {
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
 	
-	Location *location = [_locationResultsController objectAtIndexPath:indexPath];
+	Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
 	[personCell populateCellWithUser:location.user];
 }
 
@@ -66,12 +58,12 @@
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[_locationResultsController sections] count];
+    return [[self.locations.fetchedResultsController sections] count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> theSection = [[_locationResultsController sections] objectAtIndex:section];
+    id <NSFetchedResultsSectionInfo> theSection = [[self.locations.fetchedResultsController sections] objectAtIndex:section];
     return [theSection name];
 }
 
@@ -124,7 +116,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Location *location = [_locationResultsController objectAtIndexPath:indexPath];
+    Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
     if (self.personSelectionDelegate) {
         [self.personSelectionDelegate selectedUser:location.user];
     }
