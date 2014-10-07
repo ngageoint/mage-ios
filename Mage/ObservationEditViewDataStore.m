@@ -8,11 +8,14 @@
 
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
+#import "ManagedObjectContextHolder.h"
 
 @interface ObservationEditViewDataStore ()
 
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
+@property (nonatomic, strong) IBOutlet ManagedObjectContextHolder *contextHolder;
+
 @end
 
 @implementation ObservationEditViewDataStore
@@ -135,6 +138,17 @@ NSInteger expandedRow = -1;
     }
     
     [self.editTable endUpdates];
+}
+
+- (void) saveObservation {
+    NSError *error = nil;
+    if (![self.observation.managedObjectContext save:&error]) {
+        
+    }
+}
+
+- (void) discaredChanges {
+    [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
 }
 
 
