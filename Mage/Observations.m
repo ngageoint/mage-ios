@@ -14,11 +14,11 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:managedObjectContext]];
     // TODO look at this, I think we changed Android to timestamp or something
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp.timeAgoSinceNow" ascending:NO], [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
     
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                   managedObjectContext:managedObjectContext
-                    sectionNameKeyPath:@"timestamp.timeAgoSinceNow"
+                    sectionNameKeyPath:@"sectionName"
                              cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];

@@ -42,6 +42,7 @@
     
     NSString *timestamp = [observation.properties objectForKey:@"timestamp"];
     NSDateFormatter *dateFormat = [NSDateFormatter new];
+    dateFormat.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     // Always use this locale when parsing fixed format date strings
     NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];

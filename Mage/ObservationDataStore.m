@@ -14,9 +14,34 @@
 
 @interface ObservationDataStore ()
     @property (strong, nonatomic) IBOutlet UIViewController *viewController;
+    @property (nonatomic) NSDateFormatter *dateFormatter;
+    @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
 
 @implementation ObservationDataStore
+
+- (NSDateFormatter *) dateFormatter {
+    if (_dateFormatter == nil) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.dateStyle = kCFDateFormatterLongStyle;
+        _dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+
+    }
+    
+    return _dateFormatter;
+    
+}
+
+- (NSDateFormatter *) dateFormatterToDate {
+    if (_dateFormatterToDate == nil) {
+        _dateFormatterToDate = [[NSDateFormatter alloc] init];
+        _dateFormatterToDate.dateFormat = @"yyyy-MM-dd";
+        _dateFormatterToDate.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    }
+    
+    return _dateFormatterToDate;
+    
+}
 
 - (id) init {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -74,7 +99,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> theSection = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-    return [theSection name];
+    NSString *s = [theSection name];
+    NSDate *date = [self.dateFormatterToDate dateFromString:s];
+    return [self.dateFormatter stringFromDate:date];
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
