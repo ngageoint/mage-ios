@@ -46,6 +46,7 @@ NSDictionary *_fieldNameToField;
     [self setProperties:[self generatePropertiesFromRaw:properties]];
     
     NSDateFormatter *dateFormat = [NSDateFormatter new];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     // Always use this locale when parsing fixed format date strings
     NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
@@ -92,6 +93,13 @@ NSDictionary *_fieldNameToField;
     return point.location;
 }
 
+- (NSString *) sectionName {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    
+    return [dateFormatter stringFromDate:self.timestamp];
+}
+
 + (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
     [observation populateObjectFromJson:json inManagedObjectContext: context];
@@ -107,9 +115,15 @@ NSDictionary *_fieldNameToField;
     NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", serverUrl, layerId];
     NSLog(@"Fetching from layer %@", layerId);
     
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    __block NSDate *lastObservationDate = [defaults objectForKey:@"lastObservationDate"];
+    if (lastObservationDate != nil) {
+        [parameters setObject:lastObservationDate forKey:@"startDate"];
+    }
+    
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: parameters error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Observation request complete");
         NSArray *features = [responseObject objectForKey:@"features"];
@@ -158,12 +172,19 @@ NSDictionary *_fieldNameToField;
                 }
                 NSLog(@"Updating object with id: %@", o.remoteId);
             }
+            
+            if ([o.timestamp isLaterThan:lastObservationDate]) {
+                lastObservationDate = o.timestamp;
+            }
         }
         
         NSError *error = nil;
         if (! [context save:&error]) {
             NSLog(@"Error inserting Observation: %@", error);
         }
+        
+        [defaults setObject:lastObservationDate forKey:@"lastObservationDate"];
+        [defaults synchronize];
         
         complete(YES);
         
