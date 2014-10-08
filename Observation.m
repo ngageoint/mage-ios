@@ -10,7 +10,6 @@
 #import "Attachment.h"
 #import "User.h"
 
-
 @implementation Observation
 
 @dynamic deviceId;
