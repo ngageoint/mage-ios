@@ -10,7 +10,7 @@
 #import <Observation.h>
 #import "ObservationEditListener.h"
 
-@interface ObservationEditTableViewCell : UITableViewCell
+@interface ObservationEditTableViewCell : UITableViewCell <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;

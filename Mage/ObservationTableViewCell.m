@@ -22,15 +22,6 @@
     return self;
 }
 
-- (void)awakeFromNib
-{
-    UIView *view = [[UIView alloc] initWithFrame:self.frame];
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = view.bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor colorWithRed:207/255.0 green:207/255.0 blue:207/255.0 alpha:51/255.0] CGColor], nil];
-    [self.layer insertSublayer:gradient atIndex:0];
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -51,6 +42,7 @@
     
     NSString *timestamp = [observation.properties objectForKey:@"timestamp"];
     NSDateFormatter *dateFormat = [NSDateFormatter new];
+    dateFormat.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     // Always use this locale when parsing fixed format date strings
     NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];

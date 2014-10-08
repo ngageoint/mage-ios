@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "RESideMenu.h"
+#import "ManagedObjectContextHolder.h"
+#import "MapDelegate.h"
+#import "Locations.h"
+#import "Observations.h"
 
-@interface MapViewController : UIViewController<MKMapViewDelegate, NSFetchedResultsControllerDelegate>
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) NSFetchedResultsController *locationResultsController;
-@property (strong, nonatomic) NSFetchedResultsController *observationResultsController;
+@interface MapViewController : UIViewController
+@property (nonatomic, weak) IBOutlet ManagedObjectContextHolder *contextHolder;
+@property (nonatomic, weak) IBOutlet MKMapView *mapView;
+@property (nonatomic, weak) IBOutlet MapDelegate *mapDelegate;
 
 @end

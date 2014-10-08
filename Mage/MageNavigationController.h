@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ManagedObjectContextHolder.h"
 
 @interface MageNavigationController : UINavigationController
-
-@property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

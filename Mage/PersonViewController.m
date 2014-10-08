@@ -38,14 +38,14 @@
 	}
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:_managedObjectContext]];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:self.contextHolder.managedObjectContext]];
 	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@", _user.remoteId];
 	[fetchRequest setPredicate:predicate];
 	
 	_observationResultsController = [[NSFetchedResultsController alloc]
 									 initWithFetchRequest:fetchRequest
-									 managedObjectContext:_managedObjectContext
+									 managedObjectContext:self.contextHolder.managedObjectContext
 									 sectionNameKeyPath:nil
 									 cacheName:nil];
 	
@@ -111,6 +111,11 @@
 	NSArray *observations = [[self observationResultsController] fetchedObjects];
 	NSLog(@"Got observations %lu", (unsigned long)[observations count]);
 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
 }
 
 - (void) viewDidAppear:(BOOL)animated {

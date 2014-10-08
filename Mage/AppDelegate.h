@@ -11,7 +11,6 @@
 #import <LocationFetchService.h>
 #import <ObservationFetchService.h>
 
-
 @interface AppDelegate : UIResponder <UIApplicationDelegate, FICImageCacheDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

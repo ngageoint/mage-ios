@@ -34,7 +34,6 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     [self.keyLabel setText:[field objectForKey:@"title"]];
     self.valueTextField.text = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    NSLog(@"field name: %@, observation properties for field name: %@", (NSString *)[field objectForKey:@"name"], [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]);
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {

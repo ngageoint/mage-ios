@@ -31,16 +31,6 @@ id<Authentication> _authentication;
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSString *segueIdentifier = [segue identifier];
-    if ([segueIdentifier isEqualToString:@"LoginSegue"]) {
-        MageRootViewController *rootViewController = [segue destinationViewController];
-		rootViewController.managedObjectContext = self.managedObjectContext;
-        [rootViewController setLocationFetchService:_locationFetchService];
-        [rootViewController setObservationFetchService:_observationFetchService];
-    }
-}
-
 - (void) authenticationHadFailure {
 	// do something on failed login
 	UIAlertView *alert = [[UIAlertView alloc]
@@ -101,7 +91,7 @@ id<Authentication> _authentication;
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
 		NSURL *url = [NSURL URLWithString:_serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:_managedObjectContext];
+		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.contextHolder.managedObjectContext];
 		_authentication.delegate = self;
 		
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -118,18 +108,6 @@ id<Authentication> _authentication;
 		[sender resignFirstResponder];
 		[self verifyLogin];
 	}
-}
-
-- (IBAction)characterTypedInLoginFields:(id)sender {
-    if (([[_usernameField text] length] != 0) && ([[_passwordField text] length] != 0)) {
-        [_usernameField setReturnKeyType:UIReturnKeyGo];
-        [_passwordField setReturnKeyType:UIReturnKeyGo];
-        [sender reloadInputViews];
-    } else {
-        [_usernameField setReturnKeyType:UIReturnKeyNext];
-        [_passwordField setReturnKeyType:UIReturnKeyNext];
-        [sender reloadInputViews];
-    }
 }
 
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -152,20 +130,7 @@ id<Authentication> _authentication;
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
-    NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
-    
-    CGGradientRef gradient;
-    gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, NULL);
-    CGPoint startPoint;
-    startPoint.x = self.view.frame.size.width/2;
-    startPoint.y = self.view.frame.size.height/2;
-    UIGraphicsBeginImageContext(self.view.bounds.size);
-    CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, startPoint, 0, startPoint, 5000, 0);
-    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    UIImageView *gradientView = [[UIImageView alloc] initWithFrame:self.view.frame];
-    gradientView.image = gradientImage;
-    [self.view insertSubview:gradientView atIndex:0];
+
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSURL *url = [defaults URLForKey:@"serverUrl"];
 	NSString *urlText = url != nil ? [url absoluteString] : @"";
@@ -177,7 +142,7 @@ id<Authentication> _authentication;
 	
 	_authentication = [Authentication
 					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
-					   inManagedObjectContext:self.managedObjectContext];
+					   inManagedObjectContext:self.contextHolder.managedObjectContext];
 	_authentication.delegate = self;
     
 }
@@ -207,20 +172,17 @@ id<Authentication> _authentication;
 		[textField resignFirstResponder];
 	} else {
 		textField.text = updatedString;
-        [self characterTypedInLoginFields:textField];
 	}
     
     return NO;
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
-//	[self resignAndLogin:textField];
 	return YES;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

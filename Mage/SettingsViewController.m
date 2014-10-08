@@ -16,6 +16,8 @@
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
     @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
     @property (weak, nonatomic) IBOutlet UILabel *user;
+    @property (weak, nonatomic) IBOutlet UILabel *serverUrlLabel;
+    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
@@ -30,14 +32,19 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
     
-    User *user = [User fetchCurrentUserForManagedObjectContext:_managedObjectContext];
+    self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    
+    User *user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
     _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.serverUrlLabel.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
+    
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
     } else {
@@ -45,6 +52,11 @@
     }
     
     [self setPreferenceDisplayLabel:_imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (void) setLocationServicesLabel {

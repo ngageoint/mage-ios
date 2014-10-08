@@ -48,12 +48,12 @@ AVPlayer *player;
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    // TODO tmp until we get edit working
     [self.editButton setEnabled:NO];
-	
+    
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
 
-	[_mapView setDelegate:self];
 	CLLocationDistance latitudeMeters = 500;
 	CLLocationDistance longitudeMeters = 500;
 	GeoPoint *point = _observation.geometry;
@@ -82,6 +82,11 @@ AVPlayer *player;
 	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
 	
 	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -117,10 +122,10 @@ AVPlayer *player;
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
 		ObservationAnnotation *observationAnnotation = annotation;
         UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             if (image == nil) {
@@ -131,7 +136,7 @@ AVPlayer *player;
 		} else {
             annotationView.annotation = annotation;
         }
-		
+		annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
         return annotationView;
     }
 	
@@ -361,6 +366,8 @@ AVPlayer *player;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[_observation.properties valueForKey:@"type"] style: UIBarButtonItemStyleBordered target:nil action:nil];
+    
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"viewImageSegue"])
     {
@@ -370,6 +377,7 @@ AVPlayer *player;
         // Pass any objects to the view controller here, like...
         [vc setAttachment:sender];
     } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style: UIBarButtonItemStyleBordered target:nil action:nil];
         ObservationEditViewController *oevc = [segue destinationViewController];
         [oevc setObservation:_observation];
     }
