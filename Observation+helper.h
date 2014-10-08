@@ -16,6 +16,8 @@
 
 - (CLLocation *) location;
 
+- (NSString *) sectionName;
+
 + (Observation*) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
 
 + (NSOperation*) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
