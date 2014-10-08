@@ -34,6 +34,11 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    // Select the first row in the first section by default
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+    
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
 
     User *user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
@@ -94,14 +99,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-   if (indexPath.section == 2) {
+   if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             [self.settingSelectionDelegate selectedSetting:@"locationServicesSettings"];
         } else if (indexPath.row == 1) {
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
-    } else if (indexPath.section == 2) {
-        
     }
 }
 
