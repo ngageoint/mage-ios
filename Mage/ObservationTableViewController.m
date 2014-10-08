@@ -13,7 +13,7 @@
 #import "MageRootViewController.h"
 
 @interface ObservationTableViewController ()
-
+@property(nonatomic, strong) IBOutlet UIRefreshControl *refreshControl;
 @end
 
 @implementation ObservationTableViewController
@@ -21,6 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.observationDataStore startFetchControllerWithManagedObjectContext:self.contextHolder.managedObjectContext];
+    
+    [self.refreshControl addTarget:self
+                            action:@selector(refreshObservations)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -35,6 +39,10 @@
 		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
 		[destination setObservation:observation];
     }
+}
+
+-(void) refreshObservations {
+    NSLog(@"refreshObservations");
 }
 
 @end
