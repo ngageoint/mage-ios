@@ -47,9 +47,9 @@ AVPlayer *player;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-//    
-//    // TODO tmp until we get edit working
-//    [self.editButton setEnabled:NO];
+    
+    // TODO tmp until we get edit working
+    [self.editButton setEnabled:NO];
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;

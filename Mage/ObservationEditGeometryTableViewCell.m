@@ -7,15 +7,22 @@
 //
 
 #import "ObservationEditGeometryTableViewCell.h"
+#import <CoreLocation/CoreLocation.h>
+#import "Observation+helper.h"
 
 @implementation ObservationEditGeometryTableViewCell
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     
-    id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    //
-    //    NSDate *date = [[self dateParseFormatter] dateFromString:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
-    //    [self.valueLabel setText:[[self dateDisplayFormatter] stringFromDate:date]];
+    // special case if it is the actuial observation geometry and not a field
+    if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
+        self.geoPoint = (GeoPoint *)[observation geometry];
+    } else {
+        self.geoPoint = (GeoPoint *)[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
+    }
+
+    [self.latitude setText:[NSString stringWithFormat:@"%.5f",self.geoPoint.location.coordinate.latitude]];
+    [self.longitude setText:[NSString stringWithFormat:@"%.5f",self.geoPoint.location.coordinate.longitude]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
 }
 

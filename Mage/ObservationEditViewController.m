@@ -10,6 +10,8 @@
 #import "ObservationEditViewDataStore.h"
 #import "DropdownEditTableViewController.h"
 #import "ObservationPickerTableViewCell.h"
+#import "ObservationEditGeometryTableViewCell.h"
+#import "GeometryEditViewController.h"
 
 @interface ObservationEditViewController ()
 
@@ -35,7 +37,7 @@
 
 -(void) cancel:(id)sender {
     //do your saving and such here
-    [self.editDataStore discaredChanges];
+    [self.editDataStore discardChanges];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -61,12 +63,23 @@
         
         [vc setFieldDefinition:cell.fieldDefinition];
         [vc setValue:cell.valueLabel.text];
+    } else if([segue.identifier isEqualToString:@"geometrySegue"]) {
+        GeometryEditViewController *gvc = [segue destinationViewController];
+        ObservationEditGeometryTableViewCell *cell = sender;
+        gvc.geoPoint = cell.geoPoint;
+        [gvc setFieldDefinition: cell.fieldDefinition];
+        gvc.observation = self.observation;
     }
 }
 
 - (IBAction)unwindFromDropdownController: (UIStoryboardSegue *) segue {
     DropdownEditTableViewController *vc = [segue sourceViewController];
     [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
+}
+
+- (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
+//    GeometryEditViewController *vc = [segue sourceViewController];
+//    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
 }
 
 

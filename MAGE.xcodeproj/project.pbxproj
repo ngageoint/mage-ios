@@ -79,6 +79,7 @@
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
+		F7C0621D19E45B71005D8AD3 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
@@ -231,6 +232,8 @@
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
+		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
+		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
 		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
@@ -437,6 +440,8 @@
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */,
 				F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */,
+				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
+				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -709,6 +714,7 @@
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
+				F7C0621D19E45B71005D8AD3 /* GeometryEditViewController.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,

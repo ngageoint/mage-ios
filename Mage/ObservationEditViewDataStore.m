@@ -140,14 +140,14 @@ NSInteger expandedRow = -1;
     [self.editTable endUpdates];
 }
 
-- (void) saveObservation {
+- (IBAction) saveObservation {
     NSError *error = nil;
     if (![self.observation.managedObjectContext save:&error]) {
         
     }
 }
 
-- (void) discaredChanges {
+- (void) discardChanges {
     [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
 }
 
