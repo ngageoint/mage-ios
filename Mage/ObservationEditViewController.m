@@ -29,7 +29,14 @@
 }
 
 - (id) init {
+    [self.navigationItem.backBarButtonItem setAction:@selector(cancel:)];
     return self;
+}
+
+-(void) cancel:(id)sender {
+    //do your saving and such here
+    [self.editDataStore discaredChanges];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad
@@ -60,16 +67,6 @@
 - (IBAction)unwindFromDropdownController: (UIStoryboardSegue *) segue {
     DropdownEditTableViewController *vc = [segue sourceViewController];
     [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
-    
-//    
-//    NSString *fieldKey = (NSString *)[vc.fieldDefinition objectForKey:@"name"];
-//    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
-//    [newProperties setObject:vc.value forKey:fieldKey];
-//    _observation.properties = newProperties;
-//    
-//    [self.editDataStore.editTable reloadData];
-//    NSLog(@"choose %@", vc.value);
-    
 }
 
 

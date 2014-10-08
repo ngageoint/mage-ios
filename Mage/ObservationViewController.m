@@ -47,9 +47,9 @@ AVPlayer *player;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    // TODO tmp until we get edit working
-    [self.editButton setEnabled:NO];
+//    
+//    // TODO tmp until we get edit working
+//    [self.editButton setEnabled:NO];
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
@@ -366,6 +366,8 @@ AVPlayer *player;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[_observation.properties valueForKey:@"type"] style: UIBarButtonItemStyleBordered target:nil action:nil];
+    
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"viewImageSegue"])
     {
@@ -375,6 +377,7 @@ AVPlayer *player;
         // Pass any objects to the view controller here, like...
         [vc setAttachment:sender];
     } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style: UIBarButtonItemStyleBordered target:nil action:nil];
         ObservationEditViewController *oevc = [segue destinationViewController];
         [oevc setObservation:_observation];
     }
