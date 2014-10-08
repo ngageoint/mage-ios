@@ -312,7 +312,7 @@
 			name = iPhone;
 			sourceTree = "<group>";
 		};
-		2F5F2EA219E31DCB005BA157 /* Settings */ = {
+		2F5F2EBB19E599B1005BA157 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
 				2F5F2E9C19E074CF005BA157 /* SettingsSplitViewController.h */,
@@ -332,13 +332,29 @@
 				2F5F2EB819E48DC6005BA157 /* ObservationFetchDataSource.h */,
 				2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */,
 			);
-			name = Settings;
+			name = iPad;
+			sourceTree = "<group>";
+		};
+		2F5F2EBC19E599C8005BA157 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
+				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
+				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
+				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
+				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
+				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
+				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
+				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
+				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
+			);
+			name = iPhone;
 			sourceTree = "<group>";
 		};
 		2FE24CDB19C79B850019688B /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				2F5F2EA219E31DCB005BA157 /* Settings */,
 				2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */,
 				2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */,
 				2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */,
@@ -398,16 +414,8 @@
 		4C6A9BBD19813C64004A6205 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
-				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
-				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
-				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
-				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
-				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
-				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
-				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
-				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
-				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
+				2F5F2EBC19E599C8005BA157 /* iPhone */,
+				2F5F2EBB19E599B1005BA157 /* iPad */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
