@@ -1,28 +1,28 @@
 //
-//  SettingsViewController.m
-//  Mage
+//  SettingsTableViewController_iPad.m
+//  MAGE
 //
-//  Created by Dan Barela on 2/21/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
+//  Created by William Newman on 10/6/14.
+//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "SettingsViewController.h"
-#import "User+helper.h"
+#import "SettingsTableViewController_iPad.h"
 #import "LocationService.h"
+#import "User+helper.h"
 
-@interface SettingsViewController ()
+@interface SettingsTableViewController_iPad ()
 
-    @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *user;
-    @property (weak, nonatomic) IBOutlet UILabel *serverUrlLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-    @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
+@property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+@property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *serverUrl;
+@property (weak, nonatomic) IBOutlet UILabel *user;
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
-@implementation SettingsViewController
+@implementation SettingsTableViewController_iPad
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -32,18 +32,22 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
     
-    self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    // Select the first row in the first section by default
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     
+    self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+
     User *user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
-    _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
+    self.user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.serverUrlLabel.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
+    self.serverUrl.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
     
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
@@ -87,7 +91,6 @@
             break;
         }
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,16 +98,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([segue.identifier hasPrefix:@"value_"]) {
-        ValuePickerTableViewController *vc = [segue destinationViewController];
-        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        vc.title = [valueDictionary valueForKey:@"title"];
-        vc.section = [valueDictionary valueForKey:@"section"];
-        vc.labels = [valueDictionary valueForKey:@"labels"];
-        vc.values = [valueDictionary valueForKey:@"values"];
-        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+   if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            [self.settingSelectionDelegate selectedSetting:@"locationServicesSettings"];
+        } else if (indexPath.row == 1) {
+            [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
+        }
     }
 }
 

@@ -14,6 +14,6 @@
 
 @interface SettingsViewController : UITableViewController<CLLocationManagerDelegate>
 
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *managedObjectContext;
+@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @end
