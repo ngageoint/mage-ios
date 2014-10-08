@@ -11,6 +11,7 @@
 #import "MageEnums.h"
 #import "GeoPoint.h"
 #import "Attachment+helper.h"
+#import <NSDate+DateTools.h>
 
 @interface Observation ()
 
