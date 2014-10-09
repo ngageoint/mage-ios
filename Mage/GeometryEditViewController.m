@@ -25,7 +25,8 @@
 - (IBAction) saveLocation {
     GeoPoint *point = self.observation.geometry;
     point.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
-    
+    [self setGeoPoint:point];
+    [self performSegueWithIdentifier:@"unwindToEditController" sender:self];
 }
 
 - (void) viewDidLoad {
@@ -36,6 +37,15 @@
     [self.map setRegion:viewRegion];
     
     self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
+    
+    if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
+        GeoPoint *point = (GeoPoint *)[self.observation geometry];
+        self.annotation.coordinate = point.location.coordinate;
+    } else {
+        GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
+        self.annotation.coordinate = point.location.coordinate;
+    }
+    
     [self.map addAnnotation:self.annotation];
 }
 

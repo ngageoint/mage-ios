@@ -78,8 +78,8 @@
 }
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
-//    GeometryEditViewController *vc = [segue sourceViewController];
-//    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
+    GeometryEditViewController *vc = [segue sourceViewController];
+    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
 }
 
 
