@@ -16,6 +16,8 @@
 
 -(CLLocation *) location;
 
+- (NSString *) sectionName;
+
 - (void) populateLocationFromJson:(NSArray *) locations;
 
 + (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;

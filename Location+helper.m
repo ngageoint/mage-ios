@@ -31,6 +31,13 @@
     return point.location;
 }
 
+- (NSString *) sectionName {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    
+    return [dateFormatter stringFromDate:self.timestamp];
+}
+
 - (void) populateLocationFromJson:(NSArray *) locations {
 	if (locations.count) {
 		for (NSDictionary* jsonLocation in locations) {
