@@ -66,9 +66,9 @@
     } else if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;
-        gvc.geoPoint = cell.geoPoint;
+        [gvc setGeoPoint:cell.geoPoint];
         [gvc setFieldDefinition: cell.fieldDefinition];
-        gvc.observation = self.observation;
+        [gvc setObservation:self.observation];
     }
 }
 
@@ -78,8 +78,8 @@
 }
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
-//    GeometryEditViewController *vc = [segue sourceViewController];
-//    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
+    GeometryEditViewController *vc = [segue sourceViewController];
+    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
 }
 
 

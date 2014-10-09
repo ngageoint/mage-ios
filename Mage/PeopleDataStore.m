@@ -13,9 +13,34 @@
 
 @interface PeopleDataStore ()
     @property (strong, nonatomic) IBOutlet UIViewController *viewController;
+    @property (nonatomic) NSDateFormatter *dateFormatter;
+    @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
 
 @implementation PeopleDataStore
+
+- (NSDateFormatter *) dateFormatter {
+    if (_dateFormatter == nil) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.dateStyle = kCFDateFormatterLongStyle;
+        _dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+    }
+    
+    return _dateFormatter;
+    
+}
+
+- (NSDateFormatter *) dateFormatterToDate {
+    if (_dateFormatterToDate == nil) {
+        _dateFormatterToDate = [[NSDateFormatter alloc] init];
+        _dateFormatterToDate.dateFormat = @"yyyy-MM-dd";
+        _dateFormatterToDate.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    }
+    
+    return _dateFormatterToDate;
+    
+}
 
 - (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
     self.managedObjectContext = managedObjectContext;
@@ -59,10 +84,10 @@
     return [[self.locations.fetchedResultsController sections] count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> theSection = [[self.locations.fetchedResultsController sections] objectAtIndex:section];
-    return [theSection name];
+    NSDate *date = [self.dateFormatterToDate dateFromString:[theSection name]];
+    return [self.dateFormatter stringFromDate:date];
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -118,6 +143,7 @@
     if (self.personSelectionDelegate) {
         [self.personSelectionDelegate selectedUser:location.user];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

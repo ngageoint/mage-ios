@@ -17,14 +17,39 @@
 @interface PersonViewController()
 	@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 	@property (nonatomic, strong) NSString *variantField;
+    @property (nonatomic) NSDateFormatter *sectionDateFormatter;
+    @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
 
 @implementation PersonViewController
 
+- (NSDateFormatter *) sectionDateFormatter {
+    if (_sectionDateFormatter == nil) {
+        _sectionDateFormatter = [[NSDateFormatter alloc] init];
+        _sectionDateFormatter.dateStyle = kCFDateFormatterLongStyle;
+        _sectionDateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        
+    }
+    
+    return _sectionDateFormatter;
+    
+}
+
+- (NSDateFormatter *) dateFormatterToDate {
+    if (_dateFormatterToDate == nil) {
+        _dateFormatterToDate = [[NSDateFormatter alloc] init];
+        _dateFormatterToDate.dateFormat = @"yyyy-MM-dd";
+        _dateFormatterToDate.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    }
+    
+    return _dateFormatterToDate;
+    
+}
+
 - (NSDateFormatter *) dateFormatter {
 	if (_dateFormatter == nil) {
 		_dateFormatter = [[NSDateFormatter alloc] init];
-		[_dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        _dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
 		[_dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
 	}
 	
@@ -46,7 +71,7 @@
 	_observationResultsController = [[NSFetchedResultsController alloc]
 									 initWithFetchRequest:fetchRequest
 									 managedObjectContext:self.contextHolder.managedObjectContext
-									 sectionNameKeyPath:nil
+									 sectionNameKeyPath:@"sectionName"
 									 cacheName:nil];
 	
 	[_observationResultsController setDelegate:self];
@@ -224,6 +249,22 @@
     return cell;
 }
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[self.observationResultsController sections] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    id <NSFetchedResultsSectionInfo> theSection = [[self.observationResultsController sections] objectAtIndex:section];
+    NSDate *date = [self.dateFormatterToDate dateFromString:[theSection name]];
+    return [self.sectionDateFormatter stringFromDate:date];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] init];
+    
+    return view;
+}
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
     [_observationTableView beginUpdates];
@@ -276,6 +317,7 @@
         NSIndexPath *indexPath = [_observationTableView indexPathForCell:sender];
 		Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
 		[destination setObservation:observation];
+        [self.observationTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

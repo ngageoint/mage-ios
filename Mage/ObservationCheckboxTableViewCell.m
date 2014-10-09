@@ -17,6 +17,7 @@
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {
+    NSLog(@"CB self.bounds.size.height %f", self.bounds.size.height);
     return self.bounds.size.height;
 }
 

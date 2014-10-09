@@ -96,11 +96,9 @@
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> theSection = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-    NSString *s = [theSection name];
-    NSDate *date = [self.dateFormatterToDate dateFromString:s];
+    NSDate *date = [self.dateFormatterToDate dateFromString:[theSection name]];
     return [self.dateFormatter stringFromDate:date];
 }
 
@@ -168,6 +166,7 @@
     if (self.observationSelectionDelegate) {
         [self.observationSelectionDelegate selectedObservation:observation];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
