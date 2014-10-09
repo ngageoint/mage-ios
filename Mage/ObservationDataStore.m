@@ -166,6 +166,7 @@
     if (self.observationSelectionDelegate) {
         [self.observationSelectionDelegate selectedObservation:observation];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

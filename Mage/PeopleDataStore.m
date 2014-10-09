@@ -143,6 +143,7 @@
     if (self.personSelectionDelegate) {
         [self.personSelectionDelegate selectedUser:location.user];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

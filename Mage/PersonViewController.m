@@ -249,6 +249,10 @@
     return cell;
 }
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[self.observationResultsController sections] count];
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> theSection = [[self.observationResultsController sections] objectAtIndex:section];
     NSDate *date = [self.dateFormatterToDate dateFromString:[theSection name]];
@@ -313,6 +317,7 @@
         NSIndexPath *indexPath = [_observationTableView indexPathForCell:sender];
 		Observation *observation = [_observationResultsController objectAtIndexPath:indexPath];
 		[destination setObservation:observation];
+        [self.observationTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
