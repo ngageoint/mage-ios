@@ -11,6 +11,7 @@
 #import "MageEnums.h"
 #import "GeoPoint.h"
 #import "Attachment+helper.h"
+#import "NSDate+DateTools.h"
 
 @interface Observation ()
 
@@ -135,7 +136,7 @@
                 }
                 NSLog(@"Updating object with id: %@", o.remoteId);
             }
-            
+
             if ([o.timestamp isLaterThan:lastObservationDate]) {
                 lastObservationDate = o.timestamp;
             }

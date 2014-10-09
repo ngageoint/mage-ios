@@ -67,12 +67,18 @@
 	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
 	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    __block NSDate *lastLocationDate = [defaults objectForKey:@"lastLocationDate"];
+    if (lastLocationDate != nil) {
+        [parameters setObject:lastLocationDate forKey:@"startDate"];
+    }
 	
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
-		NSLog(@"Fetched locations from the server, saving to location storage");
+		NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[userLocations count]);
         User *currentUser = [User fetchCurrentUserForManagedObjectContext:context];
         
 		// Get the user ids to query
@@ -120,6 +126,10 @@
 				// already exists in core data, lets update the object we have
 				[location populateLocationFromJson:locations];
 			}
+            
+            if ([location.timestamp isLaterThan:lastLocationDate]) {
+                lastLocationDate = location.timestamp;
+            }
         }
 		
 		if (! [context save:&error]) {
@@ -130,6 +140,9 @@
             // For now if we find at least one new user let just go grab the users again
             [[User operationToFetchUsersWithManagedObjectContext:context] start];
         }
+        
+        [defaults setObject:lastLocationDate forKey:@"lastLocationDate"];
+        [defaults synchronize];
         
         complete(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
