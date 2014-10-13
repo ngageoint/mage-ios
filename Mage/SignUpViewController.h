@@ -16,6 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *password;
 @property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
 @property (weak, nonatomic) IBOutlet UITextField *email;
-@property (weak, nonatomic) IBOutlet UITextField *serverUrl;
+@property (weak, nonatomic) IBOutlet UITextField *baseServerUrl;
 
 @end

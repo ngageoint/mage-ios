@@ -18,6 +18,7 @@
 #import "MageRootViewController.h"
 #import <UserUtility.h>
 #import "DeviceUUID.h"
+#import "MageServer.h"
 
 @interface LoginViewController ()
 
@@ -90,14 +91,13 @@ id<Authentication> _authentication;
 		
 		// TODO need a better way to reset url
 		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
-		NSURL *url = [NSURL URLWithString:_serverField.text];
+		NSURL *url = [NSURL URLWithString:self.serverField.text];
 		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.contextHolder.managedObjectContext];
 		_authentication.delegate = self;
 		
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setURL:url forKey:@"serverUrl"];
+        [MageServer setBaseServerUrl:[url absoluteString]];
     } else {
-        [_serverField setEnabled:YES];
+        [self.serverField setEnabled:YES];
         button.selected = YES;
     }
 }
@@ -130,15 +130,11 @@ id<Authentication> _authentication;
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
-
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *url = [defaults URLForKey:@"serverUrl"];
-	NSString *urlText = url != nil ? [url absoluteString] : @"";
 	
-    [_usernameField setText:@""];
-    [_passwordField setText:@""];
-    [_serverField setText:urlText];
-    [_passwordField setDelegate:self];
+    [self.usernameField setText:@""];
+    [self.passwordField setText:@""];
+    [self.serverField setText:[[MageServer baseServerUrl] absoluteString]];
+    [self.passwordField setDelegate:self];
 	
 	_authentication = [Authentication
 					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]

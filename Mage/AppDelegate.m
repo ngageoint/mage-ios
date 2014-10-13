@@ -31,11 +31,6 @@
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *serverUrlString = [defaults stringForKey:@"serverUrlString"];
-    [defaults setURL:[NSURL URLWithString:serverUrlString] forKey:@"serverUrl"];
-    [defaults synchronize];
-    
     FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
     thumbnailImageFormat.name = AttachmentSmallSquare;
     thumbnailImageFormat.family = AttachmentFamily;
