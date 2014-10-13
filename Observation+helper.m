@@ -12,6 +12,7 @@
 #import "GeoPoint.h"
 #import "Attachment+helper.h"
 #import <NSDate+DateTools.h>
+#import "MageServer.h"
 
 @interface Observation ()
 
@@ -111,9 +112,8 @@ NSDictionary *_fieldNameToField;
 + (NSOperation *) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSURL *baseServerUrl = [defaults URLForKey: @"baseServerUrl"];
     NSString *layerId = [defaults stringForKey:@"layerId"];
-    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", baseServerUrl, layerId];
+    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseServerUrl], layerId];
     NSLog(@"Fetching from layer %@", layerId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

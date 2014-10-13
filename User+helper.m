@@ -8,6 +8,7 @@
 
 #import "User+helper.h"
 #import "HttpManager.h"
+#import "MageServer.h"
 
 @implementation User (helper)
 
@@ -82,9 +83,7 @@ static User *currentUser = nil;
 }
 
 + (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *baseServerUrl = [defaults URLForKey:@"baseServerUrl"];
-	NSString *url = [NSString stringWithFormat:@"%@/%@", baseServerUrl, @"api/users"];
+	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/users"];
 	
 	NSLog(@"Trying to fetch users from server %@", url);
 	
