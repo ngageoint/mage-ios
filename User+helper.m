@@ -83,8 +83,8 @@ static User *currentUser = nil;
 
 + (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
-	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/users"];
+	NSURL *baseServerUrl = [defaults URLForKey:@"baseServerUrl"];
+	NSString *url = [NSString stringWithFormat:@"%@/%@", baseServerUrl, @"api/users"];
 	
 	NSLog(@"Trying to fetch users from server %@", url);
 	

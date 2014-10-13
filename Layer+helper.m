@@ -12,6 +12,7 @@
 #import "NSManagedObjectContext+Extra.h"
 #import "Form.h"
 #import "Observation+helper.h"
+#import "MageServer.h"
 
 @implementation Layer (helper)
 
@@ -37,8 +38,7 @@
 + (NSOperation *) operationToPullLayersWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/layers"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/layers"];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"Feature", @"type", nil];
     
     HttpManager *http = [HttpManager singleton];

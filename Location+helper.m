@@ -12,6 +12,7 @@
 #import "User+helper.h"
 #import "GeoPoint.h"
 #import "HttpManager.h"
+#import "MageServer.h"
 #import <NSDate+DateTools.h>
 
 @implementation Location (helper)
@@ -71,8 +72,7 @@
 
 + (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *serverUrl = [defaults URLForKey:@"serverUrl"];
-	NSString *url = [NSString stringWithFormat:@"%@/%@", serverUrl, @"api/locations/users"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

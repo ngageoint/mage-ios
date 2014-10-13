@@ -111,9 +111,9 @@ NSDictionary *_fieldNameToField;
 + (NSOperation *) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
+    NSURL *baseServerUrl = [defaults URLForKey: @"baseServerUrl"];
     NSString *layerId = [defaults stringForKey:@"layerId"];
-    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", serverUrl, layerId];
+    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", baseServerUrl, layerId];
     NSLog(@"Fetching from layer %@", layerId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

@@ -15,6 +15,7 @@
 #import "ZipException.h"
 #import "FileInZipInfo.h"
 #import "ObservationFetchService.h"
+#import "MageServer.h"
 
 static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
     if ([JSONObject isKindOfClass:[NSArray class]]) {
@@ -46,10 +47,8 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 + (NSOperation *) operationToPullFormWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSURL *serverUrl = [defaults URLForKey: @"serverUrl"];
-
     NSString* formId = [defaults objectForKey: @"formId"];
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", serverUrl, @"api/forms", formId];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", [MageServer baseServerUrl], @"api/forms", formId];
     
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"/Form.zip"];
     
