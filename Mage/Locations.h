@@ -15,6 +15,8 @@
 @property(nonatomic, assign) id<NSFetchedResultsControllerDelegate> delegate;
 
 + (id) locationsForAllUsersInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
++ (id) locationsForUserId:(NSString *) userId inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
+
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 

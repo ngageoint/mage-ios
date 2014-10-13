@@ -20,6 +20,8 @@
     @property (nonatomic) NSMutableDictionary *observationAnnotations;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
+    @property (nonatomic) BOOL canShowUserCallout;
+    @property (nonatomic) BOOL canShowObservationCallout;
 @end
 
 @implementation MapDelegate
@@ -61,7 +63,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = self.canShowUserCallout;
             annotationView.image = image;
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -80,7 +82,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = self.canShowObservationCallout;
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -271,6 +273,13 @@
     [self.mapView selectAnnotation:annotation animated:YES];
     
     [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
+}
+
+- (void)selectedUser:(User *) user region:(MKCoordinateRegion) region {
+    LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    
+    [self.mapView setRegion:region animated:YES];
+    [self.mapView selectAnnotation:annotation animated:YES];
 }
 
 - (void)selectedObservation:(Observation *) observation {

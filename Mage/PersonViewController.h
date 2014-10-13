@@ -11,11 +11,13 @@
 
 #import "User+helper.h"
 #import "ManagedObjectContextHolder.h"
+#import "MapDelegate.h"
 
-@interface PersonViewController : UIViewController<MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@interface PersonViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *latLng;
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;

@@ -81,9 +81,11 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    Locations *locations = [Locations locationsForUserId:self.user.remoteId inManagedObjectContext:self.contextHolder.managedObjectContext];
+    [self.mapDelegate setLocations:locations];
 	
-	GeoPoint *point = _user.location.geometry;
-	CLLocationCoordinate2D coordinate = point.location.coordinate;
+	CLLocationCoordinate2D coordinate = [self.user.location location].coordinate;
 	
 	_name.text = [NSString stringWithFormat:@"%@ (%@)", _user.name, _user.username];
 	_timestamp.text = [self.dateFormatter stringFromDate:_user.location.timestamp];
@@ -98,27 +100,6 @@
 	} else if (_user.phone.length != 0) {
 		_contact1.text = _user.phone;
 	}
-
-	[_mapView setDelegate:self];
-	CLLocationDistance latitudeMeters = 500;
-	CLLocationDistance longitudeMeters = 500;
-	NSDictionary *properties = _user.location.properties;
-	id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-	if (accuracyProperty != nil) {
-		double accuracy = [accuracyProperty doubleValue];
-		latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-		longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-		
-		MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:accuracy];
-		[_mapView addOverlay:circle];
-	}
-	
-	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, latitudeMeters, longitudeMeters);
-	MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-	[_mapView setRegion:viewRegion];
-	
-	LocationAnnotation *annotation = [[LocationAnnotation alloc] initWithLocation:_user.location];
-	[_mapView addAnnotation:annotation];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *form = [defaults objectForKey:@"form"];
@@ -135,12 +116,26 @@
 	
 	NSArray *observations = [[self observationResultsController] fetchedObjects];
 	NSLog(@"Got observations %lu", (unsigned long)[observations count]);
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillAppear:animated];
+    
+    CLLocationDistance latitudeMeters = 500;
+    CLLocationDistance longitudeMeters = 500;
+    NSDictionary *properties = _user.location.properties;
+    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+    if (accuracyProperty != nil) {
+        double accuracy = [accuracyProperty doubleValue];
+        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    }
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([self.user.location location].coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+    
+    [self.mapDelegate selectedUser:self.user region:viewRegion];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -169,47 +164,6 @@
     
     [self.view insertSubview:view belowSubview:self.mapView];
     self.mapView.layer.mask = maskLayer;
-}
-
-- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-	
-    if ([annotation isKindOfClass:[LocationAnnotation class]]) {
-		LocationAnnotation *locationAnnotation = annotation;
-        UIImage *image = [PersonImage imageForLocation:locationAnnotation.location];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = NO;
-            annotationView.image = image;
-
-		} else {
-            annotationView.annotation = annotation;
-        }
-		
-        return annotationView;
-    }
-	
-    return nil;
-}
-
-- (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
-	MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
-	renderer.lineWidth = 1.0f;
-	
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:_user.location.timestamp];
-	if (interval <= 600) {
-		renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
-		renderer.strokeColor = [UIColor blueColor];
-	} else if (interval <= 1200) {
-		renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
-		renderer.strokeColor = [UIColor yellowColor];
-	} else {
-		renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
-		renderer.strokeColor = [UIColor orangeColor];
-	}
-	
-	return renderer;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
