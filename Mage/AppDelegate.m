@@ -18,12 +18,6 @@
 
 @implementation AppDelegate
 
-@synthesize managedObjectContext = _managedObjectContext;
-@synthesize managedObjectModel = _managedObjectModel;
-@synthesize locationFetchService = _locationFetchService;
-@synthesize observationFetchService = _observationFetchService;
-@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
@@ -36,6 +30,11 @@
     NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *serverUrlString = [defaults stringForKey:@"serverUrlString"];
+    [defaults setURL:[NSURL URLWithString:serverUrlString] forKey:@"serverUrl"];
+    [defaults synchronize];
     
     FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
     thumbnailImageFormat.name = AttachmentSmallSquare;
@@ -193,6 +192,14 @@
     }    
     
     return _persistentStoreCoordinator;
+}
+
+-(LocationService *) locationService {
+    if (_locationService == nil) {
+        _locationService = [[LocationService alloc] initWithManagedObjectContext:[self managedObjectContext]];
+    }
+    
+    return _locationService;
 }
 
 #pragma mark - Application's Documents directory

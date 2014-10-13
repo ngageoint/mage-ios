@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <FICImageCache.h>
+#import <LocationService.h>
 #import <LocationFetchService.h>
 #import <ObservationFetchService.h>
 
@@ -15,12 +16,13 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (readonly, strong, nonatomic) FICImageCache *imageCache;
-@property (readonly, strong, nonatomic) LocationFetchService *locationFetchService;
-@property (readonly, strong, nonatomic) ObservationFetchService *observationFetchService;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (strong, nonatomic) FICImageCache *imageCache;
+@property (strong, nonatomic) LocationService *locationService;
+@property (strong, nonatomic) LocationFetchService *locationFetchService;
+@property (strong, nonatomic) ObservationFetchService *observationFetchService;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
