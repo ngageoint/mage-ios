@@ -41,6 +41,11 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
         _locationManager.distanceFilter = gpsSensitivity;
         _locationManager.delegate = self;
         
+        // Check for iOS 8
+        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [_locationManager requestAlwaysAuthorization];
+        }
+        
         NSArray *locations = [GPSLocation fetchGPSLocationsInManagedObjectContext:_managedObjectContext];
         GPSLocation *location = [locations firstObject];
         _oldestLocationTime = location.timestamp;
@@ -92,6 +97,11 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
         [self pushLocations];
     }
 }
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"Error updating location %@", error);
+}
+
 
 - (NSArray *) persistLocations:(NSArray *) locations {
     NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
