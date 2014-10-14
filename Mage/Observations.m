@@ -24,6 +24,20 @@
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
++ (id) observationsForUser:(User *) user inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:managedObjectContext]];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"user == %@", user]];
+
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:managedObjectContext
+                                                                                                 sectionNameKeyPath:@"sectionName"
+                                                                                                          cacheName:nil];
+    
+    
+    return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
+}
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController {
     if (self = [super init]) {

@@ -18,6 +18,10 @@
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
     @property (nonatomic) NSMutableDictionary *locationAnnotations;
     @property (nonatomic) NSMutableDictionary *observationAnnotations;
+    @property (nonatomic, strong) User *selectedUser;
+    @property (nonatomic, strong) MKCircle *selectedUserCircle;
+    @property (nonatomic) BOOL canShowUserCallout;
+    @property (nonatomic) BOOL canShowObservationCallout;
 @end
 
 @implementation MapDelegate
@@ -59,7 +63,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = self.canShowUserCallout;
             annotationView.image = image;
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -78,7 +82,7 @@
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = self.canShowObservationCallout;
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -94,6 +98,33 @@
 	
     return nil;
 }
+
+- (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
+    if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
+        LocationAnnotation *annotation = view.annotation;
+
+        self.selectedUser = annotation.location.user;
+        if (self.selectedUserCircle != nil) {
+            [_mapView removeOverlay:self.selectedUserCircle];
+        }
+        
+        NSDictionary *properties = self.selectedUser.location.properties;
+        id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+        if (accuracyProperty != nil) {
+            double accuracy = [accuracyProperty doubleValue];
+            
+            self.selectedUserCircle = [MKCircle circleWithCenterCoordinate:self.selectedUser.location.location.coordinate radius:accuracy];
+            [self.mapView addOverlay:self.selectedUserCircle];
+        }
+    }
+}
+
+- (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
+    if (self.selectedUserCircle != nil) {
+        [_mapView removeOverlay:self.selectedUserCircle];
+    }
+}
+
 
 // TODO once we get a 'me' page we will segue to that page from here
 //- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -120,8 +151,23 @@
 	}
 }
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    NSLog(@"region changed");
+- (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
+    MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
+    renderer.lineWidth = 1.0f;
+    
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.selectedUser.location.timestamp];
+    if (interval <= 600) {
+        renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
+        renderer.strokeColor = [UIColor blueColor];
+    } else if (interval <= 1200) {
+        renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
+        renderer.strokeColor = [UIColor yellowColor];
+    } else {
+        renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
+        renderer.strokeColor = [UIColor orangeColor];
+    }
+    
+    return renderer;
 }
 
 - (NSMutableDictionary *) locationAnnotations {
@@ -223,9 +269,16 @@
 }
 
 - (void)selectedUser:(User *) user {
-    [self.mapView setCenterCoordinate:[user.location location].coordinate];
-    
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    [self.mapView selectAnnotation:annotation animated:YES];
+    
+    [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
+}
+
+- (void)selectedUser:(User *) user region:(MKCoordinateRegion) region {
+    LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    
+    [self.mapView setRegion:region animated:YES];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 

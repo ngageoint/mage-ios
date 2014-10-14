@@ -18,12 +18,6 @@
 
 @implementation AppDelegate
 
-@synthesize managedObjectContext = _managedObjectContext;
-@synthesize managedObjectModel = _managedObjectModel;
-@synthesize locationFetchService = _locationFetchService;
-@synthesize observationFetchService = _observationFetchService;
-@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
@@ -193,6 +187,14 @@
     }    
     
     return _persistentStoreCoordinator;
+}
+
+-(LocationService *) locationService {
+    if (_locationService == nil) {
+        _locationService = [[LocationService alloc] initWithManagedObjectContext:[self managedObjectContext]];
+    }
+    
+    return _locationService;
 }
 
 #pragma mark - Application's Documents directory

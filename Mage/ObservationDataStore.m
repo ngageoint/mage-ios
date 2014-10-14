@@ -50,6 +50,18 @@
     return self;
 }
 
+- (void) startFetchControllerWithObservations: (Observations *) observations {
+    self.observations = observations;
+    self.observations.delegate = self;
+    
+    NSError *error;
+    if (![self.observations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+}
+
 - (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
     self.managedObjectContext = managedObjectContext;
     self.observations = [Observations observationsInManagedObjectContext:self.managedObjectContext];

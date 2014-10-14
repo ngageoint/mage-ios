@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import "User+helper.h"
 #import "LocationService.h"
+#import "MageServer.h"
 
 @interface SettingsViewController ()
 
@@ -16,7 +17,7 @@
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
     @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
     @property (weak, nonatomic) IBOutlet UILabel *user;
-    @property (weak, nonatomic) IBOutlet UILabel *serverUrlLabel;
+    @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (strong, nonatomic) CLLocationManager *locationManager;
 
@@ -43,7 +44,7 @@
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.serverUrlLabel.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
+    self.baseServerUrlLabel.text = [[MageServer baseServerUrl] absoluteString];
     
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];

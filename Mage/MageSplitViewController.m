@@ -58,8 +58,7 @@
 }
 
 - (void) startServices {
-    _locationService = [[LocationService alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
-    [_locationService start];
+    [_locationServiceHolder.locationService start];
     
     NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.contextHolder.managedObjectContext];
     NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{

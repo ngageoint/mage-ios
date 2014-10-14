@@ -10,7 +10,7 @@
 #import "PeopleDataStore.h"
 #import "ManagedObjectContextHolder.h"
 
-@interface PeopleTableViewController : UIViewController<NSFetchedResultsControllerDelegate>
+@interface PeopleTableViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) IBOutlet PeopleDataStore *peopleDataStore;
