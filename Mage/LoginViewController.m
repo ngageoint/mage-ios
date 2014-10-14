@@ -22,6 +22,11 @@
 
 @interface LoginViewController ()
 
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *lockButton;
+@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+
 @end
 
 @implementation LoginViewController
@@ -30,6 +35,7 @@ id<Authentication> _authentication;
 
 - (void) authenticationWasSuccessful:(User *) user {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+    [self resetLogin];
 }
 
 - (void) authenticationHadFailure {
@@ -42,6 +48,8 @@ id<Authentication> _authentication;
                           otherButtonTitles:nil];
 	
 	[alert show];
+    [self resetLogin];
+    
 }
 
 - (void) registrationWasSuccessful {
@@ -53,11 +61,38 @@ id<Authentication> _authentication;
                           otherButtonTitles:nil];
 	
 	[alert show];
+    [self resetLogin];
+}
+
+- (void) resetLogin {
+    [self.loginButton setEnabled:YES];
+    [self.loginIndicator stopAnimating];
+    [self.usernameField setEnabled:YES];
+    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
+    [self.passwordField setEnabled:YES];
+    [self.passwordField setBackgroundColor:[UIColor whiteColor]];
+    [self.serverField setEnabled:YES];
+    [self.serverField setBackgroundColor:[UIColor whiteColor]];
+    [self.lockButton setEnabled:YES];
+    [self.showPassword setEnabled:YES];
+}
+
+- (void) startLogin {
+    [self.loginButton setEnabled:NO];
+    [self.loginIndicator startAnimating];
+    [self.usernameField setEnabled:NO];
+    [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.passwordField setEnabled:NO];
+    [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.serverField setEnabled:NO];
+    [self.serverField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.lockButton setEnabled:NO];
+    [self.showPassword setEnabled:NO];
 }
 
 - (void) verifyLogin {
 	// setup authentication
-
+    [self startLogin];
     NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
 	NSString *uidString = deviceUUID.UUIDString;
     NSLog(@"uid: %@", uidString);
