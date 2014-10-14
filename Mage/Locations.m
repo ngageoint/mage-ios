@@ -25,12 +25,12 @@
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) locationsForUserId:(NSString *) userId inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
++ (id) locationsForUser:(User *) user inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:managedObjectContext]];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.remoteId = %@", userId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user = %@", user];
     [fetchRequest setPredicate:predicate];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:managedObjectContext

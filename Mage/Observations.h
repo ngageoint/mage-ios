@@ -7,6 +7,7 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "User+helper.h"
 
 @interface Observations : NSObject
 
@@ -14,6 +15,7 @@
 @property(nonatomic, assign) id< NSFetchedResultsControllerDelegate > delegate;
 
 + (id) observationsInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
++ (id) observationsForUser:(User *) user inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 

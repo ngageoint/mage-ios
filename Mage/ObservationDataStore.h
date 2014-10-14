@@ -23,5 +23,6 @@
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView;
 - (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext;
+- (void) startFetchControllerWithObservations: (Observations *) observations;
 
 @end
