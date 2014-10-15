@@ -57,6 +57,9 @@
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
+		F75B589019EEFE060068E3D3 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = F75B588A19EEFE060068E3D3 /* UIImage+Resize.m */; };
+		F75B589119EEFE060068E3D3 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = F75B588B19EEFE060068E3D3 /* UIImage+Alpha.m */; };
+		F75B589219EEFE060068E3D3 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = F75B588C19EEFE060068E3D3 /* UIImage+RoundedCorner.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */; };
@@ -211,6 +214,12 @@
 		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
 		F7531EFE1910131C00CA084C /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		F7531EFF1910131C00CA084C /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
+		F75B588A19EEFE060068E3D3 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		F75B588B19EEFE060068E3D3 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		F75B588C19EEFE060068E3D3 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
+		F75B588D19EEFE060068E3D3 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		F75B588E19EEFE060068E3D3 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		F75B588F19EEFE060068E3D3 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -515,6 +524,19 @@
 			name = Edit;
 			sourceTree = "<group>";
 		};
+		F75B588919EEFDFB0068E3D3 /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				F75B588A19EEFE060068E3D3 /* UIImage+Resize.m */,
+				F75B588B19EEFE060068E3D3 /* UIImage+Alpha.m */,
+				F75B588C19EEFE060068E3D3 /* UIImage+RoundedCorner.m */,
+				F75B588D19EEFE060068E3D3 /* UIImage+RoundedCorner.h */,
+				F75B588E19EEFE060068E3D3 /* UIImage+Resize.h */,
+				F75B588F19EEFE060068E3D3 /* UIImage+Alpha.h */,
+			);
+			name = UIImage;
+			sourceTree = "<group>";
+		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
@@ -556,6 +578,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F75B588919EEFDFB0068E3D3 /* UIImage */,
 				F727516B19C888A3006C63CB /* Fetch */,
 				2FE24CDB19C79B850019688B /* iPad */,
 				4C6A9BBD19813C64004A6205 /* Settings */,
@@ -801,6 +824,7 @@
 				F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
+				F75B589119EEFE060068E3D3 /* UIImage+Alpha.m in Sources */,
 				2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */,
 				F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
@@ -828,12 +852,14 @@
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
+				F75B589219EEFE060068E3D3 /* UIImage+RoundedCorner.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
 				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7F840EB1910151E0009C493 /* MageFilterMenuViewController.m in Sources */,
 				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
+				F75B589019EEFE060068E3D3 /* UIImage+Resize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

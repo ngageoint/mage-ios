@@ -7,6 +7,8 @@
 //
 
 #import "PersonImage.h"
+#import <User.h>
+#import "UIImage+Resize.h"
 
 @implementation PersonImage
 	
@@ -25,10 +27,15 @@
 		imageName = [NSString stringWithFormat:format, @"high"];
 	}
     
-    UIImage *image = [UIImage imageNamed:imageName];
-    [image setAccessibilityIdentifier:imageName];
+//    UIImage *image = [UIImage imageNamed:imageName];
     
-	return image;
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", location.user.iconUrl, [defaults objectForKey:@"token"]]]];
+    UIImage *image = [UIImage imageWithData:data];
+    [image setAccessibilityIdentifier:location.user.iconUrl];
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
+    
+	return resizedImage;
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "ObservationImage.h"
 #import "User+helper.h"
 #import "Location+helper.h"
+#import "UIImage+Resize.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -64,7 +65,7 @@
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.enabled = YES;
             annotationView.canShowCallout = self.canShowUserCallout;
-            annotationView.image = image;
+            
 			
 			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -72,6 +73,7 @@
 		} else {
             annotationView.annotation = annotation;
         }
+        annotationView.image = image;
 		
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
