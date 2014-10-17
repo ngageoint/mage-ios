@@ -51,20 +51,6 @@
     NSMutableArray* viewControllers = [self.viewControllers mutableCopy];
     [viewControllers replaceObjectAtIndex:1 withObject:viewController]; //index 1 corresponds to the detail VC
     self.viewControllers = viewControllers;
-    
-    
-    //    UINavigationController *navController=[[UINavigationController alloc] init];
-    //
-    //    YourSplitViewAppDelegate *delegate=[[UIApplication sharedApplication] delegate];
-    //
-    //    NSArray *viewControllers=[[NSArray alloc] initWithObjects:[delegate.splitViewController.viewControllers objectAtIndex:0],navController,nil];
-    //
-    //    delegate.splitViewController.viewControllers = viewControllers;
-    //
-    //    [localdetailViewController release];
-    //
-    //    [navController release];
 }
-
 
 @end

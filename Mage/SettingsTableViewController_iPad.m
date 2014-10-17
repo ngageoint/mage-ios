@@ -106,7 +106,11 @@
         } else if (indexPath.row == 1) {
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
-    }
+   }
+//   else if (indexPath.section == 2) {
+//       NSLog((@"Clicked logout"));
+//       
+//   }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
