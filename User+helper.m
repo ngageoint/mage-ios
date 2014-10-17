@@ -75,6 +75,9 @@ static User *currentUser = nil;
 		NSDictionary *phone = [phones objectAtIndex:0];
 		[self setPhone:[phone objectForKey:@"number"]];
 	}
+    
+    [self setIconUrl:[json objectForKey:@"iconUrl"]];
+    [self setAvatarUrl:[json objectForKey:@"avatarUrl"]];
 	
 	NSError *error = nil;
 	if (! [context save:&error]) {
