@@ -74,7 +74,7 @@
             annotationView.annotation = annotation;
         }
         annotationView.image = image;
-		
+        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
