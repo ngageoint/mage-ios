@@ -22,10 +22,14 @@
 
 @interface LoginViewController ()
 
+    @property (strong, nonatomic) IBOutlet UITextField *usernameField;
+    @property (strong, nonatomic) IBOutlet UITextField *passwordField;
+    @property (strong, nonatomic) IBOutlet UITextField *serverUrlField;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
     @property (weak, nonatomic) IBOutlet UIButton *loginButton;
     @property (weak, nonatomic) IBOutlet UIButton *lockButton;
     @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+    @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 
     @property (strong, nonatomic) MageServer *server;
 
@@ -35,19 +39,19 @@
 
 - (void) authenticationWasSuccessful:(User *) user {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+    self.usernameField.textColor = [UIColor blackColor];
+    self.passwordField.textColor = [UIColor blackColor];
+    self.loginStatus.hidden = YES;
+    
     [self resetLogin];
 }
 
 - (void) authenticationHadFailure {
-	// do something on failed login
-	UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Login failure"
-                          message:@"The username or password you entered is incorrect"
-                          delegate:nil
-                          cancelButtonTitle:@"Dismiss"
-                          otherButtonTitles:nil];
-	
-	[alert show];
+    self.loginStatus.hidden = NO;
+    self.loginStatus.text = @"The username or password you entered is incorrect";
+    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+
     [self resetLogin];
     
 }
@@ -71,8 +75,8 @@
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setEnabled:YES];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
-    [self.serverField setEnabled:YES];
-    [self.serverField setBackgroundColor:[UIColor whiteColor]];
+    [self.serverUrlField setEnabled:YES];
+    [self.serverUrlField setBackgroundColor:[UIColor whiteColor]];
     [self.lockButton setEnabled:YES];
     [self.showPassword setEnabled:YES];
 }
@@ -84,8 +88,8 @@
     [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
     [self.passwordField setEnabled:NO];
     [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.serverField setEnabled:NO];
-    [self.serverField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.serverUrlField setEnabled:NO];
+    [self.serverUrlField setBackgroundColor:[UIColor lightGrayColor]];
     [self.lockButton setEnabled:NO];
     [self.showPassword setEnabled:NO];
 }
@@ -119,11 +123,11 @@
 }
 
 - (IBAction)toggleUrlField:(id)sender {
-    if (self.serverField.enabled) {
-		NSURL *url = [NSURL URLWithString:self.serverField.text];
+    if (self.serverUrlField.enabled) {
+		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
         [self initMageServerWithURL:url];
     } else {
-        [self.serverField setEnabled:YES];
+        [self.serverUrlField setEnabled:YES];
         [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
 }
@@ -169,25 +173,23 @@
     [self.view addGestureRecognizer:tap];
     
     NSURL *url = [MageServer baseURL];
-    [self.serverField setText:[url absoluteString]];
+    [self.serverUrlField setText:[url absoluteString]];
     [self initMageServerWithURL:url];
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
     self.server = [[MageServer alloc] initWithURL:url inManagedObjectContext:self.contextHolder.managedObjectContext success:^{
-        [self.serverField setEnabled:NO];
+        [self.serverUrlField setEnabled:NO];
         [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         
         self.server.authentication.delegate = self;
-    } failure:^(NSError *error) {
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Invalid Server URL"
-                              message:@"Could not contact MAGE server, please verify URL and try again"
-                              delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
         
-        [alert show];
+        self.loginStatus.hidden = YES;
+        self.serverUrlField.textColor = [UIColor blackColor];
+    } failure:^(NSError *error) {
+        self.loginStatus.hidden = NO;
+        self.loginStatus.text = error.localizedDescription;
+        self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     }];
 }
 
