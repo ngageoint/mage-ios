@@ -38,7 +38,7 @@
 + (NSOperation *) operationToPullLayersWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/layers"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"Feature", @"type", nil];
     
     HttpManager *http = [HttpManager singleton];

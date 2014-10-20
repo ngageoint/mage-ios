@@ -72,7 +72,7 @@
 
 + (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/locations/users"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

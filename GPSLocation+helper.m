@@ -45,7 +45,7 @@
 }
 
 + (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure {
-	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/locations/"];
+	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/"];
 	NSLog(@"Trying to push locations to server %@", url);
 	
     HttpManager *http = [HttpManager singleton];

@@ -113,7 +113,7 @@ NSDictionary *_fieldNameToField;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *layerId = [defaults stringForKey:@"layerId"];
-    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseServerUrl], layerId];
+    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseURL], layerId];
     NSLog(@"Fetching from layer %@", layerId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

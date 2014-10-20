@@ -7,22 +7,43 @@
 //
 
 #import "MageServer.h"
+#import "HttpManager.h"
 
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
+@interface MageServer ()
+@end
+
 @implementation MageServer
 
-+ (NSURL *) baseServerUrl {
++ (NSURL *) baseURL {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-    NSString *baseServerUrl = [defaults stringForKey:kBaseServerUrlKey];
-    return [NSURL URLWithString:baseServerUrl];
+    NSString *url = [defaults objectForKey:kBaseServerUrlKey];
+    return [NSURL URLWithString:url];
 }
 
-+ (void) setBaseServerUrl:(NSString *) baseServerUrl {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:baseServerUrl forKey:kBaseServerUrlKey];
-    [defaults synchronize];
+- (id) initWithURL:(NSURL *) url inManagedObjectContext: (NSManagedObjectContext *) context success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure {
+    if (self = [super init]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
+        [defaults synchronize];
+        
+        HttpManager *http = [HttpManager singleton];
+        NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
+        [http.manager GET:apiURL parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+            // TODO at some point we could read the server response and create the correct authentication module.
+            // For now just create the local (username/password) authentication module.
+            self.authentication = [Authentication authenticationWithType:LOCAL inManagedObjectContext:context];
+            
+            // TODO check server version
+            
+            success();
+        } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+            failure(error);
+        }];
+    }
+    
+    return self;
 }
 
 @end

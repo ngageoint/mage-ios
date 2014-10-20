@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Authentication.h"
 
 @interface MageServer : NSObject
 
-+ (NSURL *) baseServerUrl;
-+ (void) setBaseServerUrl:(NSString *) baseServerUrl;
+@property (nonatomic, strong) id<Authentication> authentication;
+
++ (NSURL *) baseURL;
+
+- (id) initWithURL:(NSURL *) url inManagedObjectContext: (NSManagedObjectContext *) context success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
 
 @end

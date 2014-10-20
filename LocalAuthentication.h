@@ -11,11 +11,8 @@
 
 @interface LocalAuthentication : NSObject<Authentication>
 
-- (id) initWithURL: (NSURL *) url inManagedObjectContext:(NSManagedObjectContext *) context;
+- (id) initWithManagedObjectContext:(NSManagedObjectContext *) context;
 
 - (void) loginWithParameters: (NSDictionary *) parameters;
-
-@property(strong) NSURL *baseURL;
-@property(strong) NSDictionary *parameters;
 
 @end

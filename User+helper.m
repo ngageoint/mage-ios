@@ -86,7 +86,7 @@ static User *currentUser = nil;
 }
 
 + (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context {
-	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseServerUrl], @"api/users"];
+	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"];
 	
 	NSLog(@"Trying to fetch users from server %@", url);
 	

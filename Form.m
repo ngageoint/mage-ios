@@ -48,7 +48,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString* formId = [defaults objectForKey: @"formId"];
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", [MageServer baseServerUrl], @"api/forms", formId];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", [MageServer baseURL], @"api/forms", formId];
     
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"/Form.zip"];
     

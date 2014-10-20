@@ -12,6 +12,7 @@
 
 #import "User+helper.h"
 #import "HttpManager.h"
+#import "MageServer.h"
 
 @interface LocalAuthentication ()
 	@property(nonatomic) NSManagedObjectContext *context;
@@ -21,9 +22,8 @@
 
 @synthesize delegate;
 
-- (id) initWithURL: (NSURL *) url inManagedObjectContext:(NSManagedObjectContext *) context {
+- (id) initWithManagedObjectContext:(NSManagedObjectContext *) context {
 	if (self = [super init]) {
-		_baseURL = url;
 		_context = context;
 	}
 	
@@ -49,7 +49,7 @@
 - (void) performLogin: (NSDictionary *) parameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     HttpManager *http = [HttpManager singleton];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [_baseURL absoluteString], @"api/login"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
     
     [http.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
         NSString *token = [response objectForKey:@"token"];
@@ -63,7 +63,6 @@
         NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         dateFormat.locale = posix;
         NSDate* output = [dateFormat dateFromString:expireString];
-        
         
         [defaults setObject: output forKey:@"tokenExpirationDate"];
         [defaults setObject: token forKey:@"token"];
@@ -89,7 +88,7 @@
     NSLog(@"Registering device");
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     HttpManager *http = [HttpManager singleton];
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [_baseURL absoluteString], @"api/devices"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/devices"];
     [http.manager POST: url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
         BOOL registered = [[response objectForKey:@"registered"] boolValue];
         if (registered) {
@@ -108,7 +107,6 @@
             [delegate authenticationHadFailure];
         }
     }];
-
 }
 
 - (User *) fetchUser:(NSDictionary *) userJson {
