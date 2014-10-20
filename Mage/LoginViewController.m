@@ -22,16 +22,16 @@
 
 @interface LoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
-@property (weak, nonatomic) IBOutlet UIButton *lockButton;
-@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+    @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
+    @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+    @property (weak, nonatomic) IBOutlet UIButton *lockButton;
+    @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+
+    @property (strong, nonatomic) MageServer *server;
 
 @end
 
 @implementation LoginViewController
-
-id<Authentication> _authentication;
 
 - (void) authenticationWasSuccessful:(User *) user {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
@@ -103,7 +103,7 @@ id<Authentication> _authentication;
 														 nil];
 	
 	// TODO might want to mask here or put a spinner on the login button
-	[_authentication loginWithParameters: parameters];
+	[self.server.authentication loginWithParameters: parameters];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -119,21 +119,12 @@ id<Authentication> _authentication;
 }
 
 - (IBAction)toggleUrlField:(id)sender {
-    UIButton * button = (UIButton *)sender;
-    if (_serverField.enabled) {
-        [_serverField setEnabled:NO];
-        button.selected = NO;
-		
-		// TODO need a better way to reset url
-		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
+    if (self.serverField.enabled) {
 		NSURL *url = [NSURL URLWithString:self.serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.contextHolder.managedObjectContext];
-		_authentication.delegate = self;
-		
-        [MageServer setBaseServerUrl:[url absoluteString]];
+        [self initMageServerWithURL:url];
     } else {
         [self.serverField setEnabled:YES];
-        button.selected = YES;
+        [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
 }
 
@@ -165,17 +156,9 @@ id<Authentication> _authentication;
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
-	
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
-    [self.serverField setText:[[MageServer baseServerUrl] absoluteString]];
     [self.passwordField setDelegate:self];
-	
-	_authentication = [Authentication
-					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
-					   inManagedObjectContext:self.contextHolder.managedObjectContext];
-	_authentication.delegate = self;
-    
 }
 
 - (void) viewDidLoad {
@@ -184,6 +167,28 @@ id<Authentication> _authentication;
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
+    NSURL *url = [MageServer baseURL];
+    [self.serverField setText:[url absoluteString]];
+    [self initMageServerWithURL:url];
+}
+
+- (void) initMageServerWithURL:(NSURL *) url {
+    self.server = [[MageServer alloc] initWithURL:url inManagedObjectContext:self.contextHolder.managedObjectContext success:^{
+        [self.serverField setEnabled:NO];
+        [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
+        
+        self.server.authentication.delegate = self;
+    } failure:^(NSError *error) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"Invalid Server URL"
+                              message:@"Could not contact MAGE server, please verify URL and try again"
+                              delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        
+        [alert show];
+    }];
 }
 
 -(void)dismissKeyboard {

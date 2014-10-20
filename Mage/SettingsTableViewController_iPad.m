@@ -48,7 +48,7 @@
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.baseServerUrl.text = [[MageServer baseServerUrl] absoluteString];
+//    self.baseServerUrl.text = [[MageServer baseServerUrl] absoluteString];
     
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
