@@ -11,36 +11,23 @@
 #import "UIImage+Resize.h"
 
 @implementation PersonImage
-	
-+ (UIImage *) imageForLocation:(Location *) location {
-    NSString *imageName = nil;
-    
-    if (!location || !location.timestamp) imageName = @"person";
-	
-	NSString *format = @"person_%@";
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:location.timestamp];
-	if (interval <= 600) {
-		imageName = [NSString stringWithFormat:format, @"low"];
-	} else if (interval <= 1200) {
-		imageName = [NSString stringWithFormat:format, @"medium"];
-	} else {
-		imageName = [NSString stringWithFormat:format, @"high"];
-	}
-    
-//    UIImage *image = ;
-    
+
++ (UIImage *) imageForUser: (User *) user constrainedWithSize: (CGSize) size {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    User *user = location.user;
     if ([user iconUrl] != nil) {
-    NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", location.user.iconUrl, [defaults objectForKey:@"token"]]]];
-    UIImage *image = [UIImage imageWithData:data];
-    [image setAccessibilityIdentifier:location.user.iconUrl];
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
-    
-	return [PersonImage mergeImage:resizedImage withDot:[PersonImage blueCircle]];
-    } else {
-        return [UIImage imageNamed:imageName];
+        NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults objectForKey:@"token"]]]];
+        UIImage *image = [UIImage imageWithData:data];
+        
+        UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:size interpolationQuality:kCGInterpolationLow];
+        [resizedImage setAccessibilityIdentifier:user.iconUrl];
+        return resizedImage;
     }
+    return nil;
+}
+
++ (UIImage *) imageForLocation:(Location *) location {
+    UIImage *personImage = [self imageForUser:location.user constrainedWithSize:CGSizeMake(37, 10000)];
+    return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
 }
 
 + (UIImage *)blueCircle {
