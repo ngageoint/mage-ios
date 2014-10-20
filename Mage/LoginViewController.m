@@ -22,32 +22,36 @@
 
 @interface LoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
-@property (weak, nonatomic) IBOutlet UIButton *lockButton;
-@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+    @property (strong, nonatomic) IBOutlet UITextField *usernameField;
+    @property (strong, nonatomic) IBOutlet UITextField *passwordField;
+    @property (strong, nonatomic) IBOutlet UITextField *serverUrlField;
+    @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
+    @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+    @property (weak, nonatomic) IBOutlet UIButton *lockButton;
+    @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+    @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
+
+    @property (strong, nonatomic) MageServer *server;
 
 @end
 
 @implementation LoginViewController
 
-id<Authentication> _authentication;
-
 - (void) authenticationWasSuccessful:(User *) user {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+    self.usernameField.textColor = [UIColor blackColor];
+    self.passwordField.textColor = [UIColor blackColor];
+    self.loginStatus.hidden = YES;
+    
     [self resetLogin];
 }
 
 - (void) authenticationHadFailure {
-	// do something on failed login
-	UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Login failure"
-                          message:@"The username or password you entered is incorrect"
-                          delegate:nil
-                          cancelButtonTitle:@"Dismiss"
-                          otherButtonTitles:nil];
-	
-	[alert show];
+    self.loginStatus.hidden = NO;
+    self.loginStatus.text = @"The username or password you entered is incorrect";
+    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+
     [self resetLogin];
     
 }
@@ -71,8 +75,8 @@ id<Authentication> _authentication;
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setEnabled:YES];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
-    [self.serverField setEnabled:YES];
-    [self.serverField setBackgroundColor:[UIColor whiteColor]];
+    [self.serverUrlField setEnabled:YES];
+    [self.serverUrlField setBackgroundColor:[UIColor whiteColor]];
     [self.lockButton setEnabled:YES];
     [self.showPassword setEnabled:YES];
 }
@@ -84,8 +88,8 @@ id<Authentication> _authentication;
     [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
     [self.passwordField setEnabled:NO];
     [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.serverField setEnabled:NO];
-    [self.serverField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.serverUrlField setEnabled:NO];
+    [self.serverUrlField setBackgroundColor:[UIColor lightGrayColor]];
     [self.lockButton setEnabled:NO];
     [self.showPassword setEnabled:NO];
 }
@@ -103,7 +107,7 @@ id<Authentication> _authentication;
 														 nil];
 	
 	// TODO might want to mask here or put a spinner on the login button
-	[_authentication loginWithParameters: parameters];
+	[self.server.authentication loginWithParameters: parameters];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -119,21 +123,12 @@ id<Authentication> _authentication;
 }
 
 - (IBAction)toggleUrlField:(id)sender {
-    UIButton * button = (UIButton *)sender;
-    if (_serverField.enabled) {
-        [_serverField setEnabled:NO];
-        button.selected = NO;
-		
-		// TODO need a better way to reset url
-		// Problem here is that a url reset could mean a lot of things, like the authentication type changed
-		NSURL *url = [NSURL URLWithString:self.serverField.text];
-		_authentication = [Authentication authenticationWithType:LOCAL url:url inManagedObjectContext:self.contextHolder.managedObjectContext];
-		_authentication.delegate = self;
-		
-        [MageServer setBaseServerUrl:[url absoluteString]];
+    if (self.serverUrlField.enabled) {
+		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
+        [self initMageServerWithURL:url];
     } else {
-        [self.serverField setEnabled:YES];
-        button.selected = YES;
+        [self.serverUrlField setEnabled:YES];
+        [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
 }
 
@@ -165,17 +160,9 @@ id<Authentication> _authentication;
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
-	
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
-    [self.serverField setText:[[MageServer baseServerUrl] absoluteString]];
     [self.passwordField setDelegate:self];
-	
-	_authentication = [Authentication
-					   authenticationWithType:LOCAL url:[NSURL URLWithString:_serverField.text]
-					   inManagedObjectContext:self.contextHolder.managedObjectContext];
-	_authentication.delegate = self;
-    
 }
 
 - (void) viewDidLoad {
@@ -184,6 +171,26 @@ id<Authentication> _authentication;
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
+    NSURL *url = [MageServer baseURL];
+    [self.serverUrlField setText:[url absoluteString]];
+    [self initMageServerWithURL:url];
+}
+
+- (void) initMageServerWithURL:(NSURL *) url {
+    self.server = [[MageServer alloc] initWithURL:url inManagedObjectContext:self.contextHolder.managedObjectContext success:^{
+        [self.serverUrlField setEnabled:NO];
+        [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
+        
+        self.server.authentication.delegate = self;
+        
+        self.loginStatus.hidden = YES;
+        self.serverUrlField.textColor = [UIColor blackColor];
+    } failure:^(NSError *error) {
+        self.loginStatus.hidden = NO;
+        self.loginStatus.text = error.localizedDescription;
+        self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    }];
 }
 
 -(void)dismissKeyboard {

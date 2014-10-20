@@ -21,7 +21,7 @@
 -(void) viewWillAppear:(BOOL)animate {
     [super viewWillAppear:animate];
     
-    NSURL *baseSeverUrl = [MageServer baseServerUrl];
+    NSURL *baseSeverUrl = [MageServer baseURL];
 	NSString *urlText = baseSeverUrl != nil ? [baseSeverUrl absoluteString] : @"";
     [self.baseServerUrl setText:urlText];
 }
