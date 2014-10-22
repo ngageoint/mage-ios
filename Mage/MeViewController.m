@@ -16,8 +16,9 @@
 #import "MapDelegate.h"
 #import <Location+helper.h>
 #import "ObservationDataStore.h"
+#import "ImageViewerViewController.h"
 
-@interface MeViewController ()
+@interface MeViewController () <UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
@@ -52,6 +53,27 @@
     [self.mapDelegate setObservations:observations];
 }
 
+- (IBAction)portraitClick:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", @"Change Avatar", nil];
+    [actionSheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            // view avatar
+            NSLog(@"view avatar");
+            [self performSegueWithIdentifier:@"viewImageSegue" sender:self];
+            break;
+        case 1:
+            // change avatar
+            NSLog(@"change avatar");
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -74,6 +96,15 @@
 - (IBAction)dismissMe:(id)sender {
     NSLog(@"Done");
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+        ImageViewerViewController *vc = [segue destinationViewController];
+        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+        [vc setImageUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]];
+        
+    }
 }
 
 @end
