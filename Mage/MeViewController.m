@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *username;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -54,6 +55,7 @@
     Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     [self.mapDelegate setObservations:observations];
+    self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -111,17 +113,6 @@
     
     HttpManager *manager = [HttpManager singleton];
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-//    NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithRequest:request fromData:UIImagePNGRepresentation(image) progress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-//        if (error) {
-//            NSLog(@"Error: %@", error);
-//        } else {
-//            NSLog(@"Success: %@ %@", response, responseObject);
-//        }
-//    }];
-//    [uploadTask resume];
-    
-    
     
     NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:UIImagePNGRepresentation(image) name:@"avatar" fileName:@"avatar.png" mimeType:@"image/png"];
@@ -143,8 +134,6 @@
     }];
     
     [uploadTask resume];
-    
-    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -189,6 +178,11 @@
         NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
         [vc setImageUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]];
         
+    } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
+        id destination = [segue destinationViewController];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+        [destination setObservation:observation];
     }
 }
 
