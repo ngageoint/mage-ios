@@ -36,6 +36,7 @@
 		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
     } else {
         [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
+        [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [defaults stringForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
 		[self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:nil];
     }
 }
