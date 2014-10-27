@@ -49,13 +49,14 @@
 
     [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]]]];
     
-    Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
-    [self.mapDelegate setLocations:locations];
-    
     Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
     [self.observationDataStore startFetchControllerWithObservations:observations];
-    [self.mapDelegate setObservations:observations];
-    self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+    if (self.mapDelegate != nil) {
+        [self.mapDelegate setObservations:observations];
+        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+        Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+        [self.mapDelegate setLocations:locations];
+    }
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -150,7 +151,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
 //    CLLocationDistance latitudeMeters = 500;
 //    CLLocationDistance longitudeMeters = 500;
 //    NSDictionary *properties = self.user.location.properties;
