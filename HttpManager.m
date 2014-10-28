@@ -26,6 +26,11 @@ static HttpManager *sharedSingleton = nil;
         _manager = [AFHTTPRequestOperationManager manager];
         _manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
         _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+        //_sessionManager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        _sessionManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
     }
     return self;
 }

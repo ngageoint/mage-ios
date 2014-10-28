@@ -13,5 +13,6 @@
 
 + (HttpManager *) singleton;
 @property(strong) AFHTTPRequestOperationManager *manager;
+@property(strong) AFHTTPSessionManager *sessionManager;
 
 @end
