@@ -13,7 +13,7 @@ extern NSString * const kObservationFetchFrequencyKey;
 
 @interface ObservationFetchService : NSObject
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
+- (id) init;
 
 - (void) start;
 - (void) stop;

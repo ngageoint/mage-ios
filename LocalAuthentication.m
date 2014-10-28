@@ -13,24 +13,18 @@
 #import "User+helper.h"
 #import "HttpManager.h"
 #import "MageServer.h"
-
-@interface LocalAuthentication ()
-	@property(nonatomic) NSManagedObjectContext *context;
-@end
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation LocalAuthentication
 
 @synthesize delegate;
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) context {
-	if (self = [super init]) {
-		_context = context;
-	}
-	
-	return self;
+- (NSDictionary *) loginParameters {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    return [defaults objectForKey:@"loginParameters"];
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters {
+- (void) loginWithParameters: (NSDictionary *) parameters  {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     BOOL registered = [defaults boolForKey:@"deviceRegistered"];
@@ -55,23 +49,25 @@
         NSString *token = [response objectForKey:@"token"];
 		User *user = [self fetchUser:[response objectForKey:@"user"]];
 		
-        NSString *expireString = [response objectForKey:@"expirationDate"];
-        
         NSDateFormatter *dateFormat = [NSDateFormatter new];
         dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         // Always use this locale when parsing fixed format date strings
         NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         dateFormat.locale = posix;
-        NSDate* output = [dateFormat dateFromString:expireString];
-        
-        [defaults setObject: output forKey:@"tokenExpirationDate"];
-        [defaults setObject: token forKey:@"token"];
-        [defaults synchronize];
-        
-        NSLog(@"Set the authorization token to: %@", token);
+        NSDate* tokenExpirationDate = [dateFormat dateFromString:[response objectForKey:@"expirationDate"]];
         
         [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
 		      
+        NSDictionary *loginParameters = @{
+          @"username": (NSString *) [parameters objectForKey:@"username"],
+          @"serverUrl": [[MageServer baseURL] absoluteString],
+          @"token": token,
+          @"tokenExpirationDate": tokenExpirationDate
+        };
+    
+        [defaults setObject:loginParameters forKey:@"loginParameters"];
+        [defaults synchronize];
+        
 		if (delegate) {
 			[delegate authenticationWasSuccessful:user];
 		}
@@ -111,10 +107,10 @@
 
 - (User *) fetchUser:(NSDictionary *) userJson {
 	NSString *userId = [userJson objectForKey:@"_id"];
-	User *user = [User fetchUserForId:userId inManagedObjectContext:_context];
+	User *user = [User fetchUserForId:userId];
 	
 	if (!user) {
-		user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:_context];
+		user = [User insertUserForJson:userJson myself:YES];
 	}
 		
 	return user;

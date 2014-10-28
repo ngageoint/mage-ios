@@ -12,6 +12,6 @@
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 
-+ (Attachment*) attachmentForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
++ (Attachment*) attachmentForJson: (NSDictionary *) json;
 
 @end

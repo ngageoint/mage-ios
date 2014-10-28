@@ -12,7 +12,7 @@
 
 @interface Location (helper)
 
-+ (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
++ (Location *) locationForJson: (NSDictionary *) json;
 
 -(CLLocation *) location;
 
@@ -20,7 +20,7 @@
 
 - (void) populateLocationFromJson:(NSArray *) locations;
 
-+ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
++ (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete;
 
 @property (nonatomic, retain) Geometry* geometry;
 

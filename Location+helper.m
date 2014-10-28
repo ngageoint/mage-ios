@@ -14,14 +14,16 @@
 #import "HttpManager.h"
 #import "MageServer.h"
 #import <NSDate+DateTools.h>
+#import "NSDate+Iso8601.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Location (helper)
 
-+ (Location *) locationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (Location *) locationForJson: (NSDictionary *) json {
 	NSArray *locations = [json objectForKey:@"locations"];
 	if (!locations.count) return nil;
 
-	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:context];
+	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
 	[location populateLocationFromJson:locations];
 	
 	return location;
@@ -70,15 +72,14 @@
 }
 
 
-+ (NSOperation *) operationToPullLocationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    __block NSDate *lastLocationDate = [defaults objectForKey:@"lastLocationDate"];
+    __block NSDate *lastLocationDate = [self fetchLastLocationDate];
     if (lastLocationDate != nil) {
-        [parameters setObject:lastLocationDate forKey:@"startDate"];
+        [parameters setObject:[lastLocationDate iso8601String] forKey:@"startDate"];
     }
 	
     HttpManager *http = [HttpManager singleton];
@@ -86,14 +87,14 @@
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
 		NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[userLocations count]);
-        User *currentUser = [User fetchCurrentUserForManagedObjectContext:context];
+        User *currentUser = [User fetchCurrentUser];
         
 		// Get the user ids to query
 		NSMutableArray *userIds = [[NSMutableArray alloc] init];
 		for (NSDictionary *userLocation in userLocations) {
 			[userIds addObject:[userLocation objectForKey:@"user"]];
 		}
-		
+        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
 		// Create the fetch request to get all users IDs from server response.
 		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 		[fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
@@ -120,23 +121,19 @@
                     @"firstname": @"unknown",
                     @"lastname": @"unkown"
                 };
-                user = [User insertUserForJson:userDictionary inManagedObjectContext:context];
+                user = [User insertUserForJson:userDictionary];
             };
             if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
             
 			Location *location = user.location;
 			if (location == nil) {
 				// not in core data yet need to create a new managed object
-				location = [Location locationForJson:userLocation inManagedObjectContext:context];
+				location = [Location locationForJson:userLocation];
 				user.location = location;
 			} else {
 				// already exists in core data, lets update the object we have
 				[location populateLocationFromJson:locations];
 			}
-            
-            if ([location.timestamp isLaterThan:lastLocationDate]) {
-                lastLocationDate = location.timestamp;
-            }
         }
 		
 		if (! [context save:&error]) {
@@ -145,11 +142,8 @@
         
         if (newUserFound) {
             // For now if we find at least one new user let just go grab the users again
-            [[User operationToFetchUsersWithManagedObjectContext:context] start];
+            [[User operationToFetchUsers] start];
         }
-        
-        [defaults setObject:lastLocationDate forKey:@"lastLocationDate"];
-        [defaults synchronize];
         
         complete(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -158,6 +152,35 @@
     }];
     
     return operation;
+}
+
++ (NSDate *) fetchLastLocationDate {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:context]];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+    request.fetchLimit = 1;
+    
+    NSError *error;
+    NSArray *locations = [context executeFetchRequest:request error:&error];
+    
+    if (error) {
+        NSLog(@"Error getting last location from database");
+        return nil;
+    }
+    
+    if (locations.count != 1) {
+        return nil;
+    }
+    
+    NSDate *date = nil;
+    Location *location = [locations objectAtIndex:0];
+    if (location) {
+        date = location.timestamp;
+    }
+        
+    return date;
 }
 
 - (NSString *)sectionIdentifier

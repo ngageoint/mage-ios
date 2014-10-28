@@ -17,15 +17,12 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 @interface ObservationFetchService ()
     @property (nonatomic) NSTimeInterval interval;
     @property (nonatomic, strong) NSTimer* observationFetchTimer;
-    @property (nonatomic, weak) NSManagedObjectContext* managedObjectContext;
 @end
 
 @implementation ObservationFetchService
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) init {
     if (self = [super init]) {
-		_managedObjectContext = managedObjectContext;
-    
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         _interval = [[defaults valueForKey:kObservationFetchFrequencyKey] doubleValue];
@@ -43,9 +40,9 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
     [self stop];
     
     HttpManager *http = [HttpManager singleton];
-    NSOperation *layerPullOperation = [Layer operationToPullLayersWithManagedObjectContext:_managedObjectContext complete:^(BOOL success) {
+    NSOperation *layerPullOperation = [Layer operationToPullLayers:^(BOOL success) {
         if (success) {
-            NSOperation* formPullOp = [Form operationToPullFormWithManagedObjectContext:_managedObjectContext complete:^(BOOL success) {
+            NSOperation* formPullOp = [Form operationToPullForm:^(BOOL success) {
                 if (success) {
                     // Layers and Form pulled, lets start the observation fetch
                     [self pullObservations];
@@ -73,7 +70,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) pullObservations {
-    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithManagedObjectContext:_managedObjectContext complete:^(BOOL success) {
+    NSOperation *observationFetchOperation = [Observation operationToPullObservations:^(BOOL success) {
         [self scheduleTimer];
     }];
     

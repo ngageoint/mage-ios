@@ -15,24 +15,21 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 @interface LocationFetchService ()
     @property (nonatomic) NSTimeInterval interval;
     @property (nonatomic, strong) NSTimer* locationFetchTimer;
-    @property (nonatomic, weak) NSManagedObjectContext* managedObjectContext;
 @end
 
 @implementation LocationFetchService
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) init {
     if (self = [super init]) {
-		_managedObjectContext = managedObjectContext;
-	}
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    _interval = [[defaults valueForKey:kLocationFetchFrequencyKey] doubleValue];
-    
-    [[NSUserDefaults standardUserDefaults] addObserver:self
-                                            forKeyPath:kLocationFetchFrequencyKey
-                                               options:NSKeyValueObservingOptionNew
-                                               context:NULL];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        _interval = [[defaults valueForKey:kLocationFetchFrequencyKey] doubleValue];
+        
+        [[NSUserDefaults standardUserDefaults] addObserver:self
+                                                forKeyPath:kLocationFetchFrequencyKey
+                                                   options:NSKeyValueObservingOptionNew
+                                                   context:NULL];
+    }
 	
 	return self;
 }
@@ -53,7 +50,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) pullLocations{
-    NSOperation *locationFetchOperation = [Location operationToPullLocationsWithManagedObjectContext:_managedObjectContext complete:^(BOOL success) {
+    NSOperation *locationFetchOperation = [Location operationToPullLocations:^(BOOL success) {
         [self scheduleTimer];
     }];
     

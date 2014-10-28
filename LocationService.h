@@ -16,7 +16,7 @@ extern NSString * const kLocationReportingFrequencyKey;
 
 @interface LocationService : NSObject<CLLocationManagerDelegate>
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
+- (id) init;
 
 - (void) start;
 - (void) stop;

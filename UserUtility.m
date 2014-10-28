@@ -13,12 +13,14 @@
 
 + (BOOL) isTokenExpired {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *loginParameters = [defaults objectForKey:@"loginParameters"];
     
-    NSString *token = [defaults stringForKey:@"token"];
+    NSString *token = [loginParameters objectForKey:@"token"];
     if ([token length] == 0) {
         return YES;
     }
-    NSDate *tokenExpirationDate = [defaults objectForKey:@"tokenExpirationDate"];
+    
+    NSDate *tokenExpirationDate = [loginParameters objectForKey:@"tokenExpirationDate"];
     if (tokenExpirationDate != nil && [tokenExpirationDate isKindOfClass:NSDate.class]) {
         NSDate *currentDate = [NSDate date];
         NSLog(@"current date %@ token expiration %@", currentDate, tokenExpirationDate);
@@ -29,9 +31,14 @@
 
 + (void) expireToken {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-    [defaults removeObjectForKey:@"token"];
-    [defaults removeObjectForKey:@"tokenExpirationDate"];
+    NSMutableDictionary *loginParameters = [[defaults objectForKey:@"loginParameters"] mutableCopy];
+    
+    [loginParameters removeObjectForKey:@"token"];
+    [loginParameters removeObjectForKey:@"tokenExpirationDate"];
+    
+    [defaults setObject:loginParameters forKey:@"loginParameters"];
+    
+    [defaults synchronize];
 }
 
 @end

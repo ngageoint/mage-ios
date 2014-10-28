@@ -11,10 +11,10 @@
 
 @implementation Authentication
 
-+ (id) authenticationWithType: (AuthenticationType) type inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) authenticationWithType: (AuthenticationType) type {
 	switch(type) {
 		case LOCAL: {
-			return [[LocalAuthentication alloc] initWithManagedObjectContext:context];
+			return [[LocalAuthentication alloc] init];
 		}
 		default: {
 			return nil;

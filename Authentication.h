@@ -24,9 +24,9 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 @protocol Authentication <NSObject>
 
 @required
-- (id<Authentication>) initWithManagedObjectContext: (NSManagedObjectContext *) context;
 
 - (void) loginWithParameters: (NSDictionary *) parameters;
+- (NSDictionary *) loginParameters;
 
 @property(nonatomic, retain) id<AuthenticationDelegate> delegate;
 
@@ -34,6 +34,6 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 
 @interface Authentication : NSObject
 
-+ (id) authenticationWithType: (AuthenticationType) type inManagedObjectContext: (NSManagedObjectContext *) context;
++ (id) authenticationWithType: (AuthenticationType) type;
 
 @end

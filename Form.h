@@ -11,6 +11,6 @@
 
 @interface Form : NSObject
 
-+ (NSOperation *) operationToPullFormWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete;
++ (NSOperation *) operationToPullForm:(void (^) (BOOL success)) complete;
 
 @end

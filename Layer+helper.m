@@ -13,6 +13,8 @@
 #import "Form.h"
 #import "Observation+helper.h"
 #import "MageServer.h"
+#import "Server+helper.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Layer (helper)
 
@@ -26,18 +28,17 @@
     return self;
 }
 
-+ (id) layerForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) layerForJson: (NSDictionary *) json {
     
-    Layer *layer = [[Layer alloc] initWithEntity:[NSEntityDescription entityForName:@"Layer" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
+    Layer *layer = [[Layer alloc] initWithEntity:[NSEntityDescription entityForName:@"Layer" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]] insertIntoManagedObjectContext:nil];
     
     [layer populateObjectFromJson:json];
     
     return layer;
 }
 
-+ (NSOperation *) operationToPullLayersWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
++ (NSOperation *) operationToPullLayers:(void (^) (BOOL success)) complete {
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"Feature", @"type", nil];
     
@@ -47,11 +48,13 @@
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Layer request complete %@", responseObject);
         NSArray *layers = responseObject;
+        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
         for (id layer in layers) {
-            Layer *l = [Layer layerForJson:layer inManagedObjectContext:context];
-            [defaults setObject:l.formId forKey:@"formId"];
-            [defaults setObject:l.remoteId forKey:@"layerId"];
-            [defaults synchronize];
+            Layer *l = [Layer layerForJson:layer];
+            
+            [Server setObservationFormId:l.formId];
+            [Server setObservationLayerId:l.remoteId];
+            
             NSLog(@"Form id is %@", l.formId);
             
             NSSet *existingLayers = [context fetchObjectsForEntityName:@"Layer" withPredicate:@"(remoteId == %@)", l.remoteId];

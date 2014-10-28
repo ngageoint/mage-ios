@@ -16,6 +16,7 @@
 #import "FileInZipInfo.h"
 #import "ObservationFetchService.h"
 #import "MageServer.h"
+#import "Server+helper.h"
 
 static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
     if ([JSONObject isKindOfClass:[NSArray class]]) {
@@ -44,10 +45,8 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
 @implementation Form
 
-+ (NSOperation *) operationToPullFormWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
-
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString* formId = [defaults objectForKey: @"formId"];
++ (NSOperation *) operationToPullForm:(void (^) (BOOL success)) complete {
+    NSString* formId = [Server observationFormId];
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", [MageServer baseURL], @"api/forms", formId];
     
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"/Form.zip"];
@@ -107,7 +106,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
             json = AFJSONObjectByRemovingKeysWithNullValues(json, NSJSONReadingAllowFragments);
 
-            [defaults setObject:json forKey:@"form"];
+            [Server setObservationForm:json];
         }
         
         complete(YES);

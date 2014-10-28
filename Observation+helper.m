@@ -12,11 +12,10 @@
 #import "GeoPoint.h"
 #import "Attachment+helper.h"
 #import <NSDate+DateTools.h>
+#import "NSDate+Iso8601.h"
 #import "MageServer.h"
-
-@interface Observation ()
-
-@end
+#import "Server+helper.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Observation (helper)
 
@@ -39,7 +38,7 @@ NSDictionary *_fieldNameToField;
     return _fieldNameToField;
 }
 
-- (id) populateObjectFromJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
+- (id) populateObjectFromJson: (NSDictionary *) json {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setUserId:[json objectForKey:@"userId"]];
     [self setDeviceId:[json objectForKey:@"deviceId"]];
@@ -102,24 +101,23 @@ NSDictionary *_fieldNameToField;
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
-+ (id) observationForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
-    Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
-    [observation populateObjectFromJson:json inManagedObjectContext: context];
++ (id) observationForJson: (NSDictionary *) json {
+    Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]] insertIntoManagedObjectContext:nil];
+    [observation populateObjectFromJson:json];
     
     return observation;
 }
 
-+ (NSOperation *) operationToPullObservationsWithManagedObjectContext: (NSManagedObjectContext *) context complete:(void (^) (BOOL success)) complete {
++ (NSOperation *) operationToPullObservations:(void (^) (BOOL success)) complete {
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *layerId = [defaults stringForKey:@"layerId"];
+    NSNumber *layerId = [Server observationLayerId];
     NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseURL], layerId];
     NSLog(@"Fetching from layer %@", layerId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    __block NSDate *lastObservationDate = [defaults objectForKey:@"lastObservationDate"];
+    __block NSDate *lastObservationDate = [Observation fetchLastObservationDate];
     if (lastObservationDate != nil) {
-        [parameters setObject:lastObservationDate forKey:@"startDate"];
+        [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
     }
     
     HttpManager *http = [HttpManager singleton];
@@ -128,9 +126,10 @@ NSDictionary *_fieldNameToField;
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Observation request complete");
         NSArray *features = [responseObject objectForKey:@"features"];
+        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
         
         for (id feature in features) {
-            Observation *o = [Observation observationForJson:feature inManagedObjectContext:context];
+            Observation *o = [Observation observationForJson:feature];
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
             [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(remoteId = %@)", o.userId]];
@@ -153,7 +152,7 @@ NSDictionary *_fieldNameToField;
                 o.user = [usersMatchingIDs objectAtIndex:0];
                 NSArray *attachments = [feature objectForKey:@"attachments"];
                 for (id attachment in attachments) {
-                    Attachment * a = [Attachment attachmentForJson:attachment inManagedObjectContext:context];
+                    Attachment * a = [Attachment attachmentForJson:attachment];
                     [context insertObject:a];
                     [o addAttachmentsObject:a];
                 }
@@ -161,21 +160,17 @@ NSDictionary *_fieldNameToField;
             }
             // else if the observation is not archived, and not dirty and exists, update it
             else if ([o.state intValue] != archive && [o.dirty boolValue]) {
-                [dbObs populateObjectFromJson:feature inManagedObjectContext:context];
+                [dbObs populateObjectFromJson:feature];
                 dbObs.user = [usersMatchingIDs objectAtIndex:0];
                 NSArray *attachments = [feature objectForKey:@"attachments"];
                 // stupid but for now just do this
                 [dbObs setAttachments:nil];
                 for (id attachment in attachments) {
-                    Attachment * a = [Attachment attachmentForJson:attachment inManagedObjectContext:context];
+                    Attachment * a = [Attachment attachmentForJson:attachment];
                     [context insertObject:a];
                     [dbObs addAttachmentsObject:a];
                 }
                 NSLog(@"Updating object with id: %@", o.remoteId);
-            }
-
-            if ([o.timestamp isLaterThan:lastObservationDate]) {
-                lastObservationDate = o.timestamp;
             }
         }
         
@@ -183,10 +178,7 @@ NSDictionary *_fieldNameToField;
         if (! [context save:&error]) {
             NSLog(@"Error inserting Observation: %@", error);
         }
-        
-        [defaults setObject:lastObservationDate forKey:@"lastObservationDate"];
-        [defaults synchronize];
-        
+                
         complete(YES);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -195,6 +187,35 @@ NSDictionary *_fieldNameToField;
     }];
     
     return operation;
+}
+
++ (NSDate *) fetchLastObservationDate {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+    request.fetchLimit = 1;
+    
+    NSError *error;
+    NSArray *observations = [context executeFetchRequest:request error:&error];
+    
+    if (error) {
+        NSLog(@"Error getting last location from database");
+        return nil;
+    }
+    
+    if (observations.count != 1) {
+        return nil;
+    }
+    
+    NSDate *date = nil;
+    Observation *observation = [observations objectAtIndex:0];
+    if (observation) {
+        date = observation.timestamp;
+    }
+    
+    return date;
 }
 
 @end

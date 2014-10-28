@@ -7,6 +7,7 @@
 //
 
 #import "Attachment+helper.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Attachment (helper)
 
@@ -19,9 +20,9 @@
     return self;
 }
 
-+ (id) attachmentForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
++ (id) attachmentForJson: (NSDictionary *) json  {
     
-    Attachment *attachment = [[Attachment alloc] initWithEntity:[NSEntityDescription entityForName:@"Attachment" inManagedObjectContext:context] insertIntoManagedObjectContext:nil];
+    Attachment *attachment = [[Attachment alloc] initWithEntity:[NSEntityDescription entityForName:@"Attachment" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]] insertIntoManagedObjectContext:nil];
     
     [attachment populateObjectFromJson:json];
     

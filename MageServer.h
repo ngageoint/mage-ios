@@ -15,6 +15,6 @@
 
 + (NSURL *) baseURL;
 
-- (id) initWithURL:(NSURL *) url inManagedObjectContext: (NSManagedObjectContext *) context success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
+- (id) initWithURL:(NSURL *) url success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
 
 @end

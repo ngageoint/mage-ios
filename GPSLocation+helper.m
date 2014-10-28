@@ -11,11 +11,12 @@
 #import "NSDate+Iso8601.h"
 #import "GeoPoint.h"
 #import "MageServer.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation GPSLocation (helper)
 
-+ (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext: (NSManagedObjectContext *) context {
-    GPSLocation *gpsLocation = [NSEntityDescription insertNewObjectForEntityForName:@"GPSLocation" inManagedObjectContext:context];
++ (GPSLocation *) gpsLocationForLocation:(CLLocation *) location {
+    GPSLocation *gpsLocation = [NSEntityDescription insertNewObjectForEntityForName:@"GPSLocation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
     gpsLocation.geometry = [[GeoPoint alloc] initWithLocation:location];
     gpsLocation.timestamp = location.timestamp;
     gpsLocation.properties = @{
@@ -29,7 +30,9 @@
     return gpsLocation;
 }
 
-+ (NSArray *) fetchGPSLocationsInManagedObjectContext: (NSManagedObjectContext *) context {
++ (NSArray *) fetchGPSLocations {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"GPSLocation" inManagedObjectContext:context]];
     [request setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]]];

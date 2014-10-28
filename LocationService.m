@@ -10,13 +10,13 @@
 #import "User+helper.h"
 #import "GPSLocation+helper.h"
 #import "GeoPoint.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSSensitivityKey = @"gpsSensitivity";
 NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 
 @interface LocationService ()
-    @property (nonatomic, weak) NSManagedObjectContext* managedObjectContext;
     @property (nonatomic, strong) CLLocationManager *locationManager;
     @property (nonatomic, strong) NSDate *oldestLocationTime;
     @property (nonatomic) NSTimeInterval locationPushInterval;
@@ -26,9 +26,8 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 
 @implementation LocationService
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) init {
     if (self = [super init]) {
-		_managedObjectContext = managedObjectContext;
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         _reportLocation = [defaults boolForKey:kReportLocationKey];
@@ -46,7 +45,7 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
             [_locationManager requestAlwaysAuthorization];
         }
         
-        NSArray *locations = [GPSLocation fetchGPSLocationsInManagedObjectContext:_managedObjectContext];
+        NSArray *locations = [GPSLocation fetchGPSLocations];
         GPSLocation *location = [locations firstObject];
         _oldestLocationTime = location.timestamp;
         
@@ -106,11 +105,11 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 - (NSArray *) persistLocations:(NSArray *) locations {
     NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
     for (CLLocation *location in locations) {
-        [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:_managedObjectContext]];
+        [locationEntities addObject:[GPSLocation gpsLocationForLocation:location]];
     }
     
     NSError *error = nil;
-    if (! [_managedObjectContext save:&error]) {
+    if (! [[NSManagedObjectContext defaultManagedObjectContext] save:&error]) {
         NSLog(@"Error updating locations: %@", error);
     }
     
@@ -122,13 +121,13 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
         NSLog(@"Pushing locations...");
         
         //TODO, submit in pages
-        NSArray *locations = [GPSLocation fetchGPSLocationsInManagedObjectContext:_managedObjectContext];
+        NSArray *locations = [GPSLocation fetchGPSLocations];
         
         // send to server
         NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
             self.oldestLocationTime = nil;
             for (GPSLocation *location in locations) {
-                [_managedObjectContext deleteObject:location];
+                [[NSManagedObjectContext defaultManagedObjectContext] deleteObject:location];
             }
         } failure:^{
             NSLog(@"Failure to push GPS locations to the server");

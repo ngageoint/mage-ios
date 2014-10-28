@@ -10,12 +10,12 @@
 
 @interface User (helper)
 
-+ (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
-+ (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext: (NSManagedObjectContext *) context;
-+ (User *) fetchUserForId:(NSString *) userId  inManagedObjectContext: (NSManagedObjectContext *) context;
-+ (User *) fetchCurrentUserForManagedObjectContext: (NSManagedObjectContext *) context;
-+ (NSOperation *) operationToFetchUsersWithManagedObjectContext: (NSManagedObjectContext *) context;
++ (User *) insertUserForJson: (NSDictionary *) json;
++ (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself;
++ (User *) fetchUserForId:(NSString *) userId;
++ (User *) fetchCurrentUser;
++ (NSOperation *) operationToFetchUsers;
 
-- (void) updateUserForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context;
+- (void) updateUserForJson: (NSDictionary *) json;
 
 @end
