@@ -39,7 +39,7 @@
 - (void) viewDidLoad {
     
     if (self.user == nil) {
-        self.user = [User fetchCurrentUserForManagedObjectContext: self.contextHolder.managedObjectContext];
+        self.user = [User fetchCurrentUser];
     }
     
     self.name.text = self.user.name;
