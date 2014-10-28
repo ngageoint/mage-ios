@@ -11,6 +11,7 @@
 #import "Observation+helper.h"
 #import "Observations.h"
 #import <NSDate+DateTools.h>
+#import "Server+helper.h"
 
 @interface ObservationDataStore ()
     @property (strong, nonatomic) IBOutlet UIViewController *viewController;
@@ -44,8 +45,7 @@
 }
 
 - (id) init {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     self.variantField = [form objectForKey:@"variantField"];
     return self;
 }
