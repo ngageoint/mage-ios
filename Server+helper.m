@@ -59,10 +59,12 @@
     }
     
     id property = nil;
-    Server *server = [servers objectAtIndex:0];
-    if (server) {
-        NSDictionary *properties = server.properties;
-        property = [properties objectForKey:key];
+    if (servers.count == 1) {
+        Server *server = [servers objectAtIndex:0];
+        if (server) {
+            NSDictionary *properties = server.properties;
+            property = [properties objectForKey:key];
+        }
     }
     
     return property;
