@@ -29,12 +29,14 @@
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
-@property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic) BOOL shouldHideNavBar;
 
 @end
 
 @implementation MeViewController
+
+bool originalNavBarHidden;
 
 - (void) viewDidLoad {
     
@@ -43,7 +45,7 @@
     }
     
     self.name.text = self.user.name;
-    self.username.text = self.user.username;
+    self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
 
@@ -151,20 +153,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    CLLocationDistance latitudeMeters = 500;
-//    CLLocationDistance longitudeMeters = 500;
-//    NSDictionary *properties = self.user.location.properties;
-//    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-//    if (accuracyProperty != nil) {
-//        double accuracy = [accuracyProperty doubleValue];
-//        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-//        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-//    }
-//    
-//    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([self.user.location location].coordinate, latitudeMeters, longitudeMeters);
-//    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-//    
-//    [self.mapDelegate selectedUser:self.user region:viewRegion];
+    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
+    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 - (IBAction)dismissMe:(id)sender {

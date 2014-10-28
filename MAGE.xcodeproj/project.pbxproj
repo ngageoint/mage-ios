@@ -52,7 +52,6 @@
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* PeopleDataStore.m */; };
 		F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129F919F5BE320063DB6A /* MeViewController.m */; };
-		F7312A0019FAEFA20063DB6A /* MeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129FF19FAEFA20063DB6A /* MeViewController_iPhone.m */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */; };
 		F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F232919A77A7B0068DE1B /* DatePickerTableViewCell.m */; };
@@ -205,8 +204,6 @@
 		F727517619C895CA006C63CB /* PeopleDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleDataStore.m; sourceTree = "<group>"; };
 		F73129F819F5BE320063DB6A /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		F73129F919F5BE320063DB6A /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
-		F73129FE19FAEFA20063DB6A /* MeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController_iPhone.h; sourceTree = "<group>"; };
-		F73129FF19FAEFA20063DB6A /* MeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController_iPhone.m; sourceTree = "<group>"; };
 		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7481EFC19A6372C00E9C56D /* DropdownEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropdownEditTableViewController.h; sourceTree = "<group>"; };
@@ -411,8 +408,6 @@
 				F727517619C895CA006C63CB /* PeopleDataStore.m */,
 				F73129F819F5BE320063DB6A /* MeViewController.h */,
 				F73129F919F5BE320063DB6A /* MeViewController.m */,
-				F73129FE19FAEFA20063DB6A /* MeViewController_iPhone.h */,
-				F73129FF19FAEFA20063DB6A /* MeViewController_iPhone.m */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -851,7 +846,6 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
-				F7312A0019FAEFA20063DB6A /* MeViewController_iPhone.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
