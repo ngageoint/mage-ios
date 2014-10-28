@@ -10,6 +10,6 @@
 
 @interface ManagedObjectContextHolder : NSObject
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+- (NSManagedObjectContext *) managedObjectContext;
 
 @end

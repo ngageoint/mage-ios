@@ -12,10 +12,10 @@
 @implementation FetchServicesHolder
 
 - (id) init {
-    AppDelegate *appdelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    AppDelegate *appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
     
-    self.locationFetchService = appdelegate.locationFetchService;
-    self.observationFetchService = appdelegate.observationFetchService;
+    self.locationFetchService = appDelegate.locationFetchService;
+    self.observationFetchService = appDelegate.observationFetchService;
     
     return self;
 }

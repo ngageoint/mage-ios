@@ -8,13 +8,12 @@
 
 #import "ManagedObjectContextHolder.h"
 #import "AppDelegate.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation ManagedObjectContextHolder
 
-- (id) init {
-    AppDelegate *appdelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    self.managedObjectContext = appdelegate.managedObjectContext;
-    return self;
+- (NSManagedObjectContext *) managedObjectContext {
+    return [NSManagedObjectContext defaultManagedObjectContext];
 }
 
 @end
