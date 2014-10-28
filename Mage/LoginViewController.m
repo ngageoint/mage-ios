@@ -19,12 +19,13 @@
 #import <UserUtility.h>
 #import "DeviceUUID.h"
 #import "MageServer.h"
+#import "CoreDataStack.h"
 
 @interface LoginViewController ()
 
-    @property (strong, nonatomic) IBOutlet UITextField *usernameField;
-    @property (strong, nonatomic) IBOutlet UITextField *passwordField;
-    @property (strong, nonatomic) IBOutlet UITextField *serverUrlField;
+    @property (weak, nonatomic) IBOutlet UITextField *usernameField;
+    @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+    @property (weak, nonatomic) IBOutlet UITextField *serverUrlField;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
     @property (weak, nonatomic) IBOutlet UIButton *loginButton;
     @property (weak, nonatomic) IBOutlet UIButton *lockButton;
@@ -32,7 +33,7 @@
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 
     @property (strong, nonatomic) MageServer *server;
-
+    @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
 @end
 
 @implementation LoginViewController
@@ -95,6 +96,11 @@
 }
 
 - (void) verifyLogin {
+    if (self.reachability.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
+        [CoreDataStack deleteCoreDataStack];
+        [CoreDataStack setupCoreDataStack];
+    }
+    
 	// setup authentication
     [self startLogin];
     NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
@@ -108,6 +114,18 @@
 	
 	// TODO might want to mask here or put a spinner on the login button
 	[self.server.authentication loginWithParameters: parameters];
+}
+
+- (BOOL) usernameChanged {
+    NSDictionary *loginParameters = [self.server.authentication loginParameters];
+    NSString *username = [loginParameters objectForKey:@"username"];
+    return [username length] != 0 && ![self.usernameField.text isEqualToString:username];
+}
+
+- (BOOL) serverUrlChanged {
+    NSDictionary *loginParameters = [self.server.authentication loginParameters];
+    NSString *serverUrl = [loginParameters objectForKey:@"serverUrl"];
+    return [serverUrl length] != 0 && ![self.serverUrlField.text isEqualToString:serverUrl];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -175,10 +193,13 @@
     NSURL *url = [MageServer baseURL];
     [self.serverUrlField setText:[url absoluteString]];
     [self initMageServerWithURL:url];
+    
+    self.reachability = [AFNetworkReachabilityManager managerForDomain:[[MageServer baseURL] host]];
+    [self.reachability startMonitoring];
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
-    self.server = [[MageServer alloc] initWithURL:url inManagedObjectContext:self.contextHolder.managedObjectContext success:^{
+    self.server = [[MageServer alloc] initWithURL:url success:^{
         [self.serverUrlField setEnabled:NO];
         [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         

@@ -16,15 +16,11 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) FICImageCache *imageCache;
 @property (strong, nonatomic) LocationService *locationService;
 @property (strong, nonatomic) LocationFetchService *locationFetchService;
 @property (strong, nonatomic) ObservationFetchService *observationFetchService;
 
-- (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
 @end

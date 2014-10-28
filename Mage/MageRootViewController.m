@@ -38,7 +38,7 @@
 - (void) startServices {
     [_locationServiceHolder.locationService start];
     
-    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.contextHolder.managedObjectContext];
+    NSOperation *usersPullOp = [User operationToFetchUsers];
     NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
         NSLog(@"done with intial user fetch, lets start the location fetch service");
         [self.fetchServicesHolder.locationFetchService start];

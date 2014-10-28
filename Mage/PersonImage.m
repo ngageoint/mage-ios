@@ -15,7 +15,7 @@
 + (UIImage *) imageForUser: (User *) user constrainedWithSize: (CGSize) size {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     if ([user iconUrl] != nil) {
-        NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults objectForKey:@"token"]]]];
+        NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]];
         UIImage *image = [UIImage imageWithData:data];
         
         UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:size interpolationQuality:kCGInterpolationLow];
