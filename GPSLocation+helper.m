@@ -47,6 +47,24 @@
     return locations;
 }
 
++ (NSArray *) fetchLastXGPSLocations: (NSUInteger) x {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"GPSLocation" inManagedObjectContext:context]];
+    [request setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]]];
+    request.fetchLimit = x;
+
+    NSError *error;
+    NSArray *locations = [context executeFetchRequest:request error:&error];
+    
+    if (error) {
+        NSLog(@"Error getting user locations from database");
+    }
+    
+    return locations;
+}
+
 + (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure {
 	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/"];
 	NSLog(@"Trying to push locations to server %@", url);
