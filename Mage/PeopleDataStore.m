@@ -42,9 +42,8 @@
     
 }
 
-- (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
-    self.managedObjectContext = managedObjectContext;
-    self.locations = [Locations locationsForAllUsersInManagedObjectContext:self.managedObjectContext];
+- (void) startFetchController {
+    self.locations = [Locations locationsForAllUsers];
     self.locations.delegate = self;
     
     NSError *error;

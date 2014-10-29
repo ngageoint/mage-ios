@@ -51,12 +51,12 @@ bool originalNavBarHidden;
 
     [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]]]];
     
-    Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+    Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:observations];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-        Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+        Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
     }
 }

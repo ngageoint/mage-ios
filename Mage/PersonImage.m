@@ -27,7 +27,7 @@
 
 + (UIImage *) imageForLocation:(Location *) location {
     UIImage *personImage = [self imageForUser:location.user constrainedWithSize:CGSizeMake(37, 10000)];
-    return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
+    return personImage ? [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]] : [self blueCircle];
 }
 
 + (UIImage *)blueCircle {

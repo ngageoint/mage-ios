@@ -62,9 +62,8 @@
     }
 }
 
-- (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext {
-    self.managedObjectContext = managedObjectContext;
-    self.observations = [Observations observationsInManagedObjectContext:self.managedObjectContext];
+- (void) startFetchController {
+    self.observations = [Observations observations];
     self.observations.delegate = self;
 
     NSError *error;

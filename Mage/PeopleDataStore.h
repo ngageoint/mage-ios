@@ -14,12 +14,11 @@
 
 @interface PeopleDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) Locations *locations;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) id<UserSelectionDelegate> personSelectionDelegate;
 
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath;
-- (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext;
+- (void) startFetchController;
 
 @end

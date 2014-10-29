@@ -13,7 +13,6 @@
 
 @interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) Observations *observations;
 @property (strong, nonatomic) NSDictionary *form;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -22,7 +21,7 @@
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView;
-- (void) startFetchControllerWithManagedObjectContext: (NSManagedObjectContext *) managedObjectContext;
+- (void) startFetchController;
 - (void) startFetchControllerWithObservations: (Observations *) observations;
 
 @end
