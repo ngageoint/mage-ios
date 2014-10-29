@@ -19,7 +19,7 @@
 #import "ObservationAnnotation.h"
 #import "Observation.h"
 #import "ObservationImage.h"
-#import "PersonViewController.h"
+#import "MeViewController.h"
 #import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
@@ -65,7 +65,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
-		PersonViewController *destinationViewController = segue.destinationViewController;
+		MeViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setUser:sender];
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationViewController *destinationViewController = segue.destinationViewController;

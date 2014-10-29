@@ -11,7 +11,7 @@
 #import "Location+helper.h"
 #import "NSDate+DateTools.h"
 #import "PersonTableViewCell.h"
-#import "PersonViewController.h"
+#import "MeViewController.h"
 #import "MageRootViewController.h"
 
 @implementation PeopleTableViewController
@@ -28,7 +28,7 @@
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
-        PersonViewController *destination = (PersonViewController *)[segue destinationViewController];
+        MeViewController *destination = (MeViewController *)[segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Location *location = [self.peopleDataStore locationAtIndexPath:indexPath];
 		[destination setUser:location.user];

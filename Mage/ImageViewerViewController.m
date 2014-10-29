@@ -13,10 +13,13 @@
 @interface ImageViewerViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (nonatomic) BOOL shouldHideNavBar;
 
 @end
 
 @implementation ImageViewerViewController
+
+bool originalNavBarHidden;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,6 +53,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
+    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 @end

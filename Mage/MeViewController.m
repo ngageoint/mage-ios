@@ -41,34 +41,47 @@
 @implementation MeViewController
 
 bool originalNavBarHidden;
+bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
     
     if (self.user == nil) {
         self.user = [User fetchCurrentUser];
+        currentUserIsMe = YES;
     }
     
     self.name.text = self.user.name;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    
-    NSString *url = [NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]];
-    NSLog(@"url is: %@", url);
-    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]]];
+    UIImage *avatarImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
+    if (avatarImage != nil) {
+        [self.avatar setImage:avatarImage];
+    }
     
     Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:observations];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-        Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
-        [self.mapDelegate setLocations:locations];
+        if (!currentUserIsMe) {
+            Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+            [self.mapDelegate setLocations:locations];
+        }
     }
 }
 
 - (IBAction)portraitClick:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", @"Take New Avatar Photo", @"Choose Avatar From Library", nil];
+    
+    UIActionSheet *actionSheet = nil;
+    
+    // have to do it this way to keep the cancel button on the bottom
+    if (currentUserIsMe) {
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", @"Take New Avatar Photo", @"Choose Avatar From Library", nil];
+    } else {
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", nil];
+    }
+    
     [actionSheet showInView:self.view];
 }
 
@@ -171,11 +184,12 @@ bool originalNavBarHidden;
         latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
         longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
     }
-    
-    NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
-    if (lastLocation.count != 0) {
-        GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-        [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter: YES];
+    if (currentUserIsMe) {
+        NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
+        if (lastLocation.count != 0) {
+            GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
+            [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter: YES];
+        }
     }
 }
 
