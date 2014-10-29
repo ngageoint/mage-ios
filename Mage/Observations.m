@@ -7,31 +7,36 @@
 //
 
 #import "Observations.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Observations
 
-+ (id) observationsInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
++ (id) observations {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
     // TODO look at this, I think we changed Android to timestamp or something
     [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
     
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                  managedObjectContext:managedObjectContext
+                  managedObjectContext:context
                     sectionNameKeyPath:@"sectionName"
                              cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) observationsForUser:(User *) user inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
++ (id) observationsForUser:(User *) user {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"user == %@", user]];
 
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:managedObjectContext
+                                                                                               managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"sectionName"
                                                                                                           cacheName:nil];
     

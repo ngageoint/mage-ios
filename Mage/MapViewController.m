@@ -36,10 +36,10 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    Locations *locations = [Locations locationsForAllUsersInManagedObjectContext:self.contextHolder.managedObjectContext];
+    Locations *locations = [Locations locationsForAllUsers];
     [self.mapDelegate setLocations:locations];
     
-    Observations *observations = [Observations observationsInManagedObjectContext:self.contextHolder.managedObjectContext];
+    Observations *observations = [Observations observations];
     [self.mapDelegate setObservations:observations];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

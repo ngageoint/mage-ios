@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[self.peopleDataStore startFetchControllerWithManagedObjectContext:self.contextHolder.managedObjectContext];
+	[self.peopleDataStore startFetchController];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

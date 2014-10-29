@@ -59,15 +59,17 @@ bool currentUserIsMe = NO;
         [self.avatar setImage:avatarImage];
     }
     
-    Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+    NSString *url = [NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]];
+    NSLog(@"url is: %@", url);
+    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]]];
+    
+    Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:observations];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-        if (!currentUserIsMe) {
-            Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
-            [self.mapDelegate setLocations:locations];
-        }
+        Locations *locations = [Locations locationsForUser:self.user];
+        [self.mapDelegate setLocations:locations];
     }
 }
 

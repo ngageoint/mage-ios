@@ -7,33 +7,38 @@
 //
 
 #import "Locations.h"
+#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Locations
 
-+ (id) locationsForAllUsersInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
++ (id) locationsForAllUsers {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:context]];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]];
     [fetchRequest setPredicate:predicate];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:managedObjectContext
+                                                                                               managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"sectionName"
                                                                                                           cacheName:nil];
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) locationsForUser:(User *) user inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
++ (id) locationsForUser:(User *) user {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:context]];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]]];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user = %@", user];
     [fetchRequest setPredicate:predicate];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:managedObjectContext
+                                                                                               managedObjectContext:context
                                                                                                  sectionNameKeyPath:nil
                                                                                                           cacheName:nil];
     
@@ -53,6 +58,5 @@
 -(void) setDelegate:(id<NSFetchedResultsControllerDelegate>)delegate {
     self.fetchedResultsController.delegate = delegate;
 }
-
 
 @end

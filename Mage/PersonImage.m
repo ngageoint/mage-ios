@@ -7,7 +7,7 @@
 //
 
 #import "PersonImage.h"
-#import <User.h>
+#import "User.h"
 #import "UIImage+Resize.h"
 
 @implementation PersonImage
@@ -27,12 +27,11 @@
 
 + (UIImage *) imageForLocation:(Location *) location {
     UIImage *personImage = [self imageForUser:location.user constrainedWithSize:CGSizeMake(37, 10000)];
-    return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
+    return personImage ? [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]] : [PersonImage blueCircle];
 }
 
 + (UIImage *) imageForUser:(User *) user {
-    UIImage *personImage = [self imageForUser:user constrainedWithSize:CGSizeMake(37, 10000)];
-    return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
+    return [PersonImage imageForLocation:user.location];
 }
 
 + (UIImage *)blueCircle {

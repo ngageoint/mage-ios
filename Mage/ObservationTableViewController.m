@@ -20,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.observationDataStore startFetchControllerWithManagedObjectContext:self.contextHolder.managedObjectContext];
+    [self.observationDataStore startFetchController];
     
     [self.refreshControl addTarget:self
                             action:@selector(refreshObservations)
