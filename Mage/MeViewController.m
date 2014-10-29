@@ -20,6 +20,10 @@
 #import <AFNetworking.h>
 #import <MageServer.h>
 #import <HttpManager.h>
+#import "LocationAnnotation.h"
+#import <GPSLocation+helper.h>
+#import "PersonImage.h"
+#import <GeoPoint.h>
 
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -48,8 +52,10 @@ bool originalNavBarHidden;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-
-    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]]]];
+    
+    NSString *url = [NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]];
+    NSLog(@"url is: %@", url);
+    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]]];
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
@@ -155,6 +161,22 @@ bool originalNavBarHidden;
     [super viewWillAppear:animated];
     originalNavBarHidden = [self.navigationController isNavigationBarHidden];
     [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
+    
+    CLLocationDistance latitudeMeters = 500;
+    CLLocationDistance longitudeMeters = 500;
+    NSDictionary *properties = _user.location.properties;
+    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+    if (accuracyProperty != nil) {
+        double accuracy = [accuracyProperty doubleValue];
+        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    }
+    
+    NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
+    if (lastLocation.count != 0) {
+        GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
+        [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter: YES];
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -171,7 +193,7 @@ bool originalNavBarHidden;
     if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         ImageViewerViewController *vc = [segue destinationViewController];
         NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        [vc setImageUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults objectForKey:@"token"]]]];
+        [vc setImageUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]];
         
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
