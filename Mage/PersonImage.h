@@ -12,6 +12,7 @@
 @interface PersonImage : NSObject
 
 + (UIImage *) imageForLocation:(Location *) location;
++ (UIImage *) imageForUser:(User *) user;
 + (UIImage *) imageForUser: (User *) user constrainedWithSize: (CGSize) size;
 
 @end

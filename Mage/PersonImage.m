@@ -30,6 +30,11 @@
     return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
 }
 
++ (UIImage *) imageForUser:(User *) user {
+    UIImage *personImage = [self imageForUser:user constrainedWithSize:CGSizeMake(37, 10000)];
+    return [PersonImage mergeImage:personImage withDot:[PersonImage blueCircle]];
+}
+
 + (UIImage *)blueCircle {
     static UIImage *blueCircle = nil;
     static dispatch_once_t onceToken;

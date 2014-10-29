@@ -9,11 +9,13 @@
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
+#import "GPSLocationAnnotation.h"
 #import "PersonImage.h"
 #import "ObservationImage.h"
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "UIImage+Resize.h"
+#import <GeoPoint.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -23,6 +25,7 @@
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic) BOOL canShowUserCallout;
     @property (nonatomic) BOOL canShowObservationCallout;
+    @property (nonatomic) BOOL canShowGpsLocationCallout;
 @end
 
 @implementation MapDelegate
@@ -95,6 +98,27 @@
             annotationView.annotation = annotation;
         }
 		
+        return annotationView;
+    } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
+        GPSLocationAnnotation *gpsAnnotation = annotation;
+        UIImage *image = [PersonImage imageForUser:gpsAnnotation.user];
+        
+        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+        
+        if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = self.canShowGpsLocationCallout;
+            
+            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+            [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+            annotationView.rightCalloutAccessoryView = rightButton;
+            annotationView.image = image;
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+        } else {
+            annotationView.annotation = annotation;
+        }
+        
         return annotationView;
     }
 	
@@ -254,6 +278,26 @@
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         annotationView.image = [PersonImage imageForLocation:annotation.location];
         [annotation setCoordinate:[location location].coordinate];
+        
+    }
+}
+
+- (void) updateGPSLocation:(GPSLocation *)location forUser:(User *)user andCenter: (BOOL) shouldCenter {
+    GPSLocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    if (annotation == nil) {
+        annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
+        [_mapView addAnnotation:annotation];
+        [self.locationAnnotations setObject:annotation forKey:user.remoteId];
+        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
+        [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+    } else {
+        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
+        annotationView.image = [PersonImage imageForUser:user];
+        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
+        [annotation setCoordinate:geoPoint.location.coordinate];
+        if (shouldCenter) {
+            [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+        }
     }
 }
 
