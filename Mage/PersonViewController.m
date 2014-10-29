@@ -57,10 +57,10 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    Locations *locations = [Locations locationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+    Locations *locations = [Locations locationsForUser:self.user];
     [self.mapDelegate setLocations:locations];
     
-    Observations *observations = [Observations observationsForUser:self.user inManagedObjectContext:self.contextHolder.managedObjectContext];
+    Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
 	
 	CLLocationCoordinate2D coordinate = [self.user.location location].coordinate;

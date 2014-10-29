@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RESideMenu.h"
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "Attachment.h"
