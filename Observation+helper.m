@@ -159,7 +159,7 @@ NSDictionary *_fieldNameToField;
                 NSLog(@"Saving new observation with id: %@", o.remoteId);
             }
             // else if the observation is not archived, and not dirty and exists, update it
-            else if ([o.state intValue] != archive && [o.dirty boolValue]) {
+            else if ([o.state intValue] != archive && ![dbObs.dirty boolValue]) {
                 [dbObs populateObjectFromJson:feature];
                 dbObs.user = [usersMatchingIDs objectAtIndex:0];
                 NSArray *attachments = [feature objectForKey:@"attachments"];
@@ -171,6 +171,8 @@ NSDictionary *_fieldNameToField;
                     [dbObs addAttachmentsObject:a];
                 }
                 NSLog(@"Updating object with id: %@", o.remoteId);
+            } else {
+                NSLog(@"Observation with id: %@ is dirty", o.remoteId);
             }
         }
         
