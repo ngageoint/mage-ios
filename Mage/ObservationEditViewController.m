@@ -41,6 +41,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)saveObservation:(id)sender {
+    if ([self.editDataStore saveObservation]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

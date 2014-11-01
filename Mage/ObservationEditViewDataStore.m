@@ -140,11 +140,15 @@ NSInteger expandedRow = -1;
     [self.editTable endUpdates];
 }
 
-- (IBAction) saveObservation {
+- (BOOL) saveObservation {
     NSError *error = nil;
+    [self.observation setDirty:[NSNumber numberWithBool:YES]];
     if (![self.observation.managedObjectContext save:&error]) {
-        
+        NSLog(@"failed to save the observation: %@", self.observation.remoteId);
+        return NO;
     }
+    NSLog(@"saved the observation: %@", self.observation.remoteId);
+    return YES;
 }
 
 - (void) discardChanges {
