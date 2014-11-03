@@ -21,6 +21,6 @@
 + (Observation*) observationForJson: (NSDictionary *) json;
 
 + (NSOperation*) operationToPullObservations:(void (^) (BOOL success)) complete;
-
++ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure;
 
 @end

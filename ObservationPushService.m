@@ -9,6 +9,7 @@
 #import "ObservationPushService.h"
 #import "HttpManager.h"
 #import "NSManagedObjectContext+MAGE.h"
+#import "Observation+helper.h"
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
@@ -16,6 +17,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 @property (nonatomic) NSTimeInterval interval;
 @property (nonatomic, strong) NSTimer* observationPushTimer;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSMutableDictionary *pushingObservations;
 @end
 
 @implementation ObservationPushService
@@ -25,6 +27,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         _interval = [[defaults valueForKey:kObservationPushFrequencyKey] doubleValue];
+        _pushingObservations = [[NSMutableDictionary alloc] init];
         
         [[NSUserDefaults standardUserDefaults] addObserver:self
                                                 forKeyPath:kObservationPushFrequencyKey
@@ -37,13 +40,12 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
-        
+        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]];
+
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                    managedObjectContext:context
                                                                                                      sectionNameKeyPath:@"sectionName"
                                                                                                               cacheName:nil];
-        
-//        return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
     }
     
     return self;
@@ -52,30 +54,19 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 - (void) start {
     [self stop];
     
-//    HttpManager *http = [HttpManager singleton];
-//    NSOperation *layerPullOperation = [Layer operationToPullLayers:^(BOOL success) {
-//        if (success) {
-//            NSOperation* formPullOp = [Form operationToPullForm:^(BOOL success) {
-//                if (success) {
-//                    // Layers and Form pulled, lets start the observation fetch
-//                    [self pullObservations];
-//                } else {
-//                    // TODO error
-//                }
-//            }];
-//            
-//            [http.manager.operationQueue addOperation:formPullOp];
-//        } else {
-//            // TODO error
-//        }
-//    }];
-//    
-//    [http.manager.operationQueue addOperation:layerPullOperation];
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+    
+    [self pushObservations];
 }
 
 - (void) scheduleTimer {
-    _observationPushTimer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:_observationPushTimer forMode:NSRunLoopCommonModes];
+    self.observationPushTimer = [NSTimer timerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:self.observationPushTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void) onTimerFire {
@@ -83,27 +74,38 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) pushObservations {
-//    NSOperation *observationFetchOperation = [Observation operationToPullObservations:^(BOOL success) {
-//        [self scheduleTimer];
-//    }];
-//    
-//    [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
-}
-
-- (void) stop {
-    if ([_observationPushTimer isValid]) {
-        [_observationPushTimer invalidate];
-        _observationPushTimer = nil;
+    if (self.pushingObservations.count == 0) return;
+    
+    for (Observation *observation in [self.fetchedResultsController fetchedObjects]) {
+        [self.pushingObservations setObject:observation forKey:observation.objectID];
+    }
+    
+    for (Observation *observation in self.pushingObservations) {
+        NSOperation *observationFetchOperation = [Observation operationToPushObservation:observation success:^{
+            NSLog(@"Successfully submitted observation");
+            observation.dirty = [NSNumber numberWithBool:NO];
+            
+            NSError *error;
+            if (![[NSManagedObjectContext defaultManagedObjectContext] save:&error]) {
+                NSLog(@"Error updating locations: %@", error);
+            }
+            
+            [self.pushingObservations removeObjectForKey:observation.objectID];
+        } failure:^{
+            NSLog(@"Error submitting observation");
+            [self.pushingObservations removeObjectForKey:observation.objectID];
+        }];
+        
+        [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
     }
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath
-                       ofObject:(id)object
-                         change:(NSDictionary *)change
-                        context:(void *)context {
-    _interval = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
-    [self start];
+-(void) stop {
+    if ([_observationPushTimer isValid]) {
+        [_observationPushTimer invalidate];
+        _observationPushTimer = nil;
+        
+    }
 }
-
 
 @end

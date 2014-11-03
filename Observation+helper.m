@@ -108,6 +108,37 @@ NSDictionary *_fieldNameToField;
     return observation;
 }
 
++ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure {
+    NSNumber *layerId = [Server observationLayerId];
+    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseURL], layerId];
+    NSLog(@"Trying to push observation to server %@", url);
+    
+    HttpManager *http = [HttpManager singleton];
+    NSMutableArray *parameters = [[NSMutableArray alloc] init];
+    GeoPoint *point = observation.geometry;
+    [parameters addObject:@{
+        @"geometry": @{
+            @"type": @"Point",
+            @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
+        },
+        @"type": @"Feature",
+        @"properties": observation.properties
+    }];
+
+    // TODO determine wheter this is add/update POST/PUT, checkout remoteId for null
+    //  Not sure it matters yet as I am not sure we can update
+    
+    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+        success();
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        failure();
+    }];
+    
+    return operation;
+}
+
 + (NSOperation *) operationToPullObservations:(void (^) (BOOL success)) complete {
 
     NSNumber *layerId = [Server observationLayerId];
