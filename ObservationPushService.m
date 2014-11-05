@@ -13,7 +13,7 @@
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
-@interface ObservationPushService ()
+@interface ObservationPushService () <NSFetchedResultsControllerDelegate>
 @property (nonatomic) NSTimeInterval interval;
 @property (nonatomic, strong) NSTimer* observationPushTimer;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
@@ -45,6 +45,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                                                                    managedObjectContext:context
                                                                                                      sectionNameKeyPath:@"sectionName"
                                                                                                               cacheName:nil];
+        [self.fetchedResultsController setDelegate:self];
     }
     
     return self;
@@ -61,6 +62,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     }
     
     [self pushObservations];
+    // probably not exactly correct but for now i am just going to schedule right here
+    // should wait for things to push and then schedule again maybe.
+    [self scheduleTimer];
 }
 
 - (void) scheduleTimer {
@@ -72,17 +76,67 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     [self pushObservations];
 }
 
+
+//controllerWillChangeContent:
+//controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:
+//controller:didChangeSection:atIndex:forChangeType:
+//controllerDidChangeContent:
+
+- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
+   
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
+    
+    
+    switch(type) {
+            
+        case NSFetchedResultsChangeInsert:
+//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            NSLog(@"observations inserted, push em");
+            [self pushObservations];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            NSLog(@"observations updated, push em");
+            [self pushObservations];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
 - (void) pushObservations {
     NSLog(@"currently still pushing %lu observations", (unsigned long)self.pushingObservations.count);
-    if (self.pushingObservations.count != 0) return;
+//    if (self.pushingObservations.count != 0) return;
     
+    // only push observations that haven't already been told to be pushed
+    NSMutableDictionary *obsToPush = [[NSMutableDictionary alloc] init];
     for (Observation *observation in [self.fetchedResultsController fetchedObjects]) {
-        [self.pushingObservations setObject:observation forKey:observation.objectID];
+        if ([self.pushingObservations objectForKey:observation.objectID] == nil){
+            [self.pushingObservations setObject:observation forKey:observation.objectID];
+            [obsToPush setObject:observation forKey:observation.objectID];
+        }
     }
     
-    NSLog(@"about to push %lu observations", (unsigned long)self.pushingObservations.count);
-    for (id observationId in self.pushingObservations) {
-        Observation *observation = [self.pushingObservations objectForKey:observationId];
+    NSLog(@"about to push an additional %lu observations", (unsigned long)obsToPush.count);
+    for (id observationId in obsToPush) {
+        // let's pull the most up to date version of this observation to push
+        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+        NSError *error;
+        Observation *observation = (Observation *)[context existingObjectWithID:observationId error:&error];
+        if (observation == nil) {
+            continue;
+        }
         NSLog(@"submitting observation %@", observation.objectID);
         NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^{
             NSLog(@"Successfully submitted observation");
@@ -101,9 +155,6 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         
         [[HttpManager singleton].manager.operationQueue addOperation:observationPushOperation];
     }
-    // probably not exactly correct but for now i am just going to schedule right here
-    // should wait for things to push and then schedule again maybe.
-    [self scheduleTimer];
 }
 
 -(void) stop {
