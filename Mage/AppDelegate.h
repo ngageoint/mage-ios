@@ -11,6 +11,7 @@
 #import <LocationService.h>
 #import <LocationFetchService.h>
 #import <ObservationFetchService.h>
+#import <ObservationPushService.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, FICImageCacheDelegate>
 
@@ -20,6 +21,7 @@
 @property (strong, nonatomic) LocationService *locationService;
 @property (strong, nonatomic) LocationFetchService *locationFetchService;
 @property (strong, nonatomic) ObservationFetchService *observationFetchService;
+@property (strong, nonatomic) ObservationPushService *observationPushService;
 
 - (NSURL *)applicationDocumentsDirectory;
 

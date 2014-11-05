@@ -9,6 +9,7 @@
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
 #import "ManagedObjectContextHolder.h"
+#import <Server+helper.h>
 
 @interface ObservationEditViewDataStore ()
 
@@ -29,8 +30,7 @@ NSInteger expandedRow = -1;
     if (_rowToCellType != nil) {
         return _rowToCellType;
     }
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];

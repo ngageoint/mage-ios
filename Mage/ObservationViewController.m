@@ -23,6 +23,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <HttpManager.h>
 #import "ObservationEditViewController.h"
+#import <Server+helper.h>
 
 @interface ObservationViewController ()
 
@@ -195,8 +196,7 @@ AVPlayer *player;
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     
     for (id field in [form objectForKey:@"fields"]) {
         NSString *fieldName = [field objectForKey:@"name"];
