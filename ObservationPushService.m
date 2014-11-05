@@ -138,8 +138,10 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             continue;
         }
         NSLog(@"submitting observation %@", observation.objectID);
-        NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^{
+        NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
+            
+            [observation populateObjectFromJson:response];
             observation.dirty = [NSNumber numberWithBool:NO];
             
             NSError *error;
