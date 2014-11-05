@@ -16,6 +16,7 @@
 #import "MageServer.h"
 #import "Server+helper.h"
 #import "NSManagedObjectContext+MAGE.h"
+#import <Server+helper.h>
 
 @implementation Observation (helper)
 
@@ -25,8 +26,7 @@ NSDictionary *_fieldNameToField;
     if (_fieldNameToField != nil) {
         return _fieldNameToField;
     }
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     
     NSMutableDictionary *fieldNameToFieldMap = [[NSMutableDictionary alloc] init];
     // run through the form and map the row indexes to fields
@@ -36,6 +36,56 @@ NSDictionary *_fieldNameToField;
     _fieldNameToField = fieldNameToFieldMap;
     
     return _fieldNameToField;
+}
+
+- (NSDictionary *) createJsonToSubmit {
+    
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // Always use this locale when parsing fixed format date strings
+    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormat.locale = posix;
+
+    
+    NSMutableDictionary *observationJson = [[NSMutableDictionary alloc] init];
+    
+    [observationJson setObject:self.remoteId forKey:@"id"];
+    [observationJson setObject:self.userId forKey:@"userId"];
+    [observationJson setObject:self.deviceId forKey:@"deviceId"];
+    [observationJson setObject:@"Feature" forKey:@"type"];
+    [observationJson setObject:self.url forKey:@"url"];
+    
+    NSString *stringState = [[NSString alloc] StringFromStateInt:[self.state intValue]];
+    
+    [observationJson setObject:@{
+                                 @"name": stringState
+                                 } forKey:@"state"];
+    
+    GeoPoint *point = (GeoPoint *)self.geometry;
+    [observationJson setObject:@{
+                                 @"type": @"Point",
+                                 @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
+                                 } forKey:@"geometry"];
+    [observationJson setObject: [dateFormat stringFromDate:self.timestamp] forKey:@"timestamp"];
+    
+    NSMutableDictionary *jsonProperties = [[NSMutableDictionary alloc] initWithDictionary:self.properties];
+        
+    for (id key in self.properties) {
+        id value = [self.properties objectForKey:key];
+        id field = [[self fieldNameToField] objectForKey:key];
+        if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
+            GeoPoint *point = value;
+            [jsonProperties setObject:@{@"x": [NSNumber numberWithDouble:point.location.coordinate.latitude],
+              @"y": [NSNumber numberWithDouble: point.location.coordinate.longitude]
+                                        } forKey: key];
+            
+        }
+    }
+
+    
+    [observationJson setObject:jsonProperties forKey:@"properties"];
+    return observationJson;
 }
 
 - (id) populateObjectFromJson: (NSDictionary *) json {
@@ -115,20 +165,16 @@ NSDictionary *_fieldNameToField;
     
     HttpManager *http = [HttpManager singleton];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
-    GeoPoint *point = observation.geometry;
-    [parameters addObject:@{
-        @"geometry": @{
-            @"type": @"Point",
-            @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
-        },
-        @"type": @"Feature",
-        @"properties": observation.properties
-    }];
-
-    // TODO determine wheter this is add/update POST/PUT, checkout remoteId for null
-    //  Not sure it matters yet as I am not sure we can update
+    NSObject *json = [observation createJsonToSubmit];
+    [parameters addObject:json];
     
-    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error: nil];
+    NSString *requestMethod = @"POST";
+    if (observation.remoteId != nil) {
+        requestMethod = @"PUT";
+        url = observation.url;
+    }
+    
+    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:json error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
         success();
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

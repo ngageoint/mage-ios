@@ -17,5 +17,6 @@ typedef enum state {
 
 - (State)StateEnumFromString;
 - (int)IntFromStateEnum;
+- (NSString *)StringFromStateInt: (int) stateInt;
 
 @end

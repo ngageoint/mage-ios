@@ -30,5 +30,14 @@
     return [[states objectForKey:self] intValue];
 }
 
+- (NSString *)StringFromStateInt: (int) stateInt {
+    NSDictionary *states = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"active", [NSNumber numberWithInteger:Active],
+                            @"archive", [NSNumber numberWithInteger:Archive],
+                            nil
+                            ];
+    return (NSString *)[states objectForKey:[NSNumber numberWithInt:stateInt]];
+}
+
 
 @end

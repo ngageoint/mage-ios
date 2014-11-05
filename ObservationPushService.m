@@ -36,7 +36,6 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         
         NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
         
-        // This needs to change to only pull dirty flag observations
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
@@ -74,14 +73,18 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) pushObservations {
-    if (self.pushingObservations.count == 0) return;
+    NSLog(@"currently still pushing %lu observations", (unsigned long)self.pushingObservations.count);
+    if (self.pushingObservations.count != 0) return;
     
     for (Observation *observation in [self.fetchedResultsController fetchedObjects]) {
         [self.pushingObservations setObject:observation forKey:observation.objectID];
     }
     
-    for (Observation *observation in self.pushingObservations) {
-        NSOperation *observationFetchOperation = [Observation operationToPushObservation:observation success:^{
+    NSLog(@"about to push %lu observations", (unsigned long)self.pushingObservations.count);
+    for (id observationId in self.pushingObservations) {
+        Observation *observation = [self.pushingObservations objectForKey:observationId];
+        NSLog(@"submitting observation %@", observation.objectID);
+        NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^{
             NSLog(@"Successfully submitted observation");
             observation.dirty = [NSNumber numberWithBool:NO];
             
@@ -96,8 +99,11 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             [self.pushingObservations removeObjectForKey:observation.objectID];
         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
+        [[HttpManager singleton].manager.operationQueue addOperation:observationPushOperation];
     }
+    // probably not exactly correct but for now i am just going to schedule right here
+    // should wait for things to push and then schedule again maybe.
+    [self scheduleTimer];
 }
 
 -(void) stop {
