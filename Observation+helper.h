@@ -9,10 +9,12 @@
 #import "Observation.h"
 #import "NSManagedObjectContext+Extra.h"
 #import <CoreLocation/CoreLocation.h>
+#import <GeoPoint.h>
 
 @interface Observation (helper)
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
+- (void) initializeNewObservationWithLocation: (GeoPoint *) location;
 
 - (CLLocation *) location;
 

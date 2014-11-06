@@ -17,6 +17,7 @@
 #import "Server+helper.h"
 #import "NSManagedObjectContext+MAGE.h"
 #import <Server+helper.h>
+#import <User+helper.h>
 
 @implementation Observation (helper)
 
@@ -50,11 +51,19 @@ NSDictionary *_fieldNameToField;
     
     NSMutableDictionary *observationJson = [[NSMutableDictionary alloc] init];
     
-    [observationJson setObject:self.remoteId forKey:@"id"];
-    [observationJson setObject:self.userId forKey:@"userId"];
-    [observationJson setObject:self.deviceId forKey:@"deviceId"];
+    if (self.remoteId != nil) {
+        [observationJson setObject:self.remoteId forKey:@"id"];
+    }
+    if (self.userId != nil) {
+        [observationJson setObject:self.userId forKey:@"userId"];
+    }
+    if (self.deviceId != nil) {
+        [observationJson setObject:self.deviceId forKey:@"deviceId"];
+    }
+    if (self.url != nil) {
+        [observationJson setObject:self.url forKey:@"url"];
+    }
     [observationJson setObject:@"Feature" forKey:@"type"];
-    [observationJson setObject:self.url forKey:@"url"];
     
     NSString *stringState = [[NSString alloc] StringFromStateInt:[self.state intValue]];
     
@@ -88,10 +97,30 @@ NSDictionary *_fieldNameToField;
     return observationJson;
 }
 
+- (void) initializeNewObservationWithLocation:(GeoPoint *)location {
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // Always use this locale when parsing fixed format date strings
+    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormat.locale = posix;
+    [self setTimestamp:[NSDate date]];
+    NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
+    
+    [properties setObject:[dateFormat stringFromDate:[self timestamp]] forKey:@"timestamp"];
+    
+    [self setProperties:properties];
+    [self setUser:[User fetchCurrentUser]];
+    [self setGeometry:location];
+    [self setDirty:[NSNumber numberWithBool:NO]];
+    [self setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
+}
+
 - (id) populateObjectFromJson: (NSDictionary *) json {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setUserId:[json objectForKey:@"userId"]];
     [self setDeviceId:[json objectForKey:@"deviceId"]];
+    [self setDirty:[NSNumber numberWithBool:NO]];
     NSDictionary *properties = [json objectForKey: @"properties"];
     
     [self setProperties:[self generatePropertiesFromRaw:properties]];
