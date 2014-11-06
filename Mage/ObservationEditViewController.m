@@ -12,6 +12,8 @@
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
+#import <NSManagedObjectContext+MAGE.h>
+#import <Observation+helper.h>
 
 @interface ObservationEditViewController ()
 
@@ -50,6 +52,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // if self.observation is null create a new one
+    if (self.observation == nil) {
+        self.observation = (Observation *)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
+        [self.observation initializeNewObservationWithLocation: self.location];
+    }
     self.editDataStore.observation = self.observation;
 }
 

@@ -18,6 +18,9 @@
     NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/form-%@/form/icons", formId]];
     
     NSString *type = [observation.properties objectForKey:@"type"];
+    if (type == nil) {
+        return nil;
+    }
     
     NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];

@@ -152,7 +152,11 @@ NSInteger expandedRow = -1;
 }
 
 - (void) discardChanges {
-    [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
+    if (self.observation.remoteId == nil) {
+        [self.observation.managedObjectContext deleteObject:self.observation];
+    } else {
+        [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
+    }
 }
 
 

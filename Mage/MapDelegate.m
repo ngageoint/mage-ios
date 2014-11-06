@@ -302,11 +302,11 @@
 }
 
 - (void) updateObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
     if (annotation == nil) {
         annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
         [_mapView addAnnotation:annotation];
-        [self.observationAnnotations setObject:annotation forKey:observation.remoteId];
+        [self.observationAnnotations setObject:annotation forKey:observation.objectID];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
@@ -331,7 +331,7 @@
 - (void)selectedObservation:(Observation *) observation {
     [self.mapView setCenterCoordinate:[observation location].coordinate];
     
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 
