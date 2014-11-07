@@ -9,13 +9,14 @@
 #import "SettingsTableViewController_iPad.h"
 #import "LocationService.h"
 #import "User+helper.h"
+#import "MageServer.h"
 
 @interface SettingsTableViewController_iPad ()
 
 @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
 @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *serverUrl;
+@property (weak, nonatomic) IBOutlet UILabel *baseServerUrl;
 @property (weak, nonatomic) IBOutlet UILabel *user;
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -41,13 +42,13 @@
     
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
 
-    User *user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
+    User *user = [User fetchCurrentUser];
     self.user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.serverUrl.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
+//    self.baseServerUrl.text = [[MageServer baseServerUrl] absoluteString];
     
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
@@ -105,7 +106,11 @@
         } else if (indexPath.row == 1) {
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
-    }
+   }
+//   else if (indexPath.section == 2) {
+//       NSLog((@"Clicked logout"));
+//       
+//   }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {

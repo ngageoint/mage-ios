@@ -13,6 +13,7 @@
 #import "MapCalloutTappedSegueDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
+#import <GPSLocation.h>
 
 @interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
 
@@ -22,5 +23,6 @@
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;
+- (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user andCenter: (BOOL) shouldCenter;
 
 @end

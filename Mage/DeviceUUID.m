@@ -70,9 +70,8 @@ static NSString * const kKeyChainService = @"mil.nga.giat.mage.uuid";
 
 + (NSString *) persistUUIDToKeyChain {
 	// Generate the new UIID
-	CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
-	NSString *uuidString = uuidString = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidRef);
-	CFRelease(uuidRef);
+    NSUUID *uuid = [NSUUID UUID];
+    NSString *uuidString = [uuid UUIDString];
 	
 	// Now store it in the KeyChain
 	NSDictionary *query = @{

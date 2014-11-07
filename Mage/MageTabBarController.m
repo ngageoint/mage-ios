@@ -7,7 +7,7 @@
 //
 
 #import "MageTabBarController.h"
-#import "PersonViewController.h"
+#import "MeViewController.h"
 #import "ObservationViewController.h"
 
 @implementation MageTabBarController
@@ -17,7 +17,7 @@
     [navigationController popToRootViewControllerAnimated:NO];
     
     if ([[segue identifier] isEqualToString:@"DisplayPersonFromMapSegue"]) {
-        PersonViewController *destination = (PersonViewController *)[segue destinationViewController];
+        MeViewController *destination = (MeViewController *)[segue destinationViewController];
         [destination setUser:sender];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationFromMapSegue"]) {
         ObservationViewController *destination = (ObservationViewController *)[segue destinationViewController];

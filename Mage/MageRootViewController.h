@@ -8,14 +8,14 @@
 
 #import "ObservationFetchService.h"
 #import "LocationFetchService.h"
-#import "LocationService.h"
+#import "LocationServiceHolder.h"
 #import "ManagedObjectContextHolder.h"
 #import "FetchServicesHolder.h"
 
 @interface MageRootViewController : UITabBarController
 
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
-@property (strong, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
-@property (strong, nonatomic) LocationService *locationService;
+@property (weak, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
+@property (weak, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
+@property (weak, nonatomic) IBOutlet LocationServiceHolder *locationServiceHolder;
 
 @end

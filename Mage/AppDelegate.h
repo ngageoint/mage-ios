@@ -8,21 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <FICImageCache.h>
+#import <LocationService.h>
 #import <LocationFetchService.h>
 #import <ObservationFetchService.h>
+#import <ObservationPushService.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, FICImageCacheDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (readonly, strong, nonatomic) FICImageCache *imageCache;
-@property (readonly, strong, nonatomic) LocationFetchService *locationFetchService;
-@property (readonly, strong, nonatomic) ObservationFetchService *observationFetchService;
+@property (strong, nonatomic) FICImageCache *imageCache;
+@property (strong, nonatomic) LocationService *locationService;
+@property (strong, nonatomic) LocationFetchService *locationFetchService;
+@property (strong, nonatomic) ObservationFetchService *observationFetchService;
+@property (strong, nonatomic) ObservationPushService *observationPushService;
 
-- (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
 @end

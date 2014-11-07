@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <Observation.h>
 #import "ObservationEditListener.h"
+#import <GeoPoint.h>
 
 @interface ObservationEditViewController : UIViewController
 
 @property (strong, nonatomic) Observation *observation;
+@property (strong, nonatomic) GeoPoint *location;
 
 @end

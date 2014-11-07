@@ -9,6 +9,7 @@
 #import "SignUpViewController.h"
 #import "UINextField.h"
 #import "HttpManager.h"
+#import "MageServer.h"
 
 @interface SignUpViewController ()
     @property (weak, nonatomic) UITextField *activeField;
@@ -20,26 +21,9 @@
 -(void) viewWillAppear:(BOOL)animate {
     [super viewWillAppear:animate];
     
-//    NSArray *colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:82.0/255.0 green:120.0/255.0 blue:162.0/255.0 alpha:1.0] CGColor], (id)[[UIColor colorWithRed:27.0/255.0 green:64.0/255.0 blue:105.0/25.0 alpha:1.0] CGColor], nil];
-//    
-//    CGGradientRef gradient;
-//    gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, NULL);
-//    CGPoint startPoint;
-//    startPoint.x = self.view.frame.size.width/2;
-//    startPoint.y = self.view.frame.size.height/2;
-//    UIGraphicsBeginImageContext(self.view.bounds.size);
-//    CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, startPoint, 0, startPoint, 5000, 0);
-//    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//	int largestSide = self.view.frame.size.height > self.view.frame.size.width ? self.view.frame.size.height : self.view.frame.size.width;
-//	UIImageView *gradientView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, largestSide, largestSide)];
-//    gradientView.image = gradientImage;
-//    [self.view insertSubview:gradientView atIndex:0];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSURL *url = [defaults URLForKey:@"serverUrl"];
-	NSString *urlText = url != nil ? [url absoluteString] : @"";
-    [_serverUrl setText:urlText];
+    NSURL *baseSeverUrl = [MageServer baseURL];
+	NSString *urlText = baseSeverUrl != nil ? [baseSeverUrl absoluteString] : @"";
+    [self.baseServerUrl setText:urlText];
 }
 
 -(void) viewDidLoad {
@@ -69,13 +53,13 @@
 
 - (IBAction)toggleUrlField:(id)sender {
     UIButton * button = (UIButton *)sender;
-    if (_serverUrl.enabled) {
-        [_serverUrl setEnabled:NO];
+    if (self.baseServerUrl.enabled) {
+        [self.baseServerUrl setEnabled:NO];
         button.selected = NO;
     } else {
         // TODO make /api request here before allowing lock
         
-        [_serverUrl setEnabled:YES];
+        [self.baseServerUrl setEnabled:YES];
         button.selected = YES;
     }
 }
@@ -118,7 +102,7 @@
         [self showDialogForRequiredField:@"First Name"];
     } else if ([_lastName.text length] == 0) {
         [self showDialogForRequiredField:@"Last Name"];
-    } else if ([_serverUrl.text length] == 0) {
+    } else if ([self.baseServerUrl.text length] == 0) {
         [self showDialogForRequiredField:@"Server URL"];
     } else if ([_password.text length] == 0) {
         [self showDialogForRequiredField:@"password"];
@@ -143,7 +127,7 @@
         };
         
         
-        [self signupWithParameters:parameters url:[_serverUrl.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        [self signupWithParameters:parameters url:[self.baseServerUrl.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
     }
 }
 

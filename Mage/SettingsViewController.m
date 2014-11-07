@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import "User+helper.h"
 #import "LocationService.h"
+#import "MageServer.h"
 
 @interface SettingsViewController ()
 
@@ -16,7 +17,7 @@
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
     @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
     @property (weak, nonatomic) IBOutlet UILabel *user;
-    @property (weak, nonatomic) IBOutlet UILabel *serverUrlLabel;
+    @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (strong, nonatomic) CLLocationManager *locationManager;
 
@@ -37,13 +38,13 @@
     
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     
-    User *user = [User fetchCurrentUserForManagedObjectContext:self.contextHolder.managedObjectContext];
+    User *user = [User fetchCurrentUser];
     _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
     [self setLocationServicesLabel];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.serverUrlLabel.text = [[defaults URLForKey:@"serverUrl"] absoluteString];
+    self.baseServerUrlLabel.text = [[MageServer baseURL] absoluteString];
     
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];

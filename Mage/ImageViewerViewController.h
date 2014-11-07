@@ -12,5 +12,6 @@
 @interface ImageViewerViewController : UIViewController
 
 @property (weak, nonatomic) Attachment *attachment;
+@property (weak, nonatomic) NSURL *imageUrl;
 
 @end

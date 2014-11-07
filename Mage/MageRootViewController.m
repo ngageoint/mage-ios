@@ -36,10 +36,9 @@
 }
 
 - (void) startServices {
-    _locationService = [[LocationService alloc] initWithManagedObjectContext:self.contextHolder.managedObjectContext];
-    [_locationService start];
+    [_locationServiceHolder.locationService start];
     
-    NSOperation *usersPullOp = [User operationToFetchUsersWithManagedObjectContext:self.contextHolder.managedObjectContext];
+    NSOperation *usersPullOp = [User operationToFetchUsers];
     NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
         NSLog(@"done with intial user fetch, lets start the location fetch service");
         [self.fetchServicesHolder.locationFetchService start];
@@ -52,6 +51,8 @@
     
     [startObservationFetchOp addDependency:usersPullOp];
     [startLocationFetchOp addDependency:usersPullOp];
+    
+    [self.fetchServicesHolder.observationPushService start];
     
     // Add the operations to the queue
     [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];

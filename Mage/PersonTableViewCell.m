@@ -14,7 +14,7 @@
 @implementation PersonTableViewCell
 
 - (id) populateCellWithUser:(User *) user {
-	[self.icon setImage:[PersonImage imageForLocation:user.location]];
+	[self.icon setImage:[PersonImage imageForUser:user constrainedWithSize:self.icon.frame.size]];
 	self.name.text = user.name;
 	self.username.text = user.username;
 	self.timestamp.text = user.location.timestamp.timeAgoSinceNow;

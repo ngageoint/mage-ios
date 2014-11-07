@@ -19,13 +19,14 @@
 #import "ObservationAnnotation.h"
 #import "Observation.h"
 #import "ObservationImage.h"
-#import "PersonViewController.h"
+#import "MeViewController.h"
 #import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "Observations.h"
 #import "MageRootViewController.h"
 #import "MapDelegate.h"
+#import "ObservationEditViewController.h"
 
 @interface MapViewController ()
     @property (strong, nonatomic) Observations *observationResultsController;
@@ -36,10 +37,10 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    Locations *locations = [Locations locationsForAllUsersInManagedObjectContext:self.contextHolder.managedObjectContext];
+    Locations *locations = [Locations locationsForAllUsers];
     [self.mapDelegate setLocations:locations];
     
-    Observations *observations = [Observations observationsInManagedObjectContext:self.contextHolder.managedObjectContext];
+    Observations *observations = [Observations observations];
     [self.mapDelegate setObservations:observations];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -53,7 +54,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     
     [super viewWillAppear:animated];
 }
@@ -65,11 +65,18 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
-		PersonViewController *destinationViewController = segue.destinationViewController;
+		MeViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setUser:sender];
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
+    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
+        ObservationEditViewController *editViewController = segue.destinationViewController;
+        
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+        
+        [editViewController setLocation:point];
     }
 }
 

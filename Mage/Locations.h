@@ -8,13 +8,16 @@
 
 #import <CoreData/CoreData.h>
 #import "ManagedObjectContextHolder.h"
+#import "User+helper.h"
 
 @interface Locations : NSObject
 
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, assign) id<NSFetchedResultsControllerDelegate> delegate;
 
-+ (id) locationsForAllUsersInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
++ (id) locationsForAllUsers;
++ (id) locationsForUser:(User *) user;
+
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 
