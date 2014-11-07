@@ -228,6 +228,7 @@
                 break;
                 
             case NSFetchedResultsChangeDelete:
+                [self deleteObservation:object];
                 NSLog(@"Got delete for observation");
                 break;
                 
@@ -312,6 +313,12 @@
         annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
         [annotation setCoordinate:[observation location].coordinate];
     }
+}
+
+- (void) deleteObservation: (Observation *) observation {
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
+    [_mapView removeAnnotation:annotation];
+    [self.observationAnnotations removeObjectForKey:observation.objectID];
 }
 
 - (void)selectedUser:(User *) user {
