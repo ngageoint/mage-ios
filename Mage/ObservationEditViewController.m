@@ -33,7 +33,6 @@
 }
 
 - (id) init {
-    [self.navigationItem.backBarButtonItem setAction:@selector(cancel:)];
     return self;
 }
 
@@ -52,7 +51,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem = item;
+
     // if self.observation is null create a new one
     if (self.observation == nil) {
         self.observation = (Observation *)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];

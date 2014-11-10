@@ -46,48 +46,41 @@ AVPlayer *player;
 	return _dateFormatter;
 }
 
-- (void) viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
     
-//    // TODO tmp until we get edit working
-//    [self.editButton setEnabled:NO];
+    NSString *name = [_observation.properties valueForKey:@"type"];
+    self.navigationItem.title = name;
     
-	NSString *name = [_observation.properties valueForKey:@"type"];
-	self.navigationItem.title = name;
-
-	CLLocationDistance latitudeMeters = 500;
-	CLLocationDistance longitudeMeters = 500;
-	GeoPoint *point = _observation.geometry;
-	NSDictionary *properties = _observation.properties;
-	id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-	if (accuracyProperty != nil) {
-		double accuracy = [accuracyProperty doubleValue];
-		latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-		longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-		
-		MKCircle *circle = [MKCircle circleWithCenterCoordinate:point.location.coordinate radius:accuracy];
-		[_mapView addOverlay:circle];
-	}
-
-	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point.location.coordinate, latitudeMeters, longitudeMeters);
-	MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-	[_mapView setRegion:viewRegion];
-	
-	ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:_observation];
-	[_mapView addAnnotation:annotation];
+    CLLocationDistance latitudeMeters = 500;
+    CLLocationDistance longitudeMeters = 500;
+    GeoPoint *point = _observation.geometry;
+    NSDictionary *properties = _observation.properties;
+    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+    if (accuracyProperty != nil) {
+        double accuracy = [accuracyProperty doubleValue];
+        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+        
+        MKCircle *circle = [MKCircle circleWithCenterCoordinate:point.location.coordinate radius:accuracy];
+        [_mapView addOverlay:circle];
+    }
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point.location.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+    [_mapView setRegion:viewRegion];
+    
+    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:_observation];
+    [_mapView addAnnotation:annotation];
     
     self.userLabel.text = _observation.user.name;
     self.locationLabel.text = [NSString stringWithFormat:@"%f, %f", point.location.coordinate.latitude, point.location.coordinate.longitude];
     
     self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
-	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
-	
-	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewWillAppear:animated];
+    self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
+    
+    self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
