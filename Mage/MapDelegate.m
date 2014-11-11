@@ -82,12 +82,29 @@
     _mapView.mapType = [defaults integerForKey:@"mapType"];
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath
+-(void) observeValueForKeyPath:(NSString *)keyPath
                      ofObject:(id)object
                        change:(NSDictionary *)change
                       context:(void *)context {
     if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
         self.mapView.mapType = [object integerForKey:keyPath];
+    }
+}
+
+-(void) setHideLocations:(BOOL) hideLocations {
+    _hideLocations = hideLocations;
+    [self hideAnnotations:[self.locationAnnotations allValues] hide:hideLocations];
+}
+
+-(void) setHideObservations:(BOOL) hideObservations {
+    _hideObservations = hideObservations;
+    [self hideAnnotations:[self.observationAnnotations allValues] hide:hideObservations];
+}
+
+- (void) hideAnnotations:(NSArray *) annotations hide:(BOOL) hide {
+    for (id<MKAnnotation> annotation in annotations) {
+        MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
+        annotationView.hidden = hide;
     }
 }
 
@@ -111,6 +128,8 @@
         }
         annotationView.image = image;
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
+        annotationView.hidden = self.hideLocations;
+        
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -127,6 +146,7 @@
 			annotationView.rightCalloutAccessoryView = rightButton;
             annotationView.image = image;
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+            annotationView.hidden = self.hideObservations;
 		} else {
             annotationView.annotation = annotation;
         }

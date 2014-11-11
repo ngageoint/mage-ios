@@ -53,14 +53,41 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
+- (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
+    self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
+    
+    [defaults addObserver:self
+               forKeyPath:@"hideObservations"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:@"hidePeople"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObserver:self forKeyPath:@"hideObservations"];
+    [defaults removeObserver:self forKeyPath:@"hidePeople"];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if ([@"hideObservations" isEqualToString:keyPath] && self.mapView) {
+        self.mapDelegate.hideObservations = [object boolForKey:keyPath];
+    } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
+        self.mapDelegate.hideLocations = [object boolForKey:keyPath];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
