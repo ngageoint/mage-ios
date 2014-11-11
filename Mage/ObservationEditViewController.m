@@ -12,6 +12,8 @@
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
+#import <NSManagedObjectContext+MAGE.h>
+#import <Observation+helper.h>
 
 @interface ObservationEditViewController ()
 
@@ -31,7 +33,6 @@
 }
 
 - (id) init {
-    [self.navigationItem.backBarButtonItem setAction:@selector(cancel:)];
     return self;
 }
 
@@ -41,9 +42,24 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)saveObservation:(id)sender {
+    if ([self.editDataStore saveObservation]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem = item;
+
+    // if self.observation is null create a new one
+    if (self.observation == nil) {
+        self.observation = (Observation *)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
+        [self.observation initializeNewObservationWithLocation: self.location];
+    }
     self.editDataStore.observation = self.observation;
 }
 

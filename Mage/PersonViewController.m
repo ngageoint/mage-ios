@@ -14,6 +14,7 @@
 #import "ObservationTableViewCell.h"
 #import "ObservationViewController.h"
 #import "Observations.h"
+#import <Server+helper.h>
 
 @interface PersonViewController()
 	@property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -79,8 +80,7 @@
 		_contact1.text = _user.phone;
 	}
 	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     _variantField = [form objectForKey:@"variantField"];
 }
 

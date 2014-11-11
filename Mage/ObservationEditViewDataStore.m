@@ -9,6 +9,7 @@
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
 #import "ManagedObjectContextHolder.h"
+#import <Server+helper.h>
 
 @interface ObservationEditViewDataStore ()
 
@@ -29,8 +30,7 @@ NSInteger expandedRow = -1;
     if (_rowToCellType != nil) {
         return _rowToCellType;
     }
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];
@@ -140,15 +140,23 @@ NSInteger expandedRow = -1;
     [self.editTable endUpdates];
 }
 
-- (IBAction) saveObservation {
+- (BOOL) saveObservation {
     NSError *error = nil;
+    [self.observation setDirty:[NSNumber numberWithBool:YES]];
     if (![self.observation.managedObjectContext save:&error]) {
-        
+        NSLog(@"failed to save the observation: %@", self.observation.remoteId);
+        return NO;
     }
+    NSLog(@"saved the observation: %@", self.observation.remoteId);
+    return YES;
 }
 
 - (void) discardChanges {
-    [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
+    if (self.observation.remoteId == nil) {
+        [self.observation.managedObjectContext deleteObject:self.observation];
+    } else {
+        [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
+    }
 }
 
 

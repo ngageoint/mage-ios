@@ -15,7 +15,7 @@
 @property (strong, nonatomic) Observation *observation;
 @property (weak, nonatomic) IBOutlet UITableView *editTable;
 
-- (IBAction) saveObservation;
+- (BOOL) saveObservation;
 - (void) discardChanges;
 
 @end

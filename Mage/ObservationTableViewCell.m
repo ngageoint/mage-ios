@@ -10,6 +10,7 @@
 #import "ObservationImage.h"
 #import <NSDate+DateTools.h>
 #import <User.h>
+#import <Server+helper.h>
 
 @implementation ObservationTableViewCell
 
@@ -31,7 +32,7 @@
 
 - (void) populateCellWithObservation:(Observation *) observation {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
     self.primaryField.text = type;

@@ -8,7 +8,7 @@
 
 #import "PersonImage.h"
 #import "User.h"
-#import "UIImage+Resize.h"
+#import <UIImage+Resize.h>
 
 @implementation PersonImage
 

@@ -23,8 +23,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <HttpManager.h>
 #import "ObservationEditViewController.h"
-#import "MapDelegate.h"
-#import "ObservationDataStore.h"
+#import <Server+helper.h>
 
 @interface ObservationViewController ()
 
@@ -51,11 +50,12 @@ AVPlayer *player;
 	return _dateFormatter;
 }
 
-- (void) viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
     
-//    // TODO tmp until we get edit working
-//    [self.editButton setEnabled:NO];
+    NSString *name = [_observation.properties valueForKey:@"type"];
+    self.navigationItem.title = name;
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
@@ -223,8 +223,7 @@ AVPlayer *player;
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *form = [defaults objectForKey:@"form"];
+    NSDictionary *form = [Server observationForm];
     
     for (id field in [form objectForKey:@"fields"]) {
         NSString *fieldName = [field objectForKey:@"name"];

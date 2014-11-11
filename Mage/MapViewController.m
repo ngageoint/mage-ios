@@ -26,6 +26,7 @@
 #import "Observations.h"
 #import "MageRootViewController.h"
 #import "MapDelegate.h"
+#import "ObservationEditViewController.h"
 
 @interface MapViewController ()
     @property (strong, nonatomic) Observations *observationResultsController;
@@ -53,7 +54,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     
     [super viewWillAppear:animated];
 }
@@ -70,6 +70,13 @@
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
 		ObservationViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
+    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
+        ObservationEditViewController *editViewController = segue.destinationViewController;
+        
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+        
+        [editViewController setLocation:point];
     }
 }
 

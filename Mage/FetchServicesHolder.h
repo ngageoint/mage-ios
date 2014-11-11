@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <LocationFetchService.h>
 #import <ObservationFetchService.h>
+#import <ObservationPushService.h>
 
 @interface FetchServicesHolder : NSObject
 
 @property (weak, nonatomic) LocationFetchService *locationFetchService;
 @property (weak, nonatomic) ObservationFetchService *observationFetchService;
+@property (weak, nonatomic) ObservationPushService *observationPushService;
 
 @end

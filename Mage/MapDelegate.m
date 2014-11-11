@@ -261,6 +261,7 @@
                 break;
                 
             case NSFetchedResultsChangeDelete:
+                [self deleteObservation:object];
                 NSLog(@"Got delete for observation");
                 break;
                 
@@ -335,16 +336,22 @@
 }
 
 - (void) updateObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
     if (annotation == nil) {
         annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
         [_mapView addAnnotation:annotation];
-        [self.observationAnnotations setObject:annotation forKey:observation.remoteId];
+        [self.observationAnnotations setObject:annotation forKey:observation.objectID];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
         [annotation setCoordinate:[observation location].coordinate];
     }
+}
+
+- (void) deleteObservation: (Observation *) observation {
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
+    [_mapView removeAnnotation:annotation];
+    [self.observationAnnotations removeObjectForKey:observation.objectID];
 }
 
 - (void)selectedUser:(User *) user {
@@ -364,7 +371,7 @@
 - (void)selectedObservation:(Observation *) observation {
     [self.mapView setCenterCoordinate:[observation location].coordinate];
     
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 
