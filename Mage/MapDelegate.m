@@ -30,6 +30,23 @@
 
 @implementation MapDelegate
 
+- (id) init {
+    if (self = [super init]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults addObserver:self
+                   forKeyPath:@"mapType"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+    }
+    
+    return self;
+}
+
+- (void) dealloc {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObserver:self forKeyPath:@"mapType"];
+}
+
 - (void) setLocations:(Locations *)locations {
     _locations = locations;
     _locations.delegate = self;
@@ -56,6 +73,22 @@
     }
 
     [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+}
+
+- (void) setMapView:(MKMapView *)mapView {
+    _mapView = mapView;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    _mapView.mapType = [defaults integerForKey:@"mapType"];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath
+                     ofObject:(id)object
+                       change:(NSDictionary *)change
+                      context:(void *)context {
+    if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
+        self.mapView.mapType = [object integerForKey:keyPath];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -332,6 +365,13 @@
     [self.mapView setCenterCoordinate:[observation location].coordinate];
     
     ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    [self.mapView selectAnnotation:annotation animated:YES];
+}
+
+- (void)selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region {
+    LocationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
+    
+    [self.mapView setRegion:region animated:YES];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 

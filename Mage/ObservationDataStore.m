@@ -14,7 +14,7 @@
 #import "Server+helper.h"
 
 @interface ObservationDataStore ()
-    @property (strong, nonatomic) IBOutlet UIViewController *viewController;
+    @property (weak, nonatomic) IBOutlet UIViewController *viewController;
     @property (nonatomic) NSDateFormatter *dateFormatter;
     @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end

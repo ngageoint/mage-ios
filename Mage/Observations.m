@@ -44,6 +44,24 @@
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
++ (id) observationsForObservation:(Observation *) observation {
+    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
+    
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:context
+                                                                                                 sectionNameKeyPath:nil
+                                                                                                          cacheName:nil];
+    
+    
+    return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
+}
+
+
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController {
     if (self = [super init]) {
         self.fetchedResultsController = fetchedResultsController;
