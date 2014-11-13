@@ -8,6 +8,7 @@
 
 #import <CoreData/CoreData.h>
 #import "User+helper.h"
+#import "Observation.h"
 
 @interface Observations : NSObject
 
@@ -16,6 +17,7 @@
 
 + (id) observations;
 + (id) observationsForUser:(User *) user;
++ (id) observationsForObservation:(Observation *) observation;
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 
