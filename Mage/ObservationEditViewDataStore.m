@@ -117,7 +117,8 @@ NSInteger expandedRow = -1;
     [tableView beginUpdates];
     
     if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"] ||
-        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"dropdown"]) {
+        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"dropdown"] ||
+        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"radio"]) {
         
         if (expandedRow != indexPath.row +1) {
             expandedRow = indexPath.row + 1;

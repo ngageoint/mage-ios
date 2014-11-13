@@ -10,6 +10,20 @@
 
 @implementation PickerTableViewCell
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.pickerValues = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (void)awakeFromNib
+{
+    self.pickerValues = [NSMutableArray array];
+}
+
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     
     return self.pickerValues.count;
@@ -40,7 +54,7 @@
         [self.pickerValues addObject:[choice objectForKey:@"title"]];
     }
     
-    //[self.picker reloadAllComponents];
+    [self.picker reloadAllComponents];
     //[self.picker selectRow:[pickerValues indexOfObject:[observation.properties objectForKey:[field objectForKey:@"name"]]] inComponent:0 animated:NO];
 }
 
