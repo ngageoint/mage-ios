@@ -13,6 +13,4 @@
 
 @property(nonatomic, weak) IBOutlet UIToolbar *toolbar;
 
-- (void) buttonClick;
-
 @end

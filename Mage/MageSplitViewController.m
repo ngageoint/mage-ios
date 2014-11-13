@@ -74,6 +74,8 @@
     [startObservationFetchOp addDependency:usersPullOp];
     [startLocationFetchOp addDependency:usersPullOp];
     
+    [self.fetchServicesHolder.observationPushService start];
+    
     // Add the operations to the queue
     [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
 }

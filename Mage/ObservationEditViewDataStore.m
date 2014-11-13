@@ -45,6 +45,9 @@ NSInteger expandedRow = -1;
             if ([type isEqualToString:@"date"]) {
                 [cells addObject:@"observationEdit-dateSpinner"];
                 [fields addObject:field];
+            } else if ([type isEqualToString:@"radio"] || [type isEqualToString:@"dropdown"]) {
+                [cells addObject:@"observationEdit-picker"];
+                [fields addObject:field];
             }
         }
     }
@@ -89,19 +92,22 @@ NSInteger expandedRow = -1;
         cell = [tableView dequeueReusableCellWithIdentifier:@"observationEdit-generic"];
     }
     cell.fieldDefinition = field;
-    [cell populateCellWithFormField:field andObservation:_observation];
+    
     return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
+    id field = [self rowToField][indexPath.row];
+    [cell populateCellWithFormField:field andObservation:_observation];
     cell.delegate = self;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
-    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"]) {
+    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"] ||
+        [[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-picker"]) {
         return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
     }
     return [cell getCellHeightForValue:[self valueForIndexPath:indexPath]];
@@ -110,7 +116,8 @@ NSInteger expandedRow = -1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView beginUpdates];
     
-    if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"]) {
+    if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"] ||
+        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"dropdown"]) {
         
         if (expandedRow != indexPath.row +1) {
             expandedRow = indexPath.row + 1;
@@ -157,6 +164,12 @@ NSInteger expandedRow = -1;
     } else {
         [self.observation.managedObjectContext refreshObject:self.observation mergeChanges:NO];
     }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] init];
+    
+    return view;
 }
 
 

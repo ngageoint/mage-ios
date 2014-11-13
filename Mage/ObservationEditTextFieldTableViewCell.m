@@ -13,7 +13,11 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
     [self.textField setText:value];
-    [self.keyLabel setText:[field objectForKey:@"title"]];
+    if ([[field objectForKey:@"archived"] intValue] == 1) {
+        [self.keyLabel setText:@"archived"];
+    } else {
+        [self.keyLabel setText:[field objectForKey:@"title"]];
+    }
 }
 
 @end
