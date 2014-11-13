@@ -8,7 +8,7 @@
 
 #import "ObservationViewController.h"
 #import "GeoPoint.h"
-#import <Observation.h>
+#import <Observation+helper.h>
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
 #import "ObservationPropertyTableViewCell.h"
@@ -24,11 +24,17 @@
 #import <HttpManager.h>
 #import "ObservationEditViewController.h"
 #import <Server+helper.h>
+#import "MapDelegate.h"
+#import "ObservationDataStore.h"
 
 @interface ObservationViewController ()
 
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (weak, nonatomic) IBOutlet MKMapView *map;
+@property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+
+@property (nonatomic, strong) IBOutlet ObservationDataStore *observationDataStore;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -50,37 +56,38 @@ AVPlayer *player;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillAppear:animated];
     
-    NSString *name = [_observation.properties valueForKey:@"type"];
-    self.navigationItem.title = name;
+	NSString *name = [_observation.properties valueForKey:@"type"];
+	self.navigationItem.title = name;
+    
+    Observations *observations = [Observations observationsForObservation:self.observation];
+    [self.observationDataStore startFetchControllerWithObservations:observations];
+    if (self.mapDelegate != nil) {
+        [self.mapDelegate setObservations:observations];
+        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+        [self.mapDelegate selectedObservation:_observation];
+    }
+    
+    self.userLabel.text = _observation.user.name;
+    
+    self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
+	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
+	
+	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", _observation.location.coordinate.latitude, _observation.location.coordinate.longitude];
     
     CLLocationDistance latitudeMeters = 500;
     CLLocationDistance longitudeMeters = 500;
-    GeoPoint *point = _observation.geometry;
-    NSDictionary *properties = _observation.properties;
+    NSDictionary *properties = self.observation.properties;
     id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
     if (accuracyProperty != nil) {
         double accuracy = [accuracyProperty doubleValue];
         latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
         longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-        
-        MKCircle *circle = [MKCircle circleWithCenterCoordinate:point.location.coordinate radius:accuracy];
-        [_mapView addOverlay:circle];
     }
     
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point.location.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.observation.location.coordinate, latitudeMeters, longitudeMeters);
     MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-    [_mapView setRegion:viewRegion];
     
-    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:_observation];
-    [_mapView addAnnotation:annotation];
-    
-    self.userLabel.text = _observation.user.name;
-    self.locationLabel.text = [NSString stringWithFormat:@"%f, %f", point.location.coordinate.latitude, point.location.coordinate.longitude];
-    
-    self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
-    self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
-    
-    self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    [self.mapDelegate selectedObservation:self.observation region:viewRegion];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -111,32 +118,6 @@ AVPlayer *player;
     self.mapView.layer.mask = maskLayer;
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-	
-    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-		ObservationAnnotation *observationAnnotation = annotation;
-        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-            if (image == nil) {
-                annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
-            } else {
-                annotationView.image = image;
-            }
-		} else {
-            annotationView.annotation = annotation;
-        }
-		annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-        return annotationView;
-    }
-	
-    return nil;
-}
-
 -(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
 {
     float oldWidth = sourceImage.size.width;
@@ -152,25 +133,6 @@ AVPlayer *player;
     return newImage;
 }
 
-- (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
-	MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
-	renderer.lineWidth = 1.0f;
-	
-	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:_observation.timestamp];
-	if (interval <= 600) {
-		renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
-		renderer.strokeColor = [UIColor blueColor];
-	} else if (interval <= 1200) {
-		renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
-		renderer.strokeColor = [UIColor yellowColor];
-	} else {
-		renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
-		renderer.strokeColor = [UIColor orangeColor];
-	}
-	
-	return renderer;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [_observation.properties count];
 }
@@ -180,9 +142,7 @@ AVPlayer *player;
     id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
     id title = [observationCell.fieldDefinition objectForKey:@"title"];
     if (title == nil) {
-        
         title = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-//        [_propertyTable deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
     }
     [observationCell populateCellWithKey:title andValue:value];
 }

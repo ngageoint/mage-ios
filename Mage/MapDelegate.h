@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
 @property (strong, nonatomic) Locations *locations;
 @property (strong, nonatomic) Observations *observations;
+@property (nonatomic) BOOL hideLocations;
+@property (nonatomic) BOOL hideObservations;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;

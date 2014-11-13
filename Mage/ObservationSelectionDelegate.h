@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 #import "Observation+helper.h"
 
 @protocol ObservationSelectionDelegate <NSObject>
 
 @required
-    -(void) selectedObservation:(Observation *) observation;
+    - (void) selectedObservation:(Observation *) observation;
+    - (void) selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region;
 
 @end
