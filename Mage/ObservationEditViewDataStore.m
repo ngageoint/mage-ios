@@ -106,6 +106,11 @@ NSInteger expandedRow = -1;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
+    NSDictionary *field = [[self rowToField] objectAtIndex: indexPath.row];
+    
+    if ([[field objectForKey:@"archived"] intValue] == 1) {
+        return 0.0;
+    }
     if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"] ||
         [[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-picker"]) {
         return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
