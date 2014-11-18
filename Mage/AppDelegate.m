@@ -18,10 +18,11 @@
 #import "CoreDataStack.h"
 #import "NSManagedObjectContext+MAGE.h"
 
+#import "ZipFile+OfflineMap.h"
+
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
@@ -92,6 +93,57 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
 
+    [self processOfflineMapArchives];
+}
+
+- (void) processOfflineMapArchives {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:NULL];
+    NSArray *archives = [directoryContent filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension == %@ AND SELF != %@", @"zip", @"Form.zip"]];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *offlineMaps = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:@"offlineMaps"]];
+    [offlineMaps setObject:archives forKey:@"processing"];
+    [defaults setObject:offlineMaps forKey:@"offlineMaps"];
+    [defaults synchronize];
+    
+    for (id archive in archives) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+            [self processArchiveAtFilePath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, archive] toDirectory:[documentsDirectory stringByAppendingPathComponent:@"MapCache"]];
+        });
+    }
+}
+
+- (void) processArchiveAtFilePath:(NSString *) archivePath toDirectory:(NSString *) directory {
+    NSLog(@"File %@", archivePath);
+    
+    NSError *error = nil;
+    ZipFile *zipFile = [[ZipFile alloc] initWithFileName:archivePath mode:ZipFileModeUnzip];
+    NSArray *caches = [zipFile expandToPath:directory error:&error];
+    if (error) {
+        NSLog(@"Error extracting offline map archive. %@", error);
+    } else {
+        [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
+    }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *offlineMaps = [[defaults dictionaryForKey:@"offlineMaps"] mutableCopy];
+    
+    [NSThread sleepForTimeInterval:20];
+    
+    if (caches.count) {
+        NSMutableSet *availableCaches =  [[NSMutableSet alloc] initWithArray:[offlineMaps objectForKey:@"available"]];
+        [availableCaches addObjectsFromArray:caches];
+        [offlineMaps setValue:[availableCaches allObjects] forKey:@"available"];
+    }
+    
+    NSMutableArray *archiveFileNames = [[offlineMaps objectForKey:@"processing"] mutableCopy];
+    [archiveFileNames removeObject:[archivePath lastPathComponent]];
+    [offlineMaps setValue:archiveFileNames forKey:@"processing"];
+    
+    [defaults setValue:offlineMaps forKeyPath:@"offlineMaps"];
+    [defaults synchronize];
 }
 
 - (void) applicationWillTerminate:(UIApplication *) application {

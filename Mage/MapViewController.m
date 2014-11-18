@@ -69,7 +69,7 @@
                forKeyPath:@"hidePeople"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
-}
+} 
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
