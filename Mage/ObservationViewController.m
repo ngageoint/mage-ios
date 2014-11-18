@@ -66,6 +66,7 @@ AVPlayer *player;
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         [self.mapDelegate selectedObservation:_observation];
     }
+    [self.mapDelegate setObservations:observations];
     
     self.userLabel.text = _observation.user.name;
     
