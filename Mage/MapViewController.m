@@ -30,9 +30,20 @@
 
 @interface MapViewController ()
     @property (strong, nonatomic) Observations *observationResultsController;
+    @property (strong, nonatomic) CLLocation *mapPressLocation;
 @end
 
 @implementation MapViewController
+
+- (IBAction)mapLongPress:(id)sender {
+    UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+        CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+        self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
+        [self performSegueWithIdentifier:@"CreateNewObservationAtPointSegue" sender:sender];
+    }
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -102,6 +113,12 @@
         
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+        
+        [editViewController setLocation:point];
+    } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
+        ObservationEditViewController *editViewController = segue.destinationViewController;
+        
+        GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
         
         [editViewController setLocation:point];
     }

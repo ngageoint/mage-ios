@@ -7,39 +7,27 @@
 //
 
 #import "MapViewController_iPad.h"
+#import "ObservationEditViewController.h"
+#import <GeoPoint.h>
 
 @implementation MapViewController_iPad
 
-//-(void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *) button {
-//    self.masterViewButton = nil;
-//    self.masterViewPopover = nil;
-//    
-//    NSMutableArray *itemArray = [self.toolbar.items mutableCopy];
-//    [itemArray removeObject:button];
-//    [self.toolbar setItems:itemArray];
-//}
-//
-//
-//-(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)button forPopoverController:(UIPopoverController *) pc {
-//    self.masterViewButton = button;
-//    self.masterViewPopover = pc;
-//    
-//    button.image = [UIImage imageNamed:@"bars"];
-//    
-//    NSMutableArray *items = [self.toolbar.items mutableCopy];
-//    if (!items) {
-//        items = [NSMutableArray arrayWithObject:button];
-//    } else {
-//        [items insertObject:button atIndex:0];
-//    }
-//    
-//    [self.toolbar setItems:items];
-//}
-//
-//- (void) buttonClick {
-//    if (self.masterViewButton && self.masterViewPopover) {
-//        [self.masterViewPopover presentPopoverFromBarButtonItem:self.masterViewButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-//    }
-//}
+- (void) viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES];
+    [super viewWillAppear:animated];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"CreateNewObservationSegue"]) {
+        ObservationEditViewController *editViewController = segue.destinationViewController;
+        
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+        
+        [editViewController setLocation:point];
+    } else {
+        [super prepareForSegue:segue sender:sender];
+    }
+}
 
 @end
