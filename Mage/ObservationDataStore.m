@@ -12,9 +12,12 @@
 #import "Observations.h"
 #import <NSDate+DateTools.h>
 #import "Server+helper.h"
+#import "AttachmentSelectionDelegate.h"
+#import "ObservationAttachmentTableViewCell.h"
 
 @interface ObservationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
+    @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
     @property (nonatomic) NSDateFormatter *dateFormatter;
     @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
@@ -76,7 +79,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
-    
+    NSLog(@"cell bounds height %f", cell.bounds.size.height);
     return cell.bounds.size.height;
 }
 
@@ -115,12 +118,24 @@
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
-    NSString *CellIdentifier = @"observationCell";
-    if (self.variantField != nil && [[observation.properties objectForKey:self.variantField] length] != 0) {
-        CellIdentifier = @"observationVariantCell";
+    NSString *cellIdentifier = @"cell";
+    ObservationTableViewCell *cell = nil;
+    if (observation.attachments.count != 0) {
+        if (self.variantField != nil && [[observation.properties objectForKey:self.variantField] length] != 0) {
+            cellIdentifier = @"variantCellWithAttachments";
+        } else {
+            cellIdentifier = @"cellWithAttachments";
+        }
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        ((ObservationAttachmentTableViewCell *)cell).attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+    } else {
+        if (self.variantField != nil && [[observation.properties objectForKey:self.variantField] length] != 0) {
+            cellIdentifier = @"variantCell";
+        } else {
+            cellIdentifier = @"cell";
+        }
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-	
-    ObservationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     return cell;
 }
 

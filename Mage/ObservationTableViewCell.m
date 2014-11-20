@@ -12,26 +12,14 @@
 #import <User.h>
 #import <Server+helper.h>
 
+@interface ObservationTableViewCell()
+
+@end
+
 @implementation ObservationTableViewCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void) populateCellWithObservation:(Observation *) observation {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
     NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
@@ -53,15 +41,6 @@
     self.timeField.text = output.shortTimeAgoSinceNow;
     
     self.userField.text = observation.user.name;
-    if ([observation.attachments count] != 0) {
-        self.numberOfAttachmentsLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)[observation.attachments count]];
-        self.paperClipImage.image = [self.paperClipImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [self.numberOfAttachmentsLabel setHidden:NO];
-        [self.paperClipImage setHidden:NO];
-    } else {
-        [self.paperClipImage setHidden:YES];
-        [self.numberOfAttachmentsLabel setHidden:YES];
-    }
 }
 
 @end

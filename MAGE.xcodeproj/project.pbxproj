@@ -65,6 +65,8 @@
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
+		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
+		F78B0A9A1A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */; };
 		F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */; };
 		F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A23319D20E8000904316 /* FetchServicesHolder.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
@@ -233,6 +235,11 @@
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
+		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
+		F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAttachmentTableViewCell.h; sourceTree = "<group>"; };
+		F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAttachmentTableViewCell.m; sourceTree = "<group>"; };
+		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
 		F792A22C19D1DE9E00904316 /* ManagedObjectContextHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagedObjectContextHolder.h; sourceTree = "<group>"; };
 		F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagedObjectContextHolder.m; sourceTree = "<group>"; };
 		F792A23219D20E8000904316 /* FetchServicesHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchServicesHolder.h; sourceTree = "<group>"; };
@@ -503,6 +510,11 @@
 				F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */,
 				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
 				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
+				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
+				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
+				F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */,
+				F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */,
+				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -861,6 +873,7 @@
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
+				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
@@ -876,6 +889,7 @@
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
+				F78B0A9A1A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m in Sources */,
 				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
 			);

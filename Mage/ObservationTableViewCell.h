@@ -15,8 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeField;
 @property (weak, nonatomic) IBOutlet UILabel *userField;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
-@property (weak, nonatomic) IBOutlet UILabel *numberOfAttachmentsLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *paperClipImage;
 
 - (void) populateCellWithObservation:(Observation *) observation;
 

@@ -184,10 +184,12 @@
         Attachment *attachment = (Attachment *)entity;
         UIImage *sourceImage = nil;
         NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
+        NSLog(@"content type %@", attachment.contentType);
         if ([attachment.contentType hasPrefix:@"image"]) {
             
             NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-            NSString *tokenUrl = [NSString stringWithFormat:@"%@?access_token=%@", requestURL, [defaults objectForKey:@"token"]];
+            NSString *tokenUrl = [NSString stringWithFormat:@"%@?access_token=%@", requestURL, [defaults valueForKeyPath:@"loginParameters.token"]];
+            NSLog(@"token url %@", tokenUrl);
             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:tokenUrl]];
             sourceImage = [UIImage imageWithData:data];
         } else if ([attachment.contentType hasPrefix:@"video"]) {
