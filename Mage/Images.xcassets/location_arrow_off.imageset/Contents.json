@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "people_selected.png"
+      "filename" : "location_arrow_off.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "people_selected@2x.png"
+      "filename" : "location_arrow_off@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "location_arrow_off@3x.png"
     }
   ],
   "info" : {

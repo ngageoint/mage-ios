@@ -124,14 +124,12 @@
     if (error) {
         NSLog(@"Error extracting offline map archive. %@", error);
     } else {
-        [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
+//        [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *offlineMaps = [[defaults dictionaryForKey:@"offlineMaps"] mutableCopy];
-    
-    [NSThread sleepForTimeInterval:20];
-    
+        
     if (caches.count) {
         NSMutableSet *availableCaches =  [[NSMutableSet alloc] initWithArray:[offlineMaps objectForKey:@"available"]];
         [availableCaches addObjectsFromArray:caches];

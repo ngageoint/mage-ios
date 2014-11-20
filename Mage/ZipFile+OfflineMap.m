@@ -22,12 +22,15 @@
     
     for (int i = 0; i < totalNumberOfFiles; i++) {
         FileInZipInfo *info = [self getCurrentFileInZipInfo];
+
         
         BOOL isDirectory = NO;
         [fileManager fileExistsAtPath:path isDirectory:&isDirectory];
         if(isDirectory && [regex numberOfMatchesInString:info.name options:0 range:NSMakeRange(0, [info.name length])] == 1) {
             [caches addObject:[[info.name pathComponents] firstObject]];
         };
+        
+        NSLog(@"name %@", info.name);
         
         if (![info.name hasSuffix:@"/"]) {
             NSString *filePath = [path stringByAppendingPathComponent:info.name];

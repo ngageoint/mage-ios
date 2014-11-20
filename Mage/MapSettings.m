@@ -9,7 +9,6 @@
 #import "MapSettings.h"
 
 @interface MapSettings ()
-    @property (nonatomic) BOOL shouldHideNavBar;
     @property (weak, nonatomic) IBOutlet UISegmentedControl *mapTypeSegmentedControl;
     @property (weak, nonatomic) IBOutlet UISwitch *showObservationsSwitch;
     @property (weak, nonatomic) IBOutlet UISwitch *showPeopleSwitch;
@@ -22,9 +21,6 @@ bool originalNavBarHidden;
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
-    [self.navigationController setNavigationBarHidden:self.shouldHideNavBar animated:animated];
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
     
@@ -32,12 +28,6 @@ bool originalNavBarHidden;
     self.showObservationsSwitch.on = ![defaults boolForKey:@"hideObservations"];
     
     self.showPeopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
-}
-
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 - (IBAction)onMapTypeChanged:(UISegmentedControl *) segmentedControl {

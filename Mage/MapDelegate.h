@@ -15,16 +15,26 @@
 #import "Observations.h"
 #import <GPSLocation.h>
 
+@protocol UserTrackingModeChanged <NSObject>
+
+@required
+-(void) userTrackingModeChanged:(MKUserTrackingMode) mode;
+
+@end
+
+
 @interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
 
-@property (weak, nonatomic) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
-@property (strong, nonatomic) Locations *locations;
-@property (strong, nonatomic) Observations *observations;
+@property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
+@property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
+@property (nonatomic, strong) Locations *locations;
+@property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;
 - (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user andCenter: (BOOL) shouldCenter;
+- (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 
 @end

@@ -16,6 +16,8 @@
 
 @implementation OfflineMapTableViewController
 
+bool originalNavBarHidden;
+
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     
@@ -32,7 +34,7 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+        
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"offlineMaps"];
 }
@@ -82,31 +84,47 @@
     } else {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"availableOfflineMapCell" forIndexPath:indexPath];
         cell.textLabel.text = [self.availableOfflineMaps objectAtIndex:[indexPath row]];
+        
+        if ([self.selectedOfflineMaps containsObject:cell.textLabel.text]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.selected = YES;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
         cell.accessoryType = [self.selectedOfflineMaps containsObject:cell.textLabel.text] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         
         return cell;
     }
 }
+//
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if ([self.selectedOfflineMaps containsObject:cell.textLabel.text]) {
+//        [cell setSelected:YES animated:NO];
+//    }
+//}
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
+
     UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
     
-    if ([self.selectedOfflineMaps containsObject:cell.textLabel.text]) {
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.selectedOfflineMaps removeObject:cell.textLabel.text];
-    } else {
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.selectedOfflineMaps addObject:cell.textLabel.text];
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.selectedOfflineMaps removeObject:cell.textLabel.text];
     }
     
     [[NSUserDefaults standardUserDefaults] setObject:[self.selectedOfflineMaps allObjects] forKey:@"selectedOfflineMaps"];
 }
 
 //-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *) indexPath{
-//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-
-//    
-
+//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//    cell.accessoryType = UITableViewCellAccessoryNone;
+//    [self.selectedOfflineMaps removeObject:cell.textLabel.text];
+//
+//    [[NSUserDefaults standardUserDefaults] setObject:[self.selectedOfflineMaps allObjects] forKey:@"selectedOfflineMaps"];
 //}
 
 @end
