@@ -11,7 +11,7 @@
 #import "AttachmentSelectionDelegate.h"
 
 @interface AttachmentCollectionDataStore : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
-@property (weak, nonatomic) UICollectionView *attachmentCollection;
+@property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 @property (strong, nonatomic) Observation *observation;
 @property (nonatomic, strong) id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
 
