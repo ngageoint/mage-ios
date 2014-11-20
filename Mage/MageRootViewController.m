@@ -22,15 +22,6 @@
 
 - (void) viewDidLoad {
     [self startServices];
-    
-    UITabBarItem *mapTabBar = [[self.tabBar items] objectAtIndex:0];
-    [mapTabBar setSelectedImage:[UIImage imageNamed:@"map_selected.png"]];
-    
-    UITabBarItem *observationsTabBar = [[self.tabBar items] objectAtIndex:1];
-    [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
-    
-    UITabBarItem *peopleTabBar = [[self.tabBar items] objectAtIndex:2];
-    [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
 	
 	[super viewDidLoad];
 }
@@ -57,16 +48,5 @@
     // Add the operations to the queue
     [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
