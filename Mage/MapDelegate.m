@@ -19,11 +19,13 @@
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
-    @property (nonatomic) NSMutableDictionary *locationAnnotations;
-    @property (nonatomic) NSMutableDictionary *observationAnnotations;
+    @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
+    @property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
+
+    @property (nonatomic) BOOL isTrackingAnimation;
     @property (nonatomic) BOOL canShowUserCallout;
     @property (nonatomic) BOOL canShowObservationCallout;
     @property (nonatomic) BOOL canShowGpsLocationCallout;
@@ -149,6 +151,30 @@
             [self.mapView removeOverlay:overlay];
             [self.offlineMaps removeObjectForKey:unselectedOfflineMap];
         }
+    }
+}
+
+- (void) setUserTrackingMode:(MKUserTrackingMode) mode animated:(BOOL) animated {
+    if (!self.isTrackingAnimation || mode != MKUserTrackingModeFollowWithHeading) {
+        [self.mapView setUserTrackingMode:mode animated:animated];
+    }
+}
+
+- (void) mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
+    if (self.userTrackingModeDelegate) {
+        [self.userTrackingModeDelegate userTrackingModeChanged:mode];
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
+        self.isTrackingAnimation = YES;
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
+        self.isTrackingAnimation = NO;
     }
 }
 
