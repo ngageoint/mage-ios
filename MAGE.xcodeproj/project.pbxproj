@@ -1035,7 +1035,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "4be9a689-59ef-48e1-addd-e9c2b6387b8a";
+				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1054,7 +1054,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "4be9a689-59ef-48e1-addd-e9c2b6387b8a";
+				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
