@@ -40,7 +40,7 @@
     thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone;
+    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
@@ -49,7 +49,7 @@
     largeImageFormat.style = FICImageFormatStyle32BitBGRA;
     largeImageFormat.imageSize = [[UIScreen mainScreen] bounds].size;
     largeImageFormat.maximumCount = 250;
-    largeImageFormat.devices = FICImageFormatDevicePhone;
+    largeImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     NSArray *imageFormats = @[thumbnailImageFormat, largeImageFormat];

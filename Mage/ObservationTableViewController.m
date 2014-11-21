@@ -72,7 +72,6 @@
 #pragma mark - Download Media to TMP directory
 -(void) downloadAndSaveMediaToTempFolder:(Attachment *) attachment{
     HttpManager *http = [HttpManager singleton];
-    Observation *obs = (Observation *)attachment.observation;
     
     NSString *downloadPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){

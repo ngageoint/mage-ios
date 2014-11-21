@@ -79,7 +79,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
-    NSLog(@"cell bounds height %f", cell.bounds.size.height);
     return cell.bounds.size.height;
 }
 
