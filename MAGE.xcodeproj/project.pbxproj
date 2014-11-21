@@ -29,7 +29,6 @@
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
-		4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C390F3E1978376B00AB3CCB /* PersonViewController.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
@@ -167,8 +166,6 @@
 		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
 		4C2A38EE1974803700E7470A /* PersonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonImage.h; sourceTree = "<group>"; };
 		4C2A38EF1974803700E7470A /* PersonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonImage.m; sourceTree = "<group>"; };
-		4C390F3D1978376B00AB3CCB /* PersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonViewController.h; sourceTree = "<group>"; };
-		4C390F3E1978376B00AB3CCB /* PersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonViewController.m; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
@@ -426,8 +423,6 @@
 				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
 				4C2A38EE1974803700E7470A /* PersonImage.h */,
 				4C2A38EF1974803700E7470A /* PersonImage.m */,
-				4C390F3D1978376B00AB3CCB /* PersonViewController.h */,
-				4C390F3E1978376B00AB3CCB /* PersonViewController.m */,
 				F727517519C895CA006C63CB /* PeopleDataStore.h */,
 				F727517619C895CA006C63CB /* PeopleDataStore.m */,
 				F73129F819F5BE320063DB6A /* MeViewController.h */,
@@ -883,7 +878,6 @@
 				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
-				4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
