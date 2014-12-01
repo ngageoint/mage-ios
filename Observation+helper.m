@@ -270,7 +270,9 @@ NSDictionary *_fieldNameToField;
                 dbObs.user = [usersMatchingIDs objectAtIndex:0];
                 NSArray *attachments = [feature objectForKey:@"attachments"];
                 // stupid but for now just do this
-                [dbObs setAttachments:nil];
+                for (id oldAttachment in dbObs.attachments) {
+                    [context deleteObject:oldAttachment];
+                }
                 for (id attachment in attachments) {
                     Attachment * a = [Attachment attachmentForJson:attachment];
                     [context insertObject:a];

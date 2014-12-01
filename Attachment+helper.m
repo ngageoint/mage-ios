@@ -17,6 +17,7 @@
     [self setUrl:[json objectForKey:@"url"]];
     [self setName: [json objectForKey:@"name"]];
     [self setSize: [json objectForKey:@"size"]];
+    [self setDirty:[NSNumber numberWithBool:NO]];
     return self;
 }
 
