@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "people.png"
+      "filename" : "ic_people_black_24dp-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "people@2x.png"
+      "filename" : "ic_people_black_24dp.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "ic_people_black_48dp.png"
     }
   ],
   "info" : {

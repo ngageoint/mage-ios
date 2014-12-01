@@ -43,12 +43,6 @@
     
     PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController.mapDelegate;
-
-    UITabBarItem *observationsTabBar = [[[self.tabBarController tabBar] items] objectAtIndex:0];
-    [observationsTabBar setSelectedImage:[UIImage imageNamed:@"observations_selected.png"]];
-    
-    UITabBarItem *peopleTabBar = [[[self.tabBarController tabBar] items] objectAtIndex:1];
-    [peopleTabBar setSelectedImage:[UIImage imageNamed:@"people_selected.png"]];
 }
 
 

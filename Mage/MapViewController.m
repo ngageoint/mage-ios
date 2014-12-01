@@ -28,11 +28,24 @@
 #import "MapDelegate.h"
 #import "ObservationEditViewController.h"
 
-@interface MapViewController ()
+@interface MapViewController ()<UserTrackingModeChanged>
+    @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
+
     @property (strong, nonatomic) Observations *observationResultsController;
+    @property (strong, nonatomic) CLLocation *mapPressLocation;
 @end
 
 @implementation MapViewController
+
+- (IBAction)mapLongPress:(id)sender {
+    UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+        CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+        self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
+        [self performSegueWithIdentifier:@"CreateNewObservationAtPointSegue" sender:sender];
+    }
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -42,15 +55,9 @@
     
     Observations *observations = [Observations observations];
     [self.mapDelegate setObservations:observations];
+    
+    self.mapDelegate.userTrackingModeDelegate = self;
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults boolForKey:kReportLocationKey]) {
-        [_mapView setShowsUserLocation:YES];
-        [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-    } else {
-        [_mapView setShowsUserLocation:NO];
-        [_mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -69,7 +76,7 @@
                forKeyPath:@"hidePeople"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
-}
+} 
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -104,6 +111,47 @@
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
         
         [editViewController setLocation:point];
+    } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
+        ObservationEditViewController *editViewController = segue.destinationViewController;
+        
+        GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
+        
+        [editViewController setLocation:point];
+    }
+}
+
+- (IBAction) onTrackingButtonPressed:(id)sender {
+
+    switch (self.mapView.userTrackingMode) {
+        case MKUserTrackingModeNone: {
+            [self.mapDelegate setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+            break;
+        };
+        case MKUserTrackingModeFollow: {
+            [self.mapDelegate setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+            break;
+        };
+        case MKUserTrackingModeFollowWithHeading: {
+            [self.mapDelegate setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+            break;
+        }
+    }
+}
+
+-(void) userTrackingModeChanged:(MKUserTrackingMode) mode {
+    switch (self.mapView.userTrackingMode) {
+        case MKUserTrackingModeNone: {
+            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off.png"] forState:UIControlStateNormal];
+            break;
+        };
+        case MKUserTrackingModeFollow: {
+            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_on.png"] forState:UIControlStateNormal];
+            break;
+        };
+        case MKUserTrackingModeFollowWithHeading: {
+            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_follow.png"] forState:UIControlStateNormal];
+            break;
+        }
     }
 }
 

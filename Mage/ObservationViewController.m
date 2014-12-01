@@ -66,6 +66,7 @@ AVPlayer *player;
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         [self.mapDelegate selectedObservation:_observation];
     }
+    [self.mapDelegate setObservations:observations];
     
     self.userLabel.text = _observation.user.name;
     
@@ -88,6 +89,8 @@ AVPlayer *player;
     MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
     
     [self.mapDelegate selectedObservation:self.observation region:viewRegion];
+    self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
+    self.attachmentCollectionDataStore.observation = _observation;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -183,33 +186,7 @@ AVPlayer *player;
     return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
-    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
- 
-    FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
-        cell.image.image = image;
-        [cell.image.layer addAnimation:[CATransition animation] forKey:kCATransition];
-        cell.image.layer.cornerRadius = 5;
-        cell.image.clipsToBounds = YES;
-    };
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentSmallSquare completionBlock:completionBlock];
-    
-    if (imageExists == NO) {
-        cell.image.image = [UIImage imageNamed:@"download"];
-    }
-    return cell;
-}
-
-- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _observation.attachments.count;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
-    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+- (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"clicked attachment %@", attachment.url);
     
     if ([attachment.contentType hasPrefix:@"image"]) {
@@ -219,12 +196,12 @@ AVPlayer *player;
     } else if ([attachment.contentType hasPrefix:@"audio"]) {
         [self downloadAndSaveMediaToTempFolder:attachment];
     }
+
 }
 
 #pragma mark - Download Media to TMP directory
 -(void) downloadAndSaveMediaToTempFolder:(Attachment *) attachment{
     HttpManager *http = [HttpManager singleton];
-    Observation *obs = (Observation *)attachment.observation;
     
     NSString *downloadPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){

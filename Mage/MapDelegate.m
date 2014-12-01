@@ -19,10 +19,13 @@
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
-    @property (nonatomic) NSMutableDictionary *locationAnnotations;
-    @property (nonatomic) NSMutableDictionary *observationAnnotations;
+    @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
+    @property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
+    @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
+
+    @property (nonatomic) BOOL isTrackingAnimation;
     @property (nonatomic) BOOL canShowUserCallout;
     @property (nonatomic) BOOL canShowObservationCallout;
     @property (nonatomic) BOOL canShowGpsLocationCallout;
@@ -37,6 +40,11 @@
                    forKeyPath:@"mapType"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
+        
+        [defaults addObserver:self
+                   forKeyPath:@"selectedOfflineMaps"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
     }
     
     return self;
@@ -45,6 +53,15 @@
 - (void) dealloc {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"mapType"];
+    [defaults removeObserver:self forKeyPath:@"selectedOfflineMaps"];
+}
+
+- (NSMutableDictionary *) offlineMaps {
+    if (_offlineMaps == nil) {
+        _offlineMaps = [[NSMutableDictionary alloc] init];
+    }
+    
+    return _offlineMaps;
 }
 
 - (void) setLocations:(Locations *)locations {
@@ -80,6 +97,8 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
+    
+    [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -88,6 +107,8 @@
                       context:(void *)context {
     if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
         self.mapView.mapType = [object integerForKey:keyPath];
+    } else if ([@"selectedOfflineMaps" isEqualToString:keyPath] && self.mapView) {
+        [self updateOfflineMaps:[object objectForKey:keyPath]];
     }
 }
 
@@ -105,6 +126,55 @@
     for (id<MKAnnotation> annotation in annotations) {
         MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
         annotationView.hidden = hide;
+    }
+}
+
+- (void) updateOfflineMaps:(NSSet *) offlineMaps {
+    NSMutableSet *unselectedOfflineMaps = [[self.offlineMaps allKeys] mutableCopy];
+    
+    for (NSString *offlineMap in offlineMaps) {
+        
+        if (![[self.offlineMaps allKeys] containsObject:offlineMap]) {
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            NSString *template = [NSString stringWithFormat:@"file://%@/MapCache/%@/{z}/{x}/{y}.png", documentsDirectory, offlineMap];
+            MKTileOverlay *overlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
+            [self.mapView addOverlay:overlay level:MKOverlayLevelAboveLabels];
+            [self.offlineMaps setObject:overlay forKey:offlineMap];
+        }
+        
+        [unselectedOfflineMaps removeObject:offlineMap];
+    }
+    
+    for (NSString *unselectedOfflineMap in unselectedOfflineMaps) {
+        MKTileOverlay *overlay = [self.offlineMaps objectForKey:unselectedOfflineMap];
+        if (overlay) {
+            [self.mapView removeOverlay:overlay];
+            [self.offlineMaps removeObjectForKey:unselectedOfflineMap];
+        }
+    }
+}
+
+- (void) setUserTrackingMode:(MKUserTrackingMode) mode animated:(BOOL) animated {
+    if (!self.isTrackingAnimation || mode != MKUserTrackingModeFollowWithHeading) {
+        [self.mapView setUserTrackingMode:mode animated:animated];
+    }
+}
+
+- (void) mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
+    if (self.userTrackingModeDelegate) {
+        [self.userTrackingModeDelegate userTrackingModeChanged:mode];
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
+        self.isTrackingAnimation = YES;
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
+        self.isTrackingAnimation = NO;
     }
 }
 
@@ -231,6 +301,10 @@
 }
 
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
+    if ([overlay isKindOfClass:[MKTileOverlay class]]) {
+        return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
+    }
+    
     MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
     renderer.lineWidth = 1.0f;
     

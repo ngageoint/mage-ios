@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
@@ -22,12 +23,12 @@
 		2FBFE15919E828F700590076 /* LocationServiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFE15819E828F700590076 /* LocationServiceHolder.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
+		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
-		4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C390F3E1978376B00AB3CCB /* PersonViewController.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
@@ -63,6 +64,8 @@
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
+		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
+		F78B0A9A1A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */; };
 		F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */; };
 		F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A23319D20E8000904316 /* FetchServicesHolder.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
@@ -116,6 +119,8 @@
 /* Begin PBXFileReference section */
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ZipFile+OfflineMap.h"; sourceTree = "<group>"; };
+		2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ZipFile+OfflineMap.m"; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedSegueDelegate.h; sourceTree = "<group>"; };
@@ -147,6 +152,8 @@
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
+		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
+		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineMapTableViewController.m; sourceTree = "<group>"; };
 		2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController_iPad.h; sourceTree = "<group>"; };
 		2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController_iPad.m; sourceTree = "<group>"; };
 		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
@@ -159,8 +166,6 @@
 		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
 		4C2A38EE1974803700E7470A /* PersonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonImage.h; sourceTree = "<group>"; };
 		4C2A38EF1974803700E7470A /* PersonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonImage.m; sourceTree = "<group>"; };
-		4C390F3D1978376B00AB3CCB /* PersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonViewController.h; sourceTree = "<group>"; };
-		4C390F3E1978376B00AB3CCB /* PersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonViewController.m; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
@@ -227,6 +232,11 @@
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
+		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
+		F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAttachmentTableViewCell.h; sourceTree = "<group>"; };
+		F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAttachmentTableViewCell.m; sourceTree = "<group>"; };
+		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
 		F792A22C19D1DE9E00904316 /* ManagedObjectContextHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagedObjectContextHolder.h; sourceTree = "<group>"; };
 		F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagedObjectContextHolder.m; sourceTree = "<group>"; };
 		F792A23219D20E8000904316 /* FetchServicesHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchServicesHolder.h; sourceTree = "<group>"; };
@@ -389,6 +399,8 @@
 			children = (
 				2FF4670A1A12798C00BA8357 /* CALayer+IB.h */,
 				2FF4670B1A12798C00BA8357 /* CALayer+IB.m */,
+				2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */,
+				2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -411,8 +423,6 @@
 				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
 				4C2A38EE1974803700E7470A /* PersonImage.h */,
 				4C2A38EF1974803700E7470A /* PersonImage.m */,
-				4C390F3D1978376B00AB3CCB /* PersonViewController.h */,
-				4C390F3E1978376B00AB3CCB /* PersonViewController.m */,
 				F727517519C895CA006C63CB /* PeopleDataStore.h */,
 				F727517619C895CA006C63CB /* PeopleDataStore.m */,
 				F73129F819F5BE320063DB6A /* MeViewController.h */,
@@ -428,8 +438,8 @@
 				2FFBCA0E19DB43C80033132F /* iPad */,
 				F7531EF819100E7D00CA084C /* MapViewController.h */,
 				F7531EF919100E7D00CA084C /* MapViewController.m */,
-				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
 				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
+				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
 				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
 				F727516819C87B27006C63CB /* MapDelegate.h */,
@@ -441,6 +451,8 @@
 				F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */,
 				2FA70A9D1A03F2CA00243F4A /* MapSettings.h */,
 				2FA70A9E1A03F2CA00243F4A /* MapSettings.m */,
+				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
+				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -493,6 +505,11 @@
 				F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */,
 				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
 				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
+				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
+				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
+				F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */,
+				F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */,
+				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -705,7 +722,7 @@
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
-						DevelopmentTeam = PDRAS7XQ3Y;
+						DevelopmentTeam = A8EK924J35;
 					};
 					F7A94D8518AD9CB000CB9EE0 = {
 						TestTargetID = F7A94D6518AD9CB000CB9EE0;
@@ -843,6 +860,7 @@
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
+				2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
@@ -850,6 +868,7 @@
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
+				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
@@ -859,11 +878,12 @@
 				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
-				4C390F3F1978376B00AB3CCB /* PersonViewController.m in Sources */,
+				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
+				F78B0A9A1A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m in Sources */,
 				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
 			);
@@ -955,7 +975,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -988,7 +1008,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1006,10 +1026,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1025,10 +1045,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

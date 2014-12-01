@@ -25,6 +25,8 @@
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
         
         [editViewController setLocation:point];
+    } else {
+        [super prepareForSegue:segue sender:sender];
     }
 }
 
