@@ -35,6 +35,11 @@ NSInteger expandedRow = -1;
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
+    // add the attachment cell first and then do the other fields
+    [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:@"attachments"];
+    [cells addObject:@"observationEdit-attachmentView"];
+    [fields addObject:@{}];
+    
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
