@@ -119,6 +119,8 @@ NSInteger expandedRow = -1;
     if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"] ||
         [[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-picker"]) {
         return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
+    } else if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
+        return [cell getCellHeightForValue:[NSNumber numberWithInteger:self.observation.attachments.count]];
     }
     return [cell getCellHeightForValue:[self valueForIndexPath:indexPath]];
 }
