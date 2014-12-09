@@ -13,5 +13,7 @@
 - (id) populateObjectFromJson: (NSDictionary *) json;
 
 + (Attachment*) attachmentForJson: (NSDictionary *) json;
++ (id) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context;
++ (id) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context insertIntoContext: (NSManagedObjectContext *) insertContext;
 
 @end

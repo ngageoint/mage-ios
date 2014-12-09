@@ -269,15 +269,30 @@ NSDictionary *_fieldNameToField;
                 [dbObs populateObjectFromJson:feature];
                 dbObs.user = [usersMatchingIDs objectAtIndex:0];
                 NSArray *attachments = [feature objectForKey:@"attachments"];
-                // stupid but for now just do this
-                for (id oldAttachment in dbObs.attachments) {
-                    [context deleteObject:oldAttachment];
+                
+                BOOL found = NO;
+                for (id a in attachments) {
+                    NSString *remoteId = [a objectForKey:@"remoteId"];
+                    found = NO;
+                    for (Attachment *dbAttachment in dbObs.attachments) {
+                        if (remoteId != nil && [remoteId isEqualToString:dbAttachment.remoteId]) {
+                            dbAttachment.contentType = [a objectForKey:@"contentType"];
+                            dbAttachment.name = [a objectForKey:@"name"];
+                            dbAttachment.remotePath = [a objectForKey:@"remotePath"];
+                            dbAttachment.size = [a objectForKey:@"size"];
+                            dbAttachment.url = [a objectForKey:@"url"];
+                            dbAttachment.observation = dbObs;
+                            found = YES;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        Attachment * newAttachment = [Attachment attachmentForJson:a inContext:context insertIntoContext:context];
+                        newAttachment.observation = dbObs;
+                        [dbObs addAttachmentsObject:newAttachment];
+                    }
                 }
-                for (id attachment in attachments) {
-                    Attachment * a = [Attachment attachmentForJson:attachment];
-                    [context insertObject:a];
-                    [dbObs addAttachmentsObject:a];
-                }
+
                 NSLog(@"Updating object with id: %@", o.remoteId);
             } else {
                 NSLog(@"Observation with id: %@ is dirty", o.remoteId);

@@ -9,7 +9,7 @@
 #import "Observation.h"
 #import "NSManagedObjectContext+Extra.h"
 #import <CoreLocation/CoreLocation.h>
-#import <GeoPoint.h>
+#import "GeoPoint.h"
 
 @interface Observation (helper)
 

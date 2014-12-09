@@ -145,8 +145,8 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             observation.dirty = [NSNumber numberWithBool:NO];
             
             NSError *error;
-            if (![[NSManagedObjectContext defaultManagedObjectContext] save:&error]) {
-                NSLog(@"Error updating locations: %@", error);
+            if (![observation.managedObjectContext save:&error]) {
+                NSLog(@"Error updating observation: %@", error);
             }
             
             [self.pushingObservations removeObjectForKey:observation.objectID];
