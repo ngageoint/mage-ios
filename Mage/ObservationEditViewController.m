@@ -125,9 +125,7 @@
     
     for (NSDictionary *attachmentJson in self.attachmentsToUpload) {
         Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext insertIntoContext:self.editDataStore.observation.managedObjectContext];
-        attachment.url = @"crap";
         [attachment setObservation:self.editDataStore.observation];
-        attachment.url = @"turd";
         [self.editDataStore.observation addAttachmentsObject:attachment];
     }
     [self.attachmentsToUpload removeAllObjects];
