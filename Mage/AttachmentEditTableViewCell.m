@@ -19,11 +19,15 @@
 @implementation AttachmentEditTableViewCell
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    self.ads = [[AttachmentCollectionDataStore alloc] init];
-    self.ads.attachmentCollection = self.attachmentCollection;
-    self.attachmentCollection.delegate = self.ads;
-    self.attachmentCollection.dataSource = self.ads;
-    self.ads.observation = observation;
+    if (self.ads == nil) {
+        self.ads = [[AttachmentCollectionDataStore alloc] init];
+        self.ads.attachmentCollection = self.attachmentCollection;
+        self.attachmentCollection.delegate = self.ads;
+        self.attachmentCollection.dataSource = self.ads;
+        self.ads.observation = observation;
+    } else {
+        [self.ads.attachmentCollection reloadData];
+    }
 //    self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
 }
 

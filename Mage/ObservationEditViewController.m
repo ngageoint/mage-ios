@@ -22,7 +22,7 @@
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-@property (nonatomic, strong) NSMutableArray *attachmentsToUpload;
+//@property (nonatomic, strong) NSMutableArray *attachmentsToUpload;
 
 @end
 
@@ -118,17 +118,23 @@
     [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
     [attachmentJson setValue:[NSNumber numberWithInteger:[imageData length]] forKey:@"size"];
     [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-    [self.attachmentsToUpload addObject:attachmentJson];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
+    [self.editDataStore.observation addTransientAttachment:attachment];
+//    [self.attachmentsToUpload addObject:attachment];
+    [self.editDataStore.editTable beginUpdates];
+    [self.editDataStore.editTable reloadData];
+    [self.editDataStore.editTable endUpdates];
 }
 
 - (IBAction)saveObservation:(id)sender {
     
-    for (NSDictionary *attachmentJson in self.attachmentsToUpload) {
-        Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext insertIntoContext:self.editDataStore.observation.managedObjectContext];
+    for (Attachment *attachment in self.editDataStore.observation.transientAttachments) {
+        [self.editDataStore.observation.managedObjectContext insertObject:attachment];
         [attachment setObservation:self.editDataStore.observation];
         [self.editDataStore.observation addAttachmentsObject:attachment];
     }
-    [self.attachmentsToUpload removeAllObjects];
+    [self.editDataStore.observation.transientAttachments removeAllObjects];
     
     if ([self.editDataStore saveObservation]) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -138,7 +144,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.attachmentsToUpload = [NSMutableArray array];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = item;
