@@ -19,9 +19,20 @@
 #import <Server+helper.h>
 #import <User+helper.h>
 
+
 @implementation Observation (helper)
 
+NSMutableArray *_transientAttachments;
+
 NSDictionary *_fieldNameToField;
+
+- (NSMutableArray *)transientAttachments {
+    if (_transientAttachments != nil) {
+        return _transientAttachments;
+    }
+    _transientAttachments = [NSMutableArray array];
+    return _transientAttachments;
+}
 
 - (NSDictionary *)fieldNameToField {
     if (_fieldNameToField != nil) {
@@ -92,9 +103,12 @@ NSDictionary *_fieldNameToField;
         }
     }
 
-    
     [observationJson setObject:jsonProperties forKey:@"properties"];
     return observationJson;
+}
+
+- (void) addTransientAttachment: (Attachment *) attachment {
+    [self.transientAttachments addObject:attachment];
 }
 
 - (void) initializeNewObservationWithLocation:(GeoPoint *)location {
@@ -147,7 +161,6 @@ NSDictionary *_fieldNameToField;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
     
     [self setGeometry:[[GeoPoint alloc] initWithLocation:location]];
-    
     return self;
 }
 

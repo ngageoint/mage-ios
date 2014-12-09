@@ -10,11 +10,14 @@
 #import "NSManagedObjectContext+Extra.h"
 #import <CoreLocation/CoreLocation.h>
 #import "GeoPoint.h"
+#import <Attachment.h>
 
 @interface Observation (helper)
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 - (void) initializeNewObservationWithLocation: (GeoPoint *) location;
+- (void) addTransientAttachment: (Attachment *) attachment;
+- (NSMutableArray *) transientAttachments;
 
 - (CLLocation *) location;
 
