@@ -272,7 +272,7 @@ NSDictionary *_fieldNameToField;
                 
                 BOOL found = NO;
                 for (id a in attachments) {
-                    NSString *remoteId = [a objectForKey:@"remoteId"];
+                    NSString *remoteId = [a objectForKey:@"id"];
                     found = NO;
                     for (Attachment *dbAttachment in dbObs.attachments) {
                         if (remoteId != nil && [remoteId isEqualToString:dbAttachment.remoteId]) {
