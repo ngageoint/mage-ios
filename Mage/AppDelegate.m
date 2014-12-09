@@ -63,6 +63,7 @@
     _locationFetchService = [[LocationFetchService alloc] init];
     _observationFetchService = [[ObservationFetchService alloc] init];
     _observationPushService = [[ObservationPushService alloc] init];
+    _attachmentPushService = [[AttachmentPushService alloc] init];
 	 
 	return YES;
 }

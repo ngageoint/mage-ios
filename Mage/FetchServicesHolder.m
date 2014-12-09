@@ -17,6 +17,7 @@
     self.locationFetchService = appDelegate.locationFetchService;
     self.observationFetchService = appDelegate.observationFetchService;
     self.observationPushService = appDelegate.observationPushService;
+    self.attachmentPushService = appDelegate.attachmentPushService;
     
     return self;
 }

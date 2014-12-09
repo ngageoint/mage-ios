@@ -21,8 +21,13 @@ CGSize const AttachmentSquareImageSize = {50, 50};
 @implementation Attachment (FICAttachment)
 
 - (NSString *)UUID {
-    CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self url]);
-    return FICStringWithUUIDBytes(UUIDBytes);
+    if ([self url] != nil) {
+        CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self url]);
+        return FICStringWithUUIDBytes(UUIDBytes);
+    } else {
+        CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self localPath]);
+        return FICStringWithUUIDBytes(UUIDBytes);
+    }
 }
 
 - (NSString *)sourceImageUUID {
