@@ -52,6 +52,25 @@
 
 
 - (IBAction)addVideo:(id)sender {
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        [myAlertView show];
+    } else {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.mediaTypes = [NSArray arrayWithObject:(NSString*)kUTTypeMovie];
+        
+        [self presentViewController:picker animated:YES completion:NULL];
+    }
+    
 }
 
 
@@ -82,41 +101,61 @@
     picker.delegate = self;
     picker.allowsEditing = YES;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.mediaTypes = [NSArray arrayWithObjects:(NSString*)kUTTypeMovie, (NSString*) kUTTypeImage, nil];
     
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
+    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+    NSString *contentType = @"";
+    NSString *name = @"";
+    NSString *localPath = @"";
     
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-    NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
-    NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"/MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    BOOL isDirectory;
-    if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
-        NSError *error = nil;
-        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                         forKey:NSFileProtectionKey];
-        [manager createDirectoryAtPath:attachmentsDirectory
-           withIntermediateDirectories:YES
-                            attributes:attr
-                                 error:&error];
-        if (error)
-            NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+    if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+        NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
+        NSString *moviePath = [videoUrl path];
+        
+        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
+            UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+        }
+        name = [videoUrl lastPathComponent];
+        localPath = moviePath;
+        contentType = @"video/quicktime";
+    } else {
+        UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
+        
+        NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
+        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"/MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
+        NSFileManager *manager = [NSFileManager defaultManager];
+        BOOL isDirectory;
+        if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
+            NSError *error = nil;
+            NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                             forKey:NSFileProtectionKey];
+            [manager createDirectoryAtPath:attachmentsDirectory
+               withIntermediateDirectories:YES
+                                attributes:attr
+                                     error:&error];
+            if (error)
+                NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
+        
+        NSData *imageData = UIImagePNGRepresentation(chosenImage);
+        [imageData writeToFile:fileToWriteTo atomically:YES];
+        contentType = @"image/png";
+        name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
+        localPath = fileToWriteTo;
     }
     
-    NSData *imageData = UIImagePNGRepresentation(chosenImage);
-    [imageData writeToFile:fileToWriteTo atomically:YES];
-    
     NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-    [attachmentJson setValue:@"image/png" forKey:@"contentType"];
-    [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
-    [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
-    [attachmentJson setValue:[NSNumber numberWithInteger:[imageData length]] forKey:@"size"];
+    [attachmentJson setValue:contentType forKey:@"contentType"];
+    [attachmentJson setValue:localPath forKey:@"localPath"];
+    [attachmentJson setValue:name forKey:@"name"];
     [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
     
     Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
@@ -125,6 +164,7 @@
     [self.editDataStore.editTable beginUpdates];
     [self.editDataStore.editTable reloadData];
     [self.editDataStore.editTable endUpdates];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (IBAction)saveObservation:(id)sender {
