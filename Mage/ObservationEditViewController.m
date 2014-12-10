@@ -14,10 +14,15 @@
 #import "GeometryEditViewController.h"
 #import <NSManagedObjectContext+MAGE.h>
 #import <Observation+helper.h>
+#import <HttpManager.h>
+#import <MageServer.h>
+#import <AVFoundation/AVFoundation.h>
+#import <Attachment+helper.h>
 
-@interface ObservationEditViewController ()
+@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
+//@property (nonatomic, strong) NSMutableArray *attachmentsToUpload;
 
 @end
 
@@ -42,7 +47,135 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)addVoice:(id)sender {
+}
+
+
+- (IBAction)addVideo:(id)sender {
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        [myAlertView show];
+    } else {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.mediaTypes = [NSArray arrayWithObject:(NSString*)kUTTypeMovie];
+        
+        [self presentViewController:picker animated:YES completion:NULL];
+    }
+    
+}
+
+
+- (IBAction)addFromCamera:(id)sender {
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        [myAlertView show];
+    } else {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentViewController:picker animated:YES completion:NULL];
+    }
+    
+}
+
+
+- (IBAction)addFromGallery:(id)sender {
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.mediaTypes = [NSArray arrayWithObjects:(NSString*)kUTTypeMovie, (NSString*) kUTTypeImage, nil];
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+    NSString *contentType = @"";
+    NSString *name = @"";
+    NSString *localPath = @"";
+    
+    if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+        NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
+        NSString *moviePath = [videoUrl path];
+        
+        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
+            UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+        }
+        name = [videoUrl lastPathComponent];
+        localPath = moviePath;
+        contentType = @"video/quicktime";
+    } else {
+        UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
+        
+        NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
+        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"/MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
+        NSFileManager *manager = [NSFileManager defaultManager];
+        BOOL isDirectory;
+        if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
+            NSError *error = nil;
+            NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                             forKey:NSFileProtectionKey];
+            [manager createDirectoryAtPath:attachmentsDirectory
+               withIntermediateDirectories:YES
+                                attributes:attr
+                                     error:&error];
+            if (error)
+                NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
+        
+        NSData *imageData = UIImagePNGRepresentation(chosenImage);
+        [imageData writeToFile:fileToWriteTo atomically:YES];
+        contentType = @"image/png";
+        name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
+        localPath = fileToWriteTo;
+    }
+    
+    NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
+    [attachmentJson setValue:contentType forKey:@"contentType"];
+    [attachmentJson setValue:localPath forKey:@"localPath"];
+    [attachmentJson setValue:name forKey:@"name"];
+    [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
+    [self.editDataStore.observation addTransientAttachment:attachment];
+//    [self.attachmentsToUpload addObject:attachment];
+    [self.editDataStore.editTable beginUpdates];
+    [self.editDataStore.editTable reloadData];
+    [self.editDataStore.editTable endUpdates];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
 - (IBAction)saveObservation:(id)sender {
+    
+    for (Attachment *attachment in self.editDataStore.observation.transientAttachments) {
+        [self.editDataStore.observation.managedObjectContext insertObject:attachment];
+        [attachment setObservation:self.editDataStore.observation];
+        [self.editDataStore.observation addAttachmentsObject:attachment];
+    }
+    [self.editDataStore.observation.transientAttachments removeAllObjects];
+    
     if ([self.editDataStore saveObservation]) {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -51,7 +184,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = item;

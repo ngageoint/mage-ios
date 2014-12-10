@@ -14,8 +14,11 @@
 @implementation AttachmentCollectionDataStore
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[_observation.attachments allObjects]];
+    [allAttachments addObjectsFromArray:_observation.transientAttachments];
+    
     AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
-    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
     
     FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
         cell.image.image = image;
@@ -34,12 +37,15 @@
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"there are %lu attachments", (unsigned long)_observation.attachments.count);
-    return _observation.attachments.count;
+    NSLog(@"there are %lu attachments", (unsigned long)_observation.attachments.count + _observation.transientAttachments.count);
+    return _observation.attachments.count + _observation.transientAttachments.count;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    Attachment *attachment = [[_observation.attachments allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[_observation.attachments allObjects]];
+    [allAttachments addObjectsFromArray:_observation.transientAttachments];
+    
+    Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
     NSLog(@"clicked attachment %@", attachment.url);
     
     if (self.attachmentSelectionDelegate) {

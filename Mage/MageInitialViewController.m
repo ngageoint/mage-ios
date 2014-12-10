@@ -28,6 +28,8 @@
     // stop the location fetch service
     [self.fetchServicesHolder.locationFetchService stop];
     [self.fetchServicesHolder.observationFetchService stop];
+    [self.fetchServicesHolder.observationPushService stop];
+    [self.fetchServicesHolder.attachmentPushService stop];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     

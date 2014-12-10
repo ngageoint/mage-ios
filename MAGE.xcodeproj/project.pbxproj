@@ -62,6 +62,7 @@
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
+		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
@@ -228,6 +229,8 @@
 		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
 		F7531EFE1910131C00CA084C /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		F7531EFF1910131C00CA084C /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
+		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
+		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -557,6 +560,8 @@
 				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
 				F73430F71A13A8CA0063FE6B /* PickerTableViewCell.h */,
 				F73430F81A13A8CA0063FE6B /* PickerTableViewCell.m */,
+				F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */,
+				F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -840,6 +845,7 @@
 				4C790F7919742CEC00886E58 /* DisclaimerNavigationController.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				2F5F2E9E19E074CF005BA157 /* SettingsSplitViewController.m in Sources */,
+				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
@@ -1029,7 +1035,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1048,7 +1054,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "d4f0e206-f177-4e22-8cbd-ef6edc7237f3";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

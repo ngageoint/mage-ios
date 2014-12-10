@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Observation.h>
+#import <Observation+helper.h>
 #import "AttachmentSelectionDelegate.h"
 
 @interface AttachmentCollectionDataStore : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
