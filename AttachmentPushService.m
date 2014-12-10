@@ -176,6 +176,9 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
                 attachment.name = [responseObject valueForKey:@"name"];
                 attachment.url = [responseObject valueForKey:@"url"];
                 attachment.dirty = NO;
+                // we keep getting save errors so I am just going to set a merge policy here
+                // to have the database win
+                [context setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
                 NSError *error;
                 if (![context save:&error]) {
                     NSLog(@"Error updating attachment: %@", error);
