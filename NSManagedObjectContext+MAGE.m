@@ -22,6 +22,7 @@ NSManagedObjectContext *defaultManagedObjectContext = nil;
         NSPersistentStoreCoordinator *coordinator = [NSPersistentStoreCoordinator defaultPersistentStoreCoordinator];
         defaultManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [defaultManagedObjectContext setPersistentStoreCoordinator:coordinator];
+        [defaultManagedObjectContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
     }
     
     return defaultManagedObjectContext;
