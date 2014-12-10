@@ -90,7 +90,11 @@ AVPlayer *player;
     
     [self.mapDelegate selectedObservation:self.observation region:viewRegion];
     self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
-    self.attachmentCollectionDataStore.observation = _observation;
+    if (self.attachmentCollectionDataStore.observation == nil) {
+        self.attachmentCollectionDataStore.observation = _observation;
+    } else {
+        [self.attachmentCollection reloadData];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
