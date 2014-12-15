@@ -66,4 +66,12 @@ bool originalNavBarHidden;
     [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
+-(BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+- (IBAction)doneButtonPressed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end

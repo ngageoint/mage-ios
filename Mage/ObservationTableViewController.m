@@ -130,10 +130,12 @@
     NSLog(@"Playing %@", fURL);
     MPMoviePlayerViewController *videoPlayerView = [[MPMoviePlayerViewController alloc] initWithContentURL:fURL];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:videoPlayerView.moviePlayer];
     [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
-    videoPlayerView.moviePlayer.view.frame = self.view.frame;
+    
+//    videoPlayerView.moviePlayer.view.frame = self.view.frame;
+    videoPlayerView.view.frame = CGRectMake(0, 0, self.view.window.bounds.size.width, self.view.window.bounds.size.height);
+    [videoPlayerView.moviePlayer setFullscreen:YES animated:YES];
     videoPlayerView.moviePlayer.initialPlaybackTime = 0.0;
     videoPlayerView.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
     [videoPlayerView.moviePlayer prepareToPlay];
@@ -142,16 +144,16 @@
 
 -(void) playMovieAtURL: (NSURL*) theURL {
     
-    MPMoviePlayerViewController *videoPlayerView = [[MPMoviePlayerViewController alloc] initWithContentURL:theURL];
+    MPMoviePlayerController *videoPlayerView = [[MPMoviePlayerController alloc] initWithContentURL:theURL];
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:nil];
     
-    [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
-    videoPlayerView.moviePlayer.view.frame = self.view.frame;
-    videoPlayerView.moviePlayer.initialPlaybackTime = 0.0;
-    videoPlayerView.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
-    [videoPlayerView.moviePlayer prepareToPlay];
-    [videoPlayerView.moviePlayer play];
+//    [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
+    videoPlayerView.view.frame = self.view.frame;
+    videoPlayerView.initialPlaybackTime = 0.0;
+    videoPlayerView.movieSourceType = MPMovieSourceTypeStreaming;
+    [videoPlayerView prepareToPlay];
+    [videoPlayerView play];
 }
 
 // When the movie is done, release the controller.
