@@ -12,6 +12,7 @@
 @interface ImageViewerViewController : UIViewController
 
 @property (weak, nonatomic) Attachment *attachment;
-@property (weak, nonatomic) NSURL *imageUrl;
+@property (weak, nonatomic) NSURL *mediaUrl;
+@property (weak, nonatomic) NSString *contentType;
 
 @end
