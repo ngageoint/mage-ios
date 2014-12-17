@@ -31,6 +31,7 @@
     @property (weak, nonatomic) IBOutlet UIButton *lockButton;
     @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
+    @property (weak, nonatomic) IBOutlet UIButton *statusButton;
 
     @property (strong, nonatomic) MageServer *server;
     @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
@@ -43,11 +44,13 @@
     self.usernameField.textColor = [UIColor blackColor];
     self.passwordField.textColor = [UIColor blackColor];
     self.loginStatus.hidden = YES;
+    self.statusButton.hidden = YES;
     
     [self resetLogin];
 }
 
 - (void) authenticationHadFailure {
+    self.statusButton.hidden = NO;
     self.loginStatus.hidden = NO;
     self.loginStatus.text = @"The username or password you entered is incorrect";
     self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
@@ -206,9 +209,11 @@
         self.server.authentication.delegate = self;
         
         self.loginStatus.hidden = YES;
+        self.statusButton.hidden = YES;
         self.serverUrlField.textColor = [UIColor blackColor];
     } failure:^(NSError *error) {
         self.loginStatus.hidden = NO;
+        self.statusButton.hidden = NO;
         self.loginStatus.text = error.localizedDescription;
         self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     }];
