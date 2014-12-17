@@ -148,6 +148,8 @@
 		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
         [self initMageServerWithURL:url];
     } else {
+        [self.usernameField setEnabled:NO];
+        [self.passwordField setEnabled:NO];
         [self.serverUrlField setEnabled:YES];
         [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
@@ -210,6 +212,8 @@
         
         self.loginStatus.hidden = YES;
         self.statusButton.hidden = YES;
+        [self.usernameField setEnabled:YES];
+        [self.passwordField setEnabled:YES];
         self.serverUrlField.textColor = [UIColor blackColor];
     } failure:^(NSError *error) {
         self.loginStatus.hidden = NO;
