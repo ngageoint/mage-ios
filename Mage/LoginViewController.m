@@ -32,6 +32,7 @@
     @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
+    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
     @property (strong, nonatomic) MageServer *server;
     @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
@@ -186,6 +187,10 @@
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
+    
+    NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
 }
 
 - (void) viewDidLoad {
