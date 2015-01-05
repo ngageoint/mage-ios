@@ -53,7 +53,11 @@
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    if (self.attachmentDelegate != nil) {
+        [self.attachmentDelegate selectedAttachment:attachment];
+    } else {
+        [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    }
 }
 
 @end

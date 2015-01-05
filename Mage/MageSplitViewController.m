@@ -14,8 +14,9 @@
 #import "ObservationTableViewController.h"
 #import "PeopleTableViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
+#import "ImageViewerViewController.h"
 
-@interface MageSplitViewController () <MapCalloutTapped>
+@interface MageSplitViewController () <MapCalloutTapped, AttachmentSelectionDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
     @property(nonatomic, weak) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
@@ -40,6 +41,7 @@
     
     ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
     observationTableViewController.observationDataStore.observationSelectionDelegate = self.mapViewController.mapDelegate;
+    observationTableViewController.attachmentDelegate = self;
     
     PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController.mapDelegate;
@@ -111,6 +113,18 @@
     }
     
     [self.mapViewController.toolbar setItems:items];
+}
+- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+        // Get reference to the destination view controller
+        ImageViewerViewController *vc = [segue destinationViewController];
+        [vc setAttachment:sender];
+    }
+}
+
+- (void) selectedAttachment:(Attachment *)attachment {
+    NSLog(@"attachment selected");
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
 
 @end
