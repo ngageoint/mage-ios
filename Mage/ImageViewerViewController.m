@@ -15,7 +15,7 @@
 
 @interface ImageViewerViewController ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic) BOOL shouldHideNavBar;
 @property (weak, nonatomic) IBOutlet UIView *mediaHolderView;
 @property (weak, nonatomic) IBOutlet UIView *progressView;
@@ -44,10 +44,15 @@ bool originalNavBarHidden;
     
     if (self.mediaUrl != nil) {
         if ([self.contentType hasPrefix:@"image"]) {
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.mediaHolderView.frame];
-            [self.mediaHolderView addSubview:imageView];
+            self.imageView = [[UIImageView alloc] init];
+            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            self.imageView.frame = self.mediaHolderView.frame;
+
+            [self.mediaHolderView addSubview:self.imageView];
             
-            imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.mediaUrl]];
+            self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.mediaUrl]];
+            self.imageView.clipsToBounds = YES;
+
         } else if ([self.contentType hasPrefix:@"video"]) {
             NSString *tempFile = [NSTemporaryDirectory() stringByAppendingPathComponent:[self.mediaUrl lastPathComponent]];
             [self downloadAndPlayMovieFrom:[self.mediaUrl absoluteString] andSaveto:tempFile];
@@ -58,22 +63,33 @@ bool originalNavBarHidden;
     } else if (self.attachment != nil) {
         
         if ([self.attachment.contentType hasPrefix:@"image"]) {
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.mediaHolderView.frame];
-            [self.mediaHolderView addSubview:imageView];
+            self.imageView = [[UIImageView alloc] init];
+            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            self.imageView.frame = self.mediaHolderView.frame;
+            
+            [self.mediaHolderView addSubview:self.imageView];
             FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
-                imageView.image = image;
+                self.imageView.image = image;
+                self.imageView.clipsToBounds = YES;
+                self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
             };
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             BOOL imageExists = [delegate.imageCache retrieveImageForEntity:[self attachment] withFormatName:AttachmentLarge completionBlock:completionBlock];
             
             if (imageExists == NO) {
-                imageView.image = [UIImage imageNamed:@"download"];
+                self.imageView.image = [UIImage imageNamed:@"download"];
             }
         } else if ([self.attachment.contentType hasPrefix:@"video"]) {
             [self downloadAndPlayAttachment:self.attachment];
         } else if ([self.attachment.contentType hasPrefix:@"audio"]) {
 //            [self downloadAndPlayAttachment:self.attachment];
         }
+    }
+}
+
+- (void) viewWillLayoutSubviews {
+    if (self.imageView != nil) {
+        [self.imageView setFrame:self.mediaHolderView.frame];
     }
 }
 
