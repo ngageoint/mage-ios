@@ -46,11 +46,10 @@ bool originalNavBarHidden;
         if ([self.contentType hasPrefix:@"image"]) {
             self.imageView = [[UIImageView alloc] init];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            self.imageView.frame = self.mediaHolderView.frame;
-
             [self.mediaHolderView addSubview:self.imageView];
             
             self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.mediaUrl]];
+            self.imageView.frame = CGRectMake(0, 0, self.imageView.image.size.width, self.imageView.image.size.height);
             self.imageView.clipsToBounds = YES;
 
         } else if ([self.contentType hasPrefix:@"video"]) {
@@ -90,6 +89,8 @@ bool originalNavBarHidden;
 - (void) viewWillLayoutSubviews {
     if (self.imageView != nil) {
         [self.imageView setFrame:self.mediaHolderView.frame];
+    } else if (self.videoPlayerView != nil) {
+        self.videoPlayerView.view.frame = self.mediaHolderView.frame;
     }
 }
 
