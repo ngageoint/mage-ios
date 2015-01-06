@@ -86,7 +86,8 @@ bool originalNavBarHidden;
     }
 }
 
-- (void) viewWillLayoutSubviews {
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     if (self.imageView != nil) {
         [self.imageView setFrame:self.mediaHolderView.frame];
     } else if (self.videoPlayerView != nil) {
