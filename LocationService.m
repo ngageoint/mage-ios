@@ -15,7 +15,10 @@ NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSSensitivityKey = @"gpsSensitivity";
 NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 
+NSInteger const kLocationPushLimit = 100;
+
 @interface LocationService ()
+    @property (nonatomic) BOOL isPushingLocations;
     @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
     @property (nonatomic, strong) CLLocationManager *locationManager;
     @property (nonatomic, strong) NSDate *oldestLocationTime;
@@ -77,11 +80,14 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 - (void) start {
     if (_reportLocation) {
         [self.locationManager startUpdatingLocation];
+        [self pushLocations];
     }
 }
 
 - (void) stop {
     [self.locationManager stopUpdatingLocation];
+    
+    [self pushLocations];
 }
 
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {
@@ -98,25 +104,37 @@ NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
         self.oldestLocationTime = [location timestamp];
     }
     
-    if (interval > _locationPushInterval) {
+    if (interval > self.locationPushInterval) {
         [self pushLocations];
+        self.oldestLocationTime = nil;
     }
 }
 
 - (void) pushLocations {
-    if ([self.operationQueue operationCount] == 0) {
+    if (!self.isPushingLocations) {
+        self.isPushingLocations = YES;
         NSLog(@"Pushing locations...");
         
         //TODO, submit in pages
-        NSArray *locations = [GPSLocation fetchGPSLocationsInManagedObjectContext:self.managedObjectContext];
+        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllInContext:self.managedObjectContext];
+        [fetchRequest setFetchLimit:kLocationPushLimit];
+        [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.managedObjectContext];
+        
+        if (![locations count]) return;
         
         // send to server
         __weak LocationService *weakSelf = self;
         NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
-            weakSelf.oldestLocationTime = nil;
             for (GPSLocation *location in locations) {
                 [location MR_deleteInContext:weakSelf.managedObjectContext];
             }
+            
+            [weakSelf.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                self.isPushingLocations = NO;
+                
+                if ([locations count] == kLocationPushLimit) [weakSelf pushLocations];
+            }];
         } failure:^{
             NSLog(@"Failure to push GPS locations to the server");
         }];
