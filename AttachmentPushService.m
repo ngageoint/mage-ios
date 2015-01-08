@@ -86,7 +86,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
     // only push attachments that haven't already been told to be pushed
     NSMutableDictionary *attachmentsToPush = [[NSMutableDictionary alloc] init];
     for (Attachment *attachment in attachments) {
-        if ([self.pushingAttachments objectForKey:attachment.objectID] == nil && attachment.observation.remoteId) {
+        if ([self.pushingAttachments objectForKey:attachment.objectID] == nil) {
             [self.pushingAttachments setObject:attachment forKey:attachment.objectID];
             [attachmentsToPush setObject:attachment forKey:attachment.objectID];
         }
@@ -96,11 +96,21 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
     for (Attachment *attachment in [attachmentsToPush allValues]) {
         NSLog(@"submitting attachment %@", attachment);
         
+        NSData *attachmentData = [NSData dataWithContentsOfFile:attachment.localPath];
+        if (attachmentData == nil) {
+            NSLog(@"Attachment data nil for observation: %@ at path: %@", attachment.observation.remoteId, attachment.localPath);
+            [attachment MR_deleteEntity];
+            [attachment.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                [attachmentsToPush removeObjectForKey:attachment.objectID];
+            }];
+            continue;
+        }
+        
         HttpManager *manager = [HttpManager singleton];
         NSString *url = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
 
         NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:[NSData dataWithContentsOfFile:attachment.localPath] name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
+            [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
         } error:nil];
         // not sure why the HTTPRequestHeaders are not being set, so set them here
         [manager.sessionManager.requestSerializer.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
@@ -113,6 +123,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             if (error) {
                 NSLog(@"Error: %@", error);
+                [attachmentsToPush removeObjectForKey:attachment.objectID];
             } else {
                 NSLog(@"%@ %@", response, responseObject);
                 attachment.remoteId = [responseObject valueForKey:@"id"];
