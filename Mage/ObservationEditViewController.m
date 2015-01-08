@@ -18,11 +18,13 @@
 #import <MageServer.h>
 #import <AVFoundation/AVFoundation.h>
 #import <Attachment+helper.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "AudioRecordingDelegate.h"
+#import "MediaViewController.h"
 
-@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
+@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate>
 
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-//@property (nonatomic, strong) NSMutableArray *attachmentsToUpload;
 
 @end
 
@@ -42,14 +44,13 @@
 }
 
 -(void) cancel:(id)sender {
-    //do your saving and such here
     [self.editDataStore discardChanges];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)addVoice:(id)sender {
+    [self performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
 }
-
 
 - (IBAction)addVideo:(id)sender {
     
@@ -130,7 +131,7 @@
         [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
         
         NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
-        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"/MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
+        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL isDirectory;
         if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
@@ -146,7 +147,8 @@
         }
         
         NSData *imageData = UIImagePNGRepresentation(chosenImage);
-        [imageData writeToFile:fileToWriteTo atomically:YES];
+        BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
+        NSLog(@"successfully wrote file %hhd", success);
         contentType = @"image/png";
         name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
         localPath = fileToWriteTo;
@@ -165,6 +167,21 @@
     [self.editDataStore.editTable reloadData];
     [self.editDataStore.editTable endUpdates];
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void) recordingAvailable:(Recording *)recording {
+    NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
+    [attachmentJson setValue:recording.mediaType forKey:@"contentType"];
+    [attachmentJson setValue:recording.filePath forKey:@"localPath"];
+    [attachmentJson setValue:recording.fileName forKey:@"name"];
+    [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
+    [self.editDataStore.observation addTransientAttachment:attachment];
+    //    [self.attachmentsToUpload addObject:attachment];
+    [self.editDataStore.editTable beginUpdates];
+    [self.editDataStore.editTable reloadData];
+    [self.editDataStore.editTable endUpdates];
 }
 
 - (IBAction)saveObservation:(id)sender {
@@ -223,6 +240,9 @@
         [gvc setGeoPoint:cell.geoPoint];
         [gvc setFieldDefinition: cell.fieldDefinition];
         [gvc setObservation:self.observation];
+    } else if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
+        MediaViewController *mvc = [segue destinationViewController];
+        mvc.delegate = self;
     }
 }
 
