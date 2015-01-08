@@ -138,6 +138,13 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         if (attachment == nil || attachment.observation.remoteId == nil) {
             continue;
         }
+        
+        NSData *attachmentData = [NSData dataWithContentsOfFile:attachment.localPath];
+        if (attachmentData == nil) {
+            NSLog(@"Attachment data nil for observation: %@ at path: %@", attachment.observation.remoteId, attachment.localPath);
+            continue;
+        }
+        
         NSLog(@"submitting attachment %@", attachment.objectID);
         
         HttpManager *manager = [HttpManager singleton];
