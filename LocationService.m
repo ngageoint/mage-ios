@@ -50,10 +50,6 @@ NSInteger const kLocationPushLimit = 100;
         
         self.managedObjectContext = [NSManagedObjectContext MR_context];
         
-        NSArray *locations = [GPSLocation fetchGPSLocationsInManagedObjectContext:self.managedObjectContext];
-        GPSLocation *location = [locations firstObject];
-        _oldestLocationTime = location.timestamp;
-        
         _operationQueue = [[NSOperationQueue alloc] init];
         [_operationQueue setName:@"Location Push Operation Queue"];
         [_operationQueue setMaxConcurrentOperationCount:1];
@@ -137,6 +133,7 @@ NSInteger const kLocationPushLimit = 100;
             }];
         } failure:^{
             NSLog(@"Failure to push GPS locations to the server");
+            self.isPushingLocations = NO;
         }];
         
         [self.operationQueue addOperation:locationPushOperation];
