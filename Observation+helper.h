@@ -7,23 +7,21 @@
 //
 
 #import "Observation.h"
-#import "NSManagedObjectContext+Extra.h"
 #import <CoreLocation/CoreLocation.h>
 #import "GeoPoint.h"
-#import <Attachment.h>
+#import "Attachment.h"
 
 @interface Observation (helper)
 
++ (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
+
 - (id) populateObjectFromJson: (NSDictionary *) json;
-- (void) initializeNewObservationWithLocation: (GeoPoint *) location;
 - (void) addTransientAttachment: (Attachment *) attachment;
 - (NSMutableArray *) transientAttachments;
 
 - (CLLocation *) location;
 
 - (NSString *) sectionName;
-
-+ (Observation*) observationForJson: (NSDictionary *) json;
 
 + (NSOperation*) operationToPullObservations:(void (^) (BOOL success)) complete;
 + (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure;

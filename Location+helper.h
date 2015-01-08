@@ -12,7 +12,7 @@
 
 @interface Location (helper)
 
-+ (Location *) locationForJson: (NSDictionary *) json;
+//+ (Location *) locationForJson: (NSDictionary *) json;
 
 -(CLLocation *) location;
 

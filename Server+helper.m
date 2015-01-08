@@ -7,7 +7,6 @@
 //
 
 #import "Server+helper.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Server (helper)
 
@@ -44,7 +43,7 @@
 }
 
 +(id) getPropertyForKey:(NSString *) key {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Server" inManagedObjectContext:context]];
@@ -71,7 +70,7 @@
 }
 
 +(void) setProperty:(id) property forKey:(NSString *)key {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Server" inManagedObjectContext:context]];

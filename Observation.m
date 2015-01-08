@@ -2,13 +2,14 @@
 //  Observation.m
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 7/17/14.
+//  Created by William Newman on 12/18/14.
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import "Observation.h"
 #import "Attachment.h"
 #import "User.h"
+
 
 @implementation Observation
 
@@ -19,9 +20,9 @@
 @dynamic properties;
 @dynamic remoteId;
 @dynamic state;
+@dynamic timestamp;
 @dynamic url;
 @dynamic userId;
-@dynamic timestamp;
 @dynamic attachments;
 @dynamic user;
 

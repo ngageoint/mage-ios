@@ -15,16 +15,47 @@
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
 #import "Server+helper.h"
-#import "NSManagedObjectContext+MAGE.h"
-#import <Server+helper.h>
-#import <User+helper.h>
-
+#import "User+helper.h"
 
 @implementation Observation (helper)
 
 NSMutableArray *_transientAttachments;
 
 NSDictionary *_fieldNameToField;
+
+
++ (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
+    Observation *observation = [Observation MR_createInContext:mangedObjectContext];
+    
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // Always use this locale when parsing fixed format date strings
+    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormat.locale = posix;
+    [observation setTimestamp:[NSDate date]];
+    NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
+    
+    [properties setObject:[dateFormat stringFromDate:[observation timestamp]] forKey:@"timestamp"];
+    
+    [observation setProperties:properties];
+    [observation setUser:[User fetchCurrentUserInManagedObjectContext:mangedObjectContext]];
+    [observation setGeometry:location];
+    [observation setDirty:[NSNumber numberWithBool:NO]];
+    [observation setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
+    
+    return observation;
+}
+
++ (NSString *) observationIdFromJson:(NSDictionary *) json {
+    return [json objectForKey:@"id"];
+}
+
++ (State) observationStateFromJson:(NSDictionary *) json {
+    NSDictionary *stateJson = [json objectForKey: @"state"];
+    NSString *stateName = [stateJson objectForKey: @"name"];
+    return [stateName StateEnumFromString];
+}
 
 - (NSMutableArray *)transientAttachments {
     if (_transientAttachments != nil) {
@@ -58,7 +89,6 @@ NSDictionary *_fieldNameToField;
     // Always use this locale when parsing fixed format date strings
     NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     dateFormat.locale = posix;
-
     
     NSMutableDictionary *observationJson = [[NSMutableDictionary alloc] init];
     
@@ -111,32 +141,13 @@ NSDictionary *_fieldNameToField;
     [self.transientAttachments addObject:attachment];
 }
 
-- (void) initializeNewObservationWithLocation:(GeoPoint *)location {
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
-    [self setTimestamp:[NSDate date]];
-    NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
-    
-    [properties setObject:[dateFormat stringFromDate:[self timestamp]] forKey:@"timestamp"];
-    
-    [self setProperties:properties];
-    [self setUser:[User fetchCurrentUser]];
-    [self setGeometry:location];
-    [self setDirty:[NSNumber numberWithBool:NO]];
-    [self setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
-}
-
 - (id) populateObjectFromJson: (NSDictionary *) json {
-    [self setRemoteId:[json objectForKey:@"id"]];
+    [self setRemoteId:[Observation observationIdFromJson:json]];
     [self setUserId:[json objectForKey:@"userId"]];
     [self setDeviceId:[json objectForKey:@"deviceId"]];
     [self setDirty:[NSNumber numberWithBool:NO]];
-    NSDictionary *properties = [json objectForKey: @"properties"];
     
+    NSDictionary *properties = [json objectForKey: @"properties"];
     [self setProperties:[self generatePropertiesFromRaw:properties]];
     
     NSDateFormatter *dateFormat = [NSDateFormatter new];
@@ -152,10 +163,9 @@ NSDictionary *_fieldNameToField;
     [self setTimestamp:timestamp];
     
     [self setUrl:[json objectForKey:@"url"]];
-    NSDictionary *jsonState = [json objectForKey: @"state"];
-    NSString *stateName = [jsonState objectForKey: @"name"];
-    State enumValue = [stateName StateEnumFromString];
-    [self setState:[NSNumber numberWithInt:(int)enumValue]];
+
+    State state = [Observation  observationStateFromJson:json];
+    [self setState:[NSNumber numberWithInt:(int) state]];
     
     NSArray *coordinates = [json valueForKeyPath:@"geometry.coordinates"];
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
@@ -191,13 +201,6 @@ NSDictionary *_fieldNameToField;
     dateFormatter.dateFormat = @"yyyy-MM-dd";
     
     return [dateFormatter stringFromDate:self.timestamp];
-}
-
-+ (id) observationForJson: (NSDictionary *) json {
-    Observation *observation = [[Observation alloc] initWithEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]] insertIntoManagedObjectContext:nil];
-    [observation populateObjectFromJson:json];
-    
-    return observation;
 }
 
 + (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure {
@@ -243,82 +246,66 @@ NSDictionary *_fieldNameToField;
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: parameters error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Observation request complete");
-        NSArray *features = [responseObject objectForKey:@"features"];
-        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-        
-        for (id feature in features) {
-            Observation *o = [Observation observationForJson:feature];
-            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-            [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
-            [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(remoteId = %@)", o.userId]];
-            NSError *error;
-            NSArray *usersMatchingIDs = [context executeFetchRequest:fetchRequest error:&error];
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            NSLog(@"Observation request complete");
+            NSArray *features = [responseObject objectForKey:@"features"];
             
-            NSSet *existingObservations = [context fetchObjectsForEntityName:@"Observation" withPredicate:@"(remoteId == %@)", o.remoteId];
-            Observation *dbObs = [existingObservations anyObject];
-            
-            //NSLog(@"there are %d observations", existingObservations.count);
-            int archive = [@"archive" IntFromStateEnum];
-            // if the Observation is archived and used to exist on this device, delete it
-            if ([o.state intValue] == archive && dbObs != nil) {
-                [context deleteObject:dbObs];
-                NSLog(@"Deleting observation with id: %@", o.remoteId);
-            }
-            // else if the observation is not archived and doesn't exist, insert it
-            else if ([o.state intValue] != archive && dbObs == nil) {
-                [context insertObject:o];
-                o.user = [usersMatchingIDs objectAtIndex:0];
-                NSArray *attachments = [feature objectForKey:@"attachments"];
-                for (id attachment in attachments) {
-                    Attachment * a = [Attachment attachmentForJson:attachment];
-                    [context insertObject:a];
-                    [o addAttachmentsObject:a];
-                }
-                NSLog(@"Saving new observation with id: %@", o.remoteId);
-            }
-            // else if the observation is not archived, and not dirty and exists, update it
-            else if ([o.state intValue] != archive && ![dbObs.dirty boolValue]) {
-                [dbObs populateObjectFromJson:feature];
-                dbObs.user = [usersMatchingIDs objectAtIndex:0];
-                NSArray *attachments = [feature objectForKey:@"attachments"];
+            for (id feature in features) {
+                NSString *remoteId = [Observation observationIdFromJson:feature];
+                State state = [Observation observationStateFromJson:feature];
                 
-                BOOL found = NO;
-                for (id a in attachments) {
-                    NSString *remoteId = [a objectForKey:@"id"];
-                    found = NO;
-                    for (Attachment *dbAttachment in dbObs.attachments) {
-                        if (remoteId != nil && [remoteId isEqualToString:dbAttachment.remoteId]) {
-                            dbAttachment.contentType = [a objectForKey:@"contentType"];
-                            dbAttachment.name = [a objectForKey:@"name"];
-                            dbAttachment.remotePath = [a objectForKey:@"remotePath"];
-                            dbAttachment.size = [a objectForKey:@"size"];
-                            dbAttachment.url = [a objectForKey:@"url"];
-                            dbAttachment.observation = dbObs;
-                            found = YES;
-                            break;
+                Observation *existingObservation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteId] inContext:localContext];
+                // if the Observation is archived, delete it
+                if (state == Archive && existingObservation) {
+                    NSLog(@"Deleting archived observation with id: %@", remoteId);
+                    [existingObservation MR_deleteEntity];
+                } else if (state != Archive && !existingObservation) {
+                    // if the observation doesn't exist, insert it
+                    Observation *observation = [Observation MR_createInContext:localContext];
+                    [observation populateObjectFromJson:feature];
+                    observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
+                    for (id attachmentJson in [feature objectForKey:@"attachments"]) {
+                        Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
+                        [observation addAttachmentsObject:attachment];
+                    }
+                    
+                    NSLog(@"Saving new observation with id: %@", observation.remoteId);
+                } else if (state != Archive && ![existingObservation.dirty boolValue]) {
+                    // if the observation is not dirty, update it
+                    [existingObservation populateObjectFromJson:feature];
+                    existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
+
+                    BOOL found = NO;
+                    for (id attachmentJson in [feature objectForKey:@"attachments"]) {
+                        NSString *remoteId = [attachmentJson objectForKey:@"id"];
+                        found = NO;
+                        for (Attachment *attachment in existingObservation.attachments) {
+                            if (remoteId != nil && [remoteId isEqualToString:attachment.remoteId]) {
+                                attachment.contentType = [attachmentJson objectForKey:@"contentType"];
+                                attachment.name = [attachmentJson objectForKey:@"name"];
+                                attachment.remotePath = [attachmentJson objectForKey:@"remotePath"];
+                                attachment.size = [attachmentJson objectForKey:@"size"];
+                                attachment.url = [attachmentJson objectForKey:@"url"];
+                                attachment.observation = existingObservation;
+                                found = YES;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            Attachment *newAttachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
+                            [existingObservation addAttachmentsObject:newAttachment];
                         }
                     }
-                    if (!found) {
-                        Attachment * newAttachment = [Attachment attachmentForJson:a inContext:context insertIntoContext:context];
-                        newAttachment.observation = dbObs;
-                        [dbObs addAttachmentsObject:newAttachment];
-                    }
+                    
+                    NSLog(@"Updating object with id: %@", existingObservation.remoteId);
+                } else {
+                    NSLog(@"Observation with id: %@ is dirty", remoteId);
                 }
-
-                NSLog(@"Updating object with id: %@", o.remoteId);
-            } else {
-                NSLog(@"Observation with id: %@ is dirty", o.remoteId);
             }
-        }
-        
-        NSError *error = nil;
-        if (! [context save:&error]) {
-            NSLog(@"Error inserting Observation: %@", error);
-        }
-                
-        complete(YES);
-        
+        } completion:^(BOOL success, NSError *error) {
+            complete(success);
+        }];
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         complete(NO);
@@ -328,27 +315,8 @@ NSDictionary *_fieldNameToField;
 }
 
 + (NSDate *) fetchLastObservationDate {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
-    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastModified" ascending:NO]];
-    request.fetchLimit = 1;
-    
-    NSError *error;
-    NSArray *observations = [context executeFetchRequest:request error:&error];
-    
-    if (error) {
-        NSLog(@"Error getting last location from database");
-        return nil;
-    }
-    
-    if (observations.count != 1) {
-        return nil;
-    }
-    
     NSDate *date = nil;
-    Observation *observation = [observations objectAtIndex:0];
+    Observation *observation = [Observation MR_findFirstOrderedByAttribute:@"lastModified" ascending:NO];
     if (observation) {
         date = observation.timestamp;
     }

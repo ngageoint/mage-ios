@@ -11,12 +11,12 @@
 #import "NSDate+Iso8601.h"
 #import "GeoPoint.h"
 #import "MageServer.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 @implementation GPSLocation (helper)
 
-+ (GPSLocation *) gpsLocationForLocation:(CLLocation *) location {
-    GPSLocation *gpsLocation = [NSEntityDescription insertNewObjectForEntityForName:@"GPSLocation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
++ (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+    GPSLocation *gpsLocation = [GPSLocation MR_createInContext:managedObjectContext];
+    
     gpsLocation.geometry = [[GeoPoint alloc] initWithLocation:location];
     gpsLocation.timestamp = location.timestamp;
     gpsLocation.properties = @{
@@ -30,39 +30,15 @@
     return gpsLocation;
 }
 
-+ (NSArray *) fetchGPSLocations {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"GPSLocation" inManagedObjectContext:context]];
-    [request setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]]];
-    
-    NSError *error;
-    NSArray *locations = [context executeFetchRequest:request error:&error];
-    
-    if (error) {
-        NSLog(@"Error getting user locations from database");
-    }
-    
-    return locations;
++ (NSArray *) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context {
+    return [GPSLocation MR_findAllSortedBy:@"timestamp" ascending:YES inContext:context];
 }
 
-+ (NSArray *) fetchLastXGPSLocations: (NSUInteger) x {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
++ (NSArray *) fetchLastXGPSLocations: (NSUInteger) limit {
+    NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllSortedBy:@"timestamp" ascending:YES];
+    fetchRequest.fetchLimit = limit;
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"GPSLocation" inManagedObjectContext:context]];
-    [request setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]]];
-    request.fetchLimit = x;
-
-    NSError *error;
-    NSArray *locations = [context executeFetchRequest:request error:&error];
-    
-    if (error) {
-        NSLog(@"Error getting user locations from database");
-    }
-    
-    return locations;
+    return [GPSLocation MR_executeFetchRequest:fetchRequest];
 }
 
 + (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure {

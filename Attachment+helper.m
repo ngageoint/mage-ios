@@ -7,11 +7,17 @@
 //
 
 #import "Attachment+helper.h"
-#import "NSManagedObjectContext+MAGE.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @implementation Attachment (helper)
 
-- (id) populateObjectFromJson: (NSDictionary *) json {
++ (Attachment *) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context {
+    Attachment *attachment = [Attachment MR_createInContext:context];
+    [attachment populateFromJson:json];
+    return attachment;
+}
+
+- (id) populateFromJson: (NSDictionary *) json {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setContentType:[json objectForKey:@"contentType"]];
     [self setUrl:[json objectForKey:@"url"]];
@@ -39,23 +45,5 @@
     }
     return self;
 }
-
-+ (id) attachmentForJson: (NSDictionary *) json  {
-    return [Attachment attachmentForJson:json inContext:[NSManagedObjectContext defaultManagedObjectContext]];
-}
-
-+ (id) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context  {
-    return [Attachment attachmentForJson:json inContext:[NSManagedObjectContext defaultManagedObjectContext] insertIntoContext:nil];
-}
-
-+ (id) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context insertIntoContext: (NSManagedObjectContext *) insertContext  {
-    
-    Attachment *attachment = [[Attachment alloc] initWithEntity:[NSEntityDescription entityForName:@"Attachment" inManagedObjectContext:context] insertIntoManagedObjectContext:insertContext];
-    
-    [attachment populateObjectFromJson:json];
-    
-    return attachment;
-}
-
 
 @end

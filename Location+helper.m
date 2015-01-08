@@ -15,19 +15,18 @@
 #import "MageServer.h"
 #import <NSDate+DateTools.h>
 #import "NSDate+Iso8601.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 @implementation Location (helper)
 
-+ (Location *) locationForJson: (NSDictionary *) json {
-	NSArray *locations = [json objectForKey:@"locations"];
-	if (!locations.count) return nil;
-
-	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
-	[location populateLocationFromJson:locations];
-	
-	return location;
-}
+//+ (Location *) locationForJson: (NSDictionary *) json {
+//	NSArray *locations = [json objectForKey:@"locations"];
+//	if (!locations.count) return nil;
+//
+//	Location *location = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
+//	[location populateLocationFromJson:locations];
+//	
+//	return location;
+//}
 
 - (CLLocation *) location {
     GeoPoint *point = (GeoPoint *) self.geometry;
@@ -86,64 +85,61 @@
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
-		NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[userLocations count]);
-        User *currentUser = [User fetchCurrentUser];
-        
-		// Get the user ids to query
-		NSMutableArray *userIds = [[NSMutableArray alloc] init];
-		for (NSDictionary *userLocation in userLocations) {
-			[userIds addObject:[userLocation objectForKey:@"user"]];
-		}
-        NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-		// Create the fetch request to get all users IDs from server response.
-		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-		[fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:context]];
-		[fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(remoteId IN %@)", userIds]];
-		NSError *error;
-		NSArray *usersMatchingIDs = [context executeFetchRequest:fetchRequest error:&error];
-		NSMutableDictionary *userIdMap = [[NSMutableDictionary alloc] init];
-		for (User *user in usersMatchingIDs) {
-			[userIdMap setObject:user forKey:user.remoteId];
-		}
-		
-        BOOL newUserFound = NO;
-		for (NSDictionary *userLocation in userLocations) {
-			// pull from query map
-			NSString *userId = [userLocation objectForKey:@"user"];
-            NSArray *locations = [userLocation objectForKey:@"locations"];
-			User *user = [userIdMap objectForKey:userId];
-			if (user == nil && [locations count] != 0) {
-                NSLog(@"Could not find user for id");
-                newUserFound = YES;
-                NSDictionary *userDictionary = @{
-                    @"_id": userId,
-                    @"username": userId,
-                    @"firstname": @"unknown",
-                    @"lastname": @"unkown"
-                };
-                user = [User insertUserForJson:userDictionary];
-            };
-            if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[userLocations count]);
+            User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
             
-			Location *location = user.location;
-			if (location == nil) {
-				// not in core data yet need to create a new managed object
-				location = [Location locationForJson:userLocation];
-				user.location = location;
-			} else {
-				// already exists in core data, lets update the object we have
-				[location populateLocationFromJson:locations];
-			}
-        }
-		
-		if (! [context save:&error]) {
-			NSLog(@"Error updating locations: %@", error);
-		}
-        
-        if (newUserFound) {
-            // For now if we find at least one new user let just go grab the users again
-            [[User operationToFetchUsers] start];
-        }
+            // Get the user ids to query
+            NSMutableArray *userIds = [[NSMutableArray alloc] init];
+            for (NSDictionary *userLocation in userLocations) {
+                [userIds addObject:[userLocation objectForKey:@"user"]];
+            }
+            
+            NSArray *usersMatchingIDs = [User MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", userIds] inContext:localContext];
+            NSMutableDictionary *userIdMap = [[NSMutableDictionary alloc] init];
+            for (User *user in usersMatchingIDs) {
+                [userIdMap setObject:user forKey:user.remoteId];
+            }
+            
+            BOOL newUserFound = NO;
+            for (NSDictionary *userLocation in userLocations) {
+                // pull from query map
+                NSString *userId = [userLocation objectForKey:@"user"];
+                NSArray *locations = [userLocation objectForKey:@"locations"];
+                User *user = [userIdMap objectForKey:userId];
+                if (user == nil && [locations count] != 0) {
+                    NSLog(@"Could not find user for id");
+                    newUserFound = YES;
+                    NSDictionary *userDictionary = @{
+                         @"_id": userId,
+                         @"username": userId,
+                         @"firstname": @"unknown",
+                         @"lastname": @"unkown"
+                     };
+                    
+                    user = [User MR_createInContext:localContext];
+                    user = [User insertUserForJson:userDictionary inManagedObjectContext:localContext];
+                };
+                if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
+                
+                Location *location = user.location;
+                if (location == nil) {
+                    // not in core data yet need to create a new managed object
+                    location = [Location MR_createInContext:localContext];
+                    NSArray *locations = [userLocation objectForKey:@"locations"];
+                    [location populateLocationFromJson:locations];
+                    user.location = location;
+                } else {
+                    // already exists in core data, lets update the object we have
+                    [location populateLocationFromJson:locations];
+                }
+            }
+            
+            if (newUserFound) {
+                // For now if we find at least one new user let just go grab the users again
+                [[User operationToFetchUsers] start];
+            }
+        }];
         
         complete(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -155,27 +151,8 @@
 }
 
 + (NSDate *) fetchLastLocationDate {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:context]];
-    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
-    request.fetchLimit = 1;
-    
-    NSError *error;
-    NSArray *locations = [context executeFetchRequest:request error:&error];
-    
-    if (error) {
-        NSLog(@"Error getting last location from database");
-        return nil;
-    }
-    
-    if (locations.count != 1) {
-        return nil;
-    }
-    
     NSDate *date = nil;
-    Location *location = [locations objectAtIndex:0];
+    Location *location = [Location MR_findFirstOrderedByAttribute:@"timestamp" ascending:NO];
     if (location) {
         date = location.timestamp;
     }
@@ -183,8 +160,7 @@
     return date;
 }
 
-- (NSString *)sectionIdentifier
-{
+- (NSString *)sectionIdentifier {
     return [self timestamp].timeAgoSinceNow;
 }
 

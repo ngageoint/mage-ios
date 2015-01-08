@@ -2,7 +2,7 @@
 //  Observation.h
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 7/17/14.
+//  Created by William Newman on 12/18/14.
 //  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -20,9 +20,9 @@
 @property (nonatomic, retain) id properties;
 @property (nonatomic, retain) NSString * remoteId;
 @property (nonatomic, retain) NSNumber * state;
+@property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * userId;
-@property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSSet *attachments;
 @property (nonatomic, retain) User *user;
 @end

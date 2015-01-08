@@ -13,7 +13,6 @@
 #import "User+helper.h"
 #import "HttpManager.h"
 #import "MageServer.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 @implementation LocalAuthentication
 
@@ -111,8 +110,8 @@
 	NSString *userId = [userJson objectForKey:@"_id"];
 	User *user = [User fetchUserForId:userId];
 	
-	if (!user) {
-		user = [User insertUserForJson:userJson myself:YES];
+    if (!user) {
+		user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 	}
 		
 	return user;

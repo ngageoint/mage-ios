@@ -12,8 +12,6 @@
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 
-+ (Layer *) layerForJson: (NSDictionary *) json;
-
 + (NSOperation *) operationToPullLayers:(void (^) (BOOL success)) complete;
 
 @end
