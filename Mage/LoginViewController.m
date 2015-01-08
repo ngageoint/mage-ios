@@ -19,7 +19,7 @@
 #import <UserUtility.h>
 #import "DeviceUUID.h"
 #import "MageServer.h"
-#import "CoreDataStack.h"
+#import "MagicalRecord+delete.h"
 
 @interface LoginViewController ()
 
@@ -97,8 +97,8 @@
 
 - (void) verifyLogin {
     if (self.reachability.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
-        [CoreDataStack deleteCoreDataStack];
-        [CoreDataStack setupCoreDataStack];
+        [MagicalRecord deleteCoreDataStack];
+        [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
     }
     
 	// setup authentication

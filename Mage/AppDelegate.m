@@ -15,10 +15,12 @@
 #import "Attachment+FICAttachment.h"
 
 #import "MageInitialViewController.h"
-#import "CoreDataStack.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 #import "ZipFile+OfflineMap.h"
+
+@interface AppDelegate ()
+@property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
+@end
 
 @implementation AppDelegate
 
@@ -58,12 +60,15 @@
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
     
-    [CoreDataStack setupCoreDataStack];
+    [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
     
     _locationFetchService = [[LocationFetchService alloc] init];
     _observationFetchService = [[ObservationFetchService alloc] init];
-    _observationPushService = [[ObservationPushService alloc] init];
-    _attachmentPushService = [[AttachmentPushService alloc] init];
+    
+    self.pushManagedObjectContext = [NSManagedObjectContext MR_context];
+    [self.pushManagedObjectContext MR_observeContext:[NSManagedObjectContext MR_defaultContext]];
+    _observationPushService = [[ObservationPushService alloc] initWithManagedObjectContext:self.pushManagedObjectContext];
+    _attachmentPushService = [[AttachmentPushService alloc] initWithManagedObjectContext:self.pushManagedObjectContext];
 	 
 	return YES;
 }
@@ -79,14 +84,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
-    [_locationFetchService stop];
+    [self.locationFetchService stop];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![UserUtility isTokenExpired]) {
-        [_locationFetchService start];
+        [self.locationFetchService start];
     }
 }
 
@@ -124,8 +129,6 @@
     NSArray *caches = [zipFile expandToPath:directory error:&error];
     if (error) {
         NSLog(@"Error extracting offline map archive. %@", error);
-    } else {
-//        [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -148,17 +151,7 @@
 - (void) applicationWillTerminate:(UIApplication *) application {
     NSLog(@"applicationWillTerminate");
 
-    // Saves changes in the application's managed object context before the application terminates.
-    NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = [NSManagedObjectContext defaultManagedObjectContext];
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
+    [MagicalRecord cleanUp];
 }
 
 -(LocationService *) locationService {

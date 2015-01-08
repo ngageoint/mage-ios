@@ -50,7 +50,7 @@ bool currentUserIsMe = NO;
 - (void) viewDidLoad {
     
     if (self.user == nil) {
-        self.user = [User fetchCurrentUser];
+        self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         currentUserIsMe = YES;
     }
     

@@ -161,13 +161,12 @@ NSInteger expandedRow = -1;
 }
 
 - (BOOL) saveObservation {
-    NSError *error = nil;
     [self.observation setDirty:[NSNumber numberWithBool:YES]];
-    if (![self.observation.managedObjectContext save:&error]) {
-        NSLog(@"failed to save the observation: %@", self.observation.remoteId);
-        return NO;
-    }
-    NSLog(@"saved the observation: %@", self.observation.remoteId);
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+    [context MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+        NSLog(@"saved the observation: %@", self.observation.remoteId);
+    }];
+    
     return YES;
 }
 

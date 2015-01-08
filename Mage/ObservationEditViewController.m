@@ -12,7 +12,6 @@
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
-#import <NSManagedObjectContext+MAGE.h>
 #import <Observation+helper.h>
 #import <HttpManager.h>
 #import <MageServer.h>
@@ -158,8 +157,15 @@
     [attachmentJson setValue:name forKey:@"name"];
     [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
     
-    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
-    [self.editDataStore.observation addTransientAttachment:attachment];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:[NSManagedObjectContext MR_defaultContext]];
+    attachment.observation = self.editDataStore.observation;
+
+//    [self.editDataStore.observation addAttachmentsObject:attachment];
+//    Attachment *attachment = [Attachment MR_createEntity];
+//    [attachment populateFromJson:attachmentJson];
+
+//    [self.editDataStore.observation addTransientAttachment:attachment];
 //    [self.attachmentsToUpload addObject:attachment];
     [self.editDataStore.editTable beginUpdates];
     [self.editDataStore.editTable reloadData];
@@ -169,12 +175,12 @@
 
 - (IBAction)saveObservation:(id)sender {
     
-    for (Attachment *attachment in self.editDataStore.observation.transientAttachments) {
-        [self.editDataStore.observation.managedObjectContext insertObject:attachment];
-        [attachment setObservation:self.editDataStore.observation];
-        [self.editDataStore.observation addAttachmentsObject:attachment];
-    }
-    [self.editDataStore.observation.transientAttachments removeAllObjects];
+//    for (Attachment *attachment in self.editDataStore.observation.transientAttachments) {
+//        [self.editDataStore.observation.managedObjectContext insertObject:attachment];
+//        [attachment setObservation:self.editDataStore.observation];
+//        [self.editDataStore.observation addAttachmentsObject:attachment];
+//    }
+//    [self.editDataStore.observation.transientAttachments removeAllObjects];
     
     if ([self.editDataStore saveObservation]) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -190,8 +196,7 @@
 
     // if self.observation is null create a new one
     if (self.observation == nil) {
-        self.observation = (Observation *)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
-        [self.observation initializeNewObservationWithLocation: self.location];
+        self.observation = [Observation observationWithLocation:self.location inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     }
     self.editDataStore.observation = self.observation;
 }
