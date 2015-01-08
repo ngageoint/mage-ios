@@ -51,26 +51,6 @@
 
 - (IBAction)deleteRecording:(id)sender {
 }
-    //NSNotification callback function
-- (void)moviePlayerPlaybackStateDidChange:(NSNotification*)notification {
-    MPMoviePlayerController *moviePlayer = notification.object;
-
-    MPMoviePlaybackState playbackState = moviePlayer.playbackState;
-    
-    if(playbackState == MPMoviePlaybackStateStopped) {
-        NSLog(@"MPMoviePlaybackStateStopped");
-    } else if(playbackState == MPMoviePlaybackStatePlaying) {
-        NSLog(@"MPMoviePlaybackStatePlaying");
-    } else if(playbackState == MPMoviePlaybackStatePaused) {
-        NSLog(@"MPMoviePlaybackStatePaused");
-    } else if(playbackState == MPMoviePlaybackStateInterrupted) {
-        NSLog(@"MPMoviePlaybackStateInterrupted");
-    } else if(playbackState == MPMoviePlaybackStateSeekingForward) {
-        NSLog(@"MPMoviePlaybackStateSeekingForward");
-    } else if(playbackState == MPMoviePlaybackStateSeekingBackward) {
-        NSLog(@"MPMoviePlaybackStateSeekingBackward");
-    }
-}
 
 #pragma 
 #pragma mark - Voice Recording
@@ -171,6 +151,7 @@
 }
 
 - (IBAction) playRecording:(id)sender{
+    NSLog(@"Starting to play the sound");
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     NSURL *url = [NSURL fileURLWithPath:self.recording.filePath];
@@ -184,6 +165,14 @@
     [self.audioPlayer play];
 }
 
+- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    NSLog(@"played the sound");
+}
+
+- (void) audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
+    NSLog(@"Error playing the sound");
+}
+
 
 #pragma 
 #pragma mark - Media methods
@@ -195,22 +184,4 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma
-#pragma mark - Download Media to TMP directory
-
--(void) playMediaFromDocumentsFolder:(NSString *) fromPath{
-    NSURL *fURL = [NSURL fileURLWithPath:fromPath];
-    MPMoviePlayerViewController *videoPlayerView = [[MPMoviePlayerViewController alloc] initWithContentURL:fURL];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:nil];
-    
-    [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
-    videoPlayerView.moviePlayer.view.frame = self.view.frame;
-    
-    videoPlayerView.moviePlayer.initialPlaybackTime = -1.0;
-    if([videoPlayerView.moviePlayer isPreparedToPlay])
-        [videoPlayerView.moviePlayer prepareToPlay];
-    [videoPlayerView.moviePlayer play];
-
-}
 @end
