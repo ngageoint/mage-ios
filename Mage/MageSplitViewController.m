@@ -14,8 +14,9 @@
 #import "ObservationTableViewController.h"
 #import "PeopleTableViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
+#import "ImageViewerViewController.h"
 
-@interface MageSplitViewController () <MapCalloutTapped>
+@interface MageSplitViewController () <MapCalloutTapped, AttachmentSelectionDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
     @property(nonatomic, weak) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
@@ -40,11 +41,16 @@
     
     ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
     observationTableViewController.observationDataStore.observationSelectionDelegate = self.mapViewController.mapDelegate;
+    observationTableViewController.attachmentDelegate = self;
     
     PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController.mapDelegate;
+    
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+        self.masterViewButton = self.displayModeButtonItem;
+        [self ensureButtonVisible];
+    }
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -87,7 +93,42 @@
     }
 }
 
+- (void) ensureButtonVisible {
+    self.masterViewButton.title = @"List";
+    self.masterViewButton.style = UIBarButtonItemStylePlain;
+    
+    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
+    if (!items) {
+        items = [NSMutableArray arrayWithObject:self.masterViewButton];
+    } else if ([items objectAtIndex:0] != self.masterViewButton) {
+        [items insertObject:self.masterViewButton atIndex:0];
+    }
+    
+    [self.mapViewController.toolbar setItems:items];
+}
+
+- (void)splitViewController:(UISplitViewController *)svc
+    willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+    NSLog(@"change to display mode %d", displayMode);
+    // never called in ios 7
+    self.masterViewButton = svc.displayModeButtonItem;
+    if (displayMode == UISplitViewControllerDisplayModePrimaryOverlay) {
+        [self ensureButtonVisible];
+    } else if (displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
+        [self ensureButtonVisible];
+    } else if (displayMode == UISplitViewControllerDisplayModeAllVisible) {
+        NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
+        [items removeObject:self.masterViewButton];
+        [self.mapViewController.toolbar setItems:items];
+        
+        self.masterViewButton = nil;
+        self.masterViewPopover = nil;
+    }
+}
+
 -(void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *) button {
+    NSLog(@"will show view controller");
+    // never called in ios 8
     self.masterViewButton = nil;
     self.masterViewPopover = nil;
     
@@ -98,19 +139,26 @@
 
 
 -(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)button forPopoverController:(UIPopoverController *) pc {
+    NSLog(@"will hide view controller");
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+        return;
+    }
+    // always called in both ios8 and 7
     self.masterViewButton = button;
     self.masterViewPopover = pc;
-    
-    button.image = [UIImage imageNamed:@"bars"];
-    
-    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
-    if (!items) {
-        items = [NSMutableArray arrayWithObject:button];
-    } else {
-        [items insertObject:button atIndex:0];
+    [self ensureButtonVisible];
+}
+- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+        // Get reference to the destination view controller
+        ImageViewerViewController *vc = [segue destinationViewController];
+        [vc setAttachment:sender];
     }
-    
-    [self.mapViewController.toolbar setItems:items];
+}
+
+- (void) selectedAttachment:(Attachment *)attachment {
+    NSLog(@"attachment selected");
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
 
 @end
