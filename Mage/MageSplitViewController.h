@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "LocationService.h"
-#import "ManagedObjectContextHolder.h"
 #import "FetchServicesHolder.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "LocationServiceHolder.h"
 
 @interface MageSplitViewController : UISplitViewController<UISplitViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (weak, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
 @property (weak, nonatomic) IBOutlet LocationServiceHolder *locationServiceHolder;
 

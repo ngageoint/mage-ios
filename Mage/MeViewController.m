@@ -30,7 +30,6 @@
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (weak, nonatomic) IBOutlet MKMapView *map;
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;

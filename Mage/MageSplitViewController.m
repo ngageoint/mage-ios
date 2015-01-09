@@ -87,7 +87,7 @@
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
         [self.tabBarController.observationMapCalloutTappedDelegate calloutTapped:calloutItem];
     }
-    
+
     if (self.masterViewButton && self.masterViewPopover) {
         [self.masterViewPopover presentPopoverFromBarButtonItem:self.masterViewButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
@@ -140,12 +140,13 @@
 
 -(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)button forPopoverController:(UIPopoverController *) pc {
     NSLog(@"will hide view controller");
+    self.masterViewButton = button;
+    self.masterViewPopover = pc;
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         return;
     }
+    
     // always called in both ios8 and 7
-    self.masterViewButton = button;
-    self.masterViewPopover = pc;
     [self ensureButtonVisible];
 }
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

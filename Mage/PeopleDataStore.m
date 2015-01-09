@@ -24,7 +24,6 @@
         _dateFormatter = [[NSDateFormatter alloc] init];
         _dateFormatter.dateStyle = kCFDateFormatterLongStyle;
         _dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-        
     }
     
     return _dateFormatter;

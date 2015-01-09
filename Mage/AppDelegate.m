@@ -60,15 +60,13 @@
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
     
-    [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
+    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
     
     _locationFetchService = [[LocationFetchService alloc] init];
     _observationFetchService = [[ObservationFetchService alloc] init];
     
-    self.pushManagedObjectContext = [NSManagedObjectContext MR_context];
-    [self.pushManagedObjectContext MR_observeContext:[NSManagedObjectContext MR_defaultContext]];
-    _observationPushService = [[ObservationPushService alloc] initWithManagedObjectContext:self.pushManagedObjectContext];
-    _attachmentPushService = [[AttachmentPushService alloc] initWithManagedObjectContext:self.pushManagedObjectContext];
+    _observationPushService = [[ObservationPushService alloc] init];
+    _attachmentPushService = [[AttachmentPushService alloc] init];
 	 
 	return YES;
 }
