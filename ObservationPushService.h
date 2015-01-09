@@ -10,8 +10,6 @@
 
 @interface ObservationPushService : NSObject
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
-
 - (void) start;
 - (void) stop;
 

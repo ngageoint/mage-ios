@@ -22,7 +22,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 @implementation ObservationPushService
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
@@ -39,7 +39,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                            withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                                  groupBy:nil
                                                                 delegate:nil
-                                                               inContext:managedObjectContext];
+                                                               inContext:[NSManagedObjectContext MR_rootSavingContext]];
     }
     
     return self;
@@ -72,10 +72,12 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         }
         case NSFetchedResultsChangeDelete:
             break;
-        case NSFetchedResultsChangeUpdate:
+        case NSFetchedResultsChangeUpdate: {
             NSLog(@"observations updated, push em");
-            [self pushObservations:@[anObject]];
+            Observation *observation = anObject;
+            if (observation.remoteId) [self pushObservations:@[anObject]];
             break;
+        }
         case NSFetchedResultsChangeMove:
             break;
     }
@@ -100,14 +102,17 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         NSLog(@"submitting observation %@", observation);
         NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
-            [observation populateObjectFromJson:response];
-            observation.dirty = [NSNumber numberWithBool:NO];
-            
-            for (Attachment *attachment in observation.attachments) {
-                attachment.observationRemoteId = observation.remoteId;
-            }
-            [weakSelf.fetchedResultsController.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Observation *localObservation = [observation MR_inContext:localContext];
+                [localObservation populateObjectFromJson:response];
+                localObservation.dirty = [NSNumber numberWithBool:NO];
+                
+                for (Attachment *attachment in localObservation.attachments) {
+                    attachment.observationRemoteId = observation.remoteId;
+                }
+            } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+
             }];
         } failure:^{
             NSLog(@"Error submitting observation");

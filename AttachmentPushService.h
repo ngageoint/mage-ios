@@ -10,8 +10,6 @@
 
 @interface AttachmentPushService : NSObject
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
-
 - (void) start;
 - (void) stop;
 

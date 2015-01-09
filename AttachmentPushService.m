@@ -22,7 +22,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 
 @implementation AttachmentPushService
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+- (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
@@ -39,7 +39,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
                                                           withPredicate:[NSPredicate predicateWithFormat:@"observationRemoteId != nil && dirty == YES"]
                                                                 groupBy:nil
                                                                delegate:self
-                                                              inContext:managedObjectContext];
+                                                              inContext:[NSManagedObjectContext MR_rootSavingContext]];
         
     }
     
@@ -50,7 +50,6 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
     [self stop];
     
     self.fetchedResultsController.delegate = self;
-    [Attachment MR_performFetch:self.fetchedResultsController];
     [self pushAttachments:self.fetchedResultsController.fetchedObjects];
     
     [self scheduleTimer];
@@ -99,10 +98,12 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         NSData *attachmentData = [NSData dataWithContentsOfFile:attachment.localPath];
         if (attachmentData == nil) {
             NSLog(@"Attachment data nil for observation: %@ at path: %@", attachment.observation.remoteId, attachment.localPath);
-            [attachment MR_deleteEntity];
-            [attachment.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-                [attachmentsToPush removeObjectForKey:attachment.objectID];
+            [MagicalRecord saveWithBlockAndWait:^(NSManagedObjectContext *localContext) {
+                Attachment *localAttachment = [attachment MR_inContext:localContext];
+                [localAttachment MR_deleteEntity];
             }];
+            
+            [attachmentsToPush removeObjectForKey:attachment.objectID];
             continue;
         }
         
@@ -125,27 +126,27 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
                 NSLog(@"Error: %@", error);
                 [attachmentsToPush removeObjectForKey:attachment.objectID];
             } else {
-                NSLog(@"%@ %@", response, responseObject);
-                attachment.remoteId = [responseObject valueForKey:@"id"];
-                
-                NSDateFormatter *dateFormat = [NSDateFormatter new];
-                [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-                dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-                
-                // Always use this locale when parsing fixed format date strings
-                NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-                dateFormat.locale = posix;
-                
-                NSString *dateString = [responseObject valueForKey:@"lastModified"];
-                if (dateString != nil) {
-                    NSDate *date = [dateFormat dateFromString:dateString];
-                    [attachment setLastModified:date];
-                }
-                attachment.name = [responseObject valueForKey:@"name"];
-                attachment.url = [responseObject valueForKey:@"url"];
-                attachment.dirty = [NSNumber numberWithBool:NO];
-            
-                [self.fetchedResultsController.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                    Attachment *localAttachment = [attachment MR_inContext:localContext];
+                    localAttachment.remoteId = [responseObject valueForKey:@"id"];
+                    
+                    NSDateFormatter *dateFormat = [NSDateFormatter new];
+                    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                    
+                    // Always use this locale when parsing fixed format date strings
+                    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+                    dateFormat.locale = posix;
+                    
+                    NSString *dateString = [responseObject valueForKey:@"lastModified"];
+                    if (dateString != nil) {
+                        NSDate *date = [dateFormat dateFromString:dateString];
+                        [localAttachment setLastModified:date];
+                    }
+                    localAttachment.name = [responseObject valueForKey:@"name"];
+                    localAttachment.url = [responseObject valueForKey:@"url"];
+                    localAttachment.dirty = [NSNumber numberWithBool:NO];
+                } completion:^(BOOL success, NSError *error) {
                     [attachmentsToPush removeObjectForKey:attachment.objectID];
                 }];
             }
@@ -161,7 +162,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         _attachmentPushTimer = nil;
     }
     
-    self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController.delegate = nil;
 }
 
 
