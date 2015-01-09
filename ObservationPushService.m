@@ -108,7 +108,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 localObservation.dirty = [NSNumber numberWithBool:NO];
                 
                 for (Attachment *attachment in localObservation.attachments) {
-                    attachment.observationRemoteId = observation.remoteId;
+                    attachment.observationRemoteId = localObservation.remoteId;
                 }
             } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
