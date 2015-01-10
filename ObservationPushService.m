@@ -39,7 +39,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                            withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                                  groupBy:nil
                                                                 delegate:nil
-                                                               inContext:[NSManagedObjectContext MR_rootSavingContext]];
+                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     }
     
     return self;

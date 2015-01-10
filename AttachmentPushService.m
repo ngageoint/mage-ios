@@ -39,7 +39,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
                                                           withPredicate:[NSPredicate predicateWithFormat:@"observationRemoteId != nil && dirty == YES"]
                                                                 groupBy:nil
                                                                delegate:self
-                                                              inContext:[NSManagedObjectContext MR_rootSavingContext]];
+                                                              inContext:[NSManagedObjectContext MR_defaultContext]];
         
     }
     
