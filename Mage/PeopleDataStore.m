@@ -10,6 +10,7 @@
 #import "PersonTableViewCell.h"
 #import "Location+helper.h"
 #import "Locations.h"
+#import "NSDate+DateTools.h"
 
 @interface PeopleDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
@@ -43,14 +44,7 @@
 
 - (void) startFetchController {
     self.locations = [Locations locationsForAllUsers];
-    self.locations.delegate = self;
-    
-    NSError *error;
-    if (![self.locations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
-    }
+    self.locations.delegate = self;    
 }
 
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath {
@@ -66,7 +60,7 @@
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
 	
 	Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
-	[personCell populateCellWithUser:location.user];
+    [personCell populateCellWithUser:location.user];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -100,11 +94,11 @@
     switch(type) {
 			
         case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
 			
         case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
 			
         case NSFetchedResultsChangeUpdate:
@@ -112,8 +106,8 @@
             break;
 			
         case NSFetchedResultsChangeMove:
-			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 			break;
     }
 }

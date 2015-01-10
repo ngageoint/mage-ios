@@ -64,7 +64,7 @@
     return _offlineMaps;
 }
 
-- (void) setLocations:(Locations *)locations {
+- (void) setLocations:(Locations *) locations {
     _locations = locations;
     _locations.delegate = self;
     

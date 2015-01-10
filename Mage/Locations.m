@@ -2,7 +2,7 @@
 //  Locations.m
 //  MAGE
 //
-//  Created by Dan Barela on 9/16/14.
+//  Created by William Newman on 9/16/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -12,21 +12,24 @@
 @implementation Locations
 
 + (id) locationsForAllUsers {
-    NSFetchRequest *fetchRequest = [Location MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]]];
-    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                                 sectionNameKeyPath:@"sectionName"
-                                                                                                          cacheName:nil];
+    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
+                        ascending:NO
+                    withPredicate:[NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]]
+                          groupBy:nil
+                         delegate:nil
+                        inContext:[NSManagedObjectContext MR_defaultContext]];
+    
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (id) locationsForUser:(User *) user {
-    NSFetchRequest *fetchRequest = [Location MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user = %@", user]];
-    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                                 sectionNameKeyPath:nil
-                                                                                                          cacheName:nil];
+    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
+                                                                               ascending:NO
+                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@", user]
+                                                                                 groupBy:nil
+                                                                                delegate:nil
+                                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
@@ -41,7 +44,7 @@
     return self;
 }
 
--(void) setDelegate:(id<NSFetchedResultsControllerDelegate>)delegate {
+- (void) setDelegate:(id<NSFetchedResultsControllerDelegate>)delegate {
     self.fetchedResultsController.delegate = delegate;
 }
 
