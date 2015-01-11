@@ -22,7 +22,6 @@
 #import <HttpManager.h>
 #import "LocationAnnotation.h"
 #import <GPSLocation+helper.h>
-#import "PersonImage.h"
 #import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
 #import "Attachment+FICAttachment.h"

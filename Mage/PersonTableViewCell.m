@@ -9,7 +9,6 @@
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "NSDate+DateTools.h"
-#import "PersonImage.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
 @implementation PersonTableViewCell
