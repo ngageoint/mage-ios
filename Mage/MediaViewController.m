@@ -12,13 +12,19 @@
 @property (nonatomic,strong) NSString *voiceValue;
 @property (nonatomic,strong) AVAudioRecorder * recorder;
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) NSTimer *sliderTimer;
 @property (nonatomic,strong) NSString *downloadedMediaPath;
 
 @property (weak, nonatomic) IBOutlet UIButton *recordBarButton;
 @property (strong,nonatomic) NSString *mediaFilePath;
 @property (strong,nonatomic) NSString *recorderFilePath;
-@property (weak, nonatomic) IBOutlet UILabel *recordTime;
-@property (weak, nonatomic) IBOutlet UIProgressView *recordingPlayProgress;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIButton *trashButton;
+@property (weak, nonatomic) IBOutlet UISlider *playSlider;
+@property (weak, nonatomic) IBOutlet UILabel *recordingLength;
+@property (weak, nonatomic) IBOutlet UILabel *recordingStartTime;
+@property (weak, nonatomic) IBOutlet UILabel *currentRecordingLength;
+@property (weak, nonatomic) IBOutlet UIButton *useRecordingButton;
 
 - (IBAction) dismissAndSetObservationMedia:(id)sender;
 - (IBAction) startRecording;
@@ -47,9 +53,26 @@
     self.mediaFilePath = [self createFolderInTempDirectory];
     
 	isRecording = NO;
+    
+    [self setupView:NO];
+}
+
+- (void) setupView: (BOOL) recordingExists {
+    [self.playButton setHidden:!recordingExists];
+    [self.trashButton setHidden:!recordingExists];
+    [self.playSlider setHidden:!recordingExists];
+    [self.recordingStartTime setHidden:!recordingExists];
+    [self.recordBarButton setEnabled:!recordingExists];
+    [self.recordingLength setHidden:!recordingExists];
+    [self.useRecordingButton setHidden:!recordingExists];
 }
 
 - (IBAction)deleteRecording:(id)sender {
+    NSError *error;
+    [[NSFileManager defaultManager] removeItemAtPath: self.recording.filePath error: &error];
+    self.recording = nil;
+    self.currentRecordingLength.text = @"00:00:00";
+    [self setupView:NO];
 }
 
 #pragma 
@@ -126,14 +149,36 @@
             [cantRecordAlert show];
             return;
         }
-            // start recording
+        
+        if (_sliderTimer != nil && _sliderTimer.isValid) {
+            [_sliderTimer invalidate];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateRecordingLength) userInfo:nil repeats:YES];
+        });
+
+        // start recording
         [self.recorder record];
         
     }else{
         isRecording = NO;
         [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
 		[self.recorder stop];
+        if (_sliderTimer != nil && _sliderTimer.isValid) {
+            [_sliderTimer invalidate];
+        }
+        _sliderTimer = nil;
     }
+}
+
+- (void)updateRecordingLength {
+    double totalSeconds = self.recorder.currentTime;
+    int seconds = (int)totalSeconds % 60;
+    int minutes = ((int)totalSeconds / 60) % 60;
+    int hours = totalSeconds / 3600;
+    
+    self.recordingLength.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    self.currentRecordingLength.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
 }
 
 - (void) audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
@@ -147,7 +192,10 @@
     int minutes = ((int)totalSeconds / 60) % 60;
     int hours = totalSeconds / 3600;
     
-    self.recordTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    self.recordingLength.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    self.currentRecordingLength.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+    
+    [self setupView:YES];
 }
 
 - (IBAction) playRecording:(id)sender{
@@ -157,21 +205,75 @@
     NSURL *url = [NSURL fileURLWithPath:self.recording.filePath];
 
 	NSError *error;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    self.audioPlayer.delegate = self;
-    [self.audioPlayer setVolume:1.0];
-    [self.audioPlayer prepareToPlay];
-    self.audioPlayer.numberOfLoops = 0;
-    [self.audioPlayer play];
+    if (self.audioPlayer == nil) {
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        self.audioPlayer.delegate = self;
+        [self.audioPlayer setVolume:1.0];
+        self.audioPlayer.numberOfLoops = 0;
+    }
+    if (_audioPlayer.playing) {
+        [self stopAudio];
+    } else {
+        [self playAudio];
+    }
 }
 
 - (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     NSLog(@"played the sound");
+    [self stopAudio];
 }
 
 - (void) audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
     NSLog(@"Error playing the sound");
+    [self stopAudio];
 }
+
+- (IBAction)playButtonPressed:(id)sender {
+    if (_audioPlayer.playing) {
+        [self stopAudio];
+    } else {
+        [self playAudio];
+    }
+}
+
+- (void) stopAudio {
+    if (_audioPlayer.isPlaying) {
+        [_audioPlayer stop];
+    }
+    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [self updateSlider];
+    [_sliderTimer invalidate];
+}
+
+- (void) playAudio {
+    if (_sliderTimer != nil && _sliderTimer.isValid) {
+        [_sliderTimer invalidate];
+    }
+    _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
+    self.playSlider.maximumValue = _audioPlayer.duration;
+    
+    [_audioPlayer prepareToPlay];
+    [_audioPlayer play];
+    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+}
+
+- (void)updateSlider {
+    // Update the slider about the music time
+    self.playSlider.value = _audioPlayer.currentTime;
+}
+
+- (IBAction)sliderStartChange:(id)sender {
+    [_audioPlayer stop];
+    [_sliderTimer invalidate];
+}
+
+- (IBAction)sliderChanged:(UISlider *)sender {
+    // Fast skip the music when user scroll the UISlider
+    [_audioPlayer stop];
+    [_audioPlayer setCurrentTime:self.playSlider.value];
+    [self playAudio];
+}
+
 
 
 #pragma 
