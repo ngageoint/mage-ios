@@ -18,8 +18,7 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     if ([user iconUrl] != nil) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        [self.icon setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
+        [self.icon setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
     }
     
     self.name.text = user.name;
