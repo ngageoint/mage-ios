@@ -69,8 +69,8 @@ bool currentUserIsMe = NO;
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:observations];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-        Locations *locations = [Locations locationsForUser:self.user];
-        [self.mapDelegate setLocations:locations];
+//        Locations *locations = [Locations locationsForUser:self.user];
+//        [self.mapDelegate setLocations:locations];
     }
 }
 

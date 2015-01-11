@@ -36,7 +36,8 @@
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = item;
     
-    self.managedObjectContext = [NSManagedObjectContext MR_context];
+    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_defaultContext];
     
     // if self.observation is null create a new one
     if (self.observation == nil) {

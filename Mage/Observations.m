@@ -2,7 +2,7 @@
 //  ObservationFetchedResultsController.m
 //  MAGE
 //
-//  Created by Dan Barela on 9/16/14.
+//  Created by William Newman on 9/16/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
