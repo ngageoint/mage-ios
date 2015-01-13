@@ -15,9 +15,11 @@
 
 - (id) populateCellWithUser:(User *) user {    
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    if ([user iconUrl] != nil) {
+    if ([user avatarUrl] != nil) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
         [self.icon setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+    } else {
+        self.icon.image = nil;
     }
     
     self.name.text = user.name;

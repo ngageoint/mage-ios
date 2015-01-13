@@ -15,6 +15,7 @@
 #import "Location+helper.h"
 #import "UIImage+Resize.h"
 #import <GeoPoint.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
 
 @interface MapDelegate ()
@@ -251,8 +252,16 @@
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *annotation = view.annotation;
-
         self.selectedUser = annotation.location.user;
+        
+        if ([self.selectedUser avatarUrl] != nil) {
+            NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.selectedUser.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
+            view.leftCalloutAccessoryView = imageView;
+            [imageView setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+        }
+        
         if (self.selectedUserCircle != nil) {
             [_mapView removeOverlay:self.selectedUserCircle];
         }
