@@ -24,14 +24,14 @@
         __strong __typeof (weakSelf) strongSelf = weakSelf;
         UIImage *image = responseObject;
         if (!image) {
-            strongSelf.image = [self blueCircle];
+            strongSelf.image = [strongSelf blueCircle];
             return;
         }
         
         UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
         [resizedImage setAccessibilityIdentifier:[url absoluteString]];
         
-        strongSelf.image = [self mergeImage:resizedImage withDot:[self blueCircle]];
+        strongSelf.image = [strongSelf mergeImage:resizedImage withDot:[strongSelf blueCircle]];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
     }];

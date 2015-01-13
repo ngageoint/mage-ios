@@ -18,6 +18,7 @@
 #import "ObservationDataStore.h"
 #import "ImageViewerViewController.h"
 #import <AFNetworking.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MageServer.h>
 #import <HttpManager.h>
 #import "LocationAnnotation.h"
@@ -54,22 +55,16 @@ bool currentUserIsMe = NO;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    UIImage *avatarImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
-    if (avatarImage != nil) {
-        [self.avatar setImage:avatarImage];
-    }
-    
-    NSString *url = [NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]];
-    NSLog(@"url is: %@", url);
-    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
+    [self.avatar setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:observations];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-//        Locations *locations = [Locations locationsForUser:self.user];
-//        [self.mapDelegate setLocations:locations];
+        Locations *locations = [Locations locationsForUser:self.user];
+        [self.mapDelegate setLocations:locations];
     }
 }
 
