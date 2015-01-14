@@ -1,5 +1,21 @@
 var app = UIATarget.localTarget().frontMostApp();
+
 if (isLoginScreen(app.mainWindow())) {
+
+  // https://git.***REMOVED***/mage/mage-ios/issues/16
+  // This is a test for an actual bug we have.  If you log in then log out and type your password
+  // wrong and then try to log in again it fails to log in
+  test("Log in then log out then fail to log in then log in", function(target, app) {
+    var mainWindow = app.mainWindow();
+    login(mainWindow);
+    logout(app);
+    navigateToLogin(app);
+    badLogin(mainWindow);
+    login(mainWindow);
+    assertTrue(isRootMageView(app), "Not at the root MAGE view and should be, or took longer than 5 seconds to log in.");
+    // reset for the next test
+    navigateToLogin(app);
+  });
 
   test("Server URL Unlocking", function(target, app) {
     var mainWindow = app.mainWindow();
