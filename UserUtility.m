@@ -8,6 +8,7 @@
 
 #import "UserUtility.h"
 #import <NSDate+DateTools.h>
+#import "HttpManager.h"
 
 @implementation UserUtility
 
@@ -35,6 +36,10 @@
     
     [loginParameters removeObjectForKey:@"token"];
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
+    
+    HttpManager *http = [HttpManager singleton];
+    [http.manager.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
+    [http.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     
