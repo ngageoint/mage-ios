@@ -127,6 +127,7 @@
     for (id<MKAnnotation> annotation in annotations) {
         MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
         annotationView.hidden = hide;
+        annotationView.accessibilityElementsHidden = hide;
     }
 }
 
@@ -201,7 +202,7 @@
         
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
         annotationView.hidden = self.hideLocations;
-        
+        annotationView.accessibilityElementsHidden = self.hideLocations;
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -219,10 +220,12 @@
             annotationView.image = image;
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
             annotationView.hidden = self.hideObservations;
+            annotationView.accessibilityElementsHidden = self.hideObservations;
 		} else {
             annotationView.annotation = annotation;
         }
-		
+        [annotationView setAccessibilityLabel:@"Observation"];
+        [annotationView setAccessibilityValue:@"Observation"];
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;

@@ -13,7 +13,8 @@
 @implementation MKAnnotationView (PersonIcon)
 
 - (void) setImageForUser:(User *) user {
-    
+    [self setAccessibilityLabel:@"Person"];
+    [self setAccessibilityValue:@"Person"];
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
