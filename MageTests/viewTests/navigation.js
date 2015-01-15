@@ -25,6 +25,7 @@ function navigateToLogin(app) {
   if (isLoginScreen(app.mainWindow())) return true;
   if (isDisclaimerScreen(app.mainWindow())) return navigateFromDisclaimerToLogin(app);
   logout(app);
+  navigateFromDisclaimerToLogin(app);
 }
 
 function navigateFromDisclaimerToLogin(app) {

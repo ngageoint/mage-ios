@@ -1,2 +1,2 @@
-var app = UIATarget.localTarget().frontMostApp();
-navigateToLogin(app);
+// var app = UIATarget.localTarget().frontMostApp();
+// navigateToLogin(app);
