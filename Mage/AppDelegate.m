@@ -17,6 +17,8 @@
 #import "MageInitialViewController.h"
 
 #import "ZipFile+OfflineMap.h"
+#import <AFNetworking/AFNetworkActivityIndicatorManager.h>
+#import <HttpManager.h>
 
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
@@ -25,7 +27,9 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
     NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     
@@ -158,6 +162,15 @@
     }
     
     return _locationService;
+}
+
+- (void)tokenDidExpire:(NSNotification *)notification {
+    [UserUtility expireToken];
+    [self.locationFetchService stop];
+    [self.observationFetchService stop];
+    [self.observationPushService stop];
+    [self.attachmentPushService stop];
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Application's Documents directory
