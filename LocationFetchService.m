@@ -9,6 +9,7 @@
 #import "LocationFetchService.h"
 #import "Location+helper.h"
 #import "HttpManager.h"
+#import "UserUtility.h"
 
 NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
@@ -41,8 +42,9 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) scheduleTimer {
-    _locationFetchTimer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:_locationFetchTimer forMode:NSRunLoopCommonModes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+    });
 }
 
 - (void) onTimerFire {
@@ -51,17 +53,21 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
 - (void) pullLocations{
     NSOperation *locationFetchOperation = [Location operationToPullLocations:^(BOOL success) {
-        [self scheduleTimer];
+        if (![UserUtility isTokenExpired]) {
+            [self scheduleTimer];
+        }
     }];
     
     [[HttpManager singleton].manager.operationQueue addOperation:locationFetchOperation];
 }
 
 -(void) stop {
-    if ([_locationFetchTimer isValid]) {
-        [_locationFetchTimer invalidate];
-        _locationFetchTimer = nil;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_locationFetchTimer isValid]) {
+            [_locationFetchTimer invalidate];
+            _locationFetchTimer = nil;
+        }
+    });
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath

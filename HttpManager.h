@@ -11,6 +11,8 @@
 
 @interface HttpManager : NSObject
 
+extern NSString * const MAGETokenExpiredNotification;
+
 + (HttpManager *) singleton;
 @property(strong) AFHTTPRequestOperationManager *manager;
 @property(strong) AFHTTPSessionManager *sessionManager;

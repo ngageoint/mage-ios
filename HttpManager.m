@@ -8,6 +8,19 @@
 
 #import "HttpManager.h"
 
+NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
+
+static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
+    NSURLRequest *request = nil;
+    if ([[notification object] isKindOfClass:[AFURLConnectionOperation class]]) {
+        request = [(AFURLConnectionOperation *)[notification object] request];
+    } else if ([[notification object] respondsToSelector:@selector(originalRequest)]) {
+        request = [[notification object] originalRequest];
+    }
+    
+    return request;
+}
+
 @implementation HttpManager
 
 static HttpManager *sharedSingleton = nil;
@@ -31,8 +44,31 @@ static HttpManager *sharedSingleton = nil;
         _sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
         //_sessionManager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
+        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingTaskDidCompleteNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
     }
     return self;
 }
 
+- (void)networkRequestDidFinish:(NSNotification *)notification {
+    NSURLRequest *request = AFNetworkRequestFromNotification(notification);
+    NSURLResponse *response = [notification.object response];
+    
+    if (!request && !response) {
+        return;
+    }
+    
+    NSUInteger responseStatusCode = 0;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
+        
+        // token expired
+        if (responseStatusCode == 401) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
+        }
+    }
+    return;
+}
 @end

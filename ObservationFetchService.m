@@ -11,6 +11,7 @@
 #import "Layer+helper.h"
 #import "Form.h"
 #import "HttpManager.h"
+#import "UserUtility.h"
 
 NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
@@ -61,8 +62,9 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) scheduleTimer {
-    _observationFetchTimer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:_observationFetchTimer forMode:NSRunLoopCommonModes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+    });
 }
 
 - (void) onTimerFire {
@@ -71,17 +73,21 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
 - (void) pullObservations {
     NSOperation *observationFetchOperation = [Observation operationToPullObservations:^(BOOL success) {
-        [self scheduleTimer];
+        if (![UserUtility isTokenExpired]) {
+            [self scheduleTimer];
+        }
     }];
     
     [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
 }
 
 - (void) stop {
-    if ([_observationFetchTimer isValid]) {
-        [_observationFetchTimer invalidate];
-        _observationFetchTimer = nil;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_observationFetchTimer isValid]) {
+            [_observationFetchTimer invalidate];
+            _observationFetchTimer = nil;
+        }
+    });
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath

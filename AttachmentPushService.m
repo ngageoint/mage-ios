@@ -47,17 +47,16 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 }
 
 - (void) start {
-    [self stop];
-    
     self.fetchedResultsController.delegate = self;
     [self pushAttachments:self.fetchedResultsController.fetchedObjects];
-    
-    [self scheduleTimer];
+        [self stop];
+        [self scheduleTimer];
 }
 
 - (void) scheduleTimer {
-    self.attachmentPushTimer = [NSTimer timerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.attachmentPushTimer forMode:NSRunLoopCommonModes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.attachmentPushTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
+    });
 }
 
 - (void) onTimerFire {
@@ -157,11 +156,12 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 }
 
 -(void) stop {
-    if ([_attachmentPushTimer isValid]) {
-        [_attachmentPushTimer invalidate];
-        _attachmentPushTimer = nil;
-    }
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_attachmentPushTimer isValid]) {
+            [_attachmentPushTimer invalidate];
+            _attachmentPushTimer = nil;
+        }
+    });
     self.fetchedResultsController.delegate = nil;
 }
 

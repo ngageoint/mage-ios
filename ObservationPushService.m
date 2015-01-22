@@ -55,8 +55,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) scheduleTimer {
-    self.observationPushTimer = [NSTimer timerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.observationPushTimer forMode:NSRunLoopCommonModes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.observationPushTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
+    });
 }
 
 - (void) onTimerFire {
@@ -124,11 +125,13 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 -(void) stop {
-    if ([_observationPushTimer isValid]) {
-        [_observationPushTimer invalidate];
-        _observationPushTimer = nil;
-    }
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_observationPushTimer isValid]) {
+            [_observationPushTimer invalidate];
+            _observationPushTimer = nil;
+        }
+    });
+
     self.fetchedResultsController.delegate = nil;
 }
 
