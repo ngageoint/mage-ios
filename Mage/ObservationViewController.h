@@ -10,7 +10,6 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "Attachment.h"
-#import "ManagedObjectContextHolder.h"
 #import "AttachmentCollectionDataStore.h"
 #import "AttachmentSelectionDelegate.h"
 
@@ -23,7 +22,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 @property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
-@property (weak, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (strong, nonatomic) IBOutlet AttachmentCollectionDataStore *attachmentCollectionDataStore;
 
 @end

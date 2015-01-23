@@ -6,24 +6,21 @@
 //
 
 #import "PeopleTableViewController.h"
-#import "PersonImage.h"
-#import "User+helper.h"
-#import "Location+helper.h"
-#import "NSDate+DateTools.h"
-#import "PersonTableViewCell.h"
+#import "Location.h"
 #import "MeViewController.h"
-#import "MageRootViewController.h"
 
 @implementation PeopleTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[self.peopleDataStore startFetchController];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [super viewWillAppear:animated];
+
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.peopleDataStore startFetchController];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

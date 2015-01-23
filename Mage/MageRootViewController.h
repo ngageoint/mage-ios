@@ -9,12 +9,10 @@
 #import "ObservationFetchService.h"
 #import "LocationFetchService.h"
 #import "LocationServiceHolder.h"
-#import "ManagedObjectContextHolder.h"
 #import "FetchServicesHolder.h"
 
 @interface MageRootViewController : UITabBarController
 
-@property (weak, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (weak, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
 @property (weak, nonatomic) IBOutlet LocationServiceHolder *locationServiceHolder;
 

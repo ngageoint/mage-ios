@@ -10,6 +10,7 @@
 #import <HttpManager.h>
 #import "MageRootViewController.h"
 #import "DisclaimerNavigationController.h"
+#import "DeviceUUID.h"
 
 @interface MageInitialViewController ()
 
@@ -32,7 +33,7 @@
     [self.fetchServicesHolder.attachmentPushService stop];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
+
     // if the token is not expired skip the login module
     if ([UserUtility isTokenExpired]) {
 		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];

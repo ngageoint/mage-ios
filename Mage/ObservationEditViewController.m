@@ -12,44 +12,57 @@
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
-#import <NSManagedObjectContext+MAGE.h>
 #import <Observation+helper.h>
 #import <HttpManager.h>
 #import <MageServer.h>
 #import <AVFoundation/AVFoundation.h>
 #import <Attachment+helper.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "AudioRecordingDelegate.h"
+#import "MediaViewController.h"
 
-@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
+@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate>
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-//@property (nonatomic, strong) NSMutableArray *attachmentsToUpload;
 
 @end
 
 @implementation ObservationEditViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem = item;
+    
+    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_defaultContext];
+    
+    // if self.observation is null create a new one
+    if (self.observation == nil) {
+        self.observation = [Observation observationWithLocation:self.location inManagedObjectContext:self.managedObjectContext];
+    } else {
+        self.observation = [self.observation MR_inContext:self.managedObjectContext];
     }
-    return self;
+    
+    self.observation.dirty = [NSNumber numberWithBool:YES];
+    self.editDataStore.observation = self.observation;
 }
 
-- (id) init {
-    return self;
+- (void) viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewWillAppear:animated];
 }
 
 -(void) cancel:(id)sender {
-    //do your saving and such here
-    [self.editDataStore discardChanges];
+    self.managedObjectContext = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)addVoice:(id)sender {
+    [self performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
 }
-
 
 - (IBAction)addVideo:(id)sender {
     
@@ -130,7 +143,7 @@
         [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
         
         NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
-        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"/MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
+        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL isDirectory;
         if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
@@ -146,7 +159,8 @@
         }
         
         NSData *imageData = UIImagePNGRepresentation(chosenImage);
-        [imageData writeToFile:fileToWriteTo atomically:YES];
+        BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
+        NSLog(@"successfully wrote file %hhd", success);
         contentType = @"image/png";
         name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
         localPath = fileToWriteTo;
@@ -158,47 +172,36 @@
     [attachmentJson setValue:name forKey:@"name"];
     [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
     
-    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.editDataStore.observation.managedObjectContext];
-    [self.editDataStore.observation addTransientAttachment:attachment];
-//    [self.attachmentsToUpload addObject:attachment];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
+    attachment.observation = self.observation;
+
     [self.editDataStore.editTable beginUpdates];
     [self.editDataStore.editTable reloadData];
     [self.editDataStore.editTable endUpdates];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
+- (void) recordingAvailable:(Recording *)recording {
+    NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
+    [attachmentJson setValue:recording.mediaType forKey:@"contentType"];
+    [attachmentJson setValue:recording.filePath forKey:@"localPath"];
+    [attachmentJson setValue:recording.fileName forKey:@"name"];
+    [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+    
+    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
+    attachment.observation = self.observation;
+    
+    [self.editDataStore.editTable beginUpdates];
+    [self.editDataStore.editTable reloadData];
+    [self.editDataStore.editTable endUpdates];
+}
+
 - (IBAction)saveObservation:(id)sender {
-    
-    for (Attachment *attachment in self.editDataStore.observation.transientAttachments) {
-        [self.editDataStore.observation.managedObjectContext insertObject:attachment];
-        [attachment setObservation:self.editDataStore.observation];
-        [self.editDataStore.observation addAttachmentsObject:attachment];
-    }
-    [self.editDataStore.observation.transientAttachments removeAllObjects];
-    
-    if ([self.editDataStore saveObservation]) {
+    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+        NSLog(@"saved the observation: %@", self.observation);
         [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.leftBarButtonItem = item;
-
-    // if self.observation is null create a new one
-    if (self.observation == nil) {
-        self.observation = (Observation *)[NSEntityDescription insertNewObjectForEntityForName:@"Observation" inManagedObjectContext:[NSManagedObjectContext defaultManagedObjectContext]];
-        [self.observation initializeNewObservationWithLocation: self.location];
-    }
-    self.editDataStore.observation = self.observation;
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewWillAppear:animated];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -223,6 +226,9 @@
         [gvc setGeoPoint:cell.geoPoint];
         [gvc setFieldDefinition: cell.fieldDefinition];
         [gvc setObservation:self.observation];
+    } else if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
+        MediaViewController *mvc = [segue destinationViewController];
+        mvc.delegate = self;
     }
 }
 

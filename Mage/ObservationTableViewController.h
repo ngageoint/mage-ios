@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ObservationDataStore.h"
-#import "ManagedObjectContextHolder.h"
+#import "AttachmentSelectionDelegate.h"
 
 @interface ObservationTableViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
-@property (readwrite, strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
+@property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
 
 @end

@@ -15,15 +15,21 @@
 #import "Attachment+FICAttachment.h"
 
 #import "MageInitialViewController.h"
-#import "CoreDataStack.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 #import "ZipFile+OfflineMap.h"
+#import <AFNetworking/AFNetworkActivityIndicatorManager.h>
+#import <HttpManager.h>
+
+@interface AppDelegate ()
+@property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
+@end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
     NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     
@@ -58,10 +64,11 @@
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
     
-    [CoreDataStack setupCoreDataStack];
+    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
     
     _locationFetchService = [[LocationFetchService alloc] init];
     _observationFetchService = [[ObservationFetchService alloc] init];
+    
     _observationPushService = [[ObservationPushService alloc] init];
     _attachmentPushService = [[AttachmentPushService alloc] init];
 	 
@@ -79,14 +86,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
-    [_locationFetchService stop];
+    [self.locationFetchService stop];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![UserUtility isTokenExpired]) {
-        [_locationFetchService start];
+        [self.locationFetchService start];
     }
 }
 
@@ -124,8 +131,6 @@
     NSArray *caches = [zipFile expandToPath:directory error:&error];
     if (error) {
         NSLog(@"Error extracting offline map archive. %@", error);
-    } else {
-//        [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -148,17 +153,7 @@
 - (void) applicationWillTerminate:(UIApplication *) application {
     NSLog(@"applicationWillTerminate");
 
-    // Saves changes in the application's managed object context before the application terminates.
-    NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = [NSManagedObjectContext defaultManagedObjectContext];
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
+    [MagicalRecord cleanUp];
 }
 
 -(LocationService *) locationService {
@@ -167,6 +162,15 @@
     }
     
     return _locationService;
+}
+
+- (void)tokenDidExpire:(NSNotification *)notification {
+    [UserUtility expireToken];
+    [self.locationFetchService stop];
+    [self.observationFetchService stop];
+    [self.observationPushService stop];
+    [self.attachmentPushService stop];
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Application's Documents directory

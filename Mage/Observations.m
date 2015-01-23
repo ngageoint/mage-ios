@@ -2,25 +2,19 @@
 //  ObservationFetchedResultsController.m
 //  MAGE
 //
-//  Created by Dan Barela on 9/16/14.
+//  Created by William Newman on 9/16/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "Observations.h"
-#import "NSManagedObjectContext+MAGE.h"
+#import "Observation.h"
 
 @implementation Observations
 
 + (id) observations {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
-    // TODO look at this, I think we changed Android to timestamp or something
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
-    
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                  managedObjectContext:context
+                  managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                     sectionNameKeyPath:@"sectionName"
                              cacheName:nil];
     
@@ -28,15 +22,9 @@
 }
 
 + (id) observationsForUser:(User *) user {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"user == %@", user]];
-
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@", user]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"sectionName"
                                                                                                           cacheName:nil];
     
@@ -45,15 +33,9 @@
 }
 
 + (id) observationsForObservation:(Observation *) observation {
-    NSManagedObjectContext *context = [NSManagedObjectContext defaultManagedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Observation" inManagedObjectContext:context]];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO], nil]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
-    
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:nil
                                                                                                           cacheName:nil];
     
