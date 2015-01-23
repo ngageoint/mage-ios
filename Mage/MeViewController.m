@@ -17,14 +17,12 @@
 #import <Location+helper.h>
 #import "ObservationDataStore.h"
 #import "ImageViewerViewController.h"
-#import "AVFoundation/AVFoundation.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import <AFNetworking.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MageServer.h>
 #import <HttpManager.h>
 #import "LocationAnnotation.h"
 #import <GPSLocation+helper.h>
-#import "PersonImage.h"
 #import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
 #import "Attachment+FICAttachment.h"
@@ -32,7 +30,6 @@
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (weak, nonatomic) IBOutlet MKMapView *map;
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
@@ -50,7 +47,7 @@ bool currentUserIsMe = NO;
 - (void) viewDidLoad {
     
     if (self.user == nil) {
-        self.user = [User fetchCurrentUser];
+        self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         currentUserIsMe = YES;
     }
     
@@ -58,14 +55,8 @@ bool currentUserIsMe = NO;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    UIImage *avatarImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
-    if (avatarImage != nil) {
-        [self.avatar setImage:avatarImage];
-    }
-    
-    NSString *url = [NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]];
-    NSLog(@"url is: %@", url);
-    [self.avatar setImage:[UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
+    [self.avatar setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
@@ -79,113 +70,8 @@ bool currentUserIsMe = NO;
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    if ([attachment.contentType hasPrefix:@"image"]) {
-        [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
-    } else if ([attachment.contentType hasPrefix:@"video"]) {
-        [self downloadAndSaveMediaToTempFolder:attachment];
-    } else if ([attachment.contentType hasPrefix:@"audio"]) {
-        [self downloadAndSaveMediaToTempFolder:attachment];
-    }
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
-
-
-#pragma mark - Download Media to TMP directory
--(void) downloadAndSaveMediaToTempFolder:(Attachment *) attachment{
-    HttpManager *http = [HttpManager singleton];
-    Observation *obs = (Observation *)attachment.observation;
-    
-    NSString *downloadPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
-        // save the local path
-        NSLog(@"playing locally");
-        [self playMediaFromDocumentsFolder:downloadPath];
-    } else {
-        NSLog(@"Downloading to %@", downloadPath);
-        NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
-        AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
-                // save the local path
-                [self playMediaFromDocumentsFolder:downloadPath];
-            }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            
-        }];
-        NSError *error;
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[downloadPath stringByDeletingLastPathComponent]]) {
-            NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
-            [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
-        }
-        
-        [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
-        operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
-        [operation start];
-    }
-}
-
-
-//NSNotification callback function
-- (void)moviePlayerPlaybackStateDidChange:(NSNotification*)notification {
-    MPMoviePlayerController *moviePlayer = notification.object;
-    
-    MPMoviePlaybackState playbackState = moviePlayer.playbackState;
-    
-    if(playbackState == MPMoviePlaybackStateStopped) {
-        NSLog(@"MPMoviePlaybackStateStopped");
-    } else if(playbackState == MPMoviePlaybackStatePlaying) {
-        NSLog(@"MPMoviePlaybackStatePlaying");
-    } else if(playbackState == MPMoviePlaybackStatePaused) {
-        NSLog(@"MPMoviePlaybackStatePaused");
-    } else if(playbackState == MPMoviePlaybackStateInterrupted) {
-        NSLog(@"MPMoviePlaybackStateInterrupted");
-    } else if(playbackState == MPMoviePlaybackStateSeekingForward) {
-        NSLog(@"MPMoviePlaybackStateSeekingForward");
-    } else if(playbackState == MPMoviePlaybackStateSeekingBackward) {
-        NSLog(@"MPMoviePlaybackStateSeekingBackward");
-    }
-}
-
--(void) playMediaFromDocumentsFolder:(NSString *) fromPath{
-    NSURL *fURL = [NSURL fileURLWithPath:fromPath];
-    NSLog(@"Playing %@", fURL);
-    MPMoviePlayerViewController *videoPlayerView = [[MPMoviePlayerViewController alloc] initWithContentURL:fURL];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:nil];
-    
-    [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
-    videoPlayerView.moviePlayer.view.frame = self.view.frame;
-    videoPlayerView.moviePlayer.initialPlaybackTime = 0.0;
-    videoPlayerView.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-    [videoPlayerView.moviePlayer prepareToPlay];
-    [videoPlayerView.moviePlayer play];
-}
-
--(void) playMovieAtURL: (NSURL*) theURL {
-    
-    MPMoviePlayerViewController *videoPlayerView = [[MPMoviePlayerViewController alloc] initWithContentURL:theURL];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(moviePlayerPlaybackStateDidChange:)  name:MPMoviePlayerPlaybackStateDidChangeNotification  object:nil];
-    
-    [self presentMoviePlayerViewControllerAnimated:videoPlayerView];
-    videoPlayerView.moviePlayer.view.frame = self.view.frame;
-    videoPlayerView.moviePlayer.initialPlaybackTime = 0.0;
-    videoPlayerView.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
-    [videoPlayerView.moviePlayer prepareToPlay];
-    [videoPlayerView.moviePlayer play];
-}
-
-// When the movie is done, release the controller.
--(void) myMovieFinishedCallback: (NSNotification*) aNotification
-{
-    MPMoviePlayerController* theMovie = [aNotification object];
-    
-    [[NSNotificationCenter defaultCenter]
-     removeObserver: self
-     name: MPMoviePlayerPlaybackDidFinishNotification
-     object: theMovie];
-}
-
 
 - (IBAction)portraitClick:(id)sender {
     
@@ -206,7 +92,7 @@ bool currentUserIsMe = NO;
         case 0: {
             // view avatar
             NSLog(@"view avatar");
-            [self performSegueWithIdentifier:@"viewImageSegue" sender:self];
+            [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
             break;
         }
         case 1: {
@@ -323,7 +209,8 @@ bool currentUserIsMe = NO;
     if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
         ImageViewerViewController *vc = [segue destinationViewController];
         NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        [vc setImageUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]];
+        [vc setMediaUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]];
+        [vc setContentType:@"image"];
         
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];

@@ -11,7 +11,6 @@
 #import "AppDelegate.h"
 #import "Geometry.h"
 #import "GeoPoint.h"
-#import "PersonImage.h"
 #import "User+helper.h"
 #import "Location+helper.h"
 #import "LocationAnnotation.h"

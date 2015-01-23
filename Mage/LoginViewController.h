@@ -8,10 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Authentication.h"
-#import "ManagedObjectContextHolder.h"
 
 @interface LoginViewController : UIViewController<AuthenticationDelegate, UITextFieldDelegate>
-
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @end

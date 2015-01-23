@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ManagedObjectContextHolder : NSObject
-
-- (NSManagedObjectContext *) managedObjectContext;
-
-@end
+//@interface ManagedObjectContextHolder : NSObject
+//
+//- (NSManagedObjectContext *) managedObjectContext;
+//
+//@end

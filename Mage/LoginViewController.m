@@ -19,7 +19,7 @@
 #import <UserUtility.h>
 #import "DeviceUUID.h"
 #import "MageServer.h"
-#import "CoreDataStack.h"
+#import "MagicalRecord+delete.h"
 
 @interface LoginViewController ()
 
@@ -31,6 +31,8 @@
     @property (weak, nonatomic) IBOutlet UIButton *lockButton;
     @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
+    @property (weak, nonatomic) IBOutlet UIButton *statusButton;
+    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
     @property (strong, nonatomic) MageServer *server;
     @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
@@ -43,11 +45,13 @@
     self.usernameField.textColor = [UIColor blackColor];
     self.passwordField.textColor = [UIColor blackColor];
     self.loginStatus.hidden = YES;
+    self.statusButton.hidden = YES;
     
     [self resetLogin];
 }
 
 - (void) authenticationHadFailure {
+    self.statusButton.hidden = NO;
     self.loginStatus.hidden = NO;
     self.loginStatus.text = @"The username or password you entered is incorrect";
     self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
@@ -97,8 +101,8 @@
 
 - (void) verifyLogin {
     if (self.reachability.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
-        [CoreDataStack deleteCoreDataStack];
-        [CoreDataStack setupCoreDataStack];
+        [MagicalRecord deleteCoreDataStack];
+        [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
     }
     
 	// setup authentication
@@ -145,6 +149,8 @@
 		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
         [self initMageServerWithURL:url];
     } else {
+        [self.usernameField setEnabled:NO];
+        [self.passwordField setEnabled:NO];
         [self.serverUrlField setEnabled:YES];
         [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
@@ -181,6 +187,10 @@
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
+    
+    NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
 }
 
 - (void) viewDidLoad {
@@ -206,9 +216,13 @@
         self.server.authentication.delegate = self;
         
         self.loginStatus.hidden = YES;
+        self.statusButton.hidden = YES;
+        [self.usernameField setEnabled:YES];
+        [self.passwordField setEnabled:YES];
         self.serverUrlField.textColor = [UIColor blackColor];
     } failure:^(NSError *error) {
         self.loginStatus.hidden = NO;
+        self.statusButton.hidden = NO;
         self.loginStatus.text = error.localizedDescription;
         self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     }];

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "ManagedObjectContextHolder.h"
 
 @protocol SettingSelectionDelegate <NSObject>
 @required
@@ -16,8 +15,6 @@
 @end
 
 @interface SettingsTableViewController_iPad : UITableViewController<CLLocationManagerDelegate>
-
-@property (strong, nonatomic) IBOutlet ManagedObjectContextHolder *contextHolder;
 
 @property(nonatomic, weak) id<SettingSelectionDelegate> settingSelectionDelegate;
 

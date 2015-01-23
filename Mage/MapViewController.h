@@ -8,13 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "ManagedObjectContextHolder.h"
 #import "MapDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
 
 @interface MapViewController : UIViewController
-@property (nonatomic, weak) IBOutlet ManagedObjectContextHolder *contextHolder;
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, weak) IBOutlet MapDelegate *mapDelegate;
 

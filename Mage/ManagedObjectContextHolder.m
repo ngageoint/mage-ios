@@ -8,12 +8,11 @@
 
 #import "ManagedObjectContextHolder.h"
 #import "AppDelegate.h"
-#import "NSManagedObjectContext+MAGE.h"
 
 @implementation ManagedObjectContextHolder
 
 - (NSManagedObjectContext *) managedObjectContext {
-    return [NSManagedObjectContext defaultManagedObjectContext];
+    return [NSManagedObjectContext MR_defaultContext];
 }
 
 @end

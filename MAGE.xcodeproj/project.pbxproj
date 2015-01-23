@@ -21,6 +21,7 @@
 		2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */; };
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
 		2FBFE15919E828F700590076 /* LocationServiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFE15819E828F700590076 /* LocationServiceHolder.m */; };
+		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
@@ -28,7 +29,6 @@
 		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
-		4C2A38F01974803700E7470A /* PersonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EF1974803700E7470A /* PersonImage.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */; };
 		4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */; };
@@ -45,6 +45,8 @@
 		F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EEC19781D37002D66F6 /* ObservationImage.m */; };
 		F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
+		F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5EF1A5C832F00B096A7 /* MediaViewController.m */; };
+		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
 		F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
@@ -56,6 +58,7 @@
 		F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* PeopleDataStore.m */; };
 		F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129F919F5BE320063DB6A /* MeViewController.m */; };
 		F73430F91A13A8CA0063FE6B /* PickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F73430F81A13A8CA0063FE6B /* PickerTableViewCell.m */; };
+		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7481EFD19A6372C00E9C56D /* DropdownEditTableViewController.m */; };
 		F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F232919A77A7B0068DE1B /* DatePickerTableViewCell.m */; };
@@ -63,11 +66,11 @@
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
+		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
 		F78B0A9A1A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */; };
-		F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */; };
 		F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A23319D20E8000904316 /* FetchServicesHolder.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
@@ -97,6 +100,8 @@
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
+		F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015D1A659B4D00902B4F /* setupTests.js */; };
+		F7C001601A659B5800902B4F /* tearDownTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015F1A659B5800902B4F /* tearDownTests.js */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
@@ -105,6 +110,12 @@
 		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
 		F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */; };
 		F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */; };
+		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
+		F7FAD7971A65887A00E7F224 /* loginInformation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7921A65887A00E7F224 /* loginInformation.js */; };
+		F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7931A65887A00E7F224 /* loginTest.js */; };
+		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
+		F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7951A65887A00E7F224 /* navigation.js */; };
+		F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD79B1A658A8800E7F224 /* testsToRun.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +160,8 @@
 		2FA70A9E1A03F2CA00243F4A /* MapSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSettings.m; sourceTree = "<group>"; };
 		2FBFE15719E828F700590076 /* LocationServiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServiceHolder.h; sourceTree = "<group>"; };
 		2FBFE15819E828F700590076 /* LocationServiceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServiceHolder.m; sourceTree = "<group>"; };
+		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
+		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
@@ -165,8 +178,6 @@
 		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
 		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
-		4C2A38EE1974803700E7470A /* PersonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonImage.h; sourceTree = "<group>"; };
-		4C2A38EF1974803700E7470A /* PersonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonImage.m; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C3A805E18B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4C3A806018B6F67B00B1BA12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
@@ -194,6 +205,10 @@
 		F70EAF39199BF31300909C8A /* ImageViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewerViewController.h; sourceTree = "<group>"; };
 		F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewerViewController.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F714D5EE1A5C832F00B096A7 /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
+		F714D5EF1A5C832F00B096A7 /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
+		F714D5F31A5C8CAA00B096A7 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
+		F714D5F41A5C8CAA00B096A7 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
 		F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
@@ -216,6 +231,7 @@
 		F73129F919F5BE320063DB6A /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		F73430F71A13A8CA0063FE6B /* PickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerTableViewCell.h; sourceTree = "<group>"; };
 		F73430F81A13A8CA0063FE6B /* PickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerTableViewCell.m; sourceTree = "<group>"; };
+		F73C3BF51A608EBD007A734E /* mageTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mageTest.js; sourceTree = "<group>"; };
 		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F7481EFC19A6372C00E9C56D /* DropdownEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropdownEditTableViewController.h; sourceTree = "<group>"; };
@@ -231,6 +247,8 @@
 		F7531EFF1910131C00CA084C /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
+		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -240,8 +258,6 @@
 		F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAttachmentTableViewCell.h; sourceTree = "<group>"; };
 		F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAttachmentTableViewCell.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
-		F792A22C19D1DE9E00904316 /* ManagedObjectContextHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagedObjectContextHolder.h; sourceTree = "<group>"; };
-		F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagedObjectContextHolder.m; sourceTree = "<group>"; };
 		F792A23219D20E8000904316 /* FetchServicesHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchServicesHolder.h; sourceTree = "<group>"; };
 		F792A23319D20E8000904316 /* FetchServicesHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchServicesHolder.m; sourceTree = "<group>"; };
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
@@ -285,6 +301,8 @@
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
+		F7C0015D1A659B4D00902B4F /* setupTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = setupTests.js; sourceTree = "<group>"; };
+		F7C0015F1A659B5800902B4F /* tearDownTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tearDownTests.js; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
 		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
@@ -302,6 +320,12 @@
 		F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocationAnnotation.m; sourceTree = "<group>"; };
 		F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+FICAttachment.h"; sourceTree = "<group>"; };
 		F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+FICAttachment.m"; sourceTree = "<group>"; };
+		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
+		F7FAD7921A65887A00E7F224 /* loginInformation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginInformation.js; sourceTree = "<group>"; };
+		F7FAD7931A65887A00E7F224 /* loginTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginTest.js; sourceTree = "<group>"; };
+		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
+		F7FAD7951A65887A00E7F224 /* navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = navigation.js; sourceTree = "<group>"; };
+		F7FAD79B1A658A8800E7F224 /* testsToRun.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = testsToRun.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +333,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */,
 				F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
@@ -424,12 +449,12 @@
 				4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */,
 				4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */,
 				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
-				4C2A38EE1974803700E7470A /* PersonImage.h */,
-				4C2A38EF1974803700E7470A /* PersonImage.m */,
 				F727517519C895CA006C63CB /* PeopleDataStore.h */,
 				F727517619C895CA006C63CB /* PeopleDataStore.m */,
 				F73129F819F5BE320063DB6A /* MeViewController.h */,
 				F73129F919F5BE320063DB6A /* MeViewController.m */,
+				2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */,
+				2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -517,6 +542,18 @@
 			name = Observation;
 			sourceTree = "<group>";
 		};
+		F714D5ED1A5C831B00B096A7 /* AudioRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				F714D5F31A5C8CAA00B096A7 /* Recording.h */,
+				F714D5F41A5C8CAA00B096A7 /* Recording.m */,
+				F714D5EE1A5C832F00B096A7 /* MediaViewController.h */,
+				F714D5EF1A5C832F00B096A7 /* MediaViewController.m */,
+				F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */,
+			);
+			name = AudioRecorder;
+			sourceTree = "<group>";
+		};
 		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
@@ -589,6 +626,7 @@
 		F7A94D6818AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F76FAE851A5C797400BD8443 /* CoreAudio.framework */,
 				F70EAF3C199D052D00909C8A /* MediaPlayer.framework */,
 				4C390F49197DB7B000AB3CCB /* MessageUI.framework */,
 				F7A94DAC18B5196600CB9EE0 /* libPods-JVFloatLabeledTextField.a */,
@@ -607,6 +645,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
 				2FF467091A12794000BA8357 /* Categories */,
 				F727516B19C888A3006C63CB /* Fetch */,
 				2FE24CDB19C79B850019688B /* iPad */,
@@ -637,8 +676,6 @@
 				4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */,
 				2F14288F199AB9A400C64A98 /* UINextField.h */,
 				2F142890199AB9A400C64A98 /* UINextField.m */,
-				F792A22C19D1DE9E00904316 /* ManagedObjectContextHolder.h */,
-				F792A22D19D1DE9E00904316 /* ManagedObjectContextHolder.m */,
 				F792A23219D20E8000904316 /* FetchServicesHolder.h */,
 				F792A23319D20E8000904316 /* FetchServicesHolder.m */,
 				2FBFE15719E828F700590076 /* LocationServiceHolder.h */,
@@ -662,8 +699,10 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F7FAD7901A65887A00E7F224 /* viewTests */,
 				F7A94D9418AD9CB000CB9EE0 /* MageTests.m */,
 				F7A94D8F18AD9CB000CB9EE0 /* Supporting Files */,
+				F73C3BF51A608EBD007A734E /* mageTest.js */,
 			);
 			path = MageTests;
 			sourceTree = "<group>";
@@ -675,6 +714,21 @@
 				F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F7FAD7901A65887A00E7F224 /* viewTests */ = {
+			isa = PBXGroup;
+			children = (
+				F7FAD7911A65887A00E7F224 /* disclaimerTest.js */,
+				F7FAD7921A65887A00E7F224 /* loginInformation.js */,
+				F7FAD7931A65887A00E7F224 /* loginTest.js */,
+				F7FAD7941A65887A00E7F224 /* mapTest.js */,
+				F7FAD7951A65887A00E7F224 /* navigation.js */,
+				F7FAD79B1A658A8800E7F224 /* testsToRun.js */,
+				F7C0015D1A659B4D00902B4F /* setupTests.js */,
+				F7C0015F1A659B5800902B4F /* tearDownTests.js */,
+			);
+			path = viewTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -758,11 +812,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
+				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
+				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
+				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
+				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
+				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
+				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
+				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
+				F7FAD7971A65887A00E7F224 /* loginInformation.js in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -821,7 +884,6 @@
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
-				4C2A38F01974803700E7470A /* PersonImage.m in Sources */,
 				2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
@@ -831,6 +893,7 @@
 				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
 				2F5F2EA519E31DEE005BA157 /* SettingsTableViewController_iPad.m in Sources */,
 				2F5F2EAE19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m in Sources */,
+				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */,
@@ -860,7 +923,6 @@
 				F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
-				F792A22E19D1DE9E00904316 /* ManagedObjectContextHolder.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
@@ -876,6 +938,7 @@
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
+				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */,
@@ -886,6 +949,7 @@
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
+				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
@@ -1027,6 +1091,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1046,6 +1112,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

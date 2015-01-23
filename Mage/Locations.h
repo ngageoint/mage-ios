@@ -2,7 +2,7 @@
 //  Locations.h
 //  MAGE
 //
-//  Created by Dan Barela on 9/16/14.
+//  Created by William Newman on 9/16/14.
 //  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -12,8 +12,8 @@
 
 @interface Locations : NSObject
 
+@property (nonatomic, strong) id<NSFetchedResultsControllerDelegate> delegate;
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
-@property(nonatomic, assign) id<NSFetchedResultsControllerDelegate> delegate;
 
 + (id) locationsForAllUsers;
 + (id) locationsForUser:(User *) user;
