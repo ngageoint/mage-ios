@@ -108,8 +108,6 @@ NSInteger const kLocationPushLimit = 100;
 
 - (void) pushLocations {
     if (!self.isPushingLocations) {
-        self.isPushingLocations = YES;
-        NSLog(@"Pushing locations...");
         
         //TODO, submit in pages
         NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllInContext:self.managedObjectContext];
@@ -118,6 +116,9 @@ NSInteger const kLocationPushLimit = 100;
         NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.managedObjectContext];
         
         if (![locations count]) return;
+        
+        self.isPushingLocations = YES;
+        NSLog(@"Pushing locations...");
         
         // send to server
         __weak LocationService *weakSelf = self;
