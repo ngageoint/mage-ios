@@ -74,6 +74,9 @@ bool currentUserIsMe = NO;
 }
 
 - (IBAction)portraitClick:(id)sender {
+    // Returning for right now to fix split view controller strangeness
+    return;
+    /*
     
     UIActionSheet *actionSheet = nil;
     
@@ -85,6 +88,7 @@ bool currentUserIsMe = NO;
     }
     
     [actionSheet showInView:self.view];
+     */
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
