@@ -15,6 +15,12 @@
 - (void) setImageForUser:(User *) user {
     [self setAccessibilityLabel:@"Person"];
     [self setAccessibilityValue:@"Person"];
+    
+    if (!user.iconUrl) {
+        self.image = [self blueCircle];
+        return;
+    }
+    
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
@@ -34,7 +40,7 @@
         
         strongSelf.image = [strongSelf mergeImage:resizedImage withDot:[strongSelf blueCircle]];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-
+        NSLog(@"wtf over");
     }];
     
     [requestOperation start];
