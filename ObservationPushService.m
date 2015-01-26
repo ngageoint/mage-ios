@@ -10,6 +10,7 @@
 #import "HttpManager.h"
 #import "Observation+helper.h"
 #import "Attachment.h"
+#import "UserUtility.h"
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
@@ -61,7 +62,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) onTimerFire {
-    [self pushObservations:self.fetchedResultsController.fetchedObjects];
+    if (![UserUtility isTokenExpired]) {
+        [self pushObservations:self.fetchedResultsController.fetchedObjects];
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {

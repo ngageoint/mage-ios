@@ -68,7 +68,9 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) onTimerFire {
-    [self pullObservations];
+    if (![UserUtility isTokenExpired]) {
+        [self pullObservations];
+    }
 }
 
 - (void) pullObservations {

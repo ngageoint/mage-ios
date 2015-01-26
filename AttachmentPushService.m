@@ -10,6 +10,7 @@
 #import "HttpManager.h"
 #import "Attachment+helper.h"
 #import "Observation+helper.h"
+#import "UserUtility.h"
 
 NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 
@@ -60,8 +61,10 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 }
 
 - (void) onTimerFire {
-    [Attachment MR_performFetch:self.fetchedResultsController];
-    [self pushAttachments:self.fetchedResultsController.fetchedObjects];
+    if (![UserUtility isTokenExpired]) {
+        [Attachment MR_performFetch:self.fetchedResultsController];
+        [self pushAttachments:self.fetchedResultsController.fetchedObjects];
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {

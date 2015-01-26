@@ -42,28 +42,37 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) scheduleTimer {
+    NSLog(@"told to schedule the timer");
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"in the main queue scheduling the timer");
         _locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
     });
 }
 
 - (void) onTimerFire {
-    [self pullLocations];
+    NSLog(@"timer to pull locations fired");
+    if (![UserUtility isTokenExpired]) {
+        [self pullLocations];
+    }
 }
 
 - (void) pullLocations{
     NSOperation *locationFetchOperation = [Location operationToPullLocations:^(BOOL success) {
         if (![UserUtility isTokenExpired]) {
+            NSLog(@"Scheduling the timer again");
             [self scheduleTimer];
         }
     }];
-    
+    NSLog(@"pulling locations");
     [[HttpManager singleton].manager.operationQueue addOperation:locationFetchOperation];
 }
 
 -(void) stop {
+    NSLog(@"told to stop the location timer");
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"if the timer is valid i am going to stop it");
         if ([_locationFetchTimer isValid]) {
+            NSLog(@"Stopping the location timer");
             [_locationFetchTimer invalidate];
             _locationFetchTimer = nil;
         }
