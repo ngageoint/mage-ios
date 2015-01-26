@@ -47,6 +47,10 @@
 
 - (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
     [UserUtility expireToken];
+    [self.fetchServicesHolder.locationFetchService stop];
+    [self.fetchServicesHolder.observationFetchService stop];
+    [self.fetchServicesHolder.observationPushService stop];
+    [self.fetchServicesHolder.attachmentPushService stop];
 }
 
 @end
