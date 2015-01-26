@@ -40,7 +40,9 @@
         
         strongSelf.image = [strongSelf mergeImage:resizedImage withDot:[strongSelf blueCircle]];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"wtf over");
+        NSLog(@"Icon URL request is failing");
+        __strong __typeof (weakSelf) strongSelf = weakSelf;
+        strongSelf.image = [self blueCircle];
     }];
     
     [requestOperation start];
