@@ -138,6 +138,7 @@ NSInteger expandedRow = -1;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [tableView endEditing:NO];
     [tableView endUpdates];
 }
 

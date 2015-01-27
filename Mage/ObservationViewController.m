@@ -80,16 +80,18 @@
     MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
     
     [self.mapDelegate selectedObservation:self.observation region:viewRegion];
-    self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
-    if (self.attachmentCollectionDataStore.observation == nil) {
-        self.attachmentCollectionDataStore.observation = _observation;
-    } else {
-        [self.attachmentCollection reloadData];
-    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+    
+    self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
+    if (self.attachmentCollectionDataStore.observation == nil) {
+        self.attachmentCollectionDataStore.observation = _observation;
+        [self.attachmentCollection reloadData];
+    } else {
+        [self.attachmentCollection reloadData];
+    }
 	
 	CAGradientLayer *maskLayer = [CAGradientLayer layer];
     
