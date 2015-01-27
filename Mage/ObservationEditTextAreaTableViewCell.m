@@ -20,16 +20,12 @@
     [self.keyLabel setText:[field objectForKey:@"title"]];
 }
 
-- (CGFloat) getCellHeightForValue: (id) value {
-    self.textArea.text = value;
-    CGSize idealSize = [self.textArea sizeThatFits:CGSizeMake(self.textArea.textContainer.size.width, MAXFLOAT)];
-    return idealSize.height + self.textArea.frame.origin.y + 15;
-}
-
-- (void) textViewDidChange:(UITextView *)textView {
-    
+- (void) textViewDidEndEditing:(UITextView *)textView {
     [self.delegate observationField:self.fieldDefinition valueChangedTo:textView.text reloadCell:NO];
 }
 
+- (void) textViewDidBeginEditing:(UITextView *)textView {
+    
+}
 
 @end
