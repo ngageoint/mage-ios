@@ -24,7 +24,7 @@
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
     CGSize labelSize = [value sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
     [self.valueTextView setFrame:CGRectMake(self.valueTextView.frame.origin.x, self.valueTextView.frame.origin.y, labelSize.width, labelSize.height)];
-    return labelSize.height;
+    return 45 + labelSize.height;
 }
 
 @end
