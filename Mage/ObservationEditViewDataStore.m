@@ -23,12 +23,14 @@ NSArray *_rowToCellType;
 NSArray *_rowToField;
 NSDictionary *_fieldToRow;
 NSInteger expandedRow = -1;
+NSString *_formId;
 
 - (NSArray *)rowToCellType {
-    if (_rowToCellType != nil) {
+    if (_rowToCellType != nil && [[Server observationFormId] isEqualToString:_formId]) {
         return _rowToCellType;
     }
     NSDictionary *form = [Server observationForm];
+    _formId = [Server observationFormId];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];
@@ -138,6 +140,7 @@ NSInteger expandedRow = -1;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [tableView endEditing:NO];
     [tableView endUpdates];
 }
 

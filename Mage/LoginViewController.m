@@ -19,6 +19,7 @@
 #import <UserUtility.h>
 #import "DeviceUUID.h"
 #import "MageServer.h"
+#import "Observations.h"
 #import "MagicalRecord+delete.h"
 
 @interface LoginViewController ()
