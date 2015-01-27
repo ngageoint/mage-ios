@@ -12,15 +12,16 @@
 
 +(void) deleteCoreDataStack {
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-    [self cleanUp];
     
     [context lock];
+    [context reset];
     NSArray *stores = [[NSPersistentStoreCoordinator MR_defaultStoreCoordinator] persistentStores];
     for(NSPersistentStore *store in stores) {
-        [[NSPersistentStoreCoordinator MR_defaultStoreCoordinator] removePersistentStore:store error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
     }
+    [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator: nil];
     [context unlock];
+    [self cleanUp];
 }
 
 @end
