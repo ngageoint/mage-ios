@@ -198,6 +198,7 @@
 }
 
 - (IBAction)saveObservation:(id)sender {
+    [self.editDataStore.editTable endEditing:YES];
     [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         NSLog(@"saved the observation: %@", self.observation);
         [self.navigationController popViewControllerAnimated:YES];
