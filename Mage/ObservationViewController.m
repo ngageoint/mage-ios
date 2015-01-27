@@ -49,7 +49,8 @@
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
-    
+//    self.observation = [self.observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
+//    [[self.observation managedObjectContext] refreshObject:self.observation mergeChanges:YES];
     Observations *observations = [Observations observationsForObservation:self.observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
@@ -92,6 +93,8 @@
     } else {
         [self.attachmentCollection reloadData];
     }
+    
+    [self.propertyTable reloadData];
 	
 	CAGradientLayer *maskLayer = [CAGradientLayer layer];
     
