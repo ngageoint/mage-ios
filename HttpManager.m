@@ -65,7 +65,7 @@ static HttpManager *sharedSingleton = nil;
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
         // token expired
-        if (responseStatusCode == 401) {
+        if (responseStatusCode == 401 && (![[request.URL path] containsString:@"login"] && ![[request.URL path] containsString:@"devices"]) ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
         }
     }
