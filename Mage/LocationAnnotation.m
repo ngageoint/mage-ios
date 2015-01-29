@@ -9,6 +9,7 @@
 #import "GeoPoint.h"
 #import "User+helper.h"
 #import "NSDate+DateTools.h"
+#import "MKAnnotationView+PersonIcon.h"
 
 @implementation LocationAnnotation
 
@@ -33,6 +34,25 @@
 
 -(void) setLocation:(Location *)location {
     self.location = location;
+}
+
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
+    if (annotationView == nil) {
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];
+        annotationView.enabled = YES;
+        
+        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+        annotationView.rightCalloutAccessoryView = rightButton;
+    } else {
+        annotationView.annotation = self;
+    }
+    
+    [annotationView setImageForUser:self.location.user];
+    
+    annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
+    return annotationView;
 }
 
 @end

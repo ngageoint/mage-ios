@@ -24,5 +24,6 @@
 @property (nonatomic) Observation *observation;
 
 - (id)initWithObservation:(Observation *) observation;
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
 
 @end
