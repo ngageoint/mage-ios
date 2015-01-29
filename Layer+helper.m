@@ -13,6 +13,7 @@
 #import "Observation+helper.h"
 #import "MageServer.h"
 #import "Server+helper.h"
+#import "StaticLayer+helper.h"
 
 @implementation Layer (helper)
 
@@ -26,33 +27,50 @@
     return self;
 }
 
++ (NSString *) layerIdFromJson:(NSDictionary *) json {
+    return [json objectForKey:@"id"];
+}
+
++ (NSString *) layerTypeFromJson:(NSDictionary *) json {
+    return [json objectForKey:@"type"];
+}
+
 + (NSOperation *) operationToPullLayers:(void (^) (BOOL success)) complete {
 
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
-    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"Feature", @"type", nil];
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: params error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Layer request complete %@", responseObject);
             NSArray *layers = responseObject;
             for (id layer in layers) {
-                Layer *l = [Layer MR_createInContext:localContext];
-                [l populateObjectFromJson:layer];
-                [Server setObservationFormId:l.formId];
-                [Server setObservationLayerId:l.remoteId];
-                
-                NSLog(@"Form id is %@", l.formId);
-                
-                Layer *dbLayer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", l.remoteId]];
-                if (dbLayer != nil) {
-                    NSLog(@"Updating layer with id: %@", l.remoteId);
-                    [dbLayer populateObjectFromJson:layer];
-                } else {
+                NSString *remoteLayerId = [Layer layerIdFromJson:layer];
+                Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
+
+                if (l == nil) {
+                    if ([[Layer layerTypeFromJson:layer] isEqualToString:@"External"]) {
+                        l = [StaticLayer MR_createInContext:localContext];
+                    } else {
+                        l = [Layer MR_createInContext:localContext];
+                    }
+                    [l populateObjectFromJson:layer];
                     NSLog(@"Inserting layer with id: %@", l.remoteId);
-                    [localContext insertObject:l];
+                } else {
+                    NSLog(@"Updating layer with id: %@", l.remoteId);
+                    [l populateObjectFromJson:layer];
+                }
+
+                if ([l.type isEqualToString:@"Feature"]) {
+                    [Server setObservationFormId:l.formId];
+                    [Server setObservationLayerId:l.remoteId];
+                    
+                    NSLog(@"Form id is %@", l.formId);
+                } else if ([l.type isEqualToString:@"External"]) {
+                    NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
+                    [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
                 }
             }
             
@@ -64,6 +82,5 @@
     }];
     return operation;
 }
-
 
 @end
