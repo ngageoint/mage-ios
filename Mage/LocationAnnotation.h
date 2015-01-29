@@ -25,4 +25,6 @@
 
 - (id)initWithLocation:(Location *) location;
 
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
+
 @end

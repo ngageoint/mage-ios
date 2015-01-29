@@ -111,6 +111,7 @@
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
 		F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */; };
+		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
 		F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
 		F7FAD7971A65887A00E7F224 /* loginInformation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7921A65887A00E7F224 /* loginInformation.js */; };
@@ -324,6 +325,8 @@
 		F7E0380B1992948A007CCF6C /* AttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCell.m; sourceTree = "<group>"; };
 		F7E148B21A001F5500A31A32 /* GPSLocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocationAnnotation.h; sourceTree = "<group>"; };
 		F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocationAnnotation.m; sourceTree = "<group>"; };
+		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
+		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
 		F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+FICAttachment.h"; sourceTree = "<group>"; };
 		F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+FICAttachment.m"; sourceTree = "<group>"; };
 		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
@@ -491,6 +494,8 @@
 				F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */,
 				F71B0C871A71683C00DB83B3 /* StaticLayerTableViewCell.h */,
 				F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */,
+				F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */,
+				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -949,6 +954,7 @@
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
+				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,

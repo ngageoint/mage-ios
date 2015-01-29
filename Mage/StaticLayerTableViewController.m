@@ -31,6 +31,8 @@
 }
 
 - (void)staticLayerFetched:(NSNotification *)notification {
+    NSLog(@"static layer loaded");
+    self.staticLayers = [StaticLayer MR_findAll];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self.tableView reloadData];
     });
@@ -43,10 +45,7 @@
     self.staticLayers = nil;
     [self.tableView reloadData];
     [StaticLayer refreshStaticLayers:^(BOOL success) {
-        self.staticLayers = [StaticLayer MR_findAll];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self.tableView reloadData];
-        });
+        NSLog(@"static layers refreshed");
     }];
 }
 
@@ -58,16 +57,17 @@
     return self.staticLayers.count;
 }
 
-- (Layer *) layerForRow: (NSUInteger) row {
+- (StaticLayer *) layerForRow: (NSUInteger) row {
     return [self.staticLayers objectAtIndex: row];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     StaticLayerTableViewCell *cell = (StaticLayerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"staticLayerCell" forIndexPath:indexPath];
-    Layer *layer = [self layerForRow:indexPath.row];
+    StaticLayer *layer = [self layerForRow:indexPath.row];
     
     cell.layerNameLabel.text = layer.name;
     cell.loadingIndicator.hidden = [layer.loaded boolValue];
+    cell.featureCountLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[layer.data objectForKey:@"features"] count]];
     cell.selected = [self.selectedStaticLayers containsObject:layer.remoteId];
     cell.accessoryType = [self.selectedStaticLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     

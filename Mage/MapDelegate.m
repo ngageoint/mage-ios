@@ -17,6 +17,8 @@
 #import <GeoPoint.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
+#import <StaticLayer.h>
+#import "StaticPointAnnotation.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -25,6 +27,7 @@
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
+    @property (nonatomic, strong) NSMutableDictionary *staticLayers;
 
     @property (nonatomic) BOOL isTrackingAnimation;
     @property (nonatomic) BOOL canShowUserCallout;
@@ -46,6 +49,11 @@
                    forKeyPath:@"selectedOfflineMaps"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
+        
+        [defaults addObserver:self
+                   forKeyPath:@"selectedStaticLayers"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
     }
     
     return self;
@@ -55,6 +63,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"mapType"];
     [defaults removeObserver:self forKeyPath:@"selectedOfflineMaps"];
+    [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
 }
 
 - (NSMutableDictionary *) offlineMaps {
@@ -63,6 +72,14 @@
     }
     
     return _offlineMaps;
+}
+
+- (NSMutableDictionary *) staticLayers {
+    if (_staticLayers == nil) {
+        _staticLayers = [[NSMutableDictionary alloc] init];
+    }
+    
+    return _staticLayers;
 }
 
 - (void) setLocations:(Locations *) locations {
@@ -100,6 +117,7 @@
     _mapView.mapType = [defaults integerForKey:@"mapType"];
     
     [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
+    [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -110,6 +128,8 @@
         self.mapView.mapType = [object integerForKey:keyPath];
     } else if ([@"selectedOfflineMaps" isEqualToString:keyPath] && self.mapView) {
         [self updateOfflineMaps:[object objectForKey:keyPath]];
+    } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
+        [self updateStaticLayers: [object objectForKey:keyPath]];
     }
 }
 
@@ -156,6 +176,35 @@
     }
 }
 
+- (void) updateStaticLayers: (NSArray *) staticLayers {
+    NSMutableSet *unselectedStaticLayers = [[self.staticLayers allKeys] mutableCopy];
+    
+    for (NSNumber *staticLayerId in staticLayers) {
+        StaticLayer *staticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:staticLayerId];
+        if (![unselectedStaticLayers containsObject:staticLayer]) {
+            NSLog(@"adding the static layer %@ to the map", staticLayer.name);
+            NSMutableArray *annotations = [NSMutableArray array];
+            for (NSDictionary *feature in [staticLayer.data objectForKey:@"features"]) {
+                StaticPointAnnotation *annotation = [[StaticPointAnnotation alloc] initWithFeature:feature];
+                [_mapView addAnnotation:annotation];
+                [annotations addObject:annotation];
+            }
+            [self.staticLayers setObject:annotations forKey:staticLayerId];
+        }
+        
+        [unselectedStaticLayers removeObject:staticLayerId];
+    }
+    
+    for (NSNumber *unselectedStaticLayerId in unselectedStaticLayers) {
+        StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:unselectedStaticLayerId];
+        NSLog(@"removing the layer %@ from the map", unselectedStaticLayer.name);
+        for (StaticPointAnnotation *annotation in [self.staticLayers objectForKey:unselectedStaticLayerId]) {
+            [self.mapView removeAnnotation:annotation];
+        }
+        [self.staticLayers removeObjectForKey:unselectedStaticLayerId];
+    }
+}
+
 - (void) setUserTrackingMode:(MKUserTrackingMode) mode animated:(BOOL) animated {
     if (!self.isTrackingAnimation || mode != MKUserTrackingModeFollowWithHeading) {
         [self.mapView setUserTrackingMode:mode animated:animated];
@@ -184,48 +233,17 @@
 	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
-        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"locationAnnotation"];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = self.canShowUserCallout;
-            
-			
-			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-			annotationView.rightCalloutAccessoryView = rightButton;
-		} else {
-            annotationView.annotation = annotation;
-        }
-        
-        [annotationView setImageForUser:locationAnnotation.location.user];
-        
-        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
+        MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.canShowCallout = self.canShowUserCallout;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = self.canShowObservationCallout;
-			
-			UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-			[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-			annotationView.rightCalloutAccessoryView = rightButton;
-            annotationView.image = image;
-            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-            annotationView.hidden = self.hideObservations;
-            annotationView.accessibilityElementsHidden = self.hideObservations;
-		} else {
-            annotationView.annotation = annotation;
-        }
-        [annotationView setAccessibilityLabel:@"Observation"];
-        [annotationView setAccessibilityValue:@"Observation"];
+        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.canShowCallout = self.canShowObservationCallout;
+        annotationView.hidden = self.hideObservations;
+        annotationView.accessibilityElementsHidden = self.hideObservations;
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;
@@ -247,6 +265,9 @@
         [annotationView setImageForUser:gpsAnnotation.user];
         
         return annotationView;
+    } else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
+        StaticPointAnnotation *staticAnnotation = annotation;
+        return [staticAnnotation viewForAnnotationOnMapView:self.mapView];
     }
 	
     return nil;
