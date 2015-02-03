@@ -19,6 +19,10 @@
 #import "MKAnnotationView+PersonIcon.h"
 #import <StaticLayer.h>
 #import "StaticPointAnnotation.h"
+#import <HexColor.h>
+#import "StyledPolygon.h"
+#import "StyledPolyline.h"
+#import "AreaAnnotation.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -28,6 +32,7 @@
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
+    @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
     @property (nonatomic) BOOL isTrackingAnimation;
     @property (nonatomic) BOOL canShowUserCallout;
@@ -57,6 +62,59 @@
     }
     
     return self;
+}
+
+//- (IBAction)mapTapGesture:(id)sender {
+-(void)mapTap:(UIGestureRecognizer*)gesture {
+    UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        CGPoint tapPoint = [tap locationInView:self.mapView];
+        NSLog(@"tap");
+        if (_areaAnnotation != nil) {
+            [_mapView removeAnnotation:_areaAnnotation];
+            _areaAnnotation = nil;
+        }
+        CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
+        MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
+        CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
+        
+        for (NSString* layerId in self.staticLayers) {
+            NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
+            for (id feature in layerFeatures) {
+                if([feature isKindOfClass:[MKPolygon class]]){
+                    MKPolygon *polygon = (MKPolygon*) feature;
+                    
+                    CGMutablePathRef mpr = CGPathCreateMutable();
+                    
+                    MKMapPoint *polygonPoints = polygon.points;
+                    
+                    for (int p=0; p < polygon.pointCount; p++){
+                        MKMapPoint mp = polygonPoints[p];
+                        if (p == 0)
+                            CGPathMoveToPoint(mpr, NULL, mp.x, mp.y);
+                        else
+                            CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
+                    }
+                    
+                    if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
+                        NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
+                        _areaAnnotation = [[AreaAnnotation alloc] init];
+                        _areaAnnotation.title = polygon.title;
+                        _areaAnnotation.coordinate = tapCoord;
+                        
+                        [_mapView addAnnotation:_areaAnnotation];
+                        [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                    }
+                    
+                    CGPathRelease(mpr);
+                }
+
+            }
+        }
+    } else {
+        NSLog(@"tap in some other state");
+        
+    }
 }
 
 - (void) dealloc {
@@ -118,6 +176,12 @@
     
     [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
+    
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc]
+     initWithTarget:self
+     action:@selector(mapTap:)];
+    [self.mapView addGestureRecognizer:tap];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -185,9 +249,39 @@
             NSLog(@"adding the static layer %@ to the map", staticLayer.name);
             NSMutableArray *annotations = [NSMutableArray array];
             for (NSDictionary *feature in [staticLayer.data objectForKey:@"features"]) {
-                StaticPointAnnotation *annotation = [[StaticPointAnnotation alloc] initWithFeature:feature];
-                [_mapView addAnnotation:annotation];
-                [annotations addObject:annotation];
+                if ([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Point"]) {
+                    StaticPointAnnotation *annotation = [[StaticPointAnnotation alloc] initWithFeature:feature];
+                    [_mapView addAnnotation:annotation];
+                    [annotations addObject:annotation];
+                } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
+                    NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
+                    StyledPolygon *polygon = [MapDelegate generatePolygon:coordinates];
+                    [polygon fillColorWithHexString:[feature valueForKeyPath:@"properties.style.polyStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.polyStyle.color.opacity"] floatValue]/255.0f];
+                    [polygon lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"] floatValue]/255.0f];
+                    id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
+                    if (!lineWidth) {
+                        polygon.lineWidth = 1.0f;
+                    } else {
+                        polygon.lineWidth = [lineWidth floatValue];
+                    }
+                    polygon.title = [feature valueForKeyPath:@"properties.name"];
+                    [annotations addObject:polygon];
+                    //[_mapView addAnnotation:polygon];
+                    [_mapView addOverlay:polygon];
+                } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
+                    NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
+                    StyledPolyline *polyline = [MapDelegate generatePolyline:coordinates];
+                    [polyline lineColorWithHexString: [feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"] floatValue]/255.0f];
+                    id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
+                    if (!lineWidth) {
+                        polyline.lineWidth = 1.0f;
+                    } else {
+                        polyline.lineWidth = [lineWidth floatValue];
+                    }
+                    polyline.title = [feature valueForKeyPath:@"properties.name"];
+                    [annotations addObject:polyline];
+                    [_mapView addOverlay:polyline];
+                }
             }
             [self.staticLayers setObject:annotations forKey:staticLayerId];
         }
@@ -204,6 +298,57 @@
         [self.staticLayers removeObjectForKey:unselectedStaticLayerId];
     }
 }
+
++ (StyledPolyline *) generatePolyline:(NSMutableArray *) coordinates {
+    
+    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(coordinates.count * sizeof(CLLocationCoordinate2D));
+    NSInteger exteriorCoordinateCount = 0;
+    for (id coordinate in coordinates) {
+        NSNumber *y = coordinate[0];
+        NSNumber *x = coordinate[1];
+        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
+        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    }
+    
+    return [StyledPolyline polylineWithCoordinates:exteriorMapCoordinates count:coordinates.count];
+}
+
+
++ (StyledPolygon *) generatePolygon:(NSMutableArray *) coordinates {
+    //exterior polygon
+    NSMutableArray *exteriorPolygonCoordinates = coordinates[0];
+    NSMutableArray *interiorPolygonCoordinates = [[NSMutableArray alloc] init];
+    
+    
+    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(exteriorPolygonCoordinates.count * sizeof(CLLocationCoordinate2D));
+    NSInteger exteriorCoordinateCount = 0;
+    for (id coordinate in exteriorPolygonCoordinates) {
+        NSNumber *y = coordinate[0];
+        NSNumber *x = coordinate[1];
+        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
+        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    }
+    
+    //interior polygons
+    NSMutableArray *interiorPolygons = [[NSMutableArray alloc] init];
+    if (coordinates.count > 1) {
+        [interiorPolygonCoordinates addObjectsFromArray:coordinates];
+        [interiorPolygonCoordinates removeObjectAtIndex:0];
+        MKPolygon *recursePolygon = [MapDelegate generatePolygon:interiorPolygonCoordinates];
+        [interiorPolygons addObject:recursePolygon];
+    }
+
+    StyledPolygon *exteriorPolygon;
+    if (interiorPolygons.count > 0) {
+        exteriorPolygon = [StyledPolygon polygonWithCoordinates:exteriorMapCoordinates count:exteriorPolygonCoordinates.count interiorPolygons:[NSArray arrayWithArray:interiorPolygons]];
+    }
+    else {
+        exteriorPolygon = [StyledPolygon polygonWithCoordinates:exteriorMapCoordinates count:exteriorPolygonCoordinates.count];
+    }
+    
+    return exteriorPolygon;
+}
+
 
 - (void) setUserTrackingMode:(MKUserTrackingMode) mode animated:(BOOL) animated {
     if (!self.isTrackingAnimation || mode != MKUserTrackingModeFollowWithHeading) {
@@ -268,8 +413,10 @@
     } else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *staticAnnotation = annotation;
         return [staticAnnotation viewForAnnotationOnMapView:self.mapView];
+    } else if ([annotation isKindOfClass:[AreaAnnotation class]]) {
+        AreaAnnotation *areaAnnotation = annotation;
+        return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
     }
-	
     return nil;
 }
 
@@ -305,18 +452,17 @@
     if (self.selectedUserCircle != nil) {
         [_mapView removeOverlay:self.selectedUserCircle];
     }
+    
+    if (_areaAnnotation != nil && view.annotation == _areaAnnotation) {
+        [self performSelector:@selector(reSelectAnnotationIfNoneSelected:)
+                   withObject:view.annotation afterDelay:0];
+    }
 }
 
-
-// TODO once we get a 'me' page we will segue to that page from here
-//- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-//
-//	if (view == [_mapView viewForAnnotation:_mapView.userLocation]) {
-//		UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-//		[rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-//		view.rightCalloutAccessoryView = rightButton;
-//	}
-//}
+- (void)reSelectAnnotationIfNoneSelected:(id<MKAnnotation>)annotation {
+    if (_mapView.selectedAnnotations.count == 0)
+        [_mapView selectAnnotation:annotation animated:NO];
+}
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
 
@@ -336,24 +482,39 @@
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
     if ([overlay isKindOfClass:[MKTileOverlay class]]) {
         return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
+    } else if ([overlay isKindOfClass:[MKCircle class]]) {
+        MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
+        renderer.lineWidth = 1.0f;
+        
+        NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.selectedUser.location.timestamp];
+        if (interval <= 600) {
+            renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
+            renderer.strokeColor = [UIColor blueColor];
+        } else if (interval <= 1200) {
+            renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
+            renderer.strokeColor = [UIColor yellowColor];
+        } else {
+            renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
+            renderer.strokeColor = [UIColor orangeColor];
+        }
+        
+        return renderer;
+    } else if ([overlay isKindOfClass:[StyledPolygon class]]) {
+        StyledPolygon *polygon = (StyledPolygon *) overlay;
+        MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
+        renderer.fillColor = polygon.fillColor;
+        renderer.strokeColor = polygon.lineColor;
+        renderer.lineWidth = polygon.lineWidth;
+        return renderer;
+    } else if ([overlay isKindOfClass:[StyledPolyline class]]) {
+        StyledPolyline *polyline = (StyledPolyline *) overlay;
+        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:polyline];
+        renderer.strokeColor = polyline.lineColor;
+        renderer.lineWidth = polyline.lineWidth;
+        return renderer;
     }
-    
-    MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
-    renderer.lineWidth = 1.0f;
-    
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.selectedUser.location.timestamp];
-    if (interval <= 600) {
-        renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
-        renderer.strokeColor = [UIColor blueColor];
-    } else if (interval <= 1200) {
-        renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
-        renderer.strokeColor = [UIColor yellowColor];
-    } else {
-        renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
-        renderer.strokeColor = [UIColor orangeColor];
-    }
-    
-    return renderer;
+
+    return nil;
 }
 
 - (NSMutableDictionary *) locationAnnotations {

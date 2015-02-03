@@ -119,6 +119,9 @@
 		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
 		F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7951A65887A00E7F224 /* navigation.js */; };
 		F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD79B1A658A8800E7F224 /* testsToRun.js */; };
+		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
+		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
+		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -335,6 +338,12 @@
 		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
 		F7FAD7951A65887A00E7F224 /* navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = navigation.js; sourceTree = "<group>"; };
 		F7FAD79B1A658A8800E7F224 /* testsToRun.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = testsToRun.js; sourceTree = "<group>"; };
+		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
+		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolygon.m; sourceTree = "<group>"; };
+		F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolyline.h; sourceTree = "<group>"; };
+		F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolyline.m; sourceTree = "<group>"; };
+		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
+		F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaAnnotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +505,12 @@
 				F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */,
 				F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */,
 				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */,
+				F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */,
+				F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */,
+				F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */,
+				F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */,
+				F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */,
+				F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -952,8 +967,11 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
+				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
+				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
+				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
