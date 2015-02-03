@@ -23,7 +23,7 @@
 @end
 
 
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
