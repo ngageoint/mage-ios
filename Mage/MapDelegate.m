@@ -349,7 +349,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                     }
                     polygon.title = [feature valueForKeyPath:@"properties.name"];
                     [annotations addObject:polygon];
-                    //[_mapView addAnnotation:polygon];
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
