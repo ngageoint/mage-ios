@@ -41,11 +41,14 @@
 - (IBAction)refreshLayers:(id)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"selectedStaticLayers"];
-    self.selectedStaticLayers = nil;
-    self.staticLayers = nil;
+    [self.selectedStaticLayers removeAllObjects];
     [self.tableView reloadData];
     [StaticLayer refreshStaticLayers:^(BOOL success) {
         NSLog(@"static layers refreshed");
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            self.staticLayers = [StaticLayer MR_findAll];
+            [self.tableView reloadData];
+        });
     }];
 }
 
@@ -54,6 +57,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"static layer count %lu", (unsigned long)self.staticLayers.count);
     return self.staticLayers.count;
 }
 
