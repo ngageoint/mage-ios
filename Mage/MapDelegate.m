@@ -328,7 +328,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
     for (NSNumber *staticLayerId in staticLayers) {
         StaticLayer *staticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:staticLayerId];
-        if (![unselectedStaticLayers containsObject:staticLayer]) {
+        if (![unselectedStaticLayers containsObject:staticLayerId]) {
             NSLog(@"adding the static layer %@ to the map", staticLayer.name);
             NSMutableArray *annotations = [NSMutableArray array];
             for (NSDictionary *feature in [staticLayer.data objectForKey:@"features"]) {
