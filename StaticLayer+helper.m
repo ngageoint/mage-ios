@@ -20,11 +20,15 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
 }
 
 + (void) refreshStaticLayers: (void (^) (BOOL success)) complete {
-    NSArray *staticLayers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"type = %@", @"External"]];
-    for (id layer in staticLayers) {
-        [layer MR_deleteEntity];
-    }
-    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        [StaticLayer MR_truncateAllInContext:localContext];
+    } completion:^(BOOL contextDidSave, NSError *error) {
+        NSOperation *fetchlayersOperation = [StaticLayer operationtoFetchStaticLayers:complete];
+        [fetchlayersOperation start];
+    }];
+}
+
++ (NSOperation *) operationtoFetchStaticLayers: (void (^) (BOOL success)) complete {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"External", @"type", nil];
     HttpManager *http = [HttpManager singleton];
@@ -51,12 +55,13 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
             }
         } completion:^(BOOL contextDidSave, NSError *error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:nil];
+            complete(YES);
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         complete(NO);
     }];
-    [operation start];
+    return operation;
 }
 
 + (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer {
