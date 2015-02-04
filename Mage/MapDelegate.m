@@ -64,31 +64,6 @@
     return self;
 }
 
-/*
- // how many meters away form the click can the geomerty be?
- Double circumferenceOfEarthInMeters = 2 * Math.PI * 6371000;
- // Double tileWidthAtZoomLevelAtEquatorInDegrees = 360.0/Math.pow(2.0, map.getCameraPosition().zoom);
- Double pixelSizeInMetersAtLatitude = (circumferenceOfEarthInMeters * Math.cos(map.getCameraPosition().target.latitude * (Math.PI / 180.0))) / Math.pow(2.0, map.getCameraPosition().zoom + 8.0);
- Double tolerance = pixelSizeInMetersAtLatitude * Math.sqrt(2.0) * 10.0;
- 
- // TODO : find the 'closest' line or polygon to the click.
- for (Polyline p : staticGeometryCollection.getPolylines()) {
- if (PolyUtil.isLocationOnPath(latLng, p.getPoints(), true, tolerance)) {
- // found it open a info window
- Log.i(LOG_NAME, "static feature polyline clicked at: " + latLng.toString());
- View markerInfoWindow = LayoutInflater.from(getActivity()).inflate(R.layout.marker_infowindow, null, false);
- WebView webView = ((WebView) markerInfoWindow.findViewById(R.id.infowindowcontent));
- webView.loadData(staticGeometryCollection.getPopupHTML(p), "text/html; charset=UTF-8", null);
- new AlertDialog.Builder(getActivity()).setView(markerInfoWindow).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
- public void onClick(DialogInterface dialog, int which) {
- }
- }).show();
- return;
- }
- }
- */
-
-
 BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 {
     BOOL (^LineIntersectsLine)(CGPoint, CGPoint, CGPoint, CGPoint) = ^BOOL(CGPoint line1Start, CGPoint line1End, CGPoint line2Start, CGPoint line2End)
@@ -142,6 +117,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
     if (tap.state == UIGestureRecognizerStateEnded) {
         CGPoint tapPoint = [tap locationInView:self.mapView];
+        CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
+        MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
+        CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
+
         NSLog(@"tap");
         
         CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
@@ -150,19 +129,14 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         CLLocation *ll2 = [[CLLocation alloc] initWithLatitude:l2.latitude longitude:l2.longitude];
         double mpp = [ll1 distanceFromLocation:ll2] / 500.0;
         
-        double tolerance = mpp * sqrt(2.0) * 10.0;
-        NSLog(@"tolerance is %f ppm is %f", tolerance, mpp);
+        double tolerance = mpp * sqrt(2.0) * 20.0;
         
         if (_areaAnnotation != nil) {
             [_mapView removeAnnotation:_areaAnnotation];
             _areaAnnotation = nil;
         }
-        CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
-        MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
-        CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
         
         CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
-
         
         for (NSString* layerId in self.staticLayers) {
             NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
