@@ -8,6 +8,7 @@
 #import "ObservationAnnotation.h"
 #import "GeoPoint.h"
 #import "NSDate+DateTools.h"
+#import "ObservationImage.h"
 
 @implementation ObservationAnnotation
 
@@ -26,6 +27,27 @@
 
 -(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
 	_coordinate = coordinate;
+}
+
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
+    UIImage *image = [ObservationImage imageForObservation:self.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+    
+    if (annotationView == nil) {
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:[image accessibilityIdentifier]];
+        annotationView.enabled = YES;
+        
+        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+        annotationView.rightCalloutAccessoryView = rightButton;
+        annotationView.image = image;
+        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+    } else {
+        annotationView.annotation = self;
+    }
+    [annotationView setAccessibilityLabel:@"Observation"];
+    [annotationView setAccessibilityValue:@"Observation"];
+    return annotationView;
 }
 
 @end
