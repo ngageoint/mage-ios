@@ -64,12 +64,95 @@
     return self;
 }
 
-//- (IBAction)mapTapGesture:(id)sender {
+/*
+ // how many meters away form the click can the geomerty be?
+ Double circumferenceOfEarthInMeters = 2 * Math.PI * 6371000;
+ // Double tileWidthAtZoomLevelAtEquatorInDegrees = 360.0/Math.pow(2.0, map.getCameraPosition().zoom);
+ Double pixelSizeInMetersAtLatitude = (circumferenceOfEarthInMeters * Math.cos(map.getCameraPosition().target.latitude * (Math.PI / 180.0))) / Math.pow(2.0, map.getCameraPosition().zoom + 8.0);
+ Double tolerance = pixelSizeInMetersAtLatitude * Math.sqrt(2.0) * 10.0;
+ 
+ // TODO : find the 'closest' line or polygon to the click.
+ for (Polyline p : staticGeometryCollection.getPolylines()) {
+ if (PolyUtil.isLocationOnPath(latLng, p.getPoints(), true, tolerance)) {
+ // found it open a info window
+ Log.i(LOG_NAME, "static feature polyline clicked at: " + latLng.toString());
+ View markerInfoWindow = LayoutInflater.from(getActivity()).inflate(R.layout.marker_infowindow, null, false);
+ WebView webView = ((WebView) markerInfoWindow.findViewById(R.id.infowindowcontent));
+ webView.loadData(staticGeometryCollection.getPopupHTML(p), "text/html; charset=UTF-8", null);
+ new AlertDialog.Builder(getActivity()).setView(markerInfoWindow).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+ public void onClick(DialogInterface dialog, int which) {
+ }
+ }).show();
+ return;
+ }
+ }
+ */
+
+
+BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
+{
+    BOOL (^LineIntersectsLine)(CGPoint, CGPoint, CGPoint, CGPoint) = ^BOOL(CGPoint line1Start, CGPoint line1End, CGPoint line2Start, CGPoint line2End)
+    {
+        CGFloat q =
+        //Distance between the lines' starting rows times line2's horizontal length
+        (line1Start.y - line2Start.y) * (line2End.x - line2Start.x)
+        //Distance between the lines' starting columns times line2's vertical length
+        - (line1Start.x - line2Start.x) * (line2End.y - line2Start.y);
+        CGFloat d =
+        //Line 1's horizontal length times line 2's vertical length
+        (line1End.x - line1Start.x) * (line2End.y - line2Start.y)
+        //Line 1's vertical length times line 2's horizontal length
+        - (line1End.y - line1Start.y) * (line2End.x - line2Start.x);
+        
+        if( d == 0 )
+            return NO;
+        
+        CGFloat r = q / d;
+        
+        q =
+        //Distance between the lines' starting rows times line 1's horizontal length
+        (line1Start.y - line2Start.y) * (line1End.x - line1Start.x)
+        //Distance between the lines' starting columns times line 1's vertical length
+        - (line1Start.x - line2Start.x) * (line1End.y - line1Start.y);
+        
+        CGFloat s = q / d;
+        if( r < 0 || r > 1 || s < 0 || s > 1 )
+            return NO;
+        
+        return YES;
+    };
+    
+    /*Test whether the line intersects any of:
+     *- the bottom edge of the rectangle
+     *- the right edge of the rectangle
+     *- the top edge of the rectangle
+     *- the left edge of the rectangle
+     *- the interior of the rectangle (both points inside)
+     */
+    
+    return (LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x, r.origin.y), CGPointMake(r.origin.x + r.size.width, r.origin.y)) ||
+            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x + r.size.width, r.origin.y), CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height)) ||
+            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height), CGPointMake(r.origin.x, r.origin.y + r.size.height)) ||
+            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x, r.origin.y + r.size.height), CGPointMake(r.origin.x, r.origin.y)) ||
+            (CGRectContainsPoint(r, lineStart) && CGRectContainsPoint(r, lineEnd)));
+}
+
+
 -(void)mapTap:(UIGestureRecognizer*)gesture {
     UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
     if (tap.state == UIGestureRecognizerStateEnded) {
         CGPoint tapPoint = [tap locationInView:self.mapView];
         NSLog(@"tap");
+        
+        CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
+        CLLocation *ll1 = [[CLLocation alloc] initWithLatitude:l1.latitude longitude:l1.longitude];
+        CLLocationCoordinate2D l2 = [self.mapView convertPoint:CGPointMake(0,500) toCoordinateFromView:self.mapView];
+        CLLocation *ll2 = [[CLLocation alloc] initWithLatitude:l2.latitude longitude:l2.longitude];
+        double mpp = [ll1 distanceFromLocation:ll2] / 500.0;
+        
+        double tolerance = mpp * sqrt(2.0) * 10.0;
+        NSLog(@"tolerance is %f ppm is %f", tolerance, mpp);
+        
         if (_areaAnnotation != nil) {
             [_mapView removeAnnotation:_areaAnnotation];
             _areaAnnotation = nil;
@@ -78,10 +161,32 @@
         MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
         CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
         
+        CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
+
+        
         for (NSString* layerId in self.staticLayers) {
             NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
             for (id feature in layerFeatures) {
-                if([feature isKindOfClass:[MKPolygon class]]){
+                if ([feature isKindOfClass:[MKPolyline class]]) {
+                    MKPolyline *polyline = (MKPolyline *) feature;
+                    
+                    MKMapPoint *polylinePoints = polyline.points;
+                    
+                    for (int p=0; p < polyline.pointCount-1; p++){
+                        MKMapPoint mp = polylinePoints[p];
+                        MKMapPoint mp2 = polylinePoints[p+1];
+                        if (RectContainsLine(tapRect, CGPointMake(mp.x, mp.y), CGPointMake(mp2.x, mp2.y))) {
+                            NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
+                            _areaAnnotation = [[AreaAnnotation alloc] init];
+                            _areaAnnotation.title = polyline.title;
+                            _areaAnnotation.coordinate = tapCoord;
+                            
+                            [_mapView addAnnotation:_areaAnnotation];
+                            [_mapView selectAnnotation:_areaAnnotation animated:NO];
+
+                        }
+                    }
+                } else if ([feature isKindOfClass:[MKPolygon class]]){
                     MKPolygon *polygon = (MKPolygon*) feature;
                     
                     CGMutablePathRef mpr = CGPathCreateMutable();
@@ -95,6 +200,8 @@
                         else
                             CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
                     }
+                    
+                    
                     
                     if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
                         NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
@@ -460,7 +567,7 @@
 }
 
 - (void)reSelectAnnotationIfNoneSelected:(id<MKAnnotation>)annotation {
-    if (_mapView.selectedAnnotations.count == 0)
+    if (_mapView.selectedAnnotations == nil || _mapView.selectedAnnotations.count == 0)
         [_mapView selectAnnotation:annotation animated:NO];
 }
 
