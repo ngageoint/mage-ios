@@ -23,6 +23,7 @@
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
+#import <MapKit/MapKit.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -374,8 +375,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     for (NSNumber *unselectedStaticLayerId in unselectedStaticLayers) {
         StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:unselectedStaticLayerId];
         NSLog(@"removing the layer %@ from the map", unselectedStaticLayer.name);
-        for (StaticPointAnnotation *annotation in [self.staticLayers objectForKey:unselectedStaticLayerId]) {
-            [self.mapView removeAnnotation:annotation];
+        for (id staticItem in [self.staticLayers objectForKey:unselectedStaticLayerId]) {
+            if ([staticItem conformsToProtocol:@protocol(MKOverlay)]) {
+                [self.mapView removeOverlay:staticItem];
+            } else if ([staticItem conformsToProtocol:@protocol(MKAnnotation)]) {
+                [self.mapView removeAnnotation:staticItem];
+            }
         }
         [self.staticLayers removeObjectForKey:unselectedStaticLayerId];
     }
