@@ -319,6 +319,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
         annotationView.hidden = hide;
         annotationView.accessibilityElementsHidden = hide;
+        annotationView.enabled = !hide;
     }
 }
 
@@ -489,6 +490,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         annotationView.canShowCallout = self.canShowUserCallout;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
+        annotationView.enabled = !self.hideLocations;
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -496,6 +498,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         annotationView.canShowCallout = self.canShowObservationCallout;
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
+        annotationView.enabled = !self.hideObservations;
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;
