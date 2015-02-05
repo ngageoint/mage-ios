@@ -29,6 +29,9 @@
 
 @interface MapViewController ()<UserTrackingModeChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
+    @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
+    @property (weak, nonatomic) IBOutlet UIView *toastView;
+    @property (weak, nonatomic) IBOutlet UILabel *toastText;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
@@ -56,7 +59,6 @@
     [self.mapDelegate setObservations:observations];
     
     self.mapDelegate.userTrackingModeDelegate = self;
-
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -65,6 +67,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue]];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"
@@ -75,7 +78,13 @@
                forKeyPath:@"hidePeople"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
-} 
+    
+    [defaults addObserver:self
+               forKeyPath:kReportLocationKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+}
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -83,6 +92,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
+    [defaults removeObserver:self forKeyPath:kReportLocationKey];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -93,6 +103,8 @@
         self.mapDelegate.hideObservations = [object boolForKey:keyPath];
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
+    } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath]];
     }
 }
 
@@ -116,6 +128,47 @@
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
         
         [editViewController setLocation:point];
+    }
+}
+
+- (IBAction)onReportLocationButtonPressed:(id)sender {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
+    [self setupReportLocationButtonWithTrackingState:newState];
+    [defaults setBool:newState forKey:kReportLocationKey];
+    [defaults synchronize];
+    if (newState) {
+        self.toastText.text = @"You are now reporting your location.";
+        self.toastView.backgroundColor = [UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0];
+    } else {
+        self.toastText.text = @"Location reporting has been disabled";
+        self.toastView.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0];
+    }
+    [self displayToast];
+}
+
+- (void) displayToast {
+    [self.toastView setHidden:NO];
+    self.toastView.alpha = 0.0f;
+    [UIView animateWithDuration:0.5f animations:^{
+        self.toastView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.5f];
+        [UIView setAnimationDelay:2];
+        self.toastView.alpha = 0.0f;
+        [UIView commitAnimations];
+    }];
+
+}
+
+- (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn {
+    if(trackingOn) {
+        [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_on"] forState:UIControlStateNormal];
+        [self.reportLocationButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
+    } else {
+        [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
+        [self.reportLocationButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
     }
 }
 
