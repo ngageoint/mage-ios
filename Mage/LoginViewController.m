@@ -34,6 +34,7 @@
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+    @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
 
     @property (strong, nonatomic) MageServer *server;
     @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
@@ -185,6 +186,13 @@
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
+    NSURL *url = [MageServer baseURL];
+    [self.serverUrlField setText:[url absoluteString]];
+    [self initMageServerWithURL:url];
+    
+    self.reachability = [AFNetworkReachabilityManager managerForDomain:[[MageServer baseURL] host]];
+    [self.reachability startMonitoring];
+    
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
@@ -200,16 +208,11 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
-    
-    NSURL *url = [MageServer baseURL];
-    [self.serverUrlField setText:[url absoluteString]];
-    [self initMageServerWithURL:url];
-    
-    self.reachability = [AFNetworkReachabilityManager managerForDomain:[[MageServer baseURL] host]];
-    [self.reachability startMonitoring];
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
+    [self.serverVerificationIndicator startAnimating];
+    [self.lockButton setHidden:YES];
     self.server = [[MageServer alloc] initWithURL:url success:^{
         [self.serverUrlField setEnabled:NO];
         [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
@@ -221,11 +224,15 @@
         [self.usernameField setEnabled:YES];
         [self.passwordField setEnabled:YES];
         self.serverUrlField.textColor = [UIColor blackColor];
+        [self.lockButton setHidden:NO];
+        [self.serverVerificationIndicator stopAnimating];
     } failure:^(NSError *error) {
         self.loginStatus.hidden = NO;
         self.statusButton.hidden = NO;
         self.loginStatus.text = error.localizedDescription;
         self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+        [self.lockButton setHidden:NO];
+        [self.serverVerificationIndicator stopAnimating];
     }];
 }
 
