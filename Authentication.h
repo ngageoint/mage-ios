@@ -9,7 +9,8 @@
 #import "User.h"
 
 typedef NS_ENUM(NSInteger, AuthenticationType) {
-	LOCAL
+	LOCAL,
+    SERVER
 };
 
 @protocol AuthenticationDelegate <NSObject>
@@ -27,6 +28,7 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 
 - (void) loginWithParameters: (NSDictionary *) parameters;
 - (NSDictionary *) loginParameters;
+- (BOOL) canHandleLoginToURL: (NSString *) url;
 
 @property(nonatomic, retain) id<AuthenticationDelegate> delegate;
 

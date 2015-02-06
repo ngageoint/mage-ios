@@ -47,8 +47,6 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) start {
-    [self stop];
-    
     self.fetchedResultsController.delegate = self;
     [self pushObservations:self.fetchedResultsController.fetchedObjects];
     
@@ -57,6 +55,10 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 - (void) scheduleTimer {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_observationPushTimer isValid]) {
+            [_observationPushTimer invalidate];
+            _observationPushTimer = nil;
+        }
         self.observationPushTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
     });
 }
@@ -128,6 +130,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 -(void) stop {
+    NSLog(@"stop pushing observations");
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([_observationPushTimer isValid]) {
             [_observationPushTimer invalidate];

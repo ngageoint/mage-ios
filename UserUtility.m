@@ -16,11 +16,6 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *loginParameters = [defaults objectForKey:@"loginParameters"];
     
-    NSString *token = [loginParameters objectForKey:@"token"];
-    if ([token length] == 0) {
-        return YES;
-    }
-    
     NSDate *tokenExpirationDate = [loginParameters objectForKey:@"tokenExpirationDate"];
     if (tokenExpirationDate != nil && [tokenExpirationDate isKindOfClass:NSDate.class]) {
         NSDate *currentDate = [NSDate date];
@@ -34,7 +29,6 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *loginParameters = [[defaults objectForKey:@"loginParameters"] mutableCopy];
     
-    [loginParameters removeObjectForKey:@"token"];
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
     
     HttpManager *http = [HttpManager singleton];

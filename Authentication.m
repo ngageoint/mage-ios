@@ -8,6 +8,7 @@
 
 #import "Authentication.h"
 #import "LocalAuthentication.h"
+#import "ServerAuthentication.h"
 
 @implementation Authentication
 
@@ -16,6 +17,9 @@
 		case LOCAL: {
 			return [[LocalAuthentication alloc] init];
 		}
+        case SERVER: {
+            return [[ServerAuthentication alloc] init];
+        }
 		default: {
 			return nil;
 		}
