@@ -12,7 +12,8 @@
 
 extern NSString * const StaticLayerLoaded;
 
-+ (void) refreshStaticLayers: (void (^) (BOOL success)) complete;
++ (void) refreshStaticLayers;
 + (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer;
++ (void) createOrUpdateStaticLayer: (id) layer;
 
 @end

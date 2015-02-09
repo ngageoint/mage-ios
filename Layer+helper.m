@@ -48,29 +48,19 @@
             NSArray *layers = responseObject;
             for (id layer in layers) {
                 NSString *remoteLayerId = [Layer layerIdFromJson:layer];
-                Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
-
-                if (l == nil) {
-                    if ([[Layer layerTypeFromJson:layer] isEqualToString:@"External"]) {
-                        l = [StaticLayer MR_createInContext:localContext];
-                    } else {
+                if ([[Layer layerTypeFromJson:layer] isEqualToString:@"External"]) {
+                    [StaticLayer createOrUpdateStaticLayer:layer];
+                } else if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
+                    Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
+                    if (l == nil) {
                         l = [Layer MR_createInContext:localContext];
                     }
                     [l populateObjectFromJson:layer];
-                    NSLog(@"Inserting layer with id: %@", l.remoteId);
-                } else {
-                    NSLog(@"Updating layer with id: %@", l.remoteId);
-                    [l populateObjectFromJson:layer];
-                }
-
-                if ([l.type isEqualToString:@"Feature"]) {
+                    
                     [Server setObservationFormId:l.formId];
                     [Server setObservationLayerId:l.remoteId];
                     
                     NSLog(@"Form id is %@", l.formId);
-                } else if ([l.type isEqualToString:@"External"]) {
-                    NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
-                    [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
                 }
             }
             

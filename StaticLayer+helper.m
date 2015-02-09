@@ -19,47 +19,48 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     return [json objectForKey:@"id"];
 }
 
-+ (void) refreshStaticLayers: (void (^) (BOOL success)) complete {
++ (void) refreshStaticLayers {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         [StaticLayer MR_truncateAllInContext:localContext];
     } completion:^(BOOL contextDidSave, NSError *error) {
-        NSOperation *fetchlayersOperation = [StaticLayer operationtoFetchStaticLayers:complete];
+        NSOperation *fetchlayersOperation = [StaticLayer operationtoFetchStaticLayers];
         [fetchlayersOperation start];
     }];
 }
 
-+ (NSOperation *) operationtoFetchStaticLayers: (void (^) (BOOL success)) complete {
++ (void) createOrUpdateStaticLayer: (id) layer {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
+        StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
+        if (l == nil) {
+            l = [StaticLayer MR_createInContext:localContext];
+            [l populateObjectFromJson:layer];
+            NSLog(@"Inserting layer with id: %@", l.remoteId);
+            NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
+            [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
+        } else {
+            NSLog(@"Updating layer with id: %@", l.remoteId);
+            [l populateObjectFromJson:layer];
+        }
+    } completion:^(BOOL contextDidSave, NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:nil];
+    }];
+}
+
++ (NSOperation *) operationtoFetchStaticLayers {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"External", @"type", nil];
     HttpManager *http = [HttpManager singleton];
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: params error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSLog(@"Layer request complete %@", responseObject);
-            NSArray *layers = responseObject;
-            for (id layer in layers) {
-                NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
-                StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
-                
-                if (l == nil) {
-                    l = [StaticLayer MR_createInContext:localContext];
-                    [l populateObjectFromJson:layer];
-                    NSLog(@"Inserting layer with id: %@", l.remoteId);
-                } else {
-                    NSLog(@"Updating layer with id: %@", l.remoteId);
-                    [l populateObjectFromJson:layer];
-                }
-                NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
-                [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
-            }
-        } completion:^(BOOL contextDidSave, NSError *error) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:nil];
-            complete(YES);
-        }];
+        NSLog(@"Layer request complete %@", responseObject);
+        NSArray *layers = responseObject;
+        for (id layer in layers) {
+            [StaticLayer createOrUpdateStaticLayer:layer];
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        complete(NO);
     }];
     return operation;
 }
@@ -71,8 +72,28 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             StaticLayer *localLayer = [layer MR_inContext:localContext];
             NSLog(@"fetched static features for %@", localLayer.name);
-            localLayer.data = responseObject;
+            NSMutableDictionary *dictionaryResponse = (NSMutableDictionary *)CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault, (CFDictionaryRef)responseObject, kCFPropertyListMutableContainers));
+
             localLayer.loaded = [NSNumber numberWithBool:YES];
+            for (NSDictionary *feature in [dictionaryResponse objectForKey:@"features"]) {
+                NSString *iconUrl = [feature valueForKeyPath:@"properties.style.iconStyle.icon.href"];
+                if (iconUrl) {
+                    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+
+                    NSString *featureIconPath = [NSString stringWithFormat:@"%@/featureIcons/%@/%@", documentsDirectory, localLayer.remoteId, [feature valueForKey:@"id"]];
+                    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:iconUrl]];
+                    
+                    NSLog(@"got %@ and saved it to %@", iconUrl, featureIconPath);
+                    NSError *error;
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:featureIconPath])
+                        [[NSFileManager defaultManager] createDirectoryAtPath:[featureIconPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+                    
+                    [imageData writeToFile:featureIconPath atomically:YES];
+                    [feature setValue:featureIconPath forKeyPath:@"properties.style.iconStyle.icon.href"];
+                }
+            }
+            localLayer.data = dictionaryResponse;
+            
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (contextDidSave) {
                 StaticLayer *localLayer = [layer MR_inContext:[NSManagedObjectContext MR_defaultContext]];
