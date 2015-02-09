@@ -35,7 +35,8 @@
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
        
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_iconUrl]]];
+        NSLog(@"showing icon from %@", _iconUrl);
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:_iconUrl]];
         
         float oldWidth = image.size.width;
         float scaleFactor = 35.0 / oldWidth;

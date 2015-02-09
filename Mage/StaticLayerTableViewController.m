@@ -43,13 +43,7 @@
     [defaults removeObjectForKey:@"selectedStaticLayers"];
     [self.selectedStaticLayers removeAllObjects];
     [self.tableView reloadData];
-    [StaticLayer refreshStaticLayers:^(BOOL success) {
-        NSLog(@"static layers refreshed");
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            self.staticLayers = [StaticLayer MR_findAll];
-            [self.tableView reloadData];
-        });
-    }];
+    [StaticLayer refreshStaticLayers];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
