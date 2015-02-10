@@ -258,6 +258,7 @@
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -436,6 +437,7 @@
 				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
 				2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */,
 				2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */,
+				F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */,
 			);
 			name = iPad;
 			sourceTree = "<group>";

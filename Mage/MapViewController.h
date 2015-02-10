@@ -11,8 +11,10 @@
 #import "MapDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
+#import "ObservationSelectionDelegate.h"
+#import "UserSelectionDelegate.h"
 
-@interface MapViewController : UIViewController
+@interface MapViewController : UIViewController <ObservationSelectionDelegate, UserSelectionDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, weak) IBOutlet MapDelegate *mapDelegate;
 
