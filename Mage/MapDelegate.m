@@ -27,8 +27,6 @@
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
-    @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
-    @property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary *offlineMaps;

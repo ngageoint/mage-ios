@@ -33,18 +33,19 @@
     
     self.delegate = self;
     
-    UINavigationController *masterViewController = [self.viewControllers firstObject];
-    self.mapViewController = [self.viewControllers lastObject];
-    self.tabBarController = (MageTabBarController *) [masterViewController topViewController];
+    UINavigationController *detailViewController = [self.viewControllers lastObject];
+
+    self.mapViewController = (MapViewController_iPad *)detailViewController.topViewController;
+    self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self;
     
     ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
-    observationTableViewController.observationDataStore.observationSelectionDelegate = self.mapViewController.mapDelegate;
+    observationTableViewController.observationDataStore.observationSelectionDelegate = self.mapViewController;
     observationTableViewController.attachmentDelegate = self;
     
     PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
-    peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController.mapDelegate;
+    peopleTableViewController.peopleDataStore.personSelectionDelegate = self.mapViewController;
     
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;

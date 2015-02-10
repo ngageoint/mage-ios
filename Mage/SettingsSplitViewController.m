@@ -32,7 +32,6 @@
 }
 
 - (void) dismissSettings:(UIBarButtonItem *)sender {
-    NSLog(@"Done");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

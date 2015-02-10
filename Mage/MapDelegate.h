@@ -31,6 +31,8 @@
 @property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
+@property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
+@property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;
