@@ -11,6 +11,7 @@
 #import "HttpManager.h"
 #import "MageServer.h"
 #import "User+helper.h"
+#import "UserUtility.h"
 
 @implementation ServerAuthentication
 
@@ -61,6 +62,7 @@
         
         [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
         [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+        [[UserUtility singleton] resetExpiration];
 		      
         NSDictionary *loginParameters = @{
                                           @"username": username,

@@ -54,7 +54,6 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: params error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Layer request complete %@", responseObject);
         NSArray *layers = responseObject;
         for (id layer in layers) {
             [StaticLayer createOrUpdateStaticLayer:layer];
@@ -79,17 +78,16 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
                 NSString *iconUrl = [feature valueForKeyPath:@"properties.style.iconStyle.icon.href"];
                 if (iconUrl) {
                     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-
-                    NSString *featureIconPath = [NSString stringWithFormat:@"%@/featureIcons/%@/%@", documentsDirectory, localLayer.remoteId, [feature valueForKey:@"id"]];
+                    NSString *featureIconRelativePath = [NSString stringWithFormat:@"featureIcons/%@/%@", localLayer.remoteId, [feature valueForKey:@"id"]];
+                    NSString *featureIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, featureIconRelativePath];
                     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:iconUrl]];
                     
-                    NSLog(@"got %@ and saved it to %@", iconUrl, featureIconPath);
                     NSError *error;
                     if (![[NSFileManager defaultManager] fileExistsAtPath:featureIconPath])
                         [[NSFileManager defaultManager] createDirectoryAtPath:[featureIconPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
                     
                     [imageData writeToFile:featureIconPath atomically:YES];
-                    [feature setValue:featureIconPath forKeyPath:@"properties.style.iconStyle.icon.href"];
+                    [feature setValue:featureIconRelativePath forKeyPath:@"properties.style.iconStyle.icon.href"];
                 }
             }
             localLayer.data = dictionaryResponse;

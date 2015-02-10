@@ -64,7 +64,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) onTimerFire {
-    if (![UserUtility isTokenExpired]) {
+    if (![[UserUtility singleton] isTokenExpired]) {
         [self pushObservations:self.fetchedResultsController.fetchedObjects];
     }
 }

@@ -14,7 +14,7 @@
 #import "HttpManager.h"
 #import "MageServer.h"
 #import "StoredPassword.h"
-
+#import "UserUtility.h"
 
 @implementation LocalAuthentication
 
@@ -45,6 +45,7 @@
             [defaults synchronize];
             [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
             [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
+            [[UserUtility singleton] resetExpiration];
             if (delegate) {
                 User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
                 [delegate authenticationWasSuccessful:currentUser];

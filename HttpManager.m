@@ -7,6 +7,7 @@
 //
 
 #import "HttpManager.h"
+#import "UserUtility.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
 
@@ -65,7 +66,8 @@ static HttpManager *sharedSingleton = nil;
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
         // token expired
-        if (responseStatusCode == 401 && (![[request.URL path] containsString:@"login"] && ![[request.URL path] containsString:@"devices"]) ) {
+        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] containsString:@"login"] && ![[request.URL path] containsString:@"devices"]) ) {
+            [[UserUtility singleton] expireToken];
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
         }
     }

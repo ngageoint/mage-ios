@@ -51,14 +51,14 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
 - (void) onTimerFire {
     NSLog(@"timer to pull locations fired");
-    if (![UserUtility isTokenExpired]) {
+    if (![[UserUtility singleton] isTokenExpired]) {
         [self pullLocations];
     }
 }
 
 - (void) pullLocations{
     NSOperation *locationFetchOperation = [Location operationToPullLocations:^(BOOL success) {
-        if (![UserUtility isTokenExpired]) {
+        if (![[UserUtility singleton] isTokenExpired]) {
             NSLog(@"Scheduling the timer again");
             [self scheduleTimer];
         }

@@ -10,8 +10,9 @@
 
 @interface UserUtility : NSObject
 
-+ (BOOL) isTokenExpired;
-+ (void) expireToken;
-
++ (id) singleton;
+- (BOOL) isTokenExpired;
+- (void) expireToken;
+- (void) resetExpiration;
 
 @end

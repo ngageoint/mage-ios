@@ -61,7 +61,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 }
 
 - (void) onTimerFire {
-    if (![UserUtility isTokenExpired]) {
+    if (![[UserUtility singleton] isTokenExpired]) {
         [Attachment MR_performFetch:self.fetchedResultsController];
         [self pushAttachments:self.fetchedResultsController.fetchedObjects];
     }
