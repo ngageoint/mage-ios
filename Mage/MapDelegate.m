@@ -514,11 +514,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         self.selectedUser = annotation.location.user;
         
         if ([self.selectedUser avatarUrl] != nil) {
-            NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.selectedUser.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.selectedUser.avatarUrl]]];
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
             view.leftCalloutAccessoryView = imageView;
-            [imageView setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+            
+            [imageView setImage:image];// setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
         }
         
         if (self.selectedUserCircle != nil) {

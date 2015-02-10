@@ -40,7 +40,8 @@
         if ([[_iconUrl lowercaseString] hasPrefix:@"http"]) {
             image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_iconUrl]]];
         } else {
-            image = [UIImage imageWithData:[NSData dataWithContentsOfFile:_iconUrl]];
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory,_iconUrl]]];
         }
         
         float oldWidth = image.size.width;
