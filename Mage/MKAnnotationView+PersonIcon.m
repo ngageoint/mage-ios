@@ -21,31 +21,18 @@
         return;
     }
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
-    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
-    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
-    
-    __weak __typeof(self) weakSelf = self;
-    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __strong __typeof (weakSelf) strongSelf = weakSelf;
-        UIImage *image = responseObject;
-        if (!image) {
-            strongSelf.image = [strongSelf blueCircle];
-            return;
-        }
-        
-        UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
-        [resizedImage setAccessibilityIdentifier:[url absoluteString]];
-        
-        strongSelf.image = [strongSelf mergeImage:resizedImage withDot:[strongSelf blueCircle]];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Icon URL request is failing");
-        __strong __typeof (weakSelf) strongSelf = weakSelf;
-        strongSelf.image = [self blueCircle];
-    }];
-    
-    [requestOperation start];
+    UIImage *image = nil;
+    if ([[user.iconUrl lowercaseString] hasPrefix:@"http"]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
+    } else {
+        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+        image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.iconUrl]]];
+    }
+    NSLog(@"Showing icon from %@", user.iconUrl);
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
+    [resizedImage setAccessibilityIdentifier:user.iconUrl];
+    self.image = [self mergeImage:resizedImage withDot:[self blueCircle]];
 }
 
 - (UIImage *) blueCircle {

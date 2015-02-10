@@ -15,6 +15,8 @@
 #import "Attachment+FICAttachment.h"
 
 #import "MageInitialViewController.h"
+#import "LoginViewController.h"
+#import "DisclaimerNavigationController.h"
 
 #import "ZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
@@ -92,7 +94,7 @@
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
-    if (![UserUtility isTokenExpired]) {
+    if (![UserUtility isTokenExpiredWithNotification:YES]) {
         [self.locationFetchService start];
     }
 }
@@ -165,12 +167,27 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [UserUtility expireToken];
     [self.locationFetchService stop];
     [self.observationFetchService stop];
     [self.observationPushService stop];
     [self.attachmentPushService stop];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    UIViewController *currentController = [self topMostController];
+    if (!([currentController isKindOfClass:[MageInitialViewController class]]
+        || [currentController isKindOfClass:[LoginViewController class]]
+        || [currentController isKindOfClass:[DisclaimerNavigationController class]])) {
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (UIViewController*) topMostController
+{
+    UIViewController *topController = self.window.rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
 }
 
 #pragma mark - Application's Documents directory
