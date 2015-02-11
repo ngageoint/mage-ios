@@ -31,6 +31,7 @@
 @property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
+@property (nonatomic) BOOL hideStaticLayers;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
 @property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
 
