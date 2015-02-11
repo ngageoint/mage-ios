@@ -191,7 +191,15 @@
     if (self.observationSelectionDelegate) {
         [self.observationSelectionDelegate selectedObservation:observation];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+    if (self.observationSelectionDelegate) {
+        [self.observationSelectionDelegate observationDetailSelected:observation];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

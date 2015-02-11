@@ -97,37 +97,6 @@
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
 }
 
-- (void)selectedUser:(User *) user {
-    LocationAnnotation *annotation = [self.mapDelegate.locationAnnotations objectForKey:user.remoteId];
-    [self.mapView selectAnnotation:annotation animated:YES];
-    
-    [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
-    [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:user];
-}
-
-- (void)selectedUser:(User *) user region:(MKCoordinateRegion) region {
-    LocationAnnotation *annotation = [self.mapDelegate.locationAnnotations objectForKey:user.remoteId];
-    
-    [self.mapView setRegion:region animated:YES];
-    [self.mapView selectAnnotation:annotation animated:YES];
-}
-
-- (void)selectedObservation:(Observation *) observation {
-    [self.mapView setCenterCoordinate:[observation location].coordinate];
-    
-    ObservationAnnotation *annotation = [self.mapDelegate.observationAnnotations objectForKey:observation.objectID];
-    [self.mapView selectAnnotation:annotation animated:YES];
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
-}
-
-- (void)selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region {
-    LocationAnnotation *annotation = [self.mapDelegate.observationAnnotations objectForKey:observation.remoteId];
-    
-    [self.mapView setRegion:region animated:YES];
-    [self.mapView selectAnnotation:annotation animated:YES];
-}
-
-
 -(void) observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
