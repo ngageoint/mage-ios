@@ -203,10 +203,6 @@ bool currentUserIsMe = NO;
     [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
-- (IBAction)dismissMe:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
         ImageViewerViewController *vc = [segue destinationViewController];

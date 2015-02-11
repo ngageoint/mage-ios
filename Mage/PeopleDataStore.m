@@ -138,6 +138,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
+    if (self.personSelectionDelegate) {
+        [self.personSelectionDelegate userDetailSelected:location.user];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     UIView *view = [[UIView alloc] init];
     
