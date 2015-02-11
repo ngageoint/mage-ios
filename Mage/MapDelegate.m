@@ -53,11 +53,12 @@
                    forKeyPath:@"selectedOfflineMaps"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
-        
-        [defaults addObserver:self
-                   forKeyPath:@"selectedStaticLayers"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
+        if (!self.hideStaticLayers) {
+            [defaults addObserver:self
+                       forKeyPath:@"selectedStaticLayers"
+                          options:NSKeyValueObservingOptionNew
+                          context:NULL];
+        }
     }
     
     return self;
@@ -119,8 +120,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
         CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
-
-        NSLog(@"tap");
         
         CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
         CLLocation *ll1 = [[CLLocation alloc] initWithLatitude:l1.latitude longitude:l1.longitude];
@@ -191,9 +190,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
             }
         }
-    } else {
-        NSLog(@"tap in some other state");
-        
     }
 }
 
@@ -257,11 +253,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
-    UITapGestureRecognizer *tap =
-    [[UITapGestureRecognizer alloc]
-     initWithTarget:self
-     action:@selector(mapTap:)];
-    [self.mapView addGestureRecognizer:tap];
+    if (!self.hideStaticLayers) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mapTap:)];
+        [self.mapView addGestureRecognizer:tap];
+    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -322,6 +317,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) updateStaticLayers: (NSArray *) staticLayers {
+    if (self.hideStaticLayers) return;
     NSMutableSet *unselectedStaticLayers = [[self.staticLayers allKeys] mutableCopy];
     
     for (NSNumber *staticLayerId in staticLayers) {
@@ -757,6 +753,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self.mapView setRegion:region animated:YES];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
+
+- (void)observationDetailSelected:(Observation *)observation {
+    [self selectedObservation:observation];
+}
+
+- (void)userDetailSelected:(User *)user {
+    [self selectedUser:user];
+}
+
 
 
 @end
