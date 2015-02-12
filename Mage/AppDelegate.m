@@ -48,8 +48,17 @@
     thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
+    thumbnailImageFormat.devices = FICImageFormatDevicePhone;
     thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+    
+    FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
+    ipadThumbnailImageFormat.name = AttachmentMediumSquare;
+    ipadThumbnailImageFormat.family = AttachmentFamily;
+    ipadThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
+    ipadThumbnailImageFormat.maximumCount = 250;
+    ipadThumbnailImageFormat.devices = FICImageFormatDevicePad;
+    ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
     largeImageFormat.name = AttachmentLarge;
@@ -60,7 +69,7 @@
     largeImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    NSArray *imageFormats = @[thumbnailImageFormat, largeImageFormat];
+    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat, largeImageFormat];
     
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;

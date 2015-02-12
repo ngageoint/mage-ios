@@ -111,6 +111,9 @@
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
 		F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */; };
+		F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */; };
+		F7E2970C1A8C0B00000F62C6 /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970B1A8C0B00000F62C6 /* ObservationViewController_iPad.m */; };
+		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
 		F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
@@ -329,6 +332,12 @@
 		F7E0380B1992948A007CCF6C /* AttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCell.m; sourceTree = "<group>"; };
 		F7E148B21A001F5500A31A32 /* GPSLocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocationAnnotation.h; sourceTree = "<group>"; };
 		F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocationAnnotation.m; sourceTree = "<group>"; };
+		F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPhone.h; sourceTree = "<group>"; };
+		F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPhone.m; sourceTree = "<group>"; };
+		F7E2970A1A8C0B00000F62C6 /* ObservationViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPad.h; sourceTree = "<group>"; };
+		F7E2970B1A8C0B00000F62C6 /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
+		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
+		F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+IB.m"; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
 		F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+FICAttachment.h"; sourceTree = "<group>"; };
@@ -449,6 +458,8 @@
 				2FF4670B1A12798C00BA8357 /* CALayer+IB.m */,
 				2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */,
 				2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */,
+				F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */,
+				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -570,6 +581,10 @@
 				F78B0A981A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.h */,
 				F78B0A991A1E574A00D3AC74 /* ObservationAttachmentTableViewCell.m */,
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
+				F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */,
+				F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */,
+				F7E2970A1A8C0B00000F62C6 /* ObservationViewController_iPad.h */,
+				F7E2970B1A8C0B00000F62C6 /* ObservationViewController_iPad.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -918,6 +933,7 @@
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
 				2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
+				F7E2970C1A8C0B00000F62C6 /* ObservationViewController_iPad.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
@@ -948,6 +964,7 @@
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
+				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				F7481EFE19A6372C00E9C56D /* DropdownEditTableViewController.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
@@ -987,6 +1004,7 @@
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
+				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
