@@ -166,17 +166,10 @@
     // always called in both ios8 and 7
     [self ensureButtonVisible];
 }
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        ImageViewerViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-    }
-}
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    [self.mapViewController performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
 
 @end
