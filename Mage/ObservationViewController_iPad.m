@@ -8,6 +8,7 @@
 
 #import "ObservationViewController_iPad.h"
 #import <Server+helper.h>
+#import <GeoPoint.h>
 
 @implementation ObservationViewController_iPad
 
@@ -21,6 +22,13 @@
         self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
     }
 
+}
+- (IBAction)getDirections:(id)sender {
+    MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:((GeoPoint *) self.observation.geometry).location.coordinate addressDictionary:nil];
+    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+    [mapItem setName:[self.observation.properties valueForKey:@"type"]];
+    NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+    [mapItem openInMapsWithLaunchOptions:options];
 }
 
 @end
