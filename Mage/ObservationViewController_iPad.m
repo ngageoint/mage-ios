@@ -15,11 +15,17 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSString *name = [self.observation.properties valueForKey:@"type"];
-    self.primaryFieldLabel.text = name;
+    if (name != nil) {
+        self.primaryFieldLabel.text = name;
+    } else {
+        self.primaryFieldLabel.text = @"Observation";
+    }
     NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];
     if (variantField != nil) {
         self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
+    } else {
+        self.secondaryFieldLabel.text = @"";
     }
 
 }
