@@ -74,7 +74,7 @@ bool originalNavBarHidden;
             FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
                 self.imageView.image = image;
                 self.imageView.clipsToBounds = YES;
-                self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+                self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             };
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             BOOL imageExists = [delegate.imageCache retrieveImageForEntity:[self attachment] withFormatName:AttachmentLarge completionBlock:completionBlock];
