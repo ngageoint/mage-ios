@@ -28,6 +28,7 @@
 #import "ObservationEditViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
+#import "ImageViewerViewController.h"
 
 @interface MapViewController ()<UserTrackingModeChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -130,6 +131,10 @@
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
         
         [editViewController setLocation:point];
+    } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
+        // Get reference to the destination view controller
+        ImageViewerViewController *vc = [segue destinationViewController];
+        [vc setAttachment:sender];
     }
 }
 
