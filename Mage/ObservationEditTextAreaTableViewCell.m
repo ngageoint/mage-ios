@@ -11,6 +11,12 @@
 @implementation ObservationEditTextAreaTableViewCell
 
 - (void) awakeFromNib {
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.textArea action:@selector(resignFirstResponder)];
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    toolbar.items = [NSArray arrayWithObjects:flexSpace, barButton, nil];
+    
+    self.textArea.inputAccessoryView = toolbar;
     [self.textArea setDelegate: self];
 }
 

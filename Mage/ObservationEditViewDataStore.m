@@ -85,7 +85,12 @@ NSString *_formId;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"rows is: %lu", (unsigned long)[self rowToField].count);
     return [self rowToField].count;
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -139,13 +144,11 @@ NSString *_formId;
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     [tableView endEditing:NO];
     [tableView endUpdates];
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
-    [self.editTable beginUpdates];
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
     NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
@@ -153,12 +156,13 @@ NSString *_formId;
     self.observation.properties = newProperties;
     
     if (reload == YES) {
+        [self.editTable beginUpdates];
         NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
         [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+        [self.editTable endUpdates];
     }
     
-    [self.editTable endUpdates];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
