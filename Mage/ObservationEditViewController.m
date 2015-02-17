@@ -8,7 +8,6 @@
 
 #import "ObservationEditViewController.h"
 #import "ObservationEditViewDataStore.h"
-#import "DropdownEditTableViewController.h"
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
@@ -24,6 +23,7 @@
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
 
@@ -50,7 +50,6 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     NSLog(@"view will appear");
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillAppear:animated];
 }
 
@@ -214,13 +213,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([segue.identifier isEqualToString:@"dropdownSegue"]) {
-        DropdownEditTableViewController *vc = [segue destinationViewController];
-        ObservationPickerTableViewCell *cell = sender;
-        
-        [vc setFieldDefinition:cell.fieldDefinition];
-        [vc setValue:cell.valueLabel.text];
-    } else if([segue.identifier isEqualToString:@"geometrySegue"]) {
+    if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;
         [gvc setGeoPoint:cell.geoPoint];
@@ -230,11 +223,6 @@
         MediaViewController *mvc = [segue destinationViewController];
         mvc.delegate = self;
     }
-}
-
-- (IBAction)unwindFromDropdownController: (UIStoryboardSegue *) segue {
-    DropdownEditTableViewController *vc = [segue sourceViewController];
-    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
 }
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
