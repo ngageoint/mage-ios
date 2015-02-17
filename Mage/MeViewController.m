@@ -35,13 +35,11 @@
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic) BOOL shouldHideNavBar;
 
 @end
 
 @implementation MeViewController
 
-bool originalNavBarHidden;
 bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
@@ -177,8 +175,6 @@ bool currentUserIsMe = NO;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
-    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
     
     CLLocationDistance latitudeMeters = 500;
     CLLocationDistance longitudeMeters = 500;
@@ -196,11 +192,6 @@ bool currentUserIsMe = NO;
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter: YES];
         }
     }
-}
-
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
