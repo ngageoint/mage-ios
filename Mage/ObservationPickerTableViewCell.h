@@ -8,9 +8,9 @@
 
 #import "ObservationEditTableViewCell.h"
 
-@interface ObservationPickerTableViewCell : ObservationEditTableViewCell
+@interface ObservationPickerTableViewCell : ObservationEditTableViewCell <UIPickerViewDataSource, UIPickerViewDelegate>
 
-//@property (weak, nonatomic) IBOutlet UIPickerView *valuePicker;
-@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
+@property (strong, nonatomic) IBOutlet UIPickerView *picker;
+@property (strong, nonatomic) NSMutableArray *pickerValues;
 
 @end
