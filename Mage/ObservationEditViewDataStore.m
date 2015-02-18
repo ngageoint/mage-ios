@@ -47,13 +47,6 @@ NSString *_formId;
             [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
             [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
             [fields addObject:field];
-            if ([type isEqualToString:@"date"]) {
-                [cells addObject:@"observationEdit-dateSpinner"];
-                [fields addObject:field];
-            } else if ([type isEqualToString:@"radio"] || [type isEqualToString:@"dropdown"]) {
-                [cells addObject:@"observationEdit-picker"];
-                [fields addObject:field];
-            }
         }
     }
     _fieldToRow = fieldToRowMap;
@@ -121,10 +114,7 @@ NSString *_formId;
     if ([[field objectForKey:@"archived"] intValue] == 1) {
         return 0.0;
     }
-    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"] ||
-        [[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-picker"]) {
-        return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
-    } else if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
+    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
         return [cell getCellHeightForValue:[NSNumber numberWithInteger:self.observation.attachments.count]];
     }
     return [cell getCellHeightForValue:[self valueForIndexPath:indexPath]];
@@ -132,17 +122,6 @@ NSString *_formId;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView beginUpdates];
-    
-    if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"] ||
-        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"dropdown"] ||
-        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"radio"]) {
-        
-        if (expandedRow != indexPath.row +1) {
-            expandedRow = indexPath.row + 1;
-        } else {
-            expandedRow = -1;
-        }
-    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView endEditing:NO];
     [tableView endUpdates];

@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
+@property (strong, nonatomic) UIDatePicker *datePicker;
 
 @end
 
@@ -39,19 +40,35 @@
 	return _dateParseFormatter;
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     NSDate *date = [[self dateParseFormatter] dateFromString:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
-    [self.valueLabel setText:[[self dateDisplayFormatter] stringFromDate:date]];
+    _datePicker = [[UIDatePicker alloc] init];
+    _datePicker.date = date;
+    [self.valueTextField setText:[[self dateDisplayFormatter] stringFromDate:_datePicker.date]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
+    UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
+    UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, doneBarButton, nil];
+    self.valueTextField.inputView = _datePicker;
+    self.valueTextField.inputAccessoryView = toolbar;
 }
+
+- (void) cancelButtonPressed {
+    [self.valueTextField resignFirstResponder];
+}
+
+- (void) doneButtonPressed {
+    [self.valueTextField resignFirstResponder];
+    NSString *newValue = [[self dateParseFormatter] stringFromDate:_datePicker.date];
+    self.valueTextField.text = newValue;
+    [self.valueTextField setText:[[self dateDisplayFormatter] stringFromDate:_datePicker.date]];
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+        [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
+    }
+}
+
 
 @end

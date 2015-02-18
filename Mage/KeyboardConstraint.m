@@ -34,7 +34,7 @@ CGFloat initialConstant;
     UITableView *table = self.secondItem;
     UIView *responder = [UIResponder currentFirstResponder];
     UIView *cell = responder.superview.superview;
-    [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant)];
+    [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
 }
 
 -(void)keyboardWillHide: (NSNotification *) notification {
