@@ -6,8 +6,11 @@
 //  Copyright (c) 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "ObservationViewController.h"
+#import <Observation+helper.h>
 
-@interface ObservationViewController_iPhone : ObservationViewController
+@interface ObservationViewController_iPhone : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (strong, nonatomic) Observation *observation;
+@property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 
 @end

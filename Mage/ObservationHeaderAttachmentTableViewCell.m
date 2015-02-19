@@ -1,25 +1,24 @@
 //
-//  ObservationAttachmentTableViewCell.m
+//  ObservationHeaderAttachmentTableViewCell.m
 //  MAGE
 //
-//  Created by Dan Barela on 11/20/14.
-//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
+//  Created by Dan Barela on 2/19/15.
+//  Copyright (c) 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "ObservationAttachmentTableViewCell.h"
+#import "ObservationHeaderAttachmentTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
 
-@interface ObservationAttachmentTableViewCell ()
+@interface ObservationHeaderAttachmentTableViewCell()
 
 @property (strong, nonatomic) AttachmentCollectionDataStore *ads;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 
 @end
 
-@implementation ObservationAttachmentTableViewCell
+@implementation ObservationHeaderAttachmentTableViewCell
 
-- (void) populateCellWithObservation:(Observation *)observation {
-    [super populateCellWithObservation:observation];
+- (void) configureCellForObservation:(Observation *)observation {
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;

@@ -70,6 +70,12 @@
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
+		F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */; };
+		F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C91A962ED700F2BDF1 /* ObservationMapTableViewCell.m */; };
+		F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15CC1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m */; };
+		F76A15D01A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15CF1A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m */; };
+		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
+		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
@@ -266,6 +272,18 @@
 		F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponder.h"; sourceTree = "<group>"; };
 		F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+FirstResponder.m"; sourceTree = "<group>"; };
 		F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ../LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F76A15C51A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderTableViewCell.h; sourceTree = "<group>"; };
+		F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderTableViewCell.m; sourceTree = "<group>"; };
+		F76A15C81A962ED700F2BDF1 /* ObservationMapTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationMapTableViewCell.h; sourceTree = "<group>"; };
+		F76A15C91A962ED700F2BDF1 /* ObservationMapTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationMapTableViewCell.m; sourceTree = "<group>"; };
+		F76A15CB1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCommonHeaderTableViewCell.h; sourceTree = "<group>"; };
+		F76A15CC1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCommonHeaderTableViewCell.m; sourceTree = "<group>"; };
+		F76A15CE1A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationMapDirectionsTableViewCell.h; sourceTree = "<group>"; };
+		F76A15CF1A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationMapDirectionsTableViewCell.m; sourceTree = "<group>"; };
+		F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+IB.h"; sourceTree = "<group>"; };
+		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
+		F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderAttachmentTableViewCell.h; sourceTree = "<group>"; };
+		F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderAttachmentTableViewCell.m; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
@@ -470,6 +488,8 @@
 				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 				F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */,
 				F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */,
+				F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */,
+				F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -595,6 +615,16 @@
 				F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */,
 				F7E2970A1A8C0B00000F62C6 /* ObservationViewController_iPad.h */,
 				F7E2970B1A8C0B00000F62C6 /* ObservationViewController_iPad.m */,
+				F76A15C51A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.h */,
+				F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */,
+				F76A15C81A962ED700F2BDF1 /* ObservationMapTableViewCell.h */,
+				F76A15C91A962ED700F2BDF1 /* ObservationMapTableViewCell.m */,
+				F76A15CB1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.h */,
+				F76A15CC1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m */,
+				F76A15CE1A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.h */,
+				F76A15CF1A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m */,
+				F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */,
+				F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -949,6 +979,7 @@
 			files = (
 				F73430F91A13A8CA0063FE6B /* PickerTableViewCell.m in Sources */,
 				4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */,
+				F76A15D01A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
@@ -961,6 +992,7 @@
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
+				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
 				2F5F2EA519E31DEE005BA157 /* SettingsTableViewController_iPad.m in Sources */,
 				2F5F2EAE19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
@@ -987,6 +1019,7 @@
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
+				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
 				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
@@ -997,6 +1030,7 @@
 				F74F232A19A77A7B0068DE1B /* DatePickerTableViewCell.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
+				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
@@ -1014,6 +1048,7 @@
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
+				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
@@ -1023,6 +1058,7 @@
 				4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */,
 				2FBFE15919E828F700590076 /* LocationServiceHolder.m in Sources */,
 				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
+				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,

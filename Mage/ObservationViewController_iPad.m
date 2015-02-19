@@ -10,6 +10,7 @@
 #import <Server+helper.h>
 #import <GeoPoint.h>
 
+
 @implementation ObservationViewController_iPad
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -29,12 +30,27 @@
     }
 
 }
+
 - (IBAction)getDirections:(id)sender {
-    MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:((GeoPoint *) self.observation.geometry).location.coordinate addressDictionary:nil];
-    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-    [mapItem setName:[self.observation.properties valueForKey:@"type"]];
-    NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-    [mapItem openInMapsWithLaunchOptions:options];
+    CLLocationCoordinate2D coordinate = ((GeoPoint *) self.observation.geometry).location.coordinate;
+    NSURL *testURL = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
+    if ([[UIApplication sharedApplication] canOpenURL:testURL]) {
+        NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
+                                       @"comgooglemaps-x-callback",
+                                       coordinate.latitude,
+                                       coordinate.longitude,
+                                       @"mage://?resume=true",
+                                       "MAGE"];
+        NSURL *directionsURL = [NSURL URLWithString:directionsRequest];
+        [[UIApplication sharedApplication] openURL:directionsURL];
+    } else {
+        NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
+        MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
+        MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+        [mapItem setName:[self.observation.properties valueForKey:@"type"]];
+        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+        [mapItem openInMapsWithLaunchOptions:options];
+    }
 }
 
 @end
