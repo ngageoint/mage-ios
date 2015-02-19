@@ -57,7 +57,7 @@
     ipadThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
     ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
     ipadThumbnailImageFormat.maximumCount = 250;
-    ipadThumbnailImageFormat.devices = FICImageFormatDevicePad;
+    ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
