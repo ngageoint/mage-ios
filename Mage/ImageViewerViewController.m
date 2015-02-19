@@ -51,6 +51,8 @@ bool originalNavBarHidden;
     
     if (self.mediaUrl != nil) {
         if ([self.contentType hasPrefix:@"image"]) {
+            [self.progressView setHidden:YES];
+            [self.audioPlayerView setHidden:YES];
             self.imageView = [[UIImageView alloc] init];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             [self.mediaHolderView addSubview:self.imageView];
@@ -66,6 +68,8 @@ bool originalNavBarHidden;
     } else if (self.attachment != nil) {
         
         if ([self.attachment.contentType hasPrefix:@"image"]) {
+            [self.progressView setHidden:YES];
+            [self.audioPlayerView setHidden:YES];
             self.imageView = [[UIImageView alloc] init];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.frame = self.mediaHolderView.frame;

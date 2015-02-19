@@ -24,6 +24,10 @@
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
     self.ads.observation = observation;
+}
+
+- (void) setAttachmentSelectionDelegate:(NSObject<AttachmentSelectionDelegate> *)attachmentSelectionDelegate {
+    _attachmentSelectionDelegate = attachmentSelectionDelegate;
     self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
 }
 
