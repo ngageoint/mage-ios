@@ -639,6 +639,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             case NSFetchedResultsChangeUpdate:
                 [self updateObservation:object];
                 break;
+            default:
+                break;
         }
         
     } else {
@@ -654,6 +656,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 
             case NSFetchedResultsChangeUpdate:
                 [self updateLocation:object];
+                break;
+            default:
                 break;
         }
     }
