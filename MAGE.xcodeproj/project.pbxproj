@@ -611,6 +611,8 @@
 		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
+				F792A23219D20E8000904316 /* FetchServicesHolder.h */,
+				F792A23319D20E8000904316 /* FetchServicesHolder.m */,
 				F727516C19C888DB006C63CB /* Locations.h */,
 				F727516D19C888DB006C63CB /* Locations.m */,
 				F727516F19C88CAE006C63CB /* Observations.h */,
@@ -622,9 +624,9 @@
 		F7481F0219A663B100E9C56D /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				F75DD30C1A97AA3B0007FA3F /* Cells */,
 				F70DA76119A3BC7100D7A3B9 /* ObservationEditViewController.h */,
 				F70DA76219A3BC7100D7A3B9 /* ObservationEditViewController.m */,
-				F75DD30C1A97AA3B0007FA3F /* Cells */,
 				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
 				F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */,
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
@@ -671,13 +673,13 @@
 		F75DD30D1A97AABD0007FA3F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F75DD30E1A97AAC30007FA3F /* Cells */,
 				F7531EFE1910131C00CA084C /* ObservationViewController.h */,
 				F7531EFF1910131C00CA084C /* ObservationViewController.m */,
 				F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */,
 				F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */,
 				F7E2970A1A8C0B00000F62C6 /* ObservationViewController_iPad.h */,
 				F7E2970B1A8C0B00000F62C6 /* ObservationViewController_iPad.m */,
-				F75DD30E1A97AAC30007FA3F /* Cells */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -770,6 +772,7 @@
 				4C6A9BBD19813C64004A6205 /* Settings */,
 				F70E6EE719781585002D66F6 /* Observation */,
 				4C2A38ED19745C0D00E7470A /* People */,
+				F75DD30B1A97A9B50007FA3F /* Segues */,
 				4C546FE9195A27D1000CF230 /* Map */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
@@ -795,11 +798,8 @@
 				4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */,
 				2F14288F199AB9A400C64A98 /* UINextField.h */,
 				2F142890199AB9A400C64A98 /* UINextField.m */,
-				F792A23219D20E8000904316 /* FetchServicesHolder.h */,
-				F792A23319D20E8000904316 /* FetchServicesHolder.m */,
 				2FBFE15719E828F700590076 /* LocationServiceHolder.h */,
 				2FBFE15819E828F700590076 /* LocationServiceHolder.m */,
-				F75DD30B1A97A9B50007FA3F /* Segues */,
 			);
 			path = Mage;
 			sourceTree = "<group>";

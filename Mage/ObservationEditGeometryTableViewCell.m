@@ -21,8 +21,8 @@
         self.geoPoint = (GeoPoint *)[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
     }
 
-    [self.latitude setText:[NSString stringWithFormat:@"%.5f",self.geoPoint.location.coordinate.latitude]];
-    [self.longitude setText:[NSString stringWithFormat:@"%.5f",self.geoPoint.location.coordinate.longitude]];
+    [self.latitude setText:[NSString stringWithFormat:@"%.6f",self.geoPoint.location.coordinate.latitude]];
+    [self.longitude setText:[NSString stringWithFormat:@"%.6f",self.geoPoint.location.coordinate.longitude]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
 }
 
