@@ -25,8 +25,8 @@
 }
 
 - (void) viewDidLoad {
-    CLLocationDistance latitudeMeters = 1500;
-    CLLocationDistance longitudeMeters = 1500;
+    CLLocationDistance latitudeMeters = 2500;
+    CLLocationDistance longitudeMeters = 2500;
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.geoPoint.location.coordinate, latitudeMeters, longitudeMeters);
     MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
     [self.map setRegion:viewRegion];
