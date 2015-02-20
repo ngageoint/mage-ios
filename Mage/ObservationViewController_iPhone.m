@@ -34,7 +34,9 @@
     NSArray *headerSection = [[NSArray alloc] initWithObjects:@"observation-header", @"observation-map", @"observation-map-directions", nil];
     NSArray *attachmentSection = [[NSArray alloc] initWithObjects:@"observation-attachments", nil];
     [self.tableLayout addObject:headerSection];
-    [self.tableLayout addObject:attachmentSection];
+    if (_observation.attachments.count != 0) {
+        [self.tableLayout addObject:attachmentSection];
+    }
     
     self.propertyTable.delegate = self;
     self.propertyTable.dataSource = self;
