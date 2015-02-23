@@ -44,41 +44,23 @@
 
 - (void) performLogin: (NSDictionary *) parameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    NSString *username = (NSString *) [parameters objectForKey:@"username"];
-    NSString *password = (NSString *) [parameters objectForKey:@"password"];
+    
     HttpManager *http = [HttpManager singleton];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
     
     [http.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
-        NSString *token = [response objectForKey:@"token"];
-        User *user = [self fetchUser:[response objectForKey:@"user"]];
+        NSDictionary *userJson = [response objectForKey:@"user"];
+        NSString *userId = [userJson objectForKey:@"_id"];
+        User *user = [User fetchUserForId:userId];
         
-        NSDateFormatter *dateFormat = [NSDateFormatter new];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        // Always use this locale when parsing fixed format date strings
-        NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        dateFormat.locale = posix;
-        NSDate* tokenExpirationDate = [dateFormat dateFromString:[response objectForKey:@"expirationDate"]];
-        
-        [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-        [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-        [[UserUtility singleton] resetExpiration];
-		      
-        NSDictionary *loginParameters = @{
-                                          @"username": username,
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"token": token,
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
-        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults synchronize];
-        [StoredPassword persistPasswordToKeyChain:password];
-        
-        if (delegate) {
-            [delegate authenticationWasSuccessful:user];
+        if (!user) {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                User *user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
+            } completion:^(BOOL contextDidSave, NSError *error) {
+                [self finishLoginForParameters: parameters withResponse:response andUser:user];
+            }];
+        } else {
+            [self finishLoginForParameters: parameters withResponse:response andUser:user];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error logging in: %@", error);
@@ -86,6 +68,42 @@
         [defaults setBool:NO forKey:@"deviceRegistered"];
         [self registerDevice:parameters];
     }];
+
+}
+
+- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response andUser: (User *) user {
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSString *token = [response objectForKey:@"token"];
+    NSString *username = (NSString *) [parameters objectForKey:@"username"];
+    NSString *password = (NSString *) [parameters objectForKey:@"password"];
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // Always use this locale when parsing fixed format date strings
+    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormat.locale = posix;
+    NSDate* tokenExpirationDate = [dateFormat dateFromString:[response objectForKey:@"expirationDate"]];
+    HttpManager *http = [HttpManager singleton];
+
+    [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    [[UserUtility singleton] resetExpiration];
+
+    NSDictionary *loginParameters = @{
+                                   @"username": username,
+                                   @"serverUrl": [[MageServer baseURL] absoluteString],
+                                   @"token": token,
+                                   @"tokenExpirationDate": tokenExpirationDate
+                                   };
+
+    [defaults setObject:loginParameters forKey:@"loginParameters"];
+    NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
+    [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
+    [defaults synchronize];
+    [StoredPassword persistPasswordToKeyChain:password];
+
+    if (delegate) {
+        [delegate authenticationWasSuccessful:user];
+    }
 
 }
 
@@ -112,17 +130,6 @@
             [delegate authenticationHadFailure];
         }
     }];
-}
-
-- (User *) fetchUser:(NSDictionary *) userJson {
-    NSString *userId = [userJson objectForKey:@"_id"];
-    User *user = [User fetchUserForId:userId];
-    
-    if (!user) {
-        user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    }
-    
-    return user;
 }
 
 @end
