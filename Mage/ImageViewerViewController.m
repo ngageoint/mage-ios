@@ -18,7 +18,6 @@
 
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (nonatomic) BOOL shouldHideNavBar;
 @property (weak, nonatomic) IBOutlet UIView *mediaHolderView;
 @property (weak, nonatomic) IBOutlet UIView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *progressPercentLabel;
@@ -109,13 +108,10 @@ bool originalNavBarHidden;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
-    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 -(BOOL)prefersStatusBarHidden {

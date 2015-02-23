@@ -44,7 +44,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillAppear:animated];
     
 	NSString *name = [_observation.properties valueForKey:@"type"];

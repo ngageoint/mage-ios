@@ -20,6 +20,11 @@
     [super viewWillAppear:animated];
 }
 
+- (void) viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO];
+    [super viewWillDisappear:animated];
+}
+
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
