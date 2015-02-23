@@ -87,7 +87,6 @@
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */; };
 		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
 		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
-		F79E9D4419D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */; };
 		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
@@ -307,8 +306,6 @@
 		F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxTableViewCell.m; sourceTree = "<group>"; };
 		F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditGeometryTableViewCell.h; sourceTree = "<group>"; };
 		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
-		F79E9D4219D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
-		F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditRadioTableViewCell.m; sourceTree = "<group>"; };
 		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* MAGE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAGE.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -661,8 +658,6 @@
 				F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */,
 				F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */,
 				F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */,
-				F79E9D4219D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.h */,
-				F79E9D4319D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m */,
 				F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */,
 				F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */,
 				F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */,
@@ -1025,7 +1020,6 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */,
-				F79E9D4419D4AE2C00AA55E6 /* ObservationEditRadioTableViewCell.m in Sources */,
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,

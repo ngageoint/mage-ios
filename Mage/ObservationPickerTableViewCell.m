@@ -11,8 +11,6 @@
 @implementation ObservationPickerTableViewCell
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
-    [self.keyLabel setText:[field objectForKey:@"title"]];
     self.pickerValues = [NSMutableArray array];
     for (id choice in [field objectForKey:@"choices"]) {
         NSLog(@"title is %@", [choice objectForKey:@"title"]);
@@ -29,6 +27,15 @@
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, doneBarButton, nil];
     self.valueTextField.inputView = self.picker;
     self.valueTextField.inputAccessoryView = toolbar;
+    
+    [self.keyLabel setText:[field objectForKey:@"title"]];
+    if ([observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]] != nil) {
+        [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
+    } else {
+        [self.valueTextField setText:[field objectForKey:@"value"]];
+    }
+    NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
+    [self.picker selectRow:index inComponent:0 animated:NO];
 }
 
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
