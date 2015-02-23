@@ -13,8 +13,8 @@
 
 @implementation ObservationViewController_iPad
 
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+-(void)viewDidLoad {
+    [super viewDidLoad];
     NSString *name = [self.observation.properties valueForKey:@"type"];
     if (name != nil) {
         self.primaryFieldLabel.text = name;
@@ -23,12 +23,11 @@
     }
     NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];
-    if (variantField != nil) {
+    if (variantField != nil && [self.observation.properties objectForKey:variantField] != nil) {
         self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
     } else {
-        self.secondaryFieldLabel.text = @"";
+        [self.secondaryFieldLabel removeFromSuperview];
     }
-
 }
 
 - (IBAction)getDirections:(id)sender {
