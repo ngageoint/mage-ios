@@ -80,7 +80,7 @@
     ObservationTableViewCell *cell = (ObservationTableViewCell *)[self cellForObservationAtIndex:indexPath inTableView:tableView];
     Observation *o = [self observationAtIndexPath:indexPath];
     if (o.attachments.count == 0) {
-        return cell.attachmentCollection.frame.origin.y;
+        return cell.attachmentCollection.frame.origin.y + 5;
     }
     return cell.bounds.size.height;
 }
