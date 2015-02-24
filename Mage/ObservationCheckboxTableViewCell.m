@@ -16,7 +16,7 @@
     if (value != nil) {
         [self.checkboxSwitch setOn:[value boolValue]];
     } else {
-        [self.checkboxSwitch setOn:[field objectForKey:@"value"]];
+        [self.checkboxSwitch setOn:[[field objectForKey:@"value"] boolValue] ];
     }
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
