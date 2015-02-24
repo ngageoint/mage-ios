@@ -18,6 +18,9 @@
 		
 		_observation = observation;
 		_title = [observation.properties objectForKey:@"type"];
+        if (_title == nil) {
+            _title = @"Observation";
+        }
 		_subtitle = observation.timestamp.timeAgoSinceNow;
     }
     [self setAccessibilityLabel:@"Observation Annotation"];
