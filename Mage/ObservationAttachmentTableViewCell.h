@@ -13,5 +13,6 @@
 @interface ObservationAttachmentTableViewCell : ObservationTableViewCell
 
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
+@property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 
 @end

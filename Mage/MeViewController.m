@@ -48,7 +48,7 @@ bool currentUserIsMe = NO;
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         currentUserIsMe = YES;
     }
-    self.title = self.user.name;
+//    self.title = self.user.name;
     self.name.text = self.user.name;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     

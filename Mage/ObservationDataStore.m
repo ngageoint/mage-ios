@@ -78,7 +78,11 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+    ObservationAttachmentTableViewCell *cell = (ObservationAttachmentTableViewCell *)[self cellForObservationAtIndex:indexPath inTableView:tableView];
+    Observation *o = [self observationAtIndexPath:indexPath];
+    if (o.attachments.count == 0) {
+        return cell.attachmentCollection.frame.origin.y;
+    }
     return cell.bounds.size.height;
 }
 
@@ -116,25 +120,8 @@
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
-    NSString *cellIdentifier = @"cell";
-    ObservationTableViewCell *cell = nil;
-    if (observation.attachments.count != 0) {
-        if (self.variantField != nil && [[observation.properties objectForKey:self.variantField] length] != 0) {
-            cellIdentifier = @"variantCellWithAttachments";
-        } else {
-            cellIdentifier = @"cellWithAttachments";
-        }
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        ((ObservationAttachmentTableViewCell *)cell).attachmentSelectionDelegate = self.attachmentSelectionDelegate;
-    } else {
-        if (self.variantField != nil && [[observation.properties objectForKey:self.variantField] length] != 0) {
-            cellIdentifier = @"variantCell";
-        } else {
-            cellIdentifier = @"cell";
-        }
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
+    ObservationAttachmentTableViewCell *cell = (ObservationAttachmentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"obsCell"];
+    cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     return cell;
 }
 
