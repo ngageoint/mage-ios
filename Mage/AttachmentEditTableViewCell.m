@@ -32,7 +32,8 @@
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {
-    if (value == [NSNumber numberWithInt:0]) {
+    NSNumber *number = value;
+    if ([number isEqualToNumber: [NSNumber numberWithInt:0]]) {
         return 0.0;
     }
     return self.bounds.size.height;
