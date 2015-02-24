@@ -13,7 +13,6 @@
 #import <NSDate+DateTools.h>
 #import "Server+helper.h"
 #import "AttachmentSelectionDelegate.h"
-#import "ObservationAttachmentTableViewCell.h"
 
 @interface ObservationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
@@ -78,7 +77,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationAttachmentTableViewCell *cell = (ObservationAttachmentTableViewCell *)[self cellForObservationAtIndex:indexPath inTableView:tableView];
+    ObservationTableViewCell *cell = (ObservationTableViewCell *)[self cellForObservationAtIndex:indexPath inTableView:tableView];
     Observation *o = [self observationAtIndexPath:indexPath];
     if (o.attachments.count == 0) {
         return cell.attachmentCollection.frame.origin.y;
@@ -120,7 +119,7 @@
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    ObservationAttachmentTableViewCell *cell = (ObservationAttachmentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"obsCell"];
+    ObservationTableViewCell *cell = (ObservationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"obsCell"];
     cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     return cell;
 }
