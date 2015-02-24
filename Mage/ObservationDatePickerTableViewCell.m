@@ -53,6 +53,7 @@
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, doneBarButton, nil];
     self.valueTextField.inputView = _datePicker;
     self.valueTextField.inputAccessoryView = toolbar;
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (void) cancelButtonPressed {

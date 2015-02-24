@@ -27,6 +27,7 @@
         [self.textArea setText:[field objectForKey:@"value"]];
     }
     [self.keyLabel setText:[field objectForKey:@"title"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (void) textViewDidEndEditing:(UITextView *)textView {

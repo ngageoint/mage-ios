@@ -24,6 +24,7 @@
     [self.latitude setText:[NSString stringWithFormat:@"%.6f",self.geoPoint.location.coordinate.latitude]];
     [self.longitude setText:[NSString stringWithFormat:@"%.6f",self.geoPoint.location.coordinate.longitude]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 @end
