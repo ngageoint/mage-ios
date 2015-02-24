@@ -158,7 +158,7 @@
         
         NSData *imageData = UIImagePNGRepresentation(chosenImage);
         BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
-        NSLog(@"successfully wrote file %hhd", success);
+        NSLog(@"successfully wrote file %d", success);
         contentType = @"image/png";
         name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
         localPath = fileToWriteTo;

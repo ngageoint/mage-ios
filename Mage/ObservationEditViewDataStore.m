@@ -36,7 +36,7 @@ NSString *_formId;
     NSMutableArray *fields = [[NSMutableArray alloc] init];
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
     // add the attachment cell first and then do the other fields
-    [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:@"attachments"];
+    [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:@"attachments"];
     [cells addObject:@"observationEdit-attachmentView"];
     [fields addObject:@{}];
     
@@ -44,7 +44,7 @@ NSString *_formId;
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
         if (![type isEqualToString:@"hidden"]) {
-            [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
+            [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:[field objectForKey:@"id"]];
             [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
             [fields addObject:field];
         }
