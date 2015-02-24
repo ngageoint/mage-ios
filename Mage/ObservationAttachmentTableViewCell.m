@@ -12,7 +12,6 @@
 @interface ObservationAttachmentTableViewCell ()
 
 @property (strong, nonatomic) AttachmentCollectionDataStore *ads;
-@property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 
 @end
 
