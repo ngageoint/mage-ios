@@ -20,6 +20,7 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     [self.keyLabel setText:[field objectForKey:@"title"]];
     self.valueTextField.text = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {

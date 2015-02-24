@@ -20,6 +20,7 @@
     }
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 @end

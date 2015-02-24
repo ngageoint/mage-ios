@@ -36,6 +36,8 @@
     }
     NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
     [self.picker selectRow:index inComponent:0 animated:NO];
+    
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
