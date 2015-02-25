@@ -72,6 +72,11 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    PersonTableViewCell *cell = (PersonTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"personCell"];
+    return cell.frame.size.height;
+}
+
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return [[self.locations.fetchedResultsController sections] count];
 }
