@@ -51,7 +51,11 @@
 - (void) viewDidAppear:(BOOL)animated {
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;
-        [self ensureButtonVisible];
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
+            [self ensureButtonVisible];
+        }
     }
 }
 
@@ -127,6 +131,7 @@
 
 - (void)splitViewController:(UISplitViewController *)svc
     willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+    NSLog(@"will change to display mode");
     // never called in ios 7
     self.masterViewButton = svc.displayModeButtonItem;
     if (displayMode == UISplitViewControllerDisplayModePrimaryOverlay) {
