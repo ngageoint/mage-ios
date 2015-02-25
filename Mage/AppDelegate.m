@@ -16,7 +16,6 @@
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
-#import "DisclaimerNavigationController.h"
 
 #import "ZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
@@ -183,7 +182,7 @@
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]
         || [currentController isKindOfClass:[LoginViewController class]]
-        || [currentController isKindOfClass:[DisclaimerNavigationController class]])) {
+        || [currentController.restorationIdentifier isEqualToString:@"DisclaimerScreen"])) {
         [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
