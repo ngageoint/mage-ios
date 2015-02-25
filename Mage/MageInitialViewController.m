@@ -9,7 +9,6 @@
 #import <UserUtility.h>
 #import <HttpManager.h>
 #import "MageRootViewController.h"
-#import "DisclaimerNavigationController.h"
 #import "DeviceUUID.h"
 
 @interface MageInitialViewController ()
