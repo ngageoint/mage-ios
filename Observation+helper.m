@@ -318,7 +318,7 @@ NSDictionary *_fieldNameToField;
     NSDate *date = nil;
     Observation *observation = [Observation MR_findFirstOrderedByAttribute:@"lastModified" ascending:NO];
     if (observation) {
-        date = observation.timestamp;
+        date = observation.lastModified;
     }
     
     return date;
