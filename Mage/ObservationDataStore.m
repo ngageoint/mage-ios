@@ -85,6 +85,10 @@
     return cell.bounds.size.height;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return CGFLOAT_MIN;
+}
+
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath {
     return [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
 }
