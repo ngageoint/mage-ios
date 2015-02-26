@@ -36,7 +36,7 @@ NSString *_formId;
     NSMutableArray *fields = [[NSMutableArray alloc] init];
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
     // add the attachment cell first and then do the other fields
-    [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:@"attachments"];
+    [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:@"attachments"];
     [cells addObject:@"observationEdit-attachmentView"];
     [fields addObject:@{}];
     
@@ -44,16 +44,9 @@ NSString *_formId;
     for (id field in [form objectForKey:@"fields"]) {
         NSString *type = [field objectForKey:@"type"];
         if (![type isEqualToString:@"hidden"]) {
-            [fieldToRowMap setObject:[NSNumber numberWithInt:fields.count] forKey:[field objectForKey:@"id"]];
+            [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:[field objectForKey:@"id"]];
             [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
             [fields addObject:field];
-            if ([type isEqualToString:@"date"]) {
-                [cells addObject:@"observationEdit-dateSpinner"];
-                [fields addObject:field];
-            } else if ([type isEqualToString:@"radio"] || [type isEqualToString:@"dropdown"]) {
-                [cells addObject:@"observationEdit-picker"];
-                [fields addObject:field];
-            }
         }
     }
     _fieldToRow = fieldToRowMap;
@@ -85,7 +78,12 @@ NSString *_formId;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"rows is: %lu", (unsigned long)[self rowToField].count);
     return [self rowToField].count;
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -116,10 +114,7 @@ NSString *_formId;
     if ([[field objectForKey:@"archived"] intValue] == 1) {
         return 0.0;
     }
-    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-dateSpinner"] ||
-        [[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-picker"]) {
-        return [cell getCellHeightForValue:[NSNumber numberWithBool:(expandedRow == indexPath.row)]];
-    } else if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
+    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
         return [cell getCellHeightForValue:[NSNumber numberWithInteger:self.observation.attachments.count]];
     }
     return [cell getCellHeightForValue:[self valueForIndexPath:indexPath]];
@@ -127,25 +122,12 @@ NSString *_formId;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView beginUpdates];
-    
-    if ([[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"date"] ||
-        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"dropdown"] ||
-        [[[[self rowToField] objectAtIndex:indexPath.row] objectForKey:@"type"] isEqualToString:@"radio"]) {
-        
-        if (expandedRow != indexPath.row +1) {
-            expandedRow = indexPath.row + 1;
-        } else {
-            expandedRow = -1;
-        }
-    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     [tableView endEditing:NO];
     [tableView endUpdates];
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
-    [self.editTable beginUpdates];
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
     NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
@@ -153,12 +135,13 @@ NSString *_formId;
     self.observation.properties = newProperties;
     
     if (reload == YES) {
+        [self.editTable beginUpdates];
         NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
         [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+        [self.editTable endUpdates];
     }
     
-    [self.editTable endUpdates];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

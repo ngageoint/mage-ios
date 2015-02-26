@@ -35,13 +35,11 @@
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic) BOOL shouldHideNavBar;
 
 @end
 
 @implementation MeViewController
 
-bool originalNavBarHidden;
 bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
@@ -50,13 +48,12 @@ bool currentUserIsMe = NO;
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         currentUserIsMe = YES;
     }
-    
+//    self.title = self.user.name;
     self.name.text = self.user.name;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
-    [self.avatar setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    self.avatar.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
@@ -178,8 +175,6 @@ bool currentUserIsMe = NO;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
-    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
     
     CLLocationDistance latitudeMeters = 500;
     CLLocationDistance longitudeMeters = 500;
@@ -199,23 +194,14 @@ bool currentUserIsMe = NO;
     }
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
-}
-
-- (IBAction)dismissMe:(id)sender {
-    NSLog(@"Done");
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
         ImageViewerViewController *vc = [segue destinationViewController];
-        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        [vc setMediaUrl: [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@",self.user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]];
-        [vc setContentType:@"image"];
         
+        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+        NSURL *avatarUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
+        [vc setMediaUrl: avatarUrl];
+        [vc setContentType:@"image"];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];

@@ -14,10 +14,9 @@
 @implementation PersonTableViewCell
 
 - (id) populateCellWithUser:(User *) user {    
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     if ([user avatarUrl] != nil) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
-        [self.icon setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+        self.icon.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]];
     } else {
         self.icon.image = nil;
     }

@@ -18,7 +18,6 @@
 
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (nonatomic) BOOL shouldHideNavBar;
 @property (weak, nonatomic) IBOutlet UIView *mediaHolderView;
 @property (weak, nonatomic) IBOutlet UIView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *progressPercentLabel;
@@ -51,6 +50,8 @@ bool originalNavBarHidden;
     
     if (self.mediaUrl != nil) {
         if ([self.contentType hasPrefix:@"image"]) {
+            [self.progressView setHidden:YES];
+            [self.audioPlayerView setHidden:YES];
             self.imageView = [[UIImageView alloc] init];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             [self.mediaHolderView addSubview:self.imageView];
@@ -66,6 +67,8 @@ bool originalNavBarHidden;
     } else if (self.attachment != nil) {
         
         if ([self.attachment.contentType hasPrefix:@"image"]) {
+            [self.progressView setHidden:YES];
+            [self.audioPlayerView setHidden:YES];
             self.imageView = [[UIImageView alloc] init];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.frame = self.mediaHolderView.frame;
@@ -74,7 +77,7 @@ bool originalNavBarHidden;
             FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
                 self.imageView.image = image;
                 self.imageView.clipsToBounds = YES;
-                self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+                self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             };
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             BOOL imageExists = [delegate.imageCache retrieveImageForEntity:[self attachment] withFormatName:AttachmentLarge completionBlock:completionBlock];
@@ -105,13 +108,10 @@ bool originalNavBarHidden;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    originalNavBarHidden = [self.navigationController isNavigationBarHidden];
-    [self.navigationController setNavigationBarHidden:_shouldHideNavBar animated:animated];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:originalNavBarHidden animated:animated];
 }
 
 -(BOOL)prefersStatusBarHidden {

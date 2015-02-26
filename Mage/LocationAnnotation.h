@@ -27,4 +27,6 @@
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
 
+-(void) setSubtitle:(NSString *)subtitle;
+
 @end

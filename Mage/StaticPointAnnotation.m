@@ -35,7 +35,14 @@
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
        
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_iconUrl]]];
+        NSLog(@"showing icon from %@", _iconUrl);
+        UIImage *image = nil;
+        if ([[_iconUrl lowercaseString] hasPrefix:@"http"]) {
+            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_iconUrl]]];
+        } else {
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory,_iconUrl]]];
+        }
         
         float oldWidth = image.size.width;
         float scaleFactor = 35.0 / oldWidth;

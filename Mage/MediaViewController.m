@@ -97,13 +97,13 @@
         NSError *err = nil;
         [audioSession setCategory :AVAudioSessionCategoryPlayAndRecord error:&err];
         if(err){
-            NSLog(@"audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+            NSLog(@"audioSession: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
             return;
         }
         [audioSession setActive:YES error:&err];
         err = nil;
         if(err){
-            NSLog(@"audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+            NSLog(@"audioSession: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
             return;
         }
         NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithCapacity:0];

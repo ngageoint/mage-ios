@@ -44,7 +44,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillAppear:animated];
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
@@ -81,10 +80,6 @@
     MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
     
     [self.mapDelegate selectedObservation:self.observation region:viewRegion];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
     
     self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
     if (self.attachmentCollectionDataStore.observation == nil) {
@@ -95,30 +90,6 @@
     }
     
     [self.propertyTable reloadData];
-	
-	CAGradientLayer *maskLayer = [CAGradientLayer layer];
-    
-    //this is the anchor point for our gradient, in our case top left. setting it in the middle (.5, .5) will produce a radial gradient. our startPoint and endPoints are based off the anchorPoint
-    maskLayer.anchorPoint = CGPointZero;
-    
-    // Setting our colors - since this is a mask the color itself is irrelevant - all that matters is the alpha.
-	// A clear color will completely hide the layer we're masking, an alpha of 1.0 will completely show the masked view.
-    UIColor *outerColor = [UIColor colorWithWhite:1.0 alpha:.25];
-    UIColor *innerColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-    
-    // An array of colors that dictatates the gradient(s)
-    maskLayer.colors = @[(id)outerColor.CGColor, (id)outerColor.CGColor, (id)innerColor.CGColor, (id)innerColor.CGColor];
-    
-    // These are percentage points along the line defined by our startPoint and endPoint and correspond to our colors array.
-	// The gradient will shift between the colors between these percentage points.
-    maskLayer.locations = @[@0.0, @0.0, @.35, @.35f];
-    maskLayer.bounds = _mapView.frame;
-	UIView *view = [[UIView alloc] initWithFrame:_mapView.frame];
-    
-    view.backgroundColor = [UIColor blackColor];
-    
-    [self.view insertSubview:view belowSubview:self.mapView];
-    self.mapView.layer.mask = maskLayer;
 }
 
 -(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
@@ -183,6 +154,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+    if ([[cell.fieldDefinition objectForKey:@"archived"] intValue] == 1) {
+        return 0.0;
+    }
     return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
 }
 

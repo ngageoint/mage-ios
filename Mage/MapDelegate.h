@@ -31,10 +31,14 @@
 @property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
+@property (nonatomic) BOOL hideStaticLayers;
+@property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
+@property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;
 - (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user andCenter: (BOOL) shouldCenter;
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
+- (void) setMapView:(MKMapView *)mapView;
 
 @end

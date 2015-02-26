@@ -8,13 +8,11 @@
 
 #import "ObservationEditViewController.h"
 #import "ObservationEditViewDataStore.h"
-#import "DropdownEditTableViewController.h"
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
 #import <Observation+helper.h>
 #import <HttpManager.h>
-#import <MageServer.h>
 #import <AVFoundation/AVFoundation.h>
 #import <Attachment+helper.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -25,6 +23,7 @@
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @end
 
@@ -33,7 +32,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
-    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem = item;
     
     self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
@@ -51,7 +49,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    NSLog(@"view will appear");
     [super viewWillAppear:animated];
 }
 
@@ -160,7 +158,7 @@
         
         NSData *imageData = UIImagePNGRepresentation(chosenImage);
         BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
-        NSLog(@"successfully wrote file %hhd", success);
+        NSLog(@"successfully wrote file %d", success);
         contentType = @"image/png";
         name = [NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]];
         localPath = fileToWriteTo;
@@ -215,13 +213,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([segue.identifier isEqualToString:@"dropdownSegue"]) {
-        DropdownEditTableViewController *vc = [segue destinationViewController];
-        ObservationPickerTableViewCell *cell = sender;
-        
-        [vc setFieldDefinition:cell.fieldDefinition];
-        [vc setValue:cell.valueLabel.text];
-    } else if([segue.identifier isEqualToString:@"geometrySegue"]) {
+    if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;
         [gvc setGeoPoint:cell.geoPoint];
@@ -231,11 +223,6 @@
         MediaViewController *mvc = [segue destinationViewController];
         mvc.delegate = self;
     }
-}
-
-- (IBAction)unwindFromDropdownController: (UIStoryboardSegue *) segue {
-    DropdownEditTableViewController *vc = [segue sourceViewController];
-    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.value reloadCell:YES];
 }
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {

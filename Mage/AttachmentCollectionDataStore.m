@@ -28,7 +28,7 @@
     };
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentSmallSquare completionBlock:completionBlock];
+    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentMediumSquare completionBlock:completionBlock];
     
     if (imageExists == NO) {
         cell.image.image = [UIImage imageNamed:@"download"];

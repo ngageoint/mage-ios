@@ -9,7 +9,6 @@
 #import <UserUtility.h>
 #import <HttpManager.h>
 #import "MageRootViewController.h"
-#import "DisclaimerNavigationController.h"
 #import "DeviceUUID.h"
 
 @interface MageInitialViewController ()
@@ -35,7 +34,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     // if the token is not expired skip the login module
-    if ([UserUtility isTokenExpired]) {
+    if ([[UserUtility singleton] isTokenExpired]) {
 		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
     } else {
         NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
@@ -46,7 +45,7 @@
 }
 
 - (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
-    [UserUtility expireToken];
+    [[UserUtility singleton] expireToken];
     [self.fetchServicesHolder.locationFetchService stop];
     [self.fetchServicesHolder.observationFetchService stop];
     [self.fetchServicesHolder.observationPushService stop];

@@ -33,8 +33,13 @@
 }
 
 -(void) setLocation:(Location *)location {
-    self.location = location;
+    _location = location;
 }
+
+-(void) setSubtitle:(NSString *)subtitle {
+    _subtitle = subtitle;
+}
+
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
@@ -43,6 +48,7 @@
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
         [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {

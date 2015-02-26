@@ -10,20 +10,6 @@
 
 @implementation ObservationEditTableViewCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -34,6 +20,7 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     [self.keyLabel setText:[field objectForKey:@"title"]];
     self.valueTextField.text = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {

@@ -18,6 +18,9 @@
 		
 		_observation = observation;
 		_title = [observation.properties objectForKey:@"type"];
+        if (_title == nil) {
+            _title = @"Observation";
+        }
 		_subtitle = observation.timestamp.timeAgoSinceNow;
     }
     [self setAccessibilityLabel:@"Observation Annotation"];
@@ -38,6 +41,7 @@
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
         [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
         annotationView.rightCalloutAccessoryView = rightButton;
         annotationView.image = image;

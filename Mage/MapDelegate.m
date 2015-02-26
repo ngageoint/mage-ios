@@ -24,11 +24,10 @@
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
+#import <NSDate+DateTools.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
-    @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
-    @property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
@@ -55,11 +54,12 @@
                    forKeyPath:@"selectedOfflineMaps"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
-        
-        [defaults addObserver:self
-                   forKeyPath:@"selectedStaticLayers"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
+        if (!self.hideStaticLayers) {
+            [defaults addObserver:self
+                       forKeyPath:@"selectedStaticLayers"
+                          options:NSKeyValueObservingOptionNew
+                          context:NULL];
+        }
     }
     
     return self;
@@ -121,8 +121,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
         CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
-
-        NSLog(@"tap");
         
         CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
         CLLocation *ll1 = [[CLLocation alloc] initWithLatitude:l1.latitude longitude:l1.longitude];
@@ -193,9 +191,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
             }
         }
-    } else {
-        NSLog(@"tap in some other state");
-        
     }
 }
 
@@ -259,11 +254,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
-    UITapGestureRecognizer *tap =
-    [[UITapGestureRecognizer alloc]
-     initWithTarget:self
-     action:@selector(mapTap:)];
-    [self.mapView addGestureRecognizer:tap];
+    if (!self.hideStaticLayers) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mapTap:)];
+        [self.mapView addGestureRecognizer:tap];
+    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -324,6 +318,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) updateStaticLayers: (NSArray *) staticLayers {
+    if (self.hideStaticLayers) return;
     NSMutableSet *unselectedStaticLayers = [[self.staticLayers allKeys] mutableCopy];
     
     for (NSNumber *staticLayerId in staticLayers) {
@@ -514,11 +509,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         self.selectedUser = annotation.location.user;
         
         if ([self.selectedUser avatarUrl] != nil) {
-            NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.selectedUser.avatarUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.selectedUser.avatarUrl]]];
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
             view.leftCalloutAccessoryView = imageView;
-            [imageView setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+            
+            [imageView setImage:image];// setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
         }
         
         if (self.selectedUserCircle != nil) {
@@ -644,6 +640,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             case NSFetchedResultsChangeUpdate:
                 [self updateObservation:object];
                 break;
+            default:
+                break;
         }
         
     } else {
@@ -659,6 +657,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 
             case NSFetchedResultsChangeUpdate:
                 [self updateLocation:object];
+                break;
+            default:
                 break;
         }
     }
@@ -685,6 +685,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
     } else {
+        [annotation setSubtitle:location.timestamp.timeAgoSinceNow];
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         [annotation setCoordinate:[location location].coordinate];
         
@@ -758,6 +759,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self.mapView setRegion:region animated:YES];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
+
+- (void)observationDetailSelected:(Observation *)observation {
+    [self selectedObservation:observation];
+}
+
+- (void)userDetailSelected:(User *)user {
+    [self selectedUser:user];
+}
+
 
 
 @end

@@ -15,6 +15,7 @@
 #import "Attachment+FICAttachment.h"
 
 #import "MageInitialViewController.h"
+#import "LoginViewController.h"
 
 #import "ZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
@@ -46,8 +47,17 @@
     thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
+    thumbnailImageFormat.devices = FICImageFormatDevicePhone;
     thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+    
+    FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
+    ipadThumbnailImageFormat.name = AttachmentMediumSquare;
+    ipadThumbnailImageFormat.family = AttachmentFamily;
+    ipadThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
+    ipadThumbnailImageFormat.maximumCount = 250;
+    ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
+    ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
     largeImageFormat.name = AttachmentLarge;
@@ -58,7 +68,7 @@
     largeImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    NSArray *imageFormats = @[thumbnailImageFormat, largeImageFormat];
+    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat, largeImageFormat];
     
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;
@@ -92,7 +102,7 @@
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
-    if (![UserUtility isTokenExpired]) {
+    if (![[UserUtility singleton] isTokenExpired]) {
         [self.locationFetchService start];
     }
 }
@@ -165,12 +175,27 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [UserUtility expireToken];
     [self.locationFetchService stop];
     [self.observationFetchService stop];
     [self.observationPushService stop];
     [self.attachmentPushService stop];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    UIViewController *currentController = [self topMostController];
+    if (!([currentController isKindOfClass:[MageInitialViewController class]]
+        || [currentController isKindOfClass:[LoginViewController class]]
+        || [currentController.restorationIdentifier isEqualToString:@"DisclaimerScreen"])) {
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (UIViewController*) topMostController
+{
+    UIViewController *topController = self.window.rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
 }
 
 #pragma mark - Application's Documents directory
