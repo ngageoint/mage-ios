@@ -14,28 +14,6 @@
 
 @implementation MKAnnotationView (PersonIcon)
 
-/**
- // Marker color defaults for FFT
- // orange
- appConstants.peopleColorDefault = '#FF5721';
- 
- // Specify times in milliseconds
- // set the minAge of the first color to something very negative
- // I have seen the timestamp come back ahead of the current time
- // probably due to computer time differences
- appConstants.peopleAgeToColor = [{
- minAge: -10000000,
- maxAge: 600000,
- // blue
- color: '#0000FF'
- },{
- minAge: 600001,
- maxAge: 1800000,
- // yellow
- color: '#FFFF00'
- }];
- **/
-
 - (UIColor *) colorForUser: (User *) user {
     NSDate *timestamp = user.location.timestamp;
     NSDate *now = [NSDate date];

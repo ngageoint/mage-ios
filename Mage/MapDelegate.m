@@ -24,6 +24,7 @@
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
+#import <NSDate+DateTools.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -684,6 +685,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
     } else {
+        [annotation setSubtitle:location.timestamp.timeAgoSinceNow];
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         [annotation setCoordinate:[location location].coordinate];
         
