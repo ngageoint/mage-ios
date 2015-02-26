@@ -33,8 +33,13 @@ CGFloat initialConstant;
     self.constant = initialConstant + r.size.height;
     UITableView *table = self.secondItem;
     UIView *responder = [UIResponder currentFirstResponder];
-    UIView *cell = responder.superview.superview;
-    [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
+    UIView *cell = responder.superview;
+    while (cell != nil && ![cell isKindOfClass:[UITableViewCell class]]) {
+        cell = cell.superview;
+    }
+    if (cell != nil) {
+        [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
+    }
 }
 
 -(void)keyboardWillHide: (NSNotification *) notification {
