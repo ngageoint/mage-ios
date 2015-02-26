@@ -11,13 +11,23 @@
 @implementation ObservationEditTextAreaTableViewCell
 
 - (void) awakeFromNib {
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.textArea action:@selector(resignFirstResponder)];
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    toolbar.items = [NSArray arrayWithObjects:flexSpace, barButton, nil];
+    self.textArea.inputAccessoryView = toolbar;
     [self.textArea setDelegate: self];
 }
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    [self.textArea setText:value];
+    if (value != nil) {
+        [self.textArea setText:value];
+    } else {
+        [self.textArea setText:[field objectForKey:@"value"]];
+    }
     [self.keyLabel setText:[field objectForKey:@"title"]];
+    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
 - (void) textViewDidEndEditing:(UITextView *)textView {

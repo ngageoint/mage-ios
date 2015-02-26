@@ -11,8 +11,11 @@
 #import <NSDate+DateTools.h>
 #import <User.h>
 #import <Server+helper.h>
+#import "AttachmentCollectionDataStore.h"
 
 @interface ObservationTableViewCell()
+
+@property (strong, nonatomic) AttachmentCollectionDataStore *ads;
 
 @end
 
@@ -41,6 +44,13 @@
     self.timeField.text = output.shortTimeAgoSinceNow;
     
     self.userField.text = observation.user.name;
+    
+    self.ads = [[AttachmentCollectionDataStore alloc] init];
+    self.ads.attachmentCollection = self.attachmentCollection;
+    self.attachmentCollection.delegate = self.ads;
+    self.attachmentCollection.dataSource = self.ads;
+    self.ads.observation = observation;
+    self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
 }
 
 @end

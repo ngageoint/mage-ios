@@ -15,8 +15,11 @@
 NSString *const AttachmentFamily = @"AttachmentFamily";
 
 NSString *const AttachmentSmallSquare = @"AttachmentSmallSquare";
+NSString *const AttachmentMediumSquare = @"AttachmentMediumSquare";
 NSString *const AttachmentLarge = @"AttachmentLarge";
 CGSize const AttachmentSquareImageSize = {50, 50};
+CGSize const AttachmentiPadSquareImageSize = {100, 100};
+
 
 @implementation Attachment (FICAttachment)
 
@@ -47,7 +50,7 @@ CGSize const AttachmentSquareImageSize = {50, 50};
         UIImage *imageToUse = image;
         CGRect contextBounds = CGRectZero;
         contextBounds.size = contextSize;
-        if ([formatName isEqualToString:AttachmentSmallSquare]) {
+        if ([formatName isEqualToString:AttachmentSmallSquare] || [formatName isEqualToString:AttachmentMediumSquare]) {
             CGRect cropRect = CGRectZero;
             if (image.size.width <= contextSize.width && image.size.height <= contextSize.height) {
                 cropRect = CGRectMake((contextSize.width - image.size.width)/2.0, (contextSize.height - image.size.height)/2.0, contextSize.width, contextSize.height);

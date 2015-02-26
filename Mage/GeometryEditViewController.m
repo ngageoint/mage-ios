@@ -17,11 +17,6 @@
 
 @implementation GeometryEditViewController
 
-- (id) init {
-    
-    return self;
-}
-
 - (IBAction) saveLocation {
     GeoPoint *point = self.observation.geometry;
     point.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
@@ -30,8 +25,8 @@
 }
 
 - (void) viewDidLoad {
-    CLLocationDistance latitudeMeters = 500;
-    CLLocationDistance longitudeMeters = 500;
+    CLLocationDistance latitudeMeters = 2500;
+    CLLocationDistance longitudeMeters = 2500;
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.geoPoint.location.coordinate, latitudeMeters, longitudeMeters);
     MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
     [self.map setRegion:viewRegion];

@@ -59,11 +59,6 @@
     [self setPreferenceDisplayLabel:_imageUploadSizeLabel forPreference:@"imageUploadSizes"];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewWillDisappear:animated];
-}
-
 - (void) setLocationServicesLabel {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {

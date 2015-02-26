@@ -9,57 +9,58 @@
 #import "MKAnnotationView+PersonIcon.h"
 #import "AFHTTPRequestOperation.h"
 #import "UIImage+Resize.h"
+#import <Location.h>
+#import <NSDate+DateTools.h>
 
 @implementation MKAnnotationView (PersonIcon)
+
+- (UIColor *) colorForUser: (User *) user {
+    NSDate *timestamp = user.location.timestamp;
+    NSDate *now = [NSDate date];
+    if ([timestamp isEarlierThanOrEqualTo: [now dateBySubtractingMinutes:30]]) {
+        return [UIColor orangeColor];
+    } else if ([timestamp isEarlierThanOrEqualTo: [now dateBySubtractingMinutes:10]]) {
+        return [UIColor yellowColor];
+    }
+    
+    return [UIColor blueColor];
+}
 
 - (void) setImageForUser:(User *) user {
     [self setAccessibilityLabel:@"Person"];
     [self setAccessibilityValue:@"Person"];
     
     if (!user.iconUrl) {
-        self.image = [self blueCircle];
+        self.image = [self circleWithColor:[self colorForUser:user]];
         return;
     }
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]];
-    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
-    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
-    
-    __weak __typeof(self) weakSelf = self;
-    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __strong __typeof (weakSelf) strongSelf = weakSelf;
-        UIImage *image = responseObject;
-        if (!image) {
-            strongSelf.image = [strongSelf blueCircle];
-            return;
-        }
-        
-        UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
-        [resizedImage setAccessibilityIdentifier:[url absoluteString]];
-        
-        strongSelf.image = [strongSelf mergeImage:resizedImage withDot:[strongSelf blueCircle]];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Icon URL request is failing");
-        __strong __typeof (weakSelf) strongSelf = weakSelf;
-        strongSelf.image = [self blueCircle];
-    }];
-    
-    [requestOperation start];
+    UIImage *image = nil;
+    if ([[user.iconUrl lowercaseString] hasPrefix:@"http"]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
+    } else {
+        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+        image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.iconUrl]]];
+    }
+    NSLog(@"Showing icon from %@", user.iconUrl);
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
+    [resizedImage setAccessibilityIdentifier:user.iconUrl];
+    self.image = [self mergeImage:resizedImage withDot:[self circleWithColor:[self colorForUser:user]]];
 }
 
-- (UIImage *) blueCircle {
-    static UIImage *blueCircle = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+- (UIImage *) circleWithColor: (UIColor *) color {
+    UIImage *blueCircle = nil;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(15.f, 15.f), NO, 0.0f);
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextSaveGState(ctx);
         
-        CGRect rect = CGRectMake(0, 0, 15, 15);
-        CGContextSetFillColorWithColor(ctx, [UIColor blueColor].CGColor);
+        CGRect rect = CGRectMake(1, 1, 13, 13);
+        CGContextSetFillColorWithColor(ctx, color.CGColor);
         CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-        CGContextSetLineWidth(ctx, 3);
+        CGContextSetLineWidth(ctx, 2);
         CGContextFillEllipseInRect(ctx, rect);
         CGContextStrokeEllipseInRect(ctx, rect);
         
@@ -67,7 +68,7 @@
         blueCircle = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-    });
+//    });
     return blueCircle;
 }
 

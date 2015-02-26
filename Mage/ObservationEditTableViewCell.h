@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;
 @property (weak, nonatomic) NSDictionary *fieldDefinition;
 @property (nonatomic, weak) id<ObservationEditListener> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *requiredIndicator;
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation;
 - (CGFloat) getCellHeightForValue: (id) value;
