@@ -51,12 +51,13 @@
 - (void) viewDidAppear:(BOOL)animated {
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        
-        if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
-            [self ensureButtonVisible];
-        }
     }
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
+        [self ensureButtonVisible];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
