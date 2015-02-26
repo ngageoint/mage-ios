@@ -8,6 +8,7 @@
 
 #import "HttpManager.h"
 #import "UserUtility.h"
+#import "NSString+Contains.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
 
@@ -66,7 +67,7 @@ static HttpManager *sharedSingleton = nil;
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
         // token expired
-        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] containsString:@"login"] && ![[request.URL path] containsString:@"devices"]) ) {
+        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] safeContainsString:@"login"] && ![[request.URL path] safeContainsString:@"devices"]) ) {
             [[UserUtility singleton] expireToken];
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
         }
