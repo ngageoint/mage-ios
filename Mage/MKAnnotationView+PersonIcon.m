@@ -9,15 +9,51 @@
 #import "MKAnnotationView+PersonIcon.h"
 #import "AFHTTPRequestOperation.h"
 #import "UIImage+Resize.h"
+#import <Location.h>
+#import <NSDate+DateTools.h>
 
 @implementation MKAnnotationView (PersonIcon)
+
+/**
+ // Marker color defaults for FFT
+ // orange
+ appConstants.peopleColorDefault = '#FF5721';
+ 
+ // Specify times in milliseconds
+ // set the minAge of the first color to something very negative
+ // I have seen the timestamp come back ahead of the current time
+ // probably due to computer time differences
+ appConstants.peopleAgeToColor = [{
+ minAge: -10000000,
+ maxAge: 600000,
+ // blue
+ color: '#0000FF'
+ },{
+ minAge: 600001,
+ maxAge: 1800000,
+ // yellow
+ color: '#FFFF00'
+ }];
+ **/
+
+- (UIColor *) colorForUser: (User *) user {
+    NSDate *timestamp = user.location.timestamp;
+    NSDate *now = [NSDate date];
+    if ([timestamp isEarlierThanOrEqualTo: [now dateBySubtractingMinutes:30]]) {
+        return [UIColor orangeColor];
+    } else if ([timestamp isEarlierThanOrEqualTo: [now dateBySubtractingMinutes:10]]) {
+        return [UIColor yellowColor];
+    }
+    
+    return [UIColor blueColor];
+}
 
 - (void) setImageForUser:(User *) user {
     [self setAccessibilityLabel:@"Person"];
     [self setAccessibilityValue:@"Person"];
     
     if (!user.iconUrl) {
-        self.image = [self blueCircle];
+        self.image = [self circleWithColor:[self colorForUser:user]];
         return;
     }
     
@@ -32,21 +68,21 @@
     NSLog(@"Showing icon from %@", user.iconUrl);
     UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
     [resizedImage setAccessibilityIdentifier:user.iconUrl];
-    self.image = [self mergeImage:resizedImage withDot:[self blueCircle]];
+    self.image = [self mergeImage:resizedImage withDot:[self circleWithColor:[self colorForUser:user]]];
 }
 
-- (UIImage *) blueCircle {
-    static UIImage *blueCircle = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+- (UIImage *) circleWithColor: (UIColor *) color {
+    UIImage *blueCircle = nil;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(15.f, 15.f), NO, 0.0f);
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextSaveGState(ctx);
         
-        CGRect rect = CGRectMake(0, 0, 15, 15);
-        CGContextSetFillColorWithColor(ctx, [UIColor blueColor].CGColor);
+        CGRect rect = CGRectMake(1, 1, 13, 13);
+        CGContextSetFillColorWithColor(ctx, color.CGColor);
         CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-        CGContextSetLineWidth(ctx, 3);
+        CGContextSetLineWidth(ctx, 2);
         CGContextFillEllipseInRect(ctx, rect);
         CGContextStrokeEllipseInRect(ctx, rect);
         
@@ -54,7 +90,7 @@
         blueCircle = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-    });
+//    });
     return blueCircle;
 }
 
