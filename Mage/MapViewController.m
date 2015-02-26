@@ -38,6 +38,8 @@
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
+    @property (nonatomic, strong) NSTimer* locationColorUpdateTimer;
+
 @end
 
 @implementation MapViewController
@@ -87,6 +89,8 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
+    //start the timer for updating the circles
+    [self scheduleColorUpdateTimer];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -96,6 +100,22 @@
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
+    
+    //stop the timer for updating the circles
+    if (_locationColorUpdateTimer != nil) {
+        [_locationColorUpdateTimer invalidate];
+    }
+}
+
+- (void) scheduleColorUpdateTimer {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _locationColorUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onColorUpdateTimerFire) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) onColorUpdateTimerFire {
+    NSLog(@"Update the colors");
+    [self.mapDelegate updateLocations:[self.mapDelegate.locations.fetchedResultsController fetchedObjects]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath

@@ -33,8 +33,13 @@
 }
 
 -(void) setLocation:(Location *)location {
-    self.location = location;
+    _location = location;
 }
+
+-(void) setSubtitle:(NSString *)subtitle {
+    _subtitle = subtitle;
+}
+
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
