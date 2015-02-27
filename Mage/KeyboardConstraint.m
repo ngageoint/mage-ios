@@ -27,19 +27,28 @@ CGFloat initialConstant;
     initialConstant = self.constant;
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
 -(void)keyboardWillShow: (NSNotification *) notification {
     NSDictionary *userInfo = notification.userInfo;
     CGRect r = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     self.constant = initialConstant + r.size.height;
-    UITableView *table = self.secondItem;
-    UIView *responder = [UIResponder currentFirstResponder];
-    UIView *cell = responder.superview;
-    while (cell != nil && ![cell isKindOfClass:[UITableViewCell class]]) {
-        cell = cell.superview;
-    }
-    if (cell != nil) {
-        [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
-    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITableView *table = self.secondItem;
+        UIView *responder = [UIResponder currentFirstResponder];
+        UIView *cell = responder.superview;
+        while (cell != nil && ![cell isKindOfClass:[UITableViewCell class]]) {
+            cell = cell.superview;
+        }
+        if (cell != nil) {
+            [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
+        }
+
+    });
 }
 
 -(void)keyboardWillHide: (NSNotification *) notification {
