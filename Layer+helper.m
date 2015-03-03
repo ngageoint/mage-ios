@@ -53,7 +53,7 @@
                 } else if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
                     Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
                     if (l == nil) {
-                        l = [Layer MR_createInContext:localContext];
+                        l = [Layer MR_createEntityInContext:localContext];
                     }
                     [l populateObjectFromJson:layer];
                     

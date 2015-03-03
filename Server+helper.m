@@ -22,26 +22,6 @@
     return [Server getPropertyForKey:@"observationLayerId"];
 }
 
-+(void) setObservationLayerId:(NSNumber *) observationLayerId  {
-    [Server setProperty:observationLayerId forKey:@"observationLayerId"];
-}
-
-+(NSString *) observationFormId {
-    return [Server getPropertyForKey:@"observationFormId"];
-}
-
-+(void) setObservationFormId:(NSString *) observationFormId {
-    [Server setProperty:observationFormId forKey:@"observationFormId"];
-}
-
-+(NSDictionary *) observationForm {
-    return [Server getPropertyForKey:@"observationForm"];
-}
-
-+(void) setObservationForm:(NSDictionary *) observationForm {
-    [Server setProperty:observationForm forKey:@"observationForm"];
-}
-
 +(id) getPropertyForKey:(NSString *) key {
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     

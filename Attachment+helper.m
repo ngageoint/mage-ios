@@ -12,7 +12,7 @@
 @implementation Attachment (helper)
 
 + (Attachment *) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context {
-    Attachment *attachment = [Attachment MR_createInContext:context];
+    Attachment *attachment = [Attachment MR_createEntityInContext:context];
     [attachment populateFromJson:json];
     return attachment;
 }

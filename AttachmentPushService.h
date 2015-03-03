@@ -10,6 +10,7 @@
 
 @interface AttachmentPushService : NSObject
 
++ (instancetype) singleton;
 - (void) start;
 - (void) stop;
 

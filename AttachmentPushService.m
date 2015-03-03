@@ -23,6 +23,15 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 
 @implementation AttachmentPushService
 
++ (instancetype) singleton {
+    static AttachmentPushService *pushService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        pushService = [[self alloc] init];
+    });
+    return pushService;
+}
+
 - (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -76,6 +85,8 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         case NSFetchedResultsChangeUpdate:
             NSLog(@"attachment updated, push em");
             [self pushAttachments:@[anObject]];
+            break;
+        default:
             break;
     }
 }

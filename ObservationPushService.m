@@ -23,6 +23,16 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 @implementation ObservationPushService
 
++ (instancetype) singleton {
+    static ObservationPushService *pushService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        pushService = [[self alloc] init];
+    });
+    return pushService;
+}
+
+
 - (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

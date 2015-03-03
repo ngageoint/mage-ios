@@ -20,6 +20,15 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
 @implementation LocationFetchService
 
++ (instancetype) singleton {
+    static LocationFetchService *fetchService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        fetchService = [[self alloc] init];
+    });
+    return fetchService;
+}
+
 - (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

@@ -117,7 +117,7 @@
                          @"lastname": @"unkown"
                      };
                     
-                    user = [User MR_createInContext:localContext];
+                    user = [User MR_createEntityInContext:localContext];
                     user = [User insertUserForJson:userDictionary inManagedObjectContext:localContext];
                 };
                 if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
@@ -125,7 +125,7 @@
                 Location *location = user.location;
                 if (location == nil) {
                     // not in core data yet need to create a new managed object
-                    location = [Location MR_createInContext:localContext];
+                    location = [Location MR_createEntityInContext:localContext];
                     NSArray *locations = [userLocation objectForKey:@"locations"];
                     [location populateLocationFromJson:locations];
                     user.location = location;

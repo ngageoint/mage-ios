@@ -55,7 +55,7 @@
         
         if (!user) {
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-                User *user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
+                [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
             } completion:^(BOOL contextDidSave, NSError *error) {
                 [self finishLoginForParameters: parameters withResponse:response andUser:user];
             }];

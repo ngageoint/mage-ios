@@ -29,6 +29,15 @@ NSInteger const kLocationPushLimit = 100;
 
 @implementation LocationService
 
++ (instancetype) singleton {
+    static LocationService *service = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        service = [[self alloc] init];
+    });
+    return service;
+}
+
 - (id) init {
     if (self = [super init]) {
         
@@ -124,7 +133,7 @@ NSInteger const kLocationPushLimit = 100;
         __weak LocationService *weakSelf = self;
         NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
             for (GPSLocation *location in locations) {
-                [location MR_deleteInContext:weakSelf.managedObjectContext];
+                [location MR_deleteEntityInContext:weakSelf.managedObjectContext];
             }
             
             [weakSelf.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {

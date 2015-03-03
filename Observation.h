@@ -2,8 +2,8 @@
 //  Observation.h
 //  mage-ios-sdk
 //
-//  Created by William Newman on 12/18/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//  Created by Dan Barela on 3/2/15.
+//  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSString * deviceId;
 @property (nonatomic, retain) NSNumber * dirty;
+@property (nonatomic, retain) NSNumber * eventId;
 @property (nonatomic, retain) id geometry;
 @property (nonatomic, retain) NSDate * lastModified;
 @property (nonatomic, retain) id properties;

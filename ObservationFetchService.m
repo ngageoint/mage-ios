@@ -22,6 +22,15 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
 @implementation ObservationFetchService
 
++ (instancetype) singleton {
+    static ObservationFetchService *fetchService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        fetchService = [[self alloc] init];
+    });
+    return fetchService;
+}
+
 - (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

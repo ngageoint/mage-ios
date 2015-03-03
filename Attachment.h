@@ -2,7 +2,7 @@
 //  Attachment.h
 //  mage-ios-sdk
 //
-//  Created by William Newman on 1/8/15.
+//  Created by Dan Barela on 3/2/15.
 //  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -15,14 +15,15 @@
 
 @property (nonatomic, retain) NSString * contentType;
 @property (nonatomic, retain) NSNumber * dirty;
+@property (nonatomic, retain) NSNumber * eventId;
 @property (nonatomic, retain) NSDate * lastModified;
 @property (nonatomic, retain) NSString * localPath;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * observationRemoteId;
 @property (nonatomic, retain) NSString * remoteId;
 @property (nonatomic, retain) NSString * remotePath;
 @property (nonatomic, retain) NSNumber * size;
 @property (nonatomic, retain) NSString * url;
-@property (nonatomic, retain) NSString * observationRemoteId;
 @property (nonatomic, retain) Observation *observation;
 
 @end

@@ -13,6 +13,7 @@ extern NSString * const kLocationFetchFrequencyKey;
 
 @interface LocationFetchService : NSObject
 
++ (instancetype) singleton;
 - (void) start;
 - (void) stop;
 

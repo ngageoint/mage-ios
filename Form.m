@@ -18,46 +18,20 @@
 #import "MageServer.h"
 #import "Server+helper.h"
 
-static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
-    if ([JSONObject isKindOfClass:[NSArray class]]) {
-        NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:[(NSArray *)JSONObject count]];
-        for (id value in (NSArray *)JSONObject) {
-            [mutableArray addObject:AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions)];
-        }
-        
-        return (readingOptions & NSJSONReadingMutableContainers) ? mutableArray : [NSArray arrayWithArray:mutableArray];
-    } else if ([JSONObject isKindOfClass:[NSDictionary class]]) {
-        NSMutableDictionary *mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:JSONObject];
-        for (id <NSCopying> key in [(NSDictionary *)JSONObject allKeys]) {
-            id value = [(NSDictionary *)JSONObject objectForKey:key];
-            if (!value || [value isEqual:[NSNull null]]) {
-                [mutableDictionary removeObjectForKey:key];
-            } else if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSDictionary class]]) {
-                [mutableDictionary setObject:AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions) forKey:key];
-            }
-        }
-        
-        return (readingOptions & NSJSONReadingMutableContainers) ? mutableDictionary : [NSDictionary dictionaryWithDictionary:mutableDictionary];
-    }
-    
-    return JSONObject;
-}
-
 @implementation Form
 
-+ (NSOperation *) operationToPullForm:(void (^) (BOOL success)) complete {
-    NSString* formId = [Server observationFormId];
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@.zip", [MageServer baseURL], @"api/forms", formId];
++ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure {
+    NSString *url = [NSString stringWithFormat:@"%@/%@/form/icons.zip", [MageServer baseURL], @"api/events", eventId];
     
-    NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"/Form.zip"];
+    NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/icons-%@.zip", eventId]];
     
-    NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/form-%@", formId]];
+    NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/icons-%@", eventId]];
     
     HttpManager *http = [HttpManager singleton];
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Form request complete");
+        NSLog(@"event form icon request complete");
         
         NSError *error = nil;
     
@@ -95,25 +69,17 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
         }
         
         [unzipFile close];
-        
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *jsonFilePath = [NSString stringWithFormat:@"%@/form/%@", folderToUnzipTo, @"form.json"];
-        if ( [fileManager fileExistsAtPath:jsonFilePath] && error == nil)
-        {
-            NSString *jsonString = [[NSString alloc] initWithContentsOfFile:jsonFilePath encoding:NSUTF8StringEncoding error:NULL];
-            NSError *error;
-            
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-            json = AFJSONObjectByRemovingKeysWithNullValues(json, NSJSONReadingAllowFragments);
-
-            [Server setObservationForm:json];
+        if ([[NSFileManager defaultManager] isDeletableFileAtPath:stringPath]) {
+            BOOL success = [[NSFileManager defaultManager] removeItemAtPath:stringPath error:&error];
+            if (!success) {
+                NSLog(@"Error removing file at path: %@", error.localizedDescription);
+            }
         }
-        
-        complete(YES);
+        success();
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        complete(NO);
+        failure();
     }];
     
     NSError *error = nil;

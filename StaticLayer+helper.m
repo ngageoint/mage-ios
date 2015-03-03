@@ -33,7 +33,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
         NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
         StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
         if (l == nil) {
-            l = [StaticLayer MR_createInContext:localContext];
+            l = [StaticLayer MR_createEntityInContext:localContext];
             [l populateObjectFromJson:layer];
             NSLog(@"Inserting layer with id: %@", l.remoteId);
             NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];

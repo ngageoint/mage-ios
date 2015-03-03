@@ -10,6 +10,7 @@
 
 @interface ObservationPushService : NSObject
 
++ (instancetype) singleton;
 - (void) start;
 - (void) stop;
 

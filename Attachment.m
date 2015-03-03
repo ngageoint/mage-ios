@@ -2,7 +2,7 @@
 //  Attachment.m
 //  mage-ios-sdk
 //
-//  Created by William Newman on 1/8/15.
+//  Created by Dan Barela on 3/2/15.
 //  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -14,14 +14,15 @@
 
 @dynamic contentType;
 @dynamic dirty;
+@dynamic eventId;
 @dynamic lastModified;
 @dynamic localPath;
 @dynamic name;
+@dynamic observationRemoteId;
 @dynamic remoteId;
 @dynamic remotePath;
 @dynamic size;
 @dynamic url;
-@dynamic observationRemoteId;
 @dynamic observation;
 
 @end

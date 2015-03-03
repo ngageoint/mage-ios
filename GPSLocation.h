@@ -2,8 +2,8 @@
 //  GPSLocation.h
 //  mage-ios-sdk
 //
-//  Created by William Newman on 8/20/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//  Created by Dan Barela on 3/2/15.
+//  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,6 +12,7 @@
 
 @interface GPSLocation : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * eventId;
 @property (nonatomic, retain) id geometry;
 @property (nonatomic, retain) id properties;
 @property (nonatomic, retain) NSDate * timestamp;

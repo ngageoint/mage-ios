@@ -15,7 +15,7 @@
 static User *currentUser = nil;
 
 + (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext:(NSManagedObjectContext *) context {
-    User *user = [User MR_createInContext:context];
+    User *user = [User MR_createEntityInContext:context];
     [user setCurrentUser:[NSNumber numberWithBool:myself]];
     [user updateUserForJson:json];
     

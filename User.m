@@ -2,12 +2,13 @@
 //  User.m
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 10/16/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
+//  Created by Dan Barela on 3/2/15.
+//  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import "User.h"
 #import "Location.h"
+#import "Team.h"
 
 
 @implementation User
@@ -22,5 +23,6 @@
 @dynamic remoteId;
 @dynamic username;
 @dynamic location;
+@dynamic teams;
 
 @end

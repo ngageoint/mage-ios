@@ -25,7 +25,7 @@ NSDictionary *_fieldNameToField;
 
 
 + (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
-    Observation *observation = [Observation MR_createInContext:mangedObjectContext];
+    Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
     
     NSDateFormatter *dateFormat = [NSDateFormatter new];
     [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
@@ -261,7 +261,7 @@ NSDictionary *_fieldNameToField;
                     [existingObservation MR_deleteEntity];
                 } else if (state != Archive && !existingObservation) {
                     // if the observation doesn't exist, insert it
-                    Observation *observation = [Observation MR_createInContext:localContext];
+                    Observation *observation = [Observation MR_createEntityInContext:localContext];
                     [observation populateObjectFromJson:feature];
                     observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
                     for (id attachmentJson in [feature objectForKey:@"attachments"]) {
