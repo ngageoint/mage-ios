@@ -11,6 +11,8 @@
 #import "MageRootViewController.h"
 #import "DeviceUUID.h"
 
+#import <Mage.h>
+
 @interface MageInitialViewController ()
 
 @end
@@ -25,11 +27,7 @@
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
-    // stop the location fetch service
-    [self.fetchServicesHolder.locationFetchService stop];
-    [self.fetchServicesHolder.observationFetchService stop];
-    [self.fetchServicesHolder.observationPushService stop];
-    [self.fetchServicesHolder.attachmentPushService stop];
+    [[Mage singleton] stopServices];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
@@ -46,10 +44,7 @@
 
 - (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
     [[UserUtility singleton] expireToken];
-    [self.fetchServicesHolder.locationFetchService stop];
-    [self.fetchServicesHolder.observationFetchService stop];
-    [self.fetchServicesHolder.observationPushService stop];
-    [self.fetchServicesHolder.attachmentPushService stop];
+    [[Mage singleton] stopServices];
 }
 
 @end
