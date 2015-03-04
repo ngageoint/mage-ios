@@ -8,21 +8,21 @@
 
 #import "ObservationImage.h"
 #import "Server+helper.h"
+#import <Event+helper.h>
 
 @implementation ObservationImage
 
 + (NSString *) imageNameForObservation:(Observation *) observation {
 	if (!observation) return nil;
-    
-    NSString *formId = [Server observationFormId];
-    NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/form-%@/form/icons", formId]];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
+    NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@/icons", event.remoteId]];
     
     NSString *type = [observation.properties objectForKey:@"type"];
     if (type == nil) {
         return nil;
     }
     
-    NSDictionary *form = [Server observationForm];
     NSString *variantField = [form objectForKey:@"variantField"];
     NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
     if (variantField != nil && [observation.properties objectForKey:variantField] != nil) {

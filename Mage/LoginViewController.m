@@ -42,7 +42,7 @@
 
 @implementation LoginViewController
 
-- (void) authenticationWasSuccessful:(User *) user {
+- (void) authenticationWasSuccessful {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
     self.usernameField.textColor = [UIColor blackColor];
     self.passwordField.textColor = [UIColor blackColor];

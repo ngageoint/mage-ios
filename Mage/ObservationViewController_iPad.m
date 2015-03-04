@@ -9,7 +9,7 @@
 #import "ObservationViewController_iPad.h"
 #import <Server+helper.h>
 #import <GeoPoint.h>
-
+#import <Event+helper.h>
 
 @implementation ObservationViewController_iPad
 
@@ -21,7 +21,8 @@
     } else {
         self.primaryFieldLabel.text = @"Observation";
     }
-    NSDictionary *form = [Server observationForm];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
     if (variantField != nil && [self.observation.properties objectForKey:variantField] != nil) {
         self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
