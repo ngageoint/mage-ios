@@ -9,6 +9,7 @@
 #import "ObservationCommonHeaderTableViewCell.h"
 #import <Server+helper.h>
 #import <User.h>
+#import <Event+helper.h>
 
 @interface ObservationCommonHeaderTableViewCell ()
 
@@ -35,7 +36,8 @@
     } else {
         self.primaryFieldLabel.text = @"Observation";
     }
-    NSDictionary *form = [Server observationForm];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
     if (variantField != nil) {
         self.variantFieldLabel.text = [observation.properties objectForKey:variantField];

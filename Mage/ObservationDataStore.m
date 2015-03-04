@@ -13,6 +13,7 @@
 #import <NSDate+DateTools.h>
 #import "Server+helper.h"
 #import "AttachmentSelectionDelegate.h"
+#import <Event+helper.h>
 
 @interface ObservationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
@@ -47,7 +48,8 @@
 }
 
 - (id) init {
-    NSDictionary *form = [Server observationForm];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
     self.variantField = [form objectForKey:@"variantField"];
     return self;
 }
