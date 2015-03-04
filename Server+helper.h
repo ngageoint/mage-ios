@@ -12,5 +12,7 @@
 
 +(NSString *) serverUrl;
 +(void) setServerUrl:(NSString *) serverUrl;
++(NSNumber *) currentEventId;
++(void) setCurrentEventId:(NSNumber *) eventId;
 
 @end

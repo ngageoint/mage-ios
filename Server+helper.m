@@ -18,8 +18,12 @@
     [Server setProperty:serverUrl forKey:@"serverUrl"];
 }
 
-+(NSNumber *) observationLayerId {
-    return [Server getPropertyForKey:@"observationLayerId"];
++(NSNumber *) currentEventId {
+    return [Server getPropertyForKey:@"currentEventId"];
+}
+
++(void) setCurrentEventId: (NSNumber *) eventId {
+    [Server setProperty:eventId forKey:@"currentEventId"];
 }
 
 +(id) getPropertyForKey:(NSString *) key {

@@ -72,7 +72,10 @@
 }
 
 - (void) initiateDataPull {
-    [Event operationToFetchEvents];
+    NSOperation *myselfOp = [User operationToFetchMyselfWithCompletionBlock:^{
+        [[HttpManager singleton].manager.operationQueue addOperation: [Event operationToFetchEvents]];
+    }];
+    [[HttpManager singleton].manager.operationQueue addOperation:myselfOp];
 }
 
 - (void) eventsFetched: (NSNotification *) notification {

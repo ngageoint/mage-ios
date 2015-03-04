@@ -21,11 +21,11 @@
 @implementation Form
 
 + (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure {
-    NSString *url = [NSString stringWithFormat:@"%@/%@/form/icons.zip", [MageServer baseURL], @"api/events", eventId];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/form/icons.zip", [MageServer baseURL], @"api/events", eventId];
     
-    NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/icons-%@.zip", eventId]];
+    NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/events/icons-%@.zip", eventId]];
     
-    NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/icons-%@", eventId]];
+    NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@", eventId]];
     
     HttpManager *http = [HttpManager singleton];
     

@@ -48,26 +48,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
 - (void) start {
     [self stop];
-    
-    HttpManager *http = [HttpManager singleton];
-    NSOperation *layerPullOperation = [Layer operationToPullLayers:^(BOOL success) {
-        if (success) {
-            NSOperation* formPullOp = [Form operationToPullForm:^(BOOL success) {
-                if (success) {
-                    // Layers and Form pulled, lets start the observation fetch
-                    [self pullObservations];
-                } else {
-                    // TODO error
-                }
-            }];
-            
-            [http.manager.operationQueue addOperation:formPullOp];
-        } else {
-            // TODO error
-        }
-    }];
-    
-    [http.manager.operationQueue addOperation:layerPullOperation];
+    [self pullObservations];    
 }
 
 - (void) scheduleTimer {

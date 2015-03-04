@@ -9,6 +9,7 @@
 #import "User+helper.h"
 #import "HttpManager.h"
 #import "MageServer.h"
+#import "Server+helper.h"
 
 @implementation User (helper)
 
@@ -30,12 +31,12 @@ static User *currentUser = nil;
     return [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"currentUser = %@", [NSNumber numberWithBool:YES]] inContext:managedObjectContext];
 }
 
-+ (User *) fetchUserForId:(NSString *) userId {
-    return [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId = %@", userId]];
++ (User *) fetchUserForId:(NSString *) userId inManagedObjectContext: (NSManagedObjectContext *) context {
+    return [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId = %@", userId] inContext:context];
 }
 
 - (void) updateUserForJson: (NSDictionary *) json {
-    [self setRemoteId:[json objectForKey:@"_id"]];
+    [self setRemoteId:[json objectForKey:@"id"]];
     [self setUsername:[json objectForKey:@"username"]];
     [self setEmail:[json objectForKey:@"email"]];
     [self setName:[NSString stringWithFormat:@"%@ %@", [json objectForKey:@"firstname"], [json objectForKey:@"lastname"]]];
@@ -48,6 +49,7 @@ static User *currentUser = nil;
     
     [self setIconUrl:[json objectForKey:@"iconUrl"]];
     [self setAvatarUrl:[json objectForKey:@"avatarUrl"]];
+    [self setRecentEventIds:[json objectForKey:@"recentEventIds"]];
 }
 
 + (void) pullUserIcon: (User *) user {
@@ -127,7 +129,7 @@ static User *currentUser = nil;
             // Get the user ids to query
             NSMutableArray *userIds = [[NSMutableArray alloc] init];
             for (NSDictionary *userJson in users) {
-                [userIds addObject:[userJson objectForKey:@"_id"]];
+                [userIds addObject:[userJson objectForKey:@"id"]];
             }
             
             NSArray *usersMatchingIDs = [User MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", userIds] inContext:localContext];
@@ -138,7 +140,7 @@ static User *currentUser = nil;
             
             for (NSDictionary *userJson in users) {
                 // pull from query map
-                NSString *userId = [userJson objectForKey:@"_id"];
+                NSString *userId = [userJson objectForKey:@"id"];
                 User *user = [userIdMap objectForKey:userId];
                 if (user == nil) {
                     // not in core data yet need to create a new managed object
@@ -176,6 +178,59 @@ static User *currentUser = nil;
         NSLog(@"Error: %@", error);
     }];
     return operation;
+}
+
++ (NSOperation *) operationToFetchMyselfWithCompletionBlock: (void(^)())complete {
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
+    
+    NSLog(@"Fetching myself from server %@", url);
+    
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id myself) {
+        
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            
+            User *user = [User MR_findFirstByAttribute:@"remoteId" withValue:[myself objectForKey:@"id"] inContext:localContext];
+            if (user == nil) {
+                user = [User insertUserForJson:myself inManagedObjectContext:localContext];
+                if (user.iconUrl != nil) {
+                    [User pullUserIcon:user];
+                }
+                if (user.avatarUrl != nil) {
+                    [User pullUserAvatar:user];
+                }
+            } else {
+                NSString *oldIcon = user.iconUrl;
+                NSString *oldAvatar = user.avatarUrl;
+                
+                [user updateUserForJson:myself];
+                // go pull their icon and avatar if they got one
+                if ([[oldIcon lowercaseString] hasPrefix:@"http"] || (oldIcon == nil && user.iconUrl != nil)) {
+                    [User pullUserIcon:user];
+                } else {
+                    user.iconUrl = oldIcon;
+                }
+                if ([[oldAvatar lowercaseString] hasPrefix:@"http"] || (oldAvatar == nil && user.avatarUrl != nil)) {
+                    [User pullUserAvatar:user];
+                } else {
+                    user.avatarUrl = oldAvatar;
+                }
+            }
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSArray *recentEvents = [myself objectForKey:@"recentEventIds"];
+            if (recentEvents != nil && recentEvents.count != 0) {
+                [Server setCurrentEventId:recentEvents[0]];
+            }
+        } completion:^(BOOL contextDidSave, NSError *error) {
+            complete();
+        }];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    return operation;
+
 }
 
 @end

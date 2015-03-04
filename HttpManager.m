@@ -41,6 +41,7 @@ static HttpManager *sharedSingleton = nil;
         _manager = [AFHTTPRequestOperationManager manager];
         _manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
         _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
+        [_manager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         
         _sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];

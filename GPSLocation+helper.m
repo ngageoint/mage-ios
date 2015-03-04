@@ -11,6 +11,7 @@
 #import "NSDate+Iso8601.h"
 #import "GeoPoint.h"
 #import "MageServer.h"
+#import "Server+helper.h"
 
 @implementation GPSLocation (helper)
 
@@ -42,7 +43,7 @@
 }
 
 + (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure {
-	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/"];
+	NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations", [MageServer baseURL], [Server currentEventId]];
 	NSLog(@"Trying to push locations to server %@", url);
 	
     HttpManager *http = [HttpManager singleton];

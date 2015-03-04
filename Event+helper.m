@@ -9,6 +9,7 @@
 #import "Event+helper.h"
 #import "MageServer.h"
 #import "HttpManager.h"
+#import "User+helper.h"
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -69,13 +70,18 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id events) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            User *current = [User fetchCurrentUserInManagedObjectContext:localContext];
             
             NSMutableArray *eventsReturned = [[NSMutableArray alloc] init];
             for (NSDictionary *eventJson in events) {
-                Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[eventJson objectForKey:@"id"]];
+                Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[eventJson objectForKey:@"id"] inContext:localContext];
                 if (event == nil) {
                     event = [Event insertEventForJson:eventJson inManagedObjectContext:localContext];
+                } else {
+                    [event updateEventForJson:eventJson];
                 }
+                [event setRecentSortOrder:[NSNumber numberWithLong:[current.recentEventIds indexOfObject:event.remoteId]]];
+                NSLog(@"recent sort order is %@", event.recentSortOrder);
                 [eventsReturned addObject:[eventJson objectForKey:@"id"]];
             }
             

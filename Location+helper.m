@@ -15,6 +15,7 @@
 #import "MageServer.h"
 #import <NSDate+DateTools.h>
 #import "NSDate+Iso8601.h"
+#import "Server+helper.h"
 
 @implementation Location (helper)
 
@@ -43,7 +44,7 @@
 - (void) populateLocationFromJson:(NSArray *) locations {
 	if (locations.count) {
 		for (NSDictionary* jsonLocation in locations) {
-			[self setRemoteId:[jsonLocation objectForKey:@"_id"]];
+			[self setRemoteId:[jsonLocation objectForKey:@"id"]];
 			[self setType:[jsonLocation objectForKey:@"type"]];
 			
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -72,7 +73,7 @@
 
 
 + (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete {
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/locations/users"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", [MageServer baseURL], @"api/events", [Server currentEventId], @"locations/users"];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
@@ -84,15 +85,15 @@
     HttpManager *http = [HttpManager singleton];
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id userLocations) {
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id allUserLocations) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[userLocations count]);
+            NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[allUserLocations count]);
             User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
             
             // Get the user ids to query
             NSMutableArray *userIds = [[NSMutableArray alloc] init];
-            for (NSDictionary *userLocation in userLocations) {
-                [userIds addObject:[userLocation objectForKey:@"user"]];
+            for (NSDictionary *user in allUserLocations) {
+                [userIds addObject:[user objectForKey:@"id"]];
             }
             
             NSArray *usersMatchingIDs = [User MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", userIds] inContext:localContext];
@@ -102,16 +103,16 @@
             }
             
             BOOL newUserFound = NO;
-            for (NSDictionary *userLocation in userLocations) {
+            for (NSDictionary *userJson in allUserLocations) {
                 // pull from query map
-                NSString *userId = [userLocation objectForKey:@"user"];
-                NSArray *locations = [userLocation objectForKey:@"locations"];
+                NSString *userId = [userJson objectForKey:@"id"];
+                NSArray *locations = [userJson objectForKey:@"locations"];
                 User *user = [userIdMap objectForKey:userId];
                 if (user == nil && [locations count] != 0) {
                     NSLog(@"Could not find user for id");
                     newUserFound = YES;
                     NSDictionary *userDictionary = @{
-                         @"_id": userId,
+                         @"id": userId,
                          @"username": userId,
                          @"firstname": @"unknown",
                          @"lastname": @"unkown"
@@ -126,7 +127,7 @@
                 if (location == nil) {
                     // not in core data yet need to create a new managed object
                     location = [Location MR_createEntityInContext:localContext];
-                    NSArray *locations = [userLocation objectForKey:@"locations"];
+                    NSArray *locations = [userJson objectForKey:@"locations"];
                     [location populateLocationFromJson:locations];
                     user.location = location;
                 } else {

@@ -50,18 +50,19 @@
     
     [http.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
         NSDictionary *userJson = [response objectForKey:@"user"];
-        NSString *userId = [userJson objectForKey:@"_id"];
-        User *user = [User fetchUserForId:userId];
+        NSString *userId = [userJson objectForKey:@"id"];
         
-        if (!user) {
-            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-                [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
-            } completion:^(BOOL contextDidSave, NSError *error) {
-                [self finishLoginForParameters: parameters withResponse:response andUser:user];
-            }];
-        } else {
-            [self finishLoginForParameters: parameters withResponse:response andUser:user];
-        }
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            User *user = [User fetchUserForId:userId inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+            if (!user) {
+                user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
+            } else {
+                [user updateUserForJson:userJson];
+            }
+            
+        } completion:^(BOOL contextDidSave, NSError *error) {
+            [self finishLoginForParameters: parameters withResponse:response];
+        }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error logging in: %@", error);
         // try to register again
@@ -71,7 +72,7 @@
 
 }
 
-- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response andUser: (User *) user {
+- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSString *token = [response objectForKey:@"token"];
     NSString *username = (NSString *) [parameters objectForKey:@"username"];
@@ -102,7 +103,7 @@
     [StoredPassword persistPasswordToKeyChain:password];
 
     if (delegate) {
-        [delegate authenticationWasSuccessful:user];
+        [delegate authenticationWasSuccessful];
     }
 
 }

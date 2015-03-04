@@ -69,7 +69,7 @@ NSDictionary *_fieldNameToField;
     if (_fieldNameToField != nil) {
         return _fieldNameToField;
     }
-    NSDictionary *form = [Server observationForm];
+    NSDictionary *form = nil;//[Server observationForm];
     
     NSMutableDictionary *fieldNameToFieldMap = [[NSMutableDictionary alloc] init];
     // run through the form and map the row indexes to fields
@@ -204,8 +204,8 @@ NSDictionary *_fieldNameToField;
 }
 
 + (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure {
-    NSNumber *layerId = [Server observationLayerId];
-    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseURL], layerId];
+    NSNumber *eventId = [Server currentEventId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Trying to push observation to server %@", url);
     
     HttpManager *http = [HttpManager singleton];
@@ -232,9 +232,9 @@ NSDictionary *_fieldNameToField;
 
 + (NSOperation *) operationToPullObservations:(void (^) (BOOL success)) complete {
 
-    NSNumber *layerId = [Server observationLayerId];
-    NSString *url = [NSString stringWithFormat:@"%@/FeatureServer/%@/features", [MageServer baseURL], layerId];
-    NSLog(@"Fetching from layer %@", layerId);
+    NSNumber *eventId = [Server currentEventId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
+    NSLog(@"Fetching observations from event %@", eventId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     __block NSDate *lastObservationDate = [Observation fetchLastObservationDate];
@@ -245,10 +245,9 @@ NSDictionary *_fieldNameToField;
     HttpManager *http = [HttpManager singleton];
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: parameters error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id features) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Observation request complete");
-            NSArray *features = [responseObject objectForKey:@"features"];
             
             for (id feature in features) {
                 NSString *remoteId = [Observation observationIdFromJson:feature];

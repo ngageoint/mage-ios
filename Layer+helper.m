@@ -57,8 +57,8 @@
                     }
                     [l populateObjectFromJson:layer];
                     
-                    [Server setObservationFormId:l.formId];
-                    [Server setObservationLayerId:l.remoteId];
+//                    [Server setObservationFormId:l.formId];
+//                    [Server setObservationLayerId:l.remoteId];
                     
                     NSLog(@"Form id is %@", l.formId);
                 }

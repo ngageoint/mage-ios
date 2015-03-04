@@ -12,8 +12,9 @@
 
 + (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context;
 + (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext:(NSManagedObjectContext *) context;
-+ (User *) fetchUserForId:(NSString *) userId;
++ (User *) fetchUserForId:(NSString *) userId inManagedObjectContext: (NSManagedObjectContext *) context;
 + (User *) fetchCurrentUserInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
++ (NSOperation *) operationToFetchMyselfWithCompletionBlock: (void(^)())complete;
 + (NSOperation *) operationToFetchUsers;
 
 - (void) updateUserForJson: (NSDictionary *) json;

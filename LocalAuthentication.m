@@ -48,7 +48,7 @@
             [[UserUtility singleton] resetExpiration];
             if (delegate) {
                 User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-                [delegate authenticationWasSuccessful:currentUser];
+                [delegate authenticationWasSuccessful];
             }
             return;
         }

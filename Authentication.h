@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 @protocol AuthenticationDelegate <NSObject>
 
 @optional
-- (void) authenticationWasSuccessful: (User *) user;
+- (void) authenticationWasSuccessful;
 - (void) authenticationHadFailure;
 - (void) registrationWasSuccessful;
 
