@@ -142,6 +142,9 @@
         Event *e = [self.allFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
         [Server setCurrentEventId:e.remoteId];
     }
+    [tableView beginUpdates];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView endUpdates];
     [tableView reloadData];
 }
 
