@@ -152,4 +152,23 @@
     return [[UIView alloc] init];
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
+    [label setFont:[UIFont boldSystemFontOfSize:18]];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
+    [view addSubview:label];
+    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
+    [bottomBorder setBackgroundColor:[UIColor lightGrayColor]];
+    [view addSubview:bottomBorder];
+    [view setBackgroundColor:[UIColor colorWithRed:65/255.0 green:124/255.0 blue:200/255.0 alpha:1]];
+    [view.layer setCornerRadius:3.0f];
+    return view;
+}
+
 @end
