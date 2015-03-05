@@ -8,11 +8,12 @@
 
 #import "Observations.h"
 #import "Observation.h"
+#import <Server+helper.h>
 
 @implementation Observations
 
 + (id) observations {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO];
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                   managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                     sectionNameKeyPath:@"sectionName"
@@ -22,7 +23,7 @@
 }
 
 + (id) observationsForUser:(User *) user {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@", user]];
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"sectionName"
