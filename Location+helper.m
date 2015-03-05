@@ -46,7 +46,7 @@
 		for (NSDictionary* jsonLocation in locations) {
 			[self setRemoteId:[jsonLocation objectForKey:@"id"]];
 			[self setType:[jsonLocation objectForKey:@"type"]];
-			
+            [self setEventId:[jsonLocation objectForKey:@"eventId"]];
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 			[dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
 			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
@@ -73,7 +73,7 @@
 
 
 + (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete {
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@/%@", [MageServer baseURL], @"api/events", [Server currentEventId], @"locations/users"];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations/users", [MageServer baseURL], [Server currentEventId]];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

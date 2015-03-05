@@ -81,7 +81,6 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                     [event updateEventForJson:eventJson];
                 }
                 [event setRecentSortOrder:[NSNumber numberWithLong:[current.recentEventIds indexOfObject:event.remoteId]]];
-                NSLog(@"recent sort order is %@", event.recentSortOrder);
                 [eventsReturned addObject:[eventJson objectForKey:@"id"]];
             }
             

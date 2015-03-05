@@ -2,7 +2,7 @@
 //  Location.m
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 3/2/15.
+//  Created by Dan Barela on 3/5/15.
 //  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @dynamic remoteId;
 @dynamic timestamp;
 @dynamic type;
+@dynamic eventId;
 @dynamic user;
 
 @end

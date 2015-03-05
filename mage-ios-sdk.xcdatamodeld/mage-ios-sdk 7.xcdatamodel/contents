@@ -38,6 +38,7 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Location" representedClassName="Location" syncable="YES">
+        <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="geometry" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
@@ -91,7 +92,7 @@
         <element name="Event" positionX="-2466" positionY="-973" width="128" height="135"/>
         <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="105"/>
         <element name="Layer" positionX="-2250" positionY="-1008" width="128" height="150"/>
-        <element name="Location" positionX="-2216" positionY="-655" width="128" height="135"/>
+        <element name="Location" positionX="-2216" positionY="-655" width="128" height="148"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="240"/>
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="60"/>
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="58"/>

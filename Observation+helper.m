@@ -16,12 +16,14 @@
 #import "MageServer.h"
 #import "Server+helper.h"
 #import "User+helper.h"
+#import "Event+helper.h"
 
 @implementation Observation (helper)
 
 NSMutableArray *_transientAttachments;
 
 NSDictionary *_fieldNameToField;
+NSNumber *_currentEventId;
 
 
 + (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
@@ -43,7 +45,7 @@ NSDictionary *_fieldNameToField;
     [observation setGeometry:location];
     [observation setDirty:[NSNumber numberWithBool:NO]];
     [observation setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
-    
+    [observation setEventId:[Server currentEventId]];
     return observation;
 }
 
@@ -66,11 +68,12 @@ NSDictionary *_fieldNameToField;
 }
 
 - (NSDictionary *)fieldNameToField {
-    if (_fieldNameToField != nil) {
+    if (_fieldNameToField != nil && [_currentEventId isEqualToNumber:[Server currentEventId]]) {
         return _fieldNameToField;
     }
-    NSDictionary *form = nil;//[Server observationForm];
-    
+    _currentEventId = [Server currentEventId];
+    Event *currentEvent = [Event MR_findFirstByAttribute:@"remoteId" withValue:_currentEventId];
+    NSDictionary *form = currentEvent.form;
     NSMutableDictionary *fieldNameToFieldMap = [[NSMutableDictionary alloc] init];
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
@@ -232,7 +235,7 @@ NSDictionary *_fieldNameToField;
 
 + (NSOperation *) operationToPullObservations:(void (^) (BOOL success)) complete {
 
-    NSNumber *eventId = [Server currentEventId];
+    __block NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Fetching observations from event %@", eventId);
     
@@ -267,7 +270,7 @@ NSDictionary *_fieldNameToField;
                         Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
                         [observation addAttachmentsObject:attachment];
                     }
-                    
+                    [observation setEventId:eventId];
                     NSLog(@"Saving new observation with id: %@", observation.remoteId);
                 } else if (state != Archive && ![existingObservation.dirty boolValue]) {
                     // if the observation is not dirty, update it
@@ -295,7 +298,7 @@ NSDictionary *_fieldNameToField;
                             [existingObservation addAttachmentsObject:newAttachment];
                         }
                     }
-                    
+                    [existingObservation setEventId:eventId];
                     NSLog(@"Updating object with id: %@", existingObservation.remoteId);
                 } else {
                     NSLog(@"Observation with id: %@ is dirty", remoteId);
