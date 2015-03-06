@@ -12,5 +12,7 @@
 @interface EventChooserController : UIViewController
 
 @property (strong, nonatomic) IBOutlet EventTableDataSource *eventDataSource;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
 @end
