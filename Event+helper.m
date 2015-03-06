@@ -10,6 +10,7 @@
 #import "MageServer.h"
 #import "HttpManager.h"
 #import "User+helper.h"
+#import <Server+helper.h>
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -96,6 +97,21 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
         NSLog(@"Error: %@", error);
     }];
     return operation;
+}
+
++ (void) sendRecentEvent {
+    User *u = [User fetchCurrentUserInManagedObjectContext: [NSManagedObjectContext MR_defaultContext]];
+    NSString *url = [NSString stringWithFormat:@"%@/api/users/%@/events/%@/recent", [MageServer baseURL], u.remoteId, [Server currentEventId]];
+    
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters: nil error: nil];
+    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id repsonse) {
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+    [http.manager.operationQueue addOperation:operation];
 }
 
 
