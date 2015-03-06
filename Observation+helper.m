@@ -318,7 +318,9 @@ NSNumber *_currentEventId;
 
 + (NSDate *) fetchLastObservationDate {
     NSDate *date = nil;
-    Observation *observation = [Observation MR_findFirstOrderedByAttribute:@"lastModified" ascending:NO];
+    Observation *observation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]
+                                                             sortedBy:@"lastModified"
+                                                            ascending:NO];
     if (observation) {
         date = observation.lastModified;
     }
