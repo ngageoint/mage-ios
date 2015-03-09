@@ -25,6 +25,7 @@
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
 #import <NSDate+DateTools.h>
+#import <Server+helper.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -317,9 +318,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-- (void) updateStaticLayers: (NSArray *) staticLayers {
+- (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {
     if (self.hideStaticLayers) return;
     NSMutableSet *unselectedStaticLayers = [[self.staticLayers allKeys] mutableCopy];
+    
+    NSArray *staticLayers = [staticLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
     
     for (NSNumber *staticLayerId in staticLayers) {
         StaticLayer *staticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:staticLayerId];
