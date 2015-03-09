@@ -19,54 +19,28 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     return [json objectForKey:@"id"];
 }
 
-+ (void) refreshStaticLayers {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        [StaticLayer MR_truncateAllInContext:localContext];
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        NSOperation *fetchlayersOperation = [StaticLayer operationtoFetchStaticLayers];
-        [fetchlayersOperation start];
-    }];
-}
-
-+ (void) createOrUpdateStaticLayer: (id) layer {
++ (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
         StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
         if (l == nil) {
             l = [StaticLayer MR_createEntityInContext:localContext];
-            [l populateObjectFromJson:layer];
+            [l populateObjectFromJson:layer withEventId:eventId];
             NSLog(@"Inserting layer with id: %@", l.remoteId);
             NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
             [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
         } else {
             NSLog(@"Updating layer with id: %@", l.remoteId);
-            [l populateObjectFromJson:layer];
+            [l populateObjectFromJson:layer withEventId:eventId];
         }
     } completion:^(BOOL contextDidSave, NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:nil];
     }];
 }
 
-+ (NSOperation *) operationtoFetchStaticLayers {
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
-    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"External", @"type", nil];
-    HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: params error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSArray *layers = responseObject;
-        for (id layer in layers) {
-            [StaticLayer createOrUpdateStaticLayer:layer];
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    return operation;
-}
-
 + (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer {
     HttpManager *http = [HttpManager singleton];
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/%@/%@/features", [MageServer baseURL], @"FeatureServer", layer.remoteId] parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/features", layer.url] parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             StaticLayer *localLayer = [layer MR_inContext:localContext];

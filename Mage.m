@@ -16,6 +16,7 @@
 #import "User+helper.h"
 #import "Event+helper.h"
 #import "Form.h"
+#import "Layer+helper.h"
 
 @implementation Mage
 
@@ -71,7 +72,7 @@
     [[AttachmentPushService singleton] stop];
 }
 
-- (void) initiateDataPull {
+- (void) fetchEvents {
     NSOperation *myselfOp = [User operationToFetchMyselfWithCompletionBlock:^{
         [[HttpManager singleton].manager.operationQueue addOperation: [Event operationToFetchEvents]];
     }];
@@ -80,15 +81,34 @@
 
 - (void) eventsFetched: (NSNotification *) notification {
     // after the events are fetched we need to go get the form icon zips
-    Event *events = [Event MR_findAll];
+    NSArray *events = [Event MR_findAll];
+    [self addFormFetchOperationsForEvents: events];
+    [self addLayerFetchOperationsForEvents: events];
+}
+
+- (void) addFormFetchOperationsForEvents: (NSArray *) events {
     for (Event *e in events) {
-        NSOperation *op = [Form operationToPullFormForEvent:e.remoteId
-                                                    success: ^{
-                                                        NSLog(@"Pulled form for event");
-                                                    } failure:^{
-                                                        NSLog(@"failed to pull form");
-                                                    }];
-        [[HttpManager singleton].manager.operationQueue addOperation:op];
+        NSOperation *formOp = [Form operationToPullFormForEvent:e.remoteId
+                                                        success: ^{
+                                                            NSLog(@"Pulled form for event");
+                                                        } failure:^{
+                                                            NSLog(@"failed to pull form");
+                                                        }];
+        
+        [[HttpManager singleton].manager.operationQueue addOperation:formOp];
+    }
+}
+
+- (void) addLayerFetchOperationsForEvents: (NSArray *) events {
+    for (Event *e in events) {
+        NSOperation *formOp = [Layer operationToPullLayersForEvent:e.remoteId
+                                                        success: ^{
+                                                            NSLog(@"Pulled layers for event %@", e.remoteId);
+                                                        } failure:^{
+                                                            NSLog(@"Failed to pull layers for event %@", e.remoteId);
+                                                        }];
+        
+        [[HttpManager singleton].manager.operationQueue addOperation:formOp];
     }
 }
 

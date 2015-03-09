@@ -17,12 +17,13 @@
 
 @implementation Layer (helper)
 
-- (id) populateObjectFromJson: (NSDictionary *) json {
+- (id) populateObjectFromJson: (NSDictionary *) json withEventId: (NSNumber *) eventId {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setName:[json objectForKey:@"name"]];
     [self setType:[json objectForKey:@"type"]];
     [self setUrl:[json objectForKey:@"url"]];
     [self setFormId:[json objectForKey:@"formId"]];
+    [self setEventId:eventId];
    
     return self;
 }
@@ -35,9 +36,23 @@
     return [json objectForKey:@"type"];
 }
 
-+ (NSOperation *) operationToPullLayers:(void (^) (BOOL success)) complete {
++ (void) refreshLayersForEvent: (NSNumber *) eventId {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        [Layer MR_truncateAllInContext:localContext];
+        [StaticLayer MR_truncateAllInContext:localContext];
+    } completion:^(BOOL contextDidSave, NSError *error) {
+        NSOperation *fetchlayersOperation = [Layer operationToPullLayersForEvent:eventId success: ^{
+            NSLog(@"Saved layers for event");
+        } failure:^{
+            NSLog(@"Failed to save layers for event");
+        }];
+        [fetchlayersOperation start];
+    }];
+}
 
-    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/layers"];
++ (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure {
+
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
     HttpManager *http = [HttpManager singleton];
     
@@ -47,28 +62,30 @@
             NSLog(@"Layer request complete %@", responseObject);
             NSArray *layers = responseObject;
             for (id layer in layers) {
-                NSString *remoteLayerId = [Layer layerIdFromJson:layer];
-                if ([[Layer layerTypeFromJson:layer] isEqualToString:@"External"]) {
-                    [StaticLayer createOrUpdateStaticLayer:layer];
-                } else if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
+                if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
+                    [StaticLayer createOrUpdateStaticLayer:layer withEventId:eventId];
+                } else {
+                    NSString *remoteLayerId = [Layer layerIdFromJson:layer];
                     Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
                     if (l == nil) {
                         l = [Layer MR_createEntityInContext:localContext];
+                        [l populateObjectFromJson:layer withEventId:eventId];
+                        NSLog(@"Inserting layer with id: %@", l.remoteId);
+                    } else {
+                        NSLog(@"Updating layer with id: %@", l.remoteId);
+                        [l populateObjectFromJson:layer withEventId:eventId];
                     }
-                    [l populateObjectFromJson:layer];
-                    
-//                    [Server setObservationFormId:l.formId];
-//                    [Server setObservationLayerId:l.remoteId];
-                    
-                    NSLog(@"Form id is %@", l.formId);
                 }
             }
-            
-            complete(YES);
+            if (success != nil) {
+                success();
+            }
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        complete(NO);
+        if (failure != nil) {
+            failure();
+        }
     }];
     return operation;
 }

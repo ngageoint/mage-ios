@@ -14,6 +14,6 @@
 
 - (void) startServices;
 - (void) stopServices;
-- (void) initiateDataPull;
+- (void) fetchEvents;
 
 @end
