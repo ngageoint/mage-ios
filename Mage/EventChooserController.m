@@ -58,4 +58,8 @@
     }
 }
 
+- (IBAction) unwindToEventChooser:(UIStoryboardSegue *) unwindSegue {
+    // code
+}
+
 @end
