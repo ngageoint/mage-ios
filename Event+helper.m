@@ -114,5 +114,9 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     [http.manager.operationQueue addOperation:operation];
 }
 
++ (Event *) getCurrentEvent {
+    return [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+}
+
 
 @end

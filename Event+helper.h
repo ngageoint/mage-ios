@@ -13,5 +13,6 @@
 extern NSString * const MAGEEventsFetched;
 + (NSOperation *) operationToFetchEvents;
 + (void) sendRecentEvent;
++ (Event *) getCurrentEvent;
 
 @end
