@@ -9,6 +9,8 @@
 #import "StaticLayerTableViewController.h"
 #import "StaticLayerTableViewCell.h"
 #import <StaticLayer+helper.h>
+#import <Layer+helper.h>
+#import <Server+helper.h>
 
 @interface StaticLayerTableViewController ()
     @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
@@ -32,7 +34,7 @@
 
 - (void)staticLayerFetched:(NSNotification *)notification {
     NSLog(@"static layer loaded");
-    self.staticLayers = [StaticLayer MR_findAll];
+    self.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self.tableView reloadData];
     });
@@ -43,7 +45,7 @@
     [defaults removeObjectForKey:@"selectedStaticLayers"];
     [self.selectedStaticLayers removeAllObjects];
     [self.tableView reloadData];
-    [StaticLayer refreshStaticLayers];
+    [Layer refreshLayersForEvent:[Server currentEventId]];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
