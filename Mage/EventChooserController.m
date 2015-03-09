@@ -15,7 +15,7 @@
 
 - (void) viewDidLoad {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
-    [[Mage singleton] initiateDataPull];
+    [[Mage singleton] fetchEvents];
 }
 
 - (IBAction)actionButtonTapped:(id)sender {
@@ -44,6 +44,7 @@
     } else if (self.eventDataSource.allFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
         // they only have one event and have already picked it so move on to the map
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
+        
     } else if (self.eventDataSource.allFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.allFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
