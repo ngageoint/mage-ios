@@ -37,7 +37,6 @@
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
 
     @property (strong, nonatomic) MageServer *server;
-    @property (strong, nonatomic) AFNetworkReachabilityManager *reachability;
 @end
 
 @implementation LoginViewController
@@ -102,7 +101,7 @@
 }
 
 - (void) verifyLogin {
-    if (self.reachability.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
+    if ([MageServer singleton].reachabilityManager.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
         [MagicalRecord deleteCoreDataStack];
         [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
     }
@@ -190,9 +189,6 @@
     [self.serverUrlField setText:[url absoluteString]];
     [self initMageServerWithURL:url];
     
-    self.reachability = [AFNetworkReachabilityManager managerForDomain:[[MageServer baseURL] host]];
-    [self.reachability startMonitoring];
-    
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
@@ -213,7 +209,7 @@
 - (void) initMageServerWithURL:(NSURL *) url {
     [self.serverVerificationIndicator startAnimating];
     [self.lockButton setHidden:YES];
-    self.server = [[MageServer alloc] initWithURL:url success:^{
+    self.server = [[MageServer singleton] setupServerWithURL:url success:^{
         [self.serverUrlField setEnabled:NO];
         [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         
