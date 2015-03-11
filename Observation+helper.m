@@ -206,7 +206,7 @@ NSNumber *_currentEventId;
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
-+ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure {
++ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Trying to push observation to server %@", url);
@@ -224,16 +224,18 @@ NSNumber *_currentEventId;
     
     NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:json error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
-        success(response);
+        if (success) {
+            success(response);
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        failure();
+        failure(error);
     }];
     
     return operation;
 }
 
-+ (NSOperation *) operationToPullObservations:(void (^) (BOOL success)) complete {
++ (NSOperation *) operationToPullObservationsWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
 
     __block NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
@@ -304,13 +306,21 @@ NSNumber *_currentEventId;
                     NSLog(@"Observation with id: %@ is dirty", remoteId);
                 }
             }
-        } completion:^(BOOL success, NSError *error) {
-            complete(success);
+        } completion:^(BOOL successful, NSError *error) {
+            if (!successful) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success) {
+                success();
+            }
         }];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        complete(NO);
+        if (failure) {
+            failure(error);
+        }
     }];
     
     return operation;

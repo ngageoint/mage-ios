@@ -130,7 +130,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
 
             }];
-        } failure:^{
+        } failure:^(NSError* error) {
             NSLog(@"Error submitting observation");
             [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
         }];

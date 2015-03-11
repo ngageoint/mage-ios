@@ -42,15 +42,11 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
 @implementation Event (helper)
 
-+ (Event *) insertEventForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext:(NSManagedObjectContext *) context {
++ (Event *) insertEventForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
     Event *event = [Event MR_createEntityInContext:context];
     [event updateEventForJson:json];
     
     return event;
-}
-
-+ (Event *) insertEventForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
-    return [Event insertEventForJson:json myself:NO inManagedObjectContext:context];
 }
 
 - (void) updateEventForJson: (NSDictionary *) json {
@@ -60,7 +56,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     [self setForm:AFJSONObjectByRemovingKeysWithNullValues([json objectForKey:@"form"], NSJSONReadingAllowFragments)];
 }
 
-+ (NSOperation *) operationToFetchEvents {
++ (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/events"];
     
     NSLog(@"Pulling events from the server %@", url);
@@ -85,16 +81,22 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 [eventsReturned addObject:[eventJson objectForKey:@"id"]];
             }
             
-            NSArray *eventsRemoved = [Event MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", eventsReturned] inContext:localContext];
-            for (Event *e in eventsRemoved) {
-                [e MR_deleteEntity];
-            }
+            [Event MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", eventsReturned] inContext:localContext];
             
         } completion:^(BOOL contextDidSave, NSError *error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+            if (error) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success) {
+                success();
+            }
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        if (failure) {
+            failure(error);
+        }
     }];
     return operation;
 }

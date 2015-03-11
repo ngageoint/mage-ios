@@ -66,11 +66,15 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) pullLocations{
-    NSOperation *locationFetchOperation = [Location operationToPullLocations:^(BOOL success) {
+    NSOperation *locationFetchOperation = [Location operationToPullLocationsWithSuccess: ^{
         if (![[UserUtility singleton] isTokenExpired]) {
             NSLog(@"Scheduling the timer again");
             [self scheduleTimer];
         }
+    } failure:^(NSError* error) {
+        NSLog(@"failed to pull locations");
+        NSLog(@"Scheduling the timer again");
+        [self scheduleTimer];
     }];
     NSLog(@"pulling locations");
     [[HttpManager singleton].manager.operationQueue addOperation:locationFetchOperation];

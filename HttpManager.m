@@ -9,6 +9,7 @@
 #import "HttpManager.h"
 #import "UserUtility.h"
 #import "NSString+Contains.h"
+#import "MageServer.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
 
@@ -48,7 +49,6 @@ static HttpManager *sharedSingleton = nil;
         //_sessionManager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         
-        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingTaskDidCompleteNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
     }

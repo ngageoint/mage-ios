@@ -10,6 +10,6 @@
 
 @interface Form : NSObject
 
-+ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure;
++ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure;
 
 @end

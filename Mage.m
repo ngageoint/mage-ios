@@ -17,6 +17,7 @@
 #import "Event+helper.h"
 #import "Form.h"
 #import "Layer+helper.h"
+#import "MageServer.h"
 
 @implementation Mage
 
@@ -29,14 +30,6 @@
     return mage;
 }
 
-- (id) init {
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
-    }
-    
-    return self;
-}
-
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -44,25 +37,19 @@
 - (void) startServices {
     [[LocationService singleton] start];
     
-    NSOperation *usersPullOp = [User operationToFetchUsers];
-    NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the location fetch service");
+    NSOperation *usersPullOp = [User operationToFetchUsersWithSuccess:^{
+        NSLog(@"Done with the initial user fetch, start location and observation servicds");
         [[LocationFetchService singleton] start];
-    }];
-    
-    NSOperation *startObservationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the observation fetch service");
         [[ObservationFetchService singleton] start];
+    } failure:^(NSError *error) {
+        
     }];
-    
-    [startObservationFetchOp addDependency:usersPullOp];
-    [startLocationFetchOp addDependency:usersPullOp];
     
     [[ObservationPushService singleton] start];
     [[AttachmentPushService singleton] start];
     
     // Add the operations to the queue
-    [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
+    [[HttpManager singleton].manager.operationQueue addOperation:usersPullOp];
 }
 
 - (void) stopServices {
@@ -73,17 +60,21 @@
 }
 
 - (void) fetchEvents {
-    NSOperation *myselfOp = [User operationToFetchMyselfWithCompletionBlock:^{
-        [[HttpManager singleton].manager.operationQueue addOperation: [Event operationToFetchEvents]];
+    NSOperation *myselfOp = [User operationToFetchMyselfWithSuccess:^{
+        
+        NSOperation *eventOp = [Event operationToFetchEventsWithSuccess:^{
+            NSArray *events = [Event MR_findAll];
+            [self addFormFetchOperationsForEvents: events];
+            [self addLayerFetchOperationsForEvents: events];
+        } failure:^(NSError *error) {
+            NSLog(@"Failure to pull events");
+            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+        }];
+        [[HttpManager singleton].manager.operationQueue addOperation: eventOp];
+    } failure:^(NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
     }];
     [[HttpManager singleton].manager.operationQueue addOperation:myselfOp];
-}
-
-- (void) eventsFetched: (NSNotification *) notification {
-    // after the events are fetched we need to go get the form icon zips
-    NSArray *events = [Event MR_findAll];
-    [self addFormFetchOperationsForEvents: events];
-    [self addLayerFetchOperationsForEvents: events];
 }
 
 - (void) addFormFetchOperationsForEvents: (NSArray *) events {
@@ -91,8 +82,8 @@
         NSOperation *formOp = [Form operationToPullFormForEvent:e.remoteId
                                                         success: ^{
                                                             NSLog(@"Pulled form for event");
-                                                        } failure:^{
-                                                            NSLog(@"failed to pull form");
+                                                        } failure:^(NSError* error) {
+                                                            NSLog(@"failed to pull form for event");
                                                         }];
         
         [[HttpManager singleton].manager.operationQueue addOperation:formOp];
@@ -104,7 +95,7 @@
         NSOperation *formOp = [Layer operationToPullLayersForEvent:e.remoteId
                                                         success: ^{
                                                             NSLog(@"Pulled layers for event %@", e.remoteId);
-                                                        } failure:^{
+                                                        } failure:^(NSError* error) {
                                                             NSLog(@"Failed to pull layers for event %@", e.remoteId);
                                                         }];
         

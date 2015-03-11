@@ -11,7 +11,7 @@
 @interface Event (helper)
 
 extern NSString * const MAGEEventsFetched;
-+ (NSOperation *) operationToFetchEvents;
++ (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
 + (void) sendRecentEvent;
 + (Event *) getCurrentEvent;
 

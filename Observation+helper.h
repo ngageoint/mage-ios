@@ -23,7 +23,7 @@
 
 - (NSString *) sectionName;
 
-+ (NSOperation*) operationToPullObservations:(void (^) (BOOL success)) complete;
-+ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)()) success failure: (void (^)()) failure;
++ (NSOperation*) operationToPullObservationsWithSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure;
++ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 
 @end

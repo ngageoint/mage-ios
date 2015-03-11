@@ -115,7 +115,8 @@ static User *currentUser = nil;
     [operation start];
 }
 
-+ (NSOperation *) operationToFetchUsers {
++ (NSOperation *) operationToFetchUsersWithSuccess: (void (^)())success
+                                           failure:(void (^)(NSError *error))failure {
 	NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"];
 	
 	NSLog(@"Trying to fetch users from server %@", url);
@@ -173,14 +174,23 @@ static User *currentUser = nil;
                     }
                 }
             }
+        } completion:^(BOOL contextDidSave, NSError *error) {
+            if (error) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success) {
+                success();
+            }
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        failure(error);
     }];
     return operation;
 }
 
-+ (NSOperation *) operationToFetchMyselfWithCompletionBlock: (void(^)())complete {
++ (NSOperation *) operationToFetchMyselfWithSuccess: (void (^)())success
+                                            failure:(void (^)(NSError *error))failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
     
     NSLog(@"Fetching myself from server %@", url);
@@ -224,13 +234,18 @@ static User *currentUser = nil;
                 [Server setCurrentEventId:recentEvents[0]];
             }
         } completion:^(BOOL contextDidSave, NSError *error) {
-            complete();
+            if (error) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success) {
+                success();
+            }
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        failure(error);
     }];
     return operation;
-
 }
 
 @end

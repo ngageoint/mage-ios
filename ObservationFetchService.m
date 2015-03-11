@@ -64,7 +64,11 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) pullObservations {
-    NSOperation *observationFetchOperation = [Observation operationToPullObservations:^(BOOL success) {
+    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
+        if (![[UserUtility singleton] isTokenExpired]) {
+            [self scheduleTimer];
+        }
+    } failure:^(NSError* error) {
         if (![[UserUtility singleton] isTokenExpired]) {
             [self scheduleTimer];
         }

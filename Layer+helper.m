@@ -36,21 +36,7 @@
     return [json objectForKey:@"type"];
 }
 
-+ (void) refreshLayersForEvent: (NSNumber *) eventId {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        [Layer MR_truncateAllInContext:localContext];
-        [StaticLayer MR_truncateAllInContext:localContext];
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        NSOperation *fetchlayersOperation = [Layer operationToPullLayersForEvent:eventId success: ^{
-            NSLog(@"Saved layers for event");
-        } failure:^{
-            NSLog(@"Failed to save layers for event");
-        }];
-        [fetchlayersOperation start];
-    }];
-}
-
-+ (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure {
++ (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
 
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
@@ -61,11 +47,15 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Layer request complete %@", responseObject);
             NSArray *layers = responseObject;
+            
+            NSMutableArray *layerRemoteIds = [[NSMutableArray alloc] init];
+            
             for (id layer in layers) {
                 if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
                     [StaticLayer createOrUpdateStaticLayer:layer withEventId:eventId];
                 } else {
                     NSString *remoteLayerId = [Layer layerIdFromJson:layer];
+                    [layerRemoteIds addObject:remoteLayerId];
                     Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
                     if (l == nil) {
                         l = [Layer MR_createEntityInContext:localContext];
@@ -77,14 +67,21 @@
                     }
                 }
             }
-            if (success != nil) {
+            [Layer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", layerRemoteIds] inContext:localContext];
+            [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", layerRemoteIds] inContext:localContext];
+        } completion:^(BOOL contextDidSave, NSError *error) {
+            if (error) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success) {
                 success();
             }
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        if (failure != nil) {
-            failure();
+        if (failure) {
+            failure(error);
         }
     }];
     return operation;

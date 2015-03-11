@@ -20,7 +20,7 @@
 
 - (void) populateLocationFromJson:(NSArray *) locations;
 
-+ (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete;
++ (NSOperation *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
 
 @property (nonatomic, retain) Geometry* geometry;
 

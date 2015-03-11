@@ -141,7 +141,7 @@ NSInteger const kLocationPushLimit = 100;
                 
                 if ([locations count] == kLocationPushLimit) [weakSelf pushLocations];
             }];
-        } failure:^{
+        } failure:^(NSError* failure) {
             NSLog(@"Failure to push GPS locations to the server");
             self.isPushingLocations = NO;
         }];

@@ -15,6 +15,6 @@
 + (NSArray *) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context;
 + (NSArray *) fetchLastXGPSLocations: (NSUInteger) x;
 
-+ (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)()) failure;
++ (NSOperation *) operationToPushGPSLocations: (NSArray *) locations success: (void (^)()) success failure: (void (^)(NSError *)) failure;
 
 @end

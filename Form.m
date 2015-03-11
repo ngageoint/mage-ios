@@ -20,7 +20,7 @@
 
 @implementation Form
 
-+ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(void)) failure {
++ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@/form/icons.zip", [MageServer baseURL], @"api/events", eventId];
     
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/events/icons-%@.zip", eventId]];
@@ -70,16 +70,20 @@
         
         [unzipFile close];
         if ([[NSFileManager defaultManager] isDeletableFileAtPath:stringPath]) {
-            BOOL success = [[NSFileManager defaultManager] removeItemAtPath:stringPath error:&error];
-            if (!success) {
+            BOOL successfulRemoval = [[NSFileManager defaultManager] removeItemAtPath:stringPath error:&error];
+            if (!successfulRemoval) {
                 NSLog(@"Error removing file at path: %@", error.localizedDescription);
             }
         }
-        success();
+        if (success) {
+            success();
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        failure();
+        if (failure) {
+            failure(error);
+        }
     }];
     
     NSError *error = nil;

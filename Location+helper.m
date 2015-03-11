@@ -72,7 +72,7 @@
 }
 
 
-+ (NSOperation *) operationToPullLocations:(void (^) (BOOL success)) complete {
++ (NSOperation *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations/users", [MageServer baseURL], [Server currentEventId]];
 	NSLog(@"Trying to fetch locations from server %@", url);
     
@@ -138,14 +138,22 @@
             
             if (newUserFound) {
                 // For now if we find at least one new user let just go grab the users again
-                [[User operationToFetchUsers] start];
+                [[User operationToFetchUsersWithSuccess:nil failure:nil] start];
+            }
+        } completion:^(BOOL contextDidSave, NSError *error) {
+            if (error) {
+                if (failure) {
+                    failure(error);
+                }
+            } else if (success){
+                success();
             }
         }];
-        
-        complete(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        complete(NO);
+        if (failure) {
+            failure(error);
+        }
     }];
     
     return operation;
