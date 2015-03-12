@@ -30,6 +30,7 @@
 #import "ObservationAnnotation.h"
 #import "ImageViewerViewController.h"
 #import <Event+helper.h>
+#import <GPSLocation+helper.h>
 
 @interface MapViewController ()<UserTrackingModeChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -141,10 +142,11 @@
 		[destinationViewController setObservation:sender];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
-        
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        CLLocation *location = [[LocationService singleton] location];
+        if (location == nil) {
+            location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        }
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-        
         [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
