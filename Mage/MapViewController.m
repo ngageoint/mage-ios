@@ -29,6 +29,7 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ImageViewerViewController.h"
+#import <Event+helper.h>
 
 @interface MapViewController ()<UserTrackingModeChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -72,7 +73,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue]];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"
@@ -127,7 +128,7 @@
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath]];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     }
 }
 
@@ -161,16 +162,26 @@
 - (IBAction)onReportLocationButtonPressed:(id)sender {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
-    [self setupReportLocationButtonWithTrackingState:newState];
-    [defaults setBool:newState forKey:kReportLocationKey];
-    [defaults synchronize];
-    if (newState) {
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    BOOL inEvent = [[Event getCurrentEvent] isUserInEvent:user];
+    if (!inEvent) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
+                                                        message:@"You cannot report your location for an event you are not part of."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    } else if (newState) {
         self.toastText.text = @"You are now reporting your location.";
         self.toastView.backgroundColor = [UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0];
     } else {
         self.toastText.text = @"Location reporting has been disabled";
         self.toastView.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0];
     }
+    [self setupReportLocationButtonWithTrackingState:newState userInEvent:inEvent];
+    [defaults setBool:newState forKey:kReportLocationKey];
+    [defaults synchronize];
     [self displayToast];
 }
 
@@ -189,8 +200,8 @@
 
 }
 
-- (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn {
-    if(trackingOn) {
+- (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn userInEvent: (BOOL) inEvent {
+    if(trackingOn && inEvent) {
         [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_on"] forState:UIControlStateNormal];
         [self.reportLocationButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
     } else {
