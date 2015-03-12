@@ -47,7 +47,7 @@
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
@@ -157,6 +157,21 @@
         ImageViewerViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
     }
+}
+
+- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
+        if (![[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
+                                                            message:@"You cannot create observations for an event you are not part of."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            return false;
+        }
+    }
+    return true;
 }
 
 - (IBAction)onReportLocationButtonPressed:(id)sender {
