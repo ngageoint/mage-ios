@@ -11,6 +11,7 @@
 #import "HttpManager.h"
 #import "User+helper.h"
 #import <Server+helper.h>
+#import "Team+helper.h"
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -44,16 +45,42 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
 + (Event *) insertEventForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
     Event *event = [Event MR_createEntityInContext:context];
-    [event updateEventForJson:json];
-    
+    [event updateEventForJson:json inManagedObjectContext:context];
     return event;
 }
 
-- (void) updateEventForJson: (NSDictionary *) json {
+- (void) updateEventForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setName:[json objectForKey:@"name"]];
     [self setEventDescription:[json objectForKey:@"description"]];
     [self setForm:AFJSONObjectByRemovingKeysWithNullValues([json objectForKey:@"form"], NSJSONReadingAllowFragments)];
+    for (NSDictionary *teamJson in [json objectForKey:@"teams"]) {
+        NSSet *filteredTeams = [self.teams filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", [teamJson objectForKey:@"id"]]];
+        if (filteredTeams.count == 1) {
+            Team *team = [filteredTeams anyObject];
+            [team updateTeamForJson:teamJson inManagedObjectContext:context];
+        } else {
+            Team *team = [Team MR_findFirstByAttribute:@"remoteId" withValue:[teamJson objectForKey:@"id"]];
+            if (team) {
+                [team updateTeamForJson:teamJson inManagedObjectContext:context];
+                [self addTeamsObject:team];
+            } else {
+                team = [Team insertTeamForJson:teamJson inManagedObjectContext:context];
+                [self addTeamsObject:team];
+            }
+        }
+    }
+}
+
+- (BOOL) isUserInEvent: (User *) user {
+    for (Team *t in user.teams) {
+        if ([self.teams containsObject:t]) {
+            NSLog(@"User %@ is in event %@", user.name, self.name);
+            return true;
+        }
+    }
+    NSLog(@"User %@ is not in the event %@", user.name, self.name);
+    return false;
 }
 
 + (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
@@ -75,7 +102,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 if (event == nil) {
                     event = [Event insertEventForJson:eventJson inManagedObjectContext:localContext];
                 } else {
-                    [event updateEventForJson:eventJson];
+                    [event updateEventForJson:eventJson inManagedObjectContext:localContext];
                 }
                 [event setRecentSortOrder:[NSNumber numberWithLong:[current.recentEventIds indexOfObject:event.remoteId]]];
                 [eventsReturned addObject:[eventJson objectForKey:@"id"]];

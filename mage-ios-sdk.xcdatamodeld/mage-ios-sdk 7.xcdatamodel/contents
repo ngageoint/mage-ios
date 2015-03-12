@@ -20,7 +20,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentSortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" syncable="YES"/>
+        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="GPSLocation" representedClassName="GPSLocation" syncable="YES">
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -59,7 +59,7 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Attachment" inverseName="observation" inverseEntity="Attachment" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="observations" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Server" representedClassName="Server" syncable="YES">
         <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -71,6 +71,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="events" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="teams" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
@@ -85,18 +86,19 @@
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="user" inverseEntity="Location" syncable="YES"/>
+        <relationship name="observations" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="user" inverseEntity="Observation" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="users" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="225"/>
-        <element name="Event" positionX="-2466" positionY="-973" width="128" height="135"/>
+        <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="223"/>
+        <element name="Event" positionX="-2466" positionY="-973" width="128" height="133"/>
         <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="105"/>
         <element name="Layer" positionX="-2250" positionY="-1008" width="128" height="150"/>
         <element name="Location" positionX="-2216" positionY="-655" width="128" height="148"/>
-        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="240"/>
+        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="238"/>
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="60"/>
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="58"/>
-        <element name="Team" positionX="-2360" positionY="-427" width="128" height="103"/>
-        <element name="User" positionX="-1622" positionY="-516" width="128" height="225"/>
+        <element name="Team" positionX="-2360" positionY="-427" width="128" height="120"/>
+        <element name="User" positionX="-1622" positionY="-516" width="128" height="238"/>
     </elements>
 </model>

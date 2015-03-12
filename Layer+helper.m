@@ -36,6 +36,10 @@
     return [json objectForKey:@"type"];
 }
 
++ (void) refreshLayersForEvent:(NSNumber *)eventId {
+    [[HttpManager singleton].manager.operationQueue addOperation:[Layer operationToPullLayersForEvent:eventId success:nil failure:nil]];
+}
+
 + (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
 
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
