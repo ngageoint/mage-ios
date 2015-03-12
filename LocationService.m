@@ -10,6 +10,7 @@
 #import "User+helper.h"
 #import "GPSLocation+helper.h"
 #import "GeoPoint.h"
+#import "Event+helper.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSSensitivityKey = @"gpsSensitivity";
@@ -83,7 +84,8 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) start {
-    if (_reportLocation) {
+    [self stop];
+    if (_reportLocation && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
         [self.locationManager startUpdatingLocation];
         [self pushLocations];
     }

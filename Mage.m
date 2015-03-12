@@ -38,7 +38,7 @@
     [[LocationService singleton] start];
     
     NSOperation *usersPullOp = [User operationToFetchUsersWithSuccess:^{
-        NSLog(@"Done with the initial user fetch, start location and observation servicds");
+        NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
         [[ObservationFetchService singleton] start];
     } failure:^(NSError *error) {
