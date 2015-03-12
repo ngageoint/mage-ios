@@ -20,6 +20,7 @@
     
     gpsLocation.geometry = [[GeoPoint alloc] initWithLocation:location];
     gpsLocation.timestamp = location.timestamp;
+    gpsLocation.eventId = [Server currentEventId];
     gpsLocation.properties = @{
         @"altitude": [NSNumber numberWithDouble:location.altitude],
         @"accuracy": [NSNumber numberWithDouble:location.horizontalAccuracy],

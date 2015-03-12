@@ -11,6 +11,7 @@
 #import "GPSLocation+helper.h"
 #import "GeoPoint.h"
 #import "Event+helper.h"
+#import "Server+helper.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSSensitivityKey = @"gpsSensitivity";
@@ -84,11 +85,8 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) start {
-    [self stop];
-    if (_reportLocation && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
-        [self.locationManager startUpdatingLocation];
-        [self pushLocations];
-    }
+    [self.locationManager startUpdatingLocation];
+    [self pushLocations];
 }
 
 - (void) stop {
@@ -98,22 +96,24 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {
-    NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
-    for (CLLocation *location in locations) {
-        [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:self.managedObjectContext]];
-    }
-    
-    [self.managedObjectContext MR_saveToPersistentStoreAndWait];
-    
-    CLLocation *location = [locations firstObject];
-    NSTimeInterval interval = [[location timestamp] timeIntervalSinceDate:_oldestLocationTime];
-    if (self.oldestLocationTime == nil) {
-        self.oldestLocationTime = [location timestamp];
-    }
-    
-    if (interval > self.locationPushInterval) {
-        [self pushLocations];
-        self.oldestLocationTime = nil;
+    if (_reportLocation && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
+        NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
+        for (CLLocation *location in locations) {
+            [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:self.managedObjectContext]];
+        }
+        
+        [self.managedObjectContext MR_saveToPersistentStoreAndWait];
+        
+        CLLocation *location = [locations firstObject];
+        NSTimeInterval interval = [[location timestamp] timeIntervalSinceDate:_oldestLocationTime];
+        if (self.oldestLocationTime == nil) {
+            self.oldestLocationTime = [location timestamp];
+        }
+        
+        if (interval > self.locationPushInterval) {
+            [self pushLocations];
+            self.oldestLocationTime = nil;
+        }
     }
 }
 
@@ -121,7 +121,7 @@ NSInteger const kLocationPushLimit = 100;
     if (!self.isPushingLocations) {
         
         //TODO, submit in pages
-        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllInContext:self.managedObjectContext];
+        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:self.managedObjectContext];
         [fetchRequest setFetchLimit:kLocationPushLimit];
         [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
         NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.managedObjectContext];
