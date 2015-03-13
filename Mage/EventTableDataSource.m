@@ -32,12 +32,12 @@
         NSSortDescriptor *allSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         [allFetchRequest setSortDescriptors:[NSArray arrayWithObject:allSort]];
         
-        self.allFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:allFetchRequest
+        self.otherFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:allFetchRequest
                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                  sectionNameKeyPath:nil
                                                                                           cacheName:nil];
-        self.allFetchedResultsController.accessibilityLabel = @"Other Events";
-        self.allFetchedResultsController.delegate = self;
+        self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
+        self.otherFetchedResultsController.delegate = self;
         
     }
     return self;
@@ -46,7 +46,7 @@
 // This method should not be called until the events have been loaded from the server
 - (void) startFetchController {
     NSError *error;
-    if (![self.allFetchedResultsController performFetch:&error]) {
+    if (![self.otherFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
@@ -65,13 +65,13 @@
     if (section == 1) {
         return self.recentFetchedResultsController.fetchedObjects.count;
     } else if (section == 2) {
-        return self.allFetchedResultsController.fetchedObjects.count;
+        return self.otherFetchedResultsController.fetchedObjects.count;
     }
     return 0;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.allFetchedResultsController.fetchedObjects.count == 0 && self.recentFetchedResultsController.fetchedObjects.count == 0) return 0;
+    if (self.otherFetchedResultsController.fetchedObjects.count == 0 && self.recentFetchedResultsController.fetchedObjects.count == 0) return 0;
     return 3;
 }
 
@@ -79,7 +79,7 @@
     if (section == 1) {
         return [NSString stringWithFormat:@"%@ (%lu)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
     } else if (section == 2) {
-        return [NSString stringWithFormat:@"%@ (%lu)", self.allFetchedResultsController.accessibilityLabel, (unsigned long)self.allFetchedResultsController.fetchedObjects.count];
+        return [NSString stringWithFormat:@"%@ (%lu)", self.otherFetchedResultsController.accessibilityLabel, (unsigned long)self.otherFetchedResultsController.fetchedObjects.count];
     }
     return nil;
 }
@@ -92,7 +92,7 @@
         cell.textLabel.text = e.name;
         cell.detailTextLabel.text = e.eventDescription;
     } else if (indexPath.section == 2) {
-        e = [self.allFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+        e = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
         cell.textLabel.text = e.name;
         cell.detailTextLabel.text = e.eventDescription;
     }
@@ -113,7 +113,7 @@
     NSIndexPath *realNewPath = newIndexPath;
     NSIndexPath *realOldPath = indexPath;
     
-    if ([controller.accessibilityLabel isEqualToString: self.allFetchedResultsController.accessibilityLabel]) {
+    if ([controller.accessibilityLabel isEqualToString: self.otherFetchedResultsController.accessibilityLabel]) {
         realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
         realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
     } else {
@@ -157,7 +157,7 @@
         Event *e = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
         [Server setCurrentEventId:e.remoteId];
     } else if (indexPath.section == 2){
-        Event *e = [self.allFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+        Event *e = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
         [Server setCurrentEventId:e.remoteId];
     }
     [tableView beginUpdates];
@@ -170,9 +170,9 @@
     if (section == 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 80)];
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, tableView.frame.size.width, 70)];
-        if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.allFetchedResultsController.fetchedObjects.count > 1) {
+        if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
             messageLabel.text = @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.allFetchedResultsController.fetchedObjects.count == 1) {
+        } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count == 1) {
             messageLabel.text = @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
         } else if (self.recentFetchedResultsController.fetchedObjects.count == 1) {
             // they are part of one event and have seen this page before.  Should I show it?
@@ -204,7 +204,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
-    if (section == 2 && self.allFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
+    if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
     [label setFont:[UIFont boldSystemFontOfSize:18]];
