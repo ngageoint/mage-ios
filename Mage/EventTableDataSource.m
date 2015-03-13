@@ -15,26 +15,29 @@
 
 - (id) init {
     if (self = [super init]) {
-        NSFetchRequest *allFetchRequest = [Event MR_requestAllSortedBy:@"name" ascending:YES];
-        self.allFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:allFetchRequest
-                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                 sectionNameKeyPath:nil
-                                                                                          cacheName:nil];
-        self.allFetchedResultsController.accessibilityLabel = @"All";
-        self.allFetchedResultsController.delegate = self;
-        
         User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = current.recentEventIds;
         NSFetchRequest *recentFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
-        
         [recentFetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+        
         self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentFetchRequest
                                                                                   managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                     sectionNameKeyPath:nil
                                                                                              cacheName:nil];
-        self.recentFetchedResultsController.accessibilityLabel = @"Recent";
+        self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
         self.recentFetchedResultsController.delegate = self;
+        
+        NSFetchRequest *allFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]];
+        NSSortDescriptor *allSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+        [allFetchRequest setSortDescriptors:[NSArray arrayWithObject:allSort]];
+        
+        self.allFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:allFetchRequest
+                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                 sectionNameKeyPath:nil
+                                                                                          cacheName:nil];
+        self.allFetchedResultsController.accessibilityLabel = @"Other Events";
+        self.allFetchedResultsController.delegate = self;
         
     }
     return self;
@@ -68,15 +71,15 @@
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.allFetchedResultsController.fetchedObjects.count == 0) return 0;
+    if (self.allFetchedResultsController.fetchedObjects.count == 0 && self.recentFetchedResultsController.fetchedObjects.count == 0) return 0;
     return 3;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        return [NSString stringWithFormat:@"%@ (%lu events)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
+        return [NSString stringWithFormat:@"%@ (%lu)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
     } else if (section == 2) {
-        return [NSString stringWithFormat:@"%@ (%lu events)", self.allFetchedResultsController.accessibilityLabel, (unsigned long)self.allFetchedResultsController.fetchedObjects.count];
+        return [NSString stringWithFormat:@"%@ (%lu)", self.allFetchedResultsController.accessibilityLabel, (unsigned long)self.allFetchedResultsController.fetchedObjects.count];
     }
     return nil;
 }
@@ -171,7 +174,7 @@
             messageLabel.text = @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.allFetchedResultsController.fetchedObjects.count == 1) {
             messageLabel.text = @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
-        } else if (self.allFetchedResultsController.fetchedObjects.count == 1) {
+        } else if (self.recentFetchedResultsController.fetchedObjects.count == 1) {
             // they are part of one event and have seen this page before.  Should I show it?
             messageLabel.text = @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
         } else if (self.recentFetchedResultsController.fetchedObjects.count > 1) {
@@ -201,6 +204,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
+    if (section == 2 && self.allFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
     [label setFont:[UIFont boldSystemFontOfSize:18]];
