@@ -11,7 +11,7 @@
 
 @interface EventTableDataSource : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property(nonatomic, strong)  NSFetchedResultsController *allFetchedResultsController;
+@property(nonatomic, strong)  NSFetchedResultsController *otherFetchedResultsController;
 @property(nonatomic, strong)  NSFetchedResultsController *recentFetchedResultsController;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
