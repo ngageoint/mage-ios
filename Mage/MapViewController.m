@@ -145,6 +145,13 @@
         CLLocation *location = [[LocationService singleton] location];
         if (location == nil) {
             location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Unknown"
+                                                            message:@"MAGE was unable to determine your location.  The new observation will be created in the center of the current map view.  Please confirm the location of the observation."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
         }
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
         [editViewController setLocation:point];
