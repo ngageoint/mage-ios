@@ -10,7 +10,7 @@
 #import <HttpManager.h>
 #import "MageRootViewController.h"
 #import "DeviceUUID.h"
-
+#import <LocationService.h>
 #import <Mage.h>
 
 @interface MageInitialViewController ()
@@ -45,6 +45,7 @@
 - (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
     [[UserUtility singleton] expireToken];
     [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
 }
 
 @end
