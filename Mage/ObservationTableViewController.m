@@ -26,6 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.eventNameLabel.text = [Event getCurrentEvent].name;
     [self.observationDataStore startFetchController];
     
     [self.refreshControl addTarget:self

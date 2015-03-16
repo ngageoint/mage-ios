@@ -41,6 +41,7 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
     @property (nonatomic, strong) NSTimer* locationColorUpdateTimer;
+    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end
 
@@ -74,7 +75,9 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    Event *currentEvent = [Event getCurrentEvent];
+    self.eventNameLabel.text = currentEvent.name;
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"

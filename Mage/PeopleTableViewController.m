@@ -8,11 +8,13 @@
 #import "PeopleTableViewController.h"
 #import "Location.h"
 #import "MeViewController.h"
+#import <Event+helper.h>
 
 @implementation PeopleTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.eventNameLabel.text = [Event getCurrentEvent].name;
     [self.peopleDataStore startFetchController];
 }
 
