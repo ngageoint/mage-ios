@@ -12,17 +12,14 @@
 #import "DeviceUUID.h"
 #import <LocationService.h>
 #import <Mage.h>
+#import <Server+helper.h>
+#import "EventChooserController.h"
 
 @interface MageInitialViewController ()
 
 @end
 
 @implementation MageInitialViewController
-
-- (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
@@ -34,11 +31,21 @@
     // if the token is not expired skip the login module
     if ([[UserUtility singleton] isTokenExpired]) {
 		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
-    } else {
-        NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
-        [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-        [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-		[self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
+        return;
+    }
+    NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
+    [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    
+    [self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"DisplayEventViewSegue"]) {
+        if ([Server currentEventId] != nil) {
+            EventChooserController *destination = segue.destinationViewController;
+            destination.passthrough = YES;
+        }
     }
 }
 

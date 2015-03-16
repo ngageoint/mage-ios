@@ -18,6 +18,13 @@
     [[Mage singleton] fetchEvents];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    if (self.passthrough) {
+        self.passthrough = NO;
+        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
+    }
+}
+
 - (IBAction)actionButtonTapped:(id)sender {
     if ([Server currentEventId]) {
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
@@ -50,6 +57,11 @@
         [Server setCurrentEventId:e.remoteId];
         [self.tableView reloadData];
     }
+//    self.loadingView.hidden = YES;
+    [UIView animateWithDuration:0.75f animations:^{
+        self.loadingView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
