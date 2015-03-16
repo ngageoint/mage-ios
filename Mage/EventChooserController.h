@@ -14,5 +14,7 @@
 @property (strong, nonatomic) IBOutlet EventTableDataSource *eventDataSource;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (nonatomic) BOOL passthrough;
+@property (weak, nonatomic) IBOutlet UIView *loadingView;
 
 @end
