@@ -13,6 +13,6 @@
 extern NSString * const StaticLayerLoaded;
 
 + (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer;
-+ (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId;
++ (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 
 @end

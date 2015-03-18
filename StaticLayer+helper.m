@@ -19,31 +19,31 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     return [json objectForKey:@"id"];
 }
 
-+ (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
-        StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteLayerId]];
-        if (l == nil) {
-            l = [StaticLayer MR_createEntityInContext:localContext];
-            [l populateObjectFromJson:layer withEventId:eventId];
-            NSLog(@"Inserting layer with id: %@", l.remoteId);
-            NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
-            [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
-        } else {
-            NSLog(@"Updating layer with id: %@", l.remoteId);
-            [l populateObjectFromJson:layer withEventId:eventId];
-        }
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:nil];
-    }];
++ (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context {
+    NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
+    StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId]];
+    if (l == nil) {
+        l = [StaticLayer MR_createEntityInContext:context];
+        [l populateObjectFromJson:layer withEventId:eventId];
+        NSLog(@"Inserting layer with id: %@ into event: %@", l.remoteId, eventId);
+    } else {
+        NSLog(@"Updating layer with id: %@ into event: %@", l.remoteId, eventId);
+        [l populateObjectFromJson:layer withEventId:eventId];
+    }
 }
 
 + (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer {
     HttpManager *http = [HttpManager singleton];
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/features", layer.url] parameters: nil error: nil];
+    __block NSNumber *layerId = layer.remoteId;
+    __block NSNumber *eventId = layer.eventId;
+    
+    // put this line back when the event endpoint returns the proper url for the layer
+//    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/features", layer.url] parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/api/events/%@/layers/%@/features", [MageServer baseURL], eventId, layerId] parameters: nil error: nil];
+
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            StaticLayer *localLayer = [layer MR_inContext:localContext];
+            StaticLayer *localLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, eventId] inContext:localContext];
             NSLog(@"fetched static features for %@", localLayer.name);
             NSMutableDictionary *dictionaryResponse = (NSMutableDictionary *)CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault, (CFDictionaryRef)responseObject, kCFPropertyListMutableContainers));
 

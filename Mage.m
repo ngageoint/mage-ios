@@ -65,7 +65,6 @@
         NSOperation *eventOp = [Event operationToFetchEventsWithSuccess:^{
             NSArray *events = [Event MR_findAll];
             [self addFormFetchOperationsForEvents: events];
-            [self addLayerFetchOperationsForEvents: events];
         } failure:^(NSError *error) {
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
@@ -84,19 +83,6 @@
                                                             NSLog(@"Pulled form for event");
                                                         } failure:^(NSError* error) {
                                                             NSLog(@"failed to pull form for event");
-                                                        }];
-        
-        [[HttpManager singleton].manager.operationQueue addOperation:formOp];
-    }
-}
-
-- (void) addLayerFetchOperationsForEvents: (NSArray *) events {
-    for (Event *e in events) {
-        NSOperation *formOp = [Layer operationToPullLayersForEvent:e.remoteId
-                                                        success: ^{
-                                                            NSLog(@"Pulled layers for event %@", e.remoteId);
-                                                        } failure:^(NSError* error) {
-                                                            NSLog(@"Failed to pull layers for event %@", e.remoteId);
                                                         }];
         
         [[HttpManager singleton].manager.operationQueue addOperation:formOp];

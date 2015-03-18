@@ -12,6 +12,8 @@
 #import "User+helper.h"
 #import <Server+helper.h>
 #import "Team+helper.h"
+#import "Layer+helper.h"
+#import "StaticLayer+helper.h"
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -68,6 +70,18 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 team = [Team insertTeamForJson:teamJson inManagedObjectContext:context];
                 [self addTeamsObject:team];
             }
+        }
+    }
+    for (NSDictionary *layerJson in [json objectForKey:@"layers"]) {
+        NSString *layerType = [Layer layerTypeFromJson:layerJson];
+        if ([layerType isEqualToString:@"Feature"]) {
+            [StaticLayer createOrUpdateStaticLayer:layerJson withEventId:self.remoteId inContext:context];
+        } else {
+            Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", [layerJson objectForKey:@"remoteId"], self.remoteId] inContext:context];
+            if (!layer) {
+                layer = [Layer MR_createEntityInContext:context];
+            }
+            [layer populateObjectFromJson:layerJson withEventId:self.remoteId];
         }
     }
 }
