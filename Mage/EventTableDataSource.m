@@ -101,6 +101,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 /*

@@ -56,6 +56,8 @@
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
         [self.tableView reloadData];
+    } else {
+        [self.tableView reloadData];
     }
 //    self.loadingView.hidden = YES;
     [UIView animateWithDuration:0.75f animations:^{
