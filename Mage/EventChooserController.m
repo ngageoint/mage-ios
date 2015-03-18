@@ -59,7 +59,6 @@
     } else {
         [self.tableView reloadData];
     }
-//    self.loadingView.hidden = YES;
     [UIView animateWithDuration:0.75f animations:^{
         self.loadingView.alpha = 0.0f;
     } completion:^(BOOL finished) {

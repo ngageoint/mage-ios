@@ -24,12 +24,12 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
     self.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(staticLayerFetched:) name: LayerFetched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(staticLayerFetched:) name: StaticLayerLoaded object:nil];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:StaticLayerLoaded object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)staticLayerFetched:(NSNotification *)notification {
