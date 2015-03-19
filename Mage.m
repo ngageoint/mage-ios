@@ -18,6 +18,7 @@
 #import "Form.h"
 #import "Layer+helper.h"
 #import "MageServer.h"
+#import "StaticLayer+helper.h"
 
 @implementation Mage
 
@@ -65,6 +66,8 @@
         NSOperation *eventOp = [Event operationToFetchEventsWithSuccess:^{
             NSArray *events = [Event MR_findAll];
             [self addFormFetchOperationsForEvents: events];
+            // also go fetch any static data for the static layers
+            [self addStaticLayerFetchOperations:events];
         } failure:^(NSError *error) {
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
@@ -86,6 +89,20 @@
                                                         }];
         
         [[HttpManager singleton].manager.operationQueue addOperation:formOp];
+    }
+}
+
+- (void) addStaticLayerFetchOperations: (NSArray *) events {
+    for (Event *e in events) {
+        
+        NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", e.remoteId]];
+        for (StaticLayer *s in staticLayers) {
+            if (s.data == nil) {
+                NSLog(@"Static layer data is nil for %@ in event %@ retrieving data", s.name, s.eventId);
+                NSOperation *layerOp = [StaticLayer operationToFetchStaticLayerData:s];
+                [[HttpManager singleton].manager.operationQueue addOperation:layerOp];
+            }
+        }
     }
 }
 

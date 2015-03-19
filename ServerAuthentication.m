@@ -53,7 +53,7 @@
         NSString *userId = [userJson objectForKey:@"id"];
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            User *user = [User fetchUserForId:userId inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+            User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
             if (!user) {
                 user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
             } else {

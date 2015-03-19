@@ -106,9 +106,9 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id events) {
-        
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            User *current = [User fetchCurrentUserInManagedObjectContext:localContext];
+            User *localUser = [currentUser MR_inContext:localContext];
             
             NSMutableArray *eventsReturned = [[NSMutableArray alloc] init];
             for (NSDictionary *eventJson in events) {
@@ -118,7 +118,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 } else {
                     [event updateEventForJson:eventJson inManagedObjectContext:localContext];
                 }
-                [event setRecentSortOrder:[NSNumber numberWithLong:[current.recentEventIds indexOfObject:event.remoteId]]];
+                [event setRecentSortOrder:[NSNumber numberWithLong:[localUser.recentEventIds indexOfObject:event.remoteId]]];
                 [eventsReturned addObject:[eventJson objectForKey:@"id"]];
             }
             

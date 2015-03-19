@@ -39,6 +39,7 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
 }
 
 + (void) refreshLayersForEvent:(NSNumber *)eventId {
+    [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
     [[HttpManager singleton].manager.operationQueue addOperation:[Layer operationToPullLayersForEvent:eventId success:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
         NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
@@ -66,12 +67,12 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
             NSMutableArray *layerRemoteIds = [[NSMutableArray alloc] init];
             
             for (id layer in layers) {
+                NSString *remoteLayerId = [Layer layerIdFromJson:layer];
+                [layerRemoteIds addObject:remoteLayerId];
                 if ([[Layer layerTypeFromJson:layer] isEqualToString:@"Feature"]) {
                     [StaticLayer createOrUpdateStaticLayer:layer withEventId:eventId inContext:localContext];
                 } else {
-                    NSString *remoteLayerId = [Layer layerIdFromJson:layer];
-                    [layerRemoteIds addObject:remoteLayerId];
-                    Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId]];
+                    Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId] inContext:localContext];
                     if (l == nil) {
                         l = [Layer MR_createEntityInContext:localContext];
                         [l populateObjectFromJson:layer withEventId:eventId];
