@@ -14,7 +14,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.eventNameLabel.text = [Event getCurrentEvent].name;
+    Event *currentEvent = [Event getCurrentEvent];
+    self.eventNameLabel.text = @"All";
+    [self.navigationItem setTitle:currentEvent.name];
     [self.peopleDataStore startFetchController];
 }
 
