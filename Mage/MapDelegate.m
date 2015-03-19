@@ -132,6 +132,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         double tolerance = mpp * sqrt(2.0) * 20.0;
         
         if (_areaAnnotation != nil) {
+            [_mapView deselectAnnotation:_areaAnnotation animated:NO];
             [_mapView removeAnnotation:_areaAnnotation];
             _areaAnnotation = nil;
         }
