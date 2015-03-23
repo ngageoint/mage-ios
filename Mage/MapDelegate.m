@@ -25,6 +25,7 @@
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
 #import <NSDate+DateTools.h>
+#import <Server+helper.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -131,6 +132,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         double tolerance = mpp * sqrt(2.0) * 20.0;
         
         if (_areaAnnotation != nil) {
+            [_mapView deselectAnnotation:_areaAnnotation animated:NO];
             [_mapView removeAnnotation:_areaAnnotation];
             _areaAnnotation = nil;
         }
@@ -317,12 +319,14 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-- (void) updateStaticLayers: (NSArray *) staticLayers {
+- (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {
     if (self.hideStaticLayers) return;
     NSMutableSet *unselectedStaticLayers = [[self.staticLayers allKeys] mutableCopy];
     
+    NSArray *staticLayers = [staticLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
+    
     for (NSNumber *staticLayerId in staticLayers) {
-        StaticLayer *staticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:staticLayerId];
+        StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", staticLayerId, [Server currentEventId]]];
         if (![unselectedStaticLayers containsObject:staticLayerId]) {
             NSLog(@"adding the static layer %@ to the map", staticLayer.name);
             NSMutableArray *annotations = [NSMutableArray array];
@@ -367,7 +371,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
     
     for (NSNumber *unselectedStaticLayerId in unselectedStaticLayers) {
-        StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstByAttribute:@"remoteId" withValue:unselectedStaticLayerId];
+        StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", unselectedStaticLayerId, [Server currentEventId]]];
         NSLog(@"removing the layer %@ from the map", unselectedStaticLayer.name);
         for (id staticItem in [self.staticLayers objectForKey:unselectedStaticLayerId]) {
             if ([staticItem conformsToProtocol:@protocol(MKOverlay)]) {

@@ -10,6 +10,7 @@
 #import "LocationService.h"
 #import "User+helper.h"
 #import "MageServer.h"
+#import <Event+helper.h>
 
 @interface SettingsTableViewController_iPad ()
 
@@ -20,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *user;
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end
 
@@ -46,6 +48,9 @@
     self.user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
     
     [self setLocationServicesLabel];
+    
+    Event *e = [Event getCurrentEvent];
+    self.eventNameLabel.text = e.name;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    self.baseServerUrl.text = [[MageServer baseServerUrl] absoluteString];

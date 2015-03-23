@@ -19,11 +19,6 @@
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) FICImageCache *imageCache;
-@property (strong, nonatomic) LocationService *locationService;
-@property (strong, nonatomic) LocationFetchService *locationFetchService;
-@property (strong, nonatomic) ObservationFetchService *observationFetchService;
-@property (strong, nonatomic) ObservationPushService *observationPushService;
-@property (strong, nonatomic) AttachmentPushService *attachmentPushService;
 
 - (NSURL *)applicationDocumentsDirectory;
 
