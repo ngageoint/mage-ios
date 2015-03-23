@@ -10,6 +10,10 @@
 #import <HttpManager.h>
 #import "MageRootViewController.h"
 #import "DeviceUUID.h"
+#import <LocationService.h>
+#import <Mage.h>
+#import <Server+helper.h>
+#import "EventChooserController.h"
 
 @interface MageInitialViewController ()
 
@@ -17,39 +21,38 @@
 
 @implementation MageInitialViewController
 
-- (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
-    // stop the location fetch service
-    [self.fetchServicesHolder.locationFetchService stop];
-    [self.fetchServicesHolder.observationFetchService stop];
-    [self.fetchServicesHolder.observationPushService stop];
-    [self.fetchServicesHolder.attachmentPushService stop];
+    [[Mage singleton] stopServices];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     // if the token is not expired skip the login module
     if ([[UserUtility singleton] isTokenExpired]) {
 		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
-    } else {
-        NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
-        [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-        [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-		[self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:nil];
+        return;
+    }
+    NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
+    [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    
+    [self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"DisplayEventViewSegue"]) {
+        if ([Server currentEventId] != nil) {
+            EventChooserController *destination = segue.destinationViewController;
+            destination.passthrough = YES;
+        }
     }
 }
 
 - (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
     [[UserUtility singleton] expireToken];
-    [self.fetchServicesHolder.locationFetchService stop];
-    [self.fetchServicesHolder.observationFetchService stop];
-    [self.fetchServicesHolder.observationPushService stop];
-    [self.fetchServicesHolder.attachmentPushService stop];
+    [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
 }
 
 @end

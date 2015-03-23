@@ -15,5 +15,6 @@
 @interface MapViewController_iPad : MapViewController <UISplitViewControllerDelegate, MapCalloutTapped, ObservationSelectionDelegate, UserSelectionDelegate>
 
 @property(nonatomic, weak) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *eventNameItem;
 
 @end

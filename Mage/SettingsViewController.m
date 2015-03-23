@@ -10,6 +10,7 @@
 #import "User+helper.h"
 #import "LocationService.h"
 #import "MageServer.h"
+#import <Event+helper.h>
 
 @interface SettingsViewController ()
 
@@ -20,6 +21,7 @@
     @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (strong, nonatomic) CLLocationManager *locationManager;
+    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end
 
@@ -50,6 +52,9 @@
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
+    
+    Event *e = [Event getCurrentEvent];
+    self.eventNameLabel.text = e.name;
     
     [self setPreferenceDisplayLabel:_imageUploadSizeLabel forPreference:@"imageUploadSizes"];
 }

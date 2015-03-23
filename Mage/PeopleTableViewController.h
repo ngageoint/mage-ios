@@ -15,5 +15,6 @@
 @property (strong, nonatomic) IBOutlet PeopleDataStore *peopleDataStore;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, assign) IBOutlet id<MAGEMasterSelectionDelegate> masterSelectionDelegate;
+@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end

@@ -75,12 +75,6 @@
     _imageCache.formats = imageFormats;
     
     [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
-    
-    _locationFetchService = [[LocationFetchService alloc] init];
-    _observationFetchService = [[ObservationFetchService alloc] init];
-    
-    _observationPushService = [[ObservationPushService alloc] init];
-    _attachmentPushService = [[AttachmentPushService alloc] init];
 	 
 	return YES;
 }
@@ -96,14 +90,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
-    [self.locationFetchService stop];
+    [[LocationFetchService singleton] stop];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
-        [self.locationFetchService start];
+        [[LocationFetchService singleton] start];
     }
 }
 
@@ -166,19 +160,11 @@
     [MagicalRecord cleanUp];
 }
 
--(LocationService *) locationService {
-    if (_locationService == nil) {
-        _locationService = [[LocationService alloc] init];
-    }
-    
-    return _locationService;
-}
-
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [self.locationFetchService stop];
-    [self.observationFetchService stop];
-    [self.observationPushService stop];
-    [self.attachmentPushService stop];
+    [[LocationFetchService singleton] stop];
+    [[ObservationFetchService singleton] stop];
+    [[ObservationPushService singleton] stop];
+    [[AttachmentPushService singleton] stop];
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]
         || [currentController isKindOfClass:[LoginViewController class]]

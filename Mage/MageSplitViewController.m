@@ -15,6 +15,7 @@
 #import "PeopleTableViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "ImageViewerViewController.h"
+#import <Mage.h>
 
 @interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
@@ -29,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self startServices];
+    [[Mage singleton] startServices];
     
     self.delegate = self;
     
@@ -89,31 +90,6 @@
 - (void)userDetailSelected:(User *)user {
     [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
     [self.mapViewController userDetailSelected:user];
-}
-
-
-- (void) startServices {
-    [_locationServiceHolder.locationService start];
-    
-    NSOperation *usersPullOp = [User operationToFetchUsers];
-    NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the location fetch service");
-        [self.fetchServicesHolder.locationFetchService start];
-    }];
-    
-    NSOperation *startObservationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the observation fetch service");
-        [self.fetchServicesHolder.observationFetchService start];
-    }];
-    
-    [startObservationFetchOp addDependency:usersPullOp];
-    [startLocationFetchOp addDependency:usersPullOp];
-    
-    [self.fetchServicesHolder.observationPushService start];
-    [self.fetchServicesHolder.attachmentPushService start];
-    
-    // Add the operations to the queue
-    [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
 }
 
 - (void) ensureButtonVisible {

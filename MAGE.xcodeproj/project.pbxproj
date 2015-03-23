@@ -20,7 +20,6 @@
 		2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */; };
 		2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */; };
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
-		2FBFE15919E828F700590076 /* LocationServiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFE15819E828F700590076 /* LocationServiceHolder.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
@@ -57,6 +56,7 @@
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* PeopleDataStore.m */; };
 		F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129F919F5BE320063DB6A /* MeViewController.m */; };
+		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
 		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
 		F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */; };
 		F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */; };
@@ -65,6 +65,7 @@
 		F7531F001910131C00CA084C /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
+		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
@@ -78,7 +79,6 @@
 		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
-		F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F792A23319D20E8000904316 /* FetchServicesHolder.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
 		F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAB119A4E5200010B052 /* ObservationPickerTableViewCell.m */; };
@@ -172,8 +172,6 @@
 		2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchDataSource.m; sourceTree = "<group>"; };
 		2FA70A9D1A03F2CA00243F4A /* MapSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSettings.h; sourceTree = "<group>"; };
 		2FA70A9E1A03F2CA00243F4A /* MapSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSettings.m; sourceTree = "<group>"; };
-		2FBFE15719E828F700590076 /* LocationServiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServiceHolder.h; sourceTree = "<group>"; };
-		2FBFE15819E828F700590076 /* LocationServiceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServiceHolder.m; sourceTree = "<group>"; };
 		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
@@ -243,6 +241,8 @@
 		F727517619C895CA006C63CB /* PeopleDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleDataStore.m; sourceTree = "<group>"; };
 		F73129F819F5BE320063DB6A /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		F73129F919F5BE320063DB6A /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
+		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
+		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
 		F73C3BF51A608EBD007A734E /* mageTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mageTest.js; sourceTree = "<group>"; };
 		F7467B05198144C6009E6D65 /* ObservationTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F7467B06198144C6009E6D65 /* ObservationTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTextAreaTableViewCell.m; sourceTree = "<group>"; };
@@ -259,6 +259,8 @@
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
+		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
+		F76949151AA6436000CB680B /* EventChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserController.m; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
 		F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardConstraint.m; sourceTree = "<group>"; };
 		F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponder.h"; sourceTree = "<group>"; };
@@ -286,8 +288,6 @@
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
 		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
-		F792A23219D20E8000904316 /* FetchServicesHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchServicesHolder.h; sourceTree = "<group>"; };
-		F792A23319D20E8000904316 /* FetchServicesHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchServicesHolder.m; sourceTree = "<group>"; };
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
 		F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewDataStore.m; sourceTree = "<group>"; };
 		F798FAAD19A4E4580010B052 /* ObservationDatePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDatePickerTableViewCell.h; sourceTree = "<group>"; };
@@ -605,8 +605,6 @@
 		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
-				F792A23219D20E8000904316 /* FetchServicesHolder.h */,
-				F792A23319D20E8000904316 /* FetchServicesHolder.m */,
 				F727516C19C888DB006C63CB /* Locations.h */,
 				F727516D19C888DB006C63CB /* Locations.m */,
 				F727516F19C88CAE006C63CB /* Observations.h */,
@@ -705,6 +703,17 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		F76949131AA6434A00CB680B /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				F76949141AA6436000CB680B /* EventChooserController.h */,
+				F76949151AA6436000CB680B /* EventChooserController.m */,
+				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
+				F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
 		F76A15BC1A93C33300F2BDF1 /* Constraints */ = {
 			isa = PBXGroup;
 			children = (
@@ -756,6 +765,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F76949131AA6434A00CB680B /* Event */,
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
 				2FF467091A12794000BA8357 /* Categories */,
@@ -788,8 +798,6 @@
 				4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */,
 				2F14288F199AB9A400C64A98 /* UINextField.h */,
 				2F142890199AB9A400C64A98 /* UINextField.m */,
-				2FBFE15719E828F700590076 /* LocationServiceHolder.h */,
-				2FBFE15819E828F700590076 /* LocationServiceHolder.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -1001,6 +1009,7 @@
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
+				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
 				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
@@ -1009,7 +1018,6 @@
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
-				F792A23419D20E8000904316 /* FetchServicesHolder.m in Sources */,
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,
@@ -1038,6 +1046,7 @@
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
+				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
@@ -1064,7 +1073,6 @@
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */,
 				4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */,
-				2FBFE15919E828F700590076 /* LocationServiceHolder.m in Sources */,
 				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
 				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
