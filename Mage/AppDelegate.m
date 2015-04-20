@@ -44,7 +44,7 @@
     FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
     thumbnailImageFormat.name = AttachmentSmallSquare;
     thumbnailImageFormat.family = AttachmentFamily;
-    thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    thumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
     thumbnailImageFormat.devices = FICImageFormatDevicePhone;
@@ -53,7 +53,7 @@
     FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
     ipadThumbnailImageFormat.name = AttachmentMediumSquare;
     ipadThumbnailImageFormat.family = AttachmentFamily;
-    ipadThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
     ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
     ipadThumbnailImageFormat.maximumCount = 250;
     ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
@@ -212,7 +212,7 @@
                 sourceImage = [UIImage imageWithData:data];
             }
         } else if ([attachment.contentType hasPrefix:@"video"]) {
-            sourceImage = [UIImage imageNamed:@"video"];
+            sourceImage = [UIImage imageNamed:@"play_circle"];
         } else {
             sourceImage = [UIImage imageNamed:@"download"];
         }
