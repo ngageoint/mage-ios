@@ -38,10 +38,10 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
 }
 
 - (NSURL *)sourceImageURLWithFormatName:(NSString *)formatName {
-    if ([self url] != nil) {
-        return [NSURL URLWithString: [self url]];
+    if ([self localPath] != nil) {
+        return [NSURL URLWithString: [self localPath]];
     } else {
-        return [NSURL URLWithString:[self localPath]];
+        return [NSURL URLWithString:[self url]];
     }
 }
 
@@ -62,10 +62,7 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
                 cropRect = CGRectMake((image.size.width - image.size.height)/2.0, 0, image.size.height, image.size.height);
             }
             
-            CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-            
-            imageToUse = [UIImage imageWithCGImage:imageRef];
-            CGImageRelease(imageRef);
+            [imageToUse drawInRect:cropRect];
         }
         
         CGContextClearRect(context, contextBounds);
