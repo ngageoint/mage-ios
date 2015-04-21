@@ -23,6 +23,10 @@
     }
 }
 
+- (void) viewDidDisappear:(BOOL) animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (IBAction)actionButtonTapped:(id)sender {
     if ([Server currentEventId]) {
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
@@ -50,7 +54,6 @@
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
         // they only have one event and have already picked it so move on to the map
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
-        
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
@@ -62,7 +65,6 @@
     [UIView animateWithDuration:0.75f animations:^{
         self.loadingView.alpha = 0.0f;
     } completion:^(BOOL finished) {
-        // nothing to do on completion
         self.loadingView.alpha = 0.0;
     }];
 }
@@ -74,7 +76,6 @@
 }
 
 - (IBAction) unwindToEventChooser:(UIStoryboardSegue *) unwindSegue {
-    // code
 }
 
 @end

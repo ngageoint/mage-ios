@@ -117,7 +117,6 @@
 														 uidString, @"uid",
 														 nil];
 	
-	// TODO might want to mask here or put a spinner on the login button
 	[self.server.authentication loginWithParameters: parameters];
 }
 
