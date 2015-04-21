@@ -186,8 +186,8 @@ bool originalNavBarHidden;
     
     if ([type hasPrefix:@"video"]) {
         self.videoPlayerView = [[MPMoviePlayerController alloc] initWithContentURL:url];
-        
         self.videoPlayerView.view.frame = self.mediaHolderView.frame;
+        
         self.videoPlayerView.scalingMode = MPMovieScalingModeAspectFit;
         self.videoPlayerView.initialPlaybackTime = 0.0;
         self.videoPlayerView.movieSourceType = MPMovieSourceTypeFile;
