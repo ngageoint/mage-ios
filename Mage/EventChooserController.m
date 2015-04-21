@@ -13,15 +13,13 @@
 
 @implementation EventChooserController
 
-- (void) viewDidLoad {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
-    [[Mage singleton] fetchEvents];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
+- (void) viewDidAppear:(BOOL) animated {
     if (self.passthrough) {
         self.passthrough = NO;
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
+    } else {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
+        [[Mage singleton] fetchEvents];
     }
 }
 
@@ -45,6 +43,7 @@
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];
         
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundView = messageLabel;
         
         self.actionButton.titleLabel.text = @"Return to Login";
@@ -59,9 +58,12 @@
     } else {
         [self.tableView reloadData];
     }
+    
     [UIView animateWithDuration:0.75f animations:^{
         self.loadingView.alpha = 0.0f;
     } completion:^(BOOL finished) {
+        // nothing to do on completion
+        self.loadingView.alpha = 0.0;
     }];
 }
 

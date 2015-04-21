@@ -181,6 +181,7 @@
         } else if (self.recentFetchedResultsController.fetchedObjects.count > 1) {
             messageLabel.text = @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         }
+        
         messageLabel.textColor = [UIColor whiteColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
