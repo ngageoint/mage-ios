@@ -77,7 +77,7 @@
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="avatarUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="currentUser" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="currentUser" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="iconUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -99,6 +99,6 @@
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="60"/>
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="58"/>
         <element name="Team" positionX="-2360" positionY="-427" width="128" height="120"/>
-        <element name="User" positionX="-1622" positionY="-516" width="128" height="238"/>
+        <element name="User" positionX="-1622" positionY="-516" width="128" height="240"/>
     </elements>
 </model>
