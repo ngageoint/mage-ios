@@ -44,6 +44,12 @@
 	return _dateFormatter;
 }
 
+- (void) viewDidLoad {
+    [self.navigationController setNavigationBarHidden:NO];
+
+    [super viewDidLoad];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
