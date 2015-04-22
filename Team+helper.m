@@ -25,13 +25,13 @@
         NSSet *filteredUsers = [self.users filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", userId]];
         if (filteredUsers.count == 0) {
             // see if the user exists
-            User *u = [User MR_findFirstByAttribute:@"remoteId" withValue:userId];
-            if (!u) {
+            User *user = [User MR_findFirstByAttribute:@"remoteId" withValue:userId inContext:context];
+            if (!user) {
                 User *newUser = [User MR_createEntityInContext:context];
                 [newUser setRemoteId:userId];
                 [self addUsersObject:newUser];
             } else {
-                [self addUsersObject:u];
+                [self addUsersObject:user];
             }
         }
     }

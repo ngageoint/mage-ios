@@ -62,7 +62,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             Team *team = [filteredTeams anyObject];
             [team updateTeamForJson:teamJson inManagedObjectContext:context];
         } else {
-            Team *team = [Team MR_findFirstByAttribute:@"remoteId" withValue:[teamJson objectForKey:@"id"]];
+            Team *team = [Team MR_findFirstByAttribute:@"remoteId" withValue:[teamJson objectForKey:@"id"] inContext:context];
             if (team) {
                 [team updateTeamForJson:teamJson inManagedObjectContext:context];
                 [self addTeamsObject:team];
@@ -106,10 +106,9 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id events) {
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            User *localUser = [currentUser MR_inContext:localContext];
-            
+            User *localUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+
             NSMutableArray *eventsReturned = [[NSMutableArray alloc] init];
             for (NSDictionary *eventJson in events) {
                 Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[eventJson objectForKey:@"id"] inContext:localContext];

@@ -2,7 +2,7 @@
 //  Event.h
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 3/12/15.
+//  Created by William Newman on 4/22/15.
 //  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -16,8 +16,8 @@
 @property (nonatomic, retain) NSString * eventDescription;
 @property (nonatomic, retain) id form;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * remoteId;
 @property (nonatomic, retain) NSNumber * recentSortOrder;
+@property (nonatomic, retain) NSNumber * remoteId;
 @property (nonatomic, retain) NSSet *teams;
 @end
 

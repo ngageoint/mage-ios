@@ -2,7 +2,7 @@
 //  Team.h
 //  mage-ios-sdk
 //
-//  Created by Dan Barela on 3/12/15.
+//  Created by William Newman on 4/22/15.
 //  Copyright (c) 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
@@ -16,11 +16,16 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * remoteId;
 @property (nonatomic, retain) NSString * teamDescription;
+@property (nonatomic, retain) NSSet *events;
 @property (nonatomic, retain) NSSet *users;
-@property (nonatomic, retain) Event *events;
 @end
 
 @interface Team (CoreDataGeneratedAccessors)
+
+- (void)addEventsObject:(Event *)value;
+- (void)removeEventsObject:(Event *)value;
+- (void)addEvents:(NSSet *)values;
+- (void)removeEvents:(NSSet *)values;
 
 - (void)addUsersObject:(User *)value;
 - (void)removeUsersObject:(User *)value;

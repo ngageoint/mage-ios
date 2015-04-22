@@ -36,6 +36,15 @@ static MageServer *sharedSingleton = nil;
     [defaults synchronize];
     
     self.reachabilityManager = [AFNetworkReachabilityManager managerForDomain:url.host];
+    
+// TODO see if I can get this to work for IP address
+//    struct sockaddr_in address;
+//    address.sin_len = sizeof(address);
+//    address.sin_family = AF_INET;
+//    address.sin_port = htons(url.port);
+//    address.sin_addr.s_addr = inet_addr([url.host UTF8String]);
+//    self.reachabilityManager = [AFNetworkReachabilityManager managerForAddress:&address];
+    
     [self.reachabilityManager startMonitoring];
     
     HttpManager *http = [HttpManager singleton];
