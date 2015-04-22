@@ -17,8 +17,8 @@
 @implementation MapViewController_iPad
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES];
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
     lblTitle.backgroundColor = [UIColor clearColor];
@@ -30,9 +30,9 @@
     [self.eventNameItem setCustomView:lblTitle];
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
+- (void) viewDidDisappear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO];
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -82,5 +82,6 @@
     [self.mapDelegate userDetailSelected:user];
     [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:user];
 }
+
 
 @end

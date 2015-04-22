@@ -34,9 +34,36 @@
     
     self.delegate = self;
     
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
+    
+    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
+    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
+    UIViewController *masterViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageMasterViewController"];
+    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
+    
+    self.viewControllers = @[masterViewController, detailViewController];
+    
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
+    self.tabBarController = (MageTabBarController *) masterViewController;
+    
+    self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
+    
+    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
+    observationTableViewController.observationDataStore.observationSelectionDelegate = self;
+    observationTableViewController.attachmentDelegate = self;
+    
+    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
+    peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+    // End hack fix to be remove when apple fixes bug
+    
+    
+    /*
+     Old working code prior to 8.3 bug.  Put this back and add back in master/detail relationships in storyboard
+     when apple fixes the bug
+     
     UINavigationController *detailViewController = [self.viewControllers lastObject];
 
-    self.mapViewController = (MapViewController_iPad *)detailViewController.topViewController;
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
@@ -47,6 +74,7 @@
     
     PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+     */
 }
 
 - (void) viewDidAppear:(BOOL)animated {
