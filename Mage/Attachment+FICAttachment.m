@@ -7,6 +7,7 @@
 //
 
 #import "Attachment+FICAttachment.h"
+#import "Attachment+helper.h"
 #import <FICImageCache.h>
 #import "FICUtilities.h"
 
@@ -16,7 +17,6 @@ NSString *const AttachmentFamily = @"AttachmentFamily";
 
 NSString *const AttachmentSmallSquare = @"AttachmentSmallSquare";
 NSString *const AttachmentMediumSquare = @"AttachmentMediumSquare";
-NSString *const AttachmentLarge = @"AttachmentLarge";
 CGSize const AttachmentSquareImageSize = {50, 50};
 CGSize const AttachmentiPadSquareImageSize = {100, 100};
 
@@ -38,11 +38,7 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
 }
 
 - (NSURL *)sourceImageURLWithFormatName:(NSString *)formatName {
-    if ([self localPath] != nil) {
-        return [NSURL URLWithString: [self localPath]];
-    } else {
-        return [NSURL URLWithString:[self url]];
-    }
+    return [self sourceURL];
 }
 
 - (FICEntityImageDrawingBlock)drawingBlockForImage:(UIImage *)image withFormatName:(NSString *)formatName {
@@ -50,28 +46,45 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
         UIImage *imageToUse = image;
         CGRect contextBounds = CGRectZero;
         contextBounds.size = contextSize;
-        if ([formatName isEqualToString:AttachmentSmallSquare] || [formatName isEqualToString:AttachmentMediumSquare]) {
-            CGRect cropRect = CGRectZero;
-            if (image.size.width <= contextSize.width && image.size.height <= contextSize.height) {
-                cropRect = CGRectMake((contextSize.width - image.size.width)/2.0, (contextSize.height - image.size.height)/2.0, contextSize.width, contextSize.height);
-            } else if (image.size.width < image.size.height) {
-                // portrait mode, crop off the top and bottom
-                cropRect = CGRectMake(0, (image.size.height - image.size.width)/2.0, image.size.width, image.size.width);
-            } else {
-                // landscape, crop the sides
-                cropRect = CGRectMake((image.size.width - image.size.height)/2.0, 0, image.size.height, image.size.height);
-            }
-            
-            [imageToUse drawInRect:cropRect];
-        }
         
         CGContextClearRect(context, contextBounds);
         UIGraphicsPushContext(context);
+        
+        CGRect cropRect = CGRectZero;
+        if (image.size.width * image.scale <= contextSize.width && image.size.height * image.scale <= contextSize.height) {
+            cropRect = CGRectMake((contextSize.width - image.size.width * 2)/2.0,
+                                  (contextSize.height - image.size.height * 2)/2.0,
+                                  contextSize.width,
+                                  contextSize.height);
+        } else if (image.size.width < image.size.height) {
+            // portrait mode, crop off the top and bottom
+            cropRect = CGRectMake(0, (image.size.height - image.size.width)/2.0, image.size.width, image.size.width);
+        } else {
+            // landscape, crop the sides
+            cropRect = CGRectMake((image.size.width - image.size.height)/2.0, 0, image.size.height, image.size.height);
+        }
+        
+        CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+        imageToUse = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);            
+
         [imageToUse drawInRect:contextBounds];
         UIGraphicsPopContext();
     };
     
     return drawingBlock;
+}
+
+- (CGSize) CGSizeAspectFitWithRatio:(CGSize) aspectRatio boundingSize:(CGSize) boundingSize {
+    float mW = boundingSize.width / aspectRatio.width;
+    float mH = boundingSize.height / aspectRatio.height;
+    if( mH < mW ) {
+        boundingSize.width = boundingSize.height / aspectRatio.height * aspectRatio.width;
+    } else if( mW < mH ) {
+        boundingSize.height = boundingSize.width / aspectRatio.width * aspectRatio.height;
+    }
+    
+    return boundingSize;
 }
 
 @end

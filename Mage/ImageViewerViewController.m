@@ -33,8 +33,6 @@
 
 @implementation ImageViewerViewController
 
-bool originalNavBarHidden;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -47,6 +45,8 @@ bool originalNavBarHidden;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.navigationController setNavigationBarHidden:NO];
     
     if (self.mediaUrl != nil) {
         if ([self.contentType hasPrefix:@"image"]) {
@@ -70,21 +70,11 @@ bool originalNavBarHidden;
             [self.progressView setHidden:YES];
             [self.audioPlayerView setHidden:YES];
             self.imageView = [[UIImageView alloc] init];
+
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.frame = self.mediaHolderView.frame;
-            
             [self.mediaHolderView addSubview:self.imageView];
-            FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
-                self.imageView.image = image;
-                self.imageView.clipsToBounds = YES;
-                self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            };
-            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            BOOL imageExists = [delegate.imageCache retrieveImageForEntity:[self attachment] withFormatName:AttachmentLarge completionBlock:completionBlock];
-            
-            if (imageExists == NO) {
-                self.imageView.image = [UIImage imageNamed:@"download"];
-            }
+            self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[self.attachment sourceURL]]];
         } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
             [self downloadAndPlayAttachment:self.attachment];
         }
@@ -112,14 +102,19 @@ bool originalNavBarHidden;
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    if (self.videoPlayerView) {
+        [self.videoPlayerView stop];
+    }
+    
+    if (self.audioPlayer) {
+        [self stopAudio];
+    }
 }
+
 
 -(BOOL)prefersStatusBarHidden {
     return YES;
-}
-
-- (IBAction)doneButtonPressed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

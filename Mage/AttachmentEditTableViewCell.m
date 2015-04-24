@@ -28,7 +28,8 @@
     } else {
         [self.ads.attachmentCollection reloadData];
     }
-//    self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+    
+    self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {

@@ -13,6 +13,7 @@
 #import <FICImageCache.h>
 #import <UserUtility.h>
 #import "Attachment+FICAttachment.h"
+#import "Attachment+helper.h"
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
@@ -59,16 +60,7 @@
     ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
-    largeImageFormat.name = AttachmentLarge;
-    largeImageFormat.family = AttachmentFamily;
-    largeImageFormat.style = FICImageFormatStyle32BitBGRA;
-    largeImageFormat.imageSize = [[UIScreen mainScreen] bounds].size;
-    largeImageFormat.maximumCount = 250;
-    largeImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
-    largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat, largeImageFormat];
+    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
     
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;
@@ -197,24 +189,13 @@
         // Fetch the desired source image by making a network request
         Attachment *attachment = (Attachment *)entity;
         UIImage *sourceImage = nil;
-        NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
         NSLog(@"content type %@", attachment.contentType);
         if ([attachment.contentType hasPrefix:@"image"]) {
-            
-            if (attachment.localPath != nil) {
-                NSData *data = [NSData dataWithContentsOfFile:attachment.localPath];
-                sourceImage = [UIImage imageWithData:data];
-            } else {
-                NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-                NSString *tokenUrl = [NSString stringWithFormat:@"%@?access_token=%@", requestURL, [defaults valueForKeyPath:@"loginParameters.token"]];
-                NSLog(@"token url %@", tokenUrl);
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:tokenUrl]];
-                sourceImage = [UIImage imageWithData:data];
-            }
-        } else if ([attachment.contentType hasPrefix:@"video"]) {
+            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[attachment sourceURL]]];
+        } else if ([attachment.contentType hasPrefix:@"video"] || [attachment.contentType hasPrefix:@"audio"]) {
             sourceImage = [UIImage imageNamed:@"play_circle"];
         } else {
-            sourceImage = [UIImage imageNamed:@"download"];
+            sourceImage = [UIImage imageNamed:@"paperclip"];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{

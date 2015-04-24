@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Observation.h>
 #import "ObservationEditListener.h"
+#import "AttachmentSelectionDelegate.h"
 
 @interface ObservationEditTableViewCell : UITableViewCell <UITextFieldDelegate>
 
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) NSDictionary *fieldDefinition;
 @property (nonatomic, weak) id<ObservationEditListener> delegate;
 @property (weak, nonatomic) IBOutlet UILabel *requiredIndicator;
+@property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation;
 - (CGFloat) getCellHeightForValue: (id) value;
