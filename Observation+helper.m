@@ -268,6 +268,11 @@ NSNumber *_currentEventId;
                     Observation *observation = [Observation MR_createEntityInContext:localContext];
                     [observation populateObjectFromJson:feature];
                     observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
+                    
+                    NSLog(@"Observation remoteId is %@", observation.remoteId);
+                    NSLog(@"Observation userId is %@", observation.userId);
+                    NSLog(@"Observation username is %@", observation.user.username);
+
                     for (id attachmentJson in [feature objectForKey:@"attachments"]) {
                         Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
                         [observation addAttachmentsObject:attachment];

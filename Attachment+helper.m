@@ -46,4 +46,13 @@
     return self;
 }
 
+- (NSURL *) sourceURL {
+    if (self.localPath) {
+        return [NSURL fileURLWithPath:self.localPath];
+    } else {
+        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", self.url, [defaults valueForKeyPath:@"loginParameters.token"]]];
+    }
+}
+
 @end

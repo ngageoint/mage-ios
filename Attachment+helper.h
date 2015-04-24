@@ -14,4 +14,6 @@
 
 - (id) populateFromJson: (NSDictionary *) json;
 
+- (NSURL *) sourceURL;
+
 @end
