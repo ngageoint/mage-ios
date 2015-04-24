@@ -77,7 +77,17 @@
      */
 }
 
+//-(void)viewWillAppear:(BOOL)animated {
+//    [super viewWillAppear:animated];
+//    
+//    [[[self viewControllers] objectAtIndex:0] viewWillAppear:animated];
+//}
+
 - (void) viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+    
+//    [[[self viewControllers] objectAtIndex:0] viewWillAppear:animated];
+
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;
     }
@@ -86,7 +96,6 @@
     if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
         [self ensureButtonVisible];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -150,6 +159,10 @@
         
         self.masterViewButton = nil;
         self.masterViewPopover = nil;
+        
+        for (UIViewController *viewController in self.tabBarController.viewControllers) {
+            [viewController.view setNeedsLayout];
+        }
     }
 }
 

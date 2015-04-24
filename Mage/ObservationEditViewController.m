@@ -18,8 +18,10 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "AudioRecordingDelegate.h"
 #import "MediaViewController.h"
+#import "ImageViewerViewController.h"
+#import "AttachmentSelectionDelegate.h"
 
-@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate>
+@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
@@ -143,44 +145,44 @@
             [self.editDataStore.editTable endUpdates];
             [picker dismissViewControllerAnimated:YES completion:NULL];
             
-//            AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
-//            NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
-//            if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
-//                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
-//                NSString *mp4Path = [[moviePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"mp4"];
-//
-//                exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
-//                exportSession.outputFileType = AVFileTypeMPEG4;
-//                [exportSession exportAsynchronouslyWithCompletionHandler:^{
-//                    switch ([exportSession status]) {
-//                        case AVAssetExportSessionStatusFailed:
-//                            NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
-//                            break;
-//                        case AVAssetExportSessionStatusCancelled:
-//                            NSLog(@"Export canceled");
-//                            break;
-//                        case AVAssetExportSessionStatusCompleted: {
-//                            NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-//                            [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
-//                            [attachmentJson setValue:mp4Path forKey:@"localPath"];
-//                            [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
-//                            [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-//                            
-//                            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-//                            attachment.observation = self.observation;
-//                            
-//                            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-//                                [self.editDataStore.editTable beginUpdates];
-//                                [self.editDataStore.editTable reloadData];
-//                                [self.editDataStore.editTable endUpdates];
-//                            }];
-//
-//                        }
-//                        default:
-//                            break;
-//                    }
-//                }];
-//            }
+            AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
+            NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+            if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
+                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
+                NSString *mp4Path = [[moviePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"mp4"];
+
+                exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
+                exportSession.outputFileType = AVFileTypeMPEG4;
+                [exportSession exportAsynchronouslyWithCompletionHandler:^{
+                    switch ([exportSession status]) {
+                        case AVAssetExportSessionStatusFailed:
+                            NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
+                            break;
+                        case AVAssetExportSessionStatusCancelled:
+                            NSLog(@"Export canceled");
+                            break;
+                        case AVAssetExportSessionStatusCompleted: {
+                            NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
+                            [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
+                            [attachmentJson setValue:mp4Path forKey:@"localPath"];
+                            [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
+                            [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+                            
+                            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
+                            attachment.observation = self.observation;
+                            
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                                [self.editDataStore.editTable beginUpdates];
+                                [self.editDataStore.editTable reloadData];
+                                [self.editDataStore.editTable endUpdates];
+                            }];
+
+                        }
+                        default:
+                            break;
+                    }
+                }];
+            }
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
@@ -266,12 +268,21 @@
     } else if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
         MediaViewController *mvc = [segue destinationViewController];
         mvc.delegate = self;
+    } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+        // Get reference to the destination view controller
+        ImageViewerViewController *vc = [segue destinationViewController];
+        [vc setAttachment:sender];
     }
 }
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
     GeometryEditViewController *vc = [segue sourceViewController];
     [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
+}
+
+- (void) selectedAttachment:(Attachment *)attachment {
+    NSLog(@"attachment selected");
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
 
 

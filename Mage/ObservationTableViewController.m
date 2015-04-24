@@ -26,6 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     Event *currentEvent = [Event getCurrentEvent];
     self.eventNameLabel.text = @"All";
     [self.navigationItem setTitle:currentEvent.name];
@@ -34,6 +35,20 @@
     [self.refreshControl addTarget:self
                             action:@selector(refreshObservations)
                   forControlEvents:UIControlEventValueChanged];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    // iOS bug fix.
+    // For some reason the first view in a TabBarViewController when that TabBarViewController
+    // is the master view of a split view the toolbar will not attach to the status bar correctly.
+    // Forcing it to relayout seems to fix the issue.
+    [self.view setNeedsLayout];
+    
+    [super viewWillAppear:animated];
+}
+
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
@@ -91,5 +106,6 @@
         [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
     }
 }
+
 
 @end

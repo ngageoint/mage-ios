@@ -104,8 +104,10 @@ NSNumber *_eventId;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
     id field = [self rowToField][indexPath.row];
-    [cell populateCellWithFormField:field andObservation:_observation];
     cell.delegate = self;
+    cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+    [cell populateCellWithFormField:field andObservation:_observation];
+
     return cell;
 }
 
