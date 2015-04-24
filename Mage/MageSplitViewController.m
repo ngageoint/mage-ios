@@ -77,16 +77,8 @@
      */
 }
 
-//-(void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    
-//    [[[self viewControllers] objectAtIndex:0] viewWillAppear:animated];
-//}
-
 - (void) viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-    
-//    [[[self viewControllers] objectAtIndex:0] viewWillAppear:animated];
+    [super viewDidAppear:animated];
 
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;

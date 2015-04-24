@@ -47,10 +47,6 @@
     [super viewWillAppear:animated];
 }
 
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
