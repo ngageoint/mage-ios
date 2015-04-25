@@ -39,6 +39,8 @@
     @property (nonatomic) BOOL canShowUserCallout;
     @property (nonatomic) BOOL canShowObservationCallout;
     @property (nonatomic) BOOL canShowGpsLocationCallout;
+
+    @property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation MapDelegate
@@ -61,6 +63,9 @@
                           options:NSKeyValueObservingOptionNew
                           context:NULL];
         }
+        
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
     }
     
     return self;
@@ -201,6 +206,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [defaults removeObserver:self forKeyPath:@"mapType"];
     [defaults removeObserver:self forKeyPath:@"selectedOfflineMaps"];
     [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+    
+    self.locationManager.delegate = nil;
 }
 
 - (NSMutableDictionary *) offlineMaps {
@@ -772,6 +779,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self selectedUser:user];
 }
 
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (self.locationAuthorizationChangedDelegate) {
+        [self.locationAuthorizationChangedDelegate locationManager:manager didChangeAuthorizationStatus:status];
+    }
+}
 
 
 @end
