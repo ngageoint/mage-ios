@@ -32,7 +32,7 @@
 #import <Event+helper.h>
 #import <GPSLocation+helper.h>
 
-@interface MapViewController ()<UserTrackingModeChanged>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -67,6 +67,7 @@
     [self.mapDelegate setObservations:observations];
     
     self.mapDelegate.userTrackingModeDelegate = self;
+    self.mapDelegate.locationAuthorizationChangedDelegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -97,6 +98,8 @@
     
     //start the timer for updating the circles
     [self scheduleColorUpdateTimer];
+    
+    [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -271,6 +274,15 @@
             break;
         }
     }
+}
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self onLocationAuthorizationStatus:status];
+}
+
+- (void) onLocationAuthorizationStatus:(CLAuthorizationStatus) status {
+    [self.trackingButton setHidden:status != kCLAuthorizationStatusAuthorized];
+    [self.reportLocationButton setHidden:status != kCLAuthorizationStatusAuthorized];
 }
 
 @end
