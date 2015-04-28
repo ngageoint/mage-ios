@@ -130,19 +130,6 @@
         
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
             UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
-            
-            NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-            [attachmentJson setValue:@"video/quicktime" forKey:@"contentType"];
-            [attachmentJson setValue:moviePath forKey:@"localPath"];
-            [attachmentJson setValue:[moviePath lastPathComponent] forKey:@"name"];
-            [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-            
-            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-            attachment.observation = self.observation;
-            
-            [self.editDataStore.editTable beginUpdates];
-            [self.editDataStore.editTable reloadData];
-            [self.editDataStore.editTable endUpdates];
             [picker dismissViewControllerAnimated:YES completion:NULL];
             
             AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
