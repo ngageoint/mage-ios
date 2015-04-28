@@ -223,13 +223,17 @@ NSNumber *_currentEventId;
     }
     
     NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:json error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
         if (success) {
             success(response);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         failure(error);
+    }];
+    
+    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Could not complete observation push");
     }];
     
     return operation;

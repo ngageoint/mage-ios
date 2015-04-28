@@ -120,52 +120,54 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             continue;
         }
         
-        HttpManager *manager = [HttpManager singleton];
+        HttpManager *http = [HttpManager singleton];
         NSString *url = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
 
-        NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSMutableURLRequest *request = [http.sessionManager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
         } error:nil];
+        
         // not sure why the HTTPRequestHeaders are not being set, so set them here
-        [manager.sessionManager.requestSerializer.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
-            if (![request valueForHTTPHeaderField:field]) {
-                [request setValue:value forHTTPHeaderField:field];
-            }
-        }];
-        NSProgress *progress = nil;
+//        [manager.sessionManager.requestSerializer.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
+//            if (![request valueForHTTPHeaderField:field]) {
+//                [request setValue:value forHTTPHeaderField:field];
+//            }
+//        }];
 
-        NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            if (error) {
-                NSLog(@"Error: %@", error);
+        AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Attachment *localAttachment = [attachment MR_inContext:localContext];
+                localAttachment.remoteId = [responseObject valueForKey:@"id"];
+                
+                NSDateFormatter *dateFormat = [NSDateFormatter new];
+                [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+                dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                
+                // Always use this locale when parsing fixed format date strings
+                NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+                dateFormat.locale = posix;
+                
+                NSString *dateString = [responseObject valueForKey:@"lastModified"];
+                if (dateString != nil) {
+                    NSDate *date = [dateFormat dateFromString:dateString];
+                    [localAttachment setLastModified:date];
+                }
+                localAttachment.name = [responseObject valueForKey:@"name"];
+                localAttachment.url = [responseObject valueForKey:@"url"];
+                localAttachment.dirty = [NSNumber numberWithBool:NO];
+            } completion:^(BOOL success, NSError *error) {
                 [attachmentsToPush removeObjectForKey:attachment.objectID];
-            } else {
-                [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-                    Attachment *localAttachment = [attachment MR_inContext:localContext];
-                    localAttachment.remoteId = [responseObject valueForKey:@"id"];
-                    
-                    NSDateFormatter *dateFormat = [NSDateFormatter new];
-                    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-                    
-                    // Always use this locale when parsing fixed format date strings
-                    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-                    dateFormat.locale = posix;
-                    
-                    NSString *dateString = [responseObject valueForKey:@"lastModified"];
-                    if (dateString != nil) {
-                        NSDate *date = [dateFormat dateFromString:dateString];
-                        [localAttachment setLastModified:date];
-                    }
-                    localAttachment.name = [responseObject valueForKey:@"name"];
-                    localAttachment.url = [responseObject valueForKey:@"url"];
-                    localAttachment.dirty = [NSNumber numberWithBool:NO];
-                } completion:^(BOOL success, NSError *error) {
-                    [attachmentsToPush removeObjectForKey:attachment.objectID];
-                }];
-            }
+            }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            [attachmentsToPush removeObjectForKey:attachment.objectID];
         }];
         
-        [uploadTask resume];
+        [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
+            NSLog(@"failed to upload attachments in background");
+        }];
+        
+        [http.manager.operationQueue addOperation:operation];
     }
 }
 

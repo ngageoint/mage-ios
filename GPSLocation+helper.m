@@ -61,7 +61,7 @@
     }
     
     NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
         if (success) {
             success();
         }
@@ -70,6 +70,10 @@
         if (failure) {
             failure(error);
         }
+    }];
+    
+    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Failed to push location after entering background");
     }];
     
     return operation;

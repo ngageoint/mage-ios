@@ -12,6 +12,7 @@
 #import "GeoPoint.h"
 #import "Event+helper.h"
 #import "Server+helper.h"
+#import "HttpManager.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSSensitivityKey = @"gpsSensitivity";
@@ -148,7 +149,7 @@ NSInteger const kLocationPushLimit = 100;
             self.isPushingLocations = NO;
         }];
         
-        [self.operationQueue addOperation:locationPushOperation];
+        [[HttpManager singleton].manager.operationQueue addOperation:locationPushOperation];
     }
 }
 
