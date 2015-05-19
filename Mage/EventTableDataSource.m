@@ -15,6 +15,8 @@
 
 - (id) init {
     if (self = [super init]) {
+        NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
+        
         User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = current.recentEventIds;
         NSFetchRequest *recentFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
@@ -27,6 +29,10 @@
                                                                                              cacheName:nil];
         self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
         self.recentFetchedResultsController.delegate = self;
+        
+        if (!recentEventIds) {
+            NSLog(@"could not find recent events");
+        }
         
         NSFetchRequest *allFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]];
         NSSortDescriptor *allSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
