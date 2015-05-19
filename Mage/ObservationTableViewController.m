@@ -16,10 +16,10 @@
 #import <Event+helper.h>
 #import <User+helper.h>
 #import "ObservationEditViewController.h"
+#import "HttpManager.h"
 #import <LocationService.h>
 
 @interface ObservationTableViewController () <AttachmentSelectionDelegate>
-@property(nonatomic, strong) IBOutlet UIRefreshControl *refreshControl;
 @end
 
 @implementation ObservationTableViewController
@@ -27,14 +27,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // bug in ios smashes the refresh text into the
+    // spinner.  This is the only work around I have found
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.refreshControl beginRefreshing];
+        [self.refreshControl endRefreshing];
+    });
+    
     Event *currentEvent = [Event getCurrentEvent];
     self.eventNameLabel.text = @"All";
     [self.navigationItem setTitle:currentEvent.name];
     [self.observationDataStore startFetchController];
-    
-    [self.refreshControl addTarget:self
-                            action:@selector(refreshObservations)
-                  forControlEvents:UIControlEventValueChanged];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -90,8 +93,17 @@
 }
 
 
--(void) refreshObservations {
+- (IBAction)refreshObservations:(UIRefreshControl *)sender {
     NSLog(@"refreshObservations");
+    [self.refreshControl beginRefreshing];
+    
+    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
+        [self.refreshControl endRefreshing];
+    } failure:^(NSError* error) {
+        [self.refreshControl endRefreshing];
+    }];
+    
+    [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

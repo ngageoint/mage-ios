@@ -38,21 +38,22 @@
     
     // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
     // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
-    UIViewController *masterViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageMasterViewController"];
     UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
     
-    self.viewControllers = @[masterViewController, detailViewController];
+    NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
+    [viewControllers addObject:detailViewController];
+    self.viewControllers = viewControllers;
     
     self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
-    self.tabBarController = (MageTabBarController *) masterViewController;
+    self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
-    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
+    ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
     observationTableViewController.observationDataStore.observationSelectionDelegate = self;
     observationTableViewController.attachmentDelegate = self;
     
-    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
+    PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
     // End hack fix to be remove when apple fixes bug
     
