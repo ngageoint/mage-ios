@@ -43,6 +43,7 @@
 bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
+    [self.navigationController setNavigationBarHidden:NO];
     
     if (self.user == nil) {
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];

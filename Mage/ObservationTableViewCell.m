@@ -12,6 +12,7 @@
 #import <User.h>
 #import <Server+helper.h>
 #import "AttachmentCollectionDataStore.h"
+#import <Event+helper.h>
 
 @interface ObservationTableViewCell()
 
@@ -22,8 +23,8 @@
 @implementation ObservationTableViewCell
 
 - (void) populateCellWithObservation:(Observation *) observation {
-    
-    NSDictionary *form = [Server observationForm];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
     self.primaryField.text = type;

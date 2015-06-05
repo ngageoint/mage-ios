@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "avatar.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "full__0000s_0084_menu.png"
+      "filename" : "avatar@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "avatar@3x.png"
     }
   ],
   "info" : {

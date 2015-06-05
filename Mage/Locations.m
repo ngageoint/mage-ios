@@ -8,13 +8,14 @@
 
 #import "Locations.h"
 #import "Location.h"
+#import <Server+helper.h>
 
 @implementation Locations
 
 + (id) locationsForAllUsers {
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                         ascending:NO
-                    withPredicate:[NSPredicate predicateWithFormat:@"user.currentUser = %@", [NSNumber numberWithBool:NO]]
+                    withPredicate:[NSPredicate predicateWithFormat:@"user.currentUser = %@ AND eventId == %@", [NSNumber numberWithBool:NO], [Server currentEventId]]
                           groupBy:nil
                          delegate:nil
                         inContext:[NSManagedObjectContext MR_defaultContext]];
@@ -26,7 +27,7 @@
 + (id) locationsForUser:(User *) user {
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                                                                                ascending:NO
-                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@", user]
+                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]]
                                                                                  groupBy:nil
                                                                                 delegate:nil
                                                                                inContext:[NSManagedObjectContext MR_defaultContext]];

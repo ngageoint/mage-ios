@@ -18,7 +18,7 @@
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         self.icon.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]];
     } else {
-        self.icon.image = nil;
+        self.icon.image = [UIImage imageNamed:@"avatar"];
     }
     
     self.name.text = user.name;

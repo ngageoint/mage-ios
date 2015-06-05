@@ -15,6 +15,7 @@
 #import "PeopleTableViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "ImageViewerViewController.h"
+#import <Mage.h>
 
 @interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
@@ -29,20 +30,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self startServices];
+    [[Mage singleton] startServices];
     
     self.delegate = self;
     
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
+    
     // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
     // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
     UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
     
     NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
     [viewControllers addObject:detailViewController];
     self.viewControllers = viewControllers;
     
-    self.mapViewController = (MapViewController_iPad *)detailViewController.topViewController;
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
@@ -53,16 +55,32 @@
     
     PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+    // End hack fix to be remove when apple fixes bug
     
-//    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
-//    observationTableViewController.observationDataStore.observationSelectionDelegate = self;
-//    observationTableViewController.attachmentDelegate = self;
-//    
-//    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
-//    peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+    
+    /*
+     Old working code prior to 8.3 bug.  Put this back and add back in master/detail relationships in storyboard
+     when apple fixes the bug
+     
+    UINavigationController *detailViewController = [self.viewControllers lastObject];
+
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
+    self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
+    
+    self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
+    
+    ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
+    observationTableViewController.observationDataStore.observationSelectionDelegate = self;
+    observationTableViewController.attachmentDelegate = self;
+    
+    PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
+    peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+     */
 }
 
 - (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
         self.masterViewButton = self.displayModeButtonItem;
     }
@@ -71,7 +89,6 @@
     if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
         [self ensureButtonVisible];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,31 +122,6 @@
     [self.mapViewController userDetailSelected:user];
 }
 
-
-- (void) startServices {
-    [_locationServiceHolder.locationService start];
-    
-    NSOperation *usersPullOp = [User operationToFetchUsers];
-    NSOperation *startLocationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the location fetch service");
-        [self.fetchServicesHolder.locationFetchService start];
-    }];
-    
-    NSOperation *startObservationFetchOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"done with intial user fetch, lets start the observation fetch service");
-        [self.fetchServicesHolder.observationFetchService start];
-    }];
-    
-    [startObservationFetchOp addDependency:usersPullOp];
-    [startLocationFetchOp addDependency:usersPullOp];
-    
-    [self.fetchServicesHolder.observationPushService start];
-    [self.fetchServicesHolder.attachmentPushService start];
-    
-    // Add the operations to the queue
-    [[HttpManager singleton].manager.operationQueue addOperations:@[usersPullOp, startObservationFetchOp, startLocationFetchOp] waitUntilFinished:NO];
-}
-
 - (void) ensureButtonVisible {
     self.masterViewButton.title = @"List";
     self.masterViewButton.style = UIBarButtonItemStylePlain;
@@ -160,6 +152,10 @@
         
         self.masterViewButton = nil;
         self.masterViewPopover = nil;
+        
+        for (UIViewController *viewController in self.tabBarController.viewControllers) {
+            [viewController.view setNeedsLayout];
+        }
     }
 }
 

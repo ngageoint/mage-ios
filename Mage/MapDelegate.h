@@ -22,10 +22,18 @@
 
 @end
 
+@protocol LocationAuthorizationStatusChanged <NSObject>
 
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate>
+@required
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
+@end
+
+
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
+@property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;
+
 @property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
 @property (nonatomic, strong) Locations *locations;
 @property (nonatomic, strong) Observations *observations;

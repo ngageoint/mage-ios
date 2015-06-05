@@ -13,6 +13,6 @@
 @interface AttachmentCollectionDataStore : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 @property (strong, nonatomic) Observation *observation;
-@property (nonatomic, strong) id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
+@property (nonatomic, strong) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
 
 @end

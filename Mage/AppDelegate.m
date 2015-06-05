@@ -13,6 +13,7 @@
 #import <FICImageCache.h>
 #import <UserUtility.h>
 #import "Attachment+FICAttachment.h"
+#import "Attachment+helper.h"
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
@@ -44,7 +45,7 @@
     FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
     thumbnailImageFormat.name = AttachmentSmallSquare;
     thumbnailImageFormat.family = AttachmentFamily;
-    thumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    thumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
     thumbnailImageFormat.devices = FICImageFormatDevicePhone;
@@ -53,34 +54,19 @@
     FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
     ipadThumbnailImageFormat.name = AttachmentMediumSquare;
     ipadThumbnailImageFormat.family = AttachmentFamily;
-    ipadThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
+    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
     ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
     ipadThumbnailImageFormat.maximumCount = 250;
     ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
-    FICImageFormat *largeImageFormat = [[FICImageFormat alloc] init];
-    largeImageFormat.name = AttachmentLarge;
-    largeImageFormat.family = AttachmentFamily;
-    largeImageFormat.style = FICImageFormatStyle32BitBGRA;
-    largeImageFormat.imageSize = [[UIScreen mainScreen] bounds].size;
-    largeImageFormat.maximumCount = 250;
-    largeImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
-    largeImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat, largeImageFormat];
+    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
     
     _imageCache = [FICImageCache sharedImageCache];
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
     
     [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
-    
-    _locationFetchService = [[LocationFetchService alloc] init];
-    _observationFetchService = [[ObservationFetchService alloc] init];
-    
-    _observationPushService = [[ObservationPushService alloc] init];
-    _attachmentPushService = [[AttachmentPushService alloc] init];
 	 
 	return YES;
 }
@@ -96,14 +82,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
-    [self.locationFetchService stop];
+    [[LocationFetchService singleton] stop];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
-        [self.locationFetchService start];
+        [[LocationFetchService singleton] start];
     }
 }
 
@@ -166,19 +152,11 @@
     [MagicalRecord cleanUp];
 }
 
--(LocationService *) locationService {
-    if (_locationService == nil) {
-        _locationService = [[LocationService alloc] init];
-    }
-    
-    return _locationService;
-}
-
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [self.locationFetchService stop];
-    [self.observationFetchService stop];
-    [self.observationPushService stop];
-    [self.attachmentPushService stop];
+    [[LocationFetchService singleton] stop];
+    [[ObservationFetchService singleton] stop];
+    [[ObservationPushService singleton] stop];
+    [[AttachmentPushService singleton] stop];
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]
         || [currentController isKindOfClass:[LoginViewController class]]
@@ -211,24 +189,13 @@
         // Fetch the desired source image by making a network request
         Attachment *attachment = (Attachment *)entity;
         UIImage *sourceImage = nil;
-        NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
         NSLog(@"content type %@", attachment.contentType);
         if ([attachment.contentType hasPrefix:@"image"]) {
-            
-            if (attachment.localPath != nil) {
-                NSData *data = [NSData dataWithContentsOfFile:attachment.localPath];
-                sourceImage = [UIImage imageWithData:data];
-            } else {
-                NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-                NSString *tokenUrl = [NSString stringWithFormat:@"%@?access_token=%@", requestURL, [defaults valueForKeyPath:@"loginParameters.token"]];
-                NSLog(@"token url %@", tokenUrl);
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:tokenUrl]];
-                sourceImage = [UIImage imageWithData:data];
-            }
-        } else if ([attachment.contentType hasPrefix:@"video"]) {
-            sourceImage = [UIImage imageNamed:@"video"];
+            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[attachment sourceURL]]];
+        } else if ([attachment.contentType hasPrefix:@"video"] || [attachment.contentType hasPrefix:@"audio"]) {
+            sourceImage = [UIImage imageNamed:@"play_circle"];
         } else {
-            sourceImage = [UIImage imageNamed:@"download"];
+            sourceImage = [UIImage imageNamed:@"paperclip"];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{

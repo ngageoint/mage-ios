@@ -6,14 +6,6 @@
 //  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
-#import "ObservationFetchService.h"
-#import "LocationFetchService.h"
-#import "LocationServiceHolder.h"
-#import "FetchServicesHolder.h"
-
 @interface MageRootViewController : UITabBarController
-
-@property (weak, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
-@property (weak, nonatomic) IBOutlet LocationServiceHolder *locationServiceHolder;
 
 @end
