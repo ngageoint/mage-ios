@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ManagedObjectContextHolder.h"
-#import "FetchServicesHolder.h"
 
 @interface MageInitialViewController : UIViewController
-
-@property (strong, nonatomic) IBOutlet FetchServicesHolder *fetchServicesHolder;
 
 @end

@@ -14,6 +14,7 @@
 #import "ImageViewerViewController.h"
 #import "ObservationEditViewController.h"
 #import "ObservationHeaderAttachmentTableViewCell.h"
+#import <Event+helper.h>
 
 @interface ObservationViewController_iPhone()
 
@@ -83,7 +84,8 @@
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    NSDictionary *form = [Server observationForm];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
     
     for (id field in [form objectForKey:@"fields"]) {
         NSString *fieldName = [field objectForKey:@"name"];

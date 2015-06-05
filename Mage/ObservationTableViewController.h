@@ -10,10 +10,10 @@
 #import "ObservationDataStore.h"
 #import "AttachmentSelectionDelegate.h"
 
-@interface ObservationTableViewController : UIViewController
+@interface ObservationTableViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
+@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end

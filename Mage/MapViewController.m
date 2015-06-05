@@ -29,8 +29,10 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ImageViewerViewController.h"
+#import <Event+helper.h>
+#import <GPSLocation+helper.h>
 
-@interface MapViewController ()<UserTrackingModeChanged>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -39,6 +41,7 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
     @property (nonatomic, strong) NSTimer* locationColorUpdateTimer;
+    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end
 
@@ -46,7 +49,7 @@
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
@@ -64,6 +67,7 @@
     [self.mapDelegate setObservations:observations];
     
     self.mapDelegate.userTrackingModeDelegate = self;
+    self.mapDelegate.locationAuthorizationChangedDelegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -72,7 +76,10 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue]];
+    Event *currentEvent = [Event getCurrentEvent];
+    self.eventNameLabel.text = @"All";
+    [self.navigationItem setTitle:currentEvent.name];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"
@@ -91,6 +98,8 @@
     
     //start the timer for updating the circles
     [self scheduleColorUpdateTimer];
+    
+    [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -127,7 +136,7 @@
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath]];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     }
 }
 
@@ -140,10 +149,18 @@
 		[destinationViewController setObservation:sender];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
-        
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+        CLLocation *location = [[LocationService singleton] location];
+        if (location == nil) {
+            location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Unknown"
+                                                            message:@"MAGE was unable to determine your location.  The new observation will be created in the center of the current map view.  Please confirm the location of the observation."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
+        }
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-        
         [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
@@ -158,19 +175,44 @@
     }
 }
 
+- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
+        if (![[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
+                                                            message:@"You cannot create observations for an event you are not part of."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            return false;
+        }
+    }
+    return true;
+}
+
 - (IBAction)onReportLocationButtonPressed:(id)sender {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
-    [self setupReportLocationButtonWithTrackingState:newState];
-    [defaults setBool:newState forKey:kReportLocationKey];
-    [defaults synchronize];
-    if (newState) {
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    BOOL inEvent = [[Event getCurrentEvent] isUserInEvent:user];
+    if (!inEvent) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
+                                                        message:@"You cannot report your location for an event you are not part of."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    } else if (newState) {
         self.toastText.text = @"You are now reporting your location.";
         self.toastView.backgroundColor = [UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0];
     } else {
         self.toastText.text = @"Location reporting has been disabled";
         self.toastView.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0];
     }
+    [self setupReportLocationButtonWithTrackingState:newState userInEvent:inEvent];
+    [defaults setBool:newState forKey:kReportLocationKey];
+    [defaults synchronize];
     [self displayToast];
 }
 
@@ -189,8 +231,8 @@
 
 }
 
-- (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn {
-    if(trackingOn) {
+- (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn userInEvent: (BOOL) inEvent {
+    if(trackingOn && inEvent) {
         [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_on"] forState:UIControlStateNormal];
         [self.reportLocationButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
     } else {
@@ -232,6 +274,15 @@
             break;
         }
     }
+}
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self onLocationAuthorizationStatus:status];
+}
+
+- (void) onLocationAuthorizationStatus:(CLAuthorizationStatus) status {
+    [self.trackingButton setHidden:status != kCLAuthorizationStatusAuthorized];
+    [self.reportLocationButton setHidden:status != kCLAuthorizationStatusAuthorized];
 }
 
 @end

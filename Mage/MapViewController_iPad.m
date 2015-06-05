@@ -12,17 +12,27 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import <Location+helper.h>
+#import <Event+helper.h>
 
 @implementation MapViewController_iPad
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES];
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
+    
+    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
+    lblTitle.backgroundColor = [UIColor clearColor];
+    lblTitle.textColor = [UIColor whiteColor];
+    lblTitle.font = [UIFont boldSystemFontOfSize:18];
+    lblTitle.textAlignment = NSTextAlignmentLeft;
+    lblTitle.text = [Event getCurrentEvent].name;
+    
+    [self.eventNameItem setCustomView:lblTitle];
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
+- (void) viewDidDisappear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO];
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -72,5 +82,6 @@
     [self.mapDelegate userDetailSelected:user];
     [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:user];
 }
+
 
 @end

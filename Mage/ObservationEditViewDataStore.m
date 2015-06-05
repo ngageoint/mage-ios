@@ -9,6 +9,7 @@
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
 #import <Server+helper.h>
+#import <Event+helper.h>
 
 @interface ObservationEditViewDataStore ()
 
@@ -23,14 +24,15 @@ NSArray *_rowToCellType;
 NSArray *_rowToField;
 NSDictionary *_fieldToRow;
 NSInteger expandedRow = -1;
-NSString *_formId;
+NSNumber *_eventId;
 
 - (NSArray *)rowToCellType {
-    if (_rowToCellType != nil && [[Server observationFormId] isEqualToString:_formId]) {
+    if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:_eventId]) {
         return _rowToCellType;
     }
-    NSDictionary *form = [Server observationForm];
-    _formId = [Server observationFormId];
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = event.form;
+    _eventId = [Server currentEventId];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *fields = [[NSMutableArray alloc] init];
@@ -102,8 +104,10 @@ NSString *_formId;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
     id field = [self rowToField][indexPath.row];
-    [cell populateCellWithFormField:field andObservation:_observation];
     cell.delegate = self;
+    cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+    [cell populateCellWithFormField:field andObservation:_observation];
+
     return cell;
 }
 
