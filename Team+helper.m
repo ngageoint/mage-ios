@@ -21,7 +21,8 @@
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setName:[json objectForKey:@"name"]];
     [self setTeamDescription:[json objectForKey:@"description"]];
-    for (NSString *userId in [json objectForKey:@"users"]) {
+    for (NSString *userId in [json objectForKey:@"userIds"]) {
+        NSLog(@"Thinking about adding user %@ to the team %@", userId, self.name);
         NSSet *filteredUsers = [self.users filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", userId]];
         if (filteredUsers.count == 0) {
             // see if the user exists
