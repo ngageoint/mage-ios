@@ -66,7 +66,7 @@
     NSInteger timePickerRow = [[self.locationIntervalDataSource values] indexOfObject:[defaults objectForKey:kLocationReportingFrequencyKey]];
     [self.timeIntervalPicker selectRow:timePickerRow inComponent:0 animated:NO];
     
-    NSInteger gpsPickerRow = [[self.gpsSensitivityDataSource values] indexOfObject:[defaults objectForKey:kGPSSensitivityKey]];
+    NSInteger gpsPickerRow = [[self.gpsSensitivityDataSource values] indexOfObject:[defaults objectForKey:kGPSDistanceFilterKey]];
     [self.gpsSensitivityPicker selectRow:gpsPickerRow inComponent:0 animated:NO];
 }
 
@@ -160,7 +160,7 @@
 
 -(void) gpsSensistivitySelected:(NSString *) value withLabel:(NSString *) label {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [defaults setObject:value forKey:kGPSSensitivityKey];
+    [defaults setObject:value forKey:kGPSDistanceFilterKey];
     [defaults synchronize];
     
     [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
