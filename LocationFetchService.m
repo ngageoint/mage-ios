@@ -51,7 +51,6 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) scheduleTimer {
-    NSLog(@"told to schedule the timer");
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"in the main queue scheduling the timer");
         _locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
@@ -68,7 +67,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 - (void) pullLocations{
     NSOperation *locationFetchOperation = [Location operationToPullLocationsWithSuccess: ^{
         if (![[UserUtility singleton] isTokenExpired]) {
-            NSLog(@"Scheduling the timer again");
+            NSLog(@"Scheduling the location fetch timer");
             [self scheduleTimer];
         }
     } failure:^(NSError* error) {
@@ -81,11 +80,9 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 -(void) stop {
-    NSLog(@"told to stop the location timer");
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"if the timer is valid i am going to stop it");
         if ([_locationFetchTimer isValid]) {
-            NSLog(@"Stopping the location timer");
+            NSLog(@"Stopping the location fetch timer");
             [_locationFetchTimer invalidate];
             _locationFetchTimer = nil;
         }

@@ -15,7 +15,7 @@
 #import "HttpManager.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
-NSString * const kGPSSensitivityKey = @"gpsSensitivity";
+NSString * const kGPSDistanceFilterKey = @"gpsDistanceFilter";
 NSString * const kLocationReportingFrequencyKey = @"userReportingFrequency";
 
 NSInteger const kLocationPushLimit = 100;
@@ -49,15 +49,15 @@ NSInteger const kLocationPushLimit = 100;
         _locationPushInterval = [[defaults objectForKey:kLocationReportingFrequencyKey] doubleValue];
         
         // for now filter and accuracy are based on the same preference
-        double gpsSensitivity = [[defaults objectForKey:kGPSSensitivityKey] doubleValue];
         _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.desiredAccuracy = gpsSensitivity;
-        _locationManager.distanceFilter = gpsSensitivity;
+        _locationManager.pausesLocationUpdatesAutomatically = NO;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        _locationManager.distanceFilter = [[defaults objectForKey:kGPSDistanceFilterKey] doubleValue];
         _locationManager.delegate = self;
         
         // Check for iOS 8
-        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_locationManager requestAlwaysAuthorization];
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
         }
         
         self.managedObjectContext = [NSManagedObjectContext MR_context];
@@ -72,7 +72,7 @@ NSInteger const kLocationPushLimit = 100;
                                                    context:NULL];
         
         [[NSUserDefaults standardUserDefaults] addObserver:self
-                                                forKeyPath:kGPSSensitivityKey
+                                                forKeyPath:kGPSDistanceFilterKey
                                                    options:NSKeyValueObservingOptionNew
                                                    context:NULL];
         
@@ -157,9 +157,8 @@ NSInteger const kLocationPushLimit = 100;
                        ofObject:(id)object
                          change:(NSDictionary *)change
                         context:(void *)context {
-    if ([kGPSSensitivityKey isEqualToString:keyPath]) {
+    if ([kGPSDistanceFilterKey isEqualToString:keyPath]) {
         double gpsSensitivity = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
-        [_locationManager setDesiredAccuracy:gpsSensitivity];
         [_locationManager setDistanceFilter:gpsSensitivity];
     } else if ([kLocationReportingFrequencyKey isEqualToString:keyPath]) {
         _locationPushInterval = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];

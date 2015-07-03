@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 extern NSString * const kReportLocationKey;
-extern NSString * const kGPSSensitivityKey;
+extern NSString * const kGPSDistanceFilterKey;
 extern NSString * const kLocationReportingFrequencyKey;
 
 @interface LocationService : NSObject<CLLocationManagerDelegate>
