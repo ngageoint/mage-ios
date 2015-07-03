@@ -69,11 +69,11 @@
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
-    ObservationTableViewController *observationTableViewController = (ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
+    ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
     observationTableViewController.observationDataStore.observationSelectionDelegate = self;
     observationTableViewController.attachmentDelegate = self;
     
-    PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
+    PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
      */
 }
