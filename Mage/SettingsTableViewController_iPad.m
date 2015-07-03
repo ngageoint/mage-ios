@@ -66,7 +66,8 @@
 
 - (void) setLocationServicesLabel {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways) {
         if ([defaults boolForKey:kReportLocationKey]) {
             [self.locationServicesStatus setText:@"On"];
         } else {

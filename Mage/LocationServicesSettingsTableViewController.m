@@ -35,15 +35,6 @@
     [defaults synchronize];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -82,17 +73,11 @@
     
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         return [_reportLocationSwitch isOn] ? 3 : 2;
     }
     
@@ -108,15 +93,17 @@
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
-    if (section == 0) {
-        return [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ? 65.0 : .1f;
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
+        return CGFLOAT_MIN;
     }
     
     return UITableViewAutomaticDimension;
 }
 
 -(UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger) section {
-    if (section == 0 && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
         return [[UIView alloc] initWithFrame:CGRectZero];
     }
     

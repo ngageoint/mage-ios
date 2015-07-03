@@ -85,7 +85,6 @@
             break;
         }
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,7 +95,8 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
         return [_reportLocationSwitch isOn] ? 3 : 2;
     }
     
@@ -112,15 +112,17 @@
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
-    if (section == 0) {
-        return [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ? 65.0 : .1f;
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
+        return CGFLOAT_MIN;
     }
     
     return UITableViewAutomaticDimension;
 }
 
 -(UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger) section {
-    if (section == 0 && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse)) {
         return [[UIView alloc] initWithFrame:CGRectZero];
     }
     
