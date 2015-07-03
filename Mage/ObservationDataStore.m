@@ -79,12 +79,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationTableViewCell *cell = (ObservationTableViewCell *)[self cellForObservationAtIndex:indexPath inTableView:tableView];
     Observation *o = [self observationAtIndexPath:indexPath];
-    if (o.attachments.count == 0) {
-        return cell.attachmentCollection.frame.origin.y + 5;
-    }
-    return cell.bounds.size.height;
+    return o.attachments.count > 0 ? 130 : 75;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
