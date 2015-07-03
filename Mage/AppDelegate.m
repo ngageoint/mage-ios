@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <Mage.h>
 #import <User.h>
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
@@ -82,14 +83,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
-    [[LocationFetchService singleton] stop];
+    [[Mage singleton] stopServices];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
-        [[LocationFetchService singleton] start];
+        [[Mage singleton] startServices];
     }
 }
 

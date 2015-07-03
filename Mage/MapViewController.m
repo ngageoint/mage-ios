@@ -97,6 +97,7 @@
                   context:NULL];
     
     //start the timer for updating the circles
+    // TODO turn this off on view disappear
     [self scheduleColorUpdateTimer];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
@@ -281,8 +282,9 @@
 }
 
 - (void) onLocationAuthorizationStatus:(CLAuthorizationStatus) status {
-    [self.trackingButton setHidden:status != kCLAuthorizationStatusAuthorized];
-    [self.reportLocationButton setHidden:status != kCLAuthorizationStatusAuthorized];
+    BOOL authorized = status == kCLAuthorizationStatusAuthorizedAlways  || status == kCLAuthorizationStatusAuthorizedWhenInUse;
+    [self.trackingButton setHidden:!authorized];
+    [self.reportLocationButton setHidden:!authorized];
 }
 
 @end
