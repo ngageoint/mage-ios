@@ -37,7 +37,7 @@
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"there are %lu attachments", (unsigned long)_observation.attachments.count + _observation.transientAttachments.count);
+//    NSLog(@"there are %lu attachments", (unsigned long)_observation.attachments.count + _observation.transientAttachments.count);
     return _observation.attachments.count + _observation.transientAttachments.count;
 }
 
