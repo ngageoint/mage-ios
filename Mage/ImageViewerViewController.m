@@ -83,12 +83,14 @@
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    if (self.videoPlayerView) {
-        [self.videoPlayerView stop];
-    }
-    
-    if (self.audioPlayer) {
-        [self stopAudio];
+    if (self.isMovingFromParentViewController) {
+        if (self.videoPlayerView) {
+            [self.videoPlayerView stop];
+        }
+        
+        if (self.audioPlayer) {
+            [self stopAudio];
+        }
     }
 }
 
