@@ -36,19 +36,8 @@
 
 @implementation ImageViewerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"IMAGE ATTACHMENT VIEW DID LOAD");
     
     [self.navigationController setNavigationBarHidden:NO];
     
@@ -89,25 +78,6 @@
             [self downloadAndPlayAttachment:self.attachment];
         }
     }
-}
-
-- (void) viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    if (self.imageView != nil) {
-//        [self.imageView setFrame:self.mediaHolderView.frame];
-    } else if (self.videoPlayerView != nil) {
-        self.videoPlayerView.view.frame = self.mediaHolderView.frame;
-    }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
