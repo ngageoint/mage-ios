@@ -56,7 +56,7 @@
                 @"type": @"Point",
                 @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
             },
-            @"properties": location.properties
+            @"properties": [NSDictionary dictionaryWithDictionary:location.properties]
         }];
     }
     
