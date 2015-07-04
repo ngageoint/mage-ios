@@ -15,6 +15,6 @@
 @required
     -(void) selectedUser:(User *) user;
     -(void) selectedUser:(User *) user region:(MKCoordinateRegion) region;
--(void) userDetailSelected: (User *) user;
+    -(void) userDetailSelected: (User *) user;
 
 @end
