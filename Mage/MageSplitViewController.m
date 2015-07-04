@@ -12,7 +12,9 @@
 #import "MapViewController_iPad.h"
 #import "MageTabBarController.h"
 #import "ObservationTableViewController.h"
+#import "ObservationContainerViewController.h"
 #import "PeopleTableViewController.h"
+#import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "ImageViewerViewController.h"
 #import <Mage.h>
@@ -49,12 +51,12 @@
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
-    ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
-    observationTableViewController.observationDataStore.observationSelectionDelegate = self;
-    observationTableViewController.attachmentDelegate = self;
+    ObservationContainerViewController *observationViewController = (ObservationContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
+    observationViewController.delegate = self;
     
-    PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
-    peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+    PeopleContainerViewController *peopleViewController = (PeopleContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
+    peopleViewController.delegate = self;
+    
     // End hack fix to be remove when apple fixes bug
     
     
@@ -62,20 +64,26 @@
      Old working code prior to 8.3 bug.  Put this back and add back in master/detail relationships in storyboard
      when apple fixes the bug
      
-    UINavigationController *detailViewController = [self.viewControllers lastObject];
-
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
-    self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
-    
-    self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
-    
-    ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
-    observationTableViewController.observationDataStore.observationSelectionDelegate = self;
-    observationTableViewController.attachmentDelegate = self;
-    
-    PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
-    peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
+     UINavigationController *detailViewController = [self.viewControllers lastObject];
+     
+     self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
+     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
+     
+     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
+     
+     ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
+     observationTableViewController.observationDataStore.observationSelectionDelegate = self;
+     observationTableViewController.attachmentDelegate = self;
+     
+     PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
+     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
      */
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {

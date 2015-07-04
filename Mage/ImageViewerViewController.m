@@ -118,9 +118,13 @@
 }
 
 
--(void) downloadAndPlayAttachment:(Attachment *) attachment{
-    NSString *downloadPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
-    [self downloadAndPlayAttachment: attachment andSaveto:downloadPath];
+-(void) downloadAndPlayAttachment:(Attachment *) attachment {
+    NSString *path = attachment.localPath;
+    if (!path) {
+        path = [[NSTemporaryDirectory() stringByAppendingPathComponent:attachment.remoteId] stringByAppendingPathComponent:attachment.name];
+    }
+    
+    [self downloadAndPlayAttachment:attachment andSaveto:path];
 }
 
 -(void) downloadAndPlayAttachment: (Attachment *) attachment andSaveto: (NSString *) downloadPath {
@@ -129,7 +133,7 @@
 
 -(void) downloadAndPlayMediaType: (NSString *) type fromUrl: (NSString *) url andSaveTo: (NSString *) downloadPath {
     HttpManager *http = [HttpManager singleton];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
+    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
         // save the local path
         NSLog(@"playing locally");
         [self playMediaType: type FromDocumentsFolder:downloadPath];
@@ -175,7 +179,7 @@
 
 }
 
--(void) playMediaType: (NSString *) type FromDocumentsFolder:(NSString *) fromPath{
+-(void) playMediaType: (NSString *) type FromDocumentsFolder:(NSString *) fromPath {
     NSURL *url = [NSURL fileURLWithPath:fromPath];
     NSLog(@"Playing %@", url);
     
