@@ -13,6 +13,7 @@
 #import "AVFoundation/AVFoundation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface ImageViewerViewController () <AVAudioPlayerDelegate>
 
@@ -65,7 +66,6 @@
             [self downloadAndPlayMediaType:self.contentType fromUrl:[self.mediaUrl absoluteString] andSaveTo:tempFile];
         }
     } else if (self.attachment != nil) {
-        
         if ([self.attachment.contentType hasPrefix:@"image"]) {
             [self.progressView setHidden:YES];
             [self.audioPlayerView setHidden:YES];
@@ -74,7 +74,21 @@
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.frame = self.mediaHolderView.frame;
             [self.mediaHolderView addSubview:self.imageView];
-            self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[self.attachment sourceURL]]];
+            
+            UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            activityView.center = self.view.center;
+            [activityView startAnimating];
+            [self.mediaHolderView addSubview:activityView];
+            
+            __weak typeof(self) weakSelf = self;
+            NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURL]];
+            [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                weakSelf.imageView.image = image;
+                [activityView stopAnimating];
+                [activityView removeFromSuperview];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                NSLog(@"Error loading observation attachment");
+            }];
         } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
             [self downloadAndPlayAttachment:self.attachment];
         }
