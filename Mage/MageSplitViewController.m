@@ -36,17 +36,6 @@
     
     self.delegate = self;
     
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
-    
-    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
-    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
-    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
-    
-    NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
-    [viewControllers addObject:detailViewController];
-    self.viewControllers = viewControllers;
-    
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
@@ -56,6 +45,18 @@
     
     PeopleContainerViewController *peopleViewController = (PeopleContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleViewController.delegate = self;
+    
+    
+    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
+    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
+    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
+    
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
+    
+    NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
+    [viewControllers addObject:detailViewController];
+    self.viewControllers = viewControllers;
     
     // End hack fix to be remove when apple fixes bug
     
@@ -78,12 +79,6 @@
      PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
      peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
      */
-}
-
--(void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-
 }
 
 - (void) viewDidAppear:(BOOL)animated {
