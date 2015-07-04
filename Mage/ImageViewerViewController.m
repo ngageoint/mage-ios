@@ -18,6 +18,8 @@
 @interface ImageViewerViewController () <AVAudioPlayerDelegate>
 
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIView *imageViewHolder;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIView *mediaHolderView;
 @property (weak, nonatomic) IBOutlet UIView *progressView;
@@ -46,6 +48,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"IMAGE ATTACHMENT VIEW DID LOAD");
     
     [self.navigationController setNavigationBarHidden:NO];
     
@@ -62,6 +65,8 @@
             self.imageView.clipsToBounds = YES;
 
         } else if ([self.contentType hasPrefix:@"video"] || [self.contentType hasPrefix:@"audio"]) {
+            [self.imageViewHolder setHidden:YES];
+            
             NSString *tempFile = [NSTemporaryDirectory() stringByAppendingPathComponent:[self.mediaUrl lastPathComponent]];
             [self downloadAndPlayMediaType:self.contentType fromUrl:[self.mediaUrl absoluteString] andSaveTo:tempFile];
         }
@@ -69,27 +74,18 @@
         if ([self.attachment.contentType hasPrefix:@"image"]) {
             [self.progressView setHidden:YES];
             [self.audioPlayerView setHidden:YES];
-            self.imageView = [[UIImageView alloc] init];
-
-            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            self.imageView.frame = self.mediaHolderView.frame;
-            [self.mediaHolderView addSubview:self.imageView];
-            
-            UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-            activityView.center = self.view.center;
-            [activityView startAnimating];
-            [self.mediaHolderView addSubview:activityView];
             
             __weak typeof(self) weakSelf = self;
             NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURL]];
             [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                 weakSelf.imageView.image = image;
-                [activityView stopAnimating];
-                [activityView removeFromSuperview];
+                [weakSelf.imageActivityIndicator stopAnimating];
             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                 NSLog(@"Error loading observation attachment");
             }];
         } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
+            [self.imageViewHolder setHidden:YES];
+            
             [self downloadAndPlayAttachment:self.attachment];
         }
     }
@@ -98,7 +94,7 @@
 - (void) viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.imageView != nil) {
-        [self.imageView setFrame:self.mediaHolderView.frame];
+//        [self.imageView setFrame:self.mediaHolderView.frame];
     } else if (self.videoPlayerView != nil) {
         self.videoPlayerView.view.frame = self.mediaHolderView.frame;
     }
@@ -199,8 +195,9 @@
     
     if ([type hasPrefix:@"video"]) {
         self.videoPlayerView = [[MPMoviePlayerController alloc] initWithContentURL:url];
-        self.videoPlayerView.view.frame = self.mediaHolderView.frame;
-        
+        self.videoPlayerView.view.frame = self.mediaHolderView.bounds;
+        [self.videoPlayerView.view setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+
         self.videoPlayerView.scalingMode = MPMovieScalingModeAspectFit;
         self.videoPlayerView.initialPlaybackTime = 0.0;
         self.videoPlayerView.movieSourceType = MPMovieSourceTypeFile;
