@@ -60,6 +60,7 @@
         // Get reference to the destination view controller
         ImageViewerViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
+        [vc setTitle:@"Attachment"];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
         CLLocation *location = [[LocationService singleton] location];

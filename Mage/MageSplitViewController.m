@@ -38,6 +38,13 @@
     
     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
     
+    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
+    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
+    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
+    
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
+
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
     ObservationContainerViewController *observationViewController = (ObservationContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
@@ -45,14 +52,6 @@
     
     PeopleContainerViewController *peopleViewController = (PeopleContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleViewController.delegate = self;
-    
-    
-    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
-    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
-    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
-    
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     
     NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
     [viewControllers addObject:detailViewController];
@@ -188,7 +187,13 @@
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    [self.mapViewController performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    UIViewController *visibleViewController = [self.mapViewController.navigationController visibleViewController];
+    if ([visibleViewController isKindOfClass:[ImageViewerViewController class]]) {
+        // ImageViewer already preset lets just update its content
+        [((ImageViewerViewController *) visibleViewController) setContent:attachment];
+    } else {
+        [self.mapViewController performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    }
 }
 
 @end
