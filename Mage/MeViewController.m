@@ -203,17 +203,16 @@ bool currentUserIsMe = NO;
         NSURL *avatarUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
         [vc setMediaUrl: avatarUrl];
         [vc setContentType:@"image"];
+        [vc setTitle:@"Avatar"];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
         [destination setObservation:observation];
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
         ImageViewerViewController *vc = [segue destinationViewController];
-        
-        // Pass any objects to the view controller here, like...
         [vc setAttachment:sender];
+        [vc setTitle:@"Attachment"];
     }
 }
 

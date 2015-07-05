@@ -15,4 +15,6 @@
 @property (weak, nonatomic) NSURL *mediaUrl;
 @property (weak, nonatomic) NSString *contentType;
 
+- (void) setContent:(Attachment *) attachment;
+
 @end

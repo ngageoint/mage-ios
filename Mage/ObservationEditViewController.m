@@ -259,6 +259,7 @@
         // Get reference to the destination view controller
         ImageViewerViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
+        [vc setTitle:@"Attachment"];
     }
 }
 

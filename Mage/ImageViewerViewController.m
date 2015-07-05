@@ -60,23 +60,7 @@
             [self downloadAndPlayMediaType:self.contentType fromUrl:[self.mediaUrl absoluteString] andSaveTo:tempFile];
         }
     } else if (self.attachment != nil) {
-        if ([self.attachment.contentType hasPrefix:@"image"]) {
-            [self.progressView setHidden:YES];
-            [self.audioPlayerView setHidden:YES];
-            
-            __weak typeof(self) weakSelf = self;
-            NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURL]];
-            [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                weakSelf.imageView.image = image;
-                [weakSelf.imageActivityIndicator stopAnimating];
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                NSLog(@"Error loading observation attachment");
-            }];
-        } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
-            [self.imageViewHolder setHidden:YES];
-            
-            [self downloadAndPlayAttachment:self.attachment];
-        }
+        [self showAttachment];
     }
 }
 
@@ -84,21 +68,58 @@
     [super viewWillDisappear:animated];
     
     if (self.isMovingFromParentViewController) {
-        if (self.videoPlayerView) {
-            [self.videoPlayerView stop];
-        }
-        
-        if (self.audioPlayer) {
-            [self stopAudio];
-        }
+        [self cleanup];
     }
 }
 
+- (void) cleanup {
+    self.imageView.image = nil;
+    
+    if (self.videoPlayerView) {
+        [self.videoPlayerView stop];
+        [self.videoPlayerView.view removeFromSuperview];
+        self.videoPlayerView = nil;
+    }
+    
+    if (self.audioPlayer) {
+        [self stopAudio];
+    }
+}
 
 -(BOOL)prefersStatusBarHidden {
     return YES;
 }
 
+- (void) setContent:(Attachment *)attachment {
+    if (self.attachment == attachment) return;
+    
+    self.attachment = attachment;
+    [self cleanup];
+    [self showAttachment];
+}
+
+- (void) showAttachment {
+    if ([self.attachment.contentType hasPrefix:@"image"]) {
+        [self.imageViewHolder setHidden:NO];
+        [self.progressView setHidden:YES];
+        [self.audioPlayerView setHidden:YES];
+        
+        [self.imageActivityIndicator startAnimating];
+        
+        __weak typeof(self) weakSelf = self;
+        NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURL]];
+        [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            weakSelf.imageView.image = image;
+            [weakSelf.imageActivityIndicator stopAnimating];
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            NSLog(@"Error loading observation attachment");
+        }];
+    } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
+        [self.imageViewHolder setHidden:YES];
+        
+        [self downloadAndPlayAttachment:self.attachment];
+    }
+}
 
 -(void) downloadAndPlayAttachment:(Attachment *) attachment {
     NSString *path = attachment.localPath;
@@ -180,12 +201,12 @@
         [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
         
         NSError *error;
-        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        _audioPlayer.delegate = self;
-        [_audioPlayer setVolume:1.0];
-        _audioPlayer.numberOfLoops = 0;
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        self.audioPlayer.delegate = self;
+        [self.audioPlayer setVolume:1.0];
+        self.audioPlayer.numberOfLoops = 0;
         
-        NSTimeInterval totalSeconds = _audioPlayer.duration;
+        NSTimeInterval totalSeconds = self.audioPlayer.duration;
         
         int seconds = (int)totalSeconds % 60;
         int minutes = ((int)totalSeconds / 60) % 60;
@@ -201,51 +222,49 @@
 }
 
 - (IBAction)playButtonPressed:(id)sender {
-    if (_audioPlayer.playing) {
-        [self stopAudio];
-    } else {
-        [self playAudio];
-    }
+    self.audioPlayer.playing ? [self stopAudio] : [self playAudio];
 }
 
 - (void) stopAudio {
-    if (_audioPlayer.isPlaying) {
-        [_audioPlayer stop];
+    if (self.audioPlayer.isPlaying) {
+        [self.audioPlayer stop];
     }
+    
     [self.audioPlayButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [self updateSlider];
-    [_sliderTimer invalidate];
+    [self.sliderTimer invalidate];
 }
 
 - (void) playAudio {
-    if (_sliderTimer != nil && _sliderTimer.isValid) {
-        [_sliderTimer invalidate];
+    if (self.sliderTimer != nil && self.sliderTimer.isValid) {
+        [self.sliderTimer invalidate];
     }
+    
     // Set a timer which keep getting the current music time and update the UISlider in 1 sec interval
     _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
     // Set the maximum value of the UISlider
-    self.audioProgressSlider.maximumValue = _audioPlayer.duration;
+    self.audioProgressSlider.maximumValue = self.audioPlayer.duration;
     // Set the valueChanged target
     
-    [_audioPlayer prepareToPlay];
-    [_audioPlayer play];
+    [self.audioPlayer prepareToPlay];
+    [self.audioPlayer play];
     [self.audioPlayButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
 - (void)updateSlider {
     // Update the slider about the music time
-    self.audioProgressSlider.value = _audioPlayer.currentTime;
+    self.audioProgressSlider.value = self.audioPlayer.currentTime;
 }
 
 - (IBAction)sliderStartChange:(id)sender {
-    [_audioPlayer stop];
-    [_sliderTimer invalidate];
+    [self.audioPlayer stop];
+    [self.sliderTimer invalidate];
 }
 
 - (IBAction)sliderChanged:(UISlider *)sender {
     // Fast skip the music when user scroll the UISlider
-    [_audioPlayer stop];
-    [_audioPlayer setCurrentTime:self.audioProgressSlider.value];
+    [self.audioPlayer stop];
+    [self.audioPlayer setCurrentTime:self.audioProgressSlider.value];
     [self playAudio];
 }
 

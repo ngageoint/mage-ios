@@ -156,17 +156,15 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[_observation.properties valueForKey:@"type"] style: UIBarButtonItemStyleBordered target:nil action:nil];
     
     // Make sure your segue name in storyboard is the same as this line
-    if ([[segue identifier] isEqualToString:@"viewImageSegue"])
-    {
+    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         ImageViewerViewController *vc = [segue destinationViewController];
-        
-        // Pass any objects to the view controller here, like...
         [vc setAttachment:sender];
+        [vc setTitle:@"Attachment"];
     } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style: UIBarButtonItemStyleBordered target:nil action:nil];
-        ObservationEditViewController *oevc = [segue destinationViewController];
-        [oevc setObservation:_observation];
+        ObservationEditViewController *vc = [segue destinationViewController];
+        [vc setObservation:_observation];
     }
 }
 
