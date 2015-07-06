@@ -96,12 +96,6 @@
 		F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */; };
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
-		F7A94D8818AD9CB000CB9EE0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */; };
-		F7A94D8918AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
-		F7A94D8A18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */; };
-		F7A94D8B18AD9CB000CB9EE0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */; };
-		F7A94D9318AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */; };
-		F7A94D9518AD9CB000CB9EE0 /* MageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D9418AD9CB000CB9EE0 /* MageTests.m */; };
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
@@ -133,16 +127,6 @@
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		F7A94D8C18AD9CB000CB9EE0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F7A94D6518AD9CB000CB9EE0;
-			remoteInfo = Mage;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -320,7 +304,6 @@
 		F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F7A94D8618AD9CB000CB9EE0 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAGETests-Info.plist"; sourceTree = "<group>"; };
 		F7A94D9218AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -391,17 +374,6 @@
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F7A94D8318AD9CB000CB9EE0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F7A94D8818AD9CB000CB9EE0 /* XCTest.framework in Frameworks */,
-				F7A94D8B18AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
-				F7A94D8A18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
-				F7A94D8918AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,7 +720,6 @@
 			isa = PBXGroup;
 			children = (
 				F7A94D6618AD9CB000CB9EE0 /* MAGE.app */,
-				F7A94D8618AD9CB000CB9EE0 /* MAGETests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -881,24 +852,6 @@
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F7A94D8518AD9CB000CB9EE0 /* MAGETests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F7A94D9B18AD9CB000CB9EE0 /* Build configuration list for PBXNativeTarget "MAGETests" */;
-			buildPhases = (
-				F7A94D8218AD9CB000CB9EE0 /* Sources */,
-				F7A94D8318AD9CB000CB9EE0 /* Frameworks */,
-				F7A94D8418AD9CB000CB9EE0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F7A94D8D18AD9CB000CB9EE0 /* PBXTargetDependency */,
-			);
-			name = MAGETests;
-			productName = MageTests;
-			productReference = F7A94D8618AD9CB000CB9EE0 /* MAGETests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -910,9 +863,6 @@
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
 						DevelopmentTeam = A8EK924J35;
-					};
-					F7A94D8518AD9CB000CB9EE0 = {
-						TestTargetID = F7A94D6518AD9CB000CB9EE0;
 					};
 				};
 			};
@@ -930,7 +880,6 @@
 			projectRoot = "";
 			targets = (
 				F7A94D6518AD9CB000CB9EE0 /* MAGE */,
-				F7A94D8518AD9CB000CB9EE0 /* MAGETests */,
 			);
 		};
 /* End PBXProject section */
@@ -956,14 +905,6 @@
 				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
 				F7FAD7971A65887A00E7F224 /* loginInformation.js in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F7A94D8418AD9CB000CB9EE0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F7A94D9318AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1103,23 +1044,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F7A94D8218AD9CB000CB9EE0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F7A94D9518AD9CB000CB9EE0 /* MageTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		F7A94D8D18AD9CB000CB9EE0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
-			targetProxy = F7A94D8C18AD9CB000CB9EE0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */ = {
@@ -1273,46 +1198,6 @@
 			};
 			name = Release;
 		};
-		F7A94D9C18AD9CB000CB9EE0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Mage.app/Mage";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Mage/Mage-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "MageTests/MAGETests-Info.plist";
-				PRODUCT_NAME = MAGETests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		F7A94D9D18AD9CB000CB9EE0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Mage.app/Mage";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Mage/Mage-Prefix.pch";
-				INFOPLIST_FILE = "MageTests/MAGETests-Info.plist";
-				PRODUCT_NAME = MAGETests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1330,15 +1215,6 @@
 			buildConfigurations = (
 				F7A94D9918AD9CB000CB9EE0 /* Debug */,
 				F7A94D9A18AD9CB000CB9EE0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F7A94D9B18AD9CB000CB9EE0 /* Build configuration list for PBXNativeTarget "MAGETests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F7A94D9C18AD9CB000CB9EE0 /* Debug */,
-				F7A94D9D18AD9CB000CB9EE0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

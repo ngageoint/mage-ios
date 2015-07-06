@@ -18,26 +18,27 @@
     [allAttachments addObjectsFromArray:_observation.transientAttachments];
     
     AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
+    cell.imageView.image = [UIImage imageNamed:@"download"];
+    
     Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
     
     FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
-        cell.image.image = image;
-        [cell.image.layer addAnimation:[CATransition animation] forKey:kCATransition];
-        cell.image.layer.cornerRadius = 5;
-        cell.image.clipsToBounds = YES;
+        cell.imageView.image = image;
+        [cell.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
+        cell.imageView.layer.cornerRadius = 5;
+        cell.imageView.clipsToBounds = YES;
     };
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentMediumSquare completionBlock:completionBlock];
     
     if (imageExists == NO) {
-        cell.image.image = [UIImage imageNamed:@"download"];
+        cell.imageView.image = [UIImage imageNamed:@"download"];
     }
     return cell;
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    NSLog(@"there are %lu attachments", (unsigned long)_observation.attachments.count + _observation.transientAttachments.count);
     return _observation.attachments.count + _observation.transientAttachments.count;
 }
 
