@@ -10,6 +10,6 @@
 
 @interface AttachmentCell : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *image;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
