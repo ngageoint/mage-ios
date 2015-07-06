@@ -17,7 +17,8 @@
 
 @interface ImageViewerViewController () <AVAudioPlayerDelegate>
 
-@property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) NSOperationQueue *operationQueue;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *imageViewHolder;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
@@ -35,6 +36,14 @@
 @end
 
 @implementation ImageViewerViewController
+
+- (NSOperationQueue *) operationQueue {
+    if (!_operationQueue) {
+        _operationQueue = [[NSOperationQueue alloc] init];
+    }
+    
+    return _operationQueue;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,6 +83,7 @@
 
 - (void) cleanup {
     self.imageView.image = nil;
+    [self.operationQueue cancelAllOperations];
     
     if (self.videoPlayerView) {
         [self.videoPlayerView stop];
@@ -177,7 +187,7 @@
             });
         }];
         
-        [operation start];
+        [self.operationQueue addOperation:operation];
     }
 
 }
