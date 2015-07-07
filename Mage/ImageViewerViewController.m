@@ -149,6 +149,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
         // save the local path
         NSLog(@"playing locally");
+        [self.progressView setHidden:YES];
         [self playMediaType: type FromDocumentsFolder:downloadPath];
     } else {
         NSLog(@"Downloading to %@", downloadPath);
