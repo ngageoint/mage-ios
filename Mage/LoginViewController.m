@@ -44,7 +44,15 @@
 
 
 - (void) authenticationWasSuccessful {
-	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
+        [[UserUtility singleton ] acceptConsent];
+        [self performSegueWithIdentifier:@"SkipDisclaimerSegue" sender:nil];
+    } else {
+        [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+    }
     self.usernameField.textColor = [UIColor blackColor];
     self.passwordField.textColor = [UIColor blackColor];
     self.loginStatus.hidden = YES;
