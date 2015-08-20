@@ -30,7 +30,7 @@
 
     // if the token is not expired skip the login module
     if ([[UserUtility singleton] isTokenExpired]) {
-		[self performSegueWithIdentifier:@"DisplayDisclaimerViewSegue" sender:nil];
+		[self performSegueWithIdentifier:@"DisplayLoginViewSegue" sender:nil];
         return;
     }
     NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
