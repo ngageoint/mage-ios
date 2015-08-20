@@ -14,5 +14,6 @@
 - (BOOL) isTokenExpired;
 - (void) expireToken;
 - (void) resetExpiration;
+- (void) acceptConsent;
 
 @end

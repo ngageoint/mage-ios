@@ -9,6 +9,7 @@
 #import "MageServer.h"
 #import "HttpManager.h"
 
+NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
 @implementation MageServer
@@ -55,8 +56,15 @@ static MageServer *sharedSingleton = nil;
         self.authentication = [Authentication authenticationWithType:SERVER];
         
         // TODO check server version
-        
-        success();
+        NSNumber *serverCompatibilityVersion = [defaults valueForKey:kServerMajorVersionKey];
+        NSNumber *serverVersion = [response valueForKeyPath:@"version.major"];
+        NSLog(@"Server compat version %@", serverCompatibilityVersion);
+        NSLog(@"Server version %@", [response valueForKeyPath:@"version.major"]);
+        if (serverCompatibilityVersion == serverVersion) {
+            success();
+        } else {
+            failure([[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [response valueForKeyPath:@"version.major"], [response valueForKeyPath:@"version.minor"], [response valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]]);
+        }
     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
         // check if the error indicates that the network is unavailable
         // and return a local authentication module

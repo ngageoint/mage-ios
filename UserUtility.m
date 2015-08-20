@@ -38,14 +38,24 @@
     self.expired = NO;
 }
 
+- (void) acceptConsent {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *loginParameters = [defaults objectForKey:@"loginParameters"];
+    [loginParameters setValue:@"agree" forKey:@"acceptedConsent"];
+    [defaults setObject:loginParameters forKey:@"loginParameters"];
+    [defaults synchronize];
+}
+
 - (BOOL) isTokenExpired{
     if (self.expired) return YES;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *loginParameters = [defaults objectForKey:@"loginParameters"];
     
+    NSString *acceptedConsent = [loginParameters objectForKey:@"acceptedConsent"];
+    
     NSDate *tokenExpirationDate = [loginParameters objectForKey:@"tokenExpirationDate"];
-    if (tokenExpirationDate != nil && [tokenExpirationDate isKindOfClass:NSDate.class]) {
+    if (acceptedConsent != nil && [acceptedConsent isEqualToString:@"agree"] && tokenExpirationDate != nil && [tokenExpirationDate isKindOfClass:NSDate.class]) {
         NSDate *currentDate = [NSDate date];
         NSLog(@"current date %@ token expiration %@", currentDate, tokenExpirationDate);
         self.expired = [currentDate isLaterThan:tokenExpirationDate];
@@ -64,6 +74,7 @@
     NSMutableDictionary *loginParameters = [[defaults objectForKey:@"loginParameters"] mutableCopy];
     
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
+    [loginParameters removeObjectForKey:@"acceptedConsent"];
     
     HttpManager *http = [HttpManager singleton];
     [http.manager.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
