@@ -37,9 +37,11 @@
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
 
     @property (strong, nonatomic) MageServer *server;
+    @property (nonatomic) BOOL allowLogin;
 @end
 
 @implementation LoginViewController
+
 
 - (void) authenticationWasSuccessful {
 	[self performSegueWithIdentifier:@"LoginSegue" sender:nil];
@@ -101,6 +103,7 @@
 }
 
 - (void) verifyLogin {
+    if (!self.allowLogin) return;
     if ([MageServer singleton].reachabilityManager.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
         [MagicalRecord deleteCoreDataStack];
         [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
@@ -188,6 +191,8 @@
     [self.serverUrlField setText:[url absoluteString]];
     [self initMageServerWithURL:url];
     
+    self.allowLogin = YES;
+
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
@@ -221,7 +226,9 @@
         self.serverUrlField.textColor = [UIColor blackColor];
         [self.lockButton setHidden:NO];
         [self.serverVerificationIndicator stopAnimating];
+        self.allowLogin = YES;
     } failure:^(NSError *error) {
+        self.allowLogin = NO;
         self.loginStatus.hidden = NO;
         self.statusButton.hidden = NO;
         self.loginStatus.text = error.localizedDescription;
