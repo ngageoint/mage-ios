@@ -14,6 +14,7 @@
 @implementation EventChooserController
 
 - (void) viewDidAppear:(BOOL) animated {
+    self.loadingView.alpha = 1.0f;
     if (self.passthrough) {
         self.passthrough = NO;
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
