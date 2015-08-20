@@ -57,10 +57,10 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 }
 
 - (void) start {
+    [self stop];
     self.fetchedResultsController.delegate = self;
     [self pushAttachments:self.fetchedResultsController.fetchedObjects];
-        [self stop];
-        [self scheduleTimer];
+        //[self scheduleTimer];
 }
 
 - (void) scheduleTimer {
