@@ -64,10 +64,20 @@
             [self finishLoginForParameters: parameters withResponse:response];
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error logging in: %@", error);
-        // try to register again
-        [defaults setBool:NO forKey:@"deviceRegistered"];
-        [self registerDevice:parameters];
+        if ([error.domain isEqualToString:NSURLErrorDomain]
+        && (error.code == NSURLErrorCannotConnectToHost
+            || error.code == NSURLErrorNetworkConnectionLost
+            || error.code == NSURLErrorNotConnectedToInternet)) {
+            id<Authentication> local = [Authentication authenticationWithType:LOCAL];
+            [local setDelegate: delegate];
+            [local loginWithParameters:parameters];
+        } else {
+            NSLog(@"Error logging in: %@", error);
+            // try to register again
+            [defaults setBool:NO forKey:@"deviceRegistered"];
+            [self registerDevice:parameters];
+        }
+        
     }];
 
 }

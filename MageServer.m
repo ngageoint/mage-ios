@@ -58,14 +58,13 @@ static MageServer *sharedSingleton = nil;
         // TODO check server version
         NSNumber *serverCompatibilityVersion = [defaults valueForKey:kServerMajorVersionKey];
         NSNumber *serverVersion = [response valueForKeyPath:@"version.major"];
-        NSLog(@"Server compat version %@", serverCompatibilityVersion);
-        NSLog(@"Server version %@", [response valueForKeyPath:@"version.major"]);
-        NSLog(@"disclaimer show %@", [response valueForKeyPath:@"disclaimer.show"]);
-        NSLog(@"disclaimer text %@", [response valueForKeyPath:@"disclaimer.text"]);
         
         [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+        
+        [defaults setObject:[NSNumber numberWithBool:YES] forKey:@"showDisclaimer"];
+
 
         [defaults synchronize];
 

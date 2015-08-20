@@ -40,7 +40,7 @@
 
 - (void) acceptConsent {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *loginParameters = [defaults objectForKey:@"loginParameters"];
+    NSMutableDictionary *loginParameters = [[defaults objectForKey:@"loginParameters"] mutableCopy];
     [loginParameters setValue:@"agree" forKey:@"acceptedConsent"];
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     [defaults synchronize];
