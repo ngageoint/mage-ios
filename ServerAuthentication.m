@@ -64,6 +64,7 @@
             [self finishLoginForParameters: parameters withResponse:response];
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // if the error was a network error try to login with the local auth module
         if ([error.domain isEqualToString:NSURLErrorDomain]
         && (error.code == NSURLErrorCannotConnectToHost
             || error.code == NSURLErrorNetworkConnectionLost
