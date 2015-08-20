@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ConsentViewController : UIViewController
+@interface DisclaimerViewController : UIViewController
 
 @end
