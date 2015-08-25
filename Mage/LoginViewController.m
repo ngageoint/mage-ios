@@ -163,7 +163,7 @@
         [self.usernameField setEnabled:NO];
         [self.passwordField setEnabled:NO];
         [self.serverUrlField setEnabled:YES];
-        [sender setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
+        [self.lockButton setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
 }
 
@@ -195,19 +195,29 @@
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
-    NSURL *url = [MageServer baseURL];
-    [self.serverUrlField setText:[url absoluteString]];
-    [self initMageServerWithURL:url];
-    
-    self.allowLogin = YES;
-
-    [self.usernameField setText:@""];
-    [self.passwordField setText:@""];
-    [self.passwordField setDelegate:self];
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
+    
+    [self.usernameField setText:@""];
+    [self.passwordField setText:@""];
+    [self.passwordField setDelegate:self];
+    
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    NSURL *url = [MageServer baseURL];
+    if ([@"" isEqualToString:url.absoluteString]) {
+        [self toggleUrlField:NULL];
+        [self.serverUrlField becomeFirstResponder];
+        return;
+    } else {
+        [self.serverUrlField setText:[url absoluteString]];
+        [self initMageServerWithURL:url];
+        
+        self.allowLogin = YES;
+    }
 }
 
 - (void) viewDidLoad {
