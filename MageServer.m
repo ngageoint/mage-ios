@@ -50,9 +50,6 @@ static MageServer *sharedSingleton = nil;
         return self;
     }
     
-    [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
-    [defaults synchronize];
-    
     HttpManager *http = [HttpManager singleton];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
     [http.manager GET:apiURL parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
@@ -76,6 +73,8 @@ static MageServer *sharedSingleton = nil;
         [defaults synchronize];
 
         if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion >= serverMinorVersion) {
+            [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
+            [defaults synchronize];
             success();
         } else {
             failure([[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [response valueForKeyPath:@"version.major"], [response valueForKeyPath:@"version.minor"], [response valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]]);
