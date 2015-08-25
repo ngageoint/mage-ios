@@ -25,12 +25,6 @@
     self.username.text = user.username;
     self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
     
-    if ([user.currentUser boolValue]) {
-        self.myself.hidden = NO;
-    } else {
-        self.myself.hidden = YES;
-    }
-    
     return self;
 }
 
