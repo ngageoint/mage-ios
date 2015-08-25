@@ -13,9 +13,10 @@
 @implementation Locations
 
 + (id) locationsForAllUsers {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                         ascending:NO
-                    withPredicate:[NSPredicate predicateWithFormat:@"user.currentUser = %@ AND eventId == %@", [NSNumber numberWithBool:NO], [Server currentEventId]]
+                    withPredicate:[NSPredicate predicateWithFormat:@"user.remoteId != %@ AND eventId == %@", [prefs valueForKey:@"currentUserId"], [Server currentEventId]]
                           groupBy:nil
                          delegate:nil
                         inContext:[NSManagedObjectContext MR_defaultContext]];
