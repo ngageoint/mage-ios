@@ -10,6 +10,8 @@
 #import "HttpManager.h"
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
+NSString * const kServerMinorVersionKey = @"serverMinorVersion";
+
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
 @implementation MageServer
@@ -32,21 +34,24 @@ static MageServer *sharedSingleton = nil;
 }
 
 - (id) setupServerWithURL:(NSURL *) url success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
-    [defaults synchronize];
+    
+    if (!url || !url.scheme || !url.host) {
+        failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:@"Invalid URL" forKey:NSLocalizedDescriptionKey]]);
+        return self;
+    }
     
     self.reachabilityManager = [AFNetworkReachabilityManager managerForDomain:url.host];
-    
-// TODO see if I can get this to work for IP address
-//    struct sockaddr_in address;
-//    address.sin_len = sizeof(address);
-//    address.sin_family = AF_INET;
-//    address.sin_port = htons(url.port);
-//    address.sin_addr.s_addr = inet_addr([url.host UTF8String]);
-//    self.reachabilityManager = [AFNetworkReachabilityManager managerForAddress:&address];
-    
     [self.reachabilityManager startMonitoring];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]]) {
+        success();
+        return self;
+    }
+    
+    [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
+    [defaults synchronize];
     
     HttpManager *http = [HttpManager singleton];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
@@ -56,8 +61,11 @@ static MageServer *sharedSingleton = nil;
         self.authentication = [Authentication authenticationWithType:SERVER];
         
         // TODO check server version
-        NSNumber *serverCompatibilityVersion = [defaults valueForKey:kServerMajorVersionKey];
-        NSNumber *serverVersion = [response valueForKeyPath:@"version.major"];
+        NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
+        NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
+
+        NSNumber *serverMajorVersion = [response valueForKeyPath:@"version.major"];
+        NSNumber *serverMinorVersion = [response valueForKeyPath:@"version.major"];
         
         [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
@@ -65,10 +73,9 @@ static MageServer *sharedSingleton = nil;
         
         [defaults setObject:[NSNumber numberWithBool:YES] forKey:@"showDisclaimer"];
 
-
         [defaults synchronize];
 
-        if (serverCompatibilityVersion == serverVersion) {
+        if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion >= serverMinorVersion) {
             success();
         } else {
             failure([[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [response valueForKeyPath:@"version.major"], [response valueForKeyPath:@"version.minor"], [response valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]]);
