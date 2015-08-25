@@ -55,7 +55,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
             if (!user) {
-                user = [User insertUserForJson:userJson myself:YES inManagedObjectContext:localContext];
+                user = [User insertUserForJson:userJson inManagedObjectContext:localContext];
             } else {
                 [user updateUserForJson:userJson];
             }
@@ -108,6 +108,11 @@
                                    };
 
     [defaults setObject:loginParameters forKey:@"loginParameters"];
+    
+    NSDictionary *userJson = [response objectForKey:@"user"];
+    NSString *userId = [userJson objectForKey:@"id"];
+    [defaults setObject: userId forKey:@"currentUserId"];
+    
     NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
     [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
     [defaults synchronize];

@@ -60,8 +60,6 @@ NSInteger const kLocationPushLimit = 100;
             [_locationManager requestWhenInUseAuthorization];
         }
         
-        self.managedObjectContext = [NSManagedObjectContext MR_context];
-        
         _operationQueue = [[NSOperationQueue alloc] init];
         [_operationQueue setName:@"Location Push Operation Queue"];
         [_operationQueue setMaxConcurrentOperationCount:1];
@@ -96,36 +94,42 @@ NSInteger const kLocationPushLimit = 100;
     [self pushLocations];
 }
 
+//[MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {
-    if (_reportLocation && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
-        NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
-        for (CLLocation *location in locations) {
-            [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:self.managedObjectContext]];
+    if (!_reportLocation) return;
+    
+    __block NSTimeInterval interval;
+    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        if ([[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
+            NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
+            for (CLLocation *location in locations) {
+                [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:localContext]];
+            }
+            
+            CLLocation *location = [locations firstObject];
+            interval = [[location timestamp] timeIntervalSinceDate:_oldestLocationTime];
+            if (self.oldestLocationTime == nil) {
+                self.oldestLocationTime = [location timestamp];
+            }
         }
-        
-        [self.managedObjectContext MR_saveToPersistentStoreAndWait];
-        
-        CLLocation *location = [locations firstObject];
-        NSTimeInterval interval = [[location timestamp] timeIntervalSinceDate:_oldestLocationTime];
-        if (self.oldestLocationTime == nil) {
-            self.oldestLocationTime = [location timestamp];
-        }
-        
+    } completion:^(BOOL contextDidSave, NSError *error) {
         if (interval > self.locationPushInterval) {
             [self pushLocations];
             self.oldestLocationTime = nil;
         }
-    }
+    }];
 }
 
 - (void) pushLocations {
     if (!self.isPushingLocations) {
         
         //TODO, submit in pages
-        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:self.managedObjectContext];
+        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];
         [fetchRequest setFetchLimit:kLocationPushLimit];
         [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.managedObjectContext];
+        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:[NSManagedObjectContext MR_context]];
         
         if (![locations count]) return;
         
@@ -136,7 +140,7 @@ NSInteger const kLocationPushLimit = 100;
         __weak LocationService *weakSelf = self;
         NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
             for (GPSLocation *location in locations) {
-                [location MR_deleteEntityInContext:weakSelf.managedObjectContext];
+                [location MR_deleteEntityInContext:[NSManagedObjectContext MR_context]];
             }
             
             [weakSelf.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {

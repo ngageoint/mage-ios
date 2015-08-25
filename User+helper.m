@@ -15,20 +15,17 @@
 
 static User *currentUser = nil;
 
-+ (User *) insertUserForJson: (NSDictionary *) json myself:(BOOL) myself inManagedObjectContext:(NSManagedObjectContext *) context {
++ (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
     User *user = [User MR_createEntityInContext:context];
-    [user setCurrentUser:[NSNumber numberWithBool:myself]];
     [user updateUserForJson:json];
     
     return user;
 }
 
-+ (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
-	return [User insertUserForJson:json myself:NO inManagedObjectContext:context];
-}
-
 + (User *) fetchCurrentUserInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
-    return [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"currentUser = %@", [NSNumber numberWithBool:YES]] inContext:managedObjectContext];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    return [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId = %@", [defaults valueForKey:@"currentUserId"]] inContext:managedObjectContext];
 }
 
 + (User *) fetchUserForId:(NSString *) userId inManagedObjectContext: (NSManagedObjectContext *) context {
