@@ -13,14 +13,19 @@
 
 @implementation EventChooserController
 
+BOOL unwind = NO;
+
 - (void) viewDidAppear:(BOOL) animated {
-    self.loadingView.alpha = 1.0f;
     if (self.passthrough) {
         self.passthrough = NO;
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
-    } else {
+    } else if (!unwind) {
+        self.loadingView.alpha = 1.0f;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
         [[Mage singleton] fetchEvents];
+    } else {
+        [self eventsFetched:nil];
+        unwind = NO;
     }
 }
 
@@ -77,6 +82,7 @@
 }
 
 - (IBAction) unwindToEventChooser:(UIStoryboardSegue *) unwindSegue {
+    unwind = YES;
 }
 
 @end
