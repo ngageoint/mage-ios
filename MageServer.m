@@ -45,7 +45,7 @@ static MageServer *sharedSingleton = nil;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]]) {
+    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]] && self.authentication) {
         success();
         return self;
     }
@@ -62,7 +62,7 @@ static MageServer *sharedSingleton = nil;
         NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
 
         NSNumber *serverMajorVersion = [response valueForKeyPath:@"version.major"];
-        NSNumber *serverMinorVersion = [response valueForKeyPath:@"version.major"];
+        NSNumber *serverMinorVersion = [response valueForKeyPath:@"version.minor"];
         
         [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
@@ -72,7 +72,7 @@ static MageServer *sharedSingleton = nil;
 
         [defaults synchronize];
 
-        if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion >= serverMinorVersion) {
+        if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion) {
             [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
             [defaults synchronize];
             success();
