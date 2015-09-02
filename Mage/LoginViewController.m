@@ -13,6 +13,7 @@
 #import <Location+helper.h>
 #import <Layer+helper.h>
 #import <Form.h>
+#import <Mage.h>
 #import "AppDelegate.h"
 #import <HttpManager.h>
 #import "MageRootViewController.h"
@@ -42,6 +43,11 @@
 
 @implementation LoginViewController
 
+- (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
+    [[UserUtility singleton] expireToken];
+    [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
+}
 
 - (void) authenticationWasSuccessful {
     
@@ -175,22 +181,18 @@
 	}
 }
 
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-	if ([identifier isEqualToString:@"LoginSegue"]) {
-		if (![self changeTextViewFocus: sender]) {
-			[sender resignFirstResponder];
-			if ([_usernameField isFirstResponder]) {
-				[_usernameField resignFirstResponder];
-			} else if([_passwordField isFirstResponder]) {
-				[_passwordField resignFirstResponder];
-			}
-			
-			[self verifyLogin];
-		}
-		return NO;
-	}
+- (IBAction)loginButtonPress:(id)sender {
+    if (![self changeTextViewFocus: sender]) {
+        [sender resignFirstResponder];
+        if ([_usernameField isFirstResponder]) {
+            [_usernameField resignFirstResponder];
+        } else if([_passwordField isFirstResponder]) {
+            [_passwordField resignFirstResponder];
+        }
+        
+        [self verifyLogin];
+    }
 
-	return YES;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
