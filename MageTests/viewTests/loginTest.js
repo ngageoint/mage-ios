@@ -2,8 +2,8 @@
 //
 // if (isLoginScreen(app.mainWindow())) {
 //
-//   // https://git.***REMOVED***/mage/mage-ios/issues/16
-//   // This is a test for an actual bug we have.  If you log in then log out and type your password
+//
+//   // If you log in then log out and type your password
 //   // wrong and then try to log in again it fails to log in
 //   test("Log in then log out then fail to log in then log in", function(target, app) {
 //     var mainWindow = app.mainWindow();
