@@ -30,10 +30,6 @@
         self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
         self.recentFetchedResultsController.delegate = self;
         
-        if (!recentEventIds) {
-            NSLog(@"could not find recent events");
-        }
-        
         NSFetchRequest *allFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]];
         NSSortDescriptor *allSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         [allFetchRequest setSortDescriptors:[NSArray arrayWithObject:allSort]];

@@ -20,6 +20,7 @@
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"
 #import <Event+helper.h>
+#import "NSDate+display.h"
 
 @interface ObservationViewController ()
 
@@ -28,21 +29,9 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @property (nonatomic, strong) IBOutlet ObservationDataStore *observationDataStore;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
-
 @end
 
 @implementation ObservationViewController
-
-- (NSDateFormatter *) dateFormatter {
-	if (_dateFormatter == nil) {
-		_dateFormatter = [[NSDateFormatter alloc] init];
-		[_dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-		[_dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-	}
-	
-	return _dateFormatter;
-}
 
 - (void) viewDidLoad {
     [self.navigationController setNavigationBarHidden:NO];
@@ -55,8 +44,6 @@
     
 	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
-//    self.observation = [self.observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
-//    [[self.observation managedObjectContext] refreshObject:self.observation mergeChanges:YES];
     Observations *observations = [Observations observationsForObservation:self.observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if (self.mapDelegate != nil) {
@@ -69,7 +56,7 @@
     self.userLabel.text = _observation.user.name;
     
     self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
-	self.timestampLabel.text = [self.dateFormatter stringFromDate:_observation.timestamp];
+    self.timestampLabel.text = [self.observation.timestamp formattedDisplayDate];
 	
 	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", _observation.location.coordinate.latitude, _observation.location.coordinate.longitude];
     
