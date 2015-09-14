@@ -7,44 +7,20 @@
 //
 
 #import "ObservationDatePickerTableViewCell.h"
+#import "NSDate+iso8601.h"
+#import "NSDate+display.h"
 
 @interface ObservationDatePickerTableViewCell ()
-
-@property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
-@property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
 @property (strong, nonatomic) UIDatePicker *datePicker;
-
 @end
 
 @implementation ObservationDatePickerTableViewCell
 
-- (NSDateFormatter *) dateDisplayFormatter {
-	if (_dateDisplayFormatter == nil) {
-		_dateDisplayFormatter = [[NSDateFormatter alloc] init];
-		[_dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-		[_dateDisplayFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-	}
-	
-	return _dateDisplayFormatter;
-}
-
-- (NSDateFormatter *) dateParseFormatter {
-	if (_dateParseFormatter == nil) {
-		_dateParseFormatter = [[NSDateFormatter alloc] init];
-		[_dateParseFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-		[_dateParseFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z"];
-        NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        _dateParseFormatter.locale = posix;
-	}
-	
-	return _dateParseFormatter;
-}
-
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    NSDate *date = [[self dateParseFormatter] dateFromString:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
+    NSDate *date = [NSDate dateFromIso8601String:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
     _datePicker = [[UIDatePicker alloc] init];
     _datePicker.date = date;
-    [self.valueTextField setText:[[self dateDisplayFormatter] stringFromDate:_datePicker.date]];
+    [self.valueTextField setText:[_datePicker.date formattedDisplayDate]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
     UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
@@ -62,9 +38,8 @@
 
 - (void) doneButtonPressed {
     [self.valueTextField resignFirstResponder];
-    NSString *newValue = [[self dateParseFormatter] stringFromDate:_datePicker.date];
+    NSString *newValue = [_datePicker.date formattedDisplayDate];
     self.valueTextField.text = newValue;
-    [self.valueTextField setText:[[self dateDisplayFormatter] stringFromDate:_datePicker.date]];
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
         [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];

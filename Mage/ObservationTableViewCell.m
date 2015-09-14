@@ -13,6 +13,7 @@
 #import <Server+helper.h>
 #import "AttachmentCollectionDataStore.h"
 #import <Event+helper.h>
+#import "NSDate+iso8601.h"
 
 @interface ObservationTableViewCell()
 
@@ -33,16 +34,7 @@
     }
     self.icon.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
     
-    NSString *timestamp = [observation.properties objectForKey:@"timestamp"];
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    dateFormat.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
-    NSDate* output = [dateFormat dateFromString:timestamp];
-    
-    self.timeField.text = output.shortTimeAgoSinceNow;
+    self.timeField.text = observation.timestamp.shortTimeAgoSinceNow;
     
     self.userField.text = observation.user.name;
     
