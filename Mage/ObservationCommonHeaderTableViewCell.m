@@ -10,24 +10,13 @@
 #import <Server+helper.h>
 #import <User.h>
 #import <Event+helper.h>
+#import "NSDate+display.h"
 
 @interface ObservationCommonHeaderTableViewCell ()
-
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
-
 @end
 
 @implementation ObservationCommonHeaderTableViewCell
 
-- (NSDateFormatter *) dateFormatter {
-    if (_dateFormatter == nil) {
-        _dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    }
-    
-    return _dateFormatter;
-}
 
 - (void) configureCellForObservation: (Observation *) observation {
     NSString *name = [observation.properties valueForKey:@"type"];
@@ -48,7 +37,8 @@
     self.userLabel.text = observation.user.name;
     
     self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", observation.user.name, observation.user.username];
-    self.dateLabel.text = [self.dateFormatter stringFromDate:observation.timestamp];
+    
+    self.dateLabel.text = [observation.timestamp formattedDisplayDate];
 }
 
 @end
