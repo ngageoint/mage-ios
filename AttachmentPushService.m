@@ -11,6 +11,7 @@
 #import "Attachment+helper.h"
 #import "Observation+helper.h"
 #import "UserUtility.h"
+#import "NSDate+iso8601.h"
 
 NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 
@@ -126,30 +127,15 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         NSMutableURLRequest *request = [http.sessionManager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
         } error:nil];
-        
-        // not sure why the HTTPRequestHeaders are not being set, so set them here
-//        [manager.sessionManager.requestSerializer.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
-//            if (![request valueForHTTPHeaderField:field]) {
-//                [request setValue:value forHTTPHeaderField:field];
-//            }
-//        }];
 
         AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Attachment *localAttachment = [attachment MR_inContext:localContext];
                 localAttachment.remoteId = [responseObject valueForKey:@"id"];
                 
-                NSDateFormatter *dateFormat = [NSDateFormatter new];
-                [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-                dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-                
-                // Always use this locale when parsing fixed format date strings
-                NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-                dateFormat.locale = posix;
-                
                 NSString *dateString = [responseObject valueForKey:@"lastModified"];
                 if (dateString != nil) {
-                    NSDate *date = [dateFormat dateFromString:dateString];
+                    NSDate *date = [NSDate dateFromIso8601String:dateString];
                     [localAttachment setLastModified:date];
                 }
                 localAttachment.name = [responseObject valueForKey:@"name"];

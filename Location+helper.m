@@ -47,10 +47,7 @@
 			[self setRemoteId:[jsonLocation objectForKey:@"id"]];
 			[self setType:[jsonLocation objectForKey:@"type"]];
             [self setEventId:[jsonLocation objectForKey:@"eventId"]];
-			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-			[dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-			NSDate *date = [dateFormat dateFromString:[jsonLocation valueForKeyPath:@"properties.timestamp"]];
+            NSDate *date = [NSDate dateFromIso8601String:[jsonLocation valueForKeyPath:@"properties.timestamp"]];
 			[self setTimestamp:date];
 			[self setProperties:[jsonLocation valueForKeyPath:@"properties"]];
 			

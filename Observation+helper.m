@@ -29,16 +29,10 @@ NSNumber *_currentEventId;
 + (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
     
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
     [observation setTimestamp:[NSDate date]];
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
     
-    [properties setObject:[dateFormat stringFromDate:[observation timestamp]] forKey:@"timestamp"];
+    [properties setObject:[observation.timestamp iso8601String] forKey:@"timestamp"];
     
     [observation setProperties:properties];
     [observation setUser:[User fetchCurrentUserInManagedObjectContext:mangedObjectContext]];
@@ -153,16 +147,10 @@ NSNumber *_currentEventId;
     NSDictionary *properties = [json objectForKey: @"properties"];
     [self setProperties:[self generatePropertiesFromRaw:properties]];
     
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
-    NSDate *date = [dateFormat dateFromString:[json objectForKey:@"lastModified"]];
+    NSDate *date = [NSDate dateFromIso8601String:[json objectForKey:@"lastModified"]];
     [self setLastModified:date];
     
-    NSDate *timestamp = [dateFormat dateFromString:[self.properties objectForKey:@"timestamp"]];
+    NSDate *timestamp = [NSDate dateFromIso8601String:[self.properties objectForKey:@"timestamp"]];
     [self setTimestamp:timestamp];
     
     [self setUrl:[json objectForKey:@"url"]];

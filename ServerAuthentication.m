@@ -12,6 +12,7 @@
 #import "MageServer.h"
 #import "User+helper.h"
 #import "UserUtility.h"
+#import "NSDate+iso8601.h"
 
 @implementation ServerAuthentication
 
@@ -88,12 +89,8 @@
     NSString *token = [response objectForKey:@"token"];
     NSString *username = (NSString *) [parameters objectForKey:@"username"];
     NSString *password = (NSString *) [parameters objectForKey:@"password"];
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
-    NSDate* tokenExpirationDate = [dateFormat dateFromString:[response objectForKey:@"expirationDate"]];
+    NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[response objectForKey:@"expirationDate"]];
     HttpManager *http = [HttpManager singleton];
 
     [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];

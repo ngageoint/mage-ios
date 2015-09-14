@@ -8,6 +8,7 @@
 
 #import "Attachment+helper.h"
 #import <MagicalRecord/MagicalRecord.h>
+#import "NSDate+iso8601.h"
 
 @implementation Attachment (helper)
 
@@ -30,15 +31,10 @@
         [self setDirty:[NSNumber numberWithBool:NO]];
     }
     [self setLocalPath: [json objectForKey:@"localPath"]];
-    NSDateFormatter *dateFormat = [NSDateFormatter new];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    // Always use this locale when parsing fixed format date strings
-    NSLocale* posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormat.locale = posix;
+
     NSString *dateString = [json objectForKey:@"lastModified"];
     if (dateString != nil) {
-        NSDate *date = [dateFormat dateFromString:dateString];
+        NSDate *date = [NSDate dateFromIso8601String:dateString];
         [self setLastModified:date];
     } else {
         [self setLastModified:[NSDate date]];
