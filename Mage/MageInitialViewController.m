@@ -2,7 +2,6 @@
 //  MageInitialViewController.m
 //  Mage
 //
-//  Created by Dan Barela on 7/15/14.
 //
 
 #import "MageInitialViewController.h"

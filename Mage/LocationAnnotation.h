@@ -2,8 +2,6 @@
 //  Location.h
 //  Mage
 //
-//  Created by Billy Newman on 6/24/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

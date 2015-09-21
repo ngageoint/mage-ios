@@ -2,7 +2,6 @@
 //  MediaViewController.h
 //  UFO
 //
-//  Created by   on 6/2/12.
 //    
 //
 

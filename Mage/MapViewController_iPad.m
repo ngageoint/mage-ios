@@ -2,8 +2,6 @@
 //  MapViewController_iPad.m
 //  MAGE
 //
-//  Created by William Newman on 9/30/14.
-//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "MapViewController_iPad.h"

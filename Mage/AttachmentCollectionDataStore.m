@@ -2,8 +2,6 @@
 //  AttachmentCollectionDataStore.m
 //  MAGE
 //
-//  Created by Dan Barela on 11/19/14.
-//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "AttachmentCollectionDataStore.h"

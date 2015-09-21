@@ -2,8 +2,6 @@
 //  ObservationTableViewCell.m
 //  Mage
 //
-//  Created by Dan Barela on 7/17/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import "ObservationTableViewCell.h"

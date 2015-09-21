@@ -2,7 +2,6 @@
 //  LoginViewController.m
 //  Mage
 //
-//  Created by Dan Barela on 2/19/14.
 //
 
 #import "LoginViewController.h"
