@@ -2,8 +2,6 @@
 //  MageServer.m
 //  mage-ios-sdk
 //
-//  Created by William Newman on 10/13/14.
-//  Copyright (c) 2014 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import "MageServer.h"
