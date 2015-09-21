@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="C5w-rH-oST">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="bB5-LW-ocg">
+            <objects>
+                <viewController id="C5w-rH-oST" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SUB-sU-DjE"/>
+                        <viewControllerLayoutGuide type="bottom" id="QoM-bH-aiy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pED-ce-0mi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-H3-sDB">
+                                <rect key="frame" x="180" y="277" width="240" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="4Ie-ak-LsV"/>
+                                    <constraint firstAttribute="height" constant="45" id="WXk-gt-Zp5"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.066666666666666666" green="0.32941176470588235" blue="0.64313725490196072" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="centerY" secondItem="gxd-H3-sDB" secondAttribute="centerY" constant="0.5" id="IjQ-a8-cjB"/>
+                            <constraint firstAttribute="centerX" secondItem="gxd-H3-sDB" secondAttribute="centerX" id="gPs-QB-5Py"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iFB-jJ-UiX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="656" y="427"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="mage_logo" width="331" height="82"/>
+    </resources>
+</document>
