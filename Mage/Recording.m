@@ -2,7 +2,6 @@
 //  MediaType.m
 //  UFO
 //
-//  Created by   on 6/7/12.
 //    
 //
 

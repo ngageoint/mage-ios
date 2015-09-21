@@ -2,8 +2,6 @@
 //  TimeTableViewCell.m
 //  Mage
 //
-//  Created by Dan Barela on 5/2/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import "ValueTableViewCell.h"

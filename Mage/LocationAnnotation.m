@@ -2,7 +2,6 @@
 //  LocationAnnotation.m
 //  Mage
 //
-//  Created by Billy Newman on 6/24/14.
 //
 
 #import "LocationAnnotation.h"

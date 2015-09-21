@@ -2,7 +2,6 @@
 //  PersonTableViewCell.h
 //  Mage
 //
-//  Created by Billy Newman on 7/14/14.
 //
 
 #import <UIKit/UIKit.h>

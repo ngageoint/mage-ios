@@ -2,8 +2,6 @@
 //  MageTests.m
 //  MageTests
 //
-//  Created by Dan Barela on 2/13/14.
-//  Copyright (c) 2014 Dan Barela. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
