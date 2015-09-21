@@ -1,4 +1,4 @@
-# MAGE iOS SDK
+# MAGE iOS
 
 09/21/2015
 
