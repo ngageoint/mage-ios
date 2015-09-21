@@ -2,7 +2,6 @@
 //  ValuePickerTableViewController.m
 //  Mage
 //
-//  Created by Dan Barela on 5/2/14.
 //
 
 #import "ValuePickerTableViewController.h"

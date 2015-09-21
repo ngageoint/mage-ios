@@ -2,8 +2,6 @@
 //  LocationTimeIntervalDataSource.m
 //  MAGE
 //
-//  Created by William Newman on 10/6/14.
-//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "LocationTimeIntervalDataSource.h"

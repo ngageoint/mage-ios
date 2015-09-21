@@ -2,7 +2,6 @@
 //  PeopleViewController.m
 //  Mage
 //
-//  Created by Billy Newman on 7/14/14.
 //
 
 #import "PeopleTableViewController.h"

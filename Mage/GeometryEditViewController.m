@@ -2,8 +2,6 @@
 //  GeometryEditViewController.m
 //  MAGE
 //
-//  Created by Dan Barela on 10/7/14.
-//  Copyright (c) 2014 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "GeometryEditViewController.h"

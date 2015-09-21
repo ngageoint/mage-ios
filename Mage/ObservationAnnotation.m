@@ -2,7 +2,6 @@
 //  ObservationAnnotation.m
 //  Mage
 //
-//  Created by Dan Barela on 6/26/14.
 //
 
 #import "ObservationAnnotation.h"
