@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>serverMajorVersion</key>
+	<integer>3</integer>
+	<key>serverMinorVersion</key>
+	<integer>0</integer>
+	<key>attachmentPushFrequency</key>
+	<integer>60</integer>
+	<key>baseServerUrl</key>
+	<string>https://magedemo.geointapps.org</string>
+	<key>reportLocation</key>
+	<true/>
+	<key>gpsDistanceFilter</key>
+	<integer>10</integer>
+	<key>userFetchFrequency</key>
+	<integer>60</integer>
+	<key>observationFetchFrequency</key>
+	<integer>60</integer>
+	<key>observationPushFrequency</key>
+	<integer>45</integer>
+	<key>userReportingFrequency</key>
+	<integer>30</integer>
+	<key>userReporting</key>
+	<dict>
+		<key>preferenceKey</key>
+		<string>userReportingFrequency</string>
+		<key>title</key>
+		<string>Location Reporting Fequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>5 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+			<string>Never</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>5</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<integer>1800</integer>
+			<integer>0</integer>
+		</array>
+	</dict>
+	<key>observationFetch</key>
+	<dict>
+		<key>title</key>
+		<string>Observation Fetch Frequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>15 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>2 minutes</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>15</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>120</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<real>1800</real>
+		</array>
+		<key>preferenceKey</key>
+		<string>observationFetchFrequency</string>
+	</dict>
+	<key>userFetch</key>
+	<dict>
+		<key>title</key>
+		<string>User Fetch Frequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>15 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>2 minutes</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>15</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>120</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<real>1800</real>
+		</array>
+		<key>preferenceKey</key>
+		<string>userFetchFrequency</string>
+	</dict>
+	<key>imageUploadSizes</key>
+	<dict>
+		<key>title</key>
+		<string>Image Upload Size</string>
+		<key>section</key>
+		<string>Sizes</string>
+		<key>labels</key>
+		<array>
+			<string>3</string>
+			<string>2</string>
+			<string>1</string>
+			<string>0</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>3</integer>
+			<integer>2</integer>
+			<integer>1</integer>
+			<integer>0</integer>
+		</array>
+		<key>preferenceKey</key>
+		<string>imageUploadSize</string>
+	</dict>
+	<key>gpsSensitivities</key>
+	<dict>
+		<key>title</key>
+		<string>GPS Distance Filter</string>
+		<key>section</key>
+		<string>Distance</string>
+		<key>preferenceKey</key>
+		<string>gpsDistanceFilter</string>
+		<key>labels</key>
+		<array>
+			<string>1 Meter</string>
+			<string>10 Meters</string>
+			<string>100 Meters</string>
+			<string>1 Kilometer</string>
+			<string>3 Kilometers</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>1</integer>
+			<integer>10</integer>
+			<integer>100</integer>
+			<integer>1000</integer>
+			<real>3000</real>
+		</array>
+	</dict>
+	<key>dataFetchEnabled</key>
+	<true/>
+	<key>locationServiceEnabled</key>
+	<false/>
+</dict>
+</plist>
