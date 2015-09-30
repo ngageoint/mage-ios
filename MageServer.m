@@ -58,8 +58,6 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
         
-        [defaults setObject:[NSNumber numberWithBool:YES] forKey:@"showDisclaimer"];
-
         [defaults synchronize];
 
         if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion) {
