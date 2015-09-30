@@ -42,12 +42,6 @@
 
 @implementation LoginViewController
 
-- (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
-    [[UserUtility singleton] expireToken];
-    [[Mage singleton] stopServices];
-    [[LocationService singleton] stop];
-}
-
 - (void) authenticationWasSuccessful {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -74,7 +68,6 @@
     self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
 
     [self resetLogin];
-    
 }
 
 - (void) registrationWasSuccessful {
@@ -117,7 +110,7 @@
 
 - (void) verifyLogin {
     if (!self.allowLogin) return;
-    if ([MageServer singleton].reachabilityManager.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
+    if (self.server.reachabilityManager.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
         [MagicalRecord deleteCoreDataStack];
         [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
     }
@@ -232,28 +225,29 @@
 - (void) initMageServerWithURL:(NSURL *) url {
     [self.serverVerificationIndicator startAnimating];
     [self.lockButton setHidden:YES];
-    self.server = [[MageServer singleton] setupServerWithURL:url success:^{
-        [self.serverUrlField setEnabled:NO];
-        [self.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
+    __weak __typeof__(self) weakSelf = self;
+    [MageServer serverWithURL:url authenticationDelegate:self success:^(MageServer *mageServer) {
+        weakSelf.server = mageServer;
         
-        self.server.authentication.delegate = self;
+        [weakSelf.serverUrlField setEnabled:NO];
+        [weakSelf.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         
-        self.loginStatus.hidden = YES;
-        self.statusButton.hidden = YES;
-        [self.usernameField setEnabled:YES];
-        [self.passwordField setEnabled:YES];
-        self.serverUrlField.textColor = [UIColor blackColor];
-        [self.lockButton setHidden:NO];
-        [self.serverVerificationIndicator stopAnimating];
-        self.allowLogin = YES;
+        weakSelf.loginStatus.hidden = YES;
+        weakSelf.statusButton.hidden = YES;
+        [weakSelf.usernameField setEnabled:YES];
+        [weakSelf.passwordField setEnabled:YES];
+        weakSelf.serverUrlField.textColor = [UIColor blackColor];
+        [weakSelf.lockButton setHidden:NO];
+        [weakSelf.serverVerificationIndicator stopAnimating];
+        weakSelf.allowLogin = YES;
     } failure:^(NSError *error) {
-        self.allowLogin = NO;
-        self.loginStatus.hidden = NO;
-        self.statusButton.hidden = NO;
-        self.loginStatus.text = error.localizedDescription;
-        self.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-        [self.lockButton setHidden:NO];
-        [self.serverVerificationIndicator stopAnimating];
+        weakSelf.allowLogin = NO;
+        weakSelf.loginStatus.hidden = NO;
+        weakSelf.statusButton.hidden = NO;
+        weakSelf.loginStatus.text = error.localizedDescription;
+        weakSelf.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+        [weakSelf.lockButton setHidden:NO];
+        [weakSelf.serverVerificationIndicator stopAnimating];
     }];
 }
 

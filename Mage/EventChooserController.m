@@ -55,7 +55,9 @@ BOOL unwind = NO;
         self.tableView.backgroundView = messageLabel;
         
         self.actionButton.titleLabel.text = @"Return to Login";
-    } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
+    } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&
+               self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 &&
+               [Event getCurrentEvent].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
         // they only have one event and have already picked it so move on to the map
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
