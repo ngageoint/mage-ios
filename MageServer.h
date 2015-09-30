@@ -13,9 +13,8 @@
 @property (nonatomic, strong) id<Authentication> authentication;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 
-+ (MageServer *) singleton;
 + (NSURL *) baseURL;
 
-- (id) setupServerWithURL:(NSURL *) url success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
++ (void) serverWithURL:(NSURL *) url authenticationDelegate:(id<AuthenticationDelegate>) authenticationDelegate success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
 
 @end
