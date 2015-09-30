@@ -48,5 +48,11 @@
     }
 }
 
+- (IBAction) unwindToInitial:(UIStoryboardSegue *) unwindSegue {
+    [[UserUtility singleton] expireToken];
+    [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
+}
+
 
 @end
