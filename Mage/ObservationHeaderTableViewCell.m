@@ -19,7 +19,7 @@
 }
 
 - (void) configureCellForObservation: (Observation *) observation {
-    
+
 }
 
 @end

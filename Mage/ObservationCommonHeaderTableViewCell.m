@@ -26,10 +26,11 @@
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
     NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
-    if (variantField != nil) {
+    NSString *variantText = [observation.properties objectForKey:variantField];
+    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && variantText.length > 0) {
         self.variantFieldLabel.text = [observation.properties objectForKey:variantField];
     } else {
-        self.variantFieldLabel.text = @"";
+        [self.variantFieldLabel removeFromSuperview];
     }
     
     self.userLabel.text = observation.user.name;
