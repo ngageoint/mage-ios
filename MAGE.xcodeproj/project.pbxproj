@@ -10,6 +10,8 @@
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
+		2F4116811BE93F0100461BA6 /* LocalAuthenticationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4116801BE93F0100461BA6 /* LocalAuthenticationTableViewCell.m */; };
+		2F4116841BEA869900461BA6 /* LoginStatusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4116831BEA869900461BA6 /* LoginStatusTableViewCell.m */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
@@ -24,6 +26,8 @@
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */; };
+		2FD853731BDAAB4400602CEA /* LoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD853721BDAAB4400602CEA /* LoginDataSource.m */; };
+		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
@@ -138,6 +142,10 @@
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F32FAE21B474D47009603D3 /* ObservationContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationContainerViewController.h; sourceTree = "<group>"; };
 		2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationContainerViewController.m; sourceTree = "<group>"; };
+		2F41167F1BE93F0100461BA6 /* LocalAuthenticationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthenticationTableViewCell.h; sourceTree = "<group>"; };
+		2F4116801BE93F0100461BA6 /* LocalAuthenticationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthenticationTableViewCell.m; sourceTree = "<group>"; };
+		2F4116821BEA869900461BA6 /* LoginStatusTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginStatusTableViewCell.h; sourceTree = "<group>"; };
+		2F4116831BEA869900461BA6 /* LoginStatusTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginStatusTableViewCell.m; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedSegueDelegate.h; sourceTree = "<group>"; };
@@ -167,6 +175,9 @@
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FD307681B47538900ACFE68 /* PeopleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleContainerViewController.h; sourceTree = "<group>"; };
 		2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleContainerViewController.m; sourceTree = "<group>"; };
+		2FD853711BDAAB4400602CEA /* LoginDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginDataSource.h; sourceTree = "<group>"; };
+		2FD853721BDAAB4400602CEA /* LoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginDataSource.m; sourceTree = "<group>"; };
+		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
@@ -440,6 +451,29 @@
 				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 			);
 			name = iPhone;
+			sourceTree = "<group>";
+		};
+		2FD853701BDAAB2300602CEA /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				2FD853711BDAAB4400602CEA /* LoginDataSource.h */,
+				2FD853721BDAAB4400602CEA /* LoginDataSource.m */,
+				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
+				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
+				2F41167F1BE93F0100461BA6 /* LocalAuthenticationTableViewCell.h */,
+				2F4116801BE93F0100461BA6 /* LocalAuthenticationTableViewCell.m */,
+				2F4116821BEA869900461BA6 /* LoginStatusTableViewCell.h */,
+				2F4116831BEA869900461BA6 /* LoginStatusTableViewCell.m */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		2FD853771BE1564F00602CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		2FE24CDB19C79B850019688B /* iPad */ = {
@@ -723,6 +757,7 @@
 			children = (
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
+				2FD853771BE1564F00602CEA /* Resources */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
 				A4CA82D2E2C618015C18DA14 /* Pods */,
@@ -759,6 +794,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				2FD853701BDAAB2300602CEA /* Login */,
 				2F4551831BA33A7700EE3DA6 /* Date */,
 				F76949131AA6434A00CB680B /* Event */,
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
@@ -779,8 +815,6 @@
 				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
-				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
-				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
 				F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */,
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */,
 				4C790F7419704DE300886E58 /* MageNavigationController.h */,
@@ -904,6 +938,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
@@ -987,6 +1022,7 @@
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
+				2F4116811BE93F0100461BA6 /* LocalAuthenticationTableViewCell.m in Sources */,
 				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,
 				2F5F2EA819E374B4005BA157 /* LocationTimeIntervalDataSource.m in Sources */,
 				F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */,
@@ -1006,10 +1042,12 @@
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
 				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
+				2F4116841BEA869900461BA6 /* LoginStatusTableViewCell.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */,
+				2FD853731BDAAB4400602CEA /* LoginDataSource.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
@@ -1188,7 +1226,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1209,7 +1247,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

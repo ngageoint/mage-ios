@@ -21,21 +21,18 @@
 #import "MageServer.h"
 #import "Observations.h"
 #import "MagicalRecord+delete.h"
+#import "LoginDataSource.h"
 
 @interface LoginViewController ()
 
-    @property (weak, nonatomic) IBOutlet UITextField *usernameField;
-    @property (weak, nonatomic) IBOutlet UITextField *passwordField;
     @property (weak, nonatomic) IBOutlet UITextField *serverUrlField;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-    @property (weak, nonatomic) IBOutlet UIButton *loginButton;
     @property (weak, nonatomic) IBOutlet UIButton *lockButton;
-    @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
-    @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
-
+    @property (weak, nonatomic) IBOutlet UITableView *tableView;
+    @property (strong, nonatomic) IBOutlet LoginDataSource *dataSource;
     @property (strong, nonatomic) MageServer *server;
     @property (nonatomic) BOOL allowLogin;
 @end
@@ -52,9 +49,11 @@
     } else {
         [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
     }
-    self.usernameField.textColor = [UIColor blackColor];
-    self.passwordField.textColor = [UIColor blackColor];
-    self.loginStatus.hidden = YES;
+    
+    self.dataSource.usernameField.textColor = [UIColor blackColor];
+    self.dataSource.passwordField.textColor = [UIColor blackColor];
+    
+    self.dataSource.loginStatus.hidden = YES;
     self.statusButton.hidden = YES;
     
     [self resetLogin];
@@ -62,10 +61,10 @@
 
 - (void) authenticationHadFailure {
     self.statusButton.hidden = NO;
-    self.loginStatus.hidden = NO;
-    self.loginStatus.text = @"The username or password you entered is incorrect";
-    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.dataSource.loginStatus.hidden = NO;
+    self.dataSource.loginStatus.text = @"The username or password you entered is incorrect";
+    self.dataSource.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.dataSource.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
 
     [self resetLogin];
 }
@@ -83,29 +82,29 @@
 }
 
 - (void) resetLogin {
-    [self.loginButton setEnabled:YES];
+    [self.dataSource.loginButton setEnabled:YES];
     [self.loginIndicator stopAnimating];
-    [self.usernameField setEnabled:YES];
-    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
-    [self.passwordField setEnabled:YES];
-    [self.passwordField setBackgroundColor:[UIColor whiteColor]];
+    [self.dataSource.usernameField setEnabled:YES];
+    [self.dataSource.usernameField setBackgroundColor:[UIColor whiteColor]];
+    [self.dataSource.passwordField setEnabled:YES];
+    [self.dataSource.passwordField setBackgroundColor:[UIColor whiteColor]];
     [self.serverUrlField setEnabled:YES];
     [self.serverUrlField setBackgroundColor:[UIColor whiteColor]];
     [self.lockButton setEnabled:YES];
-    [self.showPassword setEnabled:YES];
+    [self.dataSource.showPassword setEnabled:YES];
 }
 
 - (void) startLogin {
-    [self.loginButton setEnabled:NO];
+    [self.dataSource.loginButton setEnabled:NO];
     [self.loginIndicator startAnimating];
-    [self.usernameField setEnabled:NO];
-    [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.passwordField setEnabled:NO];
-    [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.dataSource.usernameField setEnabled:NO];
+    [self.dataSource.usernameField setBackgroundColor:[UIColor lightGrayColor]];
+    [self.dataSource.passwordField setEnabled:NO];
+    [self.dataSource.passwordField setBackgroundColor:[UIColor lightGrayColor]];
     [self.serverUrlField setEnabled:NO];
     [self.serverUrlField setBackgroundColor:[UIColor lightGrayColor]];
     [self.lockButton setEnabled:NO];
-    [self.showPassword setEnabled:NO];
+    [self.dataSource.showPassword setEnabled:NO];
 }
 
 - (void) verifyLogin {
@@ -121,8 +120,8 @@
 	NSString *uidString = deviceUUID.UUIDString;
     NSLog(@"uid: %@", uidString);
 	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-														 _usernameField.text, @"username",
-														 _passwordField.text, @"password",
+														 self.dataSource.usernameField.text, @"username",
+														 self.dataSource.passwordField.text, @"password",
 														 uidString, @"uid",
 														 nil];
 	
@@ -132,7 +131,7 @@
 - (BOOL) usernameChanged {
     NSDictionary *loginParameters = [self.server.authentication loginParameters];
     NSString *username = [loginParameters objectForKey:@"username"];
-    return [username length] != 0 && ![self.usernameField.text isEqualToString:username];
+    return [username length] != 0 && ![self.dataSource.usernameField.text isEqualToString:username];
 }
 
 - (BOOL) serverUrlChanged {
@@ -142,11 +141,11 @@
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
-    if ([[_usernameField text] isEqualToString:@""]) {
-        [_usernameField becomeFirstResponder];
+    if ([[self.dataSource.usernameField text] isEqualToString:@""]) {
+        [self.dataSource.usernameField becomeFirstResponder];
 		return YES;
-    } else if ([[_passwordField text] isEqualToString:@""]) {
-        [_passwordField becomeFirstResponder];
+    } else if ([[self.dataSource.passwordField text] isEqualToString:@""]) {
+        [self.dataSource.passwordField becomeFirstResponder];
 		return YES;
     } else {
 		return NO;
@@ -158,8 +157,8 @@
 		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
         [self initMageServerWithURL:url];
     } else {
-        [self.usernameField setEnabled:NO];
-        [self.passwordField setEnabled:NO];
+        [self.dataSource.usernameField setEnabled:NO];
+        [self.dataSource.passwordField setEnabled:NO];
         [self.serverUrlField setEnabled:YES];
         [self.lockButton setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
     }
@@ -176,10 +175,10 @@
 - (IBAction)loginButtonPress:(id)sender {
     if (![self changeTextViewFocus: sender]) {
         [sender resignFirstResponder];
-        if ([_usernameField isFirstResponder]) {
-            [_usernameField resignFirstResponder];
-        } else if([_passwordField isFirstResponder]) {
-            [_passwordField resignFirstResponder];
+        if ([self.dataSource.usernameField isFirstResponder]) {
+            [self.dataSource.usernameField resignFirstResponder];
+        } else if([self.dataSource.passwordField isFirstResponder]) {
+            [self.dataSource.passwordField resignFirstResponder];
         }
         
         [self verifyLogin];
@@ -194,10 +193,14 @@
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
     
-    [self.usernameField setText:@""];
-    [self.passwordField setText:@""];
-    [self.passwordField setDelegate:self];
-    
+    [self.dataSource.usernameField setText:@""];
+    [self.dataSource.passwordField setText:@""];
+    [self.dataSource.passwordField setDelegate:self];
+}
+
+- (void) setupAuthentication {
+    [self.dataSource setAuthenticationWithServer:self.server];
+    [self.tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -215,6 +218,10 @@
 }
 
 - (void) viewDidLoad {
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.alwaysBounceVertical = NO;
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
@@ -232,19 +239,20 @@
         [weakSelf.serverUrlField setEnabled:NO];
         [weakSelf.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         
-        weakSelf.loginStatus.hidden = YES;
+        weakSelf.dataSource.loginStatus.hidden = YES;
         weakSelf.statusButton.hidden = YES;
-        [weakSelf.usernameField setEnabled:YES];
-        [weakSelf.passwordField setEnabled:YES];
-        weakSelf.serverUrlField.textColor = [UIColor blackColor];
+        [weakSelf.dataSource.usernameField setEnabled:YES];
+        [weakSelf.dataSource.passwordField setEnabled:YES];
         [weakSelf.lockButton setHidden:NO];
         [weakSelf.serverVerificationIndicator stopAnimating];
         weakSelf.allowLogin = YES;
+        
+        [self setupAuthentication];
     } failure:^(NSError *error) {
         weakSelf.allowLogin = NO;
-        weakSelf.loginStatus.hidden = NO;
+        weakSelf.dataSource.loginStatus.hidden = NO;
         weakSelf.statusButton.hidden = NO;
-        weakSelf.loginStatus.text = error.localizedDescription;
+        weakSelf.dataSource.loginStatus.text = error.localizedDescription;
         weakSelf.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
         [weakSelf.lockButton setHidden:NO];
         [weakSelf.serverVerificationIndicator stopAnimating];
@@ -256,8 +264,8 @@
 }
 
 - (IBAction)showPasswordSwitchAction:(id)sender {
-    [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
-    self.passwordField.clearsOnBeginEditing = NO;
+    [self.dataSource.passwordField setSecureTextEntry:!self.dataSource.passwordField.secureTextEntry];
+    self.dataSource.passwordField.clearsOnBeginEditing = NO;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
