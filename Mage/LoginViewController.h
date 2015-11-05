@@ -1,12 +1,13 @@
 //
 //  LoginViewController.h
-//  Mage
+//  MAGE
 //
+//  Created by William Newman on 11/4/15.
+//  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "Authentication.h"
 
-@interface LoginViewController : UIViewController<AuthenticationDelegate, UITextFieldDelegate>
+@interface LoginViewController : UIViewController
 
 @end
