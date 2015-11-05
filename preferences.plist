@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>serverMajorVersion</key>
-	<integer>3</integer>
+	<integer>4</integer>
 	<key>serverMinorVersion</key>
 	<integer>0</integer>
 	<key>attachmentPushFrequency</key>
 	<integer>60</integer>
 	<key>baseServerUrl</key>
-	<string>https://magedemo.geointapps.org</string>
+	<string></string>
 	<key>reportLocation</key>
 	<true/>
 	<key>gpsDistanceFilter</key>

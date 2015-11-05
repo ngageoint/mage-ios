@@ -9,6 +9,8 @@
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
+NSString * const kServerAuthenticationStrategiesKey = @"serverAuthenticationStrategies";
+
 
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
@@ -18,6 +20,18 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *url = [defaults objectForKey:kBaseServerUrlKey];
     return [NSURL URLWithString:url];
+}
+
+- (BOOL) serverHasLocalAuthenticationStrategy {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
+    return [strategies objectForKey:@"local"] != nil;
+}
+
+- (BOOL) serverHasGoogleAuthenticationStrategy {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
+    return [strategies objectForKey:@"google"] != nil;
 }
 
 + (void) serverWithURL:(NSURL *) url authenticationDelegate:(id<AuthenticationDelegate>) authenticationDelegate success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
@@ -57,6 +71,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+        
+        [defaults setObject:[response valueForKeyPath:@"authenticationStrategies"] forKey:kServerAuthenticationStrategiesKey];
         
         [defaults synchronize];
 
