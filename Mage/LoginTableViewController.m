@@ -33,9 +33,7 @@
     @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
     @property (weak, nonatomic) IBOutlet UIButton *loginButton;
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
-    @property (weak, nonatomic) IBOutlet UIButton *lockButton;
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
-    @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
     @property (strong, nonatomic) MageServer *server;
     @property (strong, nonatomic) id<Authentication> serverAuthenticationModule;
     @property (nonatomic) BOOL allowLogin;
@@ -67,11 +65,10 @@
 - (void) viewDidAppear:(BOOL)animated {
     NSURL *url = [MageServer baseURL];
     if ([@"" isEqualToString:url.absoluteString]) {
-        [self toggleUrlField:NULL];
+        // TODO segue to URL picker
         return;
     } else {
         [self initMageServerWithURL:url];
-        
         self.allowLogin = YES;
     }
 }
@@ -127,7 +124,6 @@
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
     [self.serverUrlField setEnabled:YES];
     [self.serverUrlField setBackgroundColor:[UIColor whiteColor]];
-    [self.lockButton setEnabled:YES];
     [self.showPassword setEnabled:YES];
 }
 
@@ -140,7 +136,6 @@
     [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
     [self.serverUrlField setEnabled:NO];
     [self.serverUrlField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.lockButton setEnabled:NO];
     [self.showPassword setEnabled:NO];
 }
 
@@ -198,18 +193,6 @@
 	}
 }
 
-- (IBAction)toggleUrlField:(id)sender {
-    if (self.serverUrlField.enabled) {
-		NSURL *url = [NSURL URLWithString:self.serverUrlField.text];
-        [self initMageServerWithURL:url];
-    } else {
-        [self.usernameField setEnabled:NO];
-        [self.passwordField setEnabled:NO];
-        [self.serverUrlField setEnabled:YES];
-        [self.lockButton setImage:[UIImage imageNamed:@"unlock.png"] forState:UIControlStateNormal];
-    }
-}
-
 //  When we are done editing on the keyboard
 - (IBAction)resignAndLogin:(id) sender {
     if (![self changeTextViewFocus: sender]) {
@@ -232,21 +215,14 @@
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
-    [self.serverVerificationIndicator startAnimating];
-    [self.lockButton setHidden:YES];
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         weakSelf.server = mageServer;
-        
-        [weakSelf.serverUrlField setEnabled:NO];
-        [weakSelf.lockButton setImage:[UIImage imageNamed:@"lock.png"] forState:UIControlStateNormal];
         
         weakSelf.loginStatus.hidden = YES;
         weakSelf.statusButton.hidden = YES;
         [weakSelf.usernameField setEnabled:YES];
         [weakSelf.passwordField setEnabled:YES];
-        [weakSelf.lockButton setHidden:NO];
-        [weakSelf.serverVerificationIndicator stopAnimating];
         weakSelf.allowLogin = YES;
         
         [self setupAuthentication];
@@ -255,9 +231,6 @@
         weakSelf.loginStatus.hidden = NO;
         weakSelf.statusButton.hidden = NO;
         weakSelf.loginStatus.text = error.localizedDescription;
-        weakSelf.serverUrlField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-        [weakSelf.lockButton setHidden:NO];
-        [weakSelf.serverVerificationIndicator stopAnimating];
     }];
 }
 

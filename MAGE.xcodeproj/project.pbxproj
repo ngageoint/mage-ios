@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
+		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
@@ -141,6 +142,8 @@
 		2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ZipFile+OfflineMap.m"; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
+		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
+		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
 		2F320B6B1BEABF0200C7F66C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		2F320B6C1BEABF0200C7F66C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
@@ -469,6 +472,8 @@
 				4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */,
 				2FF74A491BEBF88B00416090 /* OAuthViewController.h */,
 				2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */,
+				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
+				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1023,6 +1028,7 @@
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
+				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,

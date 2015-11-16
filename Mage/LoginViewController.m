@@ -10,13 +10,12 @@
 #import "MageServer.h"
 
 @interface LoginViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *serverURL;
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *serverURL;
 @end
 
 @implementation LoginViewController
 
-//  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -24,6 +23,10 @@
     [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
     
     NSURL *url = [MageServer baseURL];
-    [self.serverURL setText:[url absoluteString]];
+    if ([url absoluteString].length == 0) {
+         [self performSegueWithIdentifier:@"setSeverURLSegue" sender:self];
+    } else {
+        [self.serverURL setTitle:[url absoluteString] forState:UIControlStateNormal];
+    }
 }
 @end
