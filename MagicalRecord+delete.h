@@ -4,8 +4,6 @@
 //
 //
 
-#import "MagicalRecord.h"
-
 @interface MagicalRecord (delete)
     +(void) deleteCoreDataStack;
 @end

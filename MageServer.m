@@ -6,11 +6,13 @@
 
 #import "MageServer.h"
 #import "HttpManager.h"
+#import "LocalAuthentication.h"
+#import "ServerAuthentication.h"
+#import "GoogleAuthentication.h"
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
 NSString * const kServerAuthenticationStrategiesKey = @"serverAuthenticationStrategies";
-
 
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
@@ -34,7 +36,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     return [strategies objectForKey:@"google"] != nil;
 }
 
-+ (void) serverWithURL:(NSURL *) url authenticationDelegate:(id<AuthenticationDelegate>) authenticationDelegate success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
++ (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
     
     if (!url || !url.scheme || !url.host) {
         failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:@"Invalid URL" forKey:NSLocalizedDescriptionKey]]);
@@ -48,7 +50,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]] && server.authentication) {
+    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
         success(server);
         return;
     }
@@ -56,12 +58,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     HttpManager *http = [HttpManager singleton];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
     [http.manager GET:apiURL parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
-        // TODO at some point we could read the server response and create the correct authentication module.
-        // For now just create the local (username/password) authentication module.
-        server.authentication = [Authentication authenticationWithType:SERVER];
-        server.authentication.delegate = authenticationDelegate;
         
-        // TODO check server version
         NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
         NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
 
@@ -72,7 +69,18 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
         
-        [defaults setObject:[response valueForKeyPath:@"authenticationStrategies"] forKey:kServerAuthenticationStrategiesKey];
+        NSMutableDictionary *authenticationModules = [NSMutableDictionary dictionaryWithObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:LOCAL]];
+        NSDictionary *authenticationStrategies = [response valueForKeyPath:@"authenticationStrategies"];
+        [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
+        for (NSString *authenticationType in authenticationStrategies) {
+            if ([authenticationType isEqualToString:@"google"]) {
+                
+                [authenticationModules setObject:[[GoogleAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+            } else if ([authenticationType isEqualToString:@"local"]) {
+                [authenticationModules setObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:SERVER]];
+            }
+        }
+        server.authenticationModules = authenticationModules;
         
         [defaults synchronize];
 
@@ -92,8 +100,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             && (error.code == NSURLErrorCannotConnectToHost
             || error.code == NSURLErrorNetworkConnectionLost
             || error.code == NSURLErrorNotConnectedToInternet)) {
-            server.authentication = [Authentication authenticationWithType:LOCAL];
-                if ([server.authentication canHandleLoginToURL:[url absoluteString]]) {
+                id<Authentication> authentication = [server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+                if ([authentication canHandleLoginToURL:[url absoluteString]]) {
                     success(server);
                 } else {
                     failure(error);

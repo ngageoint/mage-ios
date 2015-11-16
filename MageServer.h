@@ -10,13 +10,14 @@
 
 @interface MageServer : NSObject
 
-@property (nonatomic, strong) id<Authentication> authentication;
+@property (nonatomic, strong) NSDictionary *authenticationModules;
+
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 
 + (NSURL *) baseURL;
 - (BOOL) serverHasLocalAuthenticationStrategy;
 - (BOOL) serverHasGoogleAuthenticationStrategy;
 
-+ (void) serverWithURL:(NSURL *) url authenticationDelegate:(id<AuthenticationDelegate>) authenticationDelegate success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
++ (void) serverWithURL:(NSURL *) url success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
 
 @end

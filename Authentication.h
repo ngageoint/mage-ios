@@ -8,32 +8,29 @@
 
 typedef NS_ENUM(NSInteger, AuthenticationType) {
 	LOCAL,
-    SERVER
+    SERVER,
+    GOOGLE
 };
 
-@protocol AuthenticationDelegate <NSObject>
-
-@optional
-- (void) authenticationWasSuccessful;
-- (void) authenticationHadFailure;
-- (void) registrationWasSuccessful;
-
-@end
+typedef NS_ENUM(NSInteger, AuthenticationStatus) {
+    AUTHENTICATION_SUCCESS,
+    AUTHENTICATION_ERROR,
+    REGISTRATION_SUCCESS
+};
 
 @protocol Authentication <NSObject>
 
 @required
-
-- (void) loginWithParameters: (NSDictionary *) parameters;
 - (NSDictionary *) loginParameters;
 - (BOOL) canHandleLoginToURL: (NSString *) url;
-
-@property(nonatomic, retain) id<AuthenticationDelegate> delegate;
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) success;
 
 @end
 
 @interface Authentication : NSObject
 
-+ (id) authenticationWithType: (AuthenticationType) type;
++ (id) authenticationModuleForType: (AuthenticationType) type;
++ (AuthenticationType) authenticationTypeFromString: (NSString *) value;
++ (NSString *) authenticationTypeToString: (AuthenticationType) authenticationType;
 
 @end

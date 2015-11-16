@@ -9,6 +9,4 @@
 
 @interface LocalAuthentication : NSObject<Authentication>
 
-- (void) loginWithParameters: (NSDictionary *) parameters;
-
 @end

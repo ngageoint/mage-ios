@@ -45,8 +45,6 @@ static HttpManager *sharedSingleton = nil;
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         
         _sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
-        //_sessionManager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
-        _sessionManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(networkRequestDidFinish:)

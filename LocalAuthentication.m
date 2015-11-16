@@ -16,14 +16,16 @@
 
 @implementation LocalAuthentication
 
-@synthesize delegate;
-
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:@"loginParameters"];
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters  {
+- (BOOL) canHandleLoginToURL: (NSString *) url {
+    return [url isEqualToString:[self.loginParameters objectForKey:@"serverUrl"]];
+}
+
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSString *username = (NSString *) [parameters objectForKey:@"username"];
     NSString *password = (NSString *) [parameters objectForKey:@"password"];
@@ -44,21 +46,14 @@
             [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
             [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
             [[UserUtility singleton] resetExpiration];
-            if (delegate) {
-                User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-                [delegate authenticationWasSuccessful];
-            }
+            
+            User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+            complete(AUTHENTICATION_SUCCESS);
             return;
         }
     }
-    if (delegate) {
-        [delegate authenticationHadFailure];
-    }
-    return;
-}
-
-- (BOOL) canHandleLoginToURL: (NSString *) url {
-    return [url isEqualToString:[self.loginParameters objectForKey:@"serverUrl"]];
+    
+    complete(AUTHENTICATION_ERROR);
 }
 
 @end

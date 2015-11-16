@@ -14,14 +14,12 @@
 
 @implementation ServerAuthentication
 
-@synthesize delegate;
-
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:@"loginParameters"];
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters  {
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     BOOL registered = [defaults boolForKey:@"deviceRegistered"];
@@ -30,10 +28,10 @@
     // if we think we need to register, go do it
     if (![defaults boolForKey:@"deviceRegistered"]) {
         NSLog(@"Not registered");
-        [self registerDevice:parameters];
+        [self registerDevice:parameters complete:complete];
     } else {
         NSLog(@"Registered in theory, just log in");
-        [self performLogin:parameters];
+        [self performLogin:parameters complete:complete];
     }
 }
 
@@ -41,7 +39,7 @@
     return YES;
 }
 
-- (void) performLogin: (NSDictionary *) parameters {
+- (void) performLogin: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     HttpManager *http = [HttpManager singleton];
@@ -60,7 +58,7 @@
             }
             
         } completion:^(BOOL contextDidSave, NSError *error) {
-            [self finishLoginForParameters: parameters withResponse:response];
+            [self finishLoginForParameters: parameters withResponse:response complete:complete];
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // if the error was a network error try to login with the local auth module
@@ -68,21 +66,21 @@
         && (error.code == NSURLErrorCannotConnectToHost
             || error.code == NSURLErrorNetworkConnectionLost
             || error.code == NSURLErrorNotConnectedToInternet)) {
-            id<Authentication> local = [Authentication authenticationWithType:LOCAL];
-            [local setDelegate: delegate];
-            [local loginWithParameters:parameters];
+            id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
+            [local loginWithParameters:parameters complete:complete];
         } else {
             NSLog(@"Error logging in: %@", error);
             // try to register again
             [defaults setBool:NO forKey:@"deviceRegistered"];
-            [self registerDevice:parameters];
+            [self registerDevice:parameters complete:complete];
         }
         
     }];
 
 }
 
-- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response {
+- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSString *token = [response objectForKey:@"token"];
     NSString *username = (NSString *) [parameters objectForKey:@"username"];
@@ -112,14 +110,11 @@
     [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
     [defaults synchronize];
     [StoredPassword persistPasswordToKeyChain:password];
-
-    if (delegate) {
-        [delegate authenticationWasSuccessful];
-    }
-
+    
+    complete(AUTHENTICATION_SUCCESS);
 }
 
-- (void) registerDevice: (NSDictionary *) parameters {
+- (void) registerDevice: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSLog(@"Registering device");
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     HttpManager *http = [HttpManager singleton];
@@ -130,17 +125,13 @@
             NSLog(@"Device was registered already, logging in");
             [defaults setBool:YES forKey:@"deviceRegistered"];
             // device was already registered, log in
-            [self performLogin:parameters];
+            [self performLogin:parameters complete:complete];
         } else {
             NSLog(@"Registration was successful");
-            if (delegate) {
-                [delegate registrationWasSuccessful];
-            }
+            complete(REGISTRATION_SUCCESS);
         }
     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (delegate) {
-            [delegate authenticationHadFailure];
-        }
+        complete(AUTHENTICATION_ERROR);
     }];
 }
 

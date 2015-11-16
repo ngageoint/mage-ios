@@ -9,6 +9,4 @@
 
 @interface ServerAuthentication : NSObject <Authentication>
 
-- (void) loginWithParameters: (NSDictionary *) parameters;
-
 @end

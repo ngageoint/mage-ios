@@ -34,7 +34,7 @@ static User *currentUser = nil;
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setUsername:[json objectForKey:@"username"]];
     [self setEmail:[json objectForKey:@"email"]];
-    [self setName:[NSString stringWithFormat:@"%@ %@", [json objectForKey:@"firstname"], [json objectForKey:@"lastname"]]];
+    [self setName:[json objectForKey:@"displayName"]];
     
     NSArray *phones = [json objectForKey:@"phones"];
     if (phones != nil && [phones count] > 0) {

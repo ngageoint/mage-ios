@@ -109,8 +109,7 @@
                     NSDictionary *userDictionary = @{
                          @"id": userId,
                          @"username": userId,
-                         @"firstname": @"unknown",
-                         @"lastname": @"unkown"
+                         @"displayName": @"unknown"
                      };
                     
                     user = [User MR_createEntityInContext:localContext];
