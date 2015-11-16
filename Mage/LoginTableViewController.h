@@ -7,6 +7,6 @@
 #import <UIKit/UIKit.h>
 #import "Authentication.h"
 
-@interface LoginTableViewController : UITableViewController<AuthenticationDelegate, UITextFieldDelegate>
+@interface LoginTableViewController : UITableViewController<UITextFieldDelegate>
 
 @end

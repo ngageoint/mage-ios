@@ -17,7 +17,7 @@
         _coordinate = point.location.coordinate;
         _timestamp = gpsLocation.timestamp;
         
-        _title = user.name != nil ? user.name : user.username;
+        _title = user.name;
         _subtitle = gpsLocation.timestamp.timeAgoSinceNow;
         _user = user;
     }

@@ -54,7 +54,7 @@
         // All fields validated
         NSDictionary *parameters = @{
             @"username": [self.username.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
-            @"lastname": [self.displayName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+            @"displayName": [self.displayName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"email": [self.email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"password": [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"passwordconfirm": [self.passwordConfirm.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
@@ -79,13 +79,12 @@
 - (void) signupWithParameters:(NSDictionary *) parameters url:(NSString *) baseUrl {
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
     [[HttpManager singleton].manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
-		NSString *username = [response objectForKey:@"username"];
-        NSString *firstName = [response objectForKey:@"firstname"];
-		NSString *lastName = [response objectForKey:@"lastname"];
+        NSString *username = [response objectForKey:@"username"];
+        NSString *displayName = [response objectForKey:@"displayName"];
 		
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:@"User Creation Success"
-                              message:[NSString stringWithFormat:@"%@ %@ (%@) has been successfully created.  An administrator must approve your account before you can login", firstName, lastName, username]
+                              message:[NSString stringWithFormat:@"%@ (%@) has been successfully created.  An administrator must approve your account before you can login", displayName, username]
                               delegate:self
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil];
@@ -105,7 +104,7 @@
 
 - (void)alertView:(UIAlertView *) alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        [self performSegueWithIdentifier:@"unwindToInitialViewSegue" sender:self];
+        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
     }
 }
 

@@ -34,7 +34,7 @@
     
     self.userLabel.text = observation.user.name;
     
-    self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", observation.user.name, observation.user.username];
+    self.userLabel.text = observation.user.name;
     
     self.dateLabel.text = [observation.timestamp formattedDisplayDate];
 }

@@ -53,7 +53,7 @@
     
     self.userLabel.text = _observation.user.name;
     
-    self.userLabel.text = [NSString stringWithFormat:@"%@ (%@)", _observation.user.name, _observation.user.username];
+    self.userLabel.text = self.observation.user.name;
     self.timestampLabel.text = [self.observation.timestamp formattedDisplayDate];
 	
 	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", _observation.location.coordinate.latitude, _observation.location.coordinate.longitude];

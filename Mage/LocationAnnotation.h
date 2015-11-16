@@ -18,7 +18,6 @@
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *subtitle;
 
-@property (nonatomic) NSString *username;
 @property (nonatomic) NSString *name;
 
 - (id)initWithLocation:(Location *) location;

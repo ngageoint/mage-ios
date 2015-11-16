@@ -22,6 +22,7 @@
 #import "Observations.h"
 #import "MagicalRecord+delete.h"
 #import "SignUpTableViewController.h"
+#import "OAuthViewController.h"
 
 @interface LoginTableViewController ()
 
@@ -36,12 +37,15 @@
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *serverVerificationIndicator;
     @property (strong, nonatomic) MageServer *server;
+    @property (strong, nonatomic) id<Authentication> serverAuthenticationModule;
     @property (nonatomic) BOOL allowLogin;
 @end
 
 @implementation LoginTableViewController
 
 - (void) viewDidLoad {
+    self.serverAuthenticationModule = [Authentication authenticationModuleForType:SERVER];
+    
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.alwaysBounceVertical = NO;
@@ -157,18 +161,27 @@
 														 self.passwordField.text, @"password",
 														 uidString, @"uid",
 														 nil];
-	
-	[self.server.authentication loginWithParameters: parameters];
+    
+    __weak __typeof__(self) weakSelf = self;
+    [self.serverAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+            [weakSelf authenticationWasSuccessful];
+        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
+            [weakSelf registrationWasSuccessful];
+        } else {
+            [weakSelf authenticationHadFailure];
+        }
+    }];
 }
 
 - (BOOL) usernameChanged {
-    NSDictionary *loginParameters = [self.server.authentication loginParameters];
+    NSDictionary *loginParameters = [self.serverAuthenticationModule loginParameters];
     NSString *username = [loginParameters objectForKey:@"username"];
     return [username length] != 0 && ![self.usernameField.text isEqualToString:username];
 }
 
 - (BOOL) serverUrlChanged {
-    NSDictionary *loginParameters = [self.server.authentication loginParameters];
+    NSDictionary *loginParameters = [self.serverAuthenticationModule loginParameters];
     NSString *serverUrl = [loginParameters objectForKey:@"serverUrl"];
     return [serverUrl length] != 0 && ![self.serverUrlField.text isEqualToString:serverUrl];
 }
@@ -205,7 +218,7 @@
 	}
 }
 
-- (IBAction)loginButtonPress:(id)sender {
+- (IBAction)localLoginButtonPress:(id)sender {
     if (![self changeTextViewFocus: sender]) {
         [sender resignFirstResponder];
         if ([self.usernameField isFirstResponder]) {
@@ -216,14 +229,13 @@
         
         [self verifyLogin];
     }
-
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
     [self.serverVerificationIndicator startAnimating];
     [self.lockButton setHidden:YES];
     __weak __typeof__(self) weakSelf = self;
-    [MageServer serverWithURL:url authenticationDelegate:self success:^(MageServer *mageServer) {
+    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         weakSelf.server = mageServer;
         
         [weakSelf.serverUrlField setEnabled:NO];
@@ -279,6 +291,10 @@
     if ([[segue identifier] isEqualToString:@"SignUpSegue"]) {
         SignUpTableViewController *signUpViewController = [segue destinationViewController];
         [signUpViewController setServer:self.server];
+    } else if([[segue identifier] isEqualToString:@"OAuthSegue"]) {
+        OAuthViewController *viewController = [segue destinationViewController];
+        NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"auth/google/signin"];
+        [viewController setUrl:url];
     }
 }
 

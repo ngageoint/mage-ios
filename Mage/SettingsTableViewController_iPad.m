@@ -43,7 +43,7 @@
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
 
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    self.user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
+    self.user.text = user.name;
     
     [self setLocationServicesLabel];
     
