@@ -223,11 +223,6 @@ static User *currentUser = nil;
                     user.avatarUrl = oldAvatar;
                 }
             }
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSArray *recentEvents = [myself objectForKey:@"recentEventIds"];
-            if (recentEvents != nil && recentEvents.count != 0) {
-                [Server setCurrentEventId:recentEvents[0]];
-            }
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {
                 if (failure) {

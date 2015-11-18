@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "Authentication.h"
 
-@interface GoogleAuthentication : NSObject<Authentication>
+typedef NS_ENUM(NSInteger, OAuthRequestType) {
+    SIGNIN,
+    SIGNUP
+};
 
+@interface OAuthAuthentication : NSObject<Authentication>
 @end

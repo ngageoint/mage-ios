@@ -8,7 +8,7 @@
 
 @implementation MagicalRecord (delete)
 
-+(void) deleteCoreDataStack {
++(void) deleteCoreDataStack {    
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     [context lock];

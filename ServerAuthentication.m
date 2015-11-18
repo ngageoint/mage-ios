@@ -20,7 +20,7 @@
 }
 
 - (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     BOOL registered = [defaults boolForKey:@"deviceRegistered"];
     NSLog(@"registered? %d", registered);
@@ -40,7 +40,7 @@
 }
 
 - (void) performLogin: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     HttpManager *http = [HttpManager singleton];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
@@ -74,9 +74,7 @@
             [defaults setBool:NO forKey:@"deviceRegistered"];
             [self registerDevice:parameters complete:complete];
         }
-        
     }];
-
 }
 
 - (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {

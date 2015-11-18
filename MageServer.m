@@ -8,7 +8,7 @@
 #import "HttpManager.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
-#import "GoogleAuthentication.h"
+#import "OAuthAuthentication.h"
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
@@ -74,8 +74,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
         for (NSString *authenticationType in authenticationStrategies) {
             if ([authenticationType isEqualToString:@"google"]) {
-                
-                [authenticationModules setObject:[[GoogleAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                [authenticationModules setObject:[[OAuthAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:GOOGLE]];
             } else if ([authenticationType isEqualToString:@"local"]) {
                 [authenticationModules setObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:SERVER]];
             }

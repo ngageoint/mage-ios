@@ -6,14 +6,15 @@
 //  Copyright © 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "GoogleAuthentication.h"
+#import "OAuthAuthentication.h"
 #import "User+helper.h"
 #import "HttpManager.h"
 #import "UserUtility.h"
 #import "NSDate+iso8601.h"
 #import "MageServer.h"
+#import "MagicalRecord+MAGE.h"
 
-@implementation GoogleAuthentication
+@implementation OAuthAuthentication
 
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
@@ -24,12 +25,34 @@
     return YES;
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
-    
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {    
+    OAuthRequestType requestType = [[parameters valueForKey:@"requestType"] intValue];
+    if (requestType == SIGNUP) {
+        [self signupWithParameters:[parameters valueForKey:@"result"] complete:complete];
+    } else {
+        [self signinWithParameters:[parameters valueForKey:@"result"] complete:complete];
+    }
+}
+
+- (void) signupWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+    NSDictionary *user = [parameters objectForKey:@"user"];
+    if (user != nil) {
+        complete(AUTHENTICATION_SUCCESS);
+    } else {
+        complete(AUTHENTICATION_ERROR);
+    }
+}
+
+- (void) signinWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSString *token = [parameters valueForKey:@"token"];
     if (token != nil) {
         NSDictionary *userJson = [parameters objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
+        
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        if (currentUser != nil && ![currentUser.remoteId isEqualToString:userId]) {
+            [MagicalRecord deleteAndSetupMageCoreDataStack];
+        }
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];

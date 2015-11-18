@@ -7,6 +7,6 @@
 #import <Foundation/Foundation.h>
 #import "Authentication.h"
 
-@interface ServerAuthentication : NSObject <Authentication>
+@interface ServerAuthentication : NSObject<Authentication>
 
 @end
