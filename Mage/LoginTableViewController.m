@@ -20,13 +20,13 @@
 #import "DeviceUUID.h"
 #import "MageServer.h"
 #import "Observations.h"
-#import "MagicalRecord+delete.h"
+#import "MagicalRecord+MAGE.h"
 #import "SignUpTableViewController.h"
 #import "OAuthViewController.h"
+#import "OAuthAuthentication.h"
 
 @interface LoginTableViewController ()
 
-    @property (weak, nonatomic) IBOutlet UITextField *serverUrlField;
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
     @property (weak, nonatomic) IBOutlet UITextField *usernameField;
     @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -44,8 +44,6 @@
 - (void) viewDidLoad {
     self.serverAuthenticationModule = [Authentication authenticationModuleForType:SERVER];
     
-    self.tableView.estimatedRowHeight = 68.0;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.alwaysBounceVertical = NO;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -122,8 +120,6 @@
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setEnabled:YES];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
-    [self.serverUrlField setEnabled:YES];
-    [self.serverUrlField setBackgroundColor:[UIColor whiteColor]];
     [self.showPassword setEnabled:YES];
 }
 
@@ -134,16 +130,14 @@
     [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
     [self.passwordField setEnabled:NO];
     [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.serverUrlField setEnabled:NO];
-    [self.serverUrlField setBackgroundColor:[UIColor lightGrayColor]];
     [self.showPassword setEnabled:NO];
 }
 
 - (void) verifyLogin {
     if (!self.allowLogin) return;
-    if (self.server.reachabilityManager.reachable && ([self usernameChanged] || [self serverUrlChanged])) {
-        [MagicalRecord deleteCoreDataStack];
-        [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
+    
+    if (self.server.reachabilityManager.reachable && ([self userChanged])) {
+        [MagicalRecord deleteAndSetupMageCoreDataStack];
     }
     
 	// setup authentication
@@ -169,16 +163,9 @@
     }];
 }
 
-- (BOOL) usernameChanged {
-    NSDictionary *loginParameters = [self.serverAuthenticationModule loginParameters];
-    NSString *username = [loginParameters objectForKey:@"username"];
-    return [username length] != 0 && ![self.usernameField.text isEqualToString:username];
-}
-
-- (BOOL) serverUrlChanged {
-    NSDictionary *loginParameters = [self.serverAuthenticationModule loginParameters];
-    NSString *serverUrl = [loginParameters objectForKey:@"serverUrl"];
-    return [serverUrl length] != 0 && ![self.serverUrlField.text isEqualToString:serverUrl];
+- (BOOL) userChanged {
+    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    return (currentUser != nil && ![currentUser.username isEqualToString:self.usernameField.text]);
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -264,10 +251,12 @@
     if ([[segue identifier] isEqualToString:@"SignUpSegue"]) {
         SignUpTableViewController *signUpViewController = [segue destinationViewController];
         [signUpViewController setServer:self.server];
-    } else if([[segue identifier] isEqualToString:@"OAuthSegue"]) {
+    } else if ([[segue identifier] isEqualToString:@"OAuthSegue"]) {
         OAuthViewController *viewController = [segue destinationViewController];
         NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"auth/google/signin"];
         [viewController setUrl:url];
+        [viewController setAuthenticationType:GOOGLE];
+        [viewController setRequestType:SIGNIN];
     }
 }
 

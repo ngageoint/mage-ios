@@ -8,6 +8,7 @@
 #import "LocationService.h"
 #import "User+helper.h"
 #import "MageServer.h"
+#import "EventChooserController.h"
 #import <Event+helper.h>
 
 @interface SettingsTableViewController_iPad ()
@@ -106,10 +107,13 @@
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
    }
-//   else if (indexPath.section == 2) {
-//       NSLog((@"Clicked logout"));
-//       
-//   }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     if ([segue.identifier isEqualToString:@"unwindToEventChooserSegue"]) {
+        EventChooserController *viewController = [segue destinationViewController];
+        [viewController setForcePick:YES];
+    }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {

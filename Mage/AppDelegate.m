@@ -21,6 +21,8 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <HttpManager.h>
 
+#import "MagicalRecord+MAGE.h"
+
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
 @end
@@ -65,7 +67,7 @@
     _imageCache.delegate = self;
     _imageCache.formats = imageFormats;
     
-    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
+    [MagicalRecord setupMageCoreDataStack];
 	 
 	return YES;
 }

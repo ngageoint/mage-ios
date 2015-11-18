@@ -8,6 +8,8 @@
 #import "UINextField.h"
 #import "HttpManager.h"
 #import "MageServer.h"
+#import "OAuthViewController.h"
+#import "OAuthAuthentication.h"
 
 @interface SignUpTableViewController ()
     @property (weak, nonatomic) IBOutlet UITextField *displayName;
@@ -18,6 +20,10 @@
 @end
 
 @implementation SignUpTableViewController
+
+- (void) viewDidLoad {
+    self.tableView.alwaysBounceVertical = NO;
+}
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
     
@@ -105,6 +111,16 @@
 - (void)alertView:(UIAlertView *) alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
         [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([[segue identifier] isEqualToString:@"OAuthSegue"]) {
+        OAuthViewController *viewController = [segue destinationViewController];
+        NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"auth/google/signup"];
+        [viewController setUrl:url];
+        [viewController setAuthenticationType:GOOGLE];
+        [viewController setRequestType:SIGNUP];
     }
 }
 

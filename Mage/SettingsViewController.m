@@ -8,6 +8,7 @@
 #import "User+helper.h"
 #import "LocationService.h"
 #import "MageServer.h"
+#import "EventChooserController.h"
 #import <Event+helper.h>
 
 @interface SettingsViewController ()
@@ -104,6 +105,9 @@
         vc.labels = [valueDictionary valueForKey:@"labels"];
         vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
+    } else if ([segue.identifier isEqualToString:@"unwindToEventChooserSegue"]) {
+        EventChooserController *viewController = [segue destinationViewController];
+        [viewController setForcePick:YES];
     }
 }
 

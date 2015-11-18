@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
+#import "OAuthAuthentication.h"
 
 @interface OAuthViewController : UIViewController
 
 @property (weak, nonatomic) NSString *url;
 @property (weak, nonatomic) MageServer *server;
-
+@property (assign, nonatomic) AuthenticationType authenticationType;
+@property (assign, nonatomic) OAuthRequestType requestType;
 @end
