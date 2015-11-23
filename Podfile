@@ -9,6 +9,3 @@ pod 'HexColors', '~> 2.2.1'
 #pod 'mage-ios-sdk', :git => 'git@github.com:ngageoint/mage-ios-sdk', :tag => '0.0.2'
 pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
 pod 'tuneup_js'
-
-# todo remove and put in mage-sdk podspec once published
-pod "MagicalRecord", :git => 'https://github.com/magicalpanda/MagicalRecord.git', :tag => 'v2.3.0-beta.5'
