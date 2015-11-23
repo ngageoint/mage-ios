@@ -30,6 +30,7 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Roboto-Medium.ttf</string>
 		<string>fontawesome-webfont.ttf</string>
 		<string>SANSB__.TTF</string>
 	</array>
@@ -68,10 +69,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

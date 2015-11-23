@@ -21,7 +21,6 @@
     }
     
     self.name.text = user.name;
-    self.username.text = user.username;
     self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
     
     return self;

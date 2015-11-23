@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
+		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
+		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
+		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
@@ -24,9 +27,12 @@
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */; };
+		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
+		2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */; };
+		2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF74A4C1BEBFAD900416090 /* WebKit.framework */; };
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
@@ -37,7 +43,7 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4C790F7619704DE300886E58 /* MageNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C790F7519704DE300886E58 /* MageNavigationController.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
-		4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */; };
+		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
 		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
@@ -99,7 +105,7 @@
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
-		F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */; };
+		F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
@@ -136,6 +142,12 @@
 		2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ZipFile+OfflineMap.m"; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
+		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
+		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
+		2F320B6B1BEABF0200C7F66C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		2F320B6C1BEABF0200C7F66C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
 		2F32FAE21B474D47009603D3 /* ObservationContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationContainerViewController.h; sourceTree = "<group>"; };
 		2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationContainerViewController.m; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
@@ -167,12 +179,16 @@
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FD307681B47538900ACFE68 /* PeopleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleContainerViewController.h; sourceTree = "<group>"; };
 		2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleContainerViewController.m; sourceTree = "<group>"; };
+		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
 		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineMapTableViewController.m; sourceTree = "<group>"; };
+		2FF74A491BEBF88B00416090 /* OAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthViewController.h; sourceTree = "<group>"; };
+		2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthViewController.m; sourceTree = "<group>"; };
+		2FF74A4C1BEBFAD900416090 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController_iPad.h; sourceTree = "<group>"; };
 		2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController_iPad.m; sourceTree = "<group>"; };
 		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
@@ -192,8 +208,8 @@
 		4C790F7519704DE300886E58 /* MageNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageNavigationController.m; sourceTree = "<group>"; };
 		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
-		4CFA2F691993DB4D004155B3 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
-		4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpTableViewController.h; sourceTree = "<group>"; };
+		4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpTableViewController.m; sourceTree = "<group>"; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
@@ -314,8 +330,8 @@
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A94DAC18B5196600CB9EE0 /* libPods-JVFloatLabeledTextField.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-JVFloatLabeledTextField.a"; path = "Pods/build/Debug-iphoneos/libPods-JVFloatLabeledTextField.a"; sourceTree = "<group>"; };
-		F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		F7A94DAE18B54B2000CB9EE0 /* LoginTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTableViewController.h; sourceTree = "<group>"; };
+		F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTableViewController.m; sourceTree = "<group>"; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerViewController.h; sourceTree = "<group>"; };
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
@@ -368,6 +384,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */,
 				F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */,
 				F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
@@ -440,6 +457,33 @@
 				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 			);
 			name = iPhone;
+			sourceTree = "<group>";
+		};
+		2FD853701BDAAB2300602CEA /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
+				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
+				F7A94DAE18B54B2000CB9EE0 /* LoginTableViewController.h */,
+				F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */,
+				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
+				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
+				4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */,
+				4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */,
+				2FF74A491BEBF88B00416090 /* OAuthViewController.h */,
+				2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */,
+				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
+				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
+			);
+			name = Authentication;
+			sourceTree = "<group>";
+		};
+		2FD853771BE1564F00602CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		2FE24CDB19C79B850019688B /* iPad */ = {
@@ -723,6 +767,7 @@
 			children = (
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
+				2FD853771BE1564F00602CEA /* Resources */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
 				A4CA82D2E2C618015C18DA14 /* Pods */,
@@ -740,6 +785,7 @@
 		F7A94D6818AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FF74A4C1BEBFAD900416090 /* WebKit.framework */,
 				F76FAE851A5C797400BD8443 /* CoreAudio.framework */,
 				F70EAF3C199D052D00909C8A /* MediaPlayer.framework */,
 				4C390F49197DB7B000AB3CCB /* MessageUI.framework */,
@@ -759,6 +805,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				2FD853701BDAAB2300602CEA /* Authentication */,
 				2F4551831BA33A7700EE3DA6 /* Date */,
 				F76949131AA6434A00CB680B /* Event */,
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
@@ -779,8 +826,6 @@
 				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
-				F7A94DAE18B54B2000CB9EE0 /* LoginViewController.h */,
-				F7A94DAF18B54B2000CB9EE0 /* LoginViewController.m */,
 				F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */,
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */,
 				4C790F7419704DE300886E58 /* MageNavigationController.h */,
@@ -789,8 +834,6 @@
 				F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */,
 				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
 				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
-				4CFA2F691993DB4D004155B3 /* SignUpViewController.h */,
-				4CFA2F6A1993DB4D004155B3 /* SignUpViewController.m */,
 				2F14288F199AB9A400C64A98 /* UINextField.h */,
 				2F142890199AB9A400C64A98 /* UINextField.m */,
 				F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */,
@@ -857,7 +900,7 @@
 				F7A94D6318AD9CB000CB9EE0 /* Frameworks */,
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
 				D463D976382545778189AEE0 /* Copy Pods Resources */,
-				BA01C46480BEA520A434D842 /* Embed Pods Frameworks */,
+				C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -905,6 +948,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
@@ -926,7 +970,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BA01C46480BEA520A434D842 /* Embed Pods Frameworks */ = {
+		C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -984,15 +1028,17 @@
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
+				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
+				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F7E2970C1A8C0B00000F62C6 /* ObservationViewController_iPad.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
-				4CFA2F6B1993DB4D004155B3 /* SignUpViewController.m in Sources */,
+				4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */,
 				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
 				2F5F2EA519E31DEE005BA157 /* SettingsTableViewController_iPad.m in Sources */,
 				2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */,
@@ -1020,6 +1066,7 @@
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
+				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
@@ -1032,6 +1079,7 @@
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
+				2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
@@ -1069,7 +1117,7 @@
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
-				F7A94DB018B54B2000CB9EE0 /* LoginViewController.m in Sources */,
+				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				F7467B07198144C6009E6D65 /* ObservationTextAreaTableViewCell.m in Sources */,
 				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
@@ -1201,10 +1249,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1222,10 +1270,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

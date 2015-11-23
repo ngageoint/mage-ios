@@ -32,10 +32,10 @@ BOOL unwind = NO;
 }
 
 - (IBAction)actionButtonTapped:(id)sender {
-    if ([Server currentEventId]) {
-        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
-    } else {
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         [self performSegueWithIdentifier:@"unwindToInitialSegue" sender:sender];
+    } else {
+        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
     }
 }
 
@@ -55,7 +55,10 @@ BOOL unwind = NO;
         self.tableView.backgroundView = messageLabel;
         
         self.actionButton.titleLabel.text = @"Return to Login";
-    } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&
+        
+        [self.tableView reloadData];
+    } else if (!self.forcePick &&
+               self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&
                self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 &&
                [Event getCurrentEvent].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
         // they only have one event and have already picked it so move on to the map

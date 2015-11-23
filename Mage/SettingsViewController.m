@@ -8,6 +8,7 @@
 #import "User+helper.h"
 #import "LocationService.h"
 #import "MageServer.h"
+#import "EventChooserController.h"
 #import <Event+helper.h>
 
 @interface SettingsViewController ()
@@ -38,7 +39,7 @@
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    _user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
+    _user.text = user.name;
     
     [self setLocationServicesLabel];
     
@@ -104,6 +105,9 @@
         vc.labels = [valueDictionary valueForKey:@"labels"];
         vc.values = [valueDictionary valueForKey:@"values"];
         vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
+    } else if ([segue.identifier isEqualToString:@"unwindToEventChooserSegue"]) {
+        EventChooserController *viewController = [segue destinationViewController];
+        [viewController setForcePick:YES];
     }
 }
 

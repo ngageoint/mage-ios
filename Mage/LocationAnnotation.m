@@ -20,7 +20,7 @@
 		_timestamp = location.timestamp;
 		
 		User *user = location.user;
-		_title = user.name != nil ? user.name : user.username;
+		_title = user.name;
 		_subtitle = location.timestamp.timeAgoSinceNow;
     }
 		

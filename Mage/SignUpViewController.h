@@ -1,19 +1,14 @@
 //
 //  SignUpViewController.h
-//  Mage
+//  MAGE
 //
+//  Created by William Newman on 11/5/15.
+//  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "MageServer.h"
 
-@interface SignUpViewController : UIViewController<UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UITextField *firstName;
-@property (weak, nonatomic) IBOutlet UITextField *lastName;
-@property (weak, nonatomic) IBOutlet UITextField *username;
-@property (weak, nonatomic) IBOutlet UITextField *password;
-@property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet UITextField *email;
-@property (weak, nonatomic) IBOutlet UITextField *baseServerUrl;
-
+@interface SignUpViewController : UIViewController
+@property (strong, nonatomic) MageServer *server;
 @end

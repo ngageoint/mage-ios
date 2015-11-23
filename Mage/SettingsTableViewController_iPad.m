@@ -8,6 +8,7 @@
 #import "LocationService.h"
 #import "User+helper.h"
 #import "MageServer.h"
+#import "EventChooserController.h"
 #import <Event+helper.h>
 
 @interface SettingsTableViewController_iPad ()
@@ -43,7 +44,7 @@
     self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
 
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    self.user.text = [NSString stringWithFormat:@"%@ (%@)", user.name, user.username];
+    self.user.text = user.name;
     
     [self setLocationServicesLabel];
     
@@ -106,10 +107,13 @@
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
    }
-//   else if (indexPath.section == 2) {
-//       NSLog((@"Clicked logout"));
-//       
-//   }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     if ([segue.identifier isEqualToString:@"unwindToEventChooserSegue"]) {
+        EventChooserController *viewController = [segue destinationViewController];
+        [viewController setForcePick:YES];
+    }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
