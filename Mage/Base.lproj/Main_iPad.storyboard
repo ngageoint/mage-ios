@@ -4353,7 +4353,7 @@
                                     <constraint firstAttribute="height" constant="30" id="dnf-sM-JTY"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fve-zT-Nc3">
                                 <rect key="frame" x="20" y="179" width="362" height="40"/>
