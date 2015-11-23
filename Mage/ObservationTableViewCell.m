@@ -27,9 +27,13 @@
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
     self.primaryField.text = type;
-    if (variantField != nil) {
-        self.variantField.text = [observation.properties objectForKey:variantField];
+    NSString *variantText = [observation.properties objectForKey:variantField];
+    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
+        self.variantField.text = variantText;
+    } else {
+        self.variantField.text = nil;
     }
+    
     self.icon.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
     
     self.timeField.text = observation.timestamp.shortTimeAgoSinceNow;
