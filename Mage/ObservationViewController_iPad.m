@@ -19,10 +19,13 @@
     } else {
         self.primaryFieldLabel.text = @"Observation";
     }
+    
+    
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
     NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
-    if (variantField != nil && [self.observation.properties objectForKey:variantField] != nil) {
+    NSString *variantText = [self.observation.properties objectForKey:variantField];
+    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && variantText.length > 0) {
         self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
     } else {
         [self.secondaryFieldLabel removeFromSuperview];
