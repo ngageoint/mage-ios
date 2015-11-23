@@ -6,5 +6,5 @@
 
 #ifdef __OBJC__
 	#import <Foundation/Foundation.h>
-    #import <MagicalRecord/MagicalRecord.h>
+    #import "MagicalRecord/MagicalRecord.h"
 #endif
