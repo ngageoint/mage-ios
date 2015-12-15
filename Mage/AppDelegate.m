@@ -22,6 +22,7 @@
 #import <HttpManager.h>
 
 #import "MagicalRecord+MAGE.h"
+#import "GPKGGeoPackageFactory.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
@@ -203,6 +204,34 @@
             completionBlock(sourceImage);
         });
     });
+}
+
+- (BOOL) application:(UIApplication *)application openURL:(NSURL *) url sourceApplication:(NSString *) sourceApplication annotation:(id) annotation {
+    
+    if (!url) {
+        return NO;
+    }
+    
+    if (url.isFileURL) {
+        NSString * fileUrl = [url path];
+        
+        BOOL imported = false;
+        GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+        @try {
+            imported = [manager importGeoPackageFromPath:fileUrl andOverride:true andMove:true];
+        }
+        @finally {
+            [manager close];
+        }
+        
+        if(imported){
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"TODO" object:self]; // TODO
+        }else{
+            NSLog(@"Error importing file %@", fileUrl);
+        }
+    }
+    
+    return YES;
 }
 
 @end
