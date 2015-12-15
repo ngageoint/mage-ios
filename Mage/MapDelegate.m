@@ -306,7 +306,27 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         
         if (![[self.offlineMaps allKeys] containsObject:offlineMap]) {
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            NSString *template = [NSString stringWithFormat:@"file://%@/MapCache/%@/{z}/{x}/{y}.png", documentsDirectory, offlineMap];
+            
+            // Set the cache directory path
+            NSString *cacheDirectory = [NSString stringWithFormat:@"%@/MapCache/%@/", documentsDirectory, offlineMap];
+            
+            // Find the image extension type
+            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:cacheDirectory];
+            NSString * patternExtension = nil;
+            for (NSString *file in enumerator) {
+                NSString * extension = [file pathExtension];
+                if([extension caseInsensitiveCompare:@"png"] == NSOrderedSame ||
+                   [extension caseInsensitiveCompare:@"jpeg"] == NSOrderedSame ||
+                   [extension caseInsensitiveCompare:@"jpg"] == NSOrderedSame){
+                    patternExtension = extension;
+                    break;
+                }
+            }
+            
+            NSString *template = [NSString stringWithFormat:@"file://%@{z}/{x}/{y}", cacheDirectory];
+            if(patternExtension != nil){
+                template = [NSString stringWithFormat:@"%@.%@", template, patternExtension];
+            }
             MKTileOverlay *overlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
             [self.mapView addOverlay:overlay level:MKOverlayLevelAboveLabels];
             [self.offlineMaps setObject:overlay forKey:offlineMap];
