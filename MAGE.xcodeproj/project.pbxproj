@@ -448,6 +448,7 @@
 				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */,
 			);
 			name = Cache;
+			path = Map/Cache;
 			sourceTree = "<group>";
 		};
 		2F4551831BA33A7700EE3DA6 /* Date */ = {
