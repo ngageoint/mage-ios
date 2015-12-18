@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.m */; settings = {ASSET_TAGS = (); }; };
+		043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1251C22F875000CA07F /* CacheOverlayTypes.m */; settings = {ASSET_TAGS = (); }; };
+		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -136,6 +144,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		043FF11E1C22F643000CA07F /* CacheOverlays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlays.h; sourceTree = "<group>"; };
+		043FF11F1C22F643000CA07F /* CacheOverlays.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlays.m; sourceTree = "<group>"; };
+		043FF1211C22F6E4000CA07F /* CacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlay.h; sourceTree = "<group>"; };
+		043FF1221C22F6E4000CA07F /* CacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlay.m; sourceTree = "<group>"; };
+		043FF1241C22F875000CA07F /* CacheOverlayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayTypes.h; sourceTree = "<group>"; };
+		043FF1251C22F875000CA07F /* CacheOverlayTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayTypes.m; sourceTree = "<group>"; };
+		043FF1271C2303B4000CA07F /* CacheOverlayListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayListener.h; sourceTree = "<group>"; };
+		043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYZDirectoryCacheOverlay.h; sourceTree = "<group>"; };
+		043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYZDirectoryCacheOverlay.m; sourceTree = "<group>"; };
+		043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageCacheOverlay.h; sourceTree = "<group>"; };
+		043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageCacheOverlay.m; sourceTree = "<group>"; };
+		043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTableCacheOverlay.h; sourceTree = "<group>"; };
+		043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTableCacheOverlay.m; sourceTree = "<group>"; };
+		043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageFeatureTableCacheOverlay.h; sourceTree = "<group>"; };
+		043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageFeatureTableCacheOverlay.m; sourceTree = "<group>"; };
+		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
+		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ZipFile+OfflineMap.h"; sourceTree = "<group>"; };
@@ -401,6 +426,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		043FF11D1C22F571000CA07F /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
+				043FF11F1C22F643000CA07F /* CacheOverlays.m */,
+				043FF1211C22F6E4000CA07F /* CacheOverlay.h */,
+				043FF1221C22F6E4000CA07F /* CacheOverlay.m */,
+				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
+				043FF1251C22F875000CA07F /* CacheOverlayTypes.m */,
+				043FF1271C2303B4000CA07F /* CacheOverlayListener.h */,
+				043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */,
+				043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */,
+				043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */,
+				043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */,
+				043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */,
+				043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */,
+				043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */,
+				043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */,
+				04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */,
+				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */,
+			);
+			name = Cache;
+			sourceTree = "<group>";
+		};
 		2F4551831BA33A7700EE3DA6 /* Date */ = {
 			isa = PBXGroup;
 			children = (
@@ -550,6 +599,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				043FF11D1C22F571000CA07F /* Cache */,
 				2F5F2E9819DDE87D005BA157 /* iPhone */,
 				2FFBCA0E19DB43C80033132F /* iPad */,
 				F7531EF819100E7D00CA084C /* MapViewController.h */,
@@ -1050,6 +1100,7 @@
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,
+				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
 				2F5F2EA819E374B4005BA157 /* LocationTimeIntervalDataSource.m in Sources */,
 				F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
@@ -1065,10 +1116,13 @@
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
+				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
+				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
+				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
@@ -1083,11 +1137,13 @@
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
+				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
+				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
@@ -1097,6 +1153,7 @@
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
+				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
@@ -1108,6 +1165,7 @@
 				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
 				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
+				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
@@ -1252,7 +1310,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1273,7 +1331,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = MAGE;
-				PROVISIONING_PROFILE = "10c54811-5ef3-4dd2-8c57-08ac44905561";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
