@@ -58,6 +58,10 @@ NSInteger const kLocationPushLimit = 100;
             [_locationManager requestWhenInUseAuthorization];
         }
         
+        if ([_locationManager respondsToSelector:@selector(allowsBackgroundLocationUpdates)]) {
+            [_locationManager setAllowsBackgroundLocationUpdates:YES];
+        }
+        
         _operationQueue = [[NSOperationQueue alloc] init];
         [_operationQueue setName:@"Location Push Operation Queue"];
         [_operationQueue setMaxConcurrentOperationCount:1];
@@ -92,8 +96,6 @@ NSInteger const kLocationPushLimit = 100;
     [self pushLocations];
 }
 
-//[MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {
     if (!_reportLocation) return;
     
@@ -127,24 +129,33 @@ NSInteger const kLocationPushLimit = 100;
         NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];
         [fetchRequest setFetchLimit:kLocationPushLimit];
         [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:[NSManagedObjectContext MR_context]];
+        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:[NSManagedObjectContext MR_defaultContext]];
         
         if (![locations count]) return;
+        
+        for (GPSLocation *l in locations) {
+            GeoPoint *point = l.geometry;
+            NSLog(@"Got this point from the server %.20f, %.20f", point.location.coordinate.latitude, point.location.coordinate.longitude);
+        }
         
         self.isPushingLocations = YES;
         NSLog(@"Pushing locations...");
         
         // send to server
         __weak LocationService *weakSelf = self;
+        
+        
         NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
-            for (GPSLocation *location in locations) {
-                [location MR_deleteEntityInContext:[NSManagedObjectContext MR_context]];
-            }
-            
-            [weakSelf.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                for (GPSLocation *location in locations) {
+                    [location MR_deleteEntityInContext:localContext];
+                }
+            } completion:^(BOOL contextDidSave, NSError *error) {
                 self.isPushingLocations = NO;
                 
-                if ([locations count] == kLocationPushLimit) [weakSelf pushLocations];
+                if ([locations count] == kLocationPushLimit) {
+                    [weakSelf pushLocations];
+                }
             }];
         } failure:^(NSError* failure) {
             NSLog(@"Failure to push GPS locations to the server");

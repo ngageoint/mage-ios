@@ -44,11 +44,17 @@
 + (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)(NSError *)) failure {
 	NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations", [MageServer baseURL], [Server currentEventId]];
 	NSLog(@"Trying to push locations to server %@", url);
+    
+    NSLog(@"Got these locations to push %@", [locations description]);
+
 	
     HttpManager *http = [HttpManager singleton];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
         GeoPoint *point = location.geometry;
+        
+        NSLog(@"About to push  this point to server %.20f, %.20f", point.location.coordinate.latitude, point.location.coordinate.longitude);
+        
         [parameters addObject:@{
             @"geometry": @{
                 @"type": @"Point",
@@ -57,6 +63,8 @@
             @"properties": [NSDictionary dictionaryWithDictionary:location.properties]
         }];
     }
+    
+    NSLog(@"Parameters %@", [parameters description]);
     
     NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error: nil];
     AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
