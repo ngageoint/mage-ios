@@ -35,15 +35,12 @@
     @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (strong, nonatomic) MageServer *server;
-    @property (strong, nonatomic) id<Authentication> serverAuthenticationModule;
     @property (nonatomic) BOOL allowLogin;
 @end
 
 @implementation LoginTableViewController
 
 - (void) viewDidLoad {
-    self.serverAuthenticationModule = [Authentication authenticationModuleForType:SERVER];
-    
     self.tableView.alwaysBounceVertical = NO;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -151,8 +148,13 @@
 														 uidString, @"uid",
 														 nil];
     
+    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:SERVER]];
+    if (!authenticationModule) {
+        authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+    }
+    
     __weak __typeof__(self) weakSelf = self;
-    [self.serverAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+    [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
@@ -202,6 +204,12 @@
 }
 
 - (void) initMageServerWithURL:(NSURL *) url {
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.center = self.view.center;
+    [self.view addSubview:activityIndicator];
+    [activityIndicator setHidesWhenStopped:YES];
+    [activityIndicator startAnimating];
+    
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         weakSelf.server = mageServer;
@@ -211,6 +219,8 @@
         [weakSelf.usernameField setEnabled:YES];
         [weakSelf.passwordField setEnabled:YES];
         weakSelf.allowLogin = YES;
+        
+        [activityIndicator stopAnimating];
         
         [self setupAuthentication];
     } failure:^(NSError *error) {
