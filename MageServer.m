@@ -99,8 +99,9 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             && (error.code == NSURLErrorCannotConnectToHost
             || error.code == NSURLErrorNetworkConnectionLost
             || error.code == NSURLErrorNotConnectedToInternet)) {
-                id<Authentication> authentication = [server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+                id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
+                    server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
                     success(server);
                 } else {
                     failure(error);
