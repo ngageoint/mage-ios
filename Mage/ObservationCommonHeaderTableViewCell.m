@@ -34,9 +34,6 @@
     }
     
     self.userLabel.text = observation.user.name;
-    
-    self.userLabel.text = observation.user.name;
-    
     self.dateLabel.text = [observation.timestamp formattedDisplayDate];
 }
 

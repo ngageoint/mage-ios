@@ -28,6 +28,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *primaryFieldLabel;
 @property (weak, nonatomic) IBOutlet UILabel *secondaryFieldLabel;
 @property (nonatomic, strong) IBOutlet ObservationDataStore *observationDataStore;
+@property (strong, nonatomic) NSArray *fields;
+@property (strong, nonatomic) NSString *variantField;
 @end
 
 @implementation ObservationViewController_iPad
@@ -57,6 +59,10 @@
     } else {
         [self.secondaryFieldLabel removeFromSuperview];
     }
+    
+    self.variantField = [event.form objectForKey:@"variantField"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, @[@"timestamp", @"type", @"geometry", self.variantField]];
+    self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -121,7 +127,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_observation.properties count];
+    NSArray *fieldNames = [self.fields valueForKey:@"name"];
+    NSDictionary *filtered = [self.observation.properties dictionaryWithValuesForKeys:fieldNames];
+    return [filtered count];
 }
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
@@ -136,10 +144,7 @@
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    
-    for (id field in [form objectForKey:@"fields"]) {
+    for (id field in self.fields) {
         NSString *fieldName = [field objectForKey:@"name"];
         if ([key isEqualToString: fieldName]) {
             NSString *type = [field objectForKey:@"type"];
