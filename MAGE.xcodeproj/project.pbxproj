@@ -907,7 +907,7 @@
 		F7A94D5E18AD9CAF00CB9EE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
@@ -1169,6 +1169,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: William Newman (9RXF9K29HA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: William Newman (9RXF9K29HA)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1239,6 +1240,7 @@
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.nga.giat.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -1260,6 +1262,7 @@
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.nga.giat.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
