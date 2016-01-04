@@ -76,7 +76,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             if ([authenticationType isEqualToString:@"google"]) {
                 [authenticationModules setObject:[[OAuthAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:GOOGLE]];
             } else if ([authenticationType isEqualToString:@"local"]) {
-                [authenticationModules setObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:SERVER]];
+                [authenticationModules setObject:[[ServerAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:SERVER]];
             }
         }
         server.authenticationModules = authenticationModules;
@@ -98,7 +98,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         if ([error.domain isEqualToString:NSURLErrorDomain]
             && (error.code == NSURLErrorCannotConnectToHost
             || error.code == NSURLErrorNetworkConnectionLost
-            || error.code == NSURLErrorNotConnectedToInternet)) {
+            || error.code == NSURLErrorNotConnectedToInternet
+            || error.code == NSURLErrorTimedOut)) {
                 id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
                     server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
