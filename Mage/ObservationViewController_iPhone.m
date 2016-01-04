@@ -22,6 +22,13 @@
 
 @implementation ObservationViewController_iPhone
 
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self.propertyTable setEstimatedRowHeight:44.0f];
+    [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -124,19 +131,19 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section < self.tableLayout.count) {
-        ObservationHeaderTableViewCell *cell = (ObservationHeaderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:self.tableLayout[indexPath.section][indexPath.row]];
-        return cell.bounds.size.height;
-    } else {
-        ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
-        if ([[cell.fieldDefinition objectForKey:@"archived"] intValue] == 1) {
-            return 0.0;
-        }
-        return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
-    }
-    return 0.0;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (indexPath.section < self.tableLayout.count) {
+//        ObservationHeaderTableViewCell *cell = (ObservationHeaderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:self.tableLayout[indexPath.section][indexPath.row]];
+//        return cell.bounds.size.height;
+//    } else {
+//        ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
+//        if ([[cell.fieldDefinition objectForKey:@"archived"] intValue] == 1) {
+//            return 0.0;
+//        }
+//        return [cell getCellHeightForValue:[[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]]];
+//    }
+//    return 0.0;
+//}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
