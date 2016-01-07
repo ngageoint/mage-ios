@@ -27,6 +27,12 @@
     return self;
 }
 
+-(void) removeFromMap: (MKMapView *) mapView{
+    for(CacheOverlay * cacheOverlay in [self getChildren]){
+        [cacheOverlay removeFromMap:mapView];
+    }
+}
+
 -(NSArray<CacheOverlay *> *) getChildren{
     NSArray<CacheOverlay *> * children = [[NSArray alloc] initWithArray:[self.tables allValues]];
     return children;

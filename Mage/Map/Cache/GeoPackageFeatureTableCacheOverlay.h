@@ -8,6 +8,7 @@
 
 #import "GeoPackageTableCacheOverlay.h"
 #import "GPKGFeatureOverlayQuery.h"
+#import "GPKGMapShape.h"
 
 extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 
@@ -43,5 +44,43 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  *  @return geometry type
  */
 -(enum WKBGeometryType) getGeometryType;
+
+/**
+ *  Add a shape
+ *
+ *  @param id    id
+ *  @param shape shape
+ */
+-(void) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape;
+
+/**
+ *  Remove a shape
+ *
+ *  @param id id
+ *
+ *  @return shape
+ */
+-(GPKGMapShape *) removeShapeWithId: (NSNumber *) id;
+
+/**
+ *  Add a shape to the map view
+ *
+ *  @param id      id
+ *  @param shape   shape
+ *  @param mapView map view
+ *
+ *  @return shape
+ */
+-(GPKGMapShape *) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape toMapView: (MKMapView *) mapView;
+
+/**
+ *  Remove a shape from the map view
+ *
+ *  @param id      id
+ *  @param mapView map view
+ *
+ *  @return shape
+ */
+-(GPKGMapShape *) removeShapeFromMapWithId: (NSNumber *) id fromMapView: (MKMapView *) mapView;
 
 @end

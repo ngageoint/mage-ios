@@ -11,6 +11,11 @@
 @interface GeoPackageTableCacheOverlay : CacheOverlay
 
 /**
+ *  Tile overlay
+ */
+@property (strong, nonatomic) MKTileOverlay * tileOverlay;
+
+/**
  *  Initializer
  *
  *  @param name       GeoPackage table name

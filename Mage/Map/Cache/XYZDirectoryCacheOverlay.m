@@ -24,6 +24,13 @@
     return self;
 }
 
+-(void) removeFromMap: (MKMapView *) mapView{
+    if(self.tileOverlay != nil){
+        [mapView removeOverlay:self.tileOverlay];
+        self.tileOverlay = nil;
+    }
+}
+
 -(NSString *) getDirectory{
     return self.directory;
 }

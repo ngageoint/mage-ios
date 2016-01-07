@@ -56,4 +56,39 @@
  */
 -(void) addCacheOverlay:(CacheOverlay *)overlay;
 
+/**
+ *  Notify all listeners that a cache overlay change occurred
+ */
+-(void) notifyListeners;
+
+/**
+ *  Notify all listeners that a cache overlay change occurred except for the provided caller
+ *
+ *  @param caller calling listener
+ */
+-(void) notifyListenersExceptCaller:(NSObject<CacheOverlayListener> *) caller;
+
+/**
+ *  Get the cache overlays
+ *
+ *  @return cache overlays
+ */
+-(NSArray<CacheOverlay *> *) getOverlays;
+
+/**
+ *  Get the count of cache overlays
+ *
+ *  @return cache overlays
+ */
+-(NSUInteger) count;
+
+/**
+ *  Get the Cache Overlay at the index
+ *
+ *  @param index index
+ *
+ *  @return cache overlay at index
+ */
+-(CacheOverlay *) atIndex:(NSUInteger)index;
+
 @end

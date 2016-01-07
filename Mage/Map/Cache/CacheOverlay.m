@@ -59,6 +59,10 @@
     return nil;
 }
 
+-(void) removeFromMap: (MKMapView *) mapView{
+    
+}
+
 +(NSString *) buildChildCacheNameWithName: (NSString *) name andChildName: (NSString *) childName{
     return [NSString stringWithFormat:@"%@-%@", name, childName];
 }

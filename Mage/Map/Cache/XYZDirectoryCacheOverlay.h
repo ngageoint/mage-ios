@@ -14,6 +14,11 @@
 @interface XYZDirectoryCacheOverlay : CacheOverlay
 
 /**
+ *  Tile overlay
+ */
+@property (strong, nonatomic) MKTileOverlay * tileOverlay;
+
+/**
  *  Initializer
  *
  *  @param name      name

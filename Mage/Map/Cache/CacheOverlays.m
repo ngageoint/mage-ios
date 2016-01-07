@@ -12,7 +12,8 @@
 
 @interface CacheOverlays ()
 
-@property (nonatomic, strong) NSMutableArray<CacheOverlay *> * overlays;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> * overlays;
+@property (nonatomic, strong) NSMutableArray<NSString *> * overlayNames;
 @property (nonatomic, strong) NSMutableArray<NSObject<CacheOverlayListener> *> * listeners;
 
 @end
@@ -31,7 +32,8 @@ static CacheOverlays * instance;
 -(instancetype) init{
     self = [super init];
     if(self){
-        self.overlays = [[NSMutableArray alloc] init];
+        self.overlays = [[NSMutableDictionary alloc] init];
+        self.overlayNames = [[NSMutableArray alloc] init];
         self.listeners = [[NSMutableArray alloc] init];
     }
     return self;
@@ -40,7 +42,7 @@ static CacheOverlays * instance;
 -(void) registerListener: (NSObject<CacheOverlayListener> *) listener{
     @synchronized(self) {
         [self.listeners addObject:listener];
-        [listener cacheOverlaysUpdated:self.overlays];
+        [listener cacheOverlaysUpdated:[self.overlays allValues]];
     }
 }
 
@@ -52,29 +54,65 @@ static CacheOverlays * instance;
 
 -(void) setCacheOverlays:(NSArray<CacheOverlay *> *)overlays{
     @synchronized(self) {
-        _overlays = [[NSMutableArray alloc] initWithArray:overlays];
-        [self notifyListeners];
+        _overlays = [[NSMutableDictionary alloc] init];
+        _overlayNames = [[NSMutableArray alloc] init];
+        [self addCacheOverlays:overlays];
     }
 }
 
 -(void) addCacheOverlays:(NSArray<CacheOverlay *> *)overlays{
     @synchronized(self) {
-        [_overlays addObjectsFromArray:overlays];
+        for(CacheOverlay * overlay in overlays){
+            [self addCacheOverlayHelper:overlay];
+        }
         [self notifyListeners];
     }
 }
 
 -(void) addCacheOverlay:(CacheOverlay *)overlay{
     @synchronized(self) {
-        [_overlays addObject:overlay];
+        [self addCacheOverlayHelper:overlay];
         [self notifyListeners];
     }
 }
 
--(void) notifyListeners{
-    for(NSObject<CacheOverlayListener> * listener in self.listeners){
-        [listener cacheOverlaysUpdated:self.overlays];
+-(void) addCacheOverlayHelper:(CacheOverlay *)overlay{
+    NSString * cacheName = [overlay getCacheName];
+    CacheOverlay * existingOverlay = [_overlays objectForKey:cacheName];
+    if(existingOverlay == nil){
+        [_overlayNames addObject:cacheName];
+    }else{
+        [overlay setEnabled:existingOverlay.enabled];
     }
+    [_overlays setObject:overlay forKey:cacheName];
+}
+
+-(void) notifyListeners{
+    @synchronized(self) {
+        [self notifyListenersExceptCaller:nil];
+    }
+}
+
+-(void) notifyListenersExceptCaller:(NSObject<CacheOverlayListener> *) caller{
+    @synchronized(self) {
+        for(NSObject<CacheOverlayListener> * listener in self.listeners){
+            if(caller == nil || listener != caller){
+                [listener cacheOverlaysUpdated:[self.overlays allValues]];
+            }
+        }
+    }
+}
+
+-(NSArray<CacheOverlay *> *) getOverlays{
+    return [self.overlays allValues];
+}
+
+-(NSUInteger) count{
+    return [self.overlayNames count];
+}
+
+-(CacheOverlay *) atIndex:(NSUInteger)index{
+    return [self.overlays objectForKey:[self.overlayNames objectAtIndex:index]];
 }
 
 @end

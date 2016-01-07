@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CacheOverlayTypes.h"
+#import <MapKit/MapKit.h>
 
 /**
  *  Abstract cache overlay
@@ -83,6 +84,13 @@
  *  @return cache overlay info
  */
 -(NSString *) getInfo;
+
+/**
+ *  Remove the cache overlay from the map
+ *
+ *  @param mapView map view
+ */
+-(void) removeFromMap: (MKMapView *) mapView;
 
 /**
  *  Build the cache name of a child
