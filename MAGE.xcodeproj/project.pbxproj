@@ -15,6 +15,7 @@
 		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
 		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
+		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; settings = {ASSET_TAGS = (); }; };
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -161,6 +162,8 @@
 		043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageFeatureTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
+		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
+		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ZipFile+OfflineMap.h"; sourceTree = "<group>"; };
@@ -889,6 +892,8 @@
 				2F142890199AB9A400C64A98 /* UINextField.m */,
 				F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */,
 				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */,
+				04E0CB0D1C40161C00E34F9C /* MageConstants.h */,
+				04E0CB0E1C40161C00E34F9C /* MageConstants.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -1074,6 +1079,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */,
+				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F76A15D01A9651C800F2BDF1 /* ObservationMapDirectionsTableViewCell.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,

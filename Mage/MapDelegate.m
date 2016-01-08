@@ -392,7 +392,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     // Check each GeoPackage table
     for(CacheOverlay * tableCacheOverlay in [geoPackageCacheOverlay getChildren]){
         // Check if the table is enabled
-        if(true /*TODO*/ || tableCacheOverlay.enabled){
+        if(tableCacheOverlay.enabled){
             
             // Get and open if needed the GeoPackage
             GPKGGeoPackage * geoPackage = [self.geoPackageCache getOrOpen:[geoPackageCacheOverlay getName]];
@@ -441,14 +441,16 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         // Add the features to the map
         GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:[featureTableCacheOverlay getName]];
         
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
         // If indexed, add as a tile overlay
         if([featureTableCacheOverlay getIndexed]){
             GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithFeatureDao:featureDao];
             int maxFeaturesPerTile = 0;
             if([featureDao getGeometryType] == WKB_POINT){
-                maxFeaturesPerTile = 1000; // TODO configure
+                maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
             }else{
-                maxFeaturesPerTile = 500; // TODO configure
+                maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
             }
             [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInt:maxFeaturesPerTile]];
             GPKGNumberFeaturesTile * numberFeaturesTile = [[GPKGNumberFeaturesTile alloc] init];
@@ -472,9 +474,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         else {
             int maxFeaturesPerTable = 0;
             if([featureDao getGeometryType] == WKB_POINT){
-                maxFeaturesPerTable = 1000; // TODO configure
+                maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
             }else{
-                maxFeaturesPerTable = 500; // TODO configure
+                maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
             }
             GPKGProjection * projection = featureDao.projection;
             GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];

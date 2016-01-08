@@ -6,10 +6,11 @@
 
 #import "OfflineMapTableViewController.h"
 #import "CacheOverlays.h"
+#import "MageConstants.h"
 
 @interface OfflineMapTableViewController ()
 
-@property (nonatomic, strong) NSArray *processingOfflineMaps;
+@property (nonatomic, strong) NSArray *processingCaches;
 @property (nonatomic, strong) CacheOverlays *cacheOverlays;
 
 @end
@@ -22,7 +23,7 @@ bool originalNavBarHidden;
     [super viewWillAppear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.processingOfflineMaps = [defaults objectForKey:@"processingOfflineMaps"];
+    self.processingCaches = [defaults objectForKey:MAGE_PROCESSING_CACHES];
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
 }
@@ -33,7 +34,7 @@ bool originalNavBarHidden;
 
 -(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.processingOfflineMaps = [defaults objectForKey:@"processingOfflineMaps"];
+    self.processingCaches = [defaults objectForKey:MAGE_PROCESSING_CACHES];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
@@ -42,19 +43,19 @@ bool originalNavBarHidden;
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
-    return self.processingOfflineMaps.count > 0 ? 2 : 1;
+    return self.processingCaches.count > 0 ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.processingOfflineMaps.count > 0 && section == 0) {
-        return self.processingOfflineMaps.count;
+    if (self.processingCaches.count > 0 && section == 0) {
+        return self.processingCaches.count;
     } else {
         return [self.cacheOverlays count];
     }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (self.processingOfflineMaps.count > 0 && section == 0) {
+    if (self.processingCaches.count > 0 && section == 0) {
         return @"Extracting Archives";
     } else {
         return @"Offline Maps";
@@ -62,10 +63,10 @@ bool originalNavBarHidden;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.processingOfflineMaps.count > 0 && [indexPath section] == 0) {
+    if (self.processingCaches.count > 0 && [indexPath section] == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"processingOfflineMapCell" forIndexPath:indexPath];
         UILabel *textLabel = (UILabel *)[cell viewWithTag:100];
-        textLabel.text = [self.processingOfflineMaps objectAtIndex:[indexPath row]];
+        textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
         
         return cell;
     } else {
@@ -88,28 +89,50 @@ bool originalNavBarHidden;
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableSet * selectedOfflineMaps = [NSMutableSet setWithArray:[defaults objectForKey:@"selectedOfflineMaps"]];
     
     CacheOverlay * cacheOverlay = [self.cacheOverlays atIndex:[indexPath row]];
     NSString * cacheName = [cacheOverlay getCacheName];
     
     UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
     
+    BOOL checked = false;
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cacheOverlay.enabled = true;
-        [selectedOfflineMaps addObject:cacheName];
+        checked = true;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cacheOverlay.enabled = false;
-        [selectedOfflineMaps removeObject:cacheName];
     }
     
-    [defaults setObject:[selectedOfflineMaps allObjects] forKey:@"selectedOfflineMaps"];
+    [cacheOverlay setEnabled:checked];
+    
+    for(CacheOverlay * childCache in [cacheOverlay getChildren]){
+        [childCache setEnabled:checked];
+    }
+    
+    [defaults setObject:[self getSelectedOverlays] forKey:MAGE_SELECTED_CACHES];
     [defaults synchronize];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.cacheOverlays notifyListenersExceptCaller:self];
     });
+}
+
+-(NSArray *) getSelectedOverlays{
+    NSMutableArray * overlays = [[NSMutableArray alloc] init];
+    for(CacheOverlay * cacheOverlay in [self.cacheOverlays getOverlays]){
+        
+        BOOL childAdded = false;
+        for(CacheOverlay * childCache in [cacheOverlay getChildren]){
+            if(childCache.enabled){
+                [overlays addObject:[childCache getCacheName]];
+                childAdded = true;
+            }
+        }
+        
+        if(!childAdded && cacheOverlay.enabled){
+            [overlays addObject:[cacheOverlay getCacheName]];
+        }
+    }
+    return overlays;
 }
 
 @end

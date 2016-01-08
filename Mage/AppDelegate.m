@@ -31,6 +31,7 @@
 #import "GeoPackageTileTableCacheOverlay.h"
 #import "GPKGFeatureIndexManager.h"
 #import "GeoPackageFeatureTableCacheOverlay.h"
+#import "MageConstants.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
@@ -117,15 +118,13 @@
     NSArray *archives = [directoryContent filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension == %@ AND SELF != %@", @"zip", @"Form.zip"]];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:archives forKey:@"processingOfflineMaps"];
+    [defaults setObject:archives forKey:MAGE_PROCESSING_CACHES];
     [defaults synchronize];
     
-    NSString * baseCacheDirectory = [documentsDirectory stringByAppendingPathComponent:@"MapCache"];
-    
-    NSMutableSet * selectedOfflineMaps = [NSMutableSet setWithArray:[defaults objectForKey:@"selectedOfflineMaps"]];
+    NSString * baseCacheDirectory = [documentsDirectory stringByAppendingPathComponent:MAGE_CACHE_DIRECTORY];
     
     // Add the existing cache directories
-    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
+    NSMutableArray<CacheOverlay *> * cacheOverlays = [[NSMutableArray alloc] init];
     NSArray* caches = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseCacheDirectory error:nil];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     for(NSString * cache in caches){
@@ -134,15 +133,36 @@
         [fileManager fileExistsAtPath:cacheDirectory isDirectory:&isDirectory];
         if(isDirectory){
             CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:cacheDirectory];
-            if([selectedOfflineMaps containsObject:cache]){
-                [cacheOverlay setEnabled:true];
-            }
-            [cacheOverlays addCacheOverlay:cacheOverlay];
+            [cacheOverlays addObject:cacheOverlay];
         }
     }
     
     // Add the GeoPackage cache overlays
     [self addGeoPackageCacheOverlays:cacheOverlays];
+    
+    // Determine which caches are enabled
+    NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
+    if([selectedCaches count] > 0){
+        
+        for (CacheOverlay * cacheOverlay in cacheOverlays) {
+            
+            // Check and enable the cache
+            NSString *  cacheName = [cacheOverlay getCacheName];
+            if ([selectedCaches containsObject:cacheName]) {
+                [cacheOverlay setEnabled:true];
+            }
+            
+            // Check the child caches
+            for (CacheOverlay * childCache in [cacheOverlay getChildren]) {
+                if (cacheOverlay.enabled || [selectedCaches containsObject:[childCache getCacheName]]) {
+                    [childCache setEnabled:true];
+                    [cacheOverlay setEnabled:true];
+                }
+            }
+        }
+    }
+    
+    [[CacheOverlays getInstance] addCacheOverlays:cacheOverlays];
     
     for (id archive in archives) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
@@ -151,14 +171,14 @@
     }
 }
 
--(void) addGeoPackageCacheOverlays:(CacheOverlays *) cacheOverlays{
+-(void) addGeoPackageCacheOverlays:(NSMutableArray<CacheOverlay *> *) cacheOverlays{
     // Add the GeoPackage caches
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     NSArray * geoPackages = [manager databases];
     for(NSString * geoPackage in geoPackages){
         GeoPackageCacheOverlay * cacheOverlay = [self getGeoPackageCacheOverlayWithManager:manager andName:geoPackage];
         if(cacheOverlay != nil){
-            [cacheOverlays addCacheOverlay:cacheOverlay];
+            [cacheOverlays addObject:cacheOverlay];
         }
     }
 }
@@ -184,6 +204,8 @@
             [tables addObject:tableCache];
         }
         
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
         // GeoPackage feature tables
         NSArray * featureTables = [geoPackage getFeatureTables];
         for(NSString * featureTable in featureTables){
@@ -195,9 +217,9 @@
             BOOL indexed = [indexer isIndexed];
             int minZoom = 0;
             if(indexed){
-                minZoom = [featureDao getZoomLevel] + 0; // TODO configured offset
+                minZoom = [featureDao getZoomLevel] + (int)[defaults integerForKey:@"geopackage_feature_tiles_min_zoom_offset"];
                 minZoom = MAX(minZoom, 0);
-                minZoom = MIN(minZoom, 21); // TODO configure max zoom
+                minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }
             GeoPackageTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
             [tables addObject:tableCache];
@@ -232,9 +254,9 @@
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *archiveFileNames = [[defaults arrayForKey:@"processingOfflineMaps"] mutableCopy];
+    NSMutableArray *archiveFileNames = [[defaults arrayForKey:MAGE_PROCESSING_CACHES] mutableCopy];
     [archiveFileNames removeObject:[archivePath lastPathComponent]];
-    [defaults setValue:archiveFileNames forKeyPath:@"processingOfflineMaps"];
+    [defaults setValue:archiveFileNames forKeyPath:MAGE_PROCESSING_CACHES];
     
     [defaults synchronize];
     
@@ -325,9 +347,13 @@
                 [manager close];
             }
             
-            // Post the new imported GeoPackage notification
             if(imported){
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"TODO" object:self]; // TODO
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
+                NSString * name = [[fileUrl lastPathComponent] stringByDeletingPathExtension];
+                [selectedCaches addObject:name];
+                [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
+                [defaults synchronize];
             }else{
                 NSLog(@"Error importing GeoPackage file: %@", fileUrl);
             }
