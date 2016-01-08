@@ -138,6 +138,14 @@
         }
     }
     
+    // Import any GeoPackage files that were dropped in
+    NSArray *geoPackageFiles = [directoryContent filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension == %@ OR pathExtension == %@", @"gpkg", @"gpkx"]];
+    for(NSString * geoPackageFile in geoPackageFiles){
+        // Import the GeoPackage file
+        NSString * geoPackagePath = [documentsDirectory stringByAppendingPathComponent:geoPackageFile];
+        [self importGeoPackageFile:geoPackagePath];
+    }
+    
     // Add the GeoPackage cache overlays
     [self addGeoPackageCacheOverlays:cacheOverlays];
     
@@ -339,29 +347,36 @@
         if([GPKGGeoPackageValidate hasGeoPackageExtension:fileUrl]){
         
             // Import the GeoPackage file
-            BOOL imported = false;
-            GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
-            @try {
-                imported = [manager importGeoPackageFromPath:fileUrl andOverride:true andMove:true];
-            }
-            @finally {
-                [manager close];
-            }
-            
-            if(imported){
+            if([self importGeoPackageFile:fileUrl]){
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
                 NSString * name = [[fileUrl lastPathComponent] stringByDeletingPathExtension];
                 [selectedCaches addObject:name];
                 [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
                 [defaults synchronize];
-            }else{
-                NSLog(@"Error importing GeoPackage file: %@", fileUrl);
             }
         }
     }
     
     return YES;
+}
+
+-(BOOL) importGeoPackageFile: (NSString *) path{
+    // Import the GeoPackage file
+    BOOL imported = false;
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    @try {
+        imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
+    }
+    @finally {
+        [manager close];
+    }
+    
+    if(!imported){
+        NSLog(@"Error importing GeoPackage file: %@", path);
+    }
+    
+    return imported;
 }
 
 @end
