@@ -34,10 +34,11 @@
     
     [self.navigationController setNavigationBarHidden:NO];
 
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
     self.navigationItem.leftBarButtonItem = item;
     
     self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
     self.managedObjectContext.parentContext = [NSManagedObjectContext MR_defaultContext];
     
     // if self.observation is null create a new one
@@ -228,10 +229,9 @@
 
 - (IBAction)saveObservation:(id)sender {
     [self.editDataStore.editTable endEditing:YES];
-    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-        NSLog(@"saved the observation: %@", self.observation);
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
+    [self.managedObjectContext MR_saveToPersistentStoreAndWait];
+    NSLog(@"saved the observation: %@", self.observation);
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

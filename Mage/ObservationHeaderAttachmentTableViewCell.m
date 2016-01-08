@@ -8,10 +8,8 @@
 #import "AttachmentCollectionDataStore.h"
 
 @interface ObservationHeaderAttachmentTableViewCell()
-
 @property (strong, nonatomic) AttachmentCollectionDataStore *ads;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
-
 @end
 
 @implementation ObservationHeaderAttachmentTableViewCell

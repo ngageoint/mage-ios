@@ -684,7 +684,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             annotationView.canShowCallout = self.canShowGpsLocationCallout;
             
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
             annotationView.rightCalloutAccessoryView = rightButton;
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
         } else {

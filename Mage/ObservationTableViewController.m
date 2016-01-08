@@ -7,7 +7,6 @@
 #import "ObservationTableViewController.h"
 #import "ObservationTableViewCell.h"
 #import <Observation.h>
-#import "ObservationViewController.h"
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "ImageViewerViewController.h"

@@ -13,15 +13,6 @@
 
 @implementation ObservationDateTableViewCell
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 - (void) populateCellWithKey:(id) key andValue:(id) value {
     NSDate* date = [NSDate dateFromIso8601String:value];
     

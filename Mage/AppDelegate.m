@@ -78,6 +78,7 @@
     _imageCache.formats = imageFormats;
     
     [MagicalRecord setupMageCoreDataStack];
+    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
 	 
 	return YES;
 }

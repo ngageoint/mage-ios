@@ -9,10 +9,8 @@
 #import <GeoPoint.h>
 
 @interface ObservationMapDirectionsTableViewCell ()
-
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic, strong) NSString *mapItemName;
-
 @end
 
 @implementation ObservationMapDirectionsTableViewCell
