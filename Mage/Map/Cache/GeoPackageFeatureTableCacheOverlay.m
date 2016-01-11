@@ -43,6 +43,16 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
 }
 
+-(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{
+    NSString * message = nil;
+    
+    if(self.featureOverlayQuery != nil){
+        message = [self.featureOverlayQuery buildMapClickMessageWithLocationCoordinate:locationCoordinate andMapView:mapView];
+    }
+    
+    return message;
+}
+
 -(BOOL) getIndexed{
     return self.indexed;
 }

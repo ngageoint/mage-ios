@@ -63,6 +63,10 @@
     
 }
 
+-(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{
+    return nil;
+}
+
 +(NSString *) buildChildCacheNameWithName: (NSString *) name andChildName: (NSString *) childName{
     return [NSString stringWithFormat:@"%@-%@", name, childName];
 }
