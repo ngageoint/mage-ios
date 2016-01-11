@@ -18,13 +18,15 @@
 #import "MediaViewController.h"
 #import "ImageViewerViewController.h"
 #import "AttachmentSelectionDelegate.h"
+#import <Server+helper.h>
+#import <Event+helper.h>
+#import "ObservationEditTextFieldTableViewCell.h"
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
-
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
 @property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
-
 @end
 
 @implementation ObservationEditViewController
@@ -227,7 +229,27 @@
     [self.editDataStore.editTable endUpdates];
 }
 
-- (IBAction)saveObservation:(id)sender {
+- (IBAction) saveObservation:(id)sender {
+    // validate required fields
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.archived == %@ && SELF.required == %@ && (NOT SELF.name IN %@)", nil, [NSNumber numberWithBool:YES], @[@"timestamp", @"geometry"]];
+    NSArray *requiredFields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+    
+    // TODO loop over each object in properties, if required make sure it has a property
+    //[[nameToField objectForKey:@"field4"] objectForKey:@"required"]
+    NSMutableArray *invalidFields = [[NSMutableArray alloc] init];
+    for (NSDictionary *field in requiredFields) {
+        id property = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+        if (!property) {
+            [invalidFields addObject:field];
+        }
+    }
+    
+    [self.editDataStore setInvalidFields:invalidFields];
+    if ([invalidFields count] > 0) {
+        return;
+    }
+    
     [self.editDataStore.editTable endEditing:YES];
     [self.managedObjectContext MR_saveToPersistentStoreAndWait];
     NSLog(@"saved the observation: %@", self.observation);

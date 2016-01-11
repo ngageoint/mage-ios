@@ -30,7 +30,13 @@
     if ([observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]] != nil) {
         [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
     } else {
-        [self.valueTextField setText:[field objectForKey:@"value"]];
+        id value =[field objectForKey:@"value"];
+        if (value) {
+            [self.valueTextField setText:value];
+            if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+                [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
+            }
+        }
     }
     NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
     if (index != NSNotFound) {
@@ -74,6 +80,19 @@
         [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
     }
 }
+
+- (void) setValid:(BOOL) valid {
+    [super setValid:valid];
+    
+    if (valid) {
+        self.valueTextField.layer.borderColor = nil;
+    } else {
+        self.valueTextField.layer.cornerRadius = 4.0f;
+        self.valueTextField.layer.masksToBounds = YES;
+        self.valueTextField.layer.borderColor = [[UIColor redColor] CGColor];
+        self.valueTextField.layer.borderWidth = 1.0f;
+    }
+};
 
 
 

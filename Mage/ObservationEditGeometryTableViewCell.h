@@ -13,6 +13,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *latitude;
 @property (weak, nonatomic) IBOutlet UILabel *longitude;
+@property (weak, nonatomic) IBOutlet UILabel *latitudeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *longitudeLabel;
 @property (strong, nonatomic) GeoPoint *geoPoint;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 

@@ -10,7 +10,7 @@
 #import <GeoPoint.h>
 
 @interface GeometryEditViewController()
-@property ObservationAnnotation *annotation;
+@property NSObject<MKAnnotation> *annotation;
 @end
 
 @implementation GeometryEditViewController
@@ -23,19 +23,24 @@
 }
 
 - (void) viewDidLoad {
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.geoPoint.location.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-    [self.map setRegion:viewRegion];
-    
-    self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
+    if (self.geoPoint) {
+        CLLocationDistance latitudeMeters = 2500;
+        CLLocationDistance longitudeMeters = 2500;
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.geoPoint.location.coordinate, latitudeMeters, longitudeMeters);
+        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+        [self.map setRegion:viewRegion];
+    } else {
+        self.geoPoint = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:0 longitude:0]];
+        self.map.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
+    }
     
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
         GeoPoint *point = (GeoPoint *)[self.observation geometry];
+        self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
         self.annotation.coordinate = point.location.coordinate;
     } else {
         GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
+        self.annotation = [[MKPointAnnotation alloc] init];
         self.annotation.coordinate = point.location.coordinate;
     }
     

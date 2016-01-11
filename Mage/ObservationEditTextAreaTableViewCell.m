@@ -36,4 +36,14 @@
     
 }
 
+- (void) setValid:(BOOL) valid {
+    [super setValid:valid];
+    
+    if (valid) {
+        self.textArea.layer.borderColor = [[UIColor colorWithRed:(215/255.0) green:(215/255.0) blue:(215/255.0) alpha:1] CGColor];
+    } else {
+        self.textArea.layer.borderColor = [[UIColor redColor] CGColor];
+    }
+};
+
 @end

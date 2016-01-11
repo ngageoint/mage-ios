@@ -8,13 +8,6 @@
 
 @implementation ObservationEditTableViewCell
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     [self.keyLabel setText:[field objectForKey:@"title"]];
     self.valueTextField.text = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
@@ -27,5 +20,13 @@
 
 - (void) selectRow {
 }
+
+- (void) setValid:(BOOL) valid {
+    if (valid) {
+        self.requiredIndicator.layer.borderColor = [[UIColor blackColor] CGColor];
+    } else {
+        self.requiredIndicator.textColor = [UIColor redColor];
+    }
+};
 
 @end
