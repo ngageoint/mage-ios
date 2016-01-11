@@ -12,6 +12,8 @@
 #import "Locations.h"
 #import "Observations.h"
 #import <GPSLocation.h>
+#import "CacheOverlayListener.h"
+
 
 @protocol UserTrackingModeChanged <NSObject>
 
@@ -27,7 +29,7 @@
 @end
 
 
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;

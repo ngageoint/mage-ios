@@ -74,5 +74,39 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<array/>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>mil.nga.giat.mage.geoPackageUTIHandler.csm</string>
+			</array>
+			<key>CFBundleTypeName</key>
+                        <string>GeoPackage</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.database</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>mil.nga.giat.mage.geoPackageUTIHandler.csm</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gpkg</string>
+					<string>gpkx</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
