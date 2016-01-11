@@ -93,6 +93,16 @@
 -(void) removeFromMap: (MKMapView *) mapView;
 
 /**
+ *  On map click
+ *
+ *  @param locationCoordinate location coordinate
+ *  @param mapView            map view
+ *
+ *  @return map click message
+ */
+-(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView;
+
+/**
  *  Build the cache name of a child
  *
  *  @param name      cache name
