@@ -118,14 +118,13 @@
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:NULL];
     NSArray *archives = [directoryContent filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension == %@ AND SELF != %@", @"zip", @"Form.zip"]];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:archives forKey:MAGE_PROCESSING_CACHES];
-    [defaults synchronize];
+    CacheOverlays * cacheOverlays = [CacheOverlays getInstance];
+    [cacheOverlays addProcessingFromArray:archives];
     
     NSString * baseCacheDirectory = [documentsDirectory stringByAppendingPathComponent:MAGE_CACHE_DIRECTORY];
     
     // Add the existing cache directories
-    NSMutableArray<CacheOverlay *> * cacheOverlays = [[NSMutableArray alloc] init];
+    NSMutableArray<CacheOverlay *> * overlays = [[NSMutableArray alloc] init];
     NSArray* caches = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseCacheDirectory error:nil];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     for(NSString * cache in caches){
@@ -134,7 +133,7 @@
         [fileManager fileExistsAtPath:cacheDirectory isDirectory:&isDirectory];
         if(isDirectory){
             CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:cacheDirectory];
-            [cacheOverlays addObject:cacheOverlay];
+            [overlays addObject:cacheOverlay];
         }
     }
     
@@ -147,13 +146,14 @@
     }
     
     // Add the GeoPackage cache overlays
-    [self addGeoPackageCacheOverlays:cacheOverlays];
+    [self addGeoPackageCacheOverlays:overlays];
     
     // Determine which caches are enabled
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
     if([selectedCaches count] > 0){
         
-        for (CacheOverlay * cacheOverlay in cacheOverlays) {
+        for (CacheOverlay * cacheOverlay in overlays) {
             
             // Check and enable the cache
             NSString *  cacheName = [cacheOverlay getCacheName];
@@ -171,7 +171,7 @@
         }
     }
     
-    [[CacheOverlays getInstance] addCacheOverlays:cacheOverlays];
+    [[CacheOverlays getInstance] addCacheOverlays:overlays];
     
     for (id archive in archives) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
@@ -253,21 +253,17 @@
     if (error) {
         NSLog(@"Error extracting offline map archive: %@. Error: %@", archivePath, error);
     }
-        
+    
+    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
+    
     if (caches.count) {
-        CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
         for(NSString * cache in caches){
             CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:[directory stringByAppendingPathComponent:cache]];
             [cacheOverlays addCacheOverlay:cacheOverlay];
         }
     }
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *archiveFileNames = [[defaults arrayForKey:MAGE_PROCESSING_CACHES] mutableCopy];
-    [archiveFileNames removeObject:[archivePath lastPathComponent]];
-    [defaults setValue:archiveFileNames forKeyPath:MAGE_PROCESSING_CACHES];
-    
-    [defaults synchronize];
+    [cacheOverlays removeProcessing:[archivePath lastPathComponent]];
     
     error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];

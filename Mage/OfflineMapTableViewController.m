@@ -34,8 +34,6 @@ bool originalNavBarHidden;
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.processingCaches = [defaults objectForKey:MAGE_PROCESSING_CACHES];
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
     [self update];
@@ -58,7 +56,7 @@ bool originalNavBarHidden;
 
 -(void) update{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.processingCaches = [defaults objectForKey:MAGE_PROCESSING_CACHES];
+    self.processingCaches = [self.cacheOverlays getProcessing];
     self.tableCells = [[NSMutableArray alloc] init];
     self.cacheNamesToOverlays = [[NSMutableDictionary alloc] init];
     for(CacheOverlay * cacheOverlay in [self.cacheOverlays getOverlays]){
@@ -274,14 +272,6 @@ bool originalNavBarHidden;
                     break;
             }
             [self.cacheOverlays removeCacheOverlay:cacheOverlay];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateAndReloadData];
-            });
-            if(cacheOverlay.enabled){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.cacheOverlays notifyListenersExceptCaller:self];
-                });
-            }
         }
     }
 }

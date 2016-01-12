@@ -13,7 +13,6 @@
  */
 extern NSString * const MAGE_CACHE_DIRECTORY;
 extern NSString * const MAGE_SELECTED_CACHES;
-extern NSString * const MAGE_PROCESSING_CACHES;
 extern NSInteger const MAGE_FEATURES_MAX_ZOOM;
 
 @interface MageConstants : NSObject

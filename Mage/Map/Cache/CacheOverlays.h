@@ -114,4 +114,32 @@
  */
 -(void) removeByCacheName: (NSString *) cacheName;
 
+/**
+ *  Add a processing cache name
+ *
+ *  @param name processing name
+ */
+-(void) addProcessing: (NSString *) name;
+
+/**
+ *  Add processing cache names from an array
+ *
+ *  @param names processing cache names
+ */
+-(void) addProcessingFromArray: (NSArray *) names;
+
+/**
+ *  Remove a processing cache name
+ *
+ *  @param name processing name
+ */
+-(void) removeProcessing: (NSString *) name;
+
+/**
+ *  Get the processing cache names
+ *
+ *  @return processing caches
+ */
+-(NSArray *) getProcessing;
+
 @end
