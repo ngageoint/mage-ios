@@ -77,12 +77,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     return shape;
 }
 
--(GPKGMapShape *) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape toMapView: (MKMapView *) mapView{
-    GPKGMapShape * mapShape = [GPKGMapShapeConverter addMapShape:shape toMapView:mapView];
-    [self addShapeWithId:id andShape:mapShape];
-    return mapShape;
-}
-
 -(GPKGMapShape *) removeShapeFromMapWithId: (NSNumber *) id fromMapView: (MKMapView *) mapView{
     GPKGMapShape * shape = [self removeShapeWithId: id];
     if(shape != nil){

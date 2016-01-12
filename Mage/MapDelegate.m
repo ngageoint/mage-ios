@@ -286,7 +286,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
     
-    [self updateOfflineMaps:[self.cacheOverlays getOverlays]];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        [self updateOfflineMaps:[self.cacheOverlays getOverlays]];
+    });
+
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
     if (!self.hideStaticLayers) {
@@ -308,7 +312,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
     if(self.mapView) {
-        [self updateOfflineMaps:cacheOverlays];
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+            [self updateOfflineMaps:cacheOverlays];
+        });
     }
 }
 
@@ -362,7 +369,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
     // Remove any overlays that are on the map but no longer selected
     for(CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-        [cacheOverlay removeFromMap:self.mapView];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [cacheOverlay removeFromMap:self.mapView];
+        });
     }
     self.mapCacheOverlays = enabledCacheOverlays;
     
@@ -399,7 +408,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
-        [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+        });
         
         cacheOverlay = xyzDirectoryCacheOverlay;
     }else{
@@ -446,7 +457,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         MKTileOverlay * geoPackageTileOverlay = [GPKGOverlayFactory getTileOverlayWithTileDao:tileDao];
         geoPackageTileOverlay.canReplaceMapContent = false;
         [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
-        [self.mapView addOverlay:geoPackageTileOverlay];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:geoPackageTileOverlay];
+        });
         
         cacheOverlay = tileTableCacheOverlay;
     }else{
@@ -489,7 +502,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             [featureTableCacheOverlay setFeatureOverlayQuery:featureOverlayQuery];
             featureOverlay.canReplaceMapContent = false;
             [featureTableCacheOverlay setTileOverlay:featureOverlay];
-            [self.mapView addOverlay:featureOverlay];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.mapView addOverlay:featureOverlay];
+            });
             
             cacheOverlay = featureTableCacheOverlay;
         }
@@ -514,7 +530,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                         WKBGeometry * geometry = geometryData.geometry;
                         if(geometry != nil){
                             GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
-                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape toMapView:self.mapView];
+                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
+                            });
                             
                             if(++count >= maxFeaturesPerTable){
                                 if(count < totalCount){
