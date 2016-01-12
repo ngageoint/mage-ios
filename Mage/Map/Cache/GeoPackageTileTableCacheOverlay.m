@@ -15,6 +15,10 @@
     return self;
 }
 
+-(NSString *) getIconImageName{
+    return @"layers";
+}
+
 -(NSString *) getInfo{
     return [NSString stringWithFormat:@"tiles: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
 }

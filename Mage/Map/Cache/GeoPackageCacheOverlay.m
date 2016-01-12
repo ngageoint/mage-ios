@@ -10,18 +10,19 @@
 
 @interface GeoPackageCacheOverlay ()
 
-@property (strong, nonatomic) NSMutableDictionary<NSString *, CacheOverlay *> * tables;
+@property (strong, nonatomic) NSMutableArray<CacheOverlay *> * tables;
 
 @end
 
 @implementation GeoPackageCacheOverlay
 
--(instancetype) initWithName: (NSString *) name andTables: (NSArray<CacheOverlay *> *) tables{
+-(instancetype) initWithName: (NSString *) name andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables{
     self = [super initWithName:name andType:GEOPACKAGE andSupportsChildren:true];
     if(self){
-        self.tables = [[NSMutableDictionary alloc] init];
-        for(CacheOverlay * table in tables){
-            [self.tables setObject:table forKey:[table getCacheName]];
+        self.tables = [[NSMutableArray alloc] init];
+        for(GeoPackageTableCacheOverlay * table in tables){
+            [table setParent:self];
+            [self.tables addObject:table];
         }
     }
     return self;
@@ -33,9 +34,12 @@
     }
 }
 
+-(NSString *) getIconImageName{
+    return @"geopackage";
+}
+
 -(NSArray<CacheOverlay *> *) getChildren{
-    NSArray<CacheOverlay *> * children = [[NSArray alloc] initWithArray:[self.tables allValues]];
-    return children;
+    return self.tables;
 }
 
 @end

@@ -115,4 +115,17 @@ static CacheOverlays * instance;
     return [self.overlays objectForKey:[self.overlayNames objectAtIndex:index]];
 }
 
+-(CacheOverlay *) getByCacheName: (NSString *) cacheName{
+    return [self.overlays objectForKey:cacheName];
+}
+
+-(void) removeCacheOverlay: (CacheOverlay *) overlay{
+    [self removeByCacheName:[overlay getCacheName]];
+}
+
+-(void) removeByCacheName: (NSString *) cacheName{
+    [self.overlays removeObjectForKey:cacheName];
+    [self.overlayNames removeObject:cacheName];
+}
+
 @end

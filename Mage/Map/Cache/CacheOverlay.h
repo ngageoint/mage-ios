@@ -21,6 +21,11 @@
 @property (nonatomic) BOOL enabled;
 
 /**
+ *  True when expanded
+ */
+@property (nonatomic) BOOL expanded;
+
+/**
  *  Initializer
  *
  *  @param name              name
@@ -65,6 +70,13 @@
 -(enum CacheOverlayType) getType;
 
 /**
+ *  Get the icon image name
+ *
+ *  @return icon image name
+ */
+-(NSString *) getIconImageName;
+
+/**
  *  Determine if the cache overlay supports children
  *
  *  @return true if supports children
@@ -77,6 +89,20 @@
  *  @return children cache overlays
  */
 -(NSArray<CacheOverlay *> *) getChildren;
+
+/**
+ *  Return true if a child cache overlay, false if a top level with or without children
+ *
+ *  @return true if a child
+ */
+-(BOOL) isChild;
+
+/**
+ *  Get the child's parent cache overlay
+ *
+ *  @return parent cache overlay
+ */
+-(CacheOverlay *) getParent;
 
 /**
  *  Get information about the cache to display

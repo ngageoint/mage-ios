@@ -91,4 +91,27 @@
  */
 -(CacheOverlay *) atIndex:(NSUInteger)index;
 
+/**
+ *  Get a cache overlay by cache name
+ *
+ *  @param cacheName cachename
+ *
+ *  @return cache overlay
+ */
+-(CacheOverlay *) getByCacheName: (NSString *) cacheName;
+
+/**
+ *  Remove a cache overlay
+ *
+ *  @param overlay cache overlay
+ */
+-(void) removeCacheOverlay: (CacheOverlay *) overlay;
+
+/**
+ *  Remove a cache overlay by cache name
+ *
+ *  @param cacheName cache name
+ */
+-(void) removeByCacheName: (NSString *) cacheName;
+
 @end
