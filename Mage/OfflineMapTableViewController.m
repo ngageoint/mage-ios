@@ -14,8 +14,6 @@
 #import "GeoPackageCacheOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 
-const char ConstantKey;
-
 @interface OfflineMapTableViewController ()
 
 @property (nonatomic, strong) NSArray *processingCaches;
@@ -27,12 +25,11 @@ const char ConstantKey;
 
 @implementation OfflineMapTableViewController
 
-#define TAG_DELETE_CACHE 1
-
 bool originalNavBarHidden;
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
@@ -55,7 +52,6 @@ bool originalNavBarHidden;
 }
 
 -(void) update{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.processingCaches = [self.cacheOverlays getProcessing];
     self.tableCells = [[NSMutableArray alloc] init];
     self.cacheNamesToOverlays = [[NSMutableDictionary alloc] init];
@@ -138,7 +134,6 @@ bool originalNavBarHidden;
             }
             
             [cacheOverlayCell.active setOverlay:cacheOverlay];
-            [cacheOverlayCell.deleteButton setOverlay:cacheOverlay];
         }
         
     }
@@ -231,35 +226,30 @@ bool originalNavBarHidden;
     return overlays;
 }
 
-- (IBAction)deleteCache:(CacheDeleteButton *)sender {
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Delete Cache"
-                          message:[NSString stringWithFormat:@"Delete Cache '%@'?", [sender.overlay getName]]
-                          delegate:self
-                          cancelButtonTitle:@"Cancel"
-                          otherButtonTitles:@"Delete",
-                          nil];
-    alert.tag = TAG_DELETE_CACHE;
-    objc_setAssociatedObject(alert, &ConstantKey, sender.overlay, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [alert show];
-
+    UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
+    
+    if(self.processingCaches.count == 0 || [indexPath section] == 1){
+        CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
+        if(![cacheOverlay isChild]){
+            style = UITableViewCellEditingStyleDelete;
+        }
+    }
+    
+    return style;
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    switch(alertView.tag){
-        case TAG_DELETE_CACHE:
-            [self handleDeleteCacheWithAlertView:alertView clickedButtonAtIndex:buttonIndex];
-            break;
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    // If row is deleted, remove it from the list.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
+        [self deleteCacheOverlay:cacheOverlay];
     }
 }
 
--(void)handleDeleteCacheWithAlertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if(buttonIndex > 0){
-        CacheOverlay * cacheOverlay = objc_getAssociatedObject(alertView, &ConstantKey);
-        if(cacheOverlay != nil){
+-(void)deleteCacheOverlay: (CacheOverlay *) cacheOverlay{
+
             switch([cacheOverlay getType]){
                 case XYZ_DIRECTORY:
                     [self deleteXYZCacheOverlay:(XYZDirectoryCacheOverlay *)cacheOverlay];
@@ -272,15 +262,13 @@ bool originalNavBarHidden;
                     break;
             }
             [self.cacheOverlays removeCacheOverlay:cacheOverlay];
-        }
-    }
 }
 
 -(void) deleteXYZCacheOverlay: (XYZDirectoryCacheOverlay *) xyzCacheOverlay{
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:[xyzCacheOverlay getDirectory] error:&error];
     if(error){
-         NSLog(@"Error deleting XYZ cache directory: %@. Error: %@", [xyzCacheOverlay getDirectory], error);
+        NSLog(@"Error deleting XYZ cache directory: %@. Error: %@", [xyzCacheOverlay getDirectory], error);
     }
 }
 

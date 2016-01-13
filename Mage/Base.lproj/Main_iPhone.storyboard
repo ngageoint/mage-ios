@@ -3343,53 +3343,38 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nzI-L1-VXU" userLabel="Active" customClass="CacheActiveSwitch">
-                                            <rect key="frame" x="8" y="13" width="51" height="31"/>
-                                            <connections>
-                                                <action selector="activeChanged:" destination="XBq-ML-vAC" eventType="valueChanged" id="zm0-cy-Bo8"/>
-                                            </connections>
-                                        </switch>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8f6-HN-cA9" userLabel="Name">
-                                            <rect key="frame" x="105" y="18" width="168" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uz0-hs-OYw" userLabel="DeleteButton" customClass="CacheDeleteButton">
-                                            <rect key="frame" x="292" y="18" width="20" height="22"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="20" id="e8c-sa-69G"/>
-                                            </constraints>
-                                            <state key="normal" title="Button" image="trash"/>
-                                            <connections>
-                                                <action selector="deleteCache:" destination="XBq-ML-vAC" eventType="touchUpInside" id="nzA-BX-U8Y"/>
-                                            </connections>
-                                        </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i1v-dt-3MV" userLabel="OverlayType">
-                                            <rect key="frame" x="65" y="12" width="32" height="32"/>
+                                            <rect key="frame" x="8" y="12" width="32" height="32"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="32" id="Kia-Em-Sxc"/>
                                             </constraints>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8f6-HN-cA9" userLabel="Name">
+                                            <rect key="frame" x="48" y="18" width="207" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nzI-L1-VXU" userLabel="Active" customClass="CacheActiveSwitch">
+                                            <rect key="frame" x="263" y="13" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="activeChanged:" destination="XBq-ML-vAC" eventType="valueChanged" id="zm0-cy-Bo8"/>
+                                            </connections>
+                                        </switch>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="leading" secondItem="I9k-Rz-Vh0" secondAttribute="leadingMargin" id="9t2-EJ-4o3"/>
-                                        <constraint firstItem="8f6-HN-cA9" firstAttribute="top" secondItem="I9k-Rz-Vh0" secondAttribute="topMargin" constant="10" id="Amm-Wn-uI0"/>
-                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="centerY" secondItem="8f6-HN-cA9" secondAttribute="centerY" id="Bby-gO-yD8"/>
-                                        <constraint firstItem="uz0-hs-OYw" firstAttribute="centerY" secondItem="8f6-HN-cA9" secondAttribute="centerY" id="F5B-q1-BNg"/>
-                                        <constraint firstItem="uz0-hs-OYw" firstAttribute="top" secondItem="8f6-HN-cA9" secondAttribute="top" id="J4f-xI-K9T"/>
-                                        <constraint firstItem="uz0-hs-OYw" firstAttribute="trailing" secondItem="I9k-Rz-Vh0" secondAttribute="trailingMargin" id="Sa4-K5-Baq"/>
-                                        <constraint firstItem="uz0-hs-OYw" firstAttribute="leading" secondItem="8f6-HN-cA9" secondAttribute="trailing" constant="19" id="TX3-pb-vKH"/>
-                                        <constraint firstItem="8f6-HN-cA9" firstAttribute="leading" secondItem="i1v-dt-3MV" secondAttribute="trailing" constant="8" symbolic="YES" id="bqG-fB-138"/>
-                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="centerY" secondItem="I9k-Rz-Vh0" secondAttribute="centerY" id="jez-OZ-WV0"/>
-                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="leading" secondItem="nzI-L1-VXU" secondAttribute="trailing" constant="8" symbolic="YES" id="pSl-Aj-Yiy"/>
-                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="bottom" secondItem="i1v-dt-3MV" secondAttribute="bottom" id="reD-kN-m4p"/>
-                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="centerY" secondItem="i1v-dt-3MV" secondAttribute="centerY" id="x97-u7-mYe"/>
+                                        <constraint firstItem="8f6-HN-cA9" firstAttribute="leading" secondItem="i1v-dt-3MV" secondAttribute="trailing" constant="8" symbolic="YES" id="5wz-8P-gPC"/>
+                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="trailing" secondItem="I9k-Rz-Vh0" secondAttribute="trailingMargin" id="8iJ-AZ-fAm"/>
+                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="centerY" secondItem="8f6-HN-cA9" secondAttribute="centerY" id="NfQ-H2-F1U"/>
+                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="leading" secondItem="8f6-HN-cA9" secondAttribute="trailing" constant="8" symbolic="YES" id="YAn-uk-JFw"/>
+                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="centerY" secondItem="8f6-HN-cA9" secondAttribute="centerY" id="ZXl-B5-23o"/>
+                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="centerY" secondItem="I9k-Rz-Vh0" secondAttribute="centerY" id="g9u-z9-IQl"/>
+                                        <constraint firstItem="nzI-L1-VXU" firstAttribute="bottom" secondItem="i1v-dt-3MV" secondAttribute="bottom" id="ryR-4G-tlZ"/>
+                                        <constraint firstItem="i1v-dt-3MV" firstAttribute="leading" secondItem="I9k-Rz-Vh0" secondAttribute="leadingMargin" id="sSE-dS-sFp"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="active" destination="nzI-L1-VXU" id="h3P-zT-hFV"/>
-                                    <outlet property="deleteButton" destination="uz0-hs-OYw" id="ktk-a5-j55"/>
                                     <outlet property="name" destination="8f6-HN-cA9" id="WUE-sE-Jqe"/>
                                     <outlet property="tableType" destination="i1v-dt-3MV" id="1bS-gz-YGE"/>
                                 </connections>
@@ -3401,44 +3386,44 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VR7-Hg-VUZ" customClass="CacheActiveSwitch">
-                                            <rect key="frame" x="8" y="13" width="51" height="31"/>
-                                            <connections>
-                                                <action selector="childActiveChanged:" destination="XBq-ML-vAC" eventType="valueChanged" id="oe9-Gb-zeo"/>
-                                            </connections>
-                                        </switch>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZTf-s6-PjG" userLabel="OverlayType">
+                                            <rect key="frame" x="8" y="11" width="32" height="32"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="32" id="c2m-bo-1Y8"/>
+                                            </constraints>
+                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xeB-IU-AvO" userLabel="Name">
-                                            <rect key="frame" x="105" y="8" width="207" height="21"/>
+                                            <rect key="frame" x="48" y="8" width="207" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I5i-mR-SG3">
-                                            <rect key="frame" x="105" y="28" width="207" height="21"/>
+                                            <rect key="frame" x="48" y="28" width="207" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZTf-s6-PjG" userLabel="OverlayType">
-                                            <rect key="frame" x="65" y="12" width="32" height="32"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="32" id="c2m-bo-1Y8"/>
-                                            </constraints>
-                                        </imageView>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VR7-Hg-VUZ" customClass="CacheActiveSwitch">
+                                            <rect key="frame" x="263" y="12" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="childActiveChanged:" destination="XBq-ML-vAC" eventType="valueChanged" id="oe9-Gb-zeo"/>
+                                            </connections>
+                                        </switch>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="leading" secondItem="ZTf-s6-PjG" secondAttribute="trailing" constant="8" symbolic="YES" id="6wc-RU-ow9"/>
-                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="bottom" secondItem="ZTf-s6-PjG" secondAttribute="bottom" id="72r-tE-V3u"/>
-                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="leading" secondItem="I5i-mR-SG3" secondAttribute="leading" id="7Cc-iz-6p0"/>
-                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="trailing" secondItem="vvG-os-DU0" secondAttribute="trailingMargin" id="7OA-pr-S3l"/>
-                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="top" secondItem="vvG-os-DU0" secondAttribute="topMargin" id="8Yl-le-TPN"/>
-                                        <constraint firstItem="ZTf-s6-PjG" firstAttribute="centerY" secondItem="vvG-os-DU0" secondAttribute="centerY" id="By0-pv-ZBs"/>
-                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="centerY" secondItem="ZTf-s6-PjG" secondAttribute="centerY" id="GjK-ev-e1r"/>
-                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="leading" secondItem="vvG-os-DU0" secondAttribute="leadingMargin" id="duq-KB-QVB"/>
-                                        <constraint firstItem="ZTf-s6-PjG" firstAttribute="leading" secondItem="VR7-Hg-VUZ" secondAttribute="trailing" constant="8" symbolic="YES" id="iXy-SI-hcr"/>
-                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="bottom" secondItem="vvG-os-DU0" secondAttribute="bottomMargin" id="obg-eQ-zPU"/>
-                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="top" secondItem="vvG-os-DU0" secondAttribute="topMargin" constant="20" id="qBH-nq-B4d"/>
-                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="trailing" secondItem="xeB-IU-AvO" secondAttribute="trailing" id="x8o-HL-hbt"/>
+                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="leading" secondItem="xeB-IU-AvO" secondAttribute="trailing" constant="8" symbolic="YES" id="1Tz-3J-Tms"/>
+                                        <constraint firstItem="ZTf-s6-PjG" firstAttribute="top" secondItem="vvG-os-DU0" secondAttribute="topMargin" constant="3" id="1oF-nY-8Qm"/>
+                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="top" secondItem="vvG-os-DU0" secondAttribute="topMargin" id="Dwz-je-K9S"/>
+                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="leading" secondItem="I5i-mR-SG3" secondAttribute="trailing" constant="8" symbolic="YES" id="LhO-ED-MH9"/>
+                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="leading" secondItem="I5i-mR-SG3" secondAttribute="leading" id="S1A-EJ-cWK"/>
+                                        <constraint firstItem="ZTf-s6-PjG" firstAttribute="centerY" secondItem="VR7-Hg-VUZ" secondAttribute="centerY" id="SMV-UL-dCn"/>
+                                        <constraint firstItem="ZTf-s6-PjG" firstAttribute="leading" secondItem="vvG-os-DU0" secondAttribute="leadingMargin" id="gOz-X6-gSg"/>
+                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="bottom" secondItem="vvG-os-DU0" secondAttribute="bottomMargin" id="hc2-LF-E6L"/>
+                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="bottom" secondItem="ZTf-s6-PjG" secondAttribute="bottom" id="kQn-hs-xNV"/>
+                                        <constraint firstItem="xeB-IU-AvO" firstAttribute="leading" secondItem="ZTf-s6-PjG" secondAttribute="trailing" constant="8" symbolic="YES" id="mae-uC-Llj"/>
+                                        <constraint firstItem="I5i-mR-SG3" firstAttribute="top" secondItem="vvG-os-DU0" secondAttribute="topMargin" constant="20" id="mbu-vX-2WW"/>
+                                        <constraint firstItem="VR7-Hg-VUZ" firstAttribute="trailing" secondItem="vvG-os-DU0" secondAttribute="trailingMargin" id="y0A-UJ-iD2"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>

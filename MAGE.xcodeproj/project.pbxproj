@@ -16,7 +16,6 @@
 		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
 		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */; settings = {ASSET_TAGS = (); }; };
 		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; settings = {ASSET_TAGS = (); }; };
-		045082331C44289300EDEB88 /* CacheDeleteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082321C44289300EDEB88 /* CacheDeleteButton.m */; settings = {ASSET_TAGS = (); }; };
 		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; settings = {ASSET_TAGS = (); }; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; settings = {ASSET_TAGS = (); }; };
@@ -166,8 +165,6 @@
 		0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayTableCell.m; sourceTree = "<group>"; };
 		0450822E1C44282F00EDEB88 /* CacheActiveSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheActiveSwitch.h; sourceTree = "<group>"; };
 		0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheActiveSwitch.m; sourceTree = "<group>"; };
-		045082311C44289300EDEB88 /* CacheDeleteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheDeleteButton.h; sourceTree = "<group>"; };
-		045082321C44289300EDEB88 /* CacheDeleteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheDeleteButton.m; sourceTree = "<group>"; };
 		045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCacheOverlayTableCell.h; sourceTree = "<group>"; };
 		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCacheOverlayTableCell.m; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
@@ -459,8 +456,6 @@
 				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */,
 				0450822E1C44282F00EDEB88 /* CacheActiveSwitch.h */,
 				0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */,
-				045082311C44289300EDEB88 /* CacheDeleteButton.h */,
-				045082321C44289300EDEB88 /* CacheDeleteButton.m */,
 				045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */,
 				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */,
 			);
@@ -1154,7 +1149,6 @@
 				2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
-				045082331C44289300EDEB88 /* CacheDeleteButton.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
