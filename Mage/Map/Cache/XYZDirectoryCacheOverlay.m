@@ -31,6 +31,10 @@
     }
 }
 
+-(NSString *) getIconImageName{
+    return @"layers";
+}
+
 -(NSString *) getDirectory{
     return self.directory;
 }

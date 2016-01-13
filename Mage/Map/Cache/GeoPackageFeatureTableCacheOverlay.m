@@ -39,6 +39,10 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     [super removeFromMap: mapView];
 }
 
+-(NSString *) getIconImageName{
+    return @"observations";
+}
+
 -(NSString *) getInfo{
     return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
 }
@@ -71,12 +75,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
         [self.shapes removeObjectForKey:id];
     }
     return shape;
-}
-
--(GPKGMapShape *) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape toMapView: (MKMapView *) mapView{
-    GPKGMapShape * mapShape = [GPKGMapShapeConverter addMapShape:shape toMapView:mapView];
-    [self addShapeWithId:id andShape:shape];
-    return mapShape;
 }
 
 -(GPKGMapShape *) removeShapeFromMapWithId: (NSNumber *) id fromMapView: (MKMapView *) mapView{

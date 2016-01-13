@@ -91,4 +91,55 @@
  */
 -(CacheOverlay *) atIndex:(NSUInteger)index;
 
+/**
+ *  Get a cache overlay by cache name
+ *
+ *  @param cacheName cachename
+ *
+ *  @return cache overlay
+ */
+-(CacheOverlay *) getByCacheName: (NSString *) cacheName;
+
+/**
+ *  Remove a cache overlay
+ *
+ *  @param overlay cache overlay
+ */
+-(void) removeCacheOverlay: (CacheOverlay *) overlay;
+
+/**
+ *  Remove a cache overlay by cache name
+ *
+ *  @param cacheName cache name
+ */
+-(void) removeByCacheName: (NSString *) cacheName;
+
+/**
+ *  Add a processing cache name
+ *
+ *  @param name processing name
+ */
+-(void) addProcessing: (NSString *) name;
+
+/**
+ *  Add processing cache names from an array
+ *
+ *  @param names processing cache names
+ */
+-(void) addProcessingFromArray: (NSArray *) names;
+
+/**
+ *  Remove a processing cache name
+ *
+ *  @param name processing name
+ */
+-(void) removeProcessing: (NSString *) name;
+
+/**
+ *  Get the processing cache names
+ *
+ *  @return processing caches
+ */
+-(NSArray *) getProcessing;
+
 @end
