@@ -30,6 +30,7 @@ bool originalNavBarHidden;
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
     
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
@@ -137,6 +138,7 @@ bool originalNavBarHidden;
         }
         
     }
+    cell.layoutMargins = UIEdgeInsetsZero;
     
     return cell;
 }

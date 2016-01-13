@@ -3674,6 +3674,7 @@
                                         <constraint firstItem="wd2-Ct-JGp" firstAttribute="centerY" secondItem="BHT-gW-Bf5" secondAttribute="centerY" id="pDa-Cs-9nG"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cacheOverlayCell" id="ipk-hn-f8b" userLabel="cacheOverlayCell" customClass="CacheOverlayTableCell">
                                 <rect key="frame" x="0.0" y="172" width="320" height="58"/>
@@ -3712,6 +3713,7 @@
                                         <constraint firstItem="SKt-4B-LBr" firstAttribute="leading" secondItem="Ote-zU-xnY" secondAttribute="trailing" constant="8" symbolic="YES" id="yVU-z6-Qpu"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="active" destination="SKt-4B-LBr" id="pWJ-gO-fYT"/>
                                     <outlet property="name" destination="Ote-zU-xnY" id="Hy2-W1-SWn"/>
@@ -3767,6 +3769,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="active" destination="UMD-dX-Sk4" id="yFp-VC-HFp"/>
                                     <outlet property="info" destination="xW3-HQ-7RP" id="RB6-So-oTh"/>

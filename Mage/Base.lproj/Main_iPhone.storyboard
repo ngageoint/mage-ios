@@ -3335,6 +3335,7 @@
                                         <constraint firstItem="DmX-bp-hkd" firstAttribute="trailing" secondItem="H2A-F1-nSh" secondAttribute="trailingMargin" id="JVD-Bm-iIr"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cacheOverlayCell" id="5aD-Oe-bh9" userLabel="cacheOverlayCell" customClass="CacheOverlayTableCell">
                                 <rect key="frame" x="0.0" y="108" width="320" height="58"/>
@@ -3373,6 +3374,7 @@
                                         <constraint firstItem="i1v-dt-3MV" firstAttribute="leading" secondItem="I9k-Rz-Vh0" secondAttribute="leadingMargin" id="sSE-dS-sFp"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="active" destination="nzI-L1-VXU" id="h3P-zT-hFV"/>
                                     <outlet property="name" destination="8f6-HN-cA9" id="WUE-sE-Jqe"/>
@@ -3427,6 +3429,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="active" destination="VR7-Hg-VUZ" id="vNf-JX-gdH"/>
                                     <outlet property="info" destination="I5i-mR-SG3" id="Tm8-cT-SIN"/>
