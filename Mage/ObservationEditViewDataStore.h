@@ -12,7 +12,11 @@
 @interface ObservationEditViewDataStore : NSObject <UITableViewDelegate, UITableViewDataSource, ObservationEditListener>
 
 @property (strong, nonatomic) Observation *observation;
+
 @property (weak, nonatomic) IBOutlet UITableView *editTable;
 @property (nonatomic, weak) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
+
+
+- (void) setInvalidFields:(NSArray *) invalidFields;
 
 @end

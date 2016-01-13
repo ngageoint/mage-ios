@@ -10,10 +10,8 @@
 #import <Event+helper.h>
 
 @interface ObservationEditViewDataStore ()
-
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
-
 @end
 
 @implementation ObservationEditViewDataStore
@@ -23,6 +21,21 @@ NSArray *_rowToField;
 NSDictionary *_fieldToRow;
 NSInteger expandedRow = -1;
 NSNumber *_eventId;
+NSMutableArray *_invalidFields;
+
+- (void) setInvalidFields:(NSArray *) invalidFields {
+    _invalidFields = [invalidFields mutableCopy];
+    
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    for (id field in invalidFields) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:[[_fieldToRow objectForKey:[field objectForKey:@"id"]] integerValue] inSection:0]];
+    }
+    
+    if ([indexPaths count] > 0) {
+        [_editTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [self.editTable scrollToRowAtIndexPath:[indexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
 
 - (NSArray *)rowToCellType {
     if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:_eventId]) {
@@ -104,7 +117,9 @@ NSNumber *_eventId;
     id field = [self rowToField][indexPath.row];
     cell.delegate = self;
     cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
-    [cell populateCellWithFormField:field andObservation:_observation];
+    [cell populateCellWithFormField:field andObservation:self.observation];
+    
+    [cell setValid:![_invalidFields containsObject:field]];
 
     return cell;
 }
@@ -132,7 +147,7 @@ NSNumber *_eventId;
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
-    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:_observation.properties];
+    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
     [newProperties setObject:value forKey:fieldKey];
     self.observation.properties = newProperties;
     
@@ -144,6 +159,11 @@ NSNumber *_eventId;
         [self.editTable endUpdates];
     }
     
+    if ([_invalidFields containsObject:field]) {
+        [_invalidFields removeObject:field];
+        NSInteger row = [[_fieldToRow objectForKey:[field objectForKey:@"id"]] integerValue];
+        [_editTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
