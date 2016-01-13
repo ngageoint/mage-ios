@@ -31,6 +31,7 @@
         self.type = type;
         self.supportsChildren = supportsChildrens;
         self.enabled = false;
+        self.expanded = false;
     }
     return self;
 }
@@ -47,12 +48,24 @@
     return self.type;
 }
 
+-(NSString *) getIconImageName{
+    return nil;
+}
+
 -(BOOL) getSupportsChildren{
     return self.supportsChildren;
 }
 
 -(NSArray<CacheOverlay *> *) getChildren{
     return [[NSArray alloc] init];
+}
+
+-(BOOL) isChild{
+    return false;
+}
+
+-(CacheOverlay *) getParent{
+    return nil;
 }
 
 -(NSString *) getInfo{

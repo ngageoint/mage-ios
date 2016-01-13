@@ -7,6 +7,7 @@
 //
 
 #import "CacheOverlay.h"
+#import "GeoPackageTableCacheOverlay.h"
 
 /**
  *  GeoPackage file cache overlay
@@ -21,6 +22,6 @@
  *
  *  @return new instance
  */
--(instancetype) initWithName: (NSString *) name andTables: (NSArray<CacheOverlay *> *) tables;
+-(instancetype) initWithName: (NSString *) name andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables;
 
 @end

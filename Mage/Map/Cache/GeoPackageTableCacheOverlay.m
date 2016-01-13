@@ -30,6 +30,14 @@
     return self;
 }
 
+-(BOOL) isChild{
+    return true;
+}
+
+-(CacheOverlay *) getParent{
+    return self.parent;
+}
+
 -(void) removeFromMap: (MKMapView *) mapView{
     if(self.tileOverlay != nil){
         [mapView removeOverlay:self.tileOverlay];

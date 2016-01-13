@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> * overlays;
 @property (nonatomic, strong) NSMutableArray<NSString *> * overlayNames;
 @property (nonatomic, strong) NSMutableArray<NSObject<CacheOverlayListener> *> * listeners;
+@property (nonatomic, strong) NSMutableSet<NSString *> * processing;
 
 @end
 
@@ -35,6 +36,7 @@ static CacheOverlays * instance;
         self.overlays = [[NSMutableDictionary alloc] init];
         self.overlayNames = [[NSMutableArray alloc] init];
         self.listeners = [[NSMutableArray alloc] init];
+        self.processing = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -113,6 +115,47 @@ static CacheOverlays * instance;
 
 -(CacheOverlay *) atIndex:(NSUInteger)index{
     return [self.overlays objectForKey:[self.overlayNames objectAtIndex:index]];
+}
+
+-(CacheOverlay *) getByCacheName: (NSString *) cacheName{
+    return [self.overlays objectForKey:cacheName];
+}
+
+-(void) removeCacheOverlay: (CacheOverlay *) overlay{
+    [self removeByCacheName:[overlay getCacheName]];
+}
+
+-(void) removeByCacheName: (NSString *) cacheName{
+    @synchronized(self) {
+        [self.overlays removeObjectForKey:cacheName];
+        [self.overlayNames removeObject:cacheName];
+        [self notifyListeners];
+    }
+}
+
+-(void) addProcessing: (NSString *) name{
+    @synchronized(self) {
+        [self.processing addObject:name];
+        [self notifyListeners];
+    }
+}
+
+-(void) addProcessingFromArray: (NSArray *) names{
+    @synchronized(self) {
+        [self.processing addObjectsFromArray:names];
+        [self notifyListeners];
+    }
+}
+
+-(void) removeProcessing: (NSString *) name{
+    @synchronized(self) {
+        [self.processing removeObject:name];
+        [self notifyListeners];
+    }
+}
+
+-(NSArray *) getProcessing{
+    return [self.processing allObjects];
 }
 
 @end

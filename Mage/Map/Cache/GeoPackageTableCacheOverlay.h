@@ -16,6 +16,11 @@
 @property (strong, nonatomic) MKTileOverlay * tileOverlay;
 
 /**
+ *  Cache overlay parent
+ */
+@property (strong, nonatomic) CacheOverlay * parent;
+
+/**
  *  Initializer
  *
  *  @param name       GeoPackage table name
@@ -24,7 +29,7 @@
  *  @param type       cache type
  *  @param count      count
  *  @param minZoom    min zoom level
- *  @param maxZoom     max zoom level
+ *  @param maxZoom    max zoom level
  *
  *  @return new instance
  */

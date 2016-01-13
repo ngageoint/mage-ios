@@ -63,17 +63,6 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 -(GPKGMapShape *) removeShapeWithId: (NSNumber *) id;
 
 /**
- *  Add a shape to the map view
- *
- *  @param id      id
- *  @param shape   shape
- *  @param mapView map view
- *
- *  @return shape
- */
--(GPKGMapShape *) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape toMapView: (MKMapView *) mapView;
-
-/**
  *  Remove a shape from the map view
  *
  *  @param id      id

@@ -41,6 +41,9 @@
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
     @property (nonatomic, strong) CacheOverlays *cacheOverlays;
+    @property (nonatomic, strong) NSMutableArray<CacheOverlay *> * updateCacheOverlays;
+    @property (nonatomic) BOOL updatingCacheOverlays;
+    @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
@@ -73,6 +76,9 @@
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
         self.cacheOverlays = [CacheOverlays getInstance];
         [self.cacheOverlays registerListener:self];
+        self.updateCacheOverlays = [[NSMutableArray alloc] init];
+        self.updatingCacheOverlays = false;
+        self.waitingCacheOverlaysUpdate = false;
         GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory getManager];
         self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
         
@@ -286,7 +292,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
     
-    [self updateOfflineMaps:[self.cacheOverlays getOverlays]];
+    [self updateCacheOverlaysSynchronized:[self.cacheOverlays getOverlays]];
+
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
     if (!self.hideStaticLayers) {
@@ -308,7 +315,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
     if(self.mapView) {
-        [self updateOfflineMaps:cacheOverlays];
+        [self updateCacheOverlaysSynchronized:cacheOverlays];
     }
 }
 
@@ -331,7 +338,73 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-- (void) updateOfflineMaps:(NSArray<CacheOverlay *> *) cacheOverlays {
+/**
+ *  Synchronously update the cache overlays, including overlays and features
+ *
+ *  @param cacheOverlays cache overlays
+ */
+- (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
+    
+    @synchronized(self.updateCacheOverlays){
+        
+        // Set the cache overlays to update, including wiping out an update that hasn't processed
+        [self.updateCacheOverlays removeAllObjects];
+        [self.updateCacheOverlays addObjectsFromArray:cacheOverlays];
+        
+        // Is a thread currently updating the cache overlays?
+        if(self.updatingCacheOverlays){
+            // Notify the thread that there is an update waiting
+            self.waitingCacheOverlaysUpdate = true;
+        }else{
+        
+            // Start a new update thread
+            self.updatingCacheOverlays = true;
+            
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+            dispatch_async(queue, ^{
+                
+                // Synchronously pull the next cache overlays to update
+                NSArray<CacheOverlay *> * overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
+                while([overlaysToUpdate count] > 0){
+                    // Update the cache overlays
+                    [self updateCacheOverlays:cacheOverlays];
+                    overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
+                }
+
+            });
+        }
+    }
+    
+}
+
+/**
+ *  Synchronously get the next cache overlays to update
+ *
+ *  @return cache overlays
+ */
+-(NSArray<CacheOverlay *> *) getNextCacheOverlaysToUpdate{
+    NSMutableArray<CacheOverlay *> * overlaysToUpdate = [[NSMutableArray alloc] init];
+    // Synchronize on the update cache overlays to pull the next update
+    @synchronized(self.updateCacheOverlays){
+        // Get the update cache overlays and remove them
+        [overlaysToUpdate addObjectsFromArray:self.updateCacheOverlays];
+        [self.updateCacheOverlays removeAllObjects];
+        if([overlaysToUpdate count] == 0){
+            // Notify that the updating thread is stopping
+            self.updatingCacheOverlays = false;
+        }
+        // Reset the update waiting variable
+        self.waitingCacheOverlaysUpdate = false;
+    }
+    return overlaysToUpdate;
+}
+
+/**
+ *  Update all cache overlays by adding and removing overlays and features
+ *
+ *  @param cacheOverlays cache overlays
+ */
+- (void) updateCacheOverlays:(NSArray<CacheOverlay *> *) cacheOverlays {
     
     // Track enabled cache overlays
     NSMutableDictionary<NSString *, CacheOverlay *> *enabledCacheOverlays = [[NSMutableDictionary alloc] init];
@@ -362,7 +435,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
     // Remove any overlays that are on the map but no longer selected
     for(CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-        [cacheOverlay removeFromMap:self.mapView];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [cacheOverlay removeFromMap:self.mapView];
+        });
     }
     self.mapCacheOverlays = enabledCacheOverlays;
     
@@ -371,6 +446,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
 }
 
+/**
+ *  Add XYZ directory cache overlays to the map
+ *
+ *  @param enabledCacheOverlays     enabled cache overlays to add to
+ *  @param xyzDirectoryCacheOverlay cache overlay
+ */
 -(void) addXYZDirectoryCacheOverlayWithEnabled: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (XYZDirectoryCacheOverlay *) xyzDirectoryCacheOverlay{
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [xyzDirectoryCacheOverlay getCacheName];
@@ -399,7 +480,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
-        [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+        });
         
         cacheOverlay = xyzDirectoryCacheOverlay;
     }else{
@@ -410,6 +493,13 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
 }
 
+/**
+ *  Add GeoPackage cache overlays to the map, as map overlays and/or features
+ *
+ *  @param enabledCacheOverlays   enabled cache overlays to add to
+ *  @param enabledGeoPackages     enabled GeoPackages to add to
+ *  @param geoPackageCacheOverlay cache overlay
+ */
 -(void) addGeoPackageCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andEnabledGeoPackages: (NSMutableSet<NSString *> *) enabledGeoPackages andCacheOverlay: (GeoPackageCacheOverlay *) geoPackageCacheOverlay{
     
     // Check each GeoPackage table
@@ -436,6 +526,13 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
+/**
+ *  Add GeoPackage tile cache overlays
+ *
+ *  @param enabledCacheOverlays  enabled cache overlays to add to
+ *  @param tileTableCacheOverlay tile table cache overlay
+ *  @param geoPackage            GeoPackage
+ */
 -(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [tileTableCacheOverlay getCacheName];
@@ -446,7 +543,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         MKTileOverlay * geoPackageTileOverlay = [GPKGOverlayFactory getTileOverlayWithTileDao:tileDao];
         geoPackageTileOverlay.canReplaceMapContent = false;
         [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
-        [self.mapView addOverlay:geoPackageTileOverlay];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:geoPackageTileOverlay];
+        });
         
         cacheOverlay = tileTableCacheOverlay;
     }else{
@@ -456,7 +555,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
 }
 
+/**
+ *  Add GeoPackage feature cache overlays, as overlays when indexed or as features when not
+ *
+ *  @param enabledCacheOverlays     enabled cache overlays to add to
+ *  @param featureTableCacheOverlay feature table cache overlay
+ *  @param geoPackage               GeoPackage
+ */
 -(void) addGeoPackageFeatureCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageFeatureTableCacheOverlay *) featureTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
+    BOOL addAsEnabled = true;
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [featureTableCacheOverlay getCacheName];
     CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
@@ -489,7 +596,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             [featureTableCacheOverlay setFeatureOverlayQuery:featureOverlayQuery];
             featureOverlay.canReplaceMapContent = false;
             [featureTableCacheOverlay setTileOverlay:featureOverlay];
-            [self.mapView addOverlay:featureOverlay];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.mapView addOverlay:featureOverlay];
+            });
             
             cacheOverlay = featureTableCacheOverlay;
         }
@@ -508,13 +618,24 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 int totalCount = [resultSet count];
                 int count = 0;
                 while([resultSet moveToNext]){
+                    // If there is another cache overlay update waiting, stop and remove this overlay to let the next update handle it
+                    if(self.waitingCacheOverlaysUpdate){
+                        addAsEnabled = false;
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [featureTableCacheOverlay removeFromMap:self.mapView];
+                        });
+                        break;
+                    }
                     GPKGFeatureRow * featureRow = [featureDao getFeatureRow:resultSet];
                     GPKGGeometryData * geometryData = [featureRow getGeometry];
                     if(geometryData != nil && !geometryData.empty){
                         WKBGeometry * geometry = geometryData.geometry;
                         if(geometry != nil){
                             GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
-                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape toMapView:self.mapView];
+                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
+                            });
                             
                             if(++count >= maxFeaturesPerTable){
                                 if(count < totalCount){
@@ -535,8 +656,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }else{
         [self.mapCacheOverlays removeObjectForKey:cacheName];
     }
-    // Add the cache overlay to the enabled cache overlays
-    [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
+    
+    // If not cancelled for a waiting update
+    if(addAsEnabled){
+        // Add the cache overlay to the enabled cache overlays
+        [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
+    }
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {
@@ -806,18 +931,30 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolygon class]]) {
-        StyledPolygon *polygon = (StyledPolygon *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolygon class]]) {
+        MKPolygon *polygon = (MKPolygon *) overlay;
         MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
-        renderer.fillColor = polygon.fillColor;
-        renderer.strokeColor = polygon.lineColor;
-        renderer.lineWidth = polygon.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolygon class]]) {
+            StyledPolygon *styledPolygon = (StyledPolygon *) polygon;
+            renderer.fillColor = styledPolygon.fillColor;
+            renderer.strokeColor = styledPolygon.lineColor;
+            renderer.lineWidth = styledPolygon.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolyline class]]) {
-        StyledPolyline *polyline = (StyledPolyline *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *polyline = (MKPolyline *) overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:polyline];
-        renderer.strokeColor = polyline.lineColor;
-        renderer.lineWidth = polyline.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolyline class]]) {
+            StyledPolyline *styledPolyline = (StyledPolyline *) polyline;
+            renderer.strokeColor = styledPolyline.lineColor;
+            renderer.lineWidth = styledPolyline.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
     }
 
