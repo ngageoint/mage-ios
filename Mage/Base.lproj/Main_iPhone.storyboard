@@ -3337,6 +3337,7 @@
                                         <constraint firstItem="DmX-bp-hkd" firstAttribute="trailing" secondItem="H2A-F1-nSh" secondAttribute="trailingMargin" id="xHB-ot-7I8"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cacheOverlayCell" id="Nxr-dO-sdg" userLabel="cacheOverlayCell" customClass="CacheOverlayTableCell">
                                 <rect key="frame" x="0.0" y="108" width="320" height="58"/>
