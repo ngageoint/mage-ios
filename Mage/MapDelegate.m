@@ -825,18 +825,30 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolygon class]]) {
-        StyledPolygon *polygon = (StyledPolygon *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolygon class]]) {
+        MKPolygon *polygon = (MKPolygon *) overlay;
         MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
-        renderer.fillColor = polygon.fillColor;
-        renderer.strokeColor = polygon.lineColor;
-        renderer.lineWidth = polygon.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolygon class]]) {
+            StyledPolygon *styledPolygon = (StyledPolygon *) polygon;
+            renderer.fillColor = styledPolygon.fillColor;
+            renderer.strokeColor = styledPolygon.lineColor;
+            renderer.lineWidth = styledPolygon.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolyline class]]) {
-        StyledPolyline *polyline = (StyledPolyline *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *polyline = (MKPolyline *) overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:polyline];
-        renderer.strokeColor = polyline.lineColor;
-        renderer.lineWidth = polyline.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolyline class]]) {
+            StyledPolyline *styledPolyline = (StyledPolyline *) polyline;
+            renderer.strokeColor = styledPolyline.lineColor;
+            renderer.lineWidth = styledPolyline.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
     }
 

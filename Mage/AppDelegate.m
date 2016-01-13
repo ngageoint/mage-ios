@@ -157,16 +157,18 @@
             
             // Check and enable the cache
             NSString *  cacheName = [cacheOverlay getCacheName];
-            if ([selectedCaches containsObject:cacheName]) {
-                [cacheOverlay setEnabled:true];
-            }
+            BOOL enabled = [selectedCaches containsObject:cacheName];
             
             // Check the child caches
+            BOOL enableParent = false;
             for (CacheOverlay * childCache in [cacheOverlay getChildren]) {
-                if (cacheOverlay.enabled || [selectedCaches containsObject:[childCache getCacheName]]) {
+                if (enabled || [selectedCaches containsObject:[childCache getCacheName]]) {
                     [childCache setEnabled:true];
-                    [cacheOverlay setEnabled:true];
+                    enableParent = true;
                 }
+            }
+            if(enabled || enableParent){
+                [cacheOverlay setEnabled:true];
             }
         }
     }
