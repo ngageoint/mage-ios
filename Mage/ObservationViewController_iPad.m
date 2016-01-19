@@ -60,8 +60,13 @@
         [self.secondaryFieldLabel removeFromSuperview];
     }
     
+    NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"type", @"geometry", nil];
     self.variantField = [event.form objectForKey:@"variantField"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, @[@"timestamp", @"type", @"geometry", self.variantField]];
+    if (self.variantField) {
+        [generalProperties addObject:self.variantField];
+    }
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, generalProperties];
     self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
 }
 
