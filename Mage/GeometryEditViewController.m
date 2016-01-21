@@ -6,6 +6,7 @@
 
 #import "GeometryEditViewController.h"
 #import "ObservationAnnotation.h"
+#import "ObservationAnnotationView.h"
 #import "ObservationImage.h"
 #import <GeoPoint.h>
 
@@ -38,6 +39,7 @@
         GeoPoint *point = (GeoPoint *)[self.observation geometry];
         self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
         self.annotation.coordinate = point.location.coordinate;
+        
     } else {
         GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
         self.annotation = [[MKPointAnnotation alloc] init];
@@ -45,48 +47,41 @@
     }
     
     [self.map addAnnotation:self.annotation];
+    [self.map selectAnnotation:self.annotation animated:NO];
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>) annotation {
     
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation inMapView:mapView];
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.map dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
         
         if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
+            annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
             annotationView.draggable = YES;
-            if (image == nil) {
-                annotationView.image = [self imageWithImage:[UIImage imageNamed:@"defaultMarker"] scaledToWidth:35];
-            } else {
-                annotationView.image = image;
-            }
+            annotationView.image = image;
         } else {
             annotationView.annotation = annotation;
         }
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
         return annotationView;
+    } else {
+        MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
+        
+        if (!pinView) {
+            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
+            [pinView setPinColor:MKPinAnnotationColorGreen];
+            pinView.draggable = YES;
+            pinView.canShowCallout = NO;
+        } else {
+            pinView.annotation = annotation;
+        }
+        
+        return pinView;
     }
     
     return nil;
-}
-
--(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
-{
-    float oldWidth = sourceImage.size.width;
-    float scaleFactor = i_width / oldWidth;
-    
-    float newHeight = sourceImage.size.height * scaleFactor;
-    float newWidth = oldWidth * scaleFactor;
-    
-    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
-    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
 }
 
 @end

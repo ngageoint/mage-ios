@@ -10,10 +10,8 @@
 #import "MapDelegate.h"
 
 @interface ObservationMapTableViewCell ()
-
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
 @property (strong, nonatomic) MapDelegate *mapDelegate;
-
 @end
 
 @implementation ObservationMapTableViewCell
@@ -25,12 +23,6 @@
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
 
-    [self.mapDelegate setObservations:observations];
-    self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-    [self.mapDelegate selectedObservation:observation];
-    self.mapDelegate.hideStaticLayers = YES;
-    [self.mapDelegate setObservations:observations];
-    
     CLLocationDistance latitudeMeters = 2500;
     CLLocationDistance longitudeMeters = 2500;
     NSDictionary *properties = observation.properties;
@@ -43,6 +35,11 @@
     
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(observation.location.coordinate, latitudeMeters, longitudeMeters);
     MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+    
+    [self.mapDelegate setObservations:observations];
+    self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+    [self.mapDelegate selectedObservation:observation];
+    self.mapDelegate.hideStaticLayers = YES;
     
     [self.mapDelegate selectedObservation:observation region:viewRegion];
 }

@@ -1081,7 +1081,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         [self.observationAnnotations setObject:annotation forKey:observation.objectID];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        annotationView.image = [ObservationImage imageForObservation:observation inMapView:self.mapView];
         [annotation setCoordinate:[observation location].coordinate];
     }
 }

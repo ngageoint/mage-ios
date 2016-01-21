@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.m */; settings = {ASSET_TAGS = (); }; };
-		043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1251C22F875000CA07F /* CacheOverlayTypes.m */; settings = {ASSET_TAGS = (); }; };
-		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */; settings = {ASSET_TAGS = (); }; };
-		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; settings = {ASSET_TAGS = (); }; };
-		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; settings = {ASSET_TAGS = (); }; };
-		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; settings = {ASSET_TAGS = (); }; };
-		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; settings = {ASSET_TAGS = (); }; };
+		043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.m */; };
+		043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.m */; };
+		043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1251C22F875000CA07F /* CacheOverlayTypes.m */; };
+		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */; };
+		043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */; };
+		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */; };
+		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; };
+		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */; };
+		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; };
+		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; };
+		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
+		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -26,6 +26,7 @@
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
+		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2F5F2E9E19E074CF005BA157 /* SettingsSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9D19E074CF005BA157 /* SettingsSplitViewController.m */; };
@@ -187,6 +188,9 @@
 		2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationContainerViewController.m; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
+		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
+		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotationView.m; sourceTree = "<group>"; };
+		2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationChangedDelegate.h; sourceTree = "<group>"; };
 		2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedSegueDelegate.h; sourceTree = "<group>"; };
 		2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedSegueDelegate.m; sourceTree = "<group>"; };
 		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
@@ -621,6 +625,8 @@
 				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
 				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
+				2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */,
+				2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */,
 				F727516819C87B27006C63CB /* MapDelegate.h */,
 				F727516919C87B27006C63CB /* MapDelegate.m */,
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
@@ -726,6 +732,7 @@
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
 				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
+				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -1163,6 +1170,7 @@
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */,
+				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,

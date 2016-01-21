@@ -882,7 +882,7 @@
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observation-header" rowHeight="100" id="Utk-Uj-uco" customClass="ObservationCommonHeaderTableViewCell">
-                                        <rect key="frame" x="0.0" y="50" width="320" height="100"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Utk-Uj-uco" id="bX3-tE-T2M">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
@@ -950,17 +950,17 @@
                                             <outlet property="variantFieldLabel" destination="qW1-FO-D9D" id="lPy-FR-AzB"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observation-map" rowHeight="120" id="h3S-rh-hlS" customClass="ObservationMapTableViewCell">
-                                        <rect key="frame" x="0.0" y="150" width="320" height="120"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observation-map" rowHeight="95" id="h3S-rh-hlS" customClass="ObservationMapTableViewCell">
+                                        <rect key="frame" x="0.0" y="149.5" width="320" height="95"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h3S-rh-hlS" id="GNx-dU-JhM">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="94.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qAT-eJ-MDm">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="120" id="ajw-UD-6AA"/>
+                                                        <constraint firstAttribute="height" constant="95" id="Ji6-xa-ci6"/>
                                                     </constraints>
                                                 </mapView>
                                             </subviews>
@@ -976,7 +976,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observation-map-directions" textLabel="HNz-PH-OrT" imageView="wOv-W4-wUr" style="IBUITableViewCellStyleDefault" id="Xyh-V9-H8Q" customClass="ObservationMapDirectionsTableViewCell">
-                                        <rect key="frame" x="0.0" y="270" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="244.5" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xyh-V9-H8Q" id="jcP-Bz-bU9">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
@@ -1004,7 +1004,7 @@
                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observation-attachments" rowHeight="60" id="kVk-bT-5Xc" customClass="ObservationHeaderAttachmentTableViewCell">
-                                        <rect key="frame" x="0.0" y="314" width="320" height="60"/>
+                                        <rect key="frame" x="0.0" y="288.5" width="320" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kVk-bT-5Xc" id="v3B-72-EW5">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
@@ -1051,6 +1051,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="XIl-k8-eHR" firstAttribute="leading" secondItem="v3B-72-EW5" secondAttribute="leading" constant="5" id="8c7-bi-db2"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="XIl-k8-eHR" secondAttribute="bottom" constant="-3.5" id="afG-Uw-AGe"/>
                                                 <constraint firstAttribute="trailing" secondItem="XIl-k8-eHR" secondAttribute="trailing" constant="5" id="fyo-Hh-zc8"/>
                                                 <constraint firstItem="XIl-k8-eHR" firstAttribute="top" secondItem="v3B-72-EW5" secondAttribute="topMargin" constant="-3" id="qc1-a0-j8F"/>
                                             </constraints>
@@ -1062,7 +1063,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-textarea" rowHeight="55" id="eoB-uK-l7x" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="374" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="348.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eoB-uK-l7x" id="9cv-GG-yCc">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1103,7 +1104,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-password" rowHeight="55" id="uSg-EI-ZW4" customClass="ObservationPasswordTableViewCell">
-                                        <rect key="frame" x="0.0" y="429" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="403.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uSg-EI-ZW4" id="ZxK-gx-9LJ">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1146,7 +1147,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-email" rowHeight="55" id="sh2-8C-Zwa" userLabel="Observation Email Table View Cell - observationCell-email" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="484" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="458.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sh2-8C-Zwa" id="xhx-Vy-RwH">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1188,7 +1189,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-radio" rowHeight="55" id="b4y-xk-qBN" userLabel="Observation Radio Table View Cell - observationCell-radio" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="539" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="513.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b4y-xk-qBN" id="Nbo-e1-Mvy">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1230,7 +1231,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-geometry" rowHeight="55" id="ybP-pS-L9c" customClass="ObservationGeometryTableViewCell">
-                                        <rect key="frame" x="0.0" y="594" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="568.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ybP-pS-L9c" id="nDh-Hb-zMK">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1272,7 +1273,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-generic" rowHeight="55" id="kLh-du-ulM" userLabel="Observation Generic Table View Cell - observationCell-generic" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="649" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="623.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kLh-du-ulM" id="ykf-43-8Io">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1314,7 +1315,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-checkbox" rowHeight="55" id="Alq-3b-MI0" userLabel="Observation Checkbox Table View Cell - observationCell-checkbox" customClass="ObservationCheckboxViewTableViewCell">
-                                        <rect key="frame" x="0.0" y="704" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="678.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Alq-3b-MI0" id="ioJ-RD-LiR">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1354,7 +1355,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-textfield" rowHeight="55" id="hyX-YC-wMu" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="759" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="733.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hyX-YC-wMu" id="Brb-oz-EtG">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1395,7 +1396,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-dropdown" rowHeight="55" id="8ch-7i-WnI" userLabel="Observation Dropdown Table View Cell - observationCell-dropdown" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="814" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="788.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8ch-7i-WnI" id="cZZ-62-QoS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1437,7 +1438,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-date" rowHeight="55" id="69h-ZQ-4sw" customClass="ObservationDateTableViewCell">
-                                        <rect key="frame" x="0.0" y="869" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="843.5" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="69h-ZQ-4sw" id="XGU-Jz-a9F">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -1707,8 +1708,59 @@
                                 <rect key="frame" x="0.0" y="44" width="320" height="431"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textfield" rowHeight="65" id="hKc-13-9od" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="65"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hKc-13-9od" id="LVZ-7i-hpw">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text field key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2e-bb-GsW">
+                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="CC3-Mq-GRO"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vO3-dT-q8I">
+                                                    <rect key="frame" x="8" y="25" width="304" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="To7-QW-zKE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="hKc-13-9od" id="bip-qS-RXG"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cI5-aT-i3e">
+                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="top" secondItem="LVZ-7i-hpw" secondAttribute="topMargin" constant="-7" id="4s5-fC-mQI"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="vO3-dT-q8I" secondAttribute="bottom" constant="1.5" id="Cnu-uz-42v"/>
+                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="leading" secondItem="LVZ-7i-hpw" secondAttribute="leadingMargin" constant="4" id="WEh-I0-P1O"/>
+                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="top" secondItem="LVZ-7i-hpw" secondAttribute="topMargin" constant="17" id="dbO-eU-jle"/>
+                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="trailing" secondItem="LVZ-7i-hpw" secondAttribute="trailingMargin" id="kOV-96-4DZ"/>
+                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="trailing" secondItem="LVZ-7i-hpw" secondAttribute="trailingMargin" id="pTD-Xn-PoT"/>
+                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="leading" secondItem="LVZ-7i-hpw" secondAttribute="leadingMargin" id="zeU-31-zg9"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="keyLabel" destination="g2e-bb-GsW" id="uCB-SH-4ZZ"/>
+                                            <outlet property="requiredIndicator" destination="cI5-aT-i3e" id="TIB-y9-36l"/>
+                                            <outlet property="textField" destination="vO3-dT-q8I" id="bRF-Yo-OUh"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-geometry" rowHeight="120" id="4zi-SJ-w54" customClass="ObservationEditGeometryTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="120"/>
+                                        <rect key="frame" x="0.0" y="87" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4zi-SJ-w54" id="oxl-4z-quf">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="119.5"/>
@@ -1783,6 +1835,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="2hq-Oj-LaI" secondAttribute="bottom" constant="-3" id="1KY-gF-PLc"/>
                                                 <constraint firstItem="2hq-Oj-LaI" firstAttribute="leading" secondItem="oxl-4z-quf" secondAttribute="leadingMargin" id="8FY-c6-XB7"/>
                                                 <constraint firstItem="zqK-4n-CWV" firstAttribute="leading" secondItem="Etf-XL-OOA" secondAttribute="leading" id="Apm-lf-pMB"/>
                                                 <constraint firstItem="Etf-XL-OOA" firstAttribute="top" secondItem="oxl-4z-quf" secondAttribute="topMargin" constant="33" id="CCy-RT-D0J"/>
@@ -1811,7 +1864,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-generic" rowHeight="65" id="sBD-oJ-wOd" customClass="ObservationEditTableViewCell">
-                                        <rect key="frame" x="0.0" y="142" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="207" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sBD-oJ-wOd" id="pZm-q0-Yah">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -1845,6 +1898,7 @@
                                                 <constraint firstItem="TtX-EZ-WmW" firstAttribute="leading" secondItem="pZm-q0-Yah" secondAttribute="leadingMargin" id="0KD-rB-NsP"/>
                                                 <constraint firstItem="7gX-vg-y8f" firstAttribute="top" secondItem="pZm-q0-Yah" secondAttribute="topMargin" constant="-7" id="2Yf-mq-3rd"/>
                                                 <constraint firstItem="TtX-EZ-WmW" firstAttribute="trailing" secondItem="pZm-q0-Yah" secondAttribute="trailingMargin" id="J6L-uN-YJ8"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="TtX-EZ-WmW" secondAttribute="bottom" constant="2" id="Kew-JZ-gEo"/>
                                                 <constraint firstItem="7gX-vg-y8f" firstAttribute="leading" secondItem="pZm-q0-Yah" secondAttribute="leadingMargin" constant="4" id="n8Z-mU-NPG"/>
                                                 <constraint firstItem="7gX-vg-y8f" firstAttribute="trailing" secondItem="pZm-q0-Yah" secondAttribute="trailingMargin" id="tbI-y5-IUj"/>
                                                 <constraint firstItem="TtX-EZ-WmW" firstAttribute="top" secondItem="pZm-q0-Yah" secondAttribute="topMargin" constant="17" id="tsP-sg-bHz"/>
@@ -1858,7 +1912,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-dropdown" rowHeight="65" id="wVb-Xw-KXs" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="207" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="272" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wVb-Xw-KXs" id="d9g-DZ-eAY">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -1890,6 +1944,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="KTz-W5-jii" firstAttribute="top" secondItem="d9g-DZ-eAY" secondAttribute="topMargin" constant="17" id="4Wp-B0-XVJ"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="KTz-W5-jii" secondAttribute="bottom" constant="1.5" id="6Vf-a2-GAY"/>
                                                 <constraint firstItem="SNh-YL-m9r" firstAttribute="top" secondItem="d9g-DZ-eAY" secondAttribute="topMargin" constant="-7" id="8R4-2J-FIU"/>
                                                 <constraint firstItem="KTz-W5-jii" firstAttribute="leading" secondItem="d9g-DZ-eAY" secondAttribute="leadingMargin" id="Mp8-TE-t5w"/>
                                                 <constraint firstItem="SNh-YL-m9r" firstAttribute="leading" secondItem="d9g-DZ-eAY" secondAttribute="leadingMargin" constant="4" id="bER-vm-1cR"/>
@@ -1905,7 +1960,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-email" rowHeight="65" id="xAX-Gz-hDT" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="272" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="337" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xAX-Gz-hDT" id="4Bz-8N-csS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -1936,6 +1991,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Wph-5c-Myx" secondAttribute="bottom" constant="2" id="P9b-Z9-cu2"/>
                                                 <constraint firstItem="Wph-5c-Myx" firstAttribute="trailing" secondItem="4Bz-8N-csS" secondAttribute="trailingMargin" id="PHI-gM-sgX"/>
                                                 <constraint firstItem="R0R-WP-UxA" firstAttribute="trailing" secondItem="4Bz-8N-csS" secondAttribute="trailingMargin" id="Rd0-sF-AnH"/>
                                                 <constraint firstItem="R0R-WP-UxA" firstAttribute="top" secondItem="4Bz-8N-csS" secondAttribute="topMargin" constant="-7" id="SDf-Cw-7Q3"/>
@@ -1951,7 +2007,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-attachmentView" rowHeight="65" id="XCr-9J-1Re" customClass="AttachmentEditTableViewCell">
-                                        <rect key="frame" x="0.0" y="337" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="402" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XCr-9J-1Re" id="Swo-u1-pZv">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -1999,6 +2055,7 @@
                                             <constraints>
                                                 <constraint firstItem="PgR-7e-Eno" firstAttribute="trailing" secondItem="Swo-u1-pZv" secondAttribute="trailingMargin" id="3q8-5b-WbG"/>
                                                 <constraint firstItem="PgR-7e-Eno" firstAttribute="top" secondItem="Swo-u1-pZv" secondAttribute="topMargin" constant="-1" id="6Fz-eZ-dzL"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="PgR-7e-Eno" secondAttribute="bottom" constant="-0.5" id="N9t-Kn-pYX"/>
                                                 <constraint firstItem="PgR-7e-Eno" firstAttribute="trailing" secondItem="Swo-u1-pZv" secondAttribute="trailingMargin" id="dA2-HC-eI0"/>
                                                 <constraint firstItem="PgR-7e-Eno" firstAttribute="leading" secondItem="Swo-u1-pZv" secondAttribute="leadingMargin" id="pHb-bw-xAF"/>
                                             </constraints>
@@ -2009,7 +2066,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-date" rowHeight="65" id="NpS-Tu-6OV" userLabel="Observation Date Table View Cell - observationEdit-date" customClass="ObservationDatePickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="402" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="467" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NpS-Tu-6OV" id="GNo-wa-oOO">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -2042,6 +2099,7 @@
                                             <constraints>
                                                 <constraint firstItem="gVb-UO-dJ7" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="17" id="NKz-00-Vym"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="gVb-UO-dJ7" secondAttribute="trailing" constant="4" id="RA7-S9-6xl"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="gVb-UO-dJ7" secondAttribute="bottom" constant="1.5" id="i4l-bW-zGq"/>
                                                 <constraint firstItem="gVb-UO-dJ7" firstAttribute="leading" secondItem="GNo-wa-oOO" secondAttribute="leadingMargin" id="rWG-1y-SH0"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="2SG-7T-PwE" secondAttribute="trailing" id="wuW-Qd-Rh3"/>
                                                 <constraint firstItem="2SG-7T-PwE" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="-7" id="zZH-8o-fch"/>
@@ -2056,7 +2114,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-radio" rowHeight="65" id="xnP-jO-UFl" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="467" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="532" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xnP-jO-UFl" id="U8c-eQ-zdE">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -2088,6 +2146,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="9s9-6k-zgB" firstAttribute="top" secondItem="U8c-eQ-zdE" secondAttribute="topMargin" constant="17" id="7xs-hj-YVr"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="9s9-6k-zgB" secondAttribute="bottom" constant="1.5" id="Dk1-Ea-adZ"/>
                                                 <constraint firstItem="kvL-q5-yD9" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" constant="4" id="RUZ-RO-nmC"/>
                                                 <constraint firstItem="9s9-6k-zgB" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" constant="-4" id="VPO-vi-rhE"/>
                                                 <constraint firstItem="kvL-q5-yD9" firstAttribute="trailing" secondItem="U8c-eQ-zdE" secondAttribute="trailingMargin" id="Vaa-5G-uPh"/>
@@ -2103,7 +2162,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-password" rowHeight="65" id="a0q-GN-RQy" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="532" width="320" height="65"/>
+                                        <rect key="frame" x="0.0" y="597" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a0q-GN-RQy" id="6pD-1i-Ma1">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
@@ -2137,6 +2196,7 @@
                                                 <constraint firstItem="GNY-Pe-D2Z" firstAttribute="trailing" secondItem="6pD-1i-Ma1" secondAttribute="trailingMargin" id="8Nt-On-cfk"/>
                                                 <constraint firstItem="GNY-Pe-D2Z" firstAttribute="leading" secondItem="6pD-1i-Ma1" secondAttribute="leadingMargin" constant="4" id="DGh-iD-NnW"/>
                                                 <constraint firstItem="3g4-Fb-eQm" firstAttribute="trailing" secondItem="6pD-1i-Ma1" secondAttribute="trailingMargin" id="M56-ME-bIj"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="3g4-Fb-eQm" secondAttribute="bottom" constant="2" id="Qqj-Pu-n81"/>
                                                 <constraint firstItem="3g4-Fb-eQm" firstAttribute="leading" secondItem="6pD-1i-Ma1" secondAttribute="leadingMargin" id="Svw-uW-cuh"/>
                                                 <constraint firstItem="3g4-Fb-eQm" firstAttribute="top" secondItem="6pD-1i-Ma1" secondAttribute="topMargin" constant="17" id="YDW-EZ-neR"/>
                                                 <constraint firstItem="GNY-Pe-D2Z" firstAttribute="top" secondItem="6pD-1i-Ma1" secondAttribute="topMargin" constant="-7" id="jwk-uN-A3B"/>
@@ -2149,7 +2209,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-checkbox" rowHeight="64" id="zJ0-vH-GSc" customClass="ObservationCheckboxTableViewCell">
-                                        <rect key="frame" x="0.0" y="597" width="320" height="64"/>
+                                        <rect key="frame" x="0.0" y="662" width="320" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zJ0-vH-GSc" id="iq3-Gb-iui">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
@@ -2181,6 +2241,7 @@
                                                 <constraint firstItem="FGL-FE-8gf" firstAttribute="trailing" secondItem="iq3-Gb-iui" secondAttribute="trailingMargin" id="YUk-aZ-ian"/>
                                                 <constraint firstItem="kEX-Ie-rx0" firstAttribute="leading" secondItem="iq3-Gb-iui" secondAttribute="leadingMargin" id="cO5-PU-w8v"/>
                                                 <constraint firstItem="kEX-Ie-rx0" firstAttribute="top" secondItem="iq3-Gb-iui" secondAttribute="topMargin" constant="17" id="poC-tc-XIX"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="kEX-Ie-rx0" secondAttribute="bottom" constant="-0.5" id="xi8-hA-dNF"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -2188,56 +2249,6 @@
                                             <outlet property="checkboxSwitch" destination="kEX-Ie-rx0" id="Xpe-kb-Jbm"/>
                                             <outlet property="keyLabel" destination="FGL-FE-8gf" id="FIQ-bo-WIy"/>
                                             <outlet property="requiredIndicator" destination="xIw-aP-8oP" id="ika-w9-doq"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textfield" rowHeight="65" id="hKc-13-9od" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="661" width="320" height="65"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hKc-13-9od" id="LVZ-7i-hpw">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text field key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2e-bb-GsW">
-                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="CC3-Mq-GRO"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vO3-dT-q8I">
-                                                    <rect key="frame" x="8" y="25" width="304" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="To7-QW-zKE"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="hKc-13-9od" id="bip-qS-RXG"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cI5-aT-i3e">
-                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="top" secondItem="LVZ-7i-hpw" secondAttribute="topMargin" constant="-7" id="4s5-fC-mQI"/>
-                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="leading" secondItem="LVZ-7i-hpw" secondAttribute="leadingMargin" constant="4" id="WEh-I0-P1O"/>
-                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="top" secondItem="LVZ-7i-hpw" secondAttribute="topMargin" constant="17" id="dbO-eU-jle"/>
-                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="trailing" secondItem="LVZ-7i-hpw" secondAttribute="trailingMargin" id="kOV-96-4DZ"/>
-                                                <constraint firstItem="g2e-bb-GsW" firstAttribute="trailing" secondItem="LVZ-7i-hpw" secondAttribute="trailingMargin" id="pTD-Xn-PoT"/>
-                                                <constraint firstItem="vO3-dT-q8I" firstAttribute="leading" secondItem="LVZ-7i-hpw" secondAttribute="leadingMargin" id="zeU-31-zg9"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="keyLabel" destination="g2e-bb-GsW" id="uCB-SH-4ZZ"/>
-                                            <outlet property="requiredIndicator" destination="cI5-aT-i3e" id="TIB-y9-36l"/>
-                                            <outlet property="textField" destination="vO3-dT-q8I" id="bRF-Yo-OUh"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textarea" rowHeight="148" id="YMQ-CD-9nc" customClass="ObservationEditTextAreaTableViewCell">
@@ -2286,6 +2297,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="O7f-9b-3Y6" firstAttribute="top" secondItem="dos-Ew-BEg" secondAttribute="topMargin" constant="14" id="1IM-Bt-uet"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="O7f-9b-3Y6" secondAttribute="bottom" constant="-2.5" id="HIY-U3-Obk"/>
                                                 <constraint firstItem="O7f-9b-3Y6" firstAttribute="trailing" secondItem="dos-Ew-BEg" secondAttribute="trailingMargin" id="YBR-Zw-cqe"/>
                                                 <constraint firstItem="HE5-MG-2mv" firstAttribute="top" secondItem="dos-Ew-BEg" secondAttribute="topMargin" constant="-7" id="h0n-uM-2cj"/>
                                                 <constraint firstItem="O7f-9b-3Y6" firstAttribute="leading" secondItem="dos-Ew-BEg" secondAttribute="leadingMargin" id="kXn-gu-nia"/>
@@ -2373,6 +2385,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="editDataStore" destination="9QU-uC-jl6" id="wlg-Pi-M6P"/>
+                        <outlet property="editTable" destination="hno-eB-ZoM" id="oi7-2y-3Pq"/>
                         <segue destination="nmF-7h-4eV" kind="push" identifier="recordAudioSegue" id="GlX-sA-rMI"/>
                     </connections>
                 </viewController>
@@ -4805,12 +4818,12 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="zSP-t6-Lnh"/>
-        <segue reference="eHX-H2-6Gy"/>
         <segue reference="Udd-Ez-JOB"/>
+        <segue reference="eHX-H2-6Gy"/>
+        <segue reference="zfZ-aY-xQc"/>
         <segue reference="2y0-bF-fmy"/>
         <segue reference="7d8-sH-pU5"/>
         <segue reference="q5H-Zb-tps"/>
         <segue reference="ZtV-oz-WCw"/>
-        <segue reference="zfZ-aY-xQc"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -201,7 +201,7 @@
     // Add the GeoPackage overlay
     GPKGGeoPackage * geoPackage = [manager open:name];
     @try {
-        NSMutableArray<CacheOverlay *> * tables = [[NSMutableArray alloc] init];
+        NSMutableArray<GeoPackageTableCacheOverlay *> * tables = [[NSMutableArray alloc] init];
         
         // GeoPackage tile tables
         NSArray * tileTables = [geoPackage getTileTables];

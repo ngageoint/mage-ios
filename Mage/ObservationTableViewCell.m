@@ -34,7 +34,7 @@
         self.variantField.text = nil;
     }
     
-    self.icon.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
+    self.icon.image = [ObservationImage imageForObservation:observation];
     
     self.timeField.text = observation.timestamp.shortTimeAgoSinceNow;
     

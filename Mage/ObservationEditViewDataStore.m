@@ -6,24 +6,26 @@
 
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
+#import "ObservationEditGeometryTableViewCell.h"
 #import <Server+helper.h>
 #import <Event+helper.h>
 
 @interface ObservationEditViewDataStore ()
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
+@property (nonatomic, strong) NSArray *rowToCellType;
+@property (nonatomic, strong) NSArray *rowToField;
+@property (nonatomic, strong) NSDictionary *fieldToRow;
+@property (nonatomic, assign) NSInteger expandedRow;
+@property (nonatomic, assign) NSNumber *eventId;
+@property (nonatomic, strong) NSMutableArray *invalidFields;
+@property (nonatomic, strong) NSString *variantField;
 @end
 
 @implementation ObservationEditViewDataStore
 
-NSArray *_rowToCellType;
-NSArray *_rowToField;
-NSDictionary *_fieldToRow;
-NSInteger expandedRow = -1;
-NSNumber *_eventId;
-NSMutableArray *_invalidFields;
 
-- (void) setInvalidFields:(NSArray *) invalidFields {
+- (void) addInvalidFields:(NSArray *) invalidFields {
     _invalidFields = [invalidFields mutableCopy];
     
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
@@ -37,35 +39,41 @@ NSMutableArray *_invalidFields;
     }
 }
 
-- (NSArray *)rowToCellType {
-    if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:_eventId]) {
+- (NSArray *) rowToCellType {
+    if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _rowToCellType;
     }
+    
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    _eventId = [Server currentEventId];
+    self.eventId = [Server currentEventId];
+    self.variantField = [event.form objectForKey:@"variantField"];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
-    NSMutableArray *fields = [[NSMutableArray alloc] init];
+    NSMutableArray *rowToField = [[NSMutableArray alloc] init];
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
     // add the attachment cell first and then do the other fields
-    [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:@"attachments"];
+    [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:@"attachments"];
     [cells addObject:@"observationEdit-attachmentView"];
-    [fields addObject:@{}];
+    [rowToField addObject:@{}];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@", nil];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    NSArray *fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
     // run through the form and map the row indexes to fields
-    for (id field in [form objectForKey:@"fields"]) {
+    for (id field in fields) {
         NSString *type = [field objectForKey:@"type"];
         if (![type isEqualToString:@"hidden"]) {
-            [fieldToRowMap setObject:[NSNumber numberWithInteger:fields.count] forKey:[field objectForKey:@"id"]];
+            [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:[field objectForKey:@"id"]];
             [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
-            [fields addObject:field];
+            [rowToField addObject:field];
         }
     }
-    _fieldToRow = fieldToRowMap;
-    _rowToCellType = cells;
-    _rowToField = fields;
     
+    self.fieldToRow = fieldToRowMap;
+    self.rowToField = rowToField;
+    _rowToCellType = cells;
+
     return _rowToCellType;
 }
 
@@ -73,15 +81,17 @@ NSMutableArray *_invalidFields;
     if (_rowToField != nil) {
         return _rowToField;
     }
+    
     [self rowToCellType];
     return _rowToField;
 }
 
 - (NSDictionary *) fieldToRow {
-    if (_fieldToRow != nil) {
-        return _fieldToRow;
+    if (!_fieldToRow) {
+        _fieldToRow = [[NSDictionary alloc] init];
     }
-    return [[NSDictionary alloc] init];
+    
+    return _fieldToRow;
 }
 
 - (id) valueForIndexPath: (NSIndexPath *) indexPath {
@@ -91,7 +101,6 @@ NSMutableArray *_invalidFields;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"rows is: %lu", (unsigned long)[self rowToField].count);
     return [self rowToField].count;
 }
 
@@ -109,6 +118,10 @@ NSMutableArray *_invalidFields;
     }
     cell.fieldDefinition = field;
     
+    if ([cell isKindOfClass:[ObservationEditGeometryTableViewCell class]]) {
+        self.annotationChangedDelegate = (ObservationEditGeometryTableViewCell *) cell;
+    }
+    
     return cell;
 }
 
@@ -119,22 +132,17 @@ NSMutableArray *_invalidFields;
     cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     [cell populateCellWithFormField:field andObservation:self.observation];
     
-    [cell setValid:![_invalidFields containsObject:field]];
+    [cell setValid:![self.invalidFields containsObject:field]];
 
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
-    NSDictionary *field = [[self rowToField] objectAtIndex: indexPath.row];
-    
-    if ([[field objectForKey:@"archived"] intValue] == 1) {
+- (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
+    if ([indexPath row] == 0 && [self.observation.attachments count] == 0) {
         return 0.0;
     }
-    if ([[[self rowToCellType] objectAtIndex: indexPath.row] isEqualToString:@"observationEdit-attachmentView"]) {
-        return [cell getCellHeightForValue:[NSNumber numberWithInteger:self.observation.attachments.count]];
-    }
-    return [cell getCellHeightForValue:[self valueForIndexPath:indexPath]];
+    
+    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,17 +167,23 @@ NSMutableArray *_invalidFields;
         [self.editTable endUpdates];
     }
     
-    if ([_invalidFields containsObject:field]) {
-        [_invalidFields removeObject:field];
+    if ([self.invalidFields containsObject:field]) {
+        [self.invalidFields removeObject:field];
         NSInteger row = [[_fieldToRow objectForKey:[field objectForKey:@"id"]] integerValue];
-        [_editTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.editTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
+    if ([fieldKey isEqualToString:@"type"] && self.annotationChangedDelegate) {
+        [self.annotationChangedDelegate typeChanged:self.observation];
+    }
+    
+    if (self.variantField && [fieldKey isEqualToString:self.variantField] && self.annotationChangedDelegate) {
+        [self.annotationChangedDelegate variantChanged:self.observation];
     }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *view = [[UIView alloc] init];
-    
-    return view;
+    return [[UIView alloc] init];
 }
 
 

@@ -24,9 +24,8 @@
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-
-@property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
+@property (weak, nonatomic) IBOutlet UITableView *editTable;
+@property (weak, nonatomic) IBOutlet ObservationEditViewDataStore *editDataStore;
 @end
 
 @implementation ObservationEditViewController
@@ -52,6 +51,9 @@
     
     self.observation.dirty = [NSNumber numberWithBool:YES];
     self.editDataStore.observation = self.observation;
+    
+    [self.editTable setEstimatedRowHeight:44.0f];
+    [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -245,7 +247,7 @@
         }
     }
     
-    [self.editDataStore setInvalidFields:invalidFields];
+    [self.editDataStore addInvalidFields:invalidFields];
     if ([invalidFields count] > 0) {
         return;
     }
