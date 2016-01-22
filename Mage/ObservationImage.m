@@ -25,7 +25,7 @@ const CGFloat annotationScaleWidth = 35.0;
     
     NSString *variantField = [form objectForKey:@"variantField"];
     NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
-    if (variantField != nil && [observation.properties objectForKey:variantField] != nil) {
+    if (variantField != nil && [[observation.properties objectForKey:variantField] length]) {
         [iconProperties addObject: [observation.properties objectForKey:variantField]];
     }
     
@@ -35,16 +35,25 @@ const CGFloat annotationScaleWidth = 35.0;
     while(!foundIcon) {
         NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
         NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
+        NSLog(@"search directory %@", directoryToSearch);
         if ([fileManager fileExistsAtPath:directoryToSearch]) {
             NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
+            NSLog(@"directory contents %@", [directoryContents description]);
+
             if ([directoryContents count] != 0) {
                 for (NSString *path in directoryContents) {
                     NSString *filename = [path lastPathComponent];
+                    NSLog(@"filename is %@", filename);
                     if ([filename hasPrefix:@"icon"]) {
                         return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
                     }
                 }
             }
+            
+            if ([iconProperties count] == 0) {
+                foundIcon = YES;
+            }
+            [iconProperties removeLastObject];
         } else {
             if ([iconProperties count] == 0) {
                 foundIcon = YES;
