@@ -24,9 +24,8 @@
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-
-@property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
+@property (weak, nonatomic) IBOutlet UITableView *editTable;
+@property (weak, nonatomic) IBOutlet ObservationEditViewDataStore *editDataStore;
 @end
 
 @implementation ObservationEditViewController
@@ -52,15 +51,33 @@
     
     self.observation.dirty = [NSNumber numberWithBool:YES];
     self.editDataStore.observation = self.observation;
+    
+    [self.editTable setEstimatedRowHeight:44.0f];
+    [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
-    [super viewWillAppear:animated];
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void) cancel:(id)sender {
-    self.managedObjectContext = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -245,7 +262,7 @@
         }
     }
     
-    [self.editDataStore setInvalidFields:invalidFields];
+    [self.editDataStore addInvalidFields:invalidFields];
     if ([invalidFields count] > 0) {
         return;
     }
@@ -256,16 +273,29 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void) keyboardWillShow: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+}
+
+-(void) keyboardWillHide: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;

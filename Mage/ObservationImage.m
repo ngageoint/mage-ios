@@ -8,6 +8,8 @@
 #import "Server+helper.h"
 #import <Event+helper.h>
 
+const CGFloat annotationScaleWidth = 35.0;
+
 @implementation ObservationImage
 
 + (NSString *) imageNameForObservation:(Observation *) observation {
@@ -23,7 +25,7 @@
     
     NSString *variantField = [form objectForKey:@"variantField"];
     NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[type]];
-    if (variantField != nil && [observation.properties objectForKey:variantField] != nil) {
+    if (variantField != nil && [[observation.properties objectForKey:variantField] length]) {
         [iconProperties addObject: [observation.properties objectForKey:variantField]];
     }
     
@@ -33,16 +35,25 @@
     while(!foundIcon) {
         NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
         NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
+        NSLog(@"search directory %@", directoryToSearch);
         if ([fileManager fileExistsAtPath:directoryToSearch]) {
             NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
+            NSLog(@"directory contents %@", [directoryContents description]);
+
             if ([directoryContents count] != 0) {
                 for (NSString *path in directoryContents) {
                     NSString *filename = [path lastPathComponent];
+                    NSLog(@"filename is %@", filename);
                     if ([filename hasPrefix:@"icon"]) {
                         return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
                     }
                 }
             }
+            
+            if ([iconProperties count] == 0) {
+                foundIcon = YES;
+            }
+            [iconProperties removeLastObject];
         } else {
             if ([iconProperties count] == 0) {
                 foundIcon = YES;
@@ -53,7 +64,7 @@
     return nil;
 }
 
-+ (UIImage *) imageForObservation:(Observation *) observation scaledToWidth: (NSNumber *) width {
++ (UIImage *) imageForObservation:(Observation *) observation {
     NSString *imagePath = [ObservationImage imageNameForObservation:observation];
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
     if (image == nil) {
@@ -62,12 +73,24 @@
     
     [image setAccessibilityIdentifier:imagePath];
     
-    if (width != nil && image != nil) {
-        float oldWidth = image.size.width;
-        float scaleFactor = [width floatValue] / oldWidth;
+    return image;
+}
+
+
++ (UIImage *) imageForObservation:(Observation *) observation inMapView: (MKMapView *) mapView {
+    UIImage *image = [self imageForObservation:observation];
+
+    if (mapView != nil && image != nil) {
+        float scale = annotationScaleWidth / image.size.width;
         
-        float newHeight = image.size.height * scaleFactor;
-        float newWidth = oldWidth * scaleFactor;
+        // Ensure annotation will  fit in map view
+        // Add 5 to give the annotation a little padding
+        if ((image.size.height * scale) > (mapView.frame.size.height / 2)) {
+            scale = (mapView.frame.size.height / 2) / (image.size.height + 5);
+        }
+        
+        float newHeight = image.size.height * scale;
+        float newWidth = image.size.width * scale;
         
         UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
         [image drawInRect:CGRectMake(0, 0, newWidth, newHeight)];

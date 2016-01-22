@@ -49,12 +49,16 @@
     self.propertyTable.dataSource = self;
     
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    self.variantField = [event.form objectForKey:@"variantField"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, @[@"timestamp", @"type", @"geometry", self.variantField]];
+    NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"type", @"geometry", nil];
+    self.variantField = [event.form objectForKey:@"variantField"];;
+    if (self.variantField) {
+        [generalProperties addObject:self.variantField];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, generalProperties];
     self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
 }
 
--(UIImage*) imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
+- (UIImage*) imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
     float oldWidth = sourceImage.size.width;
     float scaleFactor = i_width / oldWidth;
     
@@ -74,7 +78,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section < self.tableLayout.count) {
-        return [(NSArray *)self.tableLayout[section] count];
+        return [(NSArray *) self.tableLayout[section] count];
     } else {
         NSArray *fieldNames = [self.fields valueForKey:@"name"];
         NSDictionary *filtered = [self.observation.properties dictionaryWithValuesForKeys:fieldNames];

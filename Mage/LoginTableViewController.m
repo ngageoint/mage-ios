@@ -24,6 +24,7 @@
 #import "SignUpTableViewController.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
+#import "UINextField.h"
 
 @interface LoginTableViewController ()
 
@@ -254,7 +255,7 @@
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
-	return YES;
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

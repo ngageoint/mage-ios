@@ -32,7 +32,7 @@
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
-    UIImage *image = [ObservationImage imageForObservation:self.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+    UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
     
     if (annotationView == nil) {
