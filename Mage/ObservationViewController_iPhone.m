@@ -56,6 +56,8 @@
     }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, generalProperties];
     self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+    
+    [self.propertyTable reloadData];
 }
 
 - (UIImage*) imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
