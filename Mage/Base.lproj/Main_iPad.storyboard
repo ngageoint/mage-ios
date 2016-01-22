@@ -174,7 +174,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="RUG-KN-ocI">
-                                <rect key="frame" x="20" y="78" width="728" height="946"/>
+                                <rect key="frame" x="20" y="78" width="728" height="870"/>
                                 <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -215,7 +215,7 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wiX-MZ-yqy">
                                 <rect key="frame" x="219" y="964" width="331" height="40"/>
-                                <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="backgroundColor" red="0.14117647059999999" green="0.32549019610000002" blue="0.4823529412" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="7h1-oL-8Lx"/>
                                     <constraint firstAttribute="width" constant="331" id="MpL-k3-Ahr"/>
@@ -265,7 +265,7 @@
                             <constraint firstAttribute="centerX" secondItem="vfM-3r-f7Q" secondAttribute="centerX" id="Btj-2Z-DsJ"/>
                             <constraint firstItem="IVu-r2-bYa" firstAttribute="top" secondItem="jw2-V3-sGx" secondAttribute="bottom" id="MRV-DS-ZhT"/>
                             <constraint firstAttribute="trailing" secondItem="jw2-V3-sGx" secondAttribute="trailing" id="RMa-Al-ZwN"/>
-                            <constraint firstItem="IVu-r2-bYa" firstAttribute="top" secondItem="RUG-KN-ocI" secondAttribute="bottom" id="Wwr-64-v5l"/>
+                            <constraint firstItem="IVu-r2-bYa" firstAttribute="top" secondItem="RUG-KN-ocI" secondAttribute="bottom" constant="76" id="Wwr-64-v5l"/>
                             <constraint firstItem="IVu-r2-bYa" firstAttribute="top" secondItem="wiX-MZ-yqy" secondAttribute="bottom" constant="20" id="a8M-uW-V6n"/>
                             <constraint firstAttribute="centerX" secondItem="wiX-MZ-yqy" secondAttribute="centerX" constant="-0.5" id="aAd-12-YpF"/>
                             <constraint firstItem="jw2-V3-sGx" firstAttribute="top" secondItem="c61-vF-6C3" secondAttribute="top" id="adc-jL-rrw"/>
