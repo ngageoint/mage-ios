@@ -56,13 +56,7 @@
     [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
-    [super viewWillAppear:animated];
-}
-
 -(void) cancel:(id)sender {
-    self.managedObjectContext = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 

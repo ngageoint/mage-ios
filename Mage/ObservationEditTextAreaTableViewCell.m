@@ -6,13 +6,18 @@
 
 #import "ObservationEditTextAreaTableViewCell.h"
 
+@interface ObservationEditTextAreaTableViewCell ()
+@property (strong, nonatomic) NSString *value;
+@end
+
 @implementation ObservationEditTextAreaTableViewCell
 
 - (void) awakeFromNib {
-    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.textArea action:@selector(resignFirstResponder)];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
+    UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolbar.items = [NSArray arrayWithObjects:flexSpace, barButton, nil];
+    toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, barButton, nil];
     self.textArea.inputAccessoryView = toolbar;
     [self.textArea setDelegate: self];
 }
@@ -24,16 +29,24 @@
     } else {
         [self.textArea setText:[field objectForKey:@"value"]];
     }
+    
+    self.value = self.textArea.text;
+    
     [self.keyLabel setText:[field objectForKey:@"title"]];
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
-- (void) textViewDidEndEditing:(UITextView *)textView {
-    [self.delegate observationField:self.fieldDefinition valueChangedTo:textView.text reloadCell:NO];
+- (void) cancelButtonPressed {
+    self.textArea.text = self.value;
+    [self.textArea resignFirstResponder];
 }
 
-- (void) textViewDidBeginEditing:(UITextView *)textView {
-    
+- (void) doneButtonPressed {
+    [self.textArea resignFirstResponder];
+    self.value = self.textArea.text;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+        [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+    }
 }
 
 - (void) setValid:(BOOL) valid {
