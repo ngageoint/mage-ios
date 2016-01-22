@@ -56,6 +56,27 @@
     [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
 -(void) cancel:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -252,10 +273,24 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void) keyboardWillShow: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+}
+
+-(void) keyboardWillHide: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 #pragma mark - Navigation
