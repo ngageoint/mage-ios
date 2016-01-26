@@ -54,6 +54,7 @@ bool currentUserIsMe = NO;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    
     self.avatar.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
     
     Observations *observations = [Observations observationsForUser:self.user];

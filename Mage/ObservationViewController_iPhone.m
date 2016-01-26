@@ -15,11 +15,9 @@
 #import <Event+helper.h>
 
 @interface ObservationViewController_iPhone()
-
 @property (strong, nonatomic) NSMutableArray *tableLayout;
-@property (strong, nonatomic) NSArray *fields;
 @property (strong, nonatomic) NSString *variantField;
-
+@property (strong, nonatomic) NSArray *fields;
 @end
 
 @implementation ObservationViewController_iPhone
@@ -54,8 +52,10 @@
     if (self.variantField) {
         [generalProperties addObject:self.variantField];
     }
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, generalProperties];
-    self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [self.observation.properties allKeys]];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
     [self.propertyTable reloadData];
 }
@@ -82,9 +82,7 @@
     if (section < self.tableLayout.count) {
         return [(NSArray *) self.tableLayout[section] count];
     } else {
-        NSArray *fieldNames = [self.fields valueForKey:@"name"];
-        NSDictionary *filtered = [self.observation.properties dictionaryWithValuesForKeys:fieldNames];
-        return [filtered count];
+        return [self.fields count];
     }
 }
 
@@ -92,35 +90,25 @@
     
     if (indexPath.section == self.tableLayout.count) {
         ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
-        id value = [[self.observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-        id title = [observationCell.fieldDefinition objectForKey:@"title"];
-        if (title == nil) {
-            title = [[self.observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-        }
+        NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
+        id title = [field objectForKey:@"title"];
+        id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+        
         [observationCell populateCellWithKey:title andValue:value];
     }
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    id key = [[self.observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
+    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
     
-    for (id field in self.fields) {
-        NSString *fieldName = [field objectForKey:@"name"];
-        if ([key isEqualToString: fieldName]) {
-            NSString *type = [field objectForKey:@"type"];
-            NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-            ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                CellIdentifier = @"observationCell-generic";
-                cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            }
-            cell.fieldDefinition = field;
-            return cell;
-        }
-    }
-    
-    NSString *CellIdentifier = @"observationCell-generic";
+    NSString *type = [field objectForKey:@"type"];
+    NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
     ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        CellIdentifier = @"observationCell-generic";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    }
+    cell.fieldDefinition = field;
     return cell;
 }
 

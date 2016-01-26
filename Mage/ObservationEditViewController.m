@@ -57,7 +57,7 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+    [super viewDidAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)

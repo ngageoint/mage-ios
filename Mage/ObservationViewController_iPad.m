@@ -66,8 +66,9 @@
         [generalProperties addObject:self.variantField];
     }
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@))", nil, generalProperties];
-    self.fields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [self.observation.properties allKeys]];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -132,43 +133,33 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *fieldNames = [self.fields valueForKey:@"name"];
-    NSDictionary *filtered = [self.observation.properties dictionaryWithValuesForKeys:fieldNames];
-    return [filtered count];
+    return [self.fields count];
 }
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
-    id value = [[_observation.properties allObjects] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    id title = [observationCell.fieldDefinition objectForKey:@"title"];
-    if (title == nil) {
-        title = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    }
+    
+    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
+    id title = [field objectForKey:@"title"];
+    id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+    
     [observationCell populateCellWithKey:title andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    id key = [[_observation.properties allKeys] objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    for (id field in self.fields) {
-        NSString *fieldName = [field objectForKey:@"name"];
-        if ([key isEqualToString: fieldName]) {
-            NSString *type = [field objectForKey:@"type"];
-            NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-            ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                CellIdentifier = @"observationCell-generic";
-                cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            }
-            
-            cell.fieldDefinition = field;
-            return cell;
-        }
+    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
+
+    NSString *type = [field objectForKey:@"type"];
+    NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        CellIdentifier = @"observationCell-generic";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     }
     
-    NSString *CellIdentifier = @"observationCell-generic";
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+    cell.fieldDefinition = field;
     return cell;
+
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -220,5 +211,6 @@
         [mapItem openInMapsWithLaunchOptions:options];
     }
 }
+
 
 @end
