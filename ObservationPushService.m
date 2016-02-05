@@ -37,25 +37,21 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         
         _interval = [[defaults valueForKey:kObservationPushFrequencyKey] doubleValue];
         _pushingObservations = [[NSMutableDictionary alloc] init];
-        
-        [[NSUserDefaults standardUserDefaults] addObserver:self
-                                                forKeyPath:kObservationPushFrequencyKey
-                                                   options:NSKeyValueObservingOptionNew
-                                                   context:NULL];
-        
-        self.fetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
-                                                               ascending:NO
-                                                           withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
-                                                                 groupBy:nil
-                                                                delegate:nil
-                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     }
     
     return self;
 }
 
 - (void) start {
-    self.fetchedResultsController.delegate = self;
+    NSLog(@"start pushing observations");
+    
+    self.fetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
+                                                           ascending:NO
+                                                       withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
+                                                             groupBy:nil
+                                                            delegate:self
+                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+    
     [self pushObservations:self.fetchedResultsController.fetchedObjects];
     
     [self scheduleTimer];
@@ -146,7 +142,8 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         }
     });
 
-    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
 }
+
 
 @end

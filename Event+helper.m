@@ -89,7 +89,6 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
         // doing this because chcking if the team is in the set didn't work
         for(Team* eventTeam in self.teams) {
             if ([eventTeam.remoteId isEqualToString:t.remoteId]) {
-                NSLog(@"User %@ is in event %@", user.name, self.name);
                 return true;
             }
         }
