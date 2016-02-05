@@ -37,27 +37,19 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         
         _interval = [[defaults valueForKey:kAttachmentPushFrequencyKey] doubleValue];
         _pushingAttachments = [[NSMutableDictionary alloc] init];
-        
-        [[NSUserDefaults standardUserDefaults] addObserver:self
-                                                forKeyPath:kAttachmentPushFrequencyKey
-                                                   options:NSKeyValueObservingOptionNew
-                                                   context:NULL];
-        
-        self.fetchedResultsController = [Attachment MR_fetchAllSortedBy:@"lastModified"
-                                                              ascending:NO
-                                                          withPredicate:[NSPredicate predicateWithFormat:@"observationRemoteId != nil && dirty == YES"]
-                                                                groupBy:nil
-                                                               delegate:self
-                                                              inContext:[NSManagedObjectContext MR_defaultContext]];
-        
     }
     
     return self;
 }
 
 - (void) start {
-    [self stop];
-    self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController = [Attachment MR_fetchAllSortedBy:@"lastModified"
+                                                          ascending:NO
+                                                      withPredicate:[NSPredicate predicateWithFormat:@"observationRemoteId != nil && dirty == YES"]
+                                                            groupBy:nil
+                                                           delegate:self
+                                                          inContext:[NSManagedObjectContext MR_defaultContext]];
+
     [self pushAttachments:self.fetchedResultsController.fetchedObjects];
     [self scheduleTimer];
 }
@@ -162,7 +154,8 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             _attachmentPushTimer = nil;
         }
     });
-    self.fetchedResultsController.delegate = nil;
+    
+    self.fetchedResultsController = nil;
 }
 
 
