@@ -24,6 +24,8 @@
 }
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
+    
     if (self.geoPoint) {
         CLLocationDistance latitudeMeters = 2500;
         CLLocationDistance longitudeMeters = 2500;

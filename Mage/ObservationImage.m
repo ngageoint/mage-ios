@@ -35,15 +35,12 @@ const CGFloat annotationScaleWidth = 35.0;
     while(!foundIcon) {
         NSString *iconPath = [iconProperties componentsJoinedByString:@"/"];
         NSString *directoryToSearch = [rootIconFolder stringByAppendingPathComponent:iconPath];
-        NSLog(@"search directory %@", directoryToSearch);
         if ([fileManager fileExistsAtPath:directoryToSearch]) {
             NSArray *directoryContents = [fileManager contentsOfDirectoryAtPath:[rootIconFolder stringByAppendingPathComponent:iconPath] error:nil];
-            NSLog(@"directory contents %@", [directoryContents description]);
 
             if ([directoryContents count] != 0) {
                 for (NSString *path in directoryContents) {
                     NSString *filename = [path lastPathComponent];
-                    NSLog(@"filename is %@", filename);
                     if ([filename hasPrefix:@"icon"]) {
                         return [[rootIconFolder stringByAppendingPathComponent:iconPath] stringByAppendingPathComponent:path];
                     }

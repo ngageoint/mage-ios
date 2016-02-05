@@ -729,18 +729,18 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-+ (StyledPolyline *) generatePolyline:(NSMutableArray *) coordinates {
++ (StyledPolyline *) generatePolyline:(NSMutableArray *) path {
+    NSInteger numberOfSteps = path.count;
     
-    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(coordinates.count * sizeof(CLLocationCoordinate2D));
-    NSInteger exteriorCoordinateCount = 0;
-    for (id coordinate in coordinates) {
-        NSNumber *y = coordinate[0];
-        NSNumber *x = coordinate[1];
-        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
-        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    CLLocationCoordinate2D coordinates[numberOfSteps];
+    for (NSInteger index = 0; index < numberOfSteps; index++) {
+        CLLocation *location = [path objectAtIndex:index];
+        CLLocationCoordinate2D coordinate = location.coordinate;
+        
+        coordinates[index] = coordinate;
     }
     
-    return [StyledPolyline polylineWithCoordinates:exteriorMapCoordinates count:coordinates.count];
+    return [StyledPolyline polylineWithCoordinates:coordinates count:path.count];
 }
 
 
@@ -750,13 +750,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSMutableArray *interiorPolygonCoordinates = [[NSMutableArray alloc] init];
     
     
-    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(exteriorPolygonCoordinates.count * sizeof(CLLocationCoordinate2D));
-    NSInteger exteriorCoordinateCount = 0;
-    for (id coordinate in exteriorPolygonCoordinates) {
-        NSNumber *y = coordinate[0];
-        NSNumber *x = coordinate[1];
-        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
-        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    CLLocationCoordinate2D exteriorMapCoordinates[exteriorPolygonCoordinates.count];
+    for (NSInteger index = 0; index < exteriorPolygonCoordinates.count; index++) {
+        CLLocation *location = [exteriorPolygonCoordinates objectAtIndex:index];
+        CLLocationCoordinate2D coordinate = location.coordinate;
+        exteriorMapCoordinates[index] = coordinate;
     }
     
     //interior polygons

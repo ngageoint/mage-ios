@@ -42,6 +42,8 @@
 @implementation LoginTableViewController
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
+    
     self.tableView.alwaysBounceVertical = NO;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -53,12 +55,16 @@
 
 //  When the view reappears after logout we want to wipe the username and password fields
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [self.usernameField setText:@""];
     [self.passwordField setText:@""];
     [self.passwordField setDelegate:self];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     NSURL *url = [MageServer baseURL];
     if ([@"" isEqualToString:url.absoluteString]) {
         // TODO segue to URL picker

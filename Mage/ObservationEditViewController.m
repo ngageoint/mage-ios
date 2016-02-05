@@ -268,9 +268,19 @@
     }
     
     [self.editDataStore.editTable endEditing:YES];
-    [self.managedObjectContext MR_saveToPersistentStoreAndWait];
-    NSLog(@"saved the observation: %@", self.observation);
-    [self.navigationController popViewControllerAnimated:YES];
+    __weak __typeof__(self) weakSelf = self;
+    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
+        if (!contextDidSave) {
+            NSLog(@"Error saving observation to persistent store, context did not save");
+        }
+        
+        if (error) {
+            NSLog(@"Error saving observation to persistent store %@", error);
+        }
+        
+        NSLog(@"saved the observation: %@", weakSelf.observation);
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
 }
 
 -(void) keyboardWillShow: (NSNotification *) notification {

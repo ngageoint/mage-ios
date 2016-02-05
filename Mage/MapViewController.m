@@ -75,7 +75,6 @@
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
     Event *currentEvent = [Event getCurrentEvent];
-    NSLog(@"current event: %@", currentEvent.name);
     self.eventNameLabel.text = @"All";
     [self.navigationItem setTitle:currentEvent.name];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];

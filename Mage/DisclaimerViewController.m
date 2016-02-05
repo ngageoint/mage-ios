@@ -16,6 +16,8 @@
 @implementation DisclaimerViewController
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self.consentTitle setText:[defaults valueForKeyPath:@"disclaimerTitle"]];
     [self.consentText setText:[defaults valueForKeyPath:@"disclaimerText"]];

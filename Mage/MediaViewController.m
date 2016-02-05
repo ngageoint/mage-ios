@@ -37,9 +37,8 @@
 #pragma mark View Life Cycle
 
 - (NSString * ) createFolderInTempDirectory {
-    
-    NSString *uuidString = (__bridge NSString*)CFUUIDCreateString(nil, CFUUIDCreate(nil));
-    NSString *mediaTempFolder = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), uuidString];
+    NSString *uuid = [[NSUUID new] UUIDString];
+    NSString *mediaTempFolder = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), uuid];
     
     // Create a the actual directory
     if (![[NSFileManager defaultManager] fileExistsAtPath:mediaTempFolder])
