@@ -22,6 +22,8 @@
 @implementation SignUpTableViewController
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
+    
     self.tableView.alwaysBounceVertical = NO;
 }
 

@@ -18,13 +18,14 @@
 #import "MediaViewController.h"
 #import "ImageViewerViewController.h"
 #import "AttachmentSelectionDelegate.h"
+#import <Server+helper.h>
+#import <Event+helper.h>
+#import "ObservationEditTextFieldTableViewCell.h"
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
-
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) IBOutlet ObservationEditViewDataStore *editDataStore;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
-
+@property (weak, nonatomic) IBOutlet UITableView *editTable;
+@property (weak, nonatomic) IBOutlet ObservationEditViewDataStore *editDataStore;
 @end
 
 @implementation ObservationEditViewController
@@ -34,10 +35,11 @@
     
     [self.navigationController setNavigationBarHidden:NO];
 
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
     self.navigationItem.leftBarButtonItem = item;
     
     self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
     self.managedObjectContext.parentContext = [NSManagedObjectContext MR_defaultContext];
     
     // if self.observation is null create a new one
@@ -49,15 +51,33 @@
     
     self.observation.dirty = [NSNumber numberWithBool:YES];
     self.editDataStore.observation = self.observation;
+    
+    [self.editTable setEstimatedRowHeight:44.0f];
+    [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
-    [super viewWillAppear:animated];
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void) cancel:(id)sender {
-    self.managedObjectContext = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -226,24 +246,66 @@
     [self.editDataStore.editTable endUpdates];
 }
 
-- (IBAction)saveObservation:(id)sender {
+- (IBAction) saveObservation:(id)sender {
+    // validate required fields
+    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.archived == %@ && SELF.required == %@ && (NOT SELF.name IN %@)", nil, [NSNumber numberWithBool:YES], @[@"timestamp", @"geometry"]];
+    NSArray *requiredFields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+    
+    // TODO loop over each object in properties, if required make sure it has a property
+    //[[nameToField objectForKey:@"field4"] objectForKey:@"required"]
+    NSMutableArray *invalidFields = [[NSMutableArray alloc] init];
+    for (NSDictionary *field in requiredFields) {
+        id property = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+        if (!property) {
+            [invalidFields addObject:field];
+        }
+    }
+    
+    [self.editDataStore addInvalidFields:invalidFields];
+    if ([invalidFields count] > 0) {
+        return;
+    }
+    
     [self.editDataStore.editTable endEditing:YES];
-    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-        NSLog(@"saved the observation: %@", self.observation);
-        [self.navigationController popViewControllerAnimated:YES];
+    __weak __typeof__(self) weakSelf = self;
+    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
+        if (!contextDidSave) {
+            NSLog(@"Error saving observation to persistent store, context did not save");
+        }
+        
+        if (error) {
+            NSLog(@"Error saving observation to persistent store %@", error);
+        }
+        
+        NSLog(@"saved the observation: %@", weakSelf.observation);
+        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void) keyboardWillShow: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+}
+
+-(void) keyboardWillHide: (NSNotification *) notification {
+    if (self.navigationItem.leftBarButtonItem) {
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
+    
+    if (self.navigationItem.rightBarButtonItem) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;

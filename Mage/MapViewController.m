@@ -17,7 +17,6 @@
 #import "Observation.h"
 #import "ObservationImage.h"
 #import "MeViewController.h"
-#import "ObservationViewController.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "Observations.h"
@@ -26,6 +25,7 @@
 #import "ObservationEditViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
+#import "ObservationViewController_iPad.h"
 #import "ImageViewerViewController.h"
 #import <Event+helper.h>
 #import <GPSLocation+helper.h>
@@ -101,8 +101,12 @@
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
 - (void) viewWillDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
@@ -144,7 +148,8 @@
 		MeViewController *destinationViewController = segue.destinationViewController;
 		[destinationViewController setUser:sender];
     } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
-		ObservationViewController *destinationViewController = segue.destinationViewController;
+        // TODO fix me, this only works because both iPad and iPhone class respond to setObservation
+		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;

@@ -15,6 +15,8 @@
 @implementation SettingsSplitViewController
 
 -(void) viewDidLoad {
+    [super viewDidLoad];
+    
     self.delegate = self;
     
     UINavigationController *masterViewController = [self.viewControllers firstObject];

@@ -21,32 +21,34 @@
     for (int i = 0; i < totalNumberOfFiles; i++) {
         FileInZipInfo *info = [self getCurrentFileInZipInfo];
 
+        if([[[info.name pathComponents] firstObject] caseInsensitiveCompare:@"__MACOSX"] != NSOrderedSame){
         
-        BOOL isDirectory = NO;
-        [fileManager fileExistsAtPath:path isDirectory:&isDirectory];
-        if(isDirectory && [regex numberOfMatchesInString:info.name options:0 range:NSMakeRange(0, [info.name length])] == 1) {
-            [caches addObject:[[info.name pathComponents] firstObject]];
-        };
-        
-        NSLog(@"name %@", info.name);
-        
-        if (![info.name hasSuffix:@"/"]) {
-            NSString *filePath = [path stringByAppendingPathComponent:info.name];
-            [fileManager createDirectoryAtPath:[filePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:error];
-            if (*error) return caches;
+            BOOL isDirectory = NO;
+            [fileManager fileExistsAtPath:path isDirectory:&isDirectory];
+            if(isDirectory && [regex numberOfMatchesInString:info.name options:0 range:NSMakeRange(0, [info.name length])] == 1) {
+                [caches addObject:[[info.name pathComponents] firstObject]];
+            };
             
-            [[NSData data] writeToFile:filePath options:0 error:nil];
-            NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
-            ZipReadStream *read = [self readCurrentFileInZip];
-            NSUInteger count;
-            NSMutableData *data = [NSMutableData dataWithLength:2048];
-            while ((count = [read readDataWithBuffer:data])) {
-                data.length = count;
-                [handle writeData:data];
-                data.length = 2048;
+            NSLog(@"name %@", info.name);
+            
+            if (![info.name hasSuffix:@"/"]) {
+                NSString *filePath = [path stringByAppendingPathComponent:info.name];
+                [fileManager createDirectoryAtPath:[filePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:error];
+                if (*error) return caches;
+                
+                [[NSData data] writeToFile:filePath options:0 error:nil];
+                NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
+                ZipReadStream *read = [self readCurrentFileInZip];
+                NSUInteger count;
+                NSMutableData *data = [NSMutableData dataWithLength:2048];
+                while ((count = [read readDataWithBuffer:data])) {
+                    data.length = count;
+                    [handle writeData:data];
+                    data.length = 2048;
+                }
+                [read finishedReading];
+                [handle closeFile];
             }
-            [read finishedReading];
-            [handle closeFile];
         }
         
         [self goToNextFileInZip];

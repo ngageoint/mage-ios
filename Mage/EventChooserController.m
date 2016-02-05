@@ -14,6 +14,8 @@
 BOOL unwind = NO;
 
 - (void) viewDidAppear:(BOOL) animated {
+    [super viewDidAppear:animated];
+    
     if (self.passthrough) {
         self.passthrough = NO;
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
@@ -28,7 +30,13 @@ BOOL unwind = NO;
 }
 
 - (void) viewDidDisappear:(BOOL) animated {
+    [super viewDidDisappear:animated];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)actionButtonTapped:(id)sender {

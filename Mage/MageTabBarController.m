@@ -6,7 +6,7 @@
 
 #import "MageTabBarController.h"
 #import "MeViewController.h"
-#import "ObservationViewController.h"
+#import "ObservationViewController_iPad.h"
 
 @implementation MageTabBarController
 
@@ -18,7 +18,7 @@
         MeViewController *destination = (MeViewController *)[segue destinationViewController];
         [destination setUser:sender];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationFromMapSegue"]) {
-        ObservationViewController *destination = (ObservationViewController *)[segue destinationViewController];
+        ObservationViewController_iPad *destination = (ObservationViewController_iPad *)[segue destinationViewController];
         [destination setObservation:sender];
     }
 }

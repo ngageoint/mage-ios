@@ -41,6 +41,8 @@
 bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
+    
     [self.navigationController setNavigationBarHidden:NO];
     
     if (self.user == nil) {
@@ -54,6 +56,7 @@ bool currentUserIsMe = NO;
     self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    
     self.avatar.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
     
     Observations *observations = [Observations observationsForUser:self.user];
@@ -177,15 +180,6 @@ bool currentUserIsMe = NO;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    CLLocationDistance latitudeMeters = 500;
-    CLLocationDistance longitudeMeters = 500;
-    NSDictionary *properties = _user.location.properties;
-    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-    if (accuracyProperty != nil) {
-        double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-    }
     if (currentUserIsMe) {
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {

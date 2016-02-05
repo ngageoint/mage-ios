@@ -9,15 +9,6 @@
 
 @implementation ObservationGeometryTableViewCell
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 - (void) populateCellWithKey:(id) key andValue:(id) value {
     if ([value isKindOfClass:[GeoPoint class]]) {
         GeoPoint *geoPoint = value;

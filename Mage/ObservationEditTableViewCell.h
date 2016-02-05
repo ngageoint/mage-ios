@@ -9,7 +9,11 @@
 #import "ObservationEditListener.h"
 #import "AttachmentSelectionDelegate.h"
 
-@interface ObservationEditTableViewCell : UITableViewCell <UITextFieldDelegate>
+@protocol ValidObservationProperty
+- (void) setValid:(BOOL) valid;
+@end
+
+@interface ObservationEditTableViewCell : UITableViewCell <UITextFieldDelegate, ValidObservationProperty>
 
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;

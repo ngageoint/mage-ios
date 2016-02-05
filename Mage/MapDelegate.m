@@ -24,12 +24,27 @@
 #import <MapKit/MapKit.h>
 #import <NSDate+DateTools.h>
 #import <Server+helper.h>
+#import "CacheOverlays.h"
+#import "XYZDirectoryCacheOverlay.h"
+#import "GPKGGeoPackageCache.h"
+#import "GPKGGeoPackageFactory.h"
+#import "GeoPackageCacheOverlay.h"
+#import "GeoPackageTileTableCacheOverlay.h"
+#import "GeoPackageFeatureTableCacheOverlay.h"
+#import "GPKGOverlayFactory.h"
+#import "GPKGNumberFeaturesTile.h"
+#import "GPKGMapShapeConverter.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
-    @property (nonatomic, strong) NSMutableDictionary *offlineMaps;
+    @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
+    @property (nonatomic, strong) CacheOverlays *cacheOverlays;
+    @property (nonatomic, strong) NSMutableArray<CacheOverlay *> * updateCacheOverlays;
+    @property (nonatomic) BOOL updatingCacheOverlays;
+    @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
+    @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
@@ -51,16 +66,21 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
         
-        [defaults addObserver:self
-                   forKeyPath:@"selectedOfflineMaps"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
         if (!self.hideStaticLayers) {
             [defaults addObserver:self
                        forKeyPath:@"selectedStaticLayers"
                           options:NSKeyValueObservingOptionNew
                           context:NULL];
         }
+        
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+        self.cacheOverlays = [CacheOverlays getInstance];
+        [self.cacheOverlays registerListener:self];
+        self.updateCacheOverlays = [[NSMutableArray alloc] init];
+        self.updatingCacheOverlays = false;
+        self.waitingCacheOverlaysUpdate = false;
+        GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory getManager];
+        self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
         
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -196,24 +216,38 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
             }
         }
+        
+        if([self.mapCacheOverlays count] > 0){
+            NSMutableString * clickMessage = [[NSMutableString alloc] init];
+            for(CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+                NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
+                if(message != nil){
+                    if([clickMessage length] > 0){
+                        [clickMessage appendString:@"\n\n"];
+                    }
+                    [clickMessage appendString:message];
+                }
+            }
+            if([clickMessage length] > 0){
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:nil
+                                      message:clickMessage
+                                      delegate:self
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:@"OK",
+                                      nil];
+                [alert show];
+            }
+        }
     }
 }
 
 - (void) dealloc {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:@"mapType"];
-    [defaults removeObserver:self forKeyPath:@"selectedOfflineMaps"];
     [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
     
     self.locationManager.delegate = nil;
-}
-
-- (NSMutableDictionary *) offlineMaps {
-    if (_offlineMaps == nil) {
-        _offlineMaps = [[NSMutableDictionary alloc] init];
-    }
-    
-    return _offlineMaps;
 }
 
 - (NSMutableDictionary *) staticLayers {
@@ -258,7 +292,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
     
-    [self updateOfflineMaps:[defaults objectForKey:@"selectedOfflineMaps"]];
+    [self updateCacheOverlaysSynchronized:[self.cacheOverlays getOverlays]];
+
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
     if (!self.hideStaticLayers) {
@@ -273,10 +308,14 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                       context:(void *)context {
     if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
         self.mapView.mapType = [object integerForKey:keyPath];
-    } else if ([@"selectedOfflineMaps" isEqualToString:keyPath] && self.mapView) {
-        [self updateOfflineMaps:[object objectForKey:keyPath]];
     } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateStaticLayers: [object objectForKey:keyPath]];
+    }
+}
+
+-(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
+    if(self.mapView) {
+        [self updateCacheOverlaysSynchronized:cacheOverlays];
     }
 }
 
@@ -299,28 +338,329 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-- (void) updateOfflineMaps:(NSSet *) offlineMaps {
-    NSMutableSet *unselectedOfflineMaps = [[self.offlineMaps allKeys] mutableCopy];
+/**
+ *  Synchronously update the cache overlays, including overlays and features
+ *
+ *  @param cacheOverlays cache overlays
+ */
+- (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
     
-    for (NSString *offlineMap in offlineMaps) {
+    @synchronized(self.updateCacheOverlays){
         
-        if (![[self.offlineMaps allKeys] containsObject:offlineMap]) {
-            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            NSString *template = [NSString stringWithFormat:@"file://%@/MapCache/%@/{z}/{x}/{y}.png", documentsDirectory, offlineMap];
-            MKTileOverlay *overlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
-            [self.mapView addOverlay:overlay level:MKOverlayLevelAboveLabels];
-            [self.offlineMaps setObject:overlay forKey:offlineMap];
+        // Set the cache overlays to update, including wiping out an update that hasn't processed
+        [self.updateCacheOverlays removeAllObjects];
+        [self.updateCacheOverlays addObjectsFromArray:cacheOverlays];
+        
+        // Is a thread currently updating the cache overlays?
+        if(self.updatingCacheOverlays){
+            // Notify the thread that there is an update waiting
+            self.waitingCacheOverlaysUpdate = true;
+        }else{
+        
+            // Start a new update thread
+            self.updatingCacheOverlays = true;
+            
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+            dispatch_async(queue, ^{
+                
+                // Synchronously pull the next cache overlays to update
+                NSArray<CacheOverlay *> * overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
+                while([overlaysToUpdate count] > 0){
+                    // Update the cache overlays
+                    [self updateCacheOverlays:cacheOverlays];
+                    overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
+                }
+
+            });
         }
-        
-        [unselectedOfflineMaps removeObject:offlineMap];
     }
     
-    for (NSString *unselectedOfflineMap in unselectedOfflineMaps) {
-        MKTileOverlay *overlay = [self.offlineMaps objectForKey:unselectedOfflineMap];
-        if (overlay) {
-            [self.mapView removeOverlay:overlay];
-            [self.offlineMaps removeObjectForKey:unselectedOfflineMap];
+}
+
+/**
+ *  Synchronously get the next cache overlays to update
+ *
+ *  @return cache overlays
+ */
+-(NSArray<CacheOverlay *> *) getNextCacheOverlaysToUpdate{
+    NSMutableArray<CacheOverlay *> * overlaysToUpdate = [[NSMutableArray alloc] init];
+    // Synchronize on the update cache overlays to pull the next update
+    @synchronized(self.updateCacheOverlays){
+        // Get the update cache overlays and remove them
+        [overlaysToUpdate addObjectsFromArray:self.updateCacheOverlays];
+        [self.updateCacheOverlays removeAllObjects];
+        if([overlaysToUpdate count] == 0){
+            // Notify that the updating thread is stopping
+            self.updatingCacheOverlays = false;
         }
+        // Reset the update waiting variable
+        self.waitingCacheOverlaysUpdate = false;
+    }
+    return overlaysToUpdate;
+}
+
+/**
+ *  Update all cache overlays by adding and removing overlays and features
+ *
+ *  @param cacheOverlays cache overlays
+ */
+- (void) updateCacheOverlays:(NSArray<CacheOverlay *> *) cacheOverlays {
+    
+    // Track enabled cache overlays
+    NSMutableDictionary<NSString *, CacheOverlay *> *enabledCacheOverlays = [[NSMutableDictionary alloc] init];
+    
+    // Track enabled GeoPackages
+    NSMutableSet<NSString *> * enabledGeoPackages = [[NSMutableSet alloc] init];
+    
+    for (CacheOverlay *cacheOverlay in cacheOverlays) {
+        // The user has asked for this overlay
+        if(cacheOverlay.enabled){
+            
+            // Handle each type of cache overlay
+            switch([cacheOverlay getType]){
+             
+                case XYZ_DIRECTORY:
+                    [self addXYZDirectoryCacheOverlayWithEnabled:enabledCacheOverlays andCacheOverlay:(XYZDirectoryCacheOverlay *)cacheOverlay];
+                    break;
+                    
+                case GEOPACKAGE:
+                    [self addGeoPackageCacheOverlay:enabledCacheOverlays andEnabledGeoPackages:enabledGeoPackages andCacheOverlay:(GeoPackageCacheOverlay *)cacheOverlay];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
+    
+    // Remove any overlays that are on the map but no longer selected
+    for(CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [cacheOverlay removeFromMap:self.mapView];
+        });
+    }
+    self.mapCacheOverlays = enabledCacheOverlays;
+    
+    // Close GeoPackages no longer enabled
+    [self.geoPackageCache closeRetain:[enabledGeoPackages allObjects]];
+    
+}
+
+/**
+ *  Add XYZ directory cache overlays to the map
+ *
+ *  @param enabledCacheOverlays     enabled cache overlays to add to
+ *  @param xyzDirectoryCacheOverlay cache overlay
+ */
+-(void) addXYZDirectoryCacheOverlayWithEnabled: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (XYZDirectoryCacheOverlay *) xyzDirectoryCacheOverlay{
+    // Retrieve the cache overlay if it already exists (and remove from cache overlays)
+    NSString * cacheName = [xyzDirectoryCacheOverlay getCacheName];
+    CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay == nil){
+        
+        // Set the cache directory path
+        NSString *cacheDirectory = [xyzDirectoryCacheOverlay getDirectory];
+        
+        // Find the image extension type
+        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:cacheDirectory];
+        NSString * patternExtension = nil;
+        for (NSString *file in enumerator) {
+            NSString * extension = [file pathExtension];
+            if([extension caseInsensitiveCompare:@"png"] == NSOrderedSame ||
+               [extension caseInsensitiveCompare:@"jpeg"] == NSOrderedSame ||
+               [extension caseInsensitiveCompare:@"jpg"] == NSOrderedSame){
+                patternExtension = extension;
+                break;
+            }
+        }
+        
+        NSString *template = [NSString stringWithFormat:@"file://%@/{z}/{x}/{y}", cacheDirectory];
+        if(patternExtension != nil){
+            template = [NSString stringWithFormat:@"%@.%@", template, patternExtension];
+        }
+        MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
+        [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+        });
+        
+        cacheOverlay = xyzDirectoryCacheOverlay;
+    }else{
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+    }
+    // Add the cache overlay to the enabled cache overlays
+    [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
+    
+}
+
+/**
+ *  Add GeoPackage cache overlays to the map, as map overlays and/or features
+ *
+ *  @param enabledCacheOverlays   enabled cache overlays to add to
+ *  @param enabledGeoPackages     enabled GeoPackages to add to
+ *  @param geoPackageCacheOverlay cache overlay
+ */
+-(void) addGeoPackageCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andEnabledGeoPackages: (NSMutableSet<NSString *> *) enabledGeoPackages andCacheOverlay: (GeoPackageCacheOverlay *) geoPackageCacheOverlay{
+    
+    // Check each GeoPackage table
+    for(CacheOverlay * tableCacheOverlay in [geoPackageCacheOverlay getChildren]){
+        // Check if the table is enabled
+        if(tableCacheOverlay.enabled){
+            
+            // Get and open if needed the GeoPackage
+            GPKGGeoPackage * geoPackage = [self.geoPackageCache getOrOpen:[geoPackageCacheOverlay getName]];
+            [enabledGeoPackages addObject:geoPackage.name];
+            
+            // Handle tile and feature tables
+            switch([tableCacheOverlay getType]){
+                case GEOPACKAGE_TILE_TABLE:
+                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageTileTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
+                    break;
+                case GEOPACKAGE_FEATURE_TABLE:
+                    [self addGeoPackageFeatureCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageFeatureTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
+                    break;
+                default:
+                    [NSException raise:@"Unsupported" format:@"Unsupported GeoPackage type: %d", [tableCacheOverlay getType]];
+            }
+        }
+    }
+}
+
+/**
+ *  Add GeoPackage tile cache overlays
+ *
+ *  @param enabledCacheOverlays  enabled cache overlays to add to
+ *  @param tileTableCacheOverlay tile table cache overlay
+ *  @param geoPackage            GeoPackage
+ */
+-(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
+    // Retrieve the cache overlay if it already exists (and remove from cache overlays)
+    NSString * cacheName = [tileTableCacheOverlay getCacheName];
+    CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay == nil){
+        // Create a new GeoPackage tile provider and add to the map
+        GPKGTileDao * tileDao = [geoPackage getTileDaoWithTableName:[tileTableCacheOverlay getName]];
+        MKTileOverlay * geoPackageTileOverlay = [GPKGOverlayFactory getTileOverlayWithTileDao:tileDao];
+        geoPackageTileOverlay.canReplaceMapContent = false;
+        [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView addOverlay:geoPackageTileOverlay];
+        });
+        
+        cacheOverlay = tileTableCacheOverlay;
+    }else{
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+    }
+    // Add the cache overlay to the enabled cache overlays
+    [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
+}
+
+/**
+ *  Add GeoPackage feature cache overlays, as overlays when indexed or as features when not
+ *
+ *  @param enabledCacheOverlays     enabled cache overlays to add to
+ *  @param featureTableCacheOverlay feature table cache overlay
+ *  @param geoPackage               GeoPackage
+ */
+-(void) addGeoPackageFeatureCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageFeatureTableCacheOverlay *) featureTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
+    BOOL addAsEnabled = true;
+    // Retrieve the cache overlay if it already exists (and remove from cache overlays)
+    NSString * cacheName = [featureTableCacheOverlay getCacheName];
+    CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay == nil){
+        // Add the features to the map
+        GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:[featureTableCacheOverlay getName]];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        // If indexed, add as a tile overlay
+        if([featureTableCacheOverlay getIndexed]){
+            GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithFeatureDao:featureDao];
+            int maxFeaturesPerTile = 0;
+            if([featureDao getGeometryType] == WKB_POINT){
+                maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
+            }else{
+                maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
+            }
+            [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInt:maxFeaturesPerTile]];
+            GPKGNumberFeaturesTile * numberFeaturesTile = [[GPKGNumberFeaturesTile alloc] init];
+            // Adjust the max features number tile draw paint attributes here as needed to
+            // change how tiles are drawn when more than the max features exist in a tile
+            [featureTiles setMaxFeaturesTileDraw:numberFeaturesTile];
+            [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+            // Adjust the feature tiles draw paint attributes here as needed to change how
+            // features are drawn on tiles
+            GPKGFeatureOverlay * featureOverlay = [[GPKGFeatureOverlay alloc] initWithFeatureTiles:featureTiles];
+            [featureOverlay setMinZoom:[NSNumber numberWithInt:[featureTableCacheOverlay getMinZoom]]];
+            GPKGFeatureOverlayQuery * featureOverlayQuery = [[GPKGFeatureOverlayQuery alloc] initWithFeatureOverlay:featureOverlay];
+            [featureTableCacheOverlay setFeatureOverlayQuery:featureOverlayQuery];
+            featureOverlay.canReplaceMapContent = false;
+            [featureTableCacheOverlay setTileOverlay:featureOverlay];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.mapView addOverlay:featureOverlay];
+            });
+            
+            cacheOverlay = featureTableCacheOverlay;
+        }
+        // Not indexed, add the features to the map
+        else {
+            int maxFeaturesPerTable = 0;
+            if([featureDao getGeometryType] == WKB_POINT){
+                maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
+            }else{
+                maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
+            }
+            GPKGProjection * projection = featureDao.projection;
+            GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];
+            GPKGResultSet * resultSet = [featureDao queryForAll];
+            @try {
+                int totalCount = [resultSet count];
+                int count = 0;
+                while([resultSet moveToNext]){
+                    // If there is another cache overlay update waiting, stop and remove this overlay to let the next update handle it
+                    if(self.waitingCacheOverlaysUpdate){
+                        addAsEnabled = false;
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [featureTableCacheOverlay removeFromMap:self.mapView];
+                        });
+                        break;
+                    }
+                    GPKGFeatureRow * featureRow = [featureDao getFeatureRow:resultSet];
+                    GPKGGeometryData * geometryData = [featureRow getGeometry];
+                    if(geometryData != nil && !geometryData.empty){
+                        WKBGeometry * geometry = geometryData.geometry;
+                        if(geometry != nil){
+                            GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
+                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
+                            });
+                            
+                            if(++count >= maxFeaturesPerTable){
+                                if(count < totalCount){
+                                    NSLog(@"%@- added %d of %d", cacheName, count, totalCount);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            @finally {
+                [resultSet close];
+            }
+        }
+    
+        cacheOverlay = featureTableCacheOverlay;
+    }else{
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+    }
+    
+    // If not cancelled for a waiting update
+    if(addAsEnabled){
+        // Add the cache overlay to the enabled cache overlays
+        [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
     }
 }
 
@@ -389,18 +729,18 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
-+ (StyledPolyline *) generatePolyline:(NSMutableArray *) coordinates {
++ (StyledPolyline *) generatePolyline:(NSMutableArray *) path {
+    NSInteger numberOfSteps = path.count;
     
-    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(coordinates.count * sizeof(CLLocationCoordinate2D));
-    NSInteger exteriorCoordinateCount = 0;
-    for (id coordinate in coordinates) {
-        NSNumber *y = coordinate[0];
-        NSNumber *x = coordinate[1];
-        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
-        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    CLLocationCoordinate2D coordinates[numberOfSteps];
+    for (NSInteger index = 0; index < numberOfSteps; index++) {
+        CLLocation *location = [path objectAtIndex:index];
+        CLLocationCoordinate2D coordinate = location.coordinate;
+        
+        coordinates[index] = coordinate;
     }
     
-    return [StyledPolyline polylineWithCoordinates:exteriorMapCoordinates count:coordinates.count];
+    return [StyledPolyline polylineWithCoordinates:coordinates count:path.count];
 }
 
 
@@ -410,13 +750,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSMutableArray *interiorPolygonCoordinates = [[NSMutableArray alloc] init];
     
     
-    CLLocationCoordinate2D *exteriorMapCoordinates = malloc(exteriorPolygonCoordinates.count * sizeof(CLLocationCoordinate2D));
-    NSInteger exteriorCoordinateCount = 0;
-    for (id coordinate in exteriorPolygonCoordinates) {
-        NSNumber *y = coordinate[0];
-        NSNumber *x = coordinate[1];
-        CLLocationCoordinate2D exteriorCoord = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
-        exteriorMapCoordinates[exteriorCoordinateCount++] = exteriorCoord;
+    CLLocationCoordinate2D exteriorMapCoordinates[exteriorPolygonCoordinates.count];
+    for (NSInteger index = 0; index < exteriorPolygonCoordinates.count; index++) {
+        CLLocation *location = [exteriorPolygonCoordinates objectAtIndex:index];
+        CLLocationCoordinate2D coordinate = location.coordinate;
+        exteriorMapCoordinates[index] = coordinate;
     }
     
     //interior polygons
@@ -492,7 +830,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             annotationView.canShowCallout = self.canShowGpsLocationCallout;
             
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
             annotationView.rightCalloutAccessoryView = rightButton;
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
         } else {
@@ -592,18 +929,30 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolygon class]]) {
-        StyledPolygon *polygon = (StyledPolygon *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolygon class]]) {
+        MKPolygon *polygon = (MKPolygon *) overlay;
         MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
-        renderer.fillColor = polygon.fillColor;
-        renderer.strokeColor = polygon.lineColor;
-        renderer.lineWidth = polygon.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolygon class]]) {
+            StyledPolygon *styledPolygon = (StyledPolygon *) polygon;
+            renderer.fillColor = styledPolygon.fillColor;
+            renderer.strokeColor = styledPolygon.lineColor;
+            renderer.lineWidth = styledPolygon.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
-    } else if ([overlay isKindOfClass:[StyledPolyline class]]) {
-        StyledPolyline *polyline = (StyledPolyline *) overlay;
+    } else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *polyline = (MKPolyline *) overlay;
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:polyline];
-        renderer.strokeColor = polyline.lineColor;
-        renderer.lineWidth = polyline.lineWidth;
+        if ([overlay isKindOfClass:[StyledPolyline class]]) {
+            StyledPolyline *styledPolyline = (StyledPolyline *) polyline;
+            renderer.strokeColor = styledPolyline.lineColor;
+            renderer.lineWidth = styledPolyline.lineWidth;
+        }else{
+            renderer.strokeColor = [UIColor blackColor];
+            renderer.lineWidth = 1;
+        }
         return renderer;
     }
 
@@ -730,7 +1079,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         [self.observationAnnotations setObject:annotation forKey:observation.objectID];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [ObservationImage imageForObservation:observation scaledToWidth:[NSNumber numberWithFloat:35]];
+        annotationView.image = [ObservationImage imageForObservation:observation inMapView:self.mapView];
         [annotation setCoordinate:[observation location].coordinate];
     }
 }

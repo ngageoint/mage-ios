@@ -32,7 +32,7 @@
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
-    UIImage *image = [ObservationImage imageForObservation:self.observation scaledToWidth:[NSNumber numberWithFloat:35]];
+    UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
     
     if (annotationView == nil) {
@@ -41,7 +41,6 @@
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
-        [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
         annotationView.rightCalloutAccessoryView = rightButton;
         annotationView.image = image;
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));

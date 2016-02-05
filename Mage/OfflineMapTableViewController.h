@@ -5,7 +5,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CacheOverlayListener.h"
 
-@interface OfflineMapTableViewController : UITableViewController
+@interface OfflineMapTableViewController : UITableViewController<CacheOverlayListener>
 
 @end
