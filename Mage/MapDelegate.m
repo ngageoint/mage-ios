@@ -733,11 +733,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     NSInteger numberOfSteps = path.count;
     
     CLLocationCoordinate2D coordinates[numberOfSteps];
+    
     for (NSInteger index = 0; index < numberOfSteps; index++) {
-        CLLocation *location = [path objectAtIndex:index];
-        CLLocationCoordinate2D coordinate = location.coordinate;
-        
-        coordinates[index] = coordinate;
+        NSNumber *y = path[index][0];
+        NSNumber *x = path[index][1];
+        coordinates[index] = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
     }
     
     return [StyledPolyline polylineWithCoordinates:coordinates count:path.count];
@@ -752,9 +752,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     
     CLLocationCoordinate2D exteriorMapCoordinates[exteriorPolygonCoordinates.count];
     for (NSInteger index = 0; index < exteriorPolygonCoordinates.count; index++) {
-        CLLocation *location = [exteriorPolygonCoordinates objectAtIndex:index];
-        CLLocationCoordinate2D coordinate = location.coordinate;
-        exteriorMapCoordinates[index] = coordinate;
+        NSNumber *y = exteriorPolygonCoordinates[index][0];
+        NSNumber *x = exteriorPolygonCoordinates[index][1];
+        
+        exteriorMapCoordinates[index] = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
     }
     
     //interior polygons
