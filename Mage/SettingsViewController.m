@@ -11,7 +11,7 @@
 #import "EventChooserController.h"
 #import <Event+helper.h>
 
-@interface SettingsViewController ()
+@interface SettingsViewController ()<UITableViewDelegate>
 
     @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
@@ -21,6 +21,7 @@
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
     @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+    @property (nonatomic, assign) BOOL showDisclaimer;
 
 @end
 
@@ -31,6 +32,9 @@
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -113,6 +117,20 @@
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self setLocationServicesLabel];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 3 && [indexPath row] == 0) {
+        cell.hidden = !self.showDisclaimer;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 3 && [indexPath row] == 0 && !self.showDisclaimer) {
+        return 0;
+    }
+                                     
+    return UITableViewAutomaticDimension;
 }
 
 @end

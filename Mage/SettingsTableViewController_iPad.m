@@ -11,7 +11,7 @@
 #import "EventChooserController.h"
 #import <Event+helper.h>
 
-@interface SettingsTableViewController_iPad ()
+@interface SettingsTableViewController_iPad () <UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+@property (nonatomic, assign) BOOL showDisclaimer;
 
 @end
 
@@ -31,6 +32,9 @@
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -106,6 +110,12 @@
         } else if (indexPath.row == 1) {
             [self.settingSelectionDelegate selectedSetting:@"dataFetchingSettings"];
         }
+   } else if (indexPath.section == 3) {
+       if (indexPath.row == 0) {
+           [self.settingSelectionDelegate selectedSetting:@"disclaimerSettings"];
+       } else if (indexPath.row == 1) {
+           [self.settingSelectionDelegate selectedSetting:@"attributionsSettings"];
+       }
    }
 }
 
@@ -118,6 +128,20 @@
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self setLocationServicesLabel];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 3 && [indexPath row] == 0) {
+        cell.hidden = !self.showDisclaimer;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 3 && [indexPath row] == 0 && !self.showDisclaimer) {
+        return 0;
+    }
+    
+    return UITableViewAutomaticDimension;
 }
 
 @end
