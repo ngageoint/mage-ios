@@ -14,6 +14,9 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 
 @interface GeoPackageFeatureTableCacheOverlay : GeoPackageTableCacheOverlay
 
+/**
+ *  Used to query the backing feature table
+ */
 @property (strong, nonatomic) GPKGFeatureOverlayQuery * featureOverlayQuery;
 
 /**

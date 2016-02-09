@@ -7,8 +7,14 @@
 //
 
 #import "GeoPackageTableCacheOverlay.h"
+#import "GPKGFeatureOverlayQuery.h"
 
 @interface GeoPackageTileTableCacheOverlay : GeoPackageTableCacheOverlay
+
+/**
+ *  Used to query the backing feature tables
+ */
+@property (strong, nonatomic) NSMutableArray<GPKGFeatureOverlayQuery *> * featureOverlayQueries;
 
 /**
  *  Initializer
