@@ -547,29 +547,20 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         
         // Check for linked feature tables
         GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
-        GPKGResultSet * linkedFeatureTableResults = [linker queryForTileTable:tileDao.tableName];
-        while([linkedFeatureTableResults moveToNext]){
+        NSArray<GPKGFeatureDao *> * featureDaos = [linker getFeatureDaosForTileTable:tileDao.tableName];
+        for(GPKGFeatureDao * featureDao in featureDaos){
             
-            GPKGFeatureTileLink * link = [linker getLinkFromResultSet:linkedFeatureTableResults];
-            
-            // Get a feature DAO and create the feature tiles
-            GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:link.featureTableName];
+             // Create the feature tiles
             GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithFeatureDao:featureDao];
             
             // Create an index manager
             GPKGFeatureIndexManager * indexer = [[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
             [featureTiles setIndexManager:indexer];
             
-            // Set the location and zoom bounds
-            [geoPackageTileOverlay setBoundingBox:[tileDao getBoundingBox] withProjection:tileDao.projection];
-            [geoPackageTileOverlay setMinZoom:[NSNumber numberWithInt:tileDao.minZoom]];
-            [geoPackageTileOverlay setMaxZoom:[NSNumber numberWithInt:tileDao.maxZoom]];
-            
             // Add the feature overlay query
-            GPKGFeatureOverlayQuery * featureOverlayQuery = [[GPKGFeatureOverlayQuery alloc] initWithFeatureOverlay:geoPackageTileOverlay andFeatureTiles:featureTiles];
+            GPKGFeatureOverlayQuery * featureOverlayQuery = [[GPKGFeatureOverlayQuery alloc] initWithBoundedOverlay:geoPackageTileOverlay andFeatureTiles:featureTiles];
             [tileTableCacheOverlay.featureOverlayQueries addObject:featureOverlayQuery];
         }
-        [linkedFeatureTableResults close];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.mapView addOverlay:geoPackageTileOverlay];
@@ -620,6 +611,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             // features are drawn on tiles
             GPKGFeatureOverlay * featureOverlay = [[GPKGFeatureOverlay alloc] initWithFeatureTiles:featureTiles];
             [featureOverlay setMinZoom:[NSNumber numberWithInt:[featureTableCacheOverlay getMinZoom]]];
+            
+            GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
+            NSArray<GPKGTileDao *> * tileDaos = [linker getTileDaosForFeatureTable:featureDao.tableName];
+            [featureOverlay ignoreTileDaos:tileDaos];
+            
             GPKGFeatureOverlayQuery * featureOverlayQuery = [[GPKGFeatureOverlayQuery alloc] initWithFeatureOverlay:featureOverlay];
             [featureTableCacheOverlay setFeatureOverlayQuery:featureOverlayQuery];
             featureOverlay.canReplaceMapContent = false;
