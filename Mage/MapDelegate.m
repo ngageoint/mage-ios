@@ -35,6 +35,7 @@
 #import "GPKGNumberFeaturesTile.h"
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureTileTableLinker.h"
+#import "CacheOverlayUpdate.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -42,7 +43,8 @@
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
     @property (nonatomic, strong) CacheOverlays *cacheOverlays;
-    @property (nonatomic, strong) NSMutableArray<CacheOverlay *> * updateCacheOverlays;
+    @property (nonatomic, strong) CacheOverlayUpdate * cacheOverlayUpdate;
+    @property (nonatomic, strong) NSObject * cacheOverlayUpdateLock;
     @property (nonatomic) BOOL updatingCacheOverlays;
     @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
@@ -77,7 +79,8 @@
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
         self.cacheOverlays = [CacheOverlays getInstance];
         [self.cacheOverlays registerListener:self];
-        self.updateCacheOverlays = [[NSMutableArray alloc] init];
+        self.cacheOverlayUpdate = nil;
+        self.cacheOverlayUpdateLock = [[NSObject alloc] init];
         self.updatingCacheOverlays = false;
         self.waitingCacheOverlaysUpdate = false;
         GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory getManager];
@@ -346,11 +349,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
  */
 - (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
     
-    @synchronized(self.updateCacheOverlays){
+    @synchronized(self.cacheOverlayUpdateLock){
         
         // Set the cache overlays to update, including wiping out an update that hasn't processed
-        [self.updateCacheOverlays removeAllObjects];
-        [self.updateCacheOverlays addObjectsFromArray:cacheOverlays];
+        self.cacheOverlayUpdate = [[CacheOverlayUpdate alloc] initWithCacheOverlays:cacheOverlays];
         
         // Is a thread currently updating the cache overlays?
         if(self.updatingCacheOverlays){
@@ -365,8 +367,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             dispatch_async(queue, ^{
                 
                 // Synchronously pull the next cache overlays to update
-                NSArray<CacheOverlay *> * overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
-                while([overlaysToUpdate count] > 0){
+                CacheOverlayUpdate * overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
+                while(overlaysToUpdate != nil){
                     // Update the cache overlays
                     [self updateCacheOverlays:cacheOverlays];
                     overlaysToUpdate = [self getNextCacheOverlaysToUpdate];
@@ -383,14 +385,14 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
  *
  *  @return cache overlays
  */
--(NSArray<CacheOverlay *> *) getNextCacheOverlaysToUpdate{
-    NSMutableArray<CacheOverlay *> * overlaysToUpdate = [[NSMutableArray alloc] init];
+-(CacheOverlayUpdate *) getNextCacheOverlaysToUpdate{
+    CacheOverlayUpdate * overlaysToUpdate = nil;
     // Synchronize on the update cache overlays to pull the next update
-    @synchronized(self.updateCacheOverlays){
+    @synchronized(self.cacheOverlayUpdateLock){
         // Get the update cache overlays and remove them
-        [overlaysToUpdate addObjectsFromArray:self.updateCacheOverlays];
-        [self.updateCacheOverlays removeAllObjects];
-        if([overlaysToUpdate count] == 0){
+        overlaysToUpdate = self.cacheOverlayUpdate;
+        self.cacheOverlayUpdate = nil;
+        if(overlaysToUpdate == nil){
             // Notify that the updating thread is stopping
             self.updatingCacheOverlays = false;
         }
@@ -482,7 +484,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveLabels];
+            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveRoads];
         });
         
         cacheOverlay = xyzDirectoryCacheOverlay;
@@ -515,7 +517,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             // Handle tile and feature tables
             switch([tableCacheOverlay getType]){
                 case GEOPACKAGE_TILE_TABLE:
-                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageTileTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
+                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageTileTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage andLinkedToFeatures:false];
                     break;
                 case GEOPACKAGE_FEATURE_TABLE:
                     [self addGeoPackageFeatureCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageFeatureTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
@@ -533,8 +535,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
  *  @param enabledCacheOverlays  enabled cache overlays to add to
  *  @param tileTableCacheOverlay tile table cache overlay
  *  @param geoPackage            GeoPackage
+ *  @param linkedToFeatures false if a normal tile table, true if linked to a feature table
  */
--(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
+-(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage andLinkedToFeatures: (BOOL) linkedToFeatures{
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [tileTableCacheOverlay getCacheName];
     CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
@@ -546,6 +549,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
         
         // Check for linked feature tables
+        [tileTableCacheOverlay.featureOverlayQueries removeAllObjects];
         GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
         NSArray<GPKGFeatureDao *> * featureDaos = [linker getFeatureDaosForTileTable:tileDao.tableName];
         for(GPKGFeatureDao * featureDao in featureDaos){
@@ -563,7 +567,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.mapView addOverlay:geoPackageTileOverlay];
+            [self.mapView addOverlay:geoPackageTileOverlay level:(linkedToFeatures ? MKOverlayLevelAboveLabels: MKOverlayLevelAboveRoads)];
         });
         
         cacheOverlay = tileTableCacheOverlay;
@@ -622,7 +626,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             [featureTableCacheOverlay setTileOverlay:featureOverlay];
             
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.mapView addOverlay:featureOverlay];
+                [self.mapView addOverlay:featureOverlay level:MKOverlayLevelAboveLabels];
             });
             
             cacheOverlay = featureTableCacheOverlay;
@@ -676,9 +680,17 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             }
         }
     
+        // Add linked tile tables
+        for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
+            [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+        }
+        
         cacheOverlay = featureTableCacheOverlay;
     }else{
         [self.mapCacheOverlays removeObjectForKey:cacheName];
+        for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
+            [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
+        }
     }
     
     // If not cancelled for a waiting update

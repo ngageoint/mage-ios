@@ -17,6 +17,7 @@
 		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */; };
 		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; };
 		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; };
+		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
 		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
@@ -171,6 +172,8 @@
 		0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheActiveSwitch.m; sourceTree = "<group>"; };
 		045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCacheOverlayTableCell.h; sourceTree = "<group>"; };
 		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCacheOverlayTableCell.m; sourceTree = "<group>"; };
+		046877F91C6D121400967470 /* CacheOverlayUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayUpdate.h; sourceTree = "<group>"; };
+		046877FA1C6D121400967470 /* CacheOverlayUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayUpdate.m; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
@@ -470,6 +473,8 @@
 				0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */,
 				045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */,
 				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */,
+				046877F91C6D121400967470 /* CacheOverlayUpdate.h */,
+				046877FA1C6D121400967470 /* CacheOverlayUpdate.m */,
 			);
 			name = Cache;
 			path = Map/Cache;
@@ -1229,6 +1234,7 @@
 				F798FAB219A4E5200010B052 /* ObservationPickerTableViewCell.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
+				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,

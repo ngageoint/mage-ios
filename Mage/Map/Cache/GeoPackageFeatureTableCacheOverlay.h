@@ -9,6 +9,7 @@
 #import "GeoPackageTableCacheOverlay.h"
 #import "GPKGFeatureOverlayQuery.h"
 #import "GPKGMapShape.h"
+#import "GeoPackageTileTableCacheOverlay.h"
 
 extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 
@@ -74,5 +75,19 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  *  @return shape
  */
 -(GPKGMapShape *) removeShapeFromMapWithId: (NSNumber *) id fromMapView: (MKMapView *) mapView;
+
+/**
+ *  Add a linked tile table cache overlay
+ *
+ *  @param tileTable  tile table cache overlay
+ */
+-(void) addLinkedTileTable: (GeoPackageTileTableCacheOverlay *) tileTable;
+
+/**
+ *  Get the linked tile table cache overlays
+ *
+ *  @return linked tile table cache overlays
+ */
+-(NSArray<GeoPackageTileTableCacheOverlay *> *) getLinkedTileTables;
 
 @end
