@@ -50,7 +50,13 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 }
 
 -(NSString *) getInfo{
-    return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
+    int minZoom = [self getMinZoom];
+    int maxZoom = [self getMaxZoom];
+    for(GeoPackageTileTableCacheOverlay * linkedTileTable in self.linkedTiles){
+        minZoom = MIN(minZoom, [linkedTileTable getMinZoom]);
+        maxZoom = MAX(maxZoom, [linkedTileTable getMaxZoom]);
+    }
+    return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], minZoom, maxZoom];
 }
 
 -(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{

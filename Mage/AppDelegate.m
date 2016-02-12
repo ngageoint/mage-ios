@@ -36,6 +36,7 @@
 
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
+@property (nonatomic, strong) NSString *addedCacheOverlay;
 @end
 
 @implementation AppDelegate
@@ -171,8 +172,14 @@
             if(enabled || enableParent){
                 [cacheOverlay setEnabled:true];
             }
+            
+            // Mark the cache overlay if MAGE was launched with a new cache file
+            if(self.addedCacheOverlay != nil && [self.addedCacheOverlay isEqualToString:cacheName]){
+                [cacheOverlay setAdded:true];
+            }
         }
     }
+    self.addedCacheOverlay = nil;
     
     [[CacheOverlays getInstance] addCacheOverlays:overlays];
     
@@ -393,6 +400,7 @@
                 [selectedCaches addObject:name];
                 [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
                 [defaults synchronize];
+                self.addedCacheOverlay = name;
             }
         }
     }

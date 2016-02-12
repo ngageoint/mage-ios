@@ -36,12 +36,16 @@
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "CacheOverlayUpdate.h"
+#import "GPKGProjectionTransform.h"
+#import "GPKGProjectionConstants.h"
+#import "GPKGTileBoundingBoxUtils.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
     @property (nonatomic, strong) User *selectedUser;
     @property (nonatomic, strong) MKCircle *selectedUserCircle;
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
+    @property (nonatomic, strong) GPKGBoundingBox * addedCacheBoundingBox;
     @property (nonatomic, strong) CacheOverlays *cacheOverlays;
     @property (nonatomic, strong) CacheOverlayUpdate * cacheOverlayUpdate;
     @property (nonatomic, strong) NSObject * cacheOverlayUpdateLock;
@@ -415,6 +419,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     // Track enabled GeoPackages
     NSMutableSet<NSString *> * enabledGeoPackages = [[NSMutableSet alloc] init];
     
+    // Reset the bounding box for newly added caches
+    self.addedCacheBoundingBox = nil;
+    
     for (CacheOverlay *cacheOverlay in cacheOverlays) {
         // The user has asked for this overlay
         if(cacheOverlay.enabled){
@@ -434,6 +441,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                     break;
             }
         }
+        
+        [cacheOverlay setAdded:false];
     }
     
     // Remove any overlays that are on the map but no longer selected
@@ -447,6 +456,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     // Close GeoPackages no longer enabled
     [self.geoPackageCache closeRetain:[enabledGeoPackages allObjects]];
     
+    // If a new cache was added, zoom to the bounding box area
+    if(self.addedCacheBoundingBox != nil){
+        
+        struct GPKGBoundingBoxSize size = [self.addedCacheBoundingBox sizeInMeters];
+        CLLocationCoordinate2D center = [self.addedCacheBoundingBox getCenter];
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(center, size.height, size.width);
+        
+        [self.mapView setRegion:region animated:true];
+    }
 }
 
 /**
@@ -524,6 +542,37 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                     break;
                 default:
                     [NSException raise:@"Unsupported" format:@"Unsupported GeoPackage type: %d", [tableCacheOverlay getType]];
+            }
+            
+            // If a newly added cache, update the bounding box for zooming
+            if(geoPackageCacheOverlay.added){
+                
+                GPKGContentsDao * contentsDao = [geoPackage getContentsDao];
+                GPKGContents * contents = (GPKGContents *)[contentsDao queryForIdObject:[tableCacheOverlay getName]];
+                GPKGBoundingBox * contentsBoundingBox = [contents getBoundingBox];
+                GPKGProjection * projection = [contentsDao getProjection:contents];
+                
+                GPKGProjectionTransform * transform = [[GPKGProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
+                GPKGBoundingBox * boundingBox = [transform transformWithBoundingBox:contentsBoundingBox];
+                boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
+                
+                if(self.addedCacheBoundingBox == nil){
+                    self.addedCacheBoundingBox = boundingBox;
+                }else{
+                    if([boundingBox.minLongitude compare:self.addedCacheBoundingBox.minLongitude] == NSOrderedAscending){
+                        [self.addedCacheBoundingBox setMinLongitude:boundingBox.minLongitude];
+                    }
+                    if([boundingBox.maxLongitude compare:self.addedCacheBoundingBox.maxLongitude] == NSOrderedDescending){
+                        [self.addedCacheBoundingBox setMaxLongitude:boundingBox.maxLongitude];
+                    }
+                    if([boundingBox.minLatitude compare:self.addedCacheBoundingBox.minLatitude] == NSOrderedAscending){
+                        [self.addedCacheBoundingBox setMinLatitude:boundingBox.minLatitude];
+                    }
+                    if([boundingBox.maxLatitude compare:self.addedCacheBoundingBox.maxLatitude] == NSOrderedDescending){
+                        [self.addedCacheBoundingBox setMaxLatitude:boundingBox.maxLatitude];
+                    }
+                }
+
             }
         }
     }

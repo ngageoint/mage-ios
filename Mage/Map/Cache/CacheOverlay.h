@@ -26,6 +26,11 @@
 @property (nonatomic) BOOL expanded;
 
 /**
+ *  True when the cache was newly added, such as a file opened with MAGE
+ */
+@property (nonatomic) BOOL added;
+
+/**
  *  Initializer
  *
  *  @param name              name
