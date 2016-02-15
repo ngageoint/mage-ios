@@ -256,23 +256,25 @@
             }
             GeoPackageFeatureTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
             
-            // Check for linked tile tables
-            NSArray<NSString *> * linkedTileTables = [linker getTileTablesForFeatureTable:featureTable];
-            for(NSString * linkedTileTable in linkedTileTables){
-                // Get the tile table cache overlay
-                GeoPackageTileTableCacheOverlay * tileCacheOverlay = [tileCacheOverlays objectForKey:linkedTileTable];
-                if(tileCacheOverlay != nil){
-                    // Remove from tile cache overlays so the tile table is not added as stand alone, and add to the linked overlays
-                    [tileCacheOverlays removeObjectForKey:linkedTileTable];
-                    [linkedTileCacheOverlays setObject:tileCacheOverlay forKey:linkedTileTable];
-                }else{
-                    // Another feature table may already be linked to this table, so check the linked overlays
-                    tileCacheOverlay = [linkedTileCacheOverlays objectForKey:linkedTileTable];
-                }
-                
-                // Add the linked tile table to the feature table
-                if(tileCacheOverlay != nil){
-                    [tableCache addLinkedTileTable:tileCacheOverlay];
+            // If indexed, check for linked tile tables
+            if(indexed){
+                NSArray<NSString *> * linkedTileTables = [linker getTileTablesForFeatureTable:featureTable];
+                for(NSString * linkedTileTable in linkedTileTables){
+                    // Get the tile table cache overlay
+                    GeoPackageTileTableCacheOverlay * tileCacheOverlay = [tileCacheOverlays objectForKey:linkedTileTable];
+                    if(tileCacheOverlay != nil){
+                        // Remove from tile cache overlays so the tile table is not added as stand alone, and add to the linked overlays
+                        [tileCacheOverlays removeObjectForKey:linkedTileTable];
+                        [linkedTileCacheOverlays setObject:tileCacheOverlay forKey:linkedTileTable];
+                    }else{
+                        // Another feature table may already be linked to this table, so check the linked overlays
+                        tileCacheOverlay = [linkedTileCacheOverlays objectForKey:linkedTileTable];
+                    }
+                    
+                    // Add the linked tile table to the feature table
+                    if(tileCacheOverlay != nil){
+                        [tableCache addLinkedTileTable:tileCacheOverlay];
+                    }
                 }
             }
             
