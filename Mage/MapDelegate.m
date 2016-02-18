@@ -423,6 +423,17 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     self.addedCacheBoundingBox = nil;
     
     for (CacheOverlay *cacheOverlay in cacheOverlays) {
+        
+        // If this cache overlay was replaced by a new version, remove the old from the map
+        if(cacheOverlay.replacedCacheOverlay != nil){
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [cacheOverlay.replacedCacheOverlay removeFromMap:self.mapView];
+            });
+            if([cacheOverlay getType] == GEOPACKAGE){
+                [self.geoPackageCache close:[cacheOverlay getName]];
+            }
+        }
+        
         // The user has asked for this overlay
         if(cacheOverlay.enabled){
             
@@ -443,6 +454,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         [cacheOverlay setAdded:false];
+        [cacheOverlay setReplacedCacheOverlay:nil];
     }
     
     // Remove any overlays that are on the map but no longer selected
@@ -559,18 +571,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 if(self.addedCacheBoundingBox == nil){
                     self.addedCacheBoundingBox = boundingBox;
                 }else{
-                    if([boundingBox.minLongitude compare:self.addedCacheBoundingBox.minLongitude] == NSOrderedAscending){
-                        [self.addedCacheBoundingBox setMinLongitude:boundingBox.minLongitude];
-                    }
-                    if([boundingBox.maxLongitude compare:self.addedCacheBoundingBox.maxLongitude] == NSOrderedDescending){
-                        [self.addedCacheBoundingBox setMaxLongitude:boundingBox.maxLongitude];
-                    }
-                    if([boundingBox.minLatitude compare:self.addedCacheBoundingBox.minLatitude] == NSOrderedAscending){
-                        [self.addedCacheBoundingBox setMinLatitude:boundingBox.minLatitude];
-                    }
-                    if([boundingBox.maxLatitude compare:self.addedCacheBoundingBox.maxLatitude] == NSOrderedDescending){
-                        [self.addedCacheBoundingBox setMaxLatitude:boundingBox.maxLatitude];
-                    }
+                    self.addedCacheBoundingBox = [GPKGTileBoundingBoxUtils unionWithBoundingBox:self.addedCacheBoundingBox andBoundingBox:boundingBox];
                 }
 
             }
@@ -590,6 +591,13 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [tileTableCacheOverlay getCacheName];
     CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay != nil){
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+        // If the existing cache overlay is being replaced, create a new cache overlay
+        if(tileTableCacheOverlay.parent.replacedCacheOverlay != nil){
+            cacheOverlay = nil;
+        }
+    }
     if(cacheOverlay == nil){
         // Create a new GeoPackage tile provider and add to the map
         GPKGTileDao * tileDao = [geoPackage getTileDaoWithTableName:[tileTableCacheOverlay getName]];
@@ -620,8 +628,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         });
         
         cacheOverlay = tileTableCacheOverlay;
-    }else{
-        [self.mapCacheOverlays removeObjectForKey:cacheName];
     }
     // Add the cache overlay to the enabled cache overlays
     [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
@@ -639,6 +645,20 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [featureTableCacheOverlay getCacheName];
     CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay != nil){
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+        // If the existing cache overlay is being replaced, create a new cache overlay
+        if(featureTableCacheOverlay.parent.replacedCacheOverlay != nil){
+            cacheOverlay = nil;
+        }
+        for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
+            if(cacheOverlay != nil){
+                // Add the existing linked tile cache overlays
+                [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+            }
+            [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
+        }
+    }
     if(cacheOverlay == nil){
         // Add the features to the map
         GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:[featureTableCacheOverlay getName]];
@@ -735,11 +755,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         }
         
         cacheOverlay = featureTableCacheOverlay;
-    }else{
-        [self.mapCacheOverlays removeObjectForKey:cacheName];
-        for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
-            [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
-        }
     }
     
     // If not cancelled for a waiting update

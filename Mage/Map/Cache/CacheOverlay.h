@@ -31,6 +31,11 @@
 @property (nonatomic) BOOL added;
 
 /**
+ *  A cache overlay that is being replaced by a new version
+ */
+@property (nonatomic, strong) CacheOverlay *replacedCacheOverlay;
+
+/**
  *  Initializer
  *
  *  @param name              name
