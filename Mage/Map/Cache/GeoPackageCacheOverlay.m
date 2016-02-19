@@ -7,6 +7,7 @@
 //
 
 #import "GeoPackageCacheOverlay.h"
+#import "GeoPackageFeatureTableCacheOverlay.h"
 
 @interface GeoPackageCacheOverlay ()
 
@@ -22,6 +23,12 @@
         self.tables = [[NSMutableArray alloc] init];
         for(GeoPackageTableCacheOverlay * table in tables){
             [table setParent:self];
+            if([table getType] == GEOPACKAGE_FEATURE_TABLE){
+                GeoPackageFeatureTableCacheOverlay * featureTable = (GeoPackageFeatureTableCacheOverlay *) table;
+                for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTable getLinkedTileTables]){
+                    [linkedTileTable setParent:self];
+                }
+            }
             [self.tables addObject:table];
         }
     }
