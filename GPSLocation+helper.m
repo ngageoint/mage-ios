@@ -14,7 +14,7 @@
 @implementation GPSLocation (helper)
 
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
-    GPSLocation *gpsLocation = [GPSLocation MR_createInContext:managedObjectContext];
+    GPSLocation *gpsLocation = [GPSLocation MR_createEntityInContext:managedObjectContext];
     
     gpsLocation.geometry = [[GeoPoint alloc] initWithLocation:location];
     gpsLocation.timestamp = location.timestamp;
@@ -22,6 +22,7 @@
     gpsLocation.properties = @{
         @"altitude": [NSNumber numberWithDouble:location.altitude],
         @"accuracy": [NSNumber numberWithDouble:location.horizontalAccuracy],
+        @"verticalAccuracy": [NSNumber numberWithDouble:location.verticalAccuracy],
         @"bearing": [NSNumber numberWithDouble:location.course],
         @"speed": [NSNumber numberWithDouble:location.speed],
         @"timestamp": [location.timestamp iso8601String]

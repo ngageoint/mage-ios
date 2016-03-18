@@ -2,7 +2,6 @@
 //  HttpManager.m
 //  mage-ios-sdk
 //
-//
 
 #import "HttpManager.h"
 #import "UserUtility.h"
@@ -38,7 +37,11 @@ static HttpManager *sharedSingleton = nil;
 - (id) init {
     if ((self = [super init])) {
         _manager = [AFHTTPRequestOperationManager manager];
-        _manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        
+        AFJSONResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        responseSerializer.removesKeysWithNullValues = YES;
+        _manager.responseSerializer = responseSerializer;
+        
         _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         [_manager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
