@@ -32,9 +32,11 @@
 #import "GPKGFeatureIndexManager.h"
 #import "GeoPackageFeatureTableCacheOverlay.h"
 #import "MageConstants.h"
+#import "GPKGFeatureTileTableLinker.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
+@property (nonatomic, strong) NSString *addedCacheOverlay;
 @end
 
 @implementation AppDelegate
@@ -170,8 +172,14 @@
             if(enabled || enableParent){
                 [cacheOverlay setEnabled:true];
             }
+            
+            // Mark the cache overlay if MAGE was launched with a new cache file
+            if(self.addedCacheOverlay != nil && [self.addedCacheOverlay isEqualToString:cacheName]){
+                [cacheOverlay setAdded:true];
+            }
         }
     }
+    self.addedCacheOverlay = nil;
     
     [[CacheOverlays getInstance] addCacheOverlays:overlays];
     
@@ -187,9 +195,18 @@
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     NSArray * geoPackages = [manager databases];
     for(NSString * geoPackage in geoPackages){
-        GeoPackageCacheOverlay * cacheOverlay = [self getGeoPackageCacheOverlayWithManager:manager andName:geoPackage];
-        if(cacheOverlay != nil){
-            [cacheOverlays addObject:cacheOverlay];
+        
+        // Make sure the GeoPackage file exists
+        NSString * filePath = [manager documentsPathForDatabase:geoPackage];
+        if(filePath != nil && [[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        
+            GeoPackageCacheOverlay * cacheOverlay = [self getGeoPackageCacheOverlayWithManager:manager andName:geoPackage];
+            if(cacheOverlay != nil){
+                [cacheOverlays addObject:cacheOverlay];
+            }
+        }else{
+            // Delete if the file was deleted
+            [manager delete:geoPackage];
         }
     }
 }
@@ -203,7 +220,8 @@
     @try {
         NSMutableArray<GeoPackageTableCacheOverlay *> * tables = [[NSMutableArray alloc] init];
         
-        // GeoPackage tile tables
+        // GeoPackage tile tables, build a mapping between table name and the created cache overlays
+        NSMutableDictionary<NSString *, GeoPackageTileTableCacheOverlay *> * tileCacheOverlays = [[NSMutableDictionary alloc] init];
         NSArray * tileTables = [geoPackage getTileTables];
         for(NSString * tileTable in tileTables){
             NSString * tableCacheName = [CacheOverlay buildChildCacheNameWithName:name andChildName:tileTable];
@@ -211,11 +229,15 @@
             int count = [tileDao count];
             int minZoom = tileDao.minZoom;
             int maxZoom = tileDao.maxZoom;
-            GeoPackageTableCacheOverlay * tableCache = [[GeoPackageTileTableCacheOverlay alloc] initWithName:tileTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andMaxZoom:maxZoom];
-            [tables addObject:tableCache];
+            GeoPackageTileTableCacheOverlay * tableCache = [[GeoPackageTileTableCacheOverlay alloc] initWithName:tileTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andMaxZoom:maxZoom];
+            [tileCacheOverlays setObject:tableCache forKey:tileTable];
         }
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        // Get a linker to find tile tables linked to features
+        GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
+        NSMutableDictionary<NSString *, GeoPackageTileTableCacheOverlay *> * linkedTileCacheOverlays = [[NSMutableDictionary alloc] init];
         
         // GeoPackage feature tables
         NSArray * featureTables = [geoPackage getFeatureTables];
@@ -232,8 +254,36 @@
                 minZoom = MAX(minZoom, 0);
                 minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }
-            GeoPackageTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
+            GeoPackageFeatureTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
+            
+            // If indexed, check for linked tile tables
+            if(indexed){
+                NSArray<NSString *> * linkedTileTables = [linker getTileTablesForFeatureTable:featureTable];
+                for(NSString * linkedTileTable in linkedTileTables){
+                    // Get the tile table cache overlay
+                    GeoPackageTileTableCacheOverlay * tileCacheOverlay = [tileCacheOverlays objectForKey:linkedTileTable];
+                    if(tileCacheOverlay != nil){
+                        // Remove from tile cache overlays so the tile table is not added as stand alone, and add to the linked overlays
+                        [tileCacheOverlays removeObjectForKey:linkedTileTable];
+                        [linkedTileCacheOverlays setObject:tileCacheOverlay forKey:linkedTileTable];
+                    }else{
+                        // Another feature table may already be linked to this table, so check the linked overlays
+                        tileCacheOverlay = [linkedTileCacheOverlays objectForKey:linkedTileTable];
+                    }
+                    
+                    // Add the linked tile table to the feature table
+                    if(tileCacheOverlay != nil){
+                        [tableCache addLinkedTileTable:tileCacheOverlay];
+                    }
+                }
+            }
+            
             [tables addObject:tableCache];
+        }
+        
+        // Add stand alone tile tables that were not linked to feature tables
+        for(GeoPackageTileTableCacheOverlay * tileCacheOverlay in [tileCacheOverlays allValues]){
+            [tables addObject: tileCacheOverlay];
         }
         
         // Create the GeoPackage overlay with child tables
@@ -352,6 +402,7 @@
                 [selectedCaches addObject:name];
                 [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
                 [defaults synchronize];
+                self.addedCacheOverlay = name;
             }
         }
     }

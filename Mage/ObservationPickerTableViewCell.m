@@ -11,8 +11,12 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     self.pickerValues = [NSMutableArray array];
     for (id choice in [field objectForKey:@"choices"]) {
-        NSLog(@"title is %@", [choice objectForKey:@"title"]);
-        [self.pickerValues addObject:[choice objectForKey:@"title"]];
+        NSString *title = [choice objectForKey:@"title"];
+        NSLog(@"title is %@", title);
+        
+        if (title) {
+            [self.pickerValues addObject:title];
+        }
     }
     self.picker = [[UIPickerView alloc] init];
     self.picker.delegate = self;
