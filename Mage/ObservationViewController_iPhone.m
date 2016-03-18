@@ -53,7 +53,11 @@
         [generalProperties addObject:self.variantField];
     }
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [self.observation.properties allKeys]];
+    NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
+    NSArray *keysWithEmptyString = [propertiesWithValue allKeysForObject:@""];
+    [propertiesWithValue removeObjectsForKeys:keysWithEmptyString];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [propertiesWithValue allKeys]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
