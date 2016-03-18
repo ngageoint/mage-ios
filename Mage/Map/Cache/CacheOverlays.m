@@ -84,7 +84,17 @@ static CacheOverlays * instance;
     if(existingOverlay == nil){
         [_overlayNames addObject:cacheName];
     }else{
+        // Set existing cache overlays to their current enabled state
         [overlay setEnabled:existingOverlay.enabled];
+        // If a new version of an existing cache overlay was added
+        if(overlay.added){
+            // Set the cache overlay being replaced
+            if(existingOverlay.replacedCacheOverlay != nil){
+                [overlay setReplacedCacheOverlay:existingOverlay.replacedCacheOverlay];
+            }else{
+                [overlay setReplacedCacheOverlay:existingOverlay];
+            }
+        }
     }
     [_overlays setObject:overlay forKey:cacheName];
 }

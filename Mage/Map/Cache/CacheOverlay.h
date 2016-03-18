@@ -26,6 +26,16 @@
 @property (nonatomic) BOOL expanded;
 
 /**
+ *  True when the cache was newly added, such as a file opened with MAGE
+ */
+@property (nonatomic) BOOL added;
+
+/**
+ *  A cache overlay that is being replaced by a new version
+ */
+@property (nonatomic, strong) CacheOverlay *replacedCacheOverlay;
+
+/**
  *  Initializer
  *
  *  @param name              name

@@ -16,6 +16,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 @property (nonatomic) BOOL indexed;
 @property (nonatomic) enum WKBGeometryType geometryType;
 @property (strong, nonatomic) NSMutableDictionary<NSNumber *, GPKGMapShape *> * shapes;
+@property (strong, nonatomic) NSMutableArray<GeoPackageTileTableCacheOverlay *> * linkedTiles;
 
 @end
 
@@ -27,6 +28,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
         self.shapes = [[NSMutableDictionary alloc] init];
         self.indexed = indexed;
         self.geometryType = geometryType;
+        self.linkedTiles = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -37,6 +39,10 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     }
     [self.shapes removeAllObjects];
     [super removeFromMap: mapView];
+    
+    for(GeoPackageTileTableCacheOverlay * linkedTileTable in self.linkedTiles){
+        [linkedTileTable removeFromMap:mapView];
+    }
 }
 
 -(NSString *) getIconImageName{
@@ -44,7 +50,13 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 }
 
 -(NSString *) getInfo{
-    return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
+    int minZoom = [self getMinZoom];
+    int maxZoom = [self getMaxZoom];
+    for(GeoPackageTileTableCacheOverlay * linkedTileTable in self.linkedTiles){
+        minZoom = MIN(minZoom, [linkedTileTable getMinZoom]);
+        maxZoom = MAX(maxZoom, [linkedTileTable getMaxZoom]);
+    }
+    return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], minZoom, maxZoom];
 }
 
 -(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{
@@ -83,6 +95,14 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
         [shape removeFromMapView:mapView];
     }
     return shape;
+}
+
+-(void) addLinkedTileTable: (GeoPackageTileTableCacheOverlay *) tileTable{
+    [self.linkedTiles addObject:tileTable];
+}
+
+-(NSArray<GeoPackageTileTableCacheOverlay *> *) getLinkedTileTables{
+    return self.linkedTiles;
 }
 
 @end
