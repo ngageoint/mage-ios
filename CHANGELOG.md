@@ -1,5 +1,3 @@
-Billys-MacBook-Pro:mage-ios-sdk wnewman$ vi CHANGELOG.md
-
 # Change Log
 All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
