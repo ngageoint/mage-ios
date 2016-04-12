@@ -36,6 +36,10 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
+- (void) selectRow {
+    [self.textArea becomeFirstResponder];
+}
+
 - (void) cancelButtonPressed {
     self.textArea.text = self.value;
     [self.textArea resignFirstResponder];
@@ -57,6 +61,10 @@
     } else {
         self.textArea.layer.borderColor = [[UIColor redColor] CGColor];
     }
-};
+}
+
+- (BOOL) isEmpty {
+    return [self.textArea.text length] == 0;
+}
 
 @end

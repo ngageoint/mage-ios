@@ -946,7 +946,13 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     } else if ([annotation isKindOfClass:[AreaAnnotation class]]) {
         AreaAnnotation *areaAnnotation = annotation;
         return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
+    } else if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
+        MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
+        [pinView setPinColor:MKPinAnnotationColorGreen];
+        return pinView;
     }
+    
+    
     return nil;
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5hL-SP-G8H">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5hL-SP-G8H">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -1731,9 +1731,110 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="hno-eB-ZoM">
                                 <rect key="frame" x="0.0" y="44" width="320" height="431"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textfield" rowHeight="65" id="hKc-13-9od" customClass="ObservationEditTextFieldTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-radio" rowHeight="65" id="xnP-jO-UFl" customClass="ObservationPickerTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="65"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xnP-jO-UFl" id="U8c-eQ-zdE">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kvL-q5-yD9">
+                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="dyE-Gc-mRH"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9s9-6k-zgB">
+                                                    <rect key="frame" x="8" y="25" width="304" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="mbc-rk-q3H"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-2v-cpR">
+                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="top" secondItem="U8c-eQ-zdE" secondAttribute="topMargin" constant="17" id="7xs-hj-YVr"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="9s9-6k-zgB" secondAttribute="bottom" constant="1.5" id="Dk1-Ea-adZ"/>
+                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" constant="4" id="RUZ-RO-nmC"/>
+                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" id="VPO-vi-rhE"/>
+                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="trailing" secondItem="U8c-eQ-zdE" secondAttribute="trailingMargin" id="Vaa-5G-uPh"/>
+                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="top" secondItem="U8c-eQ-zdE" secondAttribute="topMargin" constant="-7" id="XgX-nj-aBT"/>
+                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="trailing" secondItem="U8c-eQ-zdE" secondAttribute="trailingMargin" id="aPS-UY-eSx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <gestureRecognizers/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="keyLabel" destination="kvL-q5-yD9" id="37N-fr-kAR"/>
+                                            <outlet property="requiredIndicator" destination="iOa-2v-cpR" id="gf4-1N-55V"/>
+                                            <outlet property="valueTextField" destination="9s9-6k-zgB" id="RVn-D3-7hs"/>
+                                            <outletCollection property="gestureRecognizers" destination="kqv-3t-4Ch" appends="YES" id="cm1-vn-Bje"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-date" rowHeight="65" id="NpS-Tu-6OV" customClass="ObservationDatePickerTableViewCell">
+                                        <rect key="frame" x="0.0" y="87" width="320" height="65"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NpS-Tu-6OV" id="GNo-wa-oOO">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2SG-7T-PwE">
+                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="pXA-lv-eme"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gVb-UO-dJ7">
+                                                    <rect key="frame" x="8" y="25" width="304" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="QvJ-B7-yac"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vt-I1-Dg6">
+                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="gVb-UO-dJ7" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="17" id="NKz-00-Vym"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="gVb-UO-dJ7" secondAttribute="trailing" id="RA7-S9-6xl"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="gVb-UO-dJ7" secondAttribute="bottom" constant="1.5" id="i4l-bW-zGq"/>
+                                                <constraint firstItem="gVb-UO-dJ7" firstAttribute="leading" secondItem="GNo-wa-oOO" secondAttribute="leadingMargin" id="rWG-1y-SH0"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2SG-7T-PwE" secondAttribute="trailing" id="wuW-Qd-Rh3"/>
+                                                <constraint firstItem="2SG-7T-PwE" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="-7" id="zZH-8o-fch"/>
+                                                <constraint firstItem="2SG-7T-PwE" firstAttribute="leading" secondItem="GNo-wa-oOO" secondAttribute="leadingMargin" constant="4" id="zi0-un-Dk4"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <gestureRecognizers/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="keyLabel" destination="2SG-7T-PwE" id="Snf-jm-vZt"/>
+                                            <outlet property="requiredIndicator" destination="9vt-I1-Dg6" id="8nK-4H-qz5"/>
+                                            <outlet property="textField" destination="gVb-UO-dJ7" id="AgW-SZ-Ha0"/>
+                                            <outletCollection property="gestureRecognizers" destination="Bid-li-Uqv" appends="YES" id="aue-xY-w4S"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textfield" rowHeight="65" id="hKc-13-9od" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="152" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hKc-13-9od" id="LVZ-7i-hpw">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -1776,15 +1877,70 @@
                                                 <constraint firstItem="vO3-dT-q8I" firstAttribute="leading" secondItem="LVZ-7i-hpw" secondAttribute="leadingMargin" id="zeU-31-zg9"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="keyLabel" destination="g2e-bb-GsW" id="uCB-SH-4ZZ"/>
                                             <outlet property="requiredIndicator" destination="cI5-aT-i3e" id="TIB-y9-36l"/>
                                             <outlet property="textField" destination="vO3-dT-q8I" id="bRF-Yo-OUh"/>
+                                            <outletCollection property="gestureRecognizers" destination="NUR-Sw-09g" appends="YES" id="80w-Zt-17l"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-geometry" rowHeight="120" id="4zi-SJ-w54" customClass="ObservationEditGeometryTableViewCell">
-                                        <rect key="frame" x="0.0" y="87" width="320" height="120"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-numberfield" rowHeight="65" id="joQ-cK-O2x" userLabel="observationEdit-numberfield" customClass="ObservationEditNumberFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="217" width="320" height="65"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="joQ-cK-O2x" id="aBK-Qe-LZ3">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number field key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSu-R3-w4U">
+                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="o76-Cu-vbf"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RI8-Vi-0cP">
+                                                    <rect key="frame" x="8" y="25" width="304" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="NaQ-vq-UCZ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="joQ-cK-O2x" id="Z6e-0o-qo0"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60V-dB-RgX">
+                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="pSu-R3-w4U" firstAttribute="top" secondItem="aBK-Qe-LZ3" secondAttribute="topMargin" constant="-7" id="8En-nb-9u0"/>
+                                                <constraint firstItem="RI8-Vi-0cP" firstAttribute="top" secondItem="aBK-Qe-LZ3" secondAttribute="topMargin" constant="17" id="GCM-cQ-kKx"/>
+                                                <constraint firstItem="RI8-Vi-0cP" firstAttribute="leading" secondItem="aBK-Qe-LZ3" secondAttribute="leadingMargin" id="Qur-c8-y8f"/>
+                                                <constraint firstItem="pSu-R3-w4U" firstAttribute="trailing" secondItem="aBK-Qe-LZ3" secondAttribute="trailingMargin" id="Uk8-DM-OU9"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="RI8-Vi-0cP" secondAttribute="bottom" constant="1.5" id="VeO-Jc-qEd"/>
+                                                <constraint firstItem="RI8-Vi-0cP" firstAttribute="trailing" secondItem="aBK-Qe-LZ3" secondAttribute="trailingMargin" id="bEe-4V-wwo"/>
+                                                <constraint firstItem="pSu-R3-w4U" firstAttribute="leading" secondItem="aBK-Qe-LZ3" secondAttribute="leadingMargin" constant="4" id="wb1-wS-5gI"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <gestureRecognizers/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="keyLabel" destination="pSu-R3-w4U" id="VII-qu-hQQ"/>
+                                            <outlet property="requiredIndicator" destination="60V-dB-RgX" id="Goz-DA-E8Y"/>
+                                            <outlet property="textField" destination="RI8-Vi-0cP" id="ngZ-y9-Ut3"/>
+                                            <outletCollection property="gestureRecognizers" destination="bIw-OV-NJi" appends="YES" id="cRw-lP-YPR"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-geometry" rowHeight="120" id="4zi-SJ-w54" customClass="ObservationEditGeometryTableViewCell">
+                                        <rect key="frame" x="0.0" y="282" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4zi-SJ-w54" id="oxl-4z-quf">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="119"/>
@@ -1896,8 +2052,8 @@
                                             <segue destination="8he-gU-g1M" kind="push" identifier="geometrySegue" id="heZ-gZ-Es3"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-generic" rowHeight="65" id="sBD-oJ-wOd" customClass="ObservationEditTableViewCell">
-                                        <rect key="frame" x="0.0" y="207" width="320" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-generic" rowHeight="65" id="sBD-oJ-wOd" customClass="ObservationEditTableViewCell">
+                                        <rect key="frame" x="0.0" y="402" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sBD-oJ-wOd" id="pZm-q0-Yah">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -1922,7 +2078,7 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TtX-EZ-WmW">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TtX-EZ-WmW">
                                                     <rect key="frame" x="8" y="25" width="304" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="yOP-aa-CYg"/>
@@ -1950,8 +2106,8 @@
                                             <outlet property="valueTextField" destination="TtX-EZ-WmW" id="qFM-MX-wyw"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-dropdown" rowHeight="65" id="wVb-Xw-KXs" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="272" width="320" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-dropdown" rowHeight="65" id="wVb-Xw-KXs" customClass="ObservationPickerTableViewCell">
+                                        <rect key="frame" x="0.0" y="467" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wVb-Xw-KXs" id="d9g-DZ-eAY">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -1991,15 +2147,17 @@
                                                 <constraint firstItem="KTz-W5-jii" firstAttribute="trailing" secondItem="d9g-DZ-eAY" secondAttribute="trailingMargin" id="x8d-mG-nQI"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="keyLabel" destination="SNh-YL-m9r" id="8wl-Jb-hC6"/>
                                             <outlet property="requiredIndicator" destination="Lei-ly-Rpn" id="QCz-fn-ZOS"/>
                                             <outlet property="valueTextField" destination="KTz-W5-jii" id="1wJ-4f-e3c"/>
+                                            <outletCollection property="gestureRecognizers" destination="xAg-ls-T27" appends="YES" id="Ov5-AC-lzS"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-email" rowHeight="65" id="xAX-Gz-hDT" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="337" width="320" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-email" rowHeight="65" id="xAX-Gz-hDT" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="532" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xAX-Gz-hDT" id="4Bz-8N-csS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -2045,14 +2203,16 @@
                                                 <constraint firstItem="g4f-5S-AxH" firstAttribute="leading" secondItem="4Bz-8N-csS" secondAttribute="leading" constant="4" id="xT6-7e-xoh"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="requiredIndicator" destination="g4f-5S-AxH" id="Imt-Nb-aMe"/>
                                             <outlet property="textField" destination="Wph-5c-Myx" id="mKl-kf-ASo"/>
+                                            <outletCollection property="gestureRecognizers" destination="rzC-Mn-0IW" appends="YES" id="zUt-sx-14x"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-attachmentView" rowHeight="65" id="XCr-9J-1Re" customClass="AttachmentEditTableViewCell">
-                                        <rect key="frame" x="0.0" y="402" width="320" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-attachmentView" rowHeight="65" id="XCr-9J-1Re" customClass="AttachmentEditTableViewCell">
+                                        <rect key="frame" x="0.0" y="597" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XCr-9J-1Re" id="Swo-u1-pZv">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -2110,104 +2270,8 @@
                                             <outlet property="attachmentCollection" destination="PgR-7e-Eno" id="JAn-WI-DSR"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-date" rowHeight="65" id="NpS-Tu-6OV" userLabel="Observation Date Table View Cell - observationEdit-date" customClass="ObservationDatePickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="467" width="320" height="65"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NpS-Tu-6OV" id="GNo-wa-oOO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2SG-7T-PwE">
-                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="pXA-lv-eme"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gVb-UO-dJ7">
-                                                    <rect key="frame" x="8" y="25" width="300" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="QvJ-B7-yac"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vt-I1-Dg6">
-                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="gVb-UO-dJ7" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="17" id="NKz-00-Vym"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="gVb-UO-dJ7" secondAttribute="trailing" constant="4" id="RA7-S9-6xl"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="gVb-UO-dJ7" secondAttribute="bottom" constant="1.5" id="i4l-bW-zGq"/>
-                                                <constraint firstItem="gVb-UO-dJ7" firstAttribute="leading" secondItem="GNo-wa-oOO" secondAttribute="leadingMargin" id="rWG-1y-SH0"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="2SG-7T-PwE" secondAttribute="trailing" id="wuW-Qd-Rh3"/>
-                                                <constraint firstItem="2SG-7T-PwE" firstAttribute="top" secondItem="GNo-wa-oOO" secondAttribute="topMargin" constant="-7" id="zZH-8o-fch"/>
-                                                <constraint firstItem="2SG-7T-PwE" firstAttribute="leading" secondItem="GNo-wa-oOO" secondAttribute="leadingMargin" constant="4" id="zi0-un-Dk4"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="keyLabel" destination="2SG-7T-PwE" id="Snf-jm-vZt"/>
-                                            <outlet property="requiredIndicator" destination="9vt-I1-Dg6" id="8nK-4H-qz5"/>
-                                            <outlet property="valueTextField" destination="gVb-UO-dJ7" id="1Yv-RO-ce7"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-radio" rowHeight="65" id="xnP-jO-UFl" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="532" width="320" height="65"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xnP-jO-UFl" id="U8c-eQ-zdE">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kvL-q5-yD9">
-                                                    <rect key="frame" x="12" y="1" width="300" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="dyE-Gc-mRH"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9s9-6k-zgB">
-                                                    <rect key="frame" x="4" y="25" width="308" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="mbc-rk-q3H"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-2v-cpR">
-                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="top" secondItem="U8c-eQ-zdE" secondAttribute="topMargin" constant="17" id="7xs-hj-YVr"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="9s9-6k-zgB" secondAttribute="bottom" constant="1.5" id="Dk1-Ea-adZ"/>
-                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" constant="4" id="RUZ-RO-nmC"/>
-                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="leading" secondItem="U8c-eQ-zdE" secondAttribute="leadingMargin" constant="-4" id="VPO-vi-rhE"/>
-                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="trailing" secondItem="U8c-eQ-zdE" secondAttribute="trailingMargin" id="Vaa-5G-uPh"/>
-                                                <constraint firstItem="kvL-q5-yD9" firstAttribute="top" secondItem="U8c-eQ-zdE" secondAttribute="topMargin" constant="-7" id="XgX-nj-aBT"/>
-                                                <constraint firstItem="9s9-6k-zgB" firstAttribute="trailing" secondItem="U8c-eQ-zdE" secondAttribute="trailingMargin" id="aPS-UY-eSx"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="keyLabel" destination="kvL-q5-yD9" id="37N-fr-kAR"/>
-                                            <outlet property="requiredIndicator" destination="iOa-2v-cpR" id="gf4-1N-55V"/>
-                                            <outlet property="valueTextField" destination="9s9-6k-zgB" id="RVn-D3-7hs"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-password" rowHeight="65" id="a0q-GN-RQy" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="597" width="320" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-password" rowHeight="65" id="a0q-GN-RQy" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="662" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a0q-GN-RQy" id="6pD-1i-Ma1">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -2253,14 +2317,16 @@
                                                 <constraint firstItem="FOI-AD-2IK" firstAttribute="top" secondItem="6pD-1i-Ma1" secondAttribute="topMargin" constant="-8" id="x52-A2-PvL"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="requiredIndicator" destination="FOI-AD-2IK" id="h37-gr-GRK"/>
                                             <outlet property="textField" destination="3g4-Fb-eQm" id="gHw-XS-fb5"/>
+                                            <outletCollection property="gestureRecognizers" destination="Ygo-t4-NpE" appends="YES" id="ndg-wE-mJK"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-checkbox" rowHeight="64" id="zJ0-vH-GSc" customClass="ObservationCheckboxTableViewCell">
-                                        <rect key="frame" x="0.0" y="662" width="320" height="64"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-checkbox" rowHeight="64" id="zJ0-vH-GSc" customClass="ObservationCheckboxTableViewCell">
+                                        <rect key="frame" x="0.0" y="727" width="320" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zJ0-vH-GSc" id="iq3-Gb-iui">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
@@ -2295,15 +2361,17 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="kEX-Ie-rx0" secondAttribute="bottom" constant="-0.5" id="xi8-hA-dNF"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="checkboxSwitch" destination="kEX-Ie-rx0" id="Xpe-kb-Jbm"/>
                                             <outlet property="keyLabel" destination="FGL-FE-8gf" id="FIQ-bo-WIy"/>
                                             <outlet property="requiredIndicator" destination="xIw-aP-8oP" id="ika-w9-doq"/>
+                                            <outletCollection property="gestureRecognizers" destination="WgZ-Hf-pEc" appends="YES" id="S2Z-QS-dRg"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textarea" rowHeight="148" id="YMQ-CD-9nc" customClass="ObservationEditTextAreaTableViewCell">
-                                        <rect key="frame" x="0.0" y="726" width="320" height="148"/>
+                                        <rect key="frame" x="0.0" y="791" width="320" height="148"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YMQ-CD-9nc" id="dos-Ew-BEg">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="147"/>
@@ -2356,11 +2424,13 @@
                                                 <constraint firstItem="HE5-MG-2mv" firstAttribute="trailing" secondItem="dos-Ew-BEg" secondAttribute="trailingMargin" id="vzg-vz-IcD"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <gestureRecognizers/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="keyLabel" destination="HE5-MG-2mv" id="2T7-02-aoD"/>
                                             <outlet property="requiredIndicator" destination="60Y-gs-OLS" id="xnj-DE-HiS"/>
                                             <outlet property="textArea" destination="O7f-9b-3Y6" id="ZET-yt-qNF"/>
+                                            <outletCollection property="gestureRecognizers" destination="Y1q-UO-HRt" appends="YES" id="c4r-um-b2j"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2447,6 +2517,51 @@
                         <outlet property="editTable" destination="hno-eB-ZoM" id="kLS-Tb-zQp"/>
                     </connections>
                 </customObject>
+                <tapGestureRecognizer id="NUR-Sw-09g" userLabel="TextField Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="rEg-yd-ckz"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Bid-li-Uqv" userLabel="DateField Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="Umt-Zo-cvO"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="xAg-ls-T27" userLabel="Dropdown Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="dz7-4a-Nza"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="rzC-Mn-0IW" userLabel="Email Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="WET-B7-jIb"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="kqv-3t-4Ch" userLabel="Radio Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="7iS-FA-69c"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Ygo-t4-NpE" userLabel="Password Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="I7a-UF-bvY"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="WgZ-Hf-pEc" userLabel="Checkbox Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="mG8-8A-cdl"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Y1q-UO-HRt" userLabel="Textarea Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="xpQ-fx-wtJ"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="bIw-OV-NJi" userLabel="NumberField Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="tap:" destination="9QU-uC-jl6" id="Aqy-65-ctU"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="453" y="-43"/>
         </scene>
@@ -5072,13 +5187,13 @@
         <image name="voice" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="zSP-t6-Lnh"/>
+        <segue reference="Udd-Ez-JOB"/>
         <segue reference="eHX-H2-6Gy"/>
-        <segue reference="sCY-CX-BgC"/>
-        <segue reference="JNU-Ma-qHh"/>
-        <segue reference="OPq-qa-1fv"/>
+        <segue reference="zfZ-aY-xQc"/>
+        <segue reference="7d8-sH-pU5"/>
         <segue reference="BP9-3q-sGo"/>
         <segue reference="dNU-1p-yFN"/>
-        <segue reference="7d8-sH-pU5"/>
-        <segue reference="zfZ-aY-xQc"/>
+        <segue reference="hfh-00-YhZ"/>
     </inferredMetricsTieBreakers>
 </document>

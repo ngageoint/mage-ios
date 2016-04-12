@@ -59,16 +59,12 @@
     return 1;
 }
 
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     return self.pickerValues[row];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state
+- (void) selectRow {
+    [self.valueTextField becomeFirstResponder];
 }
 
 - (void) cancelButtonPressed {
@@ -83,6 +79,10 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
         [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
     }
+}
+
+- (BOOL) isEmpty {
+    return [self.valueTextField.text length] == 0;
 }
 
 - (void) setValid:(BOOL) valid {

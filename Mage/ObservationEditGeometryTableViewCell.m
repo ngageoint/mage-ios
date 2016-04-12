@@ -13,7 +13,7 @@
 @interface ObservationEditGeometryTableViewCell()
 
 @property (strong, nonatomic) MapDelegate *mapDelegate;
-@property (strong, nonatomic) ObservationAnnotation *annotation;
+@property (strong, nonatomic) id<MKAnnotation> annotation;
 @property (assign, nonatomic) BOOL isGeometryField;
 
 @end
@@ -42,6 +42,7 @@
     self.mapDelegate = [[MapDelegate alloc] init];
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
+    [self.mapView removeAnnotations:self.mapView.annotations];
     
     self.mapDelegate.hideStaticLayers = YES;
     
@@ -49,7 +50,12 @@
         [self.latitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.latitude]];
         [self.longitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.longitude]];
 
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        if (self.isGeometryField) {
+            self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        } else {
+            self.annotation = [[MKPointAnnotation alloc] init];
+        }
+        
         self.annotation.coordinate = self.geoPoint.location.coordinate;
         [self.mapView addAnnotation:self.annotation];
         
@@ -63,6 +69,10 @@
         [self.latitude setText:@""];
         [self.longitude setText:@""];
     }
+}
+
+- (BOOL) isEmpty {
+    return self.geoPoint == nil;
 }
 
 - (void) setValid:(BOOL) valid {

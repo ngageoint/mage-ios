@@ -18,6 +18,6 @@
 @property (nonatomic, weak) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @property (nonatomic, strong) NSObject<ObservationAnnotationChangedDelegate> *annotationChangedDelegate;
 
-- (void) addInvalidFields:(NSArray *) invalidFields;
+- (BOOL) validate;
 
 @end

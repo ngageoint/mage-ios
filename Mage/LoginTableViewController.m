@@ -215,7 +215,7 @@
     activityIndicator.center = self.view.center;
     [self.view addSubview:activityIndicator];
     [activityIndicator setHidesWhenStopped:YES];
-    [activityIndicator startAnimating];
+//    [activityIndicator startAnimating];
     
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
@@ -231,10 +231,14 @@
         
         [self setupAuthentication];
     } failure:^(NSError *error) {
+        [activityIndicator stopAnimating];
+        
         weakSelf.allowLogin = NO;
         weakSelf.loginStatus.hidden = NO;
         weakSelf.statusButton.hidden = NO;
         weakSelf.loginStatus.text = error.localizedDescription;
+        
+        [self setupAuthentication];
     }];
 }
 
@@ -292,6 +296,8 @@
             return googleAuthentication && localAuthentication ? 1 : 0;
         case 2:
             return localAuthentication ? 1 : 0;
+        case 4:
+            return self.allowLogin ? 0 : 1;
         default:
             return localAuthentication || googleAuthentication ? 1 : 0;
     }

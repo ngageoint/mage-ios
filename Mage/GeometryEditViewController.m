@@ -17,9 +17,11 @@
 @implementation GeometryEditViewController
 
 - (IBAction) saveLocation {
-    GeoPoint *point = self.observation.geometry;
-    point.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
-    [self setGeoPoint:point];
+//    GeoPoint *point = self.observation.geometry;
+//    point.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
+//    
+//    
+//    [self setGeoPoint:point];
     [self performSegueWithIdentifier:@"unwindToEditController" sender:self];
 }
 
@@ -75,7 +77,6 @@
             pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
             [pinView setPinColor:MKPinAnnotationColorGreen];
             pinView.draggable = YES;
-            pinView.canShowCallout = NO;
         } else {
             pinView.annotation = annotation;
         }
@@ -84,6 +85,13 @@
     }
     
     return nil;
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState
+{
+    if (newState == MKAnnotationViewDragStateEnding) {
+        self.geoPoint.location = [[CLLocation alloc] initWithLatitude:annotationView.annotation.coordinate.latitude longitude:annotationView.annotation.coordinate.longitude];
+    }
 }
 
 @end

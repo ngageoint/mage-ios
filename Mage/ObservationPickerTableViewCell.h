@@ -8,6 +8,7 @@
 
 @interface ObservationPickerTableViewCell : ObservationEditTableViewCell <UIPickerViewDataSource, UIPickerViewDelegate>
 
+@property (strong, nonatomic) IBOutlet UITextField *valueTextField;
 @property (strong, nonatomic) IBOutlet UIPickerView *picker;
 @property (strong, nonatomic) NSMutableArray *pickerValues;
 

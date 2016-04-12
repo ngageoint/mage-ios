@@ -8,4 +8,5 @@
 #import "AttachmentSelectionDelegate.h"
 
 @interface AttachmentEditTableViewCell : ObservationEditTableViewCell
+@property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @end

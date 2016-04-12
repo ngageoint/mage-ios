@@ -39,6 +39,10 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
+- (void) selectRow {
+    [self.textField becomeFirstResponder];
+}
+
 - (void) cancelButtonPressed {
     self.textField.text = self.value;
     [self.textField resignFirstResponder];
@@ -50,6 +54,10 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
         [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
     }
+}
+
+- (BOOL) isEmpty {
+    return [self.textField.text length] == 0;
 }
 
 - (void) setValid:(BOOL) valid {

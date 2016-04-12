@@ -6,7 +6,9 @@
 
 #import "ObservationEditViewDataStore.h"
 #import "ObservationEditTableViewCell.h"
+#import "AttachmentEditTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
+
 #import <Server+helper.h>
 #import <Event+helper.h>
 
@@ -18,25 +20,30 @@
 @property (nonatomic, strong) NSDictionary *fieldToRow;
 @property (nonatomic, assign) NSInteger expandedRow;
 @property (nonatomic, assign) NSNumber *eventId;
-@property (nonatomic, strong) NSMutableArray *invalidFields;
 @property (nonatomic, strong) NSString *variantField;
+@property (nonatomic, strong) NSMutableArray *invalidIndexPaths;
 @end
 
 @implementation ObservationEditViewDataStore
 
-
-- (void) addInvalidFields:(NSArray *) invalidFields {
-    _invalidFields = [invalidFields mutableCopy];
+- (BOOL) validate {
+    self.invalidIndexPaths = [[NSMutableArray alloc] init];
     
-    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    for (id field in invalidFields) {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:[[_fieldToRow objectForKey:[field objectForKey:@"id"]] integerValue] inSection:0]];
+    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:0]; ++i) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
+        if (![cell isValid]) {
+            [self.invalidIndexPaths addObject:indexPath];
+        }
     }
     
-    if ([indexPaths count] > 0) {
-        [_editTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-        [self.editTable scrollToRowAtIndexPath:[indexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if ([self.invalidIndexPaths count] > 0) {
+        [self.editTable reloadRowsAtIndexPaths:self.invalidIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [self.editTable scrollToRowAtIndexPath:[self.invalidIndexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        return NO;
     }
+    
+    return YES;
 }
 
 - (NSArray *) rowToCellType {
@@ -114,7 +121,7 @@
     
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
     if (cell == nil) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"observationEdit-generic"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"observationEdit-textfield"];
     }
     cell.fieldDefinition = field;
     
@@ -126,13 +133,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ObservationEditTableViewCell *cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
+    id cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
     id field = [self rowToField][indexPath.row];
-    cell.delegate = self;
-    cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+    [cell setDelegate:self];
     [cell populateCellWithFormField:field andObservation:self.observation];
     
-    [cell setValid:![self.invalidFields containsObject:field]];
+    if ([cell respondsToSelector:@selector(attachmentSelectionDelegate)]) {
+        [cell setAttachmentSelectionDelegate:self.attachmentSelectionDelegate];
+    }
+
+    [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
 
     return cell;
 }
@@ -145,32 +155,38 @@
     return UITableViewAutomaticDimension;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView beginUpdates];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [tableView endEditing:NO];
-    [tableView endUpdates];
+- (IBAction)tap:(UITapGestureRecognizer *)sender {
+    CGPoint point = [sender locationInView:self.editTable];
+    NSIndexPath *indexPath = [self.editTable indexPathForRowAtPoint:point];
+    ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self.editTable cellForRowAtIndexPath:indexPath];
+    [cell selectRow];
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
     NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
-    [newProperties setObject:value forKey:fieldKey];
+    
+    if (value == nil) {
+        [newProperties removeObjectForKey:fieldKey];
+    } else {
+        [newProperties setObject:value forKey:fieldKey];
+    }
+    
     self.observation.properties = newProperties;
+    
+    NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
     
     if (reload == YES) {
         [self.editTable beginUpdates];
-        NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
         [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
         [self.editTable endUpdates];
     }
     
-    if ([self.invalidFields containsObject:field]) {
-        [self.invalidFields removeObject:field];
-        NSInteger row = [[_fieldToRow objectForKey:[field objectForKey:@"id"]] integerValue];
-        [self.editTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    if ([self.invalidIndexPaths containsObject:indexPath]) {
+        [self.invalidIndexPaths removeObject:indexPath];
+        [self.editTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
     
     if ([fieldKey isEqualToString:@"type"] && self.annotationChangedDelegate) {

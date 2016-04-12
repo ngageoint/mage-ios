@@ -247,23 +247,7 @@
 }
 
 - (IBAction) saveObservation:(id)sender {
-    // validate required fields
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.archived == %@ && SELF.required == %@ && (NOT SELF.name IN %@)", nil, [NSNumber numberWithBool:YES], @[@"timestamp", @"geometry"]];
-    NSArray *requiredFields = [[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
-    
-    // TODO loop over each object in properties, if required make sure it has a property
-    //[[nameToField objectForKey:@"field4"] objectForKey:@"required"]
-    NSMutableArray *invalidFields = [[NSMutableArray alloc] init];
-    for (NSDictionary *field in requiredFields) {
-        id property = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
-        if (!property) {
-            [invalidFields addObject:field];
-        }
-    }
-    
-    [self.editDataStore addInvalidFields:invalidFields];
-    if ([invalidFields count] > 0) {
+    if (![self.editDataStore validate]) {
         return;
     }
     
@@ -325,7 +309,12 @@
 
 - (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
     GeometryEditViewController *vc = [segue sourceViewController];
-    [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
+    if ([[vc.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
+        self.observation.geometry = vc.geoPoint;
+        [self.editTable reloadData];
+    } else {
+        [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
+    }
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

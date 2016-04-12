@@ -34,7 +34,8 @@
     return self.bounds.size.height;
 }
 
-- (void) setValid:(BOOL) valid {
-};
+- (void) selectRow {
+    [self.checkboxSwitch setOn:!self.checkboxSwitch.isOn];
+}
 
 @end
