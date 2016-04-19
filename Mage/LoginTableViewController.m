@@ -6,11 +6,11 @@
 
 #import "LoginTableViewController.h"
 #import "LocalAuthentication.h"
-#import "User+helper.h"
-#import <Observation+helper.h>
+#import "User.h"
+#import "Observation.h"
 
-#import <Location+helper.h>
-#import <Layer+helper.h>
+#import <Location.h>
+#import <Layer.h>
 #import <Form.h>
 #import <Mage.h>
 #import "AppDelegate.h"

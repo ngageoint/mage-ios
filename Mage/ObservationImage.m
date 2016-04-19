@@ -5,8 +5,8 @@
 //
 
 #import "ObservationImage.h"
-#import "Server+helper.h"
-#import <Event+helper.h>
+#import "Server.h"
+#import "Event.h"
 
 const CGFloat annotationScaleWidth = 35.0;
 

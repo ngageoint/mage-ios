@@ -9,17 +9,17 @@
 #import "ObservationPickerTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
-#import <Observation+helper.h>
+#import "Observation.h"
 #import <HttpManager.h>
 #import <AVFoundation/AVFoundation.h>
-#import <Attachment+helper.h>
+#import "Attachment.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "AudioRecordingDelegate.h"
 #import "MediaViewController.h"
 #import "ImageViewerViewController.h"
 #import "AttachmentSelectionDelegate.h"
-#import <Server+helper.h>
-#import <Event+helper.h>
+#import "Server.h"
+#import "Event.h"
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
 

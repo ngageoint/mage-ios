@@ -6,18 +6,19 @@
 
 #import "ObservationViewController_iPad.h"
 #import "GeoPoint.h"
-#import <Observation+helper.h>
+#import "Observation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
 #import "ObservationPropertyTableViewCell.h"
-#import <User.h>
+#import "User.h"
+#import "Role.h"
 #import "AttachmentCell.h"
 #import "ImageViewerViewController.h"
 #import "ObservationEditViewController.h"
-#import <Server+helper.h>
+#import "Server.h"
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"
-#import <Event+helper.h>
+#import "Event.h"
 #import "NSDate+display.h"
 
 @interface ObservationViewController_iPad ()
@@ -41,6 +42,17 @@
     
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
+    
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    if ([self userHasEditPermissions:user]) {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = YES;
+        self.editButton.title = @"Edit";
+    } else {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = NO;
+        self.editButton.title = nil;
+    }
     
     NSString *name = [self.observation.properties valueForKey:@"type"];
     if (name != nil) {
@@ -214,6 +226,10 @@
         NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
         [mapItem openInMapsWithLaunchOptions:options];
     }
+}
+
+- (BOOL) userHasEditPermissions:(User *) user {
+    return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];
 }
 
 

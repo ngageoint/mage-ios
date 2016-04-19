@@ -5,7 +5,7 @@
 //
 
 #import "Attachment+FICAttachment.h"
-#import "Attachment+helper.h"
+#import "Attachment.h"
 #import <FICImageCache.h>
 #import "FICUtilities.h"
 

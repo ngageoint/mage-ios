@@ -7,12 +7,13 @@
 #import "ObservationViewController_iPhone.h"
 #import "Observations.h"
 #import "ObservationPropertyTableViewCell.h"
-#import <Server+helper.h>
+#import "Server.h"
 #import "ObservationHeaderTableViewCell.h"
 #import "ImageViewerViewController.h"
 #import "ObservationEditViewController.h"
 #import "ObservationHeaderAttachmentTableViewCell.h"
-#import <Event+helper.h>
+#import "Event.h"
+#import "Role.h"
 
 @interface ObservationViewController_iPhone()
 @property (strong, nonatomic) NSMutableArray *tableLayout;
@@ -31,6 +32,17 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    if ([self userHasEditPermissions:user]) {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = YES;
+        self.editButton.title = @"Edit";
+    } else {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = NO;
+        self.editButton.title = nil;
+    }
     
     NSString *name = [self.observation.properties valueForKey:@"type"];
     self.navigationItem.title = name;
@@ -162,6 +174,10 @@
         ObservationEditViewController *vc = [segue destinationViewController];
         [vc setObservation:_observation];
     }
+}
+
+- (BOOL) userHasEditPermissions:(User *) user {
+    return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];
 }
 
 

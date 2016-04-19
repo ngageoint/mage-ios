@@ -9,8 +9,8 @@
 #import "AppDelegate.h"
 #import "Geometry.h"
 #import "GeoPoint.h"
-#import "User+helper.h"
-#import "Location+helper.h"
+#import "User.h"
+#import "Location.h"
 #import "LocationAnnotation.h"
 #import "LocationService.h"
 #import "ObservationAnnotation.h"
@@ -27,8 +27,8 @@
 #import "ObservationAnnotation.h"
 #import "ObservationViewController_iPad.h"
 #import "ImageViewerViewController.h"
-#import <Event+helper.h>
-#import <GPSLocation+helper.h>
+#import "Event.h"
+#import "GPSLocation.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;

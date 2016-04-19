@@ -10,8 +10,8 @@
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "ImageViewerViewController.h"
-#import <Event+helper.h>
-#import <User+helper.h>
+#import "Event.h"
+#import "User.h"
 #import "ObservationEditViewController.h"
 #import "HttpManager.h"
 #import <LocationService.h>

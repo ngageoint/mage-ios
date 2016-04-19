@@ -10,8 +10,8 @@
 #import "MageRootViewController.h"
 #import "DeviceUUID.h"
 #import <LocationService.h>
-#import <Mage.h>
-#import <Server+helper.h>
+#import "Mage.h"
+#import "Server.h"
 #import "EventChooserController.h"
 
 @interface MageInitialViewController ()

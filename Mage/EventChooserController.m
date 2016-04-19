@@ -5,9 +5,9 @@
 //
 
 #import "EventChooserController.h"
-#import <Event+helper.h>
-#import <Mage.h>
-#import <Server+helper.h>
+#import "Event.h"
+#import "Mage.h"
+#import "Server.h"
 
 @implementation EventChooserController
 

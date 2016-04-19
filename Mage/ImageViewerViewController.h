@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Attachment+helper.h"
+#import "Attachment.h"
 
 @interface ImageViewerViewController : UIViewController
 

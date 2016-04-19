@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "Observation+helper.h"
+#import "Observation.h"
 
 @protocol ObservationSelectionDelegate <NSObject>
 

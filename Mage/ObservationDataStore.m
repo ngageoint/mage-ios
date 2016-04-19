@@ -6,12 +6,12 @@
 
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
-#import "Observation+helper.h"
+#import "Observation.h"
 #import "Observations.h"
 #import <NSDate+DateTools.h>
-#import "Server+helper.h"
+#import "Server.h"
 #import "AttachmentSelectionDelegate.h"
-#import <Event+helper.h>
+#import "Event.h"
 
 @interface ObservationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;

@@ -12,7 +12,7 @@
 #import <FICImageCache.h>
 #import <UserUtility.h>
 #import "Attachment+FICAttachment.h"
-#import "Attachment+helper.h"
+#import "Attachment.h"
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"

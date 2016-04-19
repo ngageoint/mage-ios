@@ -9,8 +9,8 @@
 #import <GeoPoint.h>
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import <Location+helper.h>
-#import <Event+helper.h>
+#import <Location.h>
+#import <Event.h>
 
 @implementation MapViewController_iPad
 

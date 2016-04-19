@@ -6,7 +6,7 @@
 
 #import "PeopleDataStore.h"
 #import "PersonTableViewCell.h"
-#import "Location+helper.h"
+#import "Location.h"
 #import "Locations.h"
 #import "NSDate+DateTools.h"
 

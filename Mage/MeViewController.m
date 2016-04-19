@@ -8,11 +8,11 @@
 #import "UIImage+Resize.h"
 #import "ManagedObjectContextHolder.h"
 #import "Observations.h"
-#import <User+helper.h>
+#import "User.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "MapDelegate.h"
-#import <Location+helper.h>
+#import "Location.h"
 #import "ObservationDataStore.h"
 #import "ImageViewerViewController.h"
 #import <AFNetworking.h>
@@ -20,7 +20,7 @@
 #import <MageServer.h>
 #import <HttpManager.h>
 #import "LocationAnnotation.h"
-#import <GPSLocation+helper.h>
+#import "GPSLocation.h"
 #import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
 #import "Attachment+FICAttachment.h"

@@ -6,9 +6,9 @@
 
 #import "StaticLayerTableViewController.h"
 #import "StaticLayerTableViewCell.h"
-#import <StaticLayer+helper.h>
-#import <Layer+helper.h>
-#import <Server+helper.h>
+#import "StaticLayer.h"
+#import "Layer.h"
+#import "Server.h"
 
 @interface StaticLayerTableViewController ()
     @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;

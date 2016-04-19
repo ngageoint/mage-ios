@@ -6,7 +6,7 @@
 
 #import "Locations.h"
 #import "Location.h"
-#import <Server+helper.h>
+#import "Server.h"
 
 @implementation Locations
 

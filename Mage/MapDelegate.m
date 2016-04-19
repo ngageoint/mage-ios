@@ -9,8 +9,8 @@
 #import "ObservationAnnotation.h"
 #import "GPSLocationAnnotation.h"
 #import "ObservationImage.h"
-#import "User+helper.h"
-#import "Location+helper.h"
+#import "User.h"
+#import "Location.h"
 #import "UIImage+Resize.h"
 #import <GeoPoint.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
@@ -23,7 +23,7 @@
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
 #import <NSDate+DateTools.h>
-#import <Server+helper.h>
+#import "Server.h"
 #import "CacheOverlays.h"
 #import "XYZDirectoryCacheOverlay.h"
 #import "GPKGGeoPackageCache.h"

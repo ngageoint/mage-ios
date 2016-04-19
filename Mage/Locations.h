@@ -6,7 +6,7 @@
 
 #import <CoreData/CoreData.h>
 #import "ManagedObjectContextHolder.h"
-#import "User+helper.h"
+#import "User.h"
 
 @interface Locations : NSObject
 

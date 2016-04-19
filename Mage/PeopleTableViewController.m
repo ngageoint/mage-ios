@@ -7,7 +7,7 @@
 #import "PeopleTableViewController.h"
 #import "Location.h"
 #import "MeViewController.h"
-#import <Event+helper.h>
+#import <Event.h>
 #import "HttpManager.h"
 
 @implementation PeopleTableViewController

@@ -6,7 +6,7 @@
 
 #import "Observations.h"
 #import "Observation.h"
-#import <Server+helper.h>
+#import "Server.h"
 
 @implementation Observations
 

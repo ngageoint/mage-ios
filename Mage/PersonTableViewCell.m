@@ -5,8 +5,8 @@
 //
 
 #import "PersonTableViewCell.h"
-#import "User+helper.h"
-#import "Location+helper.h"
+#import "User.h"
+#import "Location.h"
 #import "NSDate+DateTools.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 

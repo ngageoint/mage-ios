@@ -6,7 +6,7 @@
 
 #import "ObservationEditGeometryTableViewCell.h"
 #import <CoreLocation/CoreLocation.h>
-#import "Observation+helper.h"
+#import "Observation.h"
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
 

@@ -5,9 +5,9 @@
 //
 
 #import "ObservationCommonHeaderTableViewCell.h"
-#import <Server+helper.h>
+#import <Server.h>
 #import <User.h>
-#import <Event+helper.h>
+#import <Event.h>
 #import "NSDate+display.h"
 
 @interface ObservationCommonHeaderTableViewCell ()

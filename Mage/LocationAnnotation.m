@@ -6,7 +6,7 @@
 
 #import "LocationAnnotation.h"
 #import "GeoPoint.h"
-#import "User+helper.h"
+#import "User.h"
 #import "NSDate+DateTools.h"
 #import "MKAnnotationView+PersonIcon.h"
 

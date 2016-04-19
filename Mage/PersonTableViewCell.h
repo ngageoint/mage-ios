@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "User+helper.h"
+#import "User.h"
 
 @interface PersonTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *icon;

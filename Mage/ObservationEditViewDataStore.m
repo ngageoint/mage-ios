@@ -9,8 +9,8 @@
 #import "AttachmentEditTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 
-#import <Server+helper.h>
-#import <Event+helper.h>
+#import <Server.h>
+#import <Event.h>
 
 @interface ObservationEditViewDataStore ()
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;

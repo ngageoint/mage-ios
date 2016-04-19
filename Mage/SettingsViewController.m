@@ -5,11 +5,11 @@
 //
 
 #import "SettingsViewController.h"
-#import "User+helper.h"
+#import "User.h"
 #import "LocationService.h"
 #import "MageServer.h"
 #import "EventChooserController.h"
-#import <Event+helper.h>
+#import "Event.h"
 
 @interface SettingsViewController ()<UITableViewDelegate>
 

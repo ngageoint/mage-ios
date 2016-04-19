@@ -7,10 +7,10 @@
 #import "ObservationTableViewCell.h"
 #import "ObservationImage.h"
 #import <NSDate+DateTools.h>
-#import <User.h>
-#import <Server+helper.h>
+#import "User.h"
+#import "Server.h"
 #import "AttachmentCollectionDataStore.h"
-#import <Event+helper.h>
+#import "Event.h"
 #import "NSDate+iso8601.h"
 
 @interface ObservationTableViewCell()

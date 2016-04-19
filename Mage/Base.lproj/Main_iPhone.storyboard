@@ -1524,6 +1524,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="editButton" destination="vIS-70-lZB" id="Prd-Dx-PCR"/>
                         <outlet property="propertyTable" destination="SUG-4H-QMK" id="Ntf-aP-O24"/>
                         <segue destination="yWi-6w-ws8" kind="push" identifier="viewImageSegue" id="ZtV-oz-WCw"/>
                     </connections>
@@ -5188,13 +5189,13 @@
         <image name="voice" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="zfZ-aY-xQc"/>
-        <segue reference="qek-dh-YPY"/>
+        <segue reference="zSP-t6-Lnh"/>
         <segue reference="eHX-H2-6Gy"/>
         <segue reference="Udd-Ez-JOB"/>
-        <segue reference="7d8-sH-pU5"/>
-        <segue reference="dNU-1p-yFN"/>
         <segue reference="BP9-3q-sGo"/>
-        <segue reference="hfh-00-YhZ"/>
+        <segue reference="ZtV-oz-WCw"/>
+        <segue reference="q5H-Zb-tps"/>
+        <segue reference="zfZ-aY-xQc"/>
+        <segue reference="7d8-sH-pU5"/>
     </inferredMetricsTieBreakers>
 </document>
