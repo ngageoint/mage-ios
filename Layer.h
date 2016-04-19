@@ -2,20 +2,26 @@
 //  Layer.h
 //  mage-ios-sdk
 //
+//  Created by William Newman on 4/13/16.
+//  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Layer : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * eventId;
-@property (nonatomic, retain) NSString * formId;
-@property (nonatomic, retain) NSNumber * loaded;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * remoteId;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSString * url;
+extern NSString * const LayerFetched;
+
++ (NSString *) layerTypeFromJson:(NSDictionary *) json;
+- (id) populateObjectFromJson: (NSDictionary *) json withEventId: (NSNumber *) eventId;
++ (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (void) refreshLayersForEvent: (NSNumber *) eventId;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Layer+CoreDataProperties.h"

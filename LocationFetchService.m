@@ -5,7 +5,7 @@
 //
 
 #import "LocationFetchService.h"
-#import "Location+helper.h"
+#import "Location.h"
 #import "HttpManager.h"
 #import "UserUtility.h"
 

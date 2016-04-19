@@ -8,7 +8,7 @@
 #import "StoredPassword.h"
 #import "HttpManager.h"
 #import "MageServer.h"
-#import "User+helper.h"
+#import "User.h"
 #import "UserUtility.h"
 #import "NSDate+iso8601.h"
 

@@ -6,7 +6,7 @@
 
 #import "ObservationPushService.h"
 #import "HttpManager.h"
-#import "Observation+helper.h"
+#import "Observation.h"
 #import "Attachment.h"
 #import "UserUtility.h"
 

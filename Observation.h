@@ -2,35 +2,35 @@
 //  Observation.h
 //  mage-ios-sdk
 //
+//  Created by William Newman on 4/13/16.
+//  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "GeoPoint.h"
 
 @class Attachment, User;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface Observation : NSManagedObject
 
-@property (nonatomic, retain) NSString * deviceId;
-@property (nonatomic, retain) NSNumber * dirty;
-@property (nonatomic, retain) NSNumber * eventId;
-@property (nonatomic, retain) id geometry;
-@property (nonatomic, retain) NSDate * lastModified;
-@property (nonatomic, retain) id properties;
-@property (nonatomic, retain) NSString * remoteId;
-@property (nonatomic, retain) NSNumber * state;
-@property (nonatomic, retain) NSDate * timestamp;
-@property (nonatomic, retain) NSString * url;
-@property (nonatomic, retain) NSString * userId;
-@property (nonatomic, retain) NSSet *attachments;
-@property (nonatomic, retain) User *user;
-@end
++ (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
 
-@interface Observation (CoreDataGeneratedAccessors)
+- (id) populateObjectFromJson: (NSDictionary *) json;
+- (void) addTransientAttachment: (Attachment *) attachment;
+- (NSMutableArray *) transientAttachments;
 
-- (void)addAttachmentsObject:(Attachment *)value;
-- (void)removeAttachmentsObject:(Attachment *)value;
-- (void)addAttachments:(NSSet *)values;
-- (void)removeAttachments:(NSSet *)values;
+- (CLLocation *) location;
+
+- (NSString *) sectionName;
+
++ (NSOperation*) operationToPullObservationsWithSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure;
++ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Observation+CoreDataProperties.h"

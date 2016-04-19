@@ -2,28 +2,28 @@
 //  Event.h
 //  mage-ios-sdk
 //
+//  Created by William Newman on 4/13/16.
+//  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class User;
 @class Team;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Event : NSManagedObject
 
-@property (nonatomic, retain) NSString * eventDescription;
-@property (nonatomic, retain) id form;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * recentSortOrder;
-@property (nonatomic, retain) NSNumber * remoteId;
-@property (nonatomic, retain) NSSet *teams;
-@end
-
-@interface Event (CoreDataGeneratedAccessors)
-
-- (void)addTeamsObject:(Team *)value;
-- (void)removeTeamsObject:(Team *)value;
-- (void)addTeams:(NSSet *)values;
-- (void)removeTeams:(NSSet *)values;
+extern NSString * const MAGEEventsFetched;
++ (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (void) sendRecentEvent;
++ (Event *) getCurrentEvent;
+- (BOOL) isUserInEvent: (User *) user;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Event+CoreDataProperties.h"

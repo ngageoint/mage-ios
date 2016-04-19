@@ -18,6 +18,6 @@
 - (BOOL) serverHasLocalAuthenticationStrategy;
 - (BOOL) serverHasGoogleAuthenticationStrategy;
 
-+ (void) serverWithURL:(NSURL *) url success:(void (^) ()) success  failure:(void (^) (NSError *error)) failure;
++ (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure;
 
 @end

@@ -2,6 +2,8 @@
 //  Attachment.h
 //  mage-ios-sdk
 //
+//  Created by William Newman on 4/13/16.
+//  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -9,19 +11,16 @@
 
 @class Observation;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface Attachment : NSManagedObject
 
-@property (nonatomic, retain) NSString * contentType;
-@property (nonatomic, retain) NSNumber * dirty;
-@property (nonatomic, retain) NSNumber * eventId;
-@property (nonatomic, retain) NSDate * lastModified;
-@property (nonatomic, retain) NSString * localPath;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * observationRemoteId;
-@property (nonatomic, retain) NSString * remoteId;
-@property (nonatomic, retain) NSString * remotePath;
-@property (nonatomic, retain) NSNumber * size;
-@property (nonatomic, retain) NSString * url;
-@property (nonatomic, retain) Observation *observation;
++ (Attachment *) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context;
+- (id) populateFromJson: (NSDictionary *) json;
+- (NSURL *) sourceURL;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Attachment+CoreDataProperties.h"

@@ -1,4 +1,4 @@
-//
+  //
 //  Mage.m
 //  mage-ios-sdk
 //
@@ -11,12 +11,13 @@
 #import "ObservationFetchService.h"
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
-#import "User+helper.h"
-#import "Event+helper.h"
+#import "User.h"
+#import "Role.h"
+#import "Event.h"
 #import "Form.h"
-#import "Layer+helper.h"
+#import "Layer.h"
 #import "MageServer.h"
-#import "StaticLayer+helper.h"
+#import "StaticLayer.h"
 
 @implementation Mage
 
@@ -35,19 +36,24 @@
 
 - (void) startServices {
     [[LocationService singleton] start];
+
+    NSOperation *rolesPullOp = [Role operationToFetchRolesWithSuccess:nil failure:nil];
     
     NSOperation *usersPullOp = [User operationToFetchUsersWithSuccess:^{
         NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
         [[ObservationFetchService singleton] start];
     } failure:^(NSError *error) {
-        
+        NSLog(@"Failed to pull users");
     }];
+    
+    [usersPullOp addDependency:rolesPullOp];
     
     [[ObservationPushService singleton] start];
     [[AttachmentPushService singleton] start];
     
     // Add the operations to the queue
+    [[HttpManager singleton].manager.operationQueue addOperation:rolesPullOp];
     [[HttpManager singleton].manager.operationQueue addOperation:usersPullOp];
 }
 

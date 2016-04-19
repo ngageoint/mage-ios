@@ -5,8 +5,8 @@
 //
 
 #import "ObservationFetchService.h"
-#import "Observation+helper.h"
-#import "Layer+helper.h"
+#import "Observation.h"
+#import "Layer.h"
 #import "Form.h"
 #import "HttpManager.h"
 #import "UserUtility.h"

@@ -34,7 +34,7 @@
 }
 
 + (AuthenticationType) authenticationTypeFromString: (NSString *) value {
-    return [[Authentication stringToAuthenticationType] objectForKey:value];
+    return  (AuthenticationType) [[Authentication stringToAuthenticationType] objectForKey:value];
 }
 
 + (NSString *) authenticationTypeToString: (AuthenticationType) authenticationType {

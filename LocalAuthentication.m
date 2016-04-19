@@ -8,7 +8,7 @@
 
 #import <AFNetworking/AFNetworking.h>
 
-#import "User+helper.h"
+#import "User.h"
 #import "HttpManager.h"
 #import "MageServer.h"
 #import "StoredPassword.h"
@@ -47,7 +47,6 @@
             [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
             [[UserUtility singleton] resetExpiration];
             
-            User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
             complete(AUTHENTICATION_SUCCESS);
             return;
         }

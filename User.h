@@ -2,35 +2,28 @@
 //  User.h
 //  mage-ios-sdk
 //
+//  Created by William Newman on 4/13/16.
+//  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Location, Observation, Team;
+@class Location, Observation, Role, Team;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface User : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * active;
-@property (nonatomic, retain) NSString * avatarUrl;
-@property (nonatomic, retain) NSNumber * currentUser;
-@property (nonatomic, retain) NSString * email;
-@property (nonatomic, retain) NSString * iconUrl;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * phone;
-@property (nonatomic, retain) id recentEventIds;
-@property (nonatomic, retain) NSString * remoteId;
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) Location *location;
-@property (nonatomic, retain) Observation *observations;
-@property (nonatomic, retain) NSSet *teams;
++ (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context;
++ (User *) fetchUserForId:(NSString *) userId inManagedObjectContext: (NSManagedObjectContext *) context;
++ (User *) fetchCurrentUserInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
++ (NSOperation *) operationToFetchMyselfWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
++ (NSOperation *) operationToFetchUsersWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
+
+- (void) updateUserForJson: (NSDictionary *) json;
 @end
 
-@interface User (CoreDataGeneratedAccessors)
+NS_ASSUME_NONNULL_END
 
-- (void)addTeamsObject:(Team *)value;
-- (void)removeTeamsObject:(Team *)value;
-- (void)addTeams:(NSSet *)values;
-- (void)removeTeams:(NSSet *)values;
-
-@end
+#import "User+CoreDataProperties.h"

@@ -6,8 +6,8 @@
 
 #import "AttachmentPushService.h"
 #import "HttpManager.h"
-#import "Attachment+helper.h"
-#import "Observation+helper.h"
+#import "Attachment.h"
+#import "Observation.h"
 #import "UserUtility.h"
 #import "NSDate+iso8601.h"
 

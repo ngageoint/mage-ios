@@ -5,11 +5,11 @@
 //
 
 #import "LocationService.h"
-#import "User+helper.h"
-#import "GPSLocation+helper.h"
+#import "User.h"
+#import "GPSLocation.h"
 #import "GeoPoint.h"
-#import "Event+helper.h"
-#import "Server+helper.h"
+#import "Event.h"
+#import "Server.h"
 #import "HttpManager.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
