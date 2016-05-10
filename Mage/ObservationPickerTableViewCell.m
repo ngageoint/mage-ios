@@ -35,13 +35,11 @@
         [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
     } else {
         id value =[field objectForKey:@"value"];
+        [self.valueTextField setText:value];
         if (value) {
-            [self.valueTextField setText:value];
             if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
                 [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
             }
-        } else {
-            [self.valueTextField setText:@""];
         }
     }
     NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
