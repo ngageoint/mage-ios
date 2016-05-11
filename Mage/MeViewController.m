@@ -180,12 +180,35 @@ bool currentUserIsMe = NO;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    CLLocation *location = nil;
     if (currentUserIsMe) {
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter: YES];
+            location = ((GeoPoint *) gpsLocation.geometry).location;
+            [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
+    }
+    
+    
+    if (!location) {
+        NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
+        if ([locations count]) {
+            location = ((GeoPoint *) [[locations objectAtIndex:0] geometry]).location;
+        }
+    }
+    
+    if (location) {
+        // Zoom and center the map
+        CLLocationDistance latitudeMeters = 500;
+        CLLocationDistance longitudeMeters = 500;
+        double accuracy = location.horizontalAccuracy;
+        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+        
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
+        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+        [self.mapDelegate selectedUser:self.user region:viewRegion];
     }
 }
 

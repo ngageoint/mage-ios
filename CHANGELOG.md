@@ -7,7 +7,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * TBD
 ##### Features
-* Show/hide observation edit button based on user permissions.
+* Zoom to users current location on map in user view.
 
 ##### Bug Fixes
 
