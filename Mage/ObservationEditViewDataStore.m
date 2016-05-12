@@ -19,7 +19,7 @@
 @property (nonatomic, strong) NSArray *rowToField;
 @property (nonatomic, strong) NSDictionary *fieldToRow;
 @property (nonatomic, assign) NSInteger expandedRow;
-@property (nonatomic, assign) NSNumber *eventId;
+@property (nonatomic, strong) NSNumber *eventId;
 @property (nonatomic, strong) NSString *variantField;
 @property (nonatomic, strong) NSMutableArray *invalidIndexPaths;
 @end
@@ -47,6 +47,7 @@
 }
 
 - (NSArray *) rowToCellType {
+    id eventId = [Server currentEventId];
     if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _rowToCellType;
     }
