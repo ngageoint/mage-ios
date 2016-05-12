@@ -47,7 +47,6 @@
 }
 
 - (NSArray *) rowToCellType {
-    id eventId = [Server currentEventId];
     if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _rowToCellType;
     }
