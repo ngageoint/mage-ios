@@ -73,7 +73,10 @@
 
 - (void) doneButtonPressed {
     [self.valueTextField resignFirstResponder];
+    
     NSUInteger row = [self.picker selectedRowInComponent:0];
+    if (row >= [self.pickerValues count]) return;
+    
     NSString *newValue = [self.pickerValues objectAtIndex:row];
     self.valueTextField.text = newValue;
     if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
