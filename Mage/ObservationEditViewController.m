@@ -44,8 +44,10 @@
     
     // if self.observation is null create a new one
     if (self.observation == nil) {
+        self.navigationItem.title = @"Create Observation";
         self.observation = [Observation observationWithLocation:self.location inManagedObjectContext:self.managedObjectContext];
     } else {
+        self.navigationItem.title = @"Edit Observation";
         self.observation = [self.observation MR_inContext:self.managedObjectContext];
     }
     
