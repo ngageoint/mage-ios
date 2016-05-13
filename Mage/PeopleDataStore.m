@@ -42,7 +42,14 @@
 
 - (void) startFetchController {
     self.locations = [Locations locationsForAllUsers];
-    self.locations.delegate = self;    
+    self.locations.delegate = self;
+    
+    NSError *error;
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath {

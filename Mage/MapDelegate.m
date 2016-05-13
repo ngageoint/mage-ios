@@ -270,6 +270,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     _locations = locations;
     _locations.delegate = self;
     
+    [self.mapView removeAnnotations:[self.locationAnnotations allValues]];
+    [self.locationAnnotations removeAllObjects];
+    
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
@@ -283,6 +286,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 - (void) setObservations:(Observations *)observations {
     _observations = observations;
     _observations.delegate = self;
+    
+    [self.mapView removeAnnotations:[self.observationAnnotations allValues]];
+    [self.observationAnnotations removeAllObjects];
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {

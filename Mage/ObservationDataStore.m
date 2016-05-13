@@ -70,10 +70,10 @@
 
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
     }
+    
+    [self.tableView reloadData];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

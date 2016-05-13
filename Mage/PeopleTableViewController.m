@@ -9,6 +9,12 @@
 #import "MeViewController.h"
 #import <Event.h>
 #import "HttpManager.h"
+#import "TimeFilter.h"
+#import "UINavigationItem+Subtitle.h"
+
+@interface PeopleTableViewController ()
+@property (weak, nonatomic) IBOutlet id<TimeFilterDelegate> timeFilterDelegate;
+@end
 
 @implementation PeopleTableViewController
 
@@ -25,7 +31,17 @@
     Event *currentEvent = [Event getCurrentEvent];
     self.eventNameLabel.text = @"All";
     [self.navigationItem setTitle:currentEvent.name];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self.peopleDataStore startFetchController];
+    [self setNavBarTitle];
+}
+
+- (void) setNavBarTitle {
+    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
@@ -47,6 +63,16 @@
     }];
     
     [[HttpManager singleton].manager.operationQueue addOperation:userFetchOperation];
+}
+
+- (IBAction)showFilterActionSheet:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    
+    [self.timeFilterDelegate showFilterActionSheet:self complete:^(TimeFilterType timeFilter) {
+        [TimeFilter setTimeFilter:timeFilter];
+        [weakSelf.peopleDataStore startFetchController];
+        [self setNavBarTitle];
+    }];
 }
 
 

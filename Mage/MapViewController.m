@@ -6,6 +6,7 @@
 
 #import "MapViewController.h"
 
+#import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
 #import "Geometry.h"
 #import "GeoPoint.h"
@@ -29,12 +30,14 @@
 #import "ImageViewerViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
+#import "TimeFilter.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
     @property (weak, nonatomic) IBOutlet UILabel *toastText;
+    @property (weak, nonatomic) IBOutlet id<TimeFilterDelegate> timeFilterDelegate;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
@@ -58,12 +61,6 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    Locations *locations = [Locations locationsForAllUsers];
-    [self.mapDelegate setLocations:locations];
-    
-    Observations *observations = [Observations observations];
-    [self.mapDelegate setObservations:observations];
-    
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
 }
@@ -71,12 +68,19 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    Locations *locations = [Locations locationsForAllUsers];
+    [self.mapDelegate setLocations:locations];
+    
+    Observations *observations = [Observations observations];
+    [self.mapDelegate setObservations:observations];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
+    
+    [self setNavBarTitle];
+    
     Event *currentEvent = [Event getCurrentEvent];
-    self.eventNameLabel.text = @"All";
-    [self.navigationItem setTitle:currentEvent.name];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
     [defaults addObserver:self
@@ -100,6 +104,12 @@
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
 }
+
+- (void) setNavBarTitle {
+    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
+}
+
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -289,6 +299,17 @@
     BOOL authorized = status == kCLAuthorizationStatusAuthorizedAlways  || status == kCLAuthorizationStatusAuthorizedWhenInUse;
     [self.trackingButton setHidden:!authorized];
     [self.reportLocationButton setHidden:!authorized];
+}
+
+- (IBAction)showFilterActionSheet:(id)sender {
+    __weak typeof(self) weakSelf = self;
+
+    [self.timeFilterDelegate showFilterActionSheet:self complete:^(TimeFilterType timeFilter) {
+        [TimeFilter setTimeFilter:timeFilter];
+        weakSelf.mapDelegate.observations = [Observations observations];
+        weakSelf.mapDelegate.locations = [Locations locationsForAllUsers];
+        [weakSelf setNavBarTitle];
+    }];
 }
 
 @end

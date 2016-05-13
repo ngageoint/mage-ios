@@ -5,6 +5,8 @@
 //
 
 #import "ObservationTableViewController.h"
+#import "UINavigationItem+Subtitle.h"
+#import "TimeFilter.h"
 #import "ObservationTableViewCell.h"
 #import <Observation.h>
 #import "MageRootViewController.h"
@@ -17,6 +19,7 @@
 #import <LocationService.h>
 
 @interface ObservationTableViewController () <AttachmentSelectionDelegate>
+@property (weak, nonatomic) IBOutlet id<TimeFilterDelegate> timeFilterDelegate;
 @end
 
 @implementation ObservationTableViewController
@@ -30,21 +33,25 @@
         [self.refreshControl beginRefreshing];
         [self.refreshControl endRefreshing];
     });
-    
-    Event *currentEvent = [Event getCurrentEvent];
-    self.eventNameLabel.text = @"All";
-    [self.navigationItem setTitle:currentEvent.name];
-    [self.observationDataStore startFetchController];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     // iOS bug fix.
     // For some reason the first view in a TabBarViewController when that TabBarViewController
     // is the master view of a split view the toolbar will not attach to the status bar correctly.
     // Forcing it to relayout seems to fix the issue.
     [self.view setNeedsLayout];
     
-    [super viewWillAppear:animated];
+    [self setNavBarTitle];
+    
+    [self.observationDataStore startFetchController];
+}
+
+- (void) setNavBarTitle {
+    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
@@ -109,6 +116,16 @@
     } else {
         [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
     }
+}
+
+- (IBAction)showFilterActionSheet:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    
+    [self.timeFilterDelegate showFilterActionSheet:self complete:^(TimeFilterType timeFilter) {
+        [TimeFilter setTimeFilter:timeFilter];
+        [weakSelf.observationDataStore startFetchController];
+        [self setNavBarTitle];
+    }];
 }
 
 
