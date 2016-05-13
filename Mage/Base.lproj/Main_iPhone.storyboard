@@ -3302,16 +3302,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show observations on map" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VlH-1o-gCZ">
-                                                    <rect key="frame" x="15" y="21" width="141" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="2TP-Al-cDX"/>
-                                                        <constraint firstAttribute="width" constant="141" id="TVu-N6-zEQ"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ctV-28-o0R">
                                                     <rect key="frame" x="254" y="6" width="51" height="31"/>
                                                     <accessibility key="accessibilityConfiguration" label="Show Observations"/>
@@ -3329,6 +3319,16 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show observations on map" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VlH-1o-gCZ">
+                                                    <rect key="frame" x="15" y="22" width="150" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="2TP-Al-cDX"/>
+                                                        <constraint firstAttribute="width" constant="150" id="TVu-N6-zEQ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="lU4-vE-kTp" firstAttribute="top" secondItem="ZAq-re-dcj" secondAttribute="topMargin" constant="-3" id="6Gy-bn-i56"/>
@@ -3336,7 +3336,7 @@
                                                 <constraint firstItem="ctV-28-o0R" firstAttribute="top" secondItem="ZAq-re-dcj" secondAttribute="topMargin" constant="-2" id="DaB-s4-Hr4"/>
                                                 <constraint firstItem="VlH-1o-gCZ" firstAttribute="leading" secondItem="ZAq-re-dcj" secondAttribute="leadingMargin" constant="7" id="RNh-od-Nrh"/>
                                                 <constraint firstItem="lU4-vE-kTp" firstAttribute="leading" secondItem="ZAq-re-dcj" secondAttribute="leadingMargin" constant="7" id="aSk-oq-J6D"/>
-                                                <constraint firstItem="VlH-1o-gCZ" firstAttribute="top" secondItem="ZAq-re-dcj" secondAttribute="topMargin" constant="13" id="eb9-ZJ-qbM"/>
+                                                <constraint firstItem="VlH-1o-gCZ" firstAttribute="top" secondItem="ZAq-re-dcj" secondAttribute="topMargin" constant="14" id="eb9-ZJ-qbM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" label="Observations">
@@ -3365,10 +3365,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show users locations on map" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hfo-m6-8jA">
-                                                    <rect key="frame" x="15" y="21" width="152" height="21"/>
+                                                    <rect key="frame" x="15" y="21" width="160" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="BZI-4E-euL"/>
-                                                        <constraint firstAttribute="width" constant="152" id="qe8-uc-CBd"/>
+                                                        <constraint firstAttribute="width" constant="160" id="qe8-uc-CBd"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
