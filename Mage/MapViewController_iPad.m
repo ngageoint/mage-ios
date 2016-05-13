@@ -11,6 +11,12 @@
 #import "ObservationAnnotation.h"
 #import <Location.h>
 #import <Event.h>
+#import "TimeFilter.h"
+
+@interface MapViewController_iPad ()
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterButton;
+@end
 
 @implementation MapViewController_iPad
 
@@ -49,12 +55,11 @@
 
 -(void) calloutTapped:(id) calloutItem {
     if ([calloutItem isKindOfClass:[User class]]) {
-        [self userDetailSelected:(User *)calloutItem];
+        [self userDetailSelected:(User *) calloutItem];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
         [self observationDetailSelected:(Observation *) calloutItem];
     }
 }
-
 
 - (void)selectedUser:(User *) user {
     [self.mapDelegate selectedUser:user];
@@ -82,5 +87,44 @@
     [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:user];
 }
 
+- (IBAction)showFilterActionSheet:(id)sender {
+    UIAlertController *alert = [TimeFilter createFilterActionSheet];
+    
+    [alert.popoverPresentationController setPermittedArrowDirections:0];
+    alert.popoverPresentationController.sourceView = self.view;
+    alert.popoverPresentationController.sourceRect = self.view.frame;
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (IBAction)moreTapped:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Observation" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"CreateNewObservationSegue" sender:self];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Filter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self showFilterActionSheet:self];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"My Profile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:nil];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"SettingsSegue" sender:self];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        // TODO segue to new observation
+    }]];
+    
+    alert.popoverPresentationController.barButtonItem = self.moreButton;
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 @end

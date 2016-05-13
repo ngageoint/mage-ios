@@ -432,21 +432,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ZGQ-sg-NbB"/>
-                                    <barButtonItem title="Event Name" style="plain" id="Fy8-4Q-999"/>
+                                    <barButtonItem title="Event" style="plain" id="Fy8-4Q-999"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zsw-DC-sCE"/>
-                                    <barButtonItem title="New" id="cWe-q3-xJI">
+                                    <barButtonItem image="add" id="cWe-q3-xJI">
                                         <connections>
                                             <segue destination="EbK-Mn-fdL" kind="push" identifier="CreateNewObservationSegue" id="0Wl-Ci-3Xp"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem image="me" id="avK-q2-dCa">
+                                    <barButtonItem image="filter" id="jnl-jA-BUu">
                                         <connections>
-                                            <segue destination="Ifo-3V-Dop" kind="push" id="dGd-0Q-wla"/>
+                                            <action selector="showFilterActionSheet:" destination="UfL-Xp-Rx3" id="IQN-k1-Me5"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem image="gear" id="R0i-Qd-n7T">
+                                    <barButtonItem image="more" id="8UO-yl-RYq">
                                         <connections>
-                                            <segue destination="2fm-WU-X1u" kind="modal" modalTransitionStyle="flipHorizontal" id="ehK-RX-inz"/>
+                                            <action selector="moreTapped:" destination="UfL-Xp-Rx3" id="DtT-N0-mNH"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -485,8 +485,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="eventNameItem" destination="Fy8-4Q-999" id="QS5-50-86z"/>
+                        <outlet property="filterButton" destination="jnl-jA-BUu" id="tvW-cp-gqY"/>
                         <outlet property="mapDelegate" destination="MIU-fq-xaT" id="Id3-HZ-c6S"/>
                         <outlet property="mapView" destination="rz7-vu-mdR" id="YOi-pW-Nl2"/>
+                        <outlet property="moreButton" destination="8UO-yl-RYq" id="K5s-rp-tbY"/>
                         <outlet property="reportLocationButton" destination="wdu-qy-wn8" id="H4c-4P-z35"/>
                         <outlet property="toastText" destination="zzH-pl-bJt" id="E2U-DU-zFS"/>
                         <outlet property="toastView" destination="mAe-WQ-FSc" id="g3g-qh-BTc"/>
@@ -496,6 +498,7 @@
                         <segue destination="Lx3-sm-j1G" kind="custom" identifier="DisplayObservationSegue" customClass="PopAndGoSegue" id="5KS-77-dla"/>
                         <segue destination="1O1-Ri-rmd" kind="push" identifier="viewImageSegue" id="qcl-Tv-IV3"/>
                         <segue destination="Ifo-3V-Dop" kind="custom" identifier="DisplayPersonSegue" customClass="PopAndGoSegue" id="XJk-AA-Pqi"/>
+                        <segue destination="2fm-WU-X1u" kind="modal" identifier="SettingsSegue" modalTransitionStyle="flipHorizontal" id="Qu1-pY-kEW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NgD-XA-qXB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5074,17 +5077,18 @@
         </scene>
     </scenes>
     <resources>
+        <image name="add" width="36" height="36"/>
         <image name="camera" width="24" height="24"/>
         <image name="error" width="24" height="24"/>
+        <image name="filter" width="24" height="24"/>
         <image name="gallery" width="24" height="24"/>
-        <image name="gear" width="24" height="24"/>
         <image name="google_login_normal" width="42" height="46"/>
         <image name="google_login_pressed" width="40" height="46"/>
         <image name="layers" width="22" height="22"/>
         <image name="location_arrow_off" width="22" height="22"/>
         <image name="location_tracking_off" width="24" height="24"/>
         <image name="mage_logo" width="331" height="82"/>
-        <image name="me" width="24" height="24"/>
+        <image name="more" width="36" height="36"/>
         <image name="observations" width="24" height="24"/>
         <image name="people" width="24" height="24"/>
         <image name="play" width="48" height="48"/>
@@ -5107,5 +5111,8 @@
         <segue reference="0bY-HN-X3k"/>
         <segue reference="nz6-iR-1bf"/>
         <segue reference="KcK-eD-wHW"/>
+        <segue reference="0Wl-Ci-3Xp"/>
+        <segue reference="5KS-77-dla"/>
+        <segue reference="qcl-Tv-IV3"/>
     </inferredMetricsTieBreakers>
 </document>

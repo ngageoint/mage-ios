@@ -30,14 +30,12 @@
 #import "ImageViewerViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
-#import "TimeFilter.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
     @property (weak, nonatomic) IBOutlet UILabel *toastText;
-    @property (weak, nonatomic) IBOutlet id<TimeFilterDelegate> timeFilterDelegate;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
@@ -79,6 +77,11 @@
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
     
     [self setNavBarTitle];
+    
+    [defaults addObserver:self
+               forKeyPath:kTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
     
     Event *currentEvent = [Event getCurrentEvent];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
@@ -122,6 +125,7 @@
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
+    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
     
     //stop the timer for updating the circles
     if (_locationColorUpdateTimer != nil) {
@@ -150,6 +154,12 @@
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    } else if ([kTimeFilterKey isEqualToString:keyPath]) {
+        if ([keyPath isEqualToString:kTimeFilterKey]) {
+            self.mapDelegate.observations = [Observations observations];
+            self.mapDelegate.locations = [Locations locationsForAllUsers];
+            [self setNavBarTitle];
+        }
     }
 }
 
@@ -302,14 +312,9 @@
 }
 
 - (IBAction)showFilterActionSheet:(id)sender {
-    __weak typeof(self) weakSelf = self;
-
-    [self.timeFilterDelegate showFilterActionSheet:self complete:^(TimeFilterType timeFilter) {
-        [TimeFilter setTimeFilter:timeFilter];
-        weakSelf.mapDelegate.observations = [Observations observations];
-        weakSelf.mapDelegate.locations = [Locations locationsForAllUsers];
-        [weakSelf setNavBarTitle];
-    }];
+    UIAlertController *alert = [TimeFilter createFilterActionSheet];
+    [self presentViewController:alert animated:YES completion:nil];
 }
+
 
 @end

@@ -12,10 +12,6 @@
 #import "TimeFilter.h"
 #import "UINavigationItem+Subtitle.h"
 
-@interface PeopleTableViewController ()
-@property (weak, nonatomic) IBOutlet id<TimeFilterDelegate> timeFilterDelegate;
-@end
-
 @implementation PeopleTableViewController
 
 - (void)viewDidLoad {
@@ -37,6 +33,19 @@
     [super viewWillAppear:animated];
     [self.peopleDataStore startFetchController];
     [self setNavBarTitle];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults addObserver:self
+               forKeyPath:kTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
 }
 
 - (void) setNavBarTitle {
@@ -66,13 +75,19 @@
 }
 
 - (IBAction)showFilterActionSheet:(id)sender {
-    __weak typeof(self) weakSelf = self;
+    UIAlertController *alert = [TimeFilter createFilterActionSheet];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath
+                       ofObject:(id)object
+                         change:(NSDictionary *)change
+                        context:(void *)context {
     
-    [self.timeFilterDelegate showFilterActionSheet:self complete:^(TimeFilterType timeFilter) {
-        [TimeFilter setTimeFilter:timeFilter];
-        [weakSelf.peopleDataStore startFetchController];
+    if ([keyPath isEqualToString:kTimeFilterKey]) {
+        [self.peopleDataStore startFetchController];
         [self setNavBarTitle];
-    }];
+    }
 }
 
 

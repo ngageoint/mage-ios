@@ -50,63 +50,27 @@ NSString * const kTimeFilterKey = @"timeFilterKey";
     }
 }
 
--(void) showFilterActionSheet:(UIViewController *) viewController complete:(void (^) (TimeFilterType timeFilter)) complete {
++ (UIAlertController *) createFilterActionSheet {
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Filter"
                                                                    message:@"Filter observations and people by time"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     for (int type = TimeFilterAll; type <= TimeFilterToday; ++type) {
-        UIAlertAction *action = [self createAlertAction:type complete:complete];
+        UIAlertAction *action = [self createAlertAction:type];
         [alert addAction:action];
     }
     
-//    UIAlertAction *all = [UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterAll);
-//    }];
-//    all.enabled = currentFilter != TimeFilterAll;
-//    [alert addAction:all];
-//    
-//    UIAlertAction *lastHour = [UIAlertAction actionWithTitle:@"Last Hour" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterLastHour);
-//    }];
-//    lastHour.enabled = currentFilter != TimeFilterLastHour;
-//    [alert addAction:lastHour];
-//    
-//    UIAlertAction *last6Hours = [UIAlertAction actionWithTitle:@"Last 6 Hours" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterLast6Hours);
-//    }];
-//    last6Hours.enabled = currentFilter != TimeFilterLast6Hours;
-//    [alert addAction:last6Hours];
-//    
-//    UIAlertAction *last12Hours = [UIAlertAction actionWithTitle:@"Last 12 Hours" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterLast12Hours);
-//    }];
-//    last12Hours.enabled = currentFilter != TimeFilterLast12Hours;
-//    [alert addAction:last12Hours];
-//    
-//    UIAlertAction *last24Hours = [UIAlertAction actionWithTitle:@"Last 24 Hours" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterLast24Hours);
-//    }];
-//    last24Hours.enabled = currentFilter != TimeFilterLast24Hours;
-//    [alert addAction:last24Hours];
-//    
-//    UIAlertAction *today = [UIAlertAction actionWithTitle:@"Today" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        complete(TimeFilterLast24Hours);
-//    }];
-//    today.enabled = currentFilter != TimeFilterToday;
-//    [alert addAction:today];
-    
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
-    [viewController presentViewController:alert animated:YES completion:nil];
+    return alert;
 }
 
-- (UIAlertAction *) createAlertAction:(TimeFilterType) timeFilter complete:(void (^) (TimeFilterType timeFilter)) complete {
++ (UIAlertAction *) createAlertAction:(TimeFilterType) timeFilter {
     TimeFilterType currentFilter = [TimeFilter getTimeFilter];
 
     UIAlertAction *action = [UIAlertAction actionWithTitle:[TimeFilter timeFilterStringForType:timeFilter] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        complete(timeFilter);
+        [TimeFilter setTimeFilter:timeFilter];
     }];
     action.enabled = currentFilter != timeFilter;
 

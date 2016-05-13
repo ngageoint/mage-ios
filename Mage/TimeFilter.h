@@ -17,13 +17,7 @@ typedef NS_ENUM(NSUInteger, TimeFilterType) {
     TimeFilterToday
 };
 
-@protocol TimeFilterDelegate <NSObject>
-
--(void) showFilterActionSheet:(UIViewController *) viewController complete:(void (^) (TimeFilterType timeFilter)) complete;
-
-@end
-
-@interface TimeFilter : NSObject<TimeFilterDelegate>
+@interface TimeFilter : NSObject
 
 extern NSString * const kTimeFilterKey;
 
@@ -31,6 +25,8 @@ extern NSString * const kTimeFilterKey;
 
 + (TimeFilterType) getTimeFilter;
 + (void) setTimeFilter:(TimeFilterType) timeFilter;
++ (UIAlertController *) createFilterActionSheet;
+
 
 + (NSString *) getTimeFilterString;
 
