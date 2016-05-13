@@ -17,16 +17,13 @@
 @implementation GeometryEditViewController
 
 - (IBAction) saveLocation {
-//    GeoPoint *point = self.observation.geometry;
-//    point.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
-//    
-//    
-//    [self setGeoPoint:point];
     [self performSegueWithIdentifier:@"unwindToEditController" sender:self];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.prompt = @"Long press marker and drag to a new location.";
     
     if (self.geoPoint) {
         CLLocationDistance latitudeMeters = 2500;
