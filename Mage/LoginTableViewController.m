@@ -27,7 +27,6 @@
 #import "UINextField.h"
 
 @interface LoginTableViewController ()
-
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
     @property (weak, nonatomic) IBOutlet UITextField *usernameField;
     @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -37,6 +36,7 @@
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (strong, nonatomic) MageServer *server;
     @property (nonatomic) BOOL allowLogin;
+    @property (strong, nonatomic) UIFont *passwordFont;
 @end
 
 @implementation LoginTableViewController
@@ -51,6 +51,8 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
+    self.passwordFont = self.passwordField.font;
 }
 
 //  When the view reappears after logout we want to wipe the username and password fields
@@ -215,7 +217,6 @@
     activityIndicator.center = self.view.center;
     [self.view addSubview:activityIndicator];
     [activityIndicator setHidesWhenStopped:YES];
-//    [activityIndicator startAnimating];
     
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
@@ -249,6 +250,11 @@
 - (IBAction)showPasswordSwitchAction:(id)sender {
     [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
     self.passwordField.clearsOnBeginEditing = NO;
+    
+    // This is a hack to fix the fact that ios changes the font when you
+    // enable/disable the secure text field
+    self.passwordField.font = nil;
+    self.passwordField.font = [UIFont systemFontOfSize:14];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
