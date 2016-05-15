@@ -16,7 +16,8 @@
         NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
         
         User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        NSArray *recentEventIds = current.recentEventIds;
+        NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
+        
         NSFetchRequest *recentFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
         [recentFetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
