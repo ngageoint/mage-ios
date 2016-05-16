@@ -215,6 +215,7 @@
 - (void) initMageServerWithURL:(NSURL *) url {
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityIndicator.center = self.view.center;
+    [activityIndicator startAnimating];
     [self.view addSubview:activityIndicator];
     [activityIndicator setHidesWhenStopped:YES];
     
