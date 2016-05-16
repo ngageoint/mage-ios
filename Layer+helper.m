@@ -60,6 +60,9 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Layer request complete %@", responseObject);
+            
+            [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId] inContext:localContext];
+            
             NSArray *layers = responseObject;
             
             NSMutableArray *layerRemoteIds = [[NSMutableArray alloc] init];
