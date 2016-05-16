@@ -21,6 +21,7 @@
     [super viewWillAppear:animated];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
+    
     self.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(staticLayerFetched:) name: LayerFetched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(staticLayerFetched:) name: StaticLayerLoaded object:nil];
@@ -33,18 +34,21 @@
 }
 
 - (void)staticLayerFetched:(NSNotification *)notification {
-    NSLog(@"static layer loaded");
-    self.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        [self.tableView reloadData];
+    __weak typeof(self) weakSelf = self;
+
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        weakSelf.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
+        [weakSelf.tableView reloadData];
     });
 }
 
 - (IBAction)refreshLayers:(id)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:nil forKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]];
+    [defaults removeObjectForKey:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]];
+    self.staticLayers = [[NSArray alloc] init];
     [self.selectedStaticLayers removeAllObjects];
     [self.tableView reloadData];
+    
     [Layer refreshLayersForEvent:[Server currentEventId]];
 }
 
@@ -91,7 +95,9 @@
         [self.selectedStaticLayers removeObject:[self layerForRow:indexPath.row].remoteId];
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:@{[[Server currentEventId] stringValue] :[self.selectedStaticLayers allObjects]} forKey:@"selectedStaticLayers"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedStaticLayers allObjects]} forKey:@"selectedStaticLayers"];
+    [defaults synchronize];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
