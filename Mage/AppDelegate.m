@@ -17,7 +17,7 @@
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
 
-#import "ZipFile+OfflineMap.h"
+#import "OZZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <HttpManager.h>
 
@@ -300,7 +300,7 @@
     NSLog(@"File %@", archivePath);
     
     NSError *error = nil;
-    ZipFile *zipFile = [[ZipFile alloc] initWithFileName:archivePath mode:ZipFileModeUnzip];
+    OZZipFile *zipFile = [[OZZipFile alloc] initWithFileName:archivePath mode:OZZipFileModeUnzip error:nil];
     NSArray *caches = [zipFile expandToPath:directory error:&error];
     if (error) {
         NSLog(@"Error extracting offline map archive: %@. Error: %@", archivePath, error);

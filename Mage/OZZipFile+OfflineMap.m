@@ -4,22 +4,20 @@
 //
 //
 
-#import "ZipFile+OfflineMap.h"
-#import "FileInZipInfo.h"
-#import "ZipReadStream.h"
+#import "OZZipFile+OfflineMap.h"
 
-@implementation ZipFile (OfflineMap)
+@implementation OZZipFile (OfflineMap)
 
 - (NSArray *) expandToPath:(NSString *) path  error:(NSError **) error {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSUInteger totalNumberOfFiles = [self numFilesInZip];
     NSMutableArray *caches = [[NSMutableArray alloc] init];
     
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[^\\/]*/$" options:NSRegularExpressionCaseInsensitive error:error];
     if (*error) return caches;
     
-    for (int i = 0; i < totalNumberOfFiles; i++) {
-        FileInZipInfo *info = [self getCurrentFileInZipInfo];
+    NSArray *infos = [self listFileInZipInfosWithError:nil];
+    for (OZFileInZipInfo *info in infos) {
+        [self locateFileInZip:info.name error:nil];
 
         if([[[info.name pathComponents] firstObject] caseInsensitiveCompare:@"__MACOSX"] != NSOrderedSame){
         
@@ -38,20 +36,14 @@
                 
                 [[NSData data] writeToFile:filePath options:0 error:nil];
                 NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
-                ZipReadStream *read = [self readCurrentFileInZip];
-                NSUInteger count;
-                NSMutableData *data = [NSMutableData dataWithLength:2048];
-                while ((count = [read readDataWithBuffer:data])) {
-                    data.length = count;
-                    [handle writeData:data];
-                    data.length = 2048;
-                }
-                [read finishedReading];
+                OZZipReadStream *read = [self readCurrentFileInZipWithError:nil];
+                NSMutableData *data = [[NSMutableData alloc] initWithLength:info.length];
+                [read readDataWithBuffer:data error:nil];
+                [handle writeData:data];
+                [read finishedReadingWithError:nil];
                 [handle closeFile];
             }
         }
-        
-        [self goToNextFileInZip];
     }
         
     return caches;

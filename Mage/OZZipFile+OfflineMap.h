@@ -4,9 +4,9 @@
 //
 //
 
-#import "ZipFile.h"
+#import "Objective-Zip+NSError.h"
 
-@interface ZipFile (OfflineMap)
+@interface OZZipFile (OfflineMap)
 
 - (NSArray *) expandToPath:(NSString *) path error:(NSError **) error;
 

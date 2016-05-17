@@ -3555,20 +3555,20 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="57.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <activityIndicatorView opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="DmX-bp-hkd">
+                                            <rect key="frame" x="292" y="19" width="20" height="20"/>
+                                        </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Processing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cug-xj-GvY">
-                                            <rect key="frame" x="15" y="15" width="81" height="20"/>
+                                            <rect key="frame" x="14" y="19" width="81" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <activityIndicatorView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="DmX-bp-hkd">
-                                            <rect key="frame" x="292" y="12" width="20" height="20"/>
-                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Cug-xj-GvY" firstAttribute="leading" secondItem="H2A-F1-nSh" secondAttribute="leadingMargin" constant="7" id="AdP-c0-ysP"/>
-                                        <constraint firstAttribute="centerY" secondItem="Cug-xj-GvY" secondAttribute="centerY" constant="3.75" id="Zz6-HB-j31"/>
-                                        <constraint firstItem="DmX-bp-hkd" firstAttribute="top" secondItem="H2A-F1-nSh" secondAttribute="topMargin" constant="4" id="pXA-xZ-qtv"/>
+                                        <constraint firstItem="Cug-xj-GvY" firstAttribute="leading" secondItem="H2A-F1-nSh" secondAttribute="leadingMargin" constant="6" id="AdP-c0-ysP"/>
+                                        <constraint firstAttribute="centerY" secondItem="Cug-xj-GvY" secondAttribute="centerY" constant="-0.25" id="Zz6-HB-j31"/>
+                                        <constraint firstItem="DmX-bp-hkd" firstAttribute="top" secondItem="H2A-F1-nSh" secondAttribute="topMargin" constant="11" id="pXA-xZ-qtv"/>
                                         <constraint firstItem="DmX-bp-hkd" firstAttribute="trailing" secondItem="H2A-F1-nSh" secondAttribute="trailingMargin" id="xHB-ot-7I8"/>
                                     </constraints>
                                 </tableViewCellContentView>

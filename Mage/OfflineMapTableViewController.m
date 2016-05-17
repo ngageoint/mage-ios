@@ -100,6 +100,10 @@ bool originalNavBarHidden;
         cell = [tableView dequeueReusableCellWithIdentifier:@"processingOfflineMapCell" forIndexPath:indexPath];
         UILabel *textLabel = (UILabel *)[cell viewWithTag:100];
         textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
+        
+        UIActivityIndicatorView *activityIndicator = (UIActivityIndicatorView *) [cell viewWithTag:200];
+        activityIndicator.hidden = NO;
+        [activityIndicator startAnimating];
     } else {
         CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
         

@@ -20,7 +20,7 @@
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
-		2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */; };
+		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -181,8 +181,8 @@
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ZipFile+OfflineMap.h"; sourceTree = "<group>"; };
-		2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ZipFile+OfflineMap.m"; sourceTree = "<group>"; };
+		2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OZZipFile+OfflineMap.h"; sourceTree = "<group>"; };
+		2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OZZipFile+OfflineMap.m"; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -599,8 +599,8 @@
 			children = (
 				2FF4670A1A12798C00BA8357 /* CALayer+IB.h */,
 				2FF4670B1A12798C00BA8357 /* CALayer+IB.m */,
-				2F12FF391A190C38003ECB8B /* ZipFile+OfflineMap.h */,
-				2F12FF3A1A190C38003ECB8B /* ZipFile+OfflineMap.m */,
+				2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */,
+				2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */,
 				F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */,
 				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 				F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */,
@@ -1208,7 +1208,7 @@
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
-				2F12FF3B1A190C38003ECB8B /* ZipFile+OfflineMap.m in Sources */,
+				2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
