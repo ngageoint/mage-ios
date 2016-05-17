@@ -13,6 +13,12 @@
 
 BOOL unwind = NO;
 
+- (void)  viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.actionButton.hidden = YES;
+}
+
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
@@ -39,6 +45,10 @@ BOOL unwind = NO;
     [super viewWillDisappear:animated];
 }
 
+-(void) didSelectEvent:(Event *) event {
+    self.actionButton.hidden = NO;
+}
+
 - (IBAction)actionButtonTapped:(id)sender {
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         [self performSegueWithIdentifier:@"unwindToInitialSegue" sender:sender];
@@ -62,6 +72,7 @@ BOOL unwind = NO;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundView = messageLabel;
         
+        self.actionButton.hidden = NO;
         self.actionButton.titleLabel.text = @"Return to Login";
         
         [self.tableView reloadData];

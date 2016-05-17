@@ -8,6 +8,7 @@
 #import <Event+helper.h>
 #import <User+helper.h>
 #import <Server+helper.h>
+#import "EventChooserController.h"
 
 @implementation EventTableDataSource
 
@@ -97,17 +98,18 @@
         cell.textLabel.text = e.name;
         cell.detailTextLabel.text = e.eventDescription;
     }
+    
     if ([Server currentEventId] != nil && [e.remoteId isEqualToNumber:[Server currentEventId]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [self.eventSelectionDelegate didSelectEvent:e];
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
+    
     cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
-/*
- 
- */
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
     
     UITableView *tableView = self.tableView;
@@ -155,13 +157,16 @@
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Event *event = nil;
     if (indexPath.section == 1) {
-        Event *e = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-        [Server setCurrentEventId:e.remoteId];
-    } else if (indexPath.section == 2){
-        Event *e = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-        [Server setCurrentEventId:e.remoteId];
+        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 2) {
+        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
+    
+    [Server setCurrentEventId:event.remoteId];
+    [self.eventSelectionDelegate didSelectEvent:event];
+
     [tableView beginUpdates];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView endUpdates];
