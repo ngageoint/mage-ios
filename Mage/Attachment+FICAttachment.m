@@ -49,11 +49,11 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
         UIGraphicsPushContext(context);
         
         CGRect cropRect = CGRectZero;
-        if (image.size.width * image.scale <= contextSize.width && image.size.height * image.scale <= contextSize.height) {
-            cropRect = CGRectMake((contextSize.width - image.size.width * 2)/2.0,
-                                  (contextSize.height - image.size.height * 2)/2.0,
-                                  contextSize.width,
-                                  contextSize.height);
+        if (image.size.width <= contextSize.width && image.size.height <= contextSize.height) {
+            cropRect = CGRectMake(0,
+                                  0,
+                                  image.size.width * image.scale,
+                                  image.size.height * image.scale);
         } else if (image.size.width < image.size.height) {
             // portrait mode, crop off the top and bottom
             cropRect = CGRectMake(0, (image.size.height - image.size.width)/2.0, image.size.width, image.size.width);
