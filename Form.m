@@ -8,10 +8,7 @@
 #import <AFNetworking.h>
 #import "HttpManager.h"
 #import "zlib.h"
-#import "ZipFile.h"
-#import "ZipReadStream.h"
-#import "ZipException.h"
-#import "FileInZipInfo.h"
+#import "Objective-Zip+NSError.h"
 #import "ObservationFetchService.h"
 #import "MageServer.h"
 #import "Server+helper.h"
@@ -32,41 +29,32 @@
         NSLog(@"event form icon request complete");
         
         NSError *error = nil;
-    
-        ZipFile *unzipFile = [[ZipFile alloc] initWithFileName:stringPath mode:ZipFileModeUnzip];
-        int totalNumberOfFiles = (int)[unzipFile numFilesInZip];
-        [unzipFile goToFirstFileInZip];
-        for (int i = 0; i < totalNumberOfFiles; i++) {
-            FileInZipInfo *info = [unzipFile getCurrentFileInZipInfo];
+        OZZipFile *unzipFile = [[OZZipFile alloc] initWithFileName:stringPath mode:OZZipFileModeUnzip error:&error];
+        
+        NSArray *infos = [unzipFile listFileInZipInfosWithError:&error];
+        for (OZFileInZipInfo *info in infos) {
+            [unzipFile locateFileInZip:info.name error:&error];
             NSString *name = info.name;
             if (![name hasSuffix:@"/"]) {
                 NSString *filePath = [folderToUnzipTo stringByAppendingPathComponent:name];
                 NSString *basePath = [filePath stringByDeletingLastPathComponent];
                 if (![[NSFileManager defaultManager] createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:&error]) {
-                    [unzipFile close];
-                    
-                    //return NO;
+                    [unzipFile closeWithError:nil];
                 }
                 
                 [[NSData data] writeToFile:filePath options:0 error:nil];
                 
                 NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
-                ZipReadStream *read = [unzipFile readCurrentFileInZip];
-                NSUInteger count;
-                NSMutableData *data = [NSMutableData dataWithLength:2048];
-                while ((count = [read readDataWithBuffer:data])) {
-                    data.length = count;
-                    [handle writeData:data];
-                    data.length = 2048;
-                }
-                [read finishedReading];
+                OZZipReadStream *read = [unzipFile readCurrentFileInZipWithError:&error];
+                NSMutableData *data = [[NSMutableData alloc] initWithLength:info.length];
+                int bytesRead = [read readDataWithBuffer:data error:&error];
+                [handle writeData:data];
+                [read finishedReadingWithError:&error];
                 [handle closeFile];
             }
-            
-            [unzipFile goToNextFileInZip];
         }
         
-        [unzipFile close];
+        [unzipFile closeWithError:nil];
         if ([[NSFileManager defaultManager] isDeletableFileAtPath:stringPath]) {
             BOOL successfulRemoval = [[NSFileManager defaultManager] removeItemAtPath:stringPath error:&error];
             if (!successfulRemoval) {
