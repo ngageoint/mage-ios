@@ -13,6 +13,7 @@
 @interface StaticLayerTableViewController ()
     @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
     @property (nonatomic, strong) NSArray *staticLayers;
+    @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
 @end
 
 @implementation StaticLayerTableViewController
@@ -39,10 +40,13 @@
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         weakSelf.staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
         [weakSelf.tableView reloadData];
+        weakSelf.refreshLayersButton.enabled = YES;
     });
 }
 
 - (IBAction)refreshLayers:(id)sender {
+    self.refreshLayersButton.enabled = NO;
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]];
     self.staticLayers = [[NSArray alloc] init];
