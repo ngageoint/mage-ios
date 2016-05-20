@@ -37,17 +37,18 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
 }
 
 + (void) refreshLayersForEvent:(NSNumber *)eventId {
-    [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
-    [[HttpManager singleton].manager.operationQueue addOperation:[Layer operationToPullLayersForEvent:eventId success:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
+    NSOperation *operation = [Layer operationToPullLayersForEvent:eventId success:^{
         NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:staticLayers];
         for (StaticLayer *l in staticLayers) {
             NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
             [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
         }
     } failure:^(NSError *error) {
-        //code
-    }]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
+    }];
+    
+    [[HttpManager singleton].manager.operationQueue addOperation:operation];
 }
 
 + (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
@@ -58,9 +59,7 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
     
     NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSLog(@"Layer request complete %@", responseObject);
-            
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {            
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId] inContext:localContext];
             
             NSArray *layers = responseObject;
