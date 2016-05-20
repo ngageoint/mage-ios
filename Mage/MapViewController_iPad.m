@@ -24,6 +24,7 @@
     lblTitle.font = [UIFont boldSystemFontOfSize:18];
     lblTitle.textAlignment = NSTextAlignmentLeft;
     lblTitle.text = [Event getCurrentEvent].name;
+    [lblTitle sizeToFit];
     
     [self.eventNameItem setCustomView:lblTitle];
 }
