@@ -16,11 +16,11 @@
     [allAttachments addObjectsFromArray:_observation.transientAttachments];
     
     AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:@"download"];
-    
     Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
     
     FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
+        if (!image) return;
+        
         cell.imageView.image = image;
         [cell.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
         cell.imageView.layer.cornerRadius = 5;
