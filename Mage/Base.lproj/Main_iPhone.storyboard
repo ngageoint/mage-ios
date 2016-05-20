@@ -4204,7 +4204,7 @@
             </objects>
             <point key="canvasLocation" x="878" y="3601"/>
         </scene>
-        <!--Discalimer-->
+        <!--Disclaimer-->
         <scene sceneID="aWq-1C-P6D">
             <objects>
                 <viewController id="pUb-YD-4we" customClass="DisclaimerViewController" sceneMemberID="viewController">
@@ -4240,7 +4240,7 @@
                             <constraint firstItem="nQ8-Mz-NTz" firstAttribute="top" secondItem="LrG-G8-TK9" secondAttribute="bottom" id="yQS-X1-i0o"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Discalimer" id="OWY-iZ-cia"/>
+                    <navigationItem key="navigationItem" title="Disclaimer" id="OWY-iZ-cia"/>
                     <connections>
                         <outlet property="consentText" destination="LrG-G8-TK9" id="czy-7n-cyd"/>
                         <outlet property="consentTitle" destination="Rmd-9R-M2J" id="LnH-Xe-vZa"/>
