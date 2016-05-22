@@ -92,7 +92,6 @@
 
 
 - (IBAction)refreshObservations:(UIRefreshControl *)sender {
-    NSLog(@"refreshObservations");
     [self.refreshControl beginRefreshing];
     
     NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
@@ -105,7 +104,6 @@
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
-    NSLog(@"attachment selected");
     if (self.attachmentDelegate != nil) {
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {

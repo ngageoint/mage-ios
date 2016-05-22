@@ -12,42 +12,26 @@
 @implementation AttachmentCollectionDataStore
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[_observation.attachments allObjects]];
-    [allAttachments addObjectsFromArray:_observation.transientAttachments];
+    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[self.observation.attachments allObjects]];
+    [allAttachments addObjectsFromArray:self.observation.transientAttachments];
     
-    AttachmentCell *cell = [_attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
-    Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    
-    FICImageCacheCompletionBlock completionBlock = ^(id <FICEntity> entity, NSString *formatName, UIImage *image) {
-        if (!image) return;
-        
-        cell.imageView.image = image;
-        [cell.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
-        cell.imageView.layer.cornerRadius = 5;
-        cell.imageView.clipsToBounds = YES;
-    };
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    BOOL imageExists = [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentMediumSquare completionBlock:completionBlock];
-    
-    if (imageExists == NO) {
-        cell.imageView.image = [UIImage imageNamed:@"download"];
-    }
+    AttachmentCell *cell = [self.attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
+    Attachment *attachment = [allAttachments objectAtIndex:[indexPath row]];
+    [cell setImageForAttachament:attachment];
+
     return cell;
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _observation.attachments.count + _observation.transientAttachments.count;
+    return self.observation.attachments.count + self.observation.transientAttachments.count;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[_observation.attachments allObjects]];
-    [allAttachments addObjectsFromArray:_observation.transientAttachments];
-    
-    Attachment *attachment = [allAttachments objectAtIndex:[indexPath indexAtPosition:[indexPath length]-1]];
-    NSLog(@"clicked attachment %@", attachment.url);
+    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[self.observation.attachments allObjects]];
+    [allAttachments addObjectsFromArray:self.observation.transientAttachments];
     
     if (self.attachmentSelectionDelegate) {
+        Attachment *attachment = [allAttachments objectAtIndex:[indexPath row]];
         [self.attachmentSelectionDelegate selectedAttachment:attachment];
     }
 }
