@@ -21,7 +21,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
 
 + (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context {
     NSString *remoteLayerId = [StaticLayer layerIdFromJson:layer];
-    StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId]];
+    StaticLayer *l = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId] inContext:context];
     if (l == nil) {
         l = [StaticLayer MR_createEntityInContext:context];
         [l populateObjectFromJson:layer withEventId:eventId];
