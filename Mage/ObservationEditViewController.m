@@ -20,6 +20,7 @@
 #import "AttachmentSelectionDelegate.h"
 #import <Server+helper.h>
 #import <Event+helper.h>
+#import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
@@ -193,6 +194,7 @@
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
+        NSMutableDictionary *imageMetadata = [[info objectForKey:UIImagePickerControllerMediaMetadata] mutableCopy];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
@@ -213,12 +215,34 @@
                 NSLog(@"Error creating directory path: %@", [error localizedDescription]);
         }
         
-        NSData *imageData = UIImagePNGRepresentation(chosenImage);
-        BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
+        NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
+        CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
+        CFStringRef UTI = CGImageSourceGetType(source);
+        NSMutableData *destinationData = [NSMutableData data];
+        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destinationData, UTI, 1, NULL);
+        
+        if (!destinationData) {
+            NSLog(@"Error: Could not create image destination");
+        }
+        
+        // add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+        CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef) imageMetadata);
+        BOOL success = NO;
+        success = CGImageDestinationFinalize(destination);
+        
+        success = [destinationData writeToFile:fileToWriteTo atomically:NO];
+        
+        if (!success) {
+            NSLog(@"Error: Could not create data from image destination");
+        }
+        
+        CFRelease(destination);
+        CFRelease(source);
+        
         NSLog(@"successfully wrote file %d", success);
         
         NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-        [attachmentJson setValue:@"image/png" forKey:@"contentType"];
+        [attachmentJson setValue:@"image/jpeg" forKey:@"contentType"];
         [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
         [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
         [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];

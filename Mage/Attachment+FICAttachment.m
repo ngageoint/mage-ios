@@ -63,8 +63,9 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
         }
         
         CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-        imageToUse = [UIImage imageWithCGImage:imageRef];
-        CGImageRelease(imageRef);            
+        imageToUse = [UIImage imageWithCGImage:imageRef scale:image.scale orientation:[image imageOrientation]];
+
+        CGImageRelease(imageRef);
 
         [imageToUse drawInRect:contextBounds];
         UIGraphicsPopContext();
