@@ -2725,19 +2725,91 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="V5Y-kS-C3F">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Sk-eg-elO">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
-                                <connections>
-                                    <outlet property="delegate" destination="8he-gU-g1M" id="oMe-xU-vci"/>
-                                </connections>
-                            </mapView>
+                                <subviews>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="V5Y-kS-C3F">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="8he-gU-g1M" id="oMe-xU-vci"/>
+                                        </connections>
+                                    </mapView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-Vh-WL6">
+                                        <rect key="frame" x="0.0" y="337" width="320" height="118"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y32-wp-mo3">
+                                                <rect key="frame" x="8" y="8" width="73" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="73" id="3a0-DQ-z2F"/>
+                                                    <constraint firstAttribute="height" constant="21" id="RBx-DE-SvZ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="imt-D9-3ed">
+                                                <rect key="frame" x="8" y="28" width="304" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="k67-HZ-HyM"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                            </textField>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpF-2l-uXI">
+                                                <rect key="frame" x="8" y="60" width="73" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="BCa-L2-GQs"/>
+                                                    <constraint firstAttribute="width" constant="73" id="bki-09-h9M"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WIc-xC-3mG" userLabel="Longitude Field">
+                                                <rect key="frame" x="8" y="80" width="304" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="R8Y-cp-PI2"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                            </textField>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="imt-D9-3ed" firstAttribute="top" secondItem="y32-wp-mo3" secondAttribute="bottom" constant="-1" id="1yi-wX-02w"/>
+                                            <constraint firstItem="imt-D9-3ed" firstAttribute="leading" secondItem="JmN-Vh-WL6" secondAttribute="leading" constant="8" id="3pf-7b-b63"/>
+                                            <constraint firstItem="WIc-xC-3mG" firstAttribute="leading" secondItem="JmN-Vh-WL6" secondAttribute="leading" constant="8" id="4Ig-xy-s1T"/>
+                                            <constraint firstAttribute="trailing" secondItem="WIc-xC-3mG" secondAttribute="trailing" constant="8" id="6SC-ab-ISx"/>
+                                            <constraint firstAttribute="trailing" secondItem="imt-D9-3ed" secondAttribute="trailing" constant="8" id="6Sb-SG-0hO"/>
+                                            <constraint firstItem="y32-wp-mo3" firstAttribute="top" secondItem="JmN-Vh-WL6" secondAttribute="top" constant="8" id="Fkt-no-SPL"/>
+                                            <constraint firstItem="WIc-xC-3mG" firstAttribute="top" secondItem="dpF-2l-uXI" secondAttribute="bottom" constant="-1" id="JaZ-7f-jhc"/>
+                                            <constraint firstItem="dpF-2l-uXI" firstAttribute="top" secondItem="y32-wp-mo3" secondAttribute="bottom" constant="31" id="W1s-fj-dyi"/>
+                                            <constraint firstAttribute="height" constant="118" id="gdT-3Q-RFe"/>
+                                            <constraint firstItem="y32-wp-mo3" firstAttribute="leading" secondItem="JmN-Vh-WL6" secondAttribute="leading" constant="8" id="k5O-ra-0Fo"/>
+                                            <constraint firstItem="dpF-2l-uXI" firstAttribute="leading" secondItem="JmN-Vh-WL6" secondAttribute="leading" constant="8" id="umw-sp-45K"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="V5Y-kS-C3F" firstAttribute="top" secondItem="3Sk-eg-elO" secondAttribute="top" id="1GV-ZX-flj"/>
+                                    <constraint firstAttribute="trailing" secondItem="V5Y-kS-C3F" secondAttribute="trailing" id="39r-Ye-0va"/>
+                                    <constraint firstAttribute="bottom" secondItem="V5Y-kS-C3F" secondAttribute="bottom" id="EQm-ZD-Woz"/>
+                                    <constraint firstItem="V5Y-kS-C3F" firstAttribute="leading" secondItem="3Sk-eg-elO" secondAttribute="leading" id="EzF-Y5-e6N"/>
+                                    <constraint firstItem="JmN-Vh-WL6" firstAttribute="leading" secondItem="3Sk-eg-elO" secondAttribute="leading" id="QpX-ci-KUR"/>
+                                    <constraint firstAttribute="bottom" secondItem="JmN-Vh-WL6" secondAttribute="bottom" id="jjC-wI-cG8"/>
+                                    <constraint firstAttribute="trailing" secondItem="JmN-Vh-WL6" secondAttribute="trailing" id="tpg-fa-fQe"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="V5Y-kS-C3F" secondAttribute="trailing" constant="-16" id="8Hn-j8-AjW"/>
-                            <constraint firstItem="V5Y-kS-C3F" firstAttribute="leading" secondItem="B9z-uS-38G" secondAttribute="leadingMargin" constant="-16" id="apH-dH-HZi"/>
-                            <constraint firstItem="V5Y-kS-C3F" firstAttribute="top" secondItem="bb1-4K-LFS" secondAttribute="bottom" id="h6W-S0-HMX"/>
-                            <constraint firstItem="QJs-S7-SY5" firstAttribute="top" secondItem="V5Y-kS-C3F" secondAttribute="bottom" id="wzK-Ir-mzm"/>
+                            <constraint firstAttribute="trailing" secondItem="3Sk-eg-elO" secondAttribute="trailing" id="1bc-D6-9OG"/>
+                            <constraint firstItem="3Sk-eg-elO" firstAttribute="leading" secondItem="B9z-uS-38G" secondAttribute="leading" id="NZd-07-tjU"/>
+                            <constraint firstItem="QJs-S7-SY5" firstAttribute="top" secondItem="3Sk-eg-elO" secondAttribute="bottom" id="sVd-al-oLH"/>
+                            <constraint firstItem="3Sk-eg-elO" firstAttribute="top" secondItem="bb1-4K-LFS" secondAttribute="bottom" id="uQY-qM-4AA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="io0-e4-Uws">
@@ -2748,6 +2820,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="bottomConstraint" destination="sVd-al-oLH" id="kYG-n4-6XP"/>
+                        <outlet property="latitudeField" destination="imt-D9-3ed" id="VBe-o3-qUD"/>
+                        <outlet property="longitudeField" destination="WIc-xC-3mG" id="7uB-pD-J9o"/>
                         <outlet property="map" destination="V5Y-kS-C3F" id="dQp-JD-dNp"/>
                         <segue destination="Web-fn-MUl" kind="unwind" identifier="unwindToEditController" unwindAction="unwindFromGeometryController:" id="oR6-kX-rHs"/>
                     </connections>
@@ -4480,7 +4555,7 @@
                         <viewControllerLayoutGuide type="bottom" id="FgX-Tt-xtX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Fcs-AZ-8xW">
-                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="sQB-m1-06Y">
@@ -4500,7 +4575,7 @@
                                 </connections>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="abu-vE-3L5">
-                                <rect key="frame" x="0.0" y="206" width="320" height="269"/>
+                                <rect key="frame" x="0.0" y="206" width="320" height="249"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="obsCell" rowHeight="130" id="bGp-ui-azC" customClass="ObservationTableViewCell">
@@ -4724,7 +4799,7 @@
             <objects>
                 <tableViewController id="ikG-lE-1ri" customClass="PeopleTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4yf-Xu-lBx">
-                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -5187,12 +5262,12 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Udd-Ez-JOB"/>
-        <segue reference="zSP-t6-Lnh"/>
-        <segue reference="eHX-H2-6Gy"/>
-        <segue reference="OPq-qa-1fv"/>
-        <segue reference="BP9-3q-sGo"/>
-        <segue reference="dNU-1p-yFN"/>
-        <segue reference="7d8-sH-pU5"/>
+        <segue reference="qek-dh-YPY"/>
         <segue reference="zfZ-aY-xQc"/>
+        <segue reference="Cwu-7M-JxF"/>
+        <segue reference="zb4-mj-XYT"/>
+        <segue reference="2y0-bF-fmy"/>
+        <segue reference="hfh-00-YhZ"/>
+        <segue reference="eHX-H2-6Gy"/>
     </inferredMetricsTieBreakers>
 </document>

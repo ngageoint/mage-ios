@@ -7,7 +7,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * TBD
 ##### Features
-* Zoom to users current location on map in user view.
+* Auto zooms to users current location on map in user view.
+* Lat/Lng edit text fields added to geometry edit view, users can now manually enter a lat/lng
 
 ##### Bug Fixes
 
