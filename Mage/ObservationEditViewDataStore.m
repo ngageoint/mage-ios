@@ -8,6 +8,7 @@
 #import "ObservationEditTableViewCell.h"
 #import "AttachmentEditTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
+#import "ObservationFields.h"
 
 #import <Server.h>
 #import <Event.h>
@@ -60,21 +61,18 @@
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
     // add the attachment cell first and then do the other fields
     [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:@"attachments"];
-    [cells addObject:@"observationEdit-attachmentView"];
+    [cells addObject:@"attachmentView"];
     [rowToField addObject:@{}];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@", nil];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     NSArray *fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
     // run through the form and map the row indexes to fields
     for (id field in fields) {
-        NSString *type = [field objectForKey:@"type"];
-        if (![type isEqualToString:@"hidden"]) {
-            [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:[field objectForKey:@"id"]];
-            [cells addObject:[NSString stringWithFormat: @"observationEdit-%@", type]];
-            [rowToField addObject:field];
-        }
+        [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:[field objectForKey:@"id"]];
+        [cells addObject:[field objectForKey:@"type"]];
+        [rowToField addObject:field];
     }
     
     self.fieldToRow = fieldToRowMap;
@@ -120,9 +118,6 @@
     id field = [self rowToField][indexPath.row];
     
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
-    if (cell == nil) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"observationEdit-textfield"];
-    }
     cell.fieldDefinition = field;
     
     if ([cell isKindOfClass:[ObservationEditGeometryTableViewCell class]]) {

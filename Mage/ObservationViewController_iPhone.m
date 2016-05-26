@@ -14,6 +14,7 @@
 #import "ObservationHeaderAttachmentTableViewCell.h"
 #import "Event.h"
 #import "Role.h"
+#import "ObservationFields.h"
 
 @interface ObservationViewController_iPhone()
 @property (strong, nonatomic) NSMutableArray *tableLayout;
@@ -48,8 +49,8 @@
     self.navigationItem.title = name;
     
     self.tableLayout = [[NSMutableArray alloc] init];
-    NSArray *headerSection = [[NSArray alloc] initWithObjects:@"observation-header", @"observation-map", @"observation-map-directions", nil];
-    NSArray *attachmentSection = [[NSArray alloc] initWithObjects:@"observation-attachments", nil];
+    NSArray *headerSection = [[NSArray alloc] initWithObjects:@"header", @"map", @"directions", nil];
+    NSArray *attachmentSection = [[NSArray alloc] initWithObjects:@"attachments", nil];
     [self.tableLayout addObject:headerSection];
     if (self.observation.attachments.count != 0) {
         [self.tableLayout addObject:attachmentSection];
@@ -69,7 +70,7 @@
     NSArray *keysWithEmptyString = [propertiesWithValue allKeysForObject:@""];
     [propertiesWithValue removeObjectsForKeys:keysWithEmptyString];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [propertiesWithValue allKeys]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
@@ -116,15 +117,9 @@
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
-    
-    NSString *type = [field objectForKey:@"type"];
-    NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        CellIdentifier = @"observationCell-generic";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    }
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field objectForKey:@"type"]];
     cell.fieldDefinition = field;
+    
     return cell;
 }
 

@@ -21,6 +21,7 @@
 #import "Event.h"
 #import "NSDate+display.h"
 #import "Attachment+Thumbnail.h"
+#import "ObservationFields.h"
 
 @interface ObservationViewController_iPad ()
 
@@ -62,7 +63,6 @@
         self.primaryFieldLabel.text = @"Observation";
     }
     
-    
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
     NSDictionary *form = event.form;
     NSString *variantField = [form objectForKey:@"variantField"];
@@ -83,7 +83,7 @@
     NSArray *keysWithEmptyString = [propertiesWithValue allKeysForObject:@""];
     [propertiesWithValue removeObjectsForKeys:keysWithEmptyString];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [propertiesWithValue allKeys]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
@@ -167,18 +167,10 @@
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
-
-    NSString *type = [field objectForKey:@"type"];
-    NSString *CellIdentifier = [NSString stringWithFormat:@"observationCell-%@", type];
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        CellIdentifier = @"observationCell-generic";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    }
-    
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field valueForKey:@"type"]];
     cell.fieldDefinition = field;
+    
     return cell;
-
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

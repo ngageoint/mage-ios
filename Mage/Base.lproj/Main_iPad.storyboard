@@ -1655,7 +1655,7 @@
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-textfield" rowHeight="55" id="mBf-44-Scd" customClass="ObservationPropertyTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textfield" rowHeight="55" id="mBf-44-Scd" customClass="ObservationPropertyTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mBf-44-Scd" id="DId-5I-Wad">
@@ -1698,7 +1698,7 @@
                                             <outlet property="valueTextView" destination="HUk-cX-5tm" id="fbG-l4-YrH"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-radio" rowHeight="55" id="S6V-Fe-gsb" userLabel="Observation Radio Table View Cell - observationCell-radio" customClass="ObservationPropertyTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="radio" rowHeight="55" id="S6V-Fe-gsb" customClass="ObservationPropertyTableViewCell">
                                         <rect key="frame" x="0.0" y="77" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="S6V-Fe-gsb" id="iqw-4c-9KW">
@@ -1741,7 +1741,7 @@
                                             <outlet property="valueTextView" destination="NIM-Ul-Iz5" id="BUN-sx-7d6"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-textarea" rowHeight="55" id="X7m-TW-D0H" customClass="ObservationPropertyTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textarea" rowHeight="55" id="X7m-TW-D0H" customClass="ObservationPropertyTableViewCell">
                                         <rect key="frame" x="0.0" y="132" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X7m-TW-D0H" id="ehK-tO-0Xk">
@@ -1783,7 +1783,7 @@
                                             <outlet property="valueTextView" destination="oEA-CW-znq" id="eic-xE-a6G"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-email" rowHeight="55" id="xXb-hZ-TwT" userLabel="Observation Email Table View Cell - observationCell-email" customClass="ObservationPropertyTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="email" rowHeight="55" id="xXb-hZ-TwT" customClass="ObservationPropertyTableViewCell">
                                         <rect key="frame" x="0.0" y="187" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xXb-hZ-TwT" id="HvC-zq-L7D">
@@ -1826,7 +1826,7 @@
                                             <outlet property="valueTextView" destination="SUT-bP-2FC" id="u1m-UH-RNW"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-dropdown" rowHeight="55" id="Cs8-5o-dmA" userLabel="Observation Dropdown Table View Cell - observationCell-dropdown" customClass="ObservationPropertyTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dropdown" rowHeight="55" id="Cs8-5o-dmA" customClass="ObservationPropertyTableViewCell">
                                         <rect key="frame" x="0.0" y="242" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Cs8-5o-dmA" id="7fm-ao-tSs">
@@ -1868,7 +1868,7 @@
                                             <outlet property="valueTextView" destination="wrO-NO-UUd" id="3Vk-C7-Xhx"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-password" rowHeight="55" id="VuV-YE-GCK" customClass="ObservationPasswordTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="password" rowHeight="55" id="VuV-YE-GCK" customClass="ObservationPasswordTableViewCell">
                                         <rect key="frame" x="0.0" y="297" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VuV-YE-GCK" id="gha-Ea-Xui">
@@ -1908,7 +1908,7 @@
                                             <outlet property="passwordField" destination="8KJ-RM-bUD" id="oHv-Lb-k23"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-date" rowHeight="55" id="eqn-TJ-od6" customClass="ObservationDateTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="date" rowHeight="55" id="eqn-TJ-od6" customClass="ObservationDateTableViewCell">
                                         <rect key="frame" x="0.0" y="352" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eqn-TJ-od6" id="XqL-wf-Ttk">
@@ -1951,7 +1951,7 @@
                                             <outlet property="valueTextView" destination="sv5-U5-39z" id="LRZ-dz-pSe"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-checkbox" rowHeight="55" id="x7A-S7-Ql1" userLabel="Observation Checkbox Table View Cell - observationCell-checkbox" customClass="ObservationCheckboxViewTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="checkbox" rowHeight="55" id="x7A-S7-Ql1" customClass="ObservationCheckboxViewTableViewCell">
                                         <rect key="frame" x="0.0" y="407" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x7A-S7-Ql1" id="mw9-Hf-jyz">
@@ -1995,7 +1995,7 @@
                                             <outlet property="keyLabel" destination="GqS-za-sDt" id="iFx-pg-Kwv"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-geometry" rowHeight="55" id="SwP-eZ-UgX" customClass="ObservationGeometryTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="55" id="SwP-eZ-UgX" customClass="ObservationGeometryTableViewCell">
                                         <rect key="frame" x="0.0" y="462" width="768" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SwP-eZ-UgX" id="uNL-dd-Cy6">
@@ -2036,47 +2036,6 @@
                                         <connections>
                                             <outlet property="keyLabel" destination="XIj-W7-hRV" id="CHY-v8-8EJ"/>
                                             <outlet property="valueTextView" destination="XCF-Fj-vCV" id="mX2-Xg-XMp"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationCell-generic" rowHeight="55" id="tGZ-0m-u3k" userLabel="Observation Generic Table View Cell - observationCell-generic" customClass="ObservationPropertyTableViewCell">
-                                        <rect key="frame" x="0.0" y="517" width="768" height="55"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tGZ-0m-u3k" id="VCY-jV-Syk">
-                                            <rect key="frame" x="0.0" y="0.0" width="768" height="55"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="textfield" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jFV-j9-3QK">
-                                                    <rect key="frame" x="8" y="0.0" width="752" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="9VF-1l-TwI"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dfu-vU-gDC">
-                                                    <rect key="frame" x="8" y="14" width="752" height="28"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                </textView>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstItem="jFV-j9-3QK" firstAttribute="top" secondItem="VCY-jV-Syk" secondAttribute="topMargin" constant="-8" id="DK4-sy-GS0"/>
-                                                <constraint firstItem="dfu-vU-gDC" firstAttribute="leading" secondItem="VCY-jV-Syk" secondAttribute="leading" constant="8" id="HMu-EE-UlO"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="dfu-vU-gDC" secondAttribute="bottom" constant="5" id="Lkf-27-upD"/>
-                                                <constraint firstItem="jFV-j9-3QK" firstAttribute="leading" secondItem="VCY-jV-Syk" secondAttribute="leading" constant="8" id="hpu-XZ-Sjc"/>
-                                                <constraint firstItem="dfu-vU-gDC" firstAttribute="top" secondItem="jFV-j9-3QK" secondAttribute="bottom" constant="-7" id="lcd-l8-RGH"/>
-                                                <constraint firstAttribute="trailing" secondItem="dfu-vU-gDC" secondAttribute="trailing" constant="8" id="ocZ-hT-NOx"/>
-                                                <constraint firstAttribute="trailing" secondItem="jFV-j9-3QK" secondAttribute="trailing" constant="8" id="pqW-id-fXn"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="keyLabel" destination="jFV-j9-3QK" id="hRf-BI-4po"/>
-                                            <outlet property="valueTextView" destination="dfu-vU-gDC" id="TC0-cC-1Cd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2168,13 +2127,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
+                            <view contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
                                 <rect key="frame" x="0.0" y="20" width="768" height="960"/>
                                 <subviews>
-                                    <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-hX-Dpg" userLabel="Image View">
+                                    <view contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-hX-Dpg" userLabel="Image View">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                         <subviews>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Pmd-yH-TtY">
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Pmd-yH-TtY">
                                                 <rect key="frame" x="366" y="461" width="37" height="37"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="37" id="5Qq-7G-F2p"/>
@@ -2182,7 +2141,7 @@
                                                 </constraints>
                                                 <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             </activityIndicatorView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xr5-P6-R7W">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xr5-P6-R7W">
                                                 <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                             </imageView>
                                         </subviews>
@@ -2196,10 +2155,10 @@
                                             <constraint firstItem="xr5-P6-R7W" firstAttribute="top" secondItem="Stp-hX-Dpg" secondAttribute="top" id="yDw-DL-NqQ"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HOP-om-xPV" userLabel="Progress View">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HOP-om-xPV" userLabel="Progress View">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tgB-gY-CVX">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="10%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tgB-gY-CVX">
                                                 <rect key="frame" x="359" y="480" width="50" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="eH5-n4-yRx"/>
@@ -2209,14 +2168,14 @@
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="mmO-gY-Zew">
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="mmO-gY-Zew">
                                                 <rect key="frame" x="192" y="520" width="384" height="2"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="2" id="8IL-QO-49N"/>
                                                     <constraint firstAttribute="width" constant="384" id="NdP-zR-Ukx"/>
                                                 </constraints>
                                             </progressView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download Progress" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57d-y1-Y3A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Download Progress" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57d-y1-Y3A">
                                                 <rect key="frame" x="309" y="440" width="151" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="150.5" id="huC-2g-mUq"/>
@@ -2237,10 +2196,10 @@
                                             <constraint firstAttribute="centerX" secondItem="57d-y1-Y3A" secondAttribute="centerX" constant="-0.25" id="yYC-bs-VJr"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YFJ-Sc-OvH" userLabel="Audio Player View">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFJ-Sc-OvH" userLabel="Audio Player View">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ec3-Zq-rn3">
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ec3-Zq-rn3">
                                                 <rect key="frame" x="332" y="372" width="103" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="103" id="E3a-3X-7F9"/>
@@ -2252,7 +2211,7 @@
                                                     <action selector="playButtonPressed:" destination="1O1-Ri-rmd" eventType="touchUpInside" id="1cZ-mh-4RU"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qog-FN-HTx">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="0:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qog-FN-HTx">
                                                 <rect key="frame" x="16" y="469" width="56" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="6SB-P3-qdH"/>
@@ -2262,14 +2221,14 @@
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="XsZ-bQ-BLa">
+                                            <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="XsZ-bQ-BLa">
                                                 <rect key="frame" x="78" y="465" width="612" height="31"/>
                                                 <connections>
                                                     <action selector="sliderChanged:" destination="1O1-Ri-rmd" eventType="touchUpInside" id="aFQ-KB-R2R"/>
                                                     <action selector="sliderStartChange:" destination="1O1-Ri-rmd" eventType="touchDown" id="Eva-HO-nMT"/>
                                                 </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:02" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ZW-DJ-KBQ">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="0:00:02" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ZW-DJ-KBQ">
                                                 <rect key="frame" x="696" y="469" width="56" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="XeM-NI-yh4"/>
@@ -2845,10 +2804,10 @@
             </objects>
             <point key="canvasLocation" x="9860" y="7299"/>
         </scene>
-        <!--Attachment Selection Delegate-->
+        <!--Observation Edit View-->
         <scene sceneID="IRU-BJ-Ti8">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="EbK-Mn-fdL" customClass="ObservationEditViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="EbK-Mn-fdL" userLabel="Observation Edit View" customClass="ObservationEditViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9BP-rh-3O0"/>
                         <viewControllerLayoutGuide type="bottom" id="9wB-Ne-IrK"/>
@@ -2861,7 +2820,7 @@
                                 <rect key="frame" x="0.0" y="66" width="768" height="914"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-attachmentView" rowHeight="65" id="cPb-3i-zM0" customClass="AttachmentEditTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="attachmentView" rowHeight="65" id="cPb-3i-zM0" customClass="AttachmentEditTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cPb-3i-zM0" id="MN9-Ps-x7q">
@@ -2914,7 +2873,7 @@
                                             <outlet property="attachmentCollection" destination="MhC-nu-lg9" id="dzS-F4-L33"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-geometry" rowHeight="120" id="BAu-AN-BHJ" customClass="ObservationEditGeometryTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="120" id="BAu-AN-BHJ" customClass="ObservationEditGeometryTableViewCell">
                                         <rect key="frame" x="0.0" y="87" width="768" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BAu-AN-BHJ" id="iOV-nV-tFf">
@@ -3016,7 +2975,7 @@
                                             <segue destination="Hbu-IA-BQH" kind="push" identifier="geometrySegue" id="cJy-ac-OGp"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textarea" rowHeight="148" id="IM4-JH-qwJ" customClass="ObservationEditTextAreaTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textarea" rowHeight="148" id="IM4-JH-qwJ" customClass="ObservationEditTextAreaTableViewCell">
                                         <rect key="frame" x="0.0" y="207" width="768" height="148"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IM4-JH-qwJ" id="7Wo-dB-eAd">
@@ -3085,7 +3044,7 @@
                                             <outletCollection property="gestureRecognizers" destination="G9y-QD-gDJ" appends="YES" id="koc-JU-qAk"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-password" rowHeight="65" id="vTc-kP-6wi" customClass="ObservationEditTextFieldTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="password" rowHeight="65" id="vTc-kP-6wi" customClass="ObservationEditTextFieldTableViewCell">
                                         <rect key="frame" x="0.0" y="355" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vTc-kP-6wi" id="P40-j4-aAw">
@@ -3126,7 +3085,7 @@
                                             <outletCollection property="gestureRecognizers" destination="2Pg-WN-3g5" appends="YES" id="6Qk-d9-DKP"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-radio" rowHeight="63" id="hLt-zl-fS2" customClass="ObservationPickerTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="radio" rowHeight="63" id="hLt-zl-fS2" customClass="ObservationPickerTableViewCell">
                                         <rect key="frame" x="0.0" y="420" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hLt-zl-fS2" id="paH-lk-1eh">
@@ -3167,7 +3126,7 @@
                                             <outletCollection property="gestureRecognizers" destination="HC0-w9-2Vd" appends="YES" id="B3d-rx-EmI"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-checkbox" rowHeight="63" id="jkq-OB-SM8" customClass="ObservationCheckboxTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="checkbox" rowHeight="63" id="jkq-OB-SM8" customClass="ObservationCheckboxTableViewCell">
                                         <rect key="frame" x="0.0" y="483" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jkq-OB-SM8" id="a6B-dS-X69">
@@ -3221,46 +3180,8 @@
                                             <outletCollection property="gestureRecognizers" destination="Ezh-tE-7Er" appends="YES" id="VX0-If-jvL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-generic" rowHeight="65" id="WQD-Ho-2tF" customClass="ObservationEditTableViewCell">
-                                        <rect key="frame" x="0.0" y="546" width="768" height="65"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WQD-Ho-2tF" id="R6c-ln-fXV">
-                                            <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="generic key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Mc-PP-OSy">
-                                                    <rect key="frame" x="12" y="1" width="752" height="21"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eKf-ZZ-720">
-                                                    <rect key="frame" x="8" y="25" width="752" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpT-QP-VJV">
-                                                    <rect key="frame" x="4" y="0.0" width="7" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="eKf-ZZ-720" secondAttribute="bottom" constant="1.5" id="6Un-HW-OAN"/>
-                                                <constraint firstItem="eKf-ZZ-720" firstAttribute="leading" secondItem="R6c-ln-fXV" secondAttribute="leadingMargin" id="ARR-ID-SL6"/>
-                                                <constraint firstItem="eKf-ZZ-720" firstAttribute="trailing" secondItem="R6c-ln-fXV" secondAttribute="trailingMargin" id="bga-gi-xGy"/>
-                                                <constraint firstItem="eKf-ZZ-720" firstAttribute="top" secondItem="R6c-ln-fXV" secondAttribute="topMargin" constant="17" id="wK2-Oe-ZSK"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="keyLabel" destination="6Mc-PP-OSy" id="p5D-Ah-0RG"/>
-                                            <outlet property="requiredIndicator" destination="fpT-QP-VJV" id="Py6-0y-tfG"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-dropdown" rowHeight="63" id="8Nx-qw-Rp6" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="611" width="768" height="63"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dropdown" rowHeight="63" id="8Nx-qw-Rp6" customClass="ObservationPickerTableViewCell">
+                                        <rect key="frame" x="0.0" y="546" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Nx-qw-Rp6" id="5bj-8H-4So">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3300,8 +3221,8 @@
                                             <outletCollection property="gestureRecognizers" destination="lU1-zt-hGM" appends="YES" id="4Hk-Y1-xxL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-textfield" rowHeight="65" id="hPa-nC-Vb2" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="674" width="768" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textfield" rowHeight="65" id="hPa-nC-Vb2" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="609" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hPa-nC-Vb2" id="PIY-7z-o17">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3344,8 +3265,8 @@
                                             <outletCollection property="gestureRecognizers" destination="g3E-tD-fo1" appends="YES" id="GYf-rV-drO"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-numberfield" rowHeight="65" id="h8p-IS-9O3" customClass="ObservationEditNumberFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="739" width="768" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="numberfield" rowHeight="65" id="h8p-IS-9O3" customClass="ObservationEditNumberFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="674" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h8p-IS-9O3" id="7rg-OO-tHw">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3388,8 +3309,8 @@
                                             <outletCollection property="gestureRecognizers" destination="Miy-Fg-zI7" appends="YES" id="bQc-KC-XKj"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-date" rowHeight="63" id="lgu-ea-Mev" customClass="ObservationDatePickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="804" width="768" height="63"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="date" rowHeight="63" id="lgu-ea-Mev" customClass="ObservationDatePickerTableViewCell">
+                                        <rect key="frame" x="0.0" y="739" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lgu-ea-Mev" id="jdb-zc-Aeo">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3429,8 +3350,8 @@
                                             <outletCollection property="gestureRecognizers" destination="wPA-1H-uit" appends="YES" id="cCR-CS-PBu"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="observationEdit-email" rowHeight="65" id="J2f-vi-Fe1" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="867" width="768" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="email" rowHeight="65" id="J2f-vi-Fe1" customClass="ObservationEditTextFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="802" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J2f-vi-Fe1" id="qhi-uC-qPC">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -5173,11 +5094,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="KcK-eD-wHW"/>
         <segue reference="0bY-HN-X3k"/>
         <segue reference="nz6-iR-1bf"/>
+        <segue reference="KcK-eD-wHW"/>
         <segue reference="2QM-Oc-hGo"/>
+        <segue reference="t84-DV-Jft"/>
         <segue reference="zj4-Gr-r48"/>
-        <segue reference="XKx-ey-cRB"/>
     </inferredMetricsTieBreakers>
 </document>
