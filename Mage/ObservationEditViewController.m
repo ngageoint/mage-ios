@@ -111,27 +111,73 @@
 }
 
 
-- (IBAction)addFromCamera:(id)sender {
+- (IBAction) addFromCamera:(id)sender {
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera"
+                                                                       message:@"Your device does not have a camera"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                              message:@"Device has no camera"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles: nil];
-        [myAlertView show];
-    } else {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = NO;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
         
-        [self presentViewController:picker animated:YES completion:NULL];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
     }
     
+    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    switch (authorizationStatus) {
+        case AVAuthorizationStatusAuthorized: {
+            [self presentCamera];
+            break;
+        }
+        case AVAuthorizationStatusNotDetermined: {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if (granted) {
+                    [self presentCamera];
+                }
+            }];
+            
+            break;
+        }
+        case AVAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
+                                                                           message:@"You've been restricted from using the camera on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
+                                                                           message:@"MAGE has been denied access to the camera.  Please open Settings, and allow access to the camera."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            break;
+        }
+    }
 }
 
+- (void) presentCamera {
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = NO;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
 
 - (IBAction)addFromGallery:(id)sender {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
