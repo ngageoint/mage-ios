@@ -6,6 +6,7 @@
 
 #import "ObservationHeaderAttachmentTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
+#import "Attachment+Thumbnail.h"
 
 @interface ObservationHeaderAttachmentTableViewCell()
 @property (strong, nonatomic) AttachmentCollectionDataStore *ads;
@@ -16,6 +17,7 @@
 
 - (void) configureCellForObservation:(Observation *)observation {
     self.ads = [[AttachmentCollectionDataStore alloc] init];
+    self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;

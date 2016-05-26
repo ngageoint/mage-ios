@@ -14,7 +14,7 @@
 #import "MapDelegate.h"
 #import "Location.h"
 #import "ObservationDataStore.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import <AFNetworking.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MageServer.h>
@@ -23,7 +23,6 @@
 #import "GPSLocation.h"
 #import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
-#import "Attachment+FICAttachment.h"
 
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
 
@@ -214,7 +213,7 @@ bool currentUserIsMe = NO;
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         NSURL *avatarUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
@@ -227,7 +226,7 @@ bool currentUserIsMe = NO;
         Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
         [destination setObservation:observation];
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }

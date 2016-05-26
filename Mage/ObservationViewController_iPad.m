@@ -13,13 +13,14 @@
 #import "User.h"
 #import "Role.h"
 #import "AttachmentCell.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import "ObservationEditViewController.h"
 #import "Server.h"
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"
 #import "Event.h"
 #import "NSDate+display.h"
+#import "Attachment+Thumbnail.h"
 
 @interface ObservationViewController_iPad ()
 
@@ -85,6 +86,8 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@)", nil, generalProperties, [propertiesWithValue allKeys]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    
+    self.attachmentCollectionDataStore.attachmentFormatName = AttachmentMediumSquare;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -196,7 +199,7 @@
     
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {

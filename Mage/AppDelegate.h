@@ -16,8 +16,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) FICImageCache *imageCache;
-
 - (NSURL *)applicationDocumentsDirectory;
 
 @end

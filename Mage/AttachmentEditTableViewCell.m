@@ -6,12 +6,11 @@
 
 #import "AttachmentEditTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
+#import "Attachment+Thumbnail.h"
 
 @interface AttachmentEditTableViewCell ()
-
-@property (strong, nonatomic) AttachmentCollectionDataStore *ads;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
-
+@property (strong, nonatomic) AttachmentCollectionDataStore *ads;
 @end
 
 @implementation AttachmentEditTableViewCell
@@ -19,6 +18,7 @@
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     if (self.ads == nil) {
         self.ads = [[AttachmentCollectionDataStore alloc] init];
+        self.ads.attachmentFormatName = AttachmentSmallSquare;
         self.ads.attachmentCollection = self.attachmentCollection;
         self.attachmentCollection.delegate = self.ads;
         self.attachmentCollection.dataSource = self.ads;

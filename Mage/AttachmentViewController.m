@@ -1,10 +1,10 @@
 //
-//  ImageViewerViewController.m
+//  AttachmentViewController.m
 //  Mage
 //
 //
 
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import <FICImageCache.h>
 #import "AppDelegate.h"
 #import <HttpManager.h>
@@ -13,7 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
-@interface ImageViewerViewController () <AVAudioPlayerDelegate>
+@interface AttachmentViewController () <AVAudioPlayerDelegate>
 
 @property (strong, nonatomic) NSOperationQueue *operationQueue;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
@@ -33,7 +33,7 @@
 
 @end
 
-@implementation ImageViewerViewController
+@implementation AttachmentViewController
 
 - (NSOperationQueue *) operationQueue {
     if (!_operationQueue) {
@@ -114,8 +114,10 @@
         
         [self.imageActivityIndicator startAnimating];
         
+        NSInteger size = MAX(self.imageView.frame.size.height, self.imageView.frame.size.width) * [UIScreen mainScreen].scale;
+    
         __weak typeof(self) weakSelf = self;
-        NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURL]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURLWithSize:size]];
         [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             weakSelf.imageView.image = image;
             [weakSelf.imageActivityIndicator stopAnimating];
@@ -154,7 +156,7 @@
         [self.progressView setHidden:NO];
         
         NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-        __weak ImageViewerViewController *weakSelf = self;
+        __weak AttachmentViewController *weakSelf = self;
         AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){

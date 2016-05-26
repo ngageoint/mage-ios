@@ -136,12 +136,12 @@
     id cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
     id field = [self rowToField][indexPath.row];
     [cell setDelegate:self];
-    [cell populateCellWithFormField:field andObservation:self.observation];
     
     if ([cell respondsToSelector:@selector(attachmentSelectionDelegate)]) {
         [cell setAttachmentSelectionDelegate:self.attachmentSelectionDelegate];
     }
-
+    
+    [cell populateCellWithFormField:field andObservation:self.observation];
     [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
 
     return cell;

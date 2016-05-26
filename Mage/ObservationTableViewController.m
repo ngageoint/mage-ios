@@ -11,7 +11,7 @@
 #import <Observation.h>
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import "Event.h"
 #import "User.h"
 #import "ObservationEditViewController.h"
@@ -72,7 +72,7 @@
 		[destination setObservation:observation];
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {

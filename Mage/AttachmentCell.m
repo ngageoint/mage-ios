@@ -6,8 +6,7 @@
 
 #import "AttachmentCell.h"
 #import "FICImageCache.h"
-#import "Attachment+FICAttachment.h"
-#import "AppDelegate.h"
+#import "Attachment+Thumbnail.h"
 
 @implementation AttachmentCell
 
@@ -15,14 +14,11 @@
     self.imageView.image = nil;
 }
 
--(void) setImageForAttachament:(Attachment *) attachment {
+-(void) setImageForAttachament:(Attachment *) attachment withFormatName:(NSString *) formatName {
     self.attachment = attachment;
     
-    self.imageView.image = [UIImage imageNamed:@"download"];
-    
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     __weak typeof(self) weakSelf = self;
-    [delegate.imageCache retrieveImageForEntity:attachment withFormatName:AttachmentMediumSquare completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image) {
+    BOOL imageExists = [[FICImageCache sharedImageCache] retrieveImageForEntity:attachment withFormatName:formatName completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image) {
         // This completion block may be called much later, check to make sure this cell hasn't been reused for a different attachment before displaying the image that has loaded.
         if (attachment == [self attachment]) {
             weakSelf.imageView.image = image;
@@ -31,6 +27,10 @@
             weakSelf.imageView.clipsToBounds = YES;
         }
     }];
+    
+    if (imageExists == NO) {
+        self.imageView.image = [UIImage imageNamed:@"download_thumbnail"];
+    }
 }
 
 @end

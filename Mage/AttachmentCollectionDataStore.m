@@ -6,7 +6,6 @@
 
 #import "AttachmentCollectionDataStore.h"
 #import "AttachmentCell.h"
-#import "Attachment+FICAttachment.h"
 #import "AppDelegate.h"
 
 @implementation AttachmentCollectionDataStore
@@ -17,7 +16,7 @@
     
     AttachmentCell *cell = [self.attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
     Attachment *attachment = [allAttachments objectAtIndex:[indexPath row]];
-    [cell setImageForAttachament:attachment];
+    [cell setImageForAttachament:attachment withFormatName:self.attachmentFormatName];
 
     return cell;
 }

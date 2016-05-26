@@ -16,7 +16,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "AudioRecordingDelegate.h"
 #import "MediaViewController.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Server.h"
 #import "Event.h"
@@ -327,7 +327,7 @@
         mvc.delegate = self;
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }

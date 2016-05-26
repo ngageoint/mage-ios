@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "Attachment.h"
 
-@interface ImageViewerViewController : UIViewController
+@interface AttachmentViewController : UIViewController
 
 @property (weak, nonatomic) Attachment *attachment;
 @property (weak, nonatomic) NSURL *mediaUrl;

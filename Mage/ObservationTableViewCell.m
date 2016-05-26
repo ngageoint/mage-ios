@@ -12,6 +12,7 @@
 #import "AttachmentCollectionDataStore.h"
 #import "Event.h"
 #import "NSDate+iso8601.h"
+#import "Attachment+Thumbnail.h"
 
 @interface ObservationTableViewCell()
 
@@ -41,6 +42,7 @@
     self.userField.text = observation.user.name;
     
     self.ads = [[AttachmentCollectionDataStore alloc] init];
+    self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;

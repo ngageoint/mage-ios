@@ -9,7 +9,7 @@
 #import "ObservationPropertyTableViewCell.h"
 #import "Server.h"
 #import "ObservationHeaderTableViewCell.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import "ObservationEditViewController.h"
 #import "ObservationHeaderAttachmentTableViewCell.h"
 #import "Event.h"
@@ -166,7 +166,7 @@
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
-        ImageViewerViewController *vc = [segue destinationViewController];
+        AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {

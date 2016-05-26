@@ -14,7 +14,7 @@
 #import "PeopleTableViewController.h"
 #import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
-#import "ImageViewerViewController.h"
+#import "AttachmentViewController.h"
 #import <Mage.h>
 
 @interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
@@ -186,9 +186,9 @@
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
     UIViewController *visibleViewController = [self.mapViewController.navigationController visibleViewController];
-    if ([visibleViewController isKindOfClass:[ImageViewerViewController class]]) {
+    if ([visibleViewController isKindOfClass:[AttachmentViewController class]]) {
         // ImageViewer already preset lets just update its content
-        [((ImageViewerViewController *) visibleViewController) setContent:attachment];
+        [((AttachmentViewController *) visibleViewController) setContent:attachment];
     } else {
         [self.mapViewController performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
     }

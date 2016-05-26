@@ -4,7 +4,7 @@
 //
 //
 
-#import "Attachment+FICAttachment.h"
+#import "Attachment+Thumbnail.h"
 #import "Attachment.h"
 #import <FICImageCache.h>
 #import "FICUtilities.h"
@@ -18,10 +18,9 @@ NSString *const AttachmentMediumSquare = @"AttachmentMediumSquare";
 CGSize const AttachmentSquareImageSize = {50, 50};
 CGSize const AttachmentiPadSquareImageSize = {100, 100};
 
+@implementation Attachment (Thumbnail)
 
-@implementation Attachment (FICAttachment)
-
-- (NSString *)UUID {
+- (NSString *) UUID {
     if ([self url] != nil) {
         CFUUIDBytes UUIDBytes = FICUUIDBytesFromMD5HashOfString([self url]);
         return FICStringWithUUIDBytes(UUIDBytes);
@@ -31,15 +30,16 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
     }
 }
 
-- (NSString *)sourceImageUUID {
+- (NSString *) sourceImageUUID {
     return [self UUID];
 }
 
 - (NSURL *)sourceImageURLWithFormatName:(NSString *)formatName {
-    return [self sourceURL];
+    NSInteger size = [AttachmentSmallSquare isEqualToString:formatName] ? 50 : 100 * [UIScreen mainScreen].scale;
+    return [self sourceURLWithSize:size];
 }
 
-- (FICEntityImageDrawingBlock)drawingBlockForImage:(UIImage *)image withFormatName:(NSString *)formatName {
+- (FICEntityImageDrawingBlock)drawingBlockForImage:(UIImage *) image withFormatName:(NSString *) formatName {
     FICEntityImageDrawingBlock drawingBlock = ^(CGContextRef context, CGSize contextSize) {
         UIImage *imageToUse = image;
         CGRect contextBounds = CGRectZero;
@@ -47,6 +47,10 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
         
         CGContextClearRect(context, contextBounds);
         UIGraphicsPushContext(context);
+        
+        CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0);
+        CGContextFillRect(context, contextBounds);
+        CGContextSaveGState(context);
         
         CGRect cropRect = CGRectZero;
         if (image.size.width <= contextSize.width && image.size.height <= contextSize.height) {

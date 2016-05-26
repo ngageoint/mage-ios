@@ -11,8 +11,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import <FICImageCache.h>
 #import <UserUtility.h>
-#import "Attachment+FICAttachment.h"
 #import "Attachment.h"
+#import "Attachment+Thumbnail.h"
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
@@ -58,26 +58,27 @@
     FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
     thumbnailImageFormat.name = AttachmentSmallSquare;
     thumbnailImageFormat.family = AttachmentFamily;
-    thumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
+    thumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
     thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
     thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone;
+    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
     thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
     ipadThumbnailImageFormat.name = AttachmentMediumSquare;
     ipadThumbnailImageFormat.family = AttachmentFamily;
-    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
+    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
     ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
     ipadThumbnailImageFormat.maximumCount = 250;
-    ipadThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
+    ipadThumbnailImageFormat.devices = FICImageFormatDevicePad;
     ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
     
     NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
     
-    _imageCache = [FICImageCache sharedImageCache];
-    _imageCache.delegate = self;
-    _imageCache.formats = imageFormats;
+    FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
+    [sharedImageCache reset];
+    sharedImageCache.delegate = self;
+    sharedImageCache.formats = imageFormats;
     
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
@@ -369,11 +370,12 @@
         UIImage *sourceImage = nil;
         NSLog(@"content type %@", attachment.contentType);
         if ([attachment.contentType hasPrefix:@"image"]) {
-            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[attachment sourceURL]]];
+            NSURL *url = [entity sourceImageURLWithFormatName:formatName];
+            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
         } else if ([attachment.contentType hasPrefix:@"video"] || [attachment.contentType hasPrefix:@"audio"]) {
-            sourceImage = [UIImage imageNamed:@"play_circle"];
+            sourceImage = [UIImage imageNamed:@"play_thumbnail"];
         } else {
-            sourceImage = [UIImage imageNamed:@"paperclip"];
+            sourceImage = [UIImage imageNamed:@"paperclip_thumbnail"];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{

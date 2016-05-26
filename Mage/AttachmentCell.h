@@ -13,6 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) Attachment *attachment;
 
--(void) setImageForAttachament:(Attachment *) attachment;
+-(void) setImageForAttachament:(Attachment *) attachment withFormatName:(NSString *) formatName;
 
 @end

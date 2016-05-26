@@ -69,7 +69,7 @@
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
 		F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EEC19781D37002D66F6 /* ObservationImage.m */; };
-		F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */; };
+		F70EAF3B199BF31300909C8A /* AttachmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70EAF3A199BF31300909C8A /* AttachmentViewController.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5EF1A5C832F00B096A7 /* MediaViewController.m */; };
 		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
@@ -141,7 +141,7 @@
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
-		F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */; };
+		F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
 		F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7931A65887A00E7F224 /* loginTest.js */; };
 		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
@@ -277,8 +277,8 @@
 		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
 		F70E6EEB19781D37002D66F6 /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
 		F70E6EEC19781D37002D66F6 /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
-		F70EAF39199BF31300909C8A /* ImageViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewerViewController.h; sourceTree = "<group>"; };
-		F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewerViewController.m; sourceTree = "<group>"; };
+		F70EAF39199BF31300909C8A /* AttachmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentViewController.h; sourceTree = "<group>"; };
+		F70EAF3A199BF31300909C8A /* AttachmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentViewController.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F714D5EE1A5C832F00B096A7 /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
 		F714D5EF1A5C832F00B096A7 /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
@@ -416,8 +416,8 @@
 		F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopAndGoSegue.m; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
-		F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+FICAttachment.h"; sourceTree = "<group>"; };
-		F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+FICAttachment.m"; sourceTree = "<group>"; };
+		F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+Thumbnail.h"; sourceTree = "<group>"; };
+		F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+Thumbnail.m"; sourceTree = "<group>"; };
 		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
 		F7FAD7931A65887A00E7F224 /* loginTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginTest.js; sourceTree = "<group>"; };
 		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
@@ -718,10 +718,10 @@
 				F70E6EEC19781D37002D66F6 /* ObservationImage.m */,
 				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
-				F7E8AFD11993E1D9008756A7 /* Attachment+FICAttachment.h */,
-				F7E8AFD21993E1D9008756A7 /* Attachment+FICAttachment.m */,
-				F70EAF39199BF31300909C8A /* ImageViewerViewController.h */,
-				F70EAF3A199BF31300909C8A /* ImageViewerViewController.m */,
+				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
+				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
+				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
+				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
 				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
 				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
@@ -1174,7 +1174,7 @@
 				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
 				2F5F2EA819E374B4005BA157 /* LocationTimeIntervalDataSource.m in Sources */,
-				F70EAF3B199BF31300909C8A /* ImageViewerViewController.m in Sources */,
+				F70EAF3B199BF31300909C8A /* AttachmentViewController.m in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
@@ -1255,7 +1255,7 @@
 				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
-				F7E8AFD31993E1D9008756A7 /* Attachment+FICAttachment.m in Sources */,
+				F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
