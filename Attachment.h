@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (Attachment *) attachmentForJson: (NSDictionary *) json inContext: (NSManagedObjectContext *) context;
 - (id) populateFromJson: (NSDictionary *) json;
-- (NSURL *) sourceURL;
+- (NSURL *) sourceURLWithSize:(NSInteger) size;
 
 @end
 
