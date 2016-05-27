@@ -121,8 +121,8 @@
 
         NSNumber *num = [NSNumber numberWithLongLong:(long long)[[NSDate date] timeIntervalSince1970]];
         NSString *extensionName = [num stringValue];
-        self.recording.fileName = [NSString stringWithFormat:@"%@%@",@"Voice_",extensionName];
-        self.recorderFilePath = [NSString stringWithFormat:@"%@/%@.mp4", self.mediaFilePath, self.recording.fileName];
+        self.recording.fileName = [NSString stringWithFormat:@"%@%@%@",@"Voice_", extensionName, @".mp4"];
+        self.recorderFilePath = [NSString stringWithFormat:@"%@/%@", self.mediaFilePath, self.recording.fileName];
         self.recording.filePath = self.recorderFilePath;
         NSLog(@"Recording path %@",self.recorderFilePath);
 
