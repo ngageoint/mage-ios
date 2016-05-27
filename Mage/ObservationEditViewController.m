@@ -86,70 +86,69 @@
 }
 
 - (IBAction) addVoice:(id)sender {
-    
-    AVAudioSessionRecordPermission authorizationStatus = [AVAudioSession sharedInstance].recordPermission;
-    switch (authorizationStatus) {
-        case AVAudioSessionRecordPermissionGranted: {
-            [self presentVoiceRecorder:sender];
-            break;
+    __weak typeof(self) weakSelf = self;
+    [self checkMicrophonePermissionsWithCompletion:^(BOOL granted) {
+        if (granted) {
+            [weakSelf presentVoiceRecorder:sender];
         }
-        case AVAudioSessionRecordPermissionUndetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
-                if (granted) {
-                    [self presentVoiceRecorder:sender];
-                }
-            }];
-            
-            break;
-        }
-        default: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
-                                                                           message:@"MAGE has been denied access to the microphone.  Please open Settings, and allow access to the microphone."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            break;
-        }
-    }
+    }];
 }
 
 - (void) presentVoiceRecorder :(id) sender {
-    [self performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
+    __weak typeof(self) weakSelf = self;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [weakSelf performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
+    }];
 }
 
-- (IBAction)addVideo:(id)sender {
-    
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                              message:@"Device has no camera"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles: nil];
-        [myAlertView show];
-    } else {
+- (IBAction) addVideo:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    [self checkCameraPermissionsWithCompletion:^(BOOL granted) {
+        if (granted) {
+            [weakSelf checkMicrophonePermissionsWithCompletion:^(BOOL granted) {
+                if (granted) {
+                    [weakSelf presentVideo];
+                }
+            }];
+        }
+    }];
+}
+
+- (void) presentVideo {
+    __weak typeof(self) weakSelf = self;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
+        picker.delegate = weakSelf;
         picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.mediaTypes = [NSArray arrayWithObject:(NSString*)kUTTypeMovie];
+        picker.mediaTypes = [NSArray arrayWithObject:(NSString*) kUTTypeMovie];
         
-        [self presentViewController:picker animated:YES completion:NULL];
-    }
-    
+        [weakSelf presentViewController:picker animated:YES completion:NULL];
+    }];
 }
 
-
 - (IBAction) addFromCamera:(id)sender {
-    
+    __weak typeof(self) weakSelf = self;
+    [self checkCameraPermissionsWithCompletion:^(BOOL granted) {
+        if (granted) {
+            [weakSelf presentCamera];
+        }
+    }];
+}
+
+- (void) presentCamera {
+    __weak typeof(self) weakSelf = self;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = weakSelf;
+        picker.allowsEditing = NO;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [weakSelf presentViewController:picker animated:YES completion:NULL];
+    }];
+}
+
+- (void) checkCameraPermissionsWithCompletion:(void (^)(BOOL granted)) complete {
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera"
                                                                        message:@"Your device does not have a camera"
@@ -159,22 +158,18 @@
         
         [self presentViewController:alert animated:YES completion:nil];
         
+        complete(NO);
         return;
     }
     
     AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     switch (authorizationStatus) {
         case AVAuthorizationStatusAuthorized: {
-            [self presentCamera];
+            complete(YES);
             break;
         }
         case AVAuthorizationStatusNotDetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-                if (granted) {
-                    [self presentCamera];
-                }
-            }];
-            
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:complete];
             break;
         }
         case AVAuthorizationStatusRestricted: {
@@ -185,7 +180,8 @@
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
             
             [self presentViewController:alert animated:YES completion:nil];
-
+            
+            complete(NO);
             break;
         }
         default: {
@@ -202,18 +198,68 @@
             
             [self presentViewController:alert animated:YES completion:nil];
             
+            complete(NO);
             break;
         }
     }
+
 }
 
-- (void) presentCamera {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = NO;
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+- (void) checkMicrophonePermissionsWithCompletion:(void (^)(BOOL granted)) complete {
+    if (![[AVAudioSession sharedInstance] isInputAvailable]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Microphone"
+                                                                       message:@"Your device does not have a microphone"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        complete(NO);
+        return;
+    }
     
-    [self presentViewController:picker animated:YES completion:NULL];
+    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    switch (authorizationStatus) {
+        case AVAuthorizationStatusAuthorized: {
+            complete(YES);
+            break;
+        }
+        case AVAuthorizationStatusNotDetermined: {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:complete];
+            break;
+        }
+        case AVAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
+                                                                           message:@"You've been restricted from using the microphone on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
+                                                                           message:@"MAGE has been denied access to the microphone.  Please open Settings, and allow access to the microphone."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+    }
+    
 }
 
 - (IBAction) addFromGallery:(id)sender {
@@ -324,6 +370,8 @@
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
+        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        
         NSMutableDictionary *imageMetadata = [[info objectForKey:UIImagePickerControllerMediaMetadata] mutableCopy];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -371,6 +419,7 @@
         
         NSLog(@"successfully wrote file %d", success);
         
+        
         NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
         [attachmentJson setValue:@"image/jpeg" forKey:@"contentType"];
         [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
@@ -408,7 +457,7 @@
     }
     
     [self.editDataStore.editTable endEditing:YES];
-    __weak __typeof__(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
         if (!contextDidSave) {
             NSLog(@"Error saving observation to persistent store, context did not save");
