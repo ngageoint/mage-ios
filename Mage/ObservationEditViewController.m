@@ -22,6 +22,7 @@
 #import "Event.h"
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
+@import PhotosUI;
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -179,7 +180,54 @@
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
-- (IBAction)addFromGallery:(id)sender {
+- (IBAction) addFromGallery:(id)sender {
+    
+    PHAuthorizationStatus authorizationStatus = [PHPhotoLibrary authorizationStatus];
+    switch (authorizationStatus) {
+        case PHAuthorizationStatusAuthorized: {
+            [self presentGallery];
+            break;
+        }
+        case PHAuthorizationStatusNotDetermined: {
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized) {
+                    [self presentGallery];
+                }
+            }];
+            
+            break;
+        }
+        case PHAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"You've been restricted from using the gallery on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"MAGE has been denied access to the gallery.  Please open Settings, and allow access to the gallery."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            break;
+        }
+    }
+}
+
+- (void) presentGallery {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = NO;
