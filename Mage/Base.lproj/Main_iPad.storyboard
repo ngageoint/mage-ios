@@ -4390,7 +4390,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wS3-A0-kbG">
-                                                    <rect key="frame" x="20" y="212" width="728" height="40"/>
+                                                    <rect key="frame" x="386" y="212" width="362" height="40"/>
                                                     <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                                                     <constraints>
@@ -4403,22 +4403,39 @@
                                                         <action selector="onSignup:" destination="wGk-kI-CCC" eventType="touchUpInside" id="Jit-YH-Wqx"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QEO-DI-4dp">
+                                                    <rect key="frame" x="20" y="212" width="362" height="40"/>
+                                                    <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="MS0-QV-Vwh"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                                    <state key="normal" title="Cancel"/>
+                                                    <state key="disabled" title="Logging In..."/>
+                                                    <connections>
+                                                        <action selector="onCancel:" destination="wGk-kI-CCC" eventType="touchUpInside" id="IlT-fd-3y4"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstItem="wS3-A0-kbG" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leadingMargin" constant="12" id="9kf-rF-b6i"/>
                                                 <constraint firstItem="9lY-uQ-0XA" firstAttribute="top" secondItem="ECy-8c-NWg" secondAttribute="bottom" constant="46" id="9wO-6J-HeP"/>
+                                                <constraint firstItem="wS3-A0-kbG" firstAttribute="leading" secondItem="QEO-DI-4dp" secondAttribute="trailing" constant="4" id="BW8-xF-SK8"/>
                                                 <constraint firstItem="ECy-8c-NWg" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leadingMargin" constant="12" id="DwB-Cf-c4W"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="9lY-uQ-0XA" secondAttribute="trailing" constant="12" id="FQg-P3-bDM"/>
                                                 <constraint firstItem="UWh-Dm-ApM" firstAttribute="top" secondItem="9lY-uQ-0XA" secondAttribute="bottom" constant="8" id="Fzv-qB-Qmr"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dfh-ne-dfE" secondAttribute="trailing" constant="12" id="G8W-nM-MhT"/>
+                                                <constraint firstItem="QEO-DI-4dp" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leading" constant="20" id="Iof-0q-G64"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="UWh-Dm-ApM" secondAttribute="trailing" constant="12" id="Swl-w0-yWn"/>
                                                 <constraint firstItem="dfh-ne-dfE" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leadingMargin" constant="12" id="TKk-MF-uMo"/>
                                                 <constraint firstItem="ECy-8c-NWg" firstAttribute="top" secondItem="dfh-ne-dfE" secondAttribute="bottom" constant="8" id="V4k-mc-Ier"/>
                                                 <constraint firstItem="4Xa-dF-eDJ" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leadingMargin" constant="12" id="WNG-5x-Y2y"/>
                                                 <constraint firstAttribute="topMargin" secondItem="dfh-ne-dfE" secondAttribute="top" id="Xop-ys-8Rj"/>
+                                                <constraint firstItem="QEO-DI-4dp" firstAttribute="width" secondItem="wS3-A0-kbG" secondAttribute="width" id="YXR-bH-O1o"/>
                                                 <constraint firstItem="wS3-A0-kbG" firstAttribute="top" secondItem="4Xa-dF-eDJ" secondAttribute="bottom" constant="98" id="ZhA-fw-9FZ"/>
                                                 <constraint firstItem="UWh-Dm-ApM" firstAttribute="top" secondItem="4Xa-dF-eDJ" secondAttribute="bottom" constant="46" id="e8N-Bh-m4x"/>
+                                                <constraint firstItem="QEO-DI-4dp" firstAttribute="top" secondItem="UWh-Dm-ApM" secondAttribute="bottom" constant="22" id="gin-gp-3ez"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="4Xa-dF-eDJ" secondAttribute="trailing" constant="12" id="prW-sw-wBD"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ECy-8c-NWg" secondAttribute="trailing" constant="12" id="tcB-j4-Sd3"/>
                                                 <constraint firstItem="9lY-uQ-0XA" firstAttribute="leading" secondItem="1eL-rz-f3H" secondAttribute="leadingMargin" constant="12" id="yeY-7H-QWm"/>

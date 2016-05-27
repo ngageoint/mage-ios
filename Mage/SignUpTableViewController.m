@@ -73,6 +73,10 @@
     }
 }
 
+- (IBAction) onCancel:(id) sender {
+    [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
+}
+
 - (void) showDialogForRequiredField:(NSString *) field {
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"Missing required field"
@@ -85,35 +89,36 @@
 }
 
 - (void) signupWithParameters:(NSDictionary *) parameters url:(NSString *) baseUrl {
+    __weak typeof(self) weakSelf = self;
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
     [[HttpManager singleton].manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
 		
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"User Creation Success"
-                              message:[NSString stringWithFormat:@"%@ (%@) has been successfully created.  An administrator must approve your account before you can login", displayName, username]
-                              delegate:self
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
+                                                                       message:[NSString stringWithFormat:@"%@ (%@) has been successfully created.  An administrator must approve your account before you can login", displayName, username]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
         
-        [alert show];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf performSegueWithIdentifier:@"unwindToInitial" sender:self];
+        }]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        });
+                       
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"User Creation Failed"
-                              message:[operation responseString]
-                              delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
-        
-        [alert show];
-    }];
-}
 
-- (void)alertView:(UIAlertView *) alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
-    }
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
+                                                                       message:[operation responseString]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        });
+    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

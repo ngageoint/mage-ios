@@ -775,20 +775,6 @@
                                                         <outlet property="nextField" destination="Qj2-65-kgY" id="Ohy-st-VHB"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Kr-Wz-Fa2" customClass="UINextField">
-                                                    <rect key="frame" x="20" y="122" width="280" height="30"/>
-                                                    <color key="backgroundColor" red="0.9503561854" green="0.97202652690000002" blue="0.99986624719999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Password"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="9C1-Da-DQq"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="K8d-3N-raJ" id="xi0-9G-Cq5"/>
-                                                        <outlet property="nextField" destination="Stp-q4-GTB" id="iQR-w0-C1X"/>
-                                                    </connections>
-                                                </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qj2-65-kgY" userLabel="email" customClass="UINextField">
                                                     <rect key="frame" x="20" y="84" width="280" height="30"/>
                                                     <color key="backgroundColor" red="0.9503561854" green="0.97202652690000002" blue="0.99986624719999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -803,20 +789,20 @@
                                                         <outlet property="nextField" destination="9Kr-Wz-Fa2" id="sKs-cL-Z8i"/>
                                                     </connections>
                                                 </textField>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5E2-8A-VfJ">
-                                                    <rect key="frame" x="20" y="212" width="280" height="40"/>
-                                                    <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Kr-Wz-Fa2" userLabel="password" customClass="UINextField">
+                                                    <rect key="frame" x="20" y="122" width="280" height="30"/>
+                                                    <color key="backgroundColor" red="0.9503561854" green="0.97202652690000002" blue="0.99986624719999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Password"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="40" id="fOn-Kd-5aW"/>
+                                                        <constraint firstAttribute="height" constant="30" id="9C1-Da-DQq"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
-                                                    <state key="normal" title="Sign Up"/>
-                                                    <state key="disabled" title="Logging In..."/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                                     <connections>
-                                                        <action selector="onSignup:" destination="K8d-3N-raJ" eventType="touchUpInside" id="KGl-tH-1GJ"/>
+                                                        <outlet property="delegate" destination="K8d-3N-raJ" id="xi0-9G-Cq5"/>
+                                                        <outlet property="nextField" destination="Stp-q4-GTB" id="iQR-w0-C1X"/>
                                                     </connections>
-                                                </button>
+                                                </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-q4-GTB" userLabel="password confirm" customClass="UINextField">
                                                     <rect key="frame" x="20" y="160" width="280" height="30"/>
                                                     <color key="backgroundColor" red="0.9503561854" green="0.97202652690000002" blue="0.99986624719999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -830,26 +816,57 @@
                                                         <outlet property="delegate" destination="K8d-3N-raJ" id="f3k-qp-24U"/>
                                                     </connections>
                                                 </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="37p-Lp-dvB">
+                                                    <rect key="frame" x="20" y="212" width="138" height="40"/>
+                                                    <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="j1B-gX-we2"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                                    <state key="normal" title="Cancel"/>
+                                                    <state key="disabled" title="Logging In..."/>
+                                                    <connections>
+                                                        <action selector="onCancel:" destination="K8d-3N-raJ" eventType="touchUpInside" id="NXf-T0-kVa"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5E2-8A-VfJ">
+                                                    <rect key="frame" x="162" y="212" width="138" height="40"/>
+                                                    <color key="backgroundColor" red="0.1411764771" green="0.32549020649999999" blue="0.48235297199999999" alpha="1" colorSpace="deviceRGB"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="fOn-Kd-5aW"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                                    <state key="normal" title="Sign Up"/>
+                                                    <state key="disabled" title="Logging In..."/>
+                                                    <connections>
+                                                        <action selector="onSignup:" destination="K8d-3N-raJ" eventType="touchUpInside" id="KGl-tH-1GJ"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="9Kr-Wz-Fa2" secondAttribute="trailing" constant="12" id="3lL-nU-QD4"/>
                                                 <constraint firstItem="9Kr-Wz-Fa2" firstAttribute="top" secondItem="SRj-VJ-cmT" secondAttribute="bottom" constant="46" id="9Zu-2W-S3B"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="SRj-VJ-cmT" secondAttribute="trailing" constant="12" id="AJe-Pr-MUQ"/>
+                                                <constraint firstItem="5E2-8A-VfJ" firstAttribute="leading" secondItem="37p-Lp-dvB" secondAttribute="trailing" constant="4" id="Czn-fA-lBW"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="icR-fw-08S" secondAttribute="trailing" constant="12" id="Ets-oQ-uKa"/>
-                                                <constraint firstItem="5E2-8A-VfJ" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="FWY-4g-XBS"/>
                                                 <constraint firstItem="SRj-VJ-cmT" firstAttribute="top" secondItem="icR-fw-08S" secondAttribute="bottom" constant="8" id="FZZ-wJ-a1K"/>
                                                 <constraint firstAttribute="topMargin" secondItem="icR-fw-08S" secondAttribute="top" id="IZ0-Jg-6Fe"/>
+                                                <constraint firstItem="37p-Lp-dvB" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leading" constant="20" id="KCS-qU-MsR"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="5E2-8A-VfJ" secondAttribute="trailing" constant="12" id="ME0-v9-fEe"/>
                                                 <constraint firstItem="icR-fw-08S" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="NuN-Ia-qc3"/>
+                                                <constraint firstItem="37p-Lp-dvB" firstAttribute="width" secondItem="5E2-8A-VfJ" secondAttribute="width" id="SSi-ir-H2F"/>
+                                                <constraint firstItem="5E2-8A-VfJ" firstAttribute="top" secondItem="Stp-q4-GTB" secondAttribute="top" constant="52" id="THz-aD-Bv2"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Stp-q4-GTB" secondAttribute="trailing" constant="12" id="Ut5-X2-Kc7"/>
                                                 <constraint firstItem="Stp-q4-GTB" firstAttribute="top" secondItem="9Kr-Wz-Fa2" secondAttribute="bottom" constant="8" id="W66-Go-2sW"/>
                                                 <constraint firstItem="Stp-q4-GTB" firstAttribute="top" secondItem="Qj2-65-kgY" secondAttribute="bottom" constant="46" id="aUE-pc-siM"/>
+                                                <constraint firstItem="37p-Lp-dvB" firstAttribute="top" secondItem="Stp-q4-GTB" secondAttribute="top" constant="52" id="beA-ub-OMq"/>
                                                 <constraint firstItem="Qj2-65-kgY" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="gjI-st-yQw"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Qj2-65-kgY" secondAttribute="trailing" constant="12" id="iwr-UI-peA"/>
                                                 <constraint firstItem="9Kr-Wz-Fa2" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="l0q-gr-L1N"/>
                                                 <constraint firstItem="SRj-VJ-cmT" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="p2q-KR-jGm"/>
                                                 <constraint firstItem="Stp-q4-GTB" firstAttribute="leading" secondItem="oSs-Yg-jsv" secondAttribute="leadingMargin" constant="12" id="qDf-mx-egh"/>
-                                                <constraint firstItem="5E2-8A-VfJ" firstAttribute="top" secondItem="Qj2-65-kgY" secondAttribute="bottom" constant="98" id="trw-R3-e7b"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5114,11 +5131,11 @@
     <inferredMetricsTieBreakers>
         <segue reference="eHX-H2-6Gy"/>
         <segue reference="qek-dh-YPY"/>
-        <segue reference="zfZ-aY-xQc"/>
         <segue reference="yrr-DE-PGS"/>
         <segue reference="BP9-3q-sGo"/>
         <segue reference="q5H-Zb-tps"/>
         <segue reference="hfh-00-YhZ"/>
-        <segue reference="Udd-Ez-JOB"/>
+        <segue reference="zfZ-aY-xQc"/>
+        <segue reference="sCY-CX-BgC"/>
     </inferredMetricsTieBreakers>
 </document>
