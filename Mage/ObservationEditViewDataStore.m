@@ -142,19 +142,17 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    ObservationEditTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell selectRow];
+}
+
 - (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
     if ([indexPath row] == 0 && [self.observation.attachments count] == 0) {
         return 0.0;
     }
     
     return UITableViewAutomaticDimension;
-}
-
-- (IBAction)tap:(UITapGestureRecognizer *)sender {
-    CGPoint point = [sender locationInView:self.editTable];
-    NSIndexPath *indexPath = [self.editTable indexPathForRowAtPoint:point];
-    ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self.editTable cellForRowAtIndexPath:indexPath];
-    [cell selectRow];
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {

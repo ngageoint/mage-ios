@@ -2873,11 +2873,11 @@
                                             <outlet property="attachmentCollection" destination="MhC-nu-lg9" id="dzS-F4-L33"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="120" id="BAu-AN-BHJ" customClass="ObservationEditGeometryTableViewCell">
-                                        <rect key="frame" x="0.0" y="87" width="768" height="120"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="121" id="BAu-AN-BHJ" customClass="ObservationEditGeometryTableViewCell">
+                                        <rect key="frame" x="0.0" y="87" width="768" height="121"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BAu-AN-BHJ" id="iOV-nV-tFf">
-                                            <rect key="frame" x="0.0" y="0.0" width="682" height="119"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="682" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uZj-Nf-ibo">
@@ -2976,7 +2976,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textarea" rowHeight="148" id="IM4-JH-qwJ" customClass="ObservationEditTextAreaTableViewCell">
-                                        <rect key="frame" x="0.0" y="207" width="768" height="148"/>
+                                        <rect key="frame" x="0.0" y="208" width="768" height="148"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IM4-JH-qwJ" id="7Wo-dB-eAd">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="147"/>
@@ -3041,11 +3041,10 @@
                                             <outlet property="keyLabel" destination="1el-7X-h3n" id="76i-7E-aZP"/>
                                             <outlet property="requiredIndicator" destination="504-wP-iq1" id="mnH-9C-kOl"/>
                                             <outlet property="textArea" destination="fKa-Bk-41E" id="SQi-0G-IuR"/>
-                                            <outletCollection property="gestureRecognizers" destination="G9y-QD-gDJ" appends="YES" id="koc-JU-qAk"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="password" rowHeight="65" id="vTc-kP-6wi" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="355" width="768" height="65"/>
+                                        <rect key="frame" x="0.0" y="356" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vTc-kP-6wi" id="P40-j4-aAw">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3082,11 +3081,10 @@
                                             <outlet property="keyLabel" destination="MIV-Sb-nxV" id="EDf-qw-BSF"/>
                                             <outlet property="requiredIndicator" destination="9hY-gg-8fA" id="dF8-hX-ZCk"/>
                                             <outlet property="textField" destination="ZSm-96-mMM" id="zCS-Ys-19e"/>
-                                            <outletCollection property="gestureRecognizers" destination="2Pg-WN-3g5" appends="YES" id="6Qk-d9-DKP"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="radio" rowHeight="63" id="hLt-zl-fS2" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="420" width="768" height="63"/>
+                                        <rect key="frame" x="0.0" y="421" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hLt-zl-fS2" id="paH-lk-1eh">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3123,11 +3121,10 @@
                                             <outlet property="keyLabel" destination="Wht-tD-Fy5" id="cn1-jz-J8l"/>
                                             <outlet property="requiredIndicator" destination="s3D-Kf-xz7" id="hcF-vv-ERg"/>
                                             <outlet property="valueTextField" destination="uGj-RR-NBG" id="CZ6-vs-TH6"/>
-                                            <outletCollection property="gestureRecognizers" destination="HC0-w9-2Vd" appends="YES" id="B3d-rx-EmI"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="checkbox" rowHeight="63" id="jkq-OB-SM8" customClass="ObservationCheckboxTableViewCell">
-                                        <rect key="frame" x="0.0" y="483" width="768" height="63"/>
+                                        <rect key="frame" x="0.0" y="484" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jkq-OB-SM8" id="a6B-dS-X69">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3177,11 +3174,10 @@
                                             <outlet property="checkboxSwitch" destination="W8g-LO-sEO" id="ozG-Kk-EoA"/>
                                             <outlet property="keyLabel" destination="3OT-y9-YNw" id="BkX-2n-RMY"/>
                                             <outlet property="requiredIndicator" destination="I1K-47-Lr4" id="wl8-Zh-pfm"/>
-                                            <outletCollection property="gestureRecognizers" destination="Ezh-tE-7Er" appends="YES" id="VX0-If-jvL"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dropdown" rowHeight="63" id="8Nx-qw-Rp6" customClass="ObservationPickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="546" width="768" height="63"/>
+                                        <rect key="frame" x="0.0" y="547" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Nx-qw-Rp6" id="5bj-8H-4So">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3218,11 +3214,10 @@
                                             <outlet property="keyLabel" destination="usH-5Y-Fg1" id="Q56-F0-yBW"/>
                                             <outlet property="requiredIndicator" destination="Kj0-A2-15Z" id="l29-oy-Gyi"/>
                                             <outlet property="valueTextField" destination="oGG-8S-XyS" id="zU5-of-ldA"/>
-                                            <outletCollection property="gestureRecognizers" destination="lU1-zt-hGM" appends="YES" id="4Hk-Y1-xxL"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textfield" rowHeight="65" id="hPa-nC-Vb2" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="609" width="768" height="65"/>
+                                        <rect key="frame" x="0.0" y="610" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hPa-nC-Vb2" id="PIY-7z-o17">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3262,11 +3257,10 @@
                                             <outlet property="keyLabel" destination="MG1-17-ghD" id="6zN-S6-nTP"/>
                                             <outlet property="requiredIndicator" destination="wKA-aN-iWB" id="QZE-YZ-gWX"/>
                                             <outlet property="textField" destination="tyo-Zt-2IK" id="crs-8D-aKI"/>
-                                            <outletCollection property="gestureRecognizers" destination="g3E-tD-fo1" appends="YES" id="GYf-rV-drO"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="numberfield" rowHeight="65" id="h8p-IS-9O3" customClass="ObservationEditNumberFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="674" width="768" height="65"/>
+                                        <rect key="frame" x="0.0" y="675" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h8p-IS-9O3" id="7rg-OO-tHw">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3306,11 +3300,10 @@
                                             <outlet property="keyLabel" destination="tHW-ok-0cu" id="BwV-XR-mqM"/>
                                             <outlet property="requiredIndicator" destination="CWr-F6-yWc" id="aiT-O6-5WF"/>
                                             <outlet property="textField" destination="i16-Xd-uIo" id="Wee-eH-cLB"/>
-                                            <outletCollection property="gestureRecognizers" destination="Miy-Fg-zI7" appends="YES" id="bQc-KC-XKj"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="date" rowHeight="63" id="lgu-ea-Mev" customClass="ObservationDatePickerTableViewCell">
-                                        <rect key="frame" x="0.0" y="739" width="768" height="63"/>
+                                        <rect key="frame" x="0.0" y="740" width="768" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lgu-ea-Mev" id="jdb-zc-Aeo">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="62"/>
@@ -3347,11 +3340,10 @@
                                             <outlet property="keyLabel" destination="JFk-hc-MY6" id="2fa-qo-5e1"/>
                                             <outlet property="requiredIndicator" destination="Zs0-db-Ifh" id="OBl-Ic-Bpv"/>
                                             <outlet property="textField" destination="ftQ-CY-vUO" id="91Q-OJ-Hez"/>
-                                            <outletCollection property="gestureRecognizers" destination="wPA-1H-uit" appends="YES" id="cCR-CS-PBu"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="email" rowHeight="65" id="J2f-vi-Fe1" customClass="ObservationEditTextFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="802" width="768" height="65"/>
+                                        <rect key="frame" x="0.0" y="803" width="768" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J2f-vi-Fe1" id="qhi-uC-qPC">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="64"/>
@@ -3388,7 +3380,6 @@
                                             <outlet property="keyLabel" destination="axm-He-DCA" id="JvJ-0B-o1z"/>
                                             <outlet property="requiredIndicator" destination="aMn-dy-Xd3" id="aET-fj-LbR"/>
                                             <outlet property="textField" destination="C0G-ul-pZv" id="OkC-Lb-ix3"/>
-                                            <outletCollection property="gestureRecognizers" destination="FV8-9p-7KY" appends="YES" id="ABn-Gd-8Fw"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -3470,51 +3461,6 @@
                         <outlet property="editTable" destination="KQk-HJ-tKl" id="M5p-xj-A5V"/>
                     </connections>
                 </customObject>
-                <tapGestureRecognizer id="G9y-QD-gDJ" userLabel="Textarea Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="rwM-vu-YBv"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="2Pg-WN-3g5" userLabel="Password Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="jMo-dy-XyV"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="HC0-w9-2Vd" userLabel="Radio Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="zXK-hd-hyX"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="Ezh-tE-7Er" userLabel="Radio Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="0N2-VP-j5k"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="lU1-zt-hGM" userLabel="Dropdown Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="aI2-bp-iHH"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="g3E-tD-fo1" userLabel="Textfield Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="Ods-h9-xB8"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="Miy-Fg-zI7" userLabel="Numberfield Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="j2k-EY-XNN"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="FV8-9p-7KY" userLabel="Email Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="Eb9-h6-sKk"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="wPA-1H-uit" userLabel="Date Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="tap:" destination="bgE-Nx-DOa" id="3FI-1B-R6C"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="10766" y="2074"/>
         </scene>
@@ -5098,7 +5044,7 @@
         <segue reference="nz6-iR-1bf"/>
         <segue reference="KcK-eD-wHW"/>
         <segue reference="2QM-Oc-hGo"/>
-        <segue reference="t84-DV-Jft"/>
         <segue reference="zj4-Gr-r48"/>
+        <segue reference="XKx-ey-cRB"/>
     </inferredMetricsTieBreakers>
 </document>
