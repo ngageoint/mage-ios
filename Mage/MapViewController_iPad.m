@@ -119,7 +119,7 @@
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        // TODO segue to new observation
+        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
     }]];
     
     alert.popoverPresentationController.barButtonItem = self.moreButton;

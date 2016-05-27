@@ -499,9 +499,11 @@
                         <segue destination="1O1-Ri-rmd" kind="push" identifier="viewImageSegue" id="qcl-Tv-IV3"/>
                         <segue destination="Ifo-3V-Dop" kind="custom" identifier="DisplayPersonSegue" customClass="PopAndGoSegue" id="XJk-AA-Pqi"/>
                         <segue destination="2fm-WU-X1u" kind="modal" identifier="SettingsSegue" modalTransitionStyle="flipHorizontal" id="Qu1-pY-kEW"/>
+                        <segue destination="COK-go-gb5" kind="unwind" identifier="unwindToInitial" unwindAction="unwindToInitial:" id="Kb8-la-60D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NgD-XA-qXB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="COK-go-gb5" userLabel="Exit" sceneMemberID="exit"/>
                 <customObject id="MIU-fq-xaT" customClass="MapDelegate">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="canShowUserCallout" value="YES"/>
@@ -2127,7 +2129,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
+                            <view contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
                                 <rect key="frame" x="0.0" y="20" width="768" height="960"/>
                                 <subviews>
                                     <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-hX-Dpg" userLabel="Image View">
@@ -2816,7 +2818,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KQk-HJ-tKl">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KQk-HJ-tKl">
                                 <rect key="frame" x="0.0" y="66" width="768" height="914"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -3388,7 +3390,7 @@
                                     <outlet property="delegate" destination="bgE-Nx-DOa" id="3HP-DV-fRN"/>
                                 </connections>
                             </tableView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKJ-6x-fWv">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FKJ-6x-fWv">
                                 <rect key="frame" x="0.0" y="20" width="768" height="44"/>
                                 <items>
                                     <barButtonItem image="gallery" id="kHr-BY-ywC">
@@ -3623,16 +3625,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oyc-D1-mcW">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oyc-D1-mcW">
                                 <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3JX-aW-d7N">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3JX-aW-d7N">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                         <connections>
                                             <outlet property="delegate" destination="Hbu-IA-BQH" id="agy-GT-GX8"/>
                                         </connections>
                                     </mapView>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GP0-Nt-Xn4">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GP0-Nt-Xn4">
                                         <rect key="frame" x="0.0" y="842" width="768" height="118"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBk-fp-iiL">
@@ -5060,8 +5062,8 @@
         <segue reference="0bY-HN-X3k"/>
         <segue reference="nz6-iR-1bf"/>
         <segue reference="KcK-eD-wHW"/>
-        <segue reference="2QM-Oc-hGo"/>
-        <segue reference="zj4-Gr-r48"/>
-        <segue reference="XKx-ey-cRB"/>
+        <segue reference="5KS-77-dla"/>
+        <segue reference="Dm3-Eo-dNQ"/>
+        <segue reference="qcl-Tv-IV3"/>
     </inferredMetricsTieBreakers>
 </document>
