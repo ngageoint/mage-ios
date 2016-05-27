@@ -85,7 +85,43 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)addVoice:(id)sender {
+- (IBAction) addVoice:(id)sender {
+    
+    AVAudioSessionRecordPermission authorizationStatus = [AVAudioSession sharedInstance].recordPermission;
+    switch (authorizationStatus) {
+        case AVAudioSessionRecordPermissionGranted: {
+            [self presentVoiceRecorder:sender];
+            break;
+        }
+        case AVAudioSessionRecordPermissionUndetermined: {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                if (granted) {
+                    [self presentVoiceRecorder:sender];
+                }
+            }];
+            
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
+                                                                           message:@"MAGE has been denied access to the microphone.  Please open Settings, and allow access to the microphone."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            break;
+        }
+    }
+}
+
+- (void) presentVoiceRecorder :(id) sender {
     [self performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
 }
 
