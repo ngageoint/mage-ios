@@ -10,6 +10,8 @@
 #import "Observations.h"
 #import "User.h"
 #import <MapKit/MapKit.h>
+#import <AVFoundation/AVFoundation.h>
+
 #import "Locations.h"
 #import "MapDelegate.h"
 #import "Location.h"
@@ -23,6 +25,8 @@
 #import "GPSLocation.h"
 #import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
+
+@import PhotosUI;
 
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
 
@@ -51,12 +55,13 @@ bool currentUserIsMe = NO;
     } else {
         self.title = self.user.name;
     }
-    self.name.text = self.user.name;
-    self.name.layer.shadowColor = [[UIColor blackColor] CGColor];
-    
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-    
-    self.avatar.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
+
+    NSDictionary *textAttributes = @{
+                                     NSStrokeColorAttributeName : [UIColor grayColor],
+                                     NSForegroundColorAttributeName : [UIColor whiteColor],
+                                     NSStrokeWidthAttributeName : [NSNumber numberWithInt:-4]
+                                     };
+    self.name.attributedText = [[NSAttributedString alloc] initWithString:self.user.name attributes:textAttributes];
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
@@ -68,116 +73,14 @@ bool currentUserIsMe = NO;
     }
 }
 
-- (void) selectedAttachment:(Attachment *)attachment {
-    NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
-}
-
-- (IBAction)portraitClick:(id)sender {
-    // Returning for right now to fix split view controller strangeness
-    return;
-    /*
-    
-    UIActionSheet *actionSheet = nil;
-    
-    // have to do it this way to keep the cancel button on the bottom
-    if (currentUserIsMe) {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", @"Take New Avatar Photo", @"Choose Avatar From Library", nil];
-    } else {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"View Avatar", nil];
-    }
-    
-    [actionSheet showInView:self.view];
-     */
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {
-            // view avatar
-            NSLog(@"view avatar");
-            [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
-            break;
-        }
-        case 1: {
-            // change avatar
-            NSLog(@"take avatar picture");
-            
-            if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                
-                UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                      message:@"Device has no camera"
-                                                                     delegate:nil
-                                                            cancelButtonTitle:@"OK"
-                                                            otherButtonTitles: nil];
-                [myAlertView show];
-            } else {
-                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                picker.delegate = self;
-                picker.allowsEditing = YES;
-                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                
-                [self presentViewController:picker animated:YES completion:NULL];
-            }
-            break;
-        }
-        case 2: {
-            NSLog(@"choose avatar from library");
-            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-            picker.delegate = self;
-            picker.allowsEditing = YES;
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            
-            [self presentViewController:picker animated:YES completion:NULL];
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-}
-
-- (void) uploadAvatar: (UIImage *)image {
-    
-    HttpManager *manager = [HttpManager singleton];
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
-    
-    NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImagePNGRepresentation(image) name:@"avatar" fileName:@"avatar.png" mimeType:@"image/png"];
-    } error:nil];
-    // not sure why the HTTPRequestHeaders are not being set, so set them here
-    [manager.sessionManager.requestSerializer.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
-        if (![request valueForHTTPHeaderField:field]) {
-            [request setValue:value forHTTPHeaderField:field];
-        }
-    }];
-    NSProgress *progress = nil;
-    
-    NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-        if (error) {
-            NSLog(@"Error: %@", error);
-        } else {
-            NSLog(@"%@ %@", response, responseObject);
-        }
-    }];
-    
-    [uploadTask resume];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.avatar.image = chosenImage;
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-    [self uploadAvatar:chosenImage];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:self.user.avatarUrl];
+    if([[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
+        self.avatar.image = [UIImage imageWithContentsOfFile:avatarFile];
+    }
     
     CLLocation *location = nil;
     if (currentUserIsMe) {
@@ -211,12 +114,234 @@ bool currentUserIsMe = NO;
     }
 }
 
+- (void) selectedAttachment:(Attachment *)attachment {
+    NSLog(@"attachment selected");
+    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+}
+
+- (IBAction)portraitClick:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Avatar"
+                                                                   message:@"Change or view your avatar"
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+
+    __weak typeof(self) weakSelf = self;
+    [alert addAction:[UIAlertAction actionWithTitle:@"View Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+    }]];
+    
+    if (currentUserIsMe) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
+                if (granted) {
+                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                    picker.delegate = weakSelf;
+                    picker.allowsEditing = YES;
+                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+                    
+                    [weakSelf presentViewController:picker animated:YES completion:NULL];                }
+            }];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar From Gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf checkGalleryPermissionsWithCompletion:^(BOOL granted) {
+                if (granted) {
+                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                    picker.delegate = weakSelf;
+                    picker.allowsEditing = YES;
+                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    
+                    [weakSelf presentViewController:picker animated:YES completion:NULL];
+                }
+            }];
+        }]];
+    }
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    
+    if (alert.popoverPresentationController) {
+        alert.popoverPresentationController.sourceView = self.view;
+        alert.popoverPresentationController.sourceRect = self.view.frame;
+        alert.popoverPresentationController.permittedArrowDirections = 0;
+    }
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) checkCameraPermissionsWithCompletion:(void (^)(BOOL granted)) complete {
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera"
+                                                                       message:@"Your device does not have a camera"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        complete(NO);
+        return;
+    }
+    
+    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    switch (authorizationStatus) {
+        case AVAuthorizationStatusAuthorized: {
+            complete(YES);
+            break;
+        }
+        case AVAuthorizationStatusNotDetermined: {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:complete];
+            break;
+        }
+        case AVAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
+                                                                           message:@"You've been restricted from using the camera on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
+                                                                           message:@"MAGE has been denied access to the camera.  Please open Settings, and allow access to the camera."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+    }
+    
+}
+
+- (void) checkGalleryPermissionsWithCompletion:(void (^)(BOOL granted)) complete {
+    PHAuthorizationStatus authorizationStatus = [PHPhotoLibrary authorizationStatus];
+    switch (authorizationStatus) {
+        case PHAuthorizationStatusAuthorized: {
+            complete(YES);
+            break;
+        }
+        case PHAuthorizationStatusNotDetermined: {
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized) {
+                    complete(YES);
+                } else {
+                    complete(NO);
+                }
+            }];
+            
+            break;
+        }
+        case PHAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"You've been restricted from using the gallery on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"MAGE has been denied access to the gallery.  Please open Settings, and allow access to the gallery."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    NSMutableDictionary *imageMetadata = [[info objectForKey:UIImagePickerControllerMediaMetadata] mutableCopy];
+
+    self.avatar.image = chosenImage;
+    
+    NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
+    CFStringRef UTI = CGImageSourceGetType(source);
+    NSMutableData *destinationData = [NSMutableData data];
+    CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destinationData, UTI, 1, NULL);
+    
+    if (!destinationData) {
+        NSLog(@"Error: Could not create image destination");
+    }
+    
+    // add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+    CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef) imageMetadata);
+    BOOL success = NO;
+    success = CGImageDestinationFinalize(destination);
+    
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    NSString *userAvatarPath = [NSString stringWithFormat:@"%@/userAvatars/%@", documentsDirectory, self.user.remoteId];
+    success = [destinationData writeToFile:userAvatarPath atomically:NO];
+    
+    if (!success) {
+        NSLog(@"Error: Could not create data from image destination");
+    }
+    
+    CFRelease(destination);
+    CFRelease(source);
+    
+    NSLog(@"successfully wrote file %d", success);
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+
+    HttpManager *manager = [HttpManager singleton];
+    NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
+    
+    NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:UIImagePNGRepresentation(chosenImage) name:@"avatar" fileName:@"avatar.jpeg" mimeType:@"image/jpeg"];
+    } error:nil];
+    
+    NSProgress *progress = nil;
+    
+    NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            NSLog(@"Error: %@", error);
+        } else {
+            NSLog(@"%@ %@", response, responseObject);
+        }
+    }];
+    
+    [uploadTask resume];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
         AttachmentViewController *vc = [segue destinationViewController];
         
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-        NSURL *avatarUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
+        NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
         [vc setMediaUrl: avatarUrl];
         [vc setContentType:@"image"];
         [vc setTitle:@"Avatar"];

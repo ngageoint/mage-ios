@@ -50,16 +50,14 @@
     
     if (self.mediaUrl != nil) {
         if ([self.contentType hasPrefix:@"image"]) {
+            
+            [self.imageViewHolder setHidden:NO];
             [self.progressView setHidden:YES];
             [self.audioPlayerView setHidden:YES];
-            self.imageView = [[UIImageView alloc] init];
-            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            [self.mediaHolderView addSubview:self.imageView];
+            [self.imageActivityIndicator setHidden:YES];
+            [self.imageActivityIndicator stopAnimating];
             
             self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.mediaUrl]];
-            self.imageView.frame = CGRectMake(0, 0, self.imageView.image.size.width, self.imageView.image.size.height);
-            self.imageView.clipsToBounds = YES;
-
         } else if ([self.contentType hasPrefix:@"video"] || [self.contentType hasPrefix:@"audio"]) {
             [self.imageViewHolder setHidden:YES];
             

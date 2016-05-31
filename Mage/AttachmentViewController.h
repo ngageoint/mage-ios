@@ -9,9 +9,9 @@
 
 @interface AttachmentViewController : UIViewController
 
-@property (weak, nonatomic) Attachment *attachment;
-@property (weak, nonatomic) NSURL *mediaUrl;
-@property (weak, nonatomic) NSString *contentType;
+@property (strong, nonatomic) Attachment *attachment;
+@property (strong, nonatomic) NSURL *mediaUrl;
+@property (strong, nonatomic) NSString *contentType;
 
 - (void) setContent:(Attachment *) attachment;
 
