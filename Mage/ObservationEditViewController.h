@@ -10,7 +10,11 @@
 #import "AttachmentCollectionDataStore.h"
 #import <GeoPoint.h>
 
-@interface ObservationEditViewController : UIViewController
+@protocol PropertyEditDelegate <NSObject>
+- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+@end
+
+@interface ObservationEditViewController : UIViewController<PropertyEditDelegate>
 
 @property (strong, nonatomic) Observation *observation;
 @property (strong, nonatomic) GeoPoint *location;

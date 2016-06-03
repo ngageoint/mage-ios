@@ -6,9 +6,10 @@
 
 #import "ObservationEditViewController.h"
 #import "ObservationEditViewDataStore.h"
-#import "ObservationPickerTableViewCell.h"
+#import "ObservationEditSelectTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
+#import "DropdownEditViewController.h"
 #import "Observation.h"
 #import <HttpManager.h>
 #import <AVFoundation/AVFoundation.h>
@@ -22,6 +23,7 @@
 #import "Event.h"
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
+
 @import PhotosUI;
 
 @interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
@@ -481,6 +483,10 @@
     }
 }
 
+- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition {
+    [self.editDataStore observationField:fieldDefinition valueChangedTo:value reloadCell:YES];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -490,6 +496,12 @@
         [gvc setGeoPoint:cell.geoPoint];
         [gvc setFieldDefinition: cell.fieldDefinition];
         [gvc setObservation:self.observation];
+    } else if ([segue.identifier isEqualToString:@"dropdownSegue"]) {
+        DropdownEditViewController *viewController = [segue destinationViewController];
+        ObservationEditSelectTableViewCell *cell = sender;
+        viewController.fieldDefinition = cell.fieldDefinition;
+        viewController.value = cell.value;
+        viewController.propertyEditDelegate = self;
     } else if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
         MediaViewController *mvc = [segue destinationViewController];
         mvc.delegate = self;
@@ -501,7 +513,7 @@
     }
 }
 
-- (IBAction)unwindFromGeometryController: (UIStoryboardSegue *) segue {
+- (IBAction) unwindFromGeometryController: (UIStoryboardSegue *) segue {
     GeometryEditViewController *vc = [segue sourceViewController];
     if ([[vc.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.observation.geometry = vc.geoPoint;

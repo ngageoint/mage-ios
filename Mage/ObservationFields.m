@@ -17,6 +17,7 @@
         fields = @[@"checkbox",
                    @"date",
                    @"dropdown",
+                   @"multiselectdropdown",
                    @"email",
                    @"geometry",
                    @"numberfield",
