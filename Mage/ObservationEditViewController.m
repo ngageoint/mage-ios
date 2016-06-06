@@ -9,7 +9,7 @@
 #import "ObservationEditSelectTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "GeometryEditViewController.h"
-#import "DropdownEditViewController.h"
+#import "SelectEditViewController.h"
 #import "Observation.h"
 #import <HttpManager.h>
 #import <AVFoundation/AVFoundation.h>
@@ -496,8 +496,8 @@
         [gvc setGeoPoint:cell.geoPoint];
         [gvc setFieldDefinition: cell.fieldDefinition];
         [gvc setObservation:self.observation];
-    } else if ([segue.identifier isEqualToString:@"dropdownSegue"]) {
-        DropdownEditViewController *viewController = [segue destinationViewController];
+    } else if ([segue.identifier isEqualToString:@"selectSegue"]) {
+        SelectEditViewController *viewController = [segue destinationViewController];
         ObservationEditSelectTableViewCell *cell = sender;
         viewController.fieldDefinition = cell.fieldDefinition;
         viewController.value = cell.value;

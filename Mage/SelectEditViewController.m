@@ -6,20 +6,21 @@
 //  Copyright © 2016 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "DropdownEditViewController.h"
+#import "SelectEditViewController.h"
 
-@interface DropdownEditViewController ()
+@interface SelectEditViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-//@property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UILabel *selectedLabel;
-@property (weak, nonatomic) IBOutlet UIButton *clearButton;
+@property (weak, nonatomic) IBOutlet UIView *searchBarContainer;
 
+@property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) NSMutableArray *choices;
+@property (strong, nonatomic) NSArray *filteredChoices;
 @property (strong, nonatomic) NSMutableArray *selectedChoices;
 @property (assign, nonatomic) BOOL multiselect;
 @end
 
-@implementation DropdownEditViewController
+@implementation SelectEditViewController
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +30,14 @@
     
     self.selectedLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.selectedLabel.numberOfLines = 0;
+    
+    self.definesPresentationContext = YES;
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [self.searchBarContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) viewWillAppear:(BOOL) animated {
@@ -55,16 +64,39 @@
             [self.choices addObject:title];
         }
     }
+    
+    self.filteredChoices = [NSArray arrayWithArray:self.choices];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.searchController.searchBar sizeToFit];
+}
+
+// Use this if I want to hide the cancel button
+//- (void) viewWillLayoutSubviews {
+//    self.searchController.searchBar.showsCancelButton = NO;
+//}
+
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
+    if (self.searchController.active && [self.searchController.searchBar.text length]) {
+        return [self.filteredChoices count];
+    }
+    
     return [self.choices count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"choiceCell"];
     
-    NSString *choice = [self.choices objectAtIndex:[indexPath row]];
+    NSString *choice = nil;
+    if (self.searchController.active && [self.searchController.searchBar.text length]) {
+        choice = [self.filteredChoices objectAtIndex:indexPath.row];
+    } else {
+        choice = [self.choices objectAtIndex:indexPath.row];
+    }
+    
     cell.textLabel.text = choice;
     
     if ([self.selectedChoices containsObject:choice]) {
@@ -100,7 +132,16 @@
     self.selectedLabel.text = [self.selectedChoices componentsJoinedByString:@", "];
 }
 
-- (IBAction) onSaveTapped:(id) sender {
+- (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSLog(@"updateSearchResultsForSearchController called...");
+//    [self filterContentForSearchText:searchController.searchBar.text];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] %@", searchController.searchBar.text];
+    self.filteredChoices = [self.choices filteredArrayUsingPredicate:predicate];
+    
+    [self.tableView reloadData];
+}
+
+- (IBAction) onApplyTapped:(id) sender {
     id value = nil;
     if (self.multiselect) {
         value = self.selectedChoices;

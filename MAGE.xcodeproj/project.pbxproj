@@ -59,7 +59,7 @@
 		2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF74A4C1BEBFAD900416090 /* WebKit.framework */; };
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */; };
-		2FFF8E551CFF7B06002FD563 /* DropdownEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* DropdownEditViewController.m */; };
+		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		4C2A38E919744FBC00E7470A /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */; };
 		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
@@ -265,8 +265,8 @@
 		2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageTabBarController.h; sourceTree = "<group>"; };
 		2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageTabBarController.m; sourceTree = "<group>"; };
-		2FFF8E531CFF7B06002FD563 /* DropdownEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropdownEditViewController.h; sourceTree = "<group>"; };
-		2FFF8E541CFF7B06002FD563 /* DropdownEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropdownEditViewController.m; sourceTree = "<group>"; };
+		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
+		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
@@ -790,8 +790,8 @@
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
 				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
-				2FFF8E531CFF7B06002FD563 /* DropdownEditViewController.h */,
-				2FFF8E541CFF7B06002FD563 /* DropdownEditViewController.m */,
+				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
+				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -1232,7 +1232,7 @@
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
-				2FFF8E551CFF7B06002FD563 /* DropdownEditViewController.m in Sources */,
+				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,

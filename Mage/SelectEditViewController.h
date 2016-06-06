@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ObservationEditViewController.h"
 
-@interface DropdownEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 @property (weak, nonatomic) NSDictionary *fieldDefinition;
 @property (weak, nonatomic) id value;
 @property (weak, nonatomic) id<PropertyEditDelegate> propertyEditDelegate;
