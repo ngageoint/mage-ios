@@ -288,7 +288,7 @@ bool currentUserIsMe = NO;
     BOOL success = [imageData writeToFile:userAvatarPath atomically:NO];
 
     if (!success) {
-        NSLog(@"Error: Could not create data from image destination");
+        NSLog(@"Error: Could not write image file to destination");
     }
     
     [picker dismissViewControllerAnimated:YES completion:NULL];

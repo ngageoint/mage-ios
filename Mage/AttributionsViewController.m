@@ -17,6 +17,8 @@
 @implementation AttributionsViewController
 
 -(void) viewDidLoad {
+    [super viewDidLoad];
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];

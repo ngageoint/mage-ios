@@ -406,7 +406,7 @@
         NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
         BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
         if (!success) {
-            NSLog(@"Error: Could not create data from image destination");
+            NSLog(@"Error: Could not write image to destination");
         }
 
         NSLog(@"successfully wrote file %d", success);
