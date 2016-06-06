@@ -53,6 +53,7 @@
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
+		2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
 		2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */; };
@@ -252,6 +253,8 @@
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
+		2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
+		2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditRadioTableViewCell.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
@@ -826,6 +829,8 @@
 				F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */,
 				2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */,
 				2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */,
+				2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */,
+				2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1299,6 +1304,7 @@
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
+				2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
