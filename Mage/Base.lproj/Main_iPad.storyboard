@@ -434,20 +434,46 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ZGQ-sg-NbB"/>
                                     <barButtonItem title="Event" style="plain" id="Fy8-4Q-999"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zsw-DC-sCE"/>
-                                    <barButtonItem image="add" id="cWe-q3-xJI">
+                                    <barButtonItem title="New" id="cWe-q3-xJI">
                                         <connections>
                                             <segue destination="EbK-Mn-fdL" kind="push" identifier="CreateNewObservationSegue" id="0Wl-Ci-3Xp"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem image="filter" id="jnl-jA-BUu">
+                                    <barButtonItem id="eeI-UJ-E9H">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6ir-6h-eDL">
+                                            <rect key="frame" x="641" y="7" width="1" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem title="Filter" id="jnl-jA-BUu">
                                         <connections>
                                             <action selector="showFilterActionSheet:" destination="UfL-Xp-Rx3" id="IQN-k1-Me5"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem image="more" id="8UO-yl-RYq">
-                                        <connections>
-                                            <action selector="moreTapped:" destination="UfL-Xp-Rx3" id="DtT-N0-mNH"/>
-                                        </connections>
+                                    <barButtonItem id="2hL-eu-w5a">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YgZ-w8-GnS">
+                                            <rect key="frame" x="701" y="7" width="1" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="0.5" colorSpace="calibratedWhite"/>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="KQr-9r-Wi1">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dr2-Yh-vFN">
+                                            <rect key="frame" x="712" y="4" width="36" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" image="more"/>
+                                            <connections>
+                                                <action selector="moreTapped:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="x7s-7N-Y5H"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="fixedSpace" id="Yso-7P-DDq">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="width">
+                                                <integer key="value" value="-8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </barButtonItem>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -488,7 +514,7 @@
                         <outlet property="filterButton" destination="jnl-jA-BUu" id="tvW-cp-gqY"/>
                         <outlet property="mapDelegate" destination="MIU-fq-xaT" id="Id3-HZ-c6S"/>
                         <outlet property="mapView" destination="rz7-vu-mdR" id="YOi-pW-Nl2"/>
-                        <outlet property="moreButton" destination="8UO-yl-RYq" id="K5s-rp-tbY"/>
+                        <outlet property="moreButton" destination="KQr-9r-Wi1" id="Aqy-oq-HO5"/>
                         <outlet property="reportLocationButton" destination="wdu-qy-wn8" id="H4c-4P-z35"/>
                         <outlet property="toastText" destination="zzH-pl-bJt" id="E2U-DU-zFS"/>
                         <outlet property="toastView" destination="mAe-WQ-FSc" id="g3g-qh-BTc"/>
@@ -2193,7 +2219,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
+                            <view contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fip-jT-E06" userLabel="Parent View">
                                 <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HOP-om-xPV" userLabel="Progress View">
@@ -2882,7 +2908,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KQk-HJ-tKl">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KQk-HJ-tKl">
                                 <rect key="frame" x="0.0" y="64" width="768" height="916"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -3540,7 +3566,7 @@
                                     <outlet property="delegate" destination="bgE-Nx-DOa" id="3HP-DV-fRN"/>
                                 </connections>
                             </tableView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKJ-6x-fWv">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FKJ-6x-fWv">
                                 <rect key="frame" x="0.0" y="20" width="768" height="44"/>
                                 <items>
                                     <barButtonItem image="gallery" id="kHr-BY-ywC">
@@ -3775,16 +3801,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oyc-D1-mcW">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oyc-D1-mcW">
                                 <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3JX-aW-d7N">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3JX-aW-d7N">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                         <connections>
                                             <outlet property="delegate" destination="Hbu-IA-BQH" id="agy-GT-GX8"/>
                                         </connections>
                                     </mapView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GP0-Nt-Xn4">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GP0-Nt-Xn4">
                                         <rect key="frame" x="0.0" y="886" width="768" height="118"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBk-fp-iiL">
@@ -3888,14 +3914,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tu7-RY-Ebe" userLabel="Search bar container">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tu7-RY-Ebe" userLabel="Search bar container">
                                 <rect key="frame" x="0.0" y="20" width="768" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="8mU-cQ-tji"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="peg-OO-PpS" userLabel="Selected">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="peg-OO-PpS" userLabel="Selected">
                                 <rect key="frame" x="0.0" y="64" width="768" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Selected" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRF-UY-Aue">
@@ -3939,7 +3965,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="tUS-NX-bwX"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tAr-Mm-fsI">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tAr-Mm-fsI">
                                 <rect key="frame" x="0.0" y="114" width="768" height="866"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -5311,10 +5337,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add" width="36" height="36"/>
         <image name="camera" width="24" height="24"/>
         <image name="error" width="24" height="24"/>
-        <image name="filter" width="24" height="24"/>
         <image name="gallery" width="24" height="24"/>
         <image name="google_login_normal" width="42" height="46"/>
         <image name="google_login_pressed" width="40" height="46"/>
@@ -5338,12 +5362,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="nz6-iR-1bf"/>
-        <segue reference="0bY-HN-X3k"/>
-        <segue reference="KcK-eD-wHW"/>
-        <segue reference="zj4-Gr-r48"/>
-        <segue reference="2QM-Oc-hGo"/>
-        <segue reference="XKx-ey-cRB"/>
+        <segue reference="Dm3-Eo-dNQ"/>
+        <segue reference="qcl-Tv-IV3"/>
+        <segue reference="5KS-77-dla"/>
         <segue reference="t27-nm-iv5"/>
+        <segue reference="0bY-HN-X3k"/>
+        <segue reference="nz6-iR-1bf"/>
+        <segue reference="KcK-eD-wHW"/>
     </inferredMetricsTieBreakers>
 </document>
