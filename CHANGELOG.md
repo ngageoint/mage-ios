@@ -3,11 +3,13 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.1.1 (TBD)
+## 1.1.0 (TBD)
 
 * TBD
 
 ##### Features
+* Multi select support. 
+* Filter select and multi select options
 * Turn on App Transport Security.
 
 ##### Bug Fixes
