@@ -24,6 +24,8 @@
         [self.refreshControl endRefreshing];
     });
     
+    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    
     Event *currentEvent = [Event getCurrentEvent];
     self.eventNameLabel.text = @"All";
     [self.navigationItem setTitle:currentEvent.name];

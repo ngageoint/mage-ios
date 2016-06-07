@@ -30,6 +30,8 @@
         [self.refreshControl beginRefreshing];
         [self.refreshControl endRefreshing];
     });
+    
+    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
