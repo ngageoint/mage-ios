@@ -65,6 +65,11 @@
         }
     }
     
+    if (![[self.fieldDefinition objectForKey:@"required"] boolValue]) {
+        // Remove the empty select option the server adds for non-required fields
+        [self.choices removeObject:@""];
+    }
+    
     self.filteredChoices = [NSArray arrayWithArray:self.choices];
 }
 
@@ -73,11 +78,6 @@
     
     [self.searchController.searchBar sizeToFit];
 }
-
-// Use this if I want to hide the cancel button
-//- (void) viewWillLayoutSubviews {
-//    self.searchController.searchBar.showsCancelButton = NO;
-//}
 
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
     if (self.searchController.active && [self.searchController.searchBar.text length]) {
@@ -98,6 +98,8 @@
     }
     
     cell.textLabel.text = choice;
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.textLabel.numberOfLines = 0;
     
     if ([self.selectedChoices containsObject:choice]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

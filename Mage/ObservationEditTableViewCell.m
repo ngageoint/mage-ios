@@ -16,7 +16,7 @@
 
 - (void) setValid:(BOOL) valid {
     if (valid) {
-        self.requiredIndicator.layer.borderColor = [[UIColor blackColor] CGColor];
+        self.requiredIndicator.textColor = [UIColor blackColor];
     } else {
         self.requiredIndicator.textColor = [UIColor redColor];
     }

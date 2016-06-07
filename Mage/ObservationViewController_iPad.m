@@ -37,13 +37,19 @@
 
 @implementation ObservationViewController_iPad
 
--(void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:NO];
     
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
+    
+    self.attachmentCollectionDataStore.attachmentFormatName = AttachmentMediumSquare;
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     if ([self userHasEditPermissions:user]) {
@@ -87,13 +93,6 @@
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
-    self.attachmentCollectionDataStore.attachmentFormatName = AttachmentMediumSquare;
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-	NSString *name = [_observation.properties valueForKey:@"type"];
 	self.navigationItem.title = name;
     Observations *observations = [Observations observationsForObservation:self.observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
