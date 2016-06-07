@@ -52,11 +52,11 @@
 
 - (void) doneButtonPressed {
     [self.textField resignFirstResponder];
-    NSString *newValue = [_datePicker.date formattedDisplayDate];
+    NSString *newValue = [self.datePicker.date formattedDisplayDate];
     self.textField.text = newValue;
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
+        [self.delegate observationField:self.fieldDefinition valueChangedTo:[self.datePicker.date iso8601String] reloadCell:NO];
     }
 }
 
