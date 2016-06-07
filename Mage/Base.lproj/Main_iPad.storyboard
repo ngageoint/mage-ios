@@ -3894,11 +3894,9 @@
                         <outlet property="latitudeField" destination="69q-Fk-D83" id="aT1-WL-by1"/>
                         <outlet property="longitudeField" destination="xRG-ZN-ngL" id="H92-A7-a8g"/>
                         <outlet property="map" destination="3JX-aW-d7N" id="zci-hn-28N"/>
-                        <segue destination="Jhf-M0-4QA" kind="unwind" identifier="unwindToEditController" unwindAction="unwindFromGeometryController:" id="3md-3I-dy0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CW3-TN-5dE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="Jhf-M0-4QA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="12456" y="1870"/>
         </scene>

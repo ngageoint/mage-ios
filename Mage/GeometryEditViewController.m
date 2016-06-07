@@ -99,9 +99,11 @@
 
 - (IBAction) saveLocation {
     self.navigationItem.prompt = nil;
-    self.geoPoint.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
     
-    [self performSegueWithIdentifier:@"unwindToEditController" sender:self];
+    self.geoPoint.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
+    [self.propertyEditDelegate setValue:self.geoPoint forFieldDefinition:self.fieldDefinition];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>) annotation {
@@ -137,7 +139,7 @@
     return nil;
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
         [self setLocationTextFields];
     }
@@ -148,12 +150,12 @@
     self.longitudeField.text = [NSString stringWithFormat:@"%f", self.annotation.coordinate.longitude];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL) textFieldShouldReturn:(UITextField *) textField {
     [textField resignFirstResponder];
     return NO;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (BOOL)textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange) range replacementString:(NSString *) string {
     
     // allow backspace
     if (!string.length) {

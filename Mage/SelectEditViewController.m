@@ -135,8 +135,6 @@
 }
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSLog(@"updateSearchResultsForSearchController called...");
-//    [self filterContentForSearchText:searchController.searchBar.text];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] %@", searchController.searchBar.text];
     self.filteredChoices = [self.choices filteredArrayUsingPredicate:predicate];
     

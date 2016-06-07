@@ -493,9 +493,10 @@
     if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;
-        [gvc setGeoPoint:cell.geoPoint];
-        [gvc setFieldDefinition: cell.fieldDefinition];
-        [gvc setObservation:self.observation];
+        gvc.geoPoint = cell.geoPoint;
+        gvc.fieldDefinition = cell.fieldDefinition;
+        gvc.observation = self.observation;
+        gvc.propertyEditDelegate = self;
     } else if ([segue.identifier isEqualToString:@"selectSegue"]) {
         SelectEditViewController *viewController = [segue destinationViewController];
         ObservationEditSelectTableViewCell *cell = sender;
@@ -510,16 +511,6 @@
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    }
-}
-
-- (IBAction) unwindFromGeometryController: (UIStoryboardSegue *) segue {
-    GeometryEditViewController *vc = [segue sourceViewController];
-    if ([[vc.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        self.observation.geometry = vc.geoPoint;
-        [self.editTable reloadData];
-    } else {
-        [self.editDataStore observationField:vc.fieldDefinition valueChangedTo:vc.geoPoint reloadCell:YES];
     }
 }
 

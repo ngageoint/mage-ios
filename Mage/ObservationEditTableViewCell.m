@@ -16,7 +16,7 @@
 
 - (void) setValid:(BOOL) valid {
     if (valid) {
-        self.requiredIndicator.textColor = [UIColor blackColor];
+        self.requiredIndicator.textColor = [UIColor darkGrayColor];
     } else {
         self.requiredIndicator.textColor = [UIColor redColor];
     }
