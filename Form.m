@@ -43,13 +43,21 @@
                 }
                 
                 [[NSData data] writeToFile:filePath options:0 error:nil];
-                
                 NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
                 OZZipReadStream *read = [unzipFile readCurrentFileInZipWithError:&error];
-                NSMutableData *data = [[NSMutableData alloc] initWithLength:info.length];
-                int bytesRead = [read readDataWithBuffer:data error:&error];
-                [handle writeData:data];
-                [read finishedReadingWithError:&error];
+                NSMutableData *buffer = [NSMutableData dataWithLength:2048];
+                do {
+                    long bytesRead = [read readDataWithBuffer:buffer error:nil];
+                    if (bytesRead <= 0) {
+                        break;
+                    }
+                    
+                    [buffer setLength:bytesRead];
+                    
+                    [handle writeData:buffer];
+                } while(YES);
+                
+                [read finishedReadingWithError:nil];
                 [handle closeFile];
             }
         }

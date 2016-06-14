@@ -24,8 +24,8 @@
     [self setPermissions:[json objectForKey:@"permissions"]];
 }
 
-+ (NSOperation *) operationToFetchRolesWithSuccess:(void (^)()) success
-                                           failure:(void (^)(NSError *error)) failure {
++ (NSOperation *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
+                                           failure:(void (^ _Nullable)(NSError *error)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/roles"];
     
     NSLog(@"Trying to fetch users from server %@", url);
@@ -55,7 +55,7 @@
                 if (role == nil) {
                     // not in core data yet need to create a new managed object
                     NSLog(@"Inserting new role into database");
-                    role = [Role insertRoleForJson:roleJson inManagedObjectContext:localContext];
+                    [Role insertRoleForJson:roleJson inManagedObjectContext:localContext];
                 } else {
                     // already exists in core data, lets update the object we have
                     NSLog(@"Updating role in the database");

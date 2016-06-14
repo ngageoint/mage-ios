@@ -16,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Role : NSManagedObject
 
 + (Role *) insertRoleForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context;
-+ (NSOperation *) operationToFetchRolesWithSuccess:(void (^)()) success
-                                           failure:(void (^)(NSError *error)) failure;
++ (NSOperation *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
+                                           failure:(void (^ _Nullable)(NSError *error)) failure;
 
-- (void) updateUserForJson: (NSDictionary *) json;
+- (void) updateRoleForJson: (NSDictionary *) json;
 
 @end
 

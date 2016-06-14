@@ -52,7 +52,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
             if (!user) {
-                user = [User insertUserForJson:userJson inManagedObjectContext:localContext];
+                 [User insertUserForJson:userJson inManagedObjectContext:localContext];
             } else {
                 [user updateUserForJson:userJson];
             }

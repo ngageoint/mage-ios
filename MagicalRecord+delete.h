@@ -5,5 +5,5 @@
 //
 
 @interface MagicalRecord (delete)
-    +(void) deleteCoreDataStack;
+    + (BOOL) deleteCoreDataStack;
 @end

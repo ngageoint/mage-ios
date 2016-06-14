@@ -8,18 +8,25 @@
 
 @implementation MagicalRecord (delete)
 
-+(void) deleteCoreDataStack {    
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
++ (BOOL) deleteCoreDataStack {
+    [MagicalRecord cleanUp];
     
-    [context lock];
-    [context reset];
-    NSArray *stores = [[NSPersistentStoreCoordinator MR_defaultStoreCoordinator] persistentStores];
-    for(NSPersistentStore *store in stores) {
-        [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
+    NSString *dbStore = [MagicalRecord defaultStoreName];
+    
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:dbStore];
+    NSURL *walURL = [[storeURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"sqlite-wal"];
+    NSURL *shmURL = [[storeURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"sqlite-shm"];
+    
+    NSError *error = nil;
+    BOOL result = YES;
+    
+    for (NSURL *url in @[storeURL, walURL, shmURL]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
+            result = [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+        }
     }
-    [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator: nil];
-    [context unlock];
-    [self cleanUp];
+    
+    return result;
 }
 
 @end

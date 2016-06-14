@@ -104,7 +104,6 @@
                                                      @"displayName": @"unknown"
                                                      };
                     
-                    user = [User MR_createEntityInContext:localContext];
                     user = [User insertUserForJson:userDictionary inManagedObjectContext:localContext];
                 };
                 if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;

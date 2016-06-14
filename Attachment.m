@@ -47,7 +47,7 @@
         return [NSURL fileURLWithPath:self.localPath];
     } else {
         NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        return [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@&size=%d", self.url, [defaults valueForKeyPath:@"loginParameters.token"], size]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@&size=%ld", self.url, [defaults valueForKeyPath:@"loginParameters.token"], (long) size]];
     }
 }
 
