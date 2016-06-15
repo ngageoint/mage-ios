@@ -10,24 +10,21 @@
 
 typedef NS_ENUM(NSUInteger, TimeFilterType) {
     TimeFilterAll,
-    TimeFilterLastHour,
-    TimeFilterLast6Hours,
-    TimeFilterLast12Hours,
+    TimeFilterToday,
     TimeFilterLast24Hours,
-    TimeFilterToday
+    TimeFilterLastWeek,
+    TimeFilterLastMonth
 };
 
 @interface TimeFilter : NSObject
 
 extern NSString * const kTimeFilterKey;
 
-
-
 + (TimeFilterType) getTimeFilter;
 + (void) setTimeFilter:(TimeFilterType) timeFilter;
 + (UIAlertController *) createFilterActionSheet;
 
-
 + (NSString *) getTimeFilterString;
++ (NSPredicate *) getTimePredicateForField:(NSString *) field;
 
 @end
