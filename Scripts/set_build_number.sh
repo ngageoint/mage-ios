@@ -1,11 +1,18 @@
+#!/bin/bash
+
+#
 #  set_build_number.sh
 #  MAGE
 #
 
-#!/bin/bash
+BRANCH=${1:-'master'}
+BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
+echo "Updating build number to $BUILD_NUMBER using branch '$BRANCH'."
 
-branch=${1:-'master'}
-buildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))
-echo "Updating build number to $buildNumber using branch '$branch'."
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}.dSYM/Contents/Info.plist"
+APP_INFO_PLIST="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+DSYM_INFO_PLIST="${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist"
+
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$APP_INFO_PLIST"
+if [ -f "$DSYM_INFO_PLIST" ] ; then
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$DSYM_INFO_PLIST"
+fi

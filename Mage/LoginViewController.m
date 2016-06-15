@@ -20,8 +20,7 @@
     [super viewWillAppear:animated];
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    [self.versionLabel setText:[NSString stringWithFormat:@"v%@ b%@", versionString, buildString]];
+    [self.versionLabel setText:[NSString stringWithFormat:@"v%@", versionString]];
     
     NSURL *url = [MageServer baseURL];
     if ([url absoluteString].length == 0) {
