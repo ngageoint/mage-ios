@@ -40,6 +40,7 @@
 		2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB319E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m */; };
 		2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */; };
 		2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */; };
+		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
 		2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */; };
 		2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43A31CE4F68400D99AAF /* TimeFilter.m */; };
@@ -48,7 +49,6 @@
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
-		2FDBB3061C6595DD000C6C2F /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2FDBB3051C6595DD000C6C2F /* set_build_number.sh */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
@@ -225,6 +225,7 @@
 		2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserFetchDataSource.m; sourceTree = "<group>"; };
 		2F5F2EB819E48DC6005BA157 /* ObservationFetchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchDataSource.h; sourceTree = "<group>"; };
 		2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchDataSource.m; sourceTree = "<group>"; };
+		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
 		2F81C4221C692C30006897E7 /* AttributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionsViewController.h; sourceTree = "<group>"; };
 		2F81C4231C692C30006897E7 /* AttributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionsViewController.m; sourceTree = "<group>"; };
 		2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionTableViewCell.h; sourceTree = "<group>"; };
@@ -240,7 +241,6 @@
 		2FD307681B47538900ACFE68 /* PeopleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleContainerViewController.h; sourceTree = "<group>"; };
 		2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleContainerViewController.m; sourceTree = "<group>"; };
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		2FDBB3051C6595DD000C6C2F /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
@@ -577,7 +577,7 @@
 		2FDBB3021C65940E000C6C2F /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
-				2FDBB3051C6595DD000C6C2F /* set_build_number.sh */,
+				2F7AB0C01D12EF91006F99FC /* set_build_number.sh */,
 			);
 			name = Scripts;
 			sourceTree = "<group>";
@@ -1010,7 +1010,7 @@
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
 				D463D976382545778189AEE0 /* Copy Pods Resources */,
 				C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */,
-				2FDBB3041C65946A000C6C2F /* Set Build Number */,
+				2F7AB0BF1D12EEF7006F99FC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1067,7 +1067,7 @@
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
-				2FDBB3061C6595DD000C6C2F /* set_build_number.sh in Resources */,
+				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
 				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
 				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
@@ -1081,18 +1081,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2FDBB3041C65946A000C6C2F /* Set Build Number */ = {
+		2F7AB0BF1D12EEF7006F99FC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Set Build Number";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/bash;
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
 			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */ = {

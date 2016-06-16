@@ -22,6 +22,8 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (nonatomic, assign) BOOL showDisclaimer;
+@property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
+@property (assign, nonatomic) NSInteger versionCellSelectionCount;
 
 @end
 
@@ -30,11 +32,17 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    self.versionCellSelectionCount = 0;
+    
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
+    
+    NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    self.versionLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -45,8 +53,6 @@
     [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     
-    self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
-
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.user.text = user.name;
     
@@ -98,11 +104,6 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
    if (indexPath.section == 0) {
         if (indexPath.row == 0) {
@@ -115,6 +116,12 @@
            [self.settingSelectionDelegate selectedSetting:@"disclaimerSettings"];
        } else if (indexPath.row == 1) {
            [self.settingSelectionDelegate selectedSetting:@"attributionsSettings"];
+       }
+   } else if ([tableView cellForRowAtIndexPath:indexPath] == self.versionCell) {
+       self.versionCellSelectionCount++;
+       
+       if (self.versionCellSelectionCount == 5) {
+           [tableView reloadData];
        }
    }
 }
@@ -133,6 +140,15 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 3 && [indexPath row] == 0) {
         cell.hidden = !self.showDisclaimer;
+    } else if (cell == self.versionCell) {
+        NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        
+        if (self.versionCellSelectionCount == 5) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
+        } else {
+            cell.detailTextLabel.text = versionString;
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5hL-SP-G8H">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5hL-SP-G8H">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -2837,7 +2837,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="About" id="T71-To-Ucs">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="1Em-46-TEH" detailTextLabel="YG8-dD-9c6" style="IBUITableViewCellStyleSubtitle" id="M0h-rF-gm5">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="1Em-46-TEH" detailTextLabel="YG8-dD-9c6" style="IBUITableViewCellStyleSubtitle" id="M0h-rF-gm5">
                                         <rect key="frame" x="0.0" y="253" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M0h-rF-gm5" id="JHh-PG-WEK">
@@ -2861,7 +2861,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="YEg-fx-apP" detailTextLabel="lWV-YS-Ds5" style="IBUITableViewCellStyleSubtitle" id="9Et-1a-t0R">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="YEg-fx-apP" detailTextLabel="lWV-YS-Ds5" style="IBUITableViewCellStyleSubtitle" id="9Et-1a-t0R">
                                         <rect key="frame" x="0.0" y="297" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Et-1a-t0R" id="ghL-De-s8y">
@@ -2885,7 +2885,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="8dd-JD-rfI" detailTextLabel="9ME-9H-xwE" style="IBUITableViewCellStyleSubtitle" id="pM7-Fu-NZc">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="8dd-JD-rfI" detailTextLabel="9ME-9H-xwE" style="IBUITableViewCellStyleSubtitle" id="pM7-Fu-NZc">
                                         <rect key="frame" x="0.0" y="341" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pM7-Fu-NZc" id="qqU-9A-Mia">
@@ -3004,6 +3004,7 @@
                         <outlet property="eventNameLabel" destination="I9i-yj-nhH" id="8bV-I1-kGd"/>
                         <outlet property="locationServicesStatus" destination="vby-wN-O8B" id="q9h-3c-ePj"/>
                         <outlet property="user" destination="lWV-YS-Ds5" id="WZp-ym-uEX"/>
+                        <outlet property="versionCell" destination="pM7-Fu-NZc" id="A9g-HZ-A7H"/>
                         <outlet property="versionLabel" destination="9ME-9H-xwE" id="jaf-kM-byf"/>
                     </connections>
                 </tableViewController>

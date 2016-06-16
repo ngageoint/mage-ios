@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0r1-Us-84Q">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0r1-Us-84Q">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -933,7 +933,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="hDW-F9-rT1" detailTextLabel="Mov-OX-K5t" style="IBUITableViewCellStyleSubtitle" id="m5U-9l-u7Z">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="hDW-F9-rT1" detailTextLabel="Mov-OX-K5t" style="IBUITableViewCellStyleSubtitle" id="m5U-9l-u7Z">
                                         <rect key="frame" x="0.0" y="405" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m5U-9l-u7Z" id="jiS-u6-9BY">
@@ -1036,6 +1036,7 @@
                         <outlet property="eventNameLabel" destination="Txh-4S-T2v" id="03L-Cz-Dne"/>
                         <outlet property="locationServicesStatus" destination="HeA-Qb-Hb6" id="oYo-GM-uiC"/>
                         <outlet property="user" destination="57B-mt-0p9" id="8aE-Sd-wFh"/>
+                        <outlet property="versionCell" destination="m5U-9l-u7Z" id="8kb-cu-W5t"/>
                         <outlet property="versionLabel" destination="Mov-OX-K5t" id="Fqm-wQ-Rxi"/>
                     </connections>
                 </tableViewController>

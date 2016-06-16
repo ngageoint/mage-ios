@@ -22,13 +22,16 @@
     @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
     @property (nonatomic, assign) BOOL showDisclaimer;
-
+    @property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
+    @property (assign, nonatomic) NSInteger versionCellSelectionCount;
 @end
 
 @implementation SettingsViewController
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.versionCellSelectionCount = 0;
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
@@ -39,8 +42,6 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.versionLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     _user.text = user.name;
@@ -119,9 +120,28 @@
     [self setLocationServicesLabel];
 }
 
+- (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
+    if ([tableView cellForRowAtIndexPath:indexPath] == self.versionCell) {
+        self.versionCellSelectionCount++;
+        
+        if (self.versionCellSelectionCount == 5) {
+            [tableView reloadData];
+        }
+    }
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 3 && [indexPath row] == 0) {
         cell.hidden = !self.showDisclaimer;
+    } else if (cell == self.versionCell) {
+        NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        
+        if (self.versionCellSelectionCount == 5) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
+        } else {
+            cell.detailTextLabel.text = versionString;
+        }
     }
 }
 
