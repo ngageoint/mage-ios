@@ -51,7 +51,7 @@ BOOL unwind = NO;
 
 - (IBAction)actionButtonTapped:(id)sender {
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
-        [self performSegueWithIdentifier:@"unwindToInitialSegue" sender:sender];
+        [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
     }

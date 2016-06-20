@@ -48,18 +48,18 @@
                                  @"requestType": [NSNumber numberWithInt:SIGNUP],
                                  @"result": result
                                  };
-    
+    __weak typeof(self) weakSelf = self;
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:@"Account Creation Success"
                                   message:@"Your account has been successfully created.  An administrator must approve your account before you can login"
-                                  delegate:self
+                                  delegate:weakSelf
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
             
             [alert show];
-            [self performSegueWithIdentifier:@"unwindToInitialSegue" sender:self];
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
         } else {
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:@"Signup error"
@@ -69,7 +69,7 @@
                                   otherButtonTitles:nil];
             
             [alert show];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }
     }];
 }

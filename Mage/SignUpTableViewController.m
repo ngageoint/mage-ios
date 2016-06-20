@@ -74,7 +74,7 @@
 }
 
 - (IBAction) onCancel:(id) sender {
-    [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) showDialogForRequiredField:(NSString *) field {
@@ -100,7 +100,7 @@
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf performSegueWithIdentifier:@"unwindToInitial" sender:self];
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }]];
         
         dispatch_async(dispatch_get_main_queue(), ^{

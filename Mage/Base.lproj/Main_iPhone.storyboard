@@ -915,7 +915,7 @@
                         <viewControllerLayoutGuide type="bottom" id="oTV-eA-AAp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Igh-1x-94E">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="SUG-4H-QMK">
@@ -1519,17 +1519,17 @@
                         <viewControllerLayoutGuide type="bottom" id="7Db-KT-Slw"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="6zq-TS-tIG">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EGu-m5-vb5" userLabel="Parent">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xjD-Uw-AIb" userLabel="Image View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ezx-A8-LbC">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                             </imageView>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Fxx-8r-Ouv">
                                                 <rect key="frame" x="142" y="210" width="37" height="37"/>
@@ -1551,7 +1551,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SCZ-3y-pdK" userLabel="Audio Player View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2lh-bQ-Uwz">
                                                 <rect key="frame" x="108" y="158" width="104" height="48"/>
@@ -1612,7 +1612,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56V-wu-5Es" userLabel="Progress View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Download Progress" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPx-5B-Ldq">
                                                 <rect key="frame" x="0.0" y="192" width="320" height="21"/>
@@ -1700,11 +1700,11 @@
                         <viewControllerLayoutGuide type="bottom" id="8ca-Rr-FaE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="BVq-aE-bjh">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="hno-eB-ZoM">
-                                <rect key="frame" x="0.0" y="44" width="320" height="411"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="431"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <prototypes>
@@ -2440,7 +2440,7 @@
                         <viewControllerLayoutGuide type="bottom" id="VOa-Cw-Fkc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ZyN-oY-e7u">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Record Audio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7I-KA-YP5">
@@ -2590,20 +2590,20 @@
                         <viewControllerLayoutGuide type="bottom" id="QJs-S7-SY5"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="B9z-uS-38G">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Sk-eg-elO">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="475"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="V5Y-kS-C3F">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="475"/>
                                         <connections>
                                             <outlet property="delegate" destination="8he-gU-g1M" id="oMe-xU-vci"/>
                                         </connections>
                                     </mapView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-Vh-WL6">
-                                        <rect key="frame" x="0.0" y="337" width="320" height="118"/>
+                                        <rect key="frame" x="0.0" y="357" width="320" height="118"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y32-wp-mo3">
                                                 <rect key="frame" x="8" y="8" width="73" height="21"/>
@@ -2726,7 +2726,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="settingsViewController" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6Q2-x4-2ZU" customClass="SettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nWg-JJ-3O1">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
@@ -3018,7 +3018,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="locationServicesSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xb7-5U-btP" customClass="LocationServicesSettingsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Xy0-dy-oe9">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
@@ -3200,7 +3200,7 @@
             <objects>
                 <tableViewController id="mrT-VE-lFy" customClass="MapSettings" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="zU0-as-G33">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
@@ -3409,7 +3409,7 @@
             <objects>
                 <tableViewController id="e2X-UY-4EL" customClass="StaticLayerTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1Iu-Hz-MwA">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -3489,7 +3489,7 @@
             <objects>
                 <tableViewController id="XBq-ML-vAC" customClass="OfflineMapTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="58" sectionHeaderHeight="10" sectionFooterHeight="10" id="HeG-Kq-Lpi">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -3642,18 +3642,18 @@
                         <viewControllerLayoutGuide type="bottom" id="6q2-We-jg1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="l9s-8J-Fej">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g40-xu-gvY">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="475"/>
                                 <connections>
                                     <outlet property="delegate" destination="aTf-31-vyJ" id="78f-N2-0eb"/>
                                     <outletCollection property="gestureRecognizers" destination="1TF-m7-FjB" appends="YES" id="efS-Lc-evX"/>
                                 </connections>
                             </mapView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="379-G7-fAL">
-                                <rect key="frame" x="0.0" y="438" width="320" height="17"/>
+                                <rect key="frame" x="0.0" y="458" width="320" height="17"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cfz-qe-Yeh">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="17"/>
@@ -3864,7 +3864,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="dataFetchingSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tdk-aE-t1M" customClass="DataFetchSettingsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="YpJ-CF-8Yi">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
@@ -4035,11 +4035,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Wy4-04-FJh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="P4j-ir-4KN">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FZt-Pu-8ae">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="475"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="attributionCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="attributionCell" rowHeight="88" id="xjC-Yi-s78" customClass="AttributionTableViewCell">
@@ -4140,11 +4140,11 @@
                         <viewControllerLayoutGuide type="bottom" id="nQ8-Mz-NTz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="yQ8-Fn-TV0">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Disclaimer text" translatesAutoresizingMaskIntoConstraints="NO" id="LrG-G8-TK9">
-                                <rect key="frame" x="16" y="82" width="288" height="373"/>
+                                <rect key="frame" x="16" y="82" width="288" height="393"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -4182,7 +4182,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="timeSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mNK-4o-Y4C" customClass="ValuePickerTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OPS-kg-1Vn">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -4244,7 +4244,7 @@
             <objects>
                 <tableViewController id="5nd-zV-iKV" customClass="ObservationTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OPP-IU-i5n">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -4427,7 +4427,7 @@
                         <viewControllerLayoutGuide type="bottom" id="FgX-Tt-xtX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Fcs-AZ-8xW">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="sQB-m1-06Y">
@@ -4440,7 +4440,7 @@
                                 </connections>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="abu-vE-3L5">
-                                <rect key="frame" x="0.0" y="206" width="320" height="298"/>
+                                <rect key="frame" x="0.0" y="206" width="320" height="318"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="obsCell" rowHeight="130" id="bGp-ui-azC" customClass="ObservationTableViewCell">
@@ -4659,7 +4659,7 @@
             <objects>
                 <tableViewController id="ikG-lE-1ri" customClass="PeopleTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4yf-Xu-lBx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -4955,7 +4955,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M7J-dz-vKO">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M7J-dz-vKO">
                                 <rect key="frame" x="16" y="53" width="288" height="447"/>
                                 <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -5019,7 +5019,7 @@
                                     <action selector="actionButtonTapped:" destination="LgF-Lf-Fh3" eventType="touchUpInside" id="VEQ-na-w5g"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose An Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZO-ia-4HR">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Choose An Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZO-ia-4HR">
                                 <rect key="frame" x="16" y="24" width="288" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="omG-Xe-i4n"/>
@@ -5028,17 +5028,17 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hiN-G4-CTk">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hiN-G4-CTk">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="P4Z-7B-zsU">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="P4Z-7B-zsU">
                                         <rect key="frame" x="40" y="261" width="240" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="240" id="8pS-OJ-Ihb"/>
                                             <constraint firstAttribute="height" constant="45" id="sEB-ct-KH1"/>
                                         </constraints>
                                     </imageView>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="7aI-pB-SZF">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="7aI-pB-SZF">
                                         <rect key="frame" x="142" y="314" width="37" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="37" id="SnC-dP-Oc8"/>
@@ -5121,13 +5121,13 @@
         <image name="voice" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qek-dh-YPY"/>
+        <segue reference="Udd-Ez-JOB"/>
         <segue reference="eHX-H2-6Gy"/>
-        <segue reference="sCY-CX-BgC"/>
-        <segue reference="zfZ-aY-xQc"/>
+        <segue reference="zSP-t6-Lnh"/>
         <segue reference="yrr-DE-PGS"/>
-        <segue reference="AcY-hY-TSo"/>
         <segue reference="jBJ-WK-9G6"/>
+        <segue reference="AcY-hY-TSo"/>
         <segue reference="dNU-1p-yFN"/>
+        <segue reference="zfZ-aY-xQc"/>
     </inferredMetricsTieBreakers>
 </document>
