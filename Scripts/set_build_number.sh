@@ -15,7 +15,7 @@ echo " git clone mage sdk error, with exit status $?"
 exit 1
 fi
 
-fiSDK_BUILD_NUMBER=$(expr $(git -C .mage-sdk rev-list $BRANCH --count) - $(git -C .mage-sdk rev-list HEAD..$BRANCH --count))
+SDK_BUILD_NUMBER=$(expr $(git -C .mage-sdk rev-list $BRANCH --count) - $(git -C .mage-sdk rev-list HEAD..$BRANCH --count))
 SDK_BUILD_NUMBER=$(seq -f "%05g" $SDK_BUILD_NUMBER $SDK_BUILD_NUMBER)
 rm -rf .mage-sdk
 
