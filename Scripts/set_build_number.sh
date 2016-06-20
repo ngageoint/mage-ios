@@ -6,7 +6,20 @@
 #
 
 BRANCH=${1:-'master'}
-BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
+APP_BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
+
+rm -rf .mage-sdk && mkdir .mage-sdk
+git clone -n https://github.com/ngageoint/mage-ios-sdk.git .mage-sdk
+if [ ! $? -eq 0 ]; then
+echo " git clone mage sdk error, with exit status $?"
+exit 1
+fi
+
+fiSDK_BUILD_NUMBER=$(expr $(git -C .mage-sdk rev-list $BRANCH --count) - $(git -C .mage-sdk rev-list HEAD..$BRANCH --count))
+SDK_BUILD_NUMBER=$(seq -f "%05g" $SDK_BUILD_NUMBER $SDK_BUILD_NUMBER)
+rm -rf .mage-sdk
+
+BUILD_NUMBER=${APP_BUILD_NUMBER}${SDK_BUILD_NUMBER}
 echo "Updating build number to $BUILD_NUMBER using branch '$BRANCH'."
 
 APP_INFO_PLIST="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"

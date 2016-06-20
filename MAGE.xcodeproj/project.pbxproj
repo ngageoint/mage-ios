@@ -1010,7 +1010,7 @@
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
 				D463D976382545778189AEE0 /* Copy Pods Resources */,
 				C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */,
-				2F7AB0BF1D12EEF7006F99FC /* ShellScript */,
+				2F7AB0BF1D12EEF7006F99FC /* Set Build Number */,
 			);
 			buildRules = (
 			);
@@ -1081,16 +1081,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2F7AB0BF1D12EEF7006F99FC /* ShellScript */ = {
+		2F7AB0BF1D12EEF7006F99FC /* Set Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Set Build Number";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
