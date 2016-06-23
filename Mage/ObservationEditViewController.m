@@ -382,8 +382,6 @@
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
         UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
         
-        NSMutableDictionary *imageMetadata = [[info objectForKey:UIImagePickerControllerMediaMetadata] mutableCopy];
-        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
         
@@ -404,31 +402,12 @@
         }
         
         NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
-        CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
-        CFStringRef UTI = CGImageSourceGetType(source);
-        NSMutableData *destinationData = [NSMutableData data];
-        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destinationData, UTI, 1, NULL);
-        
-        if (!destinationData) {
-            NSLog(@"Error: Could not create image destination");
-        }
-        
-        // add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-        CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef) imageMetadata);
-        BOOL success = NO;
-        success = CGImageDestinationFinalize(destination);
-        
-        success = [destinationData writeToFile:fileToWriteTo atomically:NO];
-        
+        BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
         if (!success) {
             NSLog(@"Error: Could not create data from image destination");
         }
-        
-        CFRelease(destination);
-        CFRelease(source);
-        
+
         NSLog(@"successfully wrote file %d", success);
-        
         
         NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
         [attachmentJson setValue:@"image/jpeg" forKey:@"contentType"];

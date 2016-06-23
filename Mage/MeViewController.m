@@ -278,37 +278,17 @@ bool currentUserIsMe = NO;
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    NSMutableDictionary *imageMetadata = [[info objectForKey:UIImagePickerControllerMediaMetadata] mutableCopy];
 
     self.avatar.image = chosenImage;
     
     NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
-    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
-    CFStringRef UTI = CGImageSourceGetType(source);
-    NSMutableData *destinationData = [NSMutableData data];
-    CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destinationData, UTI, 1, NULL);
-    
-    if (!destinationData) {
-        NSLog(@"Error: Could not create image destination");
-    }
-    
-    // add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-    CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef) imageMetadata);
-    BOOL success = NO;
-    success = CGImageDestinationFinalize(destination);
-    
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString *userAvatarPath = [NSString stringWithFormat:@"%@/userAvatars/%@", documentsDirectory, self.user.remoteId];
-    success = [destinationData writeToFile:userAvatarPath atomically:NO];
-    
+    BOOL success = [imageData writeToFile:userAvatarPath atomically:NO];
+
     if (!success) {
         NSLog(@"Error: Could not create data from image destination");
     }
-    
-    CFRelease(destination);
-    CFRelease(source);
-    
-    NSLog(@"successfully wrote file %d", success);
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 
@@ -316,7 +296,7 @@ bool currentUserIsMe = NO;
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
     
     NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImagePNGRepresentation(chosenImage) name:@"avatar" fileName:@"avatar.jpeg" mimeType:@"image/jpeg"];
+        [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpeg" mimeType:@"image/jpeg"];
     } error:nil];
     
     NSProgress *progress = nil;
