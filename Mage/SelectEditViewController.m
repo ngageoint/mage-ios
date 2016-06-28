@@ -161,8 +161,15 @@
 }
 
 - (IBAction) onClearTapped:(id) sender {
+    NSArray *choices = nil;
+    if (self.searchController.active && [self.searchController.searchBar.text length]) {
+        choices = self.filteredChoices;
+    } else {
+        choices = self.choices;
+    }
+
     for (NSString *choice in self.selectedChoices) {
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[self.choices indexOfObject:choice] inSection:0]];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[choices indexOfObject:choice] inSection:0]];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
