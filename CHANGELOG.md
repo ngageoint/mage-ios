@@ -3,9 +3,16 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.1.0 (TBD)
+## 1.1.1 (TBD)
 
 * TBD
+
+##### Features
+
+##### Bug Fixes
+* Fixed bug where persons location was set to your location when viewing persons info.
+
+## 1.1.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.1.0) (06-23-2016)
 
 ##### Features
 * Auto zooms to users current location on map in user view.

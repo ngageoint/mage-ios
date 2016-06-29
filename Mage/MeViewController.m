@@ -53,6 +53,7 @@ bool currentUserIsMe = NO;
         currentUserIsMe = YES;
         self.title = @"Me";
     } else {
+        currentUserIsMe = NO;
         self.title = self.user.name;
     }
 
