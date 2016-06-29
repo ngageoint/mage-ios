@@ -49,6 +49,7 @@
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
+		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
@@ -241,6 +242,8 @@
 		2FD307681B47538900ACFE68 /* PeopleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleContainerViewController.h; sourceTree = "<group>"; };
 		2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleContainerViewController.m; sourceTree = "<group>"; };
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
+		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
@@ -615,6 +618,8 @@
 				F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */,
 				2F9F43A91CE5050400D99AAF /* UINavigationItem+Subtitle.h */,
 				2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */,
+				2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */,
+				2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1210,6 +1215,7 @@
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
+				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,

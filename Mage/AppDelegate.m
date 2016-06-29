@@ -9,10 +9,12 @@
 #import <User.h>
 #import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
+#import <AVFoundation/AVFoundation.h>
 #import <FICImageCache.h>
 #import <UserUtility.h>
 #import "Attachment.h"
 #import "Attachment+Thumbnail.h"
+#import "UIImage+Thumbnail.h"
 
 #import "MageInitialViewController.h"
 #import "LoginViewController.h"
@@ -76,7 +78,6 @@
     NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
     
     FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
-    [sharedImageCache reset];
     sharedImageCache.delegate = self;
     sharedImageCache.formats = imageFormats;
     
@@ -372,15 +373,49 @@
         if ([attachment.contentType hasPrefix:@"image"]) {
             NSURL *url = [entity sourceImageURLWithFormatName:formatName];
             sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        } else if ([attachment.contentType hasPrefix:@"video"] || [attachment.contentType hasPrefix:@"audio"]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionBlock(sourceImage);
+            });
+        } else if ([attachment.contentType hasPrefix:@"video"]) {
+            NSURL *url = [entity sourceImageURLWithFormatName:formatName];
+            AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
+            AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+            generator.appliesPreferredTrackTransform = YES;
+            CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
+            
+            AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
+                if (result != AVAssetImageGeneratorSucceeded) {
+                    NSLog(@"couldn't generate thumbnail, error:%@", error);
+                }
+                
+                CGSize thumbnailSize = [AttachmentSmallSquare isEqualToString:formatName] ? AttachmentSquareImageSize : AttachmentiPadSquareImageSize;
+                UIImage *sourceImage = [UIImage imageWithCGImage:image];
+                UIImage *thumbnail = [sourceImage thumbnailWithSize:thumbnailSize];
+                UIImage *playOverlay = [UIImage imageNamed:@"play_overlay"];
+
+                UIGraphicsBeginImageContextWithOptions(thumbnail.size, NO, 0.0);
+                [thumbnail drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
+                [playOverlay drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
+                UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionBlock(newImage);
+                });
+            };
+            
+            [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
+        } else if ([attachment.contentType hasPrefix:@"audio"]) {
             sourceImage = [UIImage imageNamed:@"play_thumbnail"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionBlock(sourceImage);
+            });
         } else {
             sourceImage = [UIImage imageNamed:@"paperclip_thumbnail"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionBlock(sourceImage);
+            });
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionBlock(sourceImage);
-        });
     });
 }
 
