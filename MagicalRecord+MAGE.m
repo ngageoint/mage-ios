@@ -11,7 +11,25 @@
 @implementation MagicalRecord (MAGE)
 
 +(void) setupMageCoreDataStack {
-    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"Mage.sqlite"];
+    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
+    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    
+    // Adding the journalling mode recommended by apple
+    NSMutableDictionary *sqliteOptions = [NSMutableDictionary dictionary];
+    [sqliteOptions setObject:@"WAL" forKey:@"journal_mode"];
+    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                             NSFileProtectionCompleteUnlessOpen, NSPersistentStoreFileProtectionKey,
+                             sqliteOptions, NSSQLitePragmasOption,
+                             nil];
+    
+    [coordinator MR_addSqliteStoreNamed:@"Mage.sqlite" withOptions:options];
+    [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:coordinator];
+
+    
+    [NSManagedObjectContext MR_initializeDefaultContextWithCoordinator:coordinator];
 }
 
 +(void) deleteAndSetupMageCoreDataStack {

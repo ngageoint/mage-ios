@@ -15,7 +15,6 @@ static NSString * const kKeyChainService = @"mil.nga.giat.mage.pass";
     
     NSString *passwordString = nil;
     
-    // Check to see if a UUID is stored in the KeyChain
     NSDictionary *query = @{
                             (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
                             (__bridge id)kSecAttrService: kKeyChainService,
