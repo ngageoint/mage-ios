@@ -20,6 +20,7 @@
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
+		17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */; };
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
@@ -184,6 +185,7 @@
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
 		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OZZipFile+OfflineMap.h"; sourceTree = "<group>"; };
 		2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OZZipFile+OfflineMap.m"; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 		2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0719D5D7530012C6A7 /* MageTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageTabBarController.h; sourceTree = "<group>"; };
 		2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageTabBarController.m; sourceTree = "<group>"; };
+		46B6A7CF6172383A175FCA54 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		4C2A38E719744FBC00E7470A /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		4C2A38E819744FBC00E7470A /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
@@ -272,6 +275,7 @@
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpTableViewController.h; sourceTree = "<group>"; };
 		4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpTableViewController.m; sourceTree = "<group>"; };
+		94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
@@ -453,6 +457,7 @@
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */,
+				17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +714,8 @@
 			children = (
 				0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */,
 				0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */,
+				46B6A7CF6172383A175FCA54 /* Pods-MAGE.debug.xcconfig */,
+				2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -912,6 +919,7 @@
 				F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */,
 				F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */,
 				C8A622B3962D4C72B0951A4A /* libPods.a */,
+				94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1009,13 +1017,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F7A94D9818AD9CB000CB9EE0 /* Build configuration list for PBXNativeTarget "MAGE" */;
 			buildPhases = (
-				DE8C6B93007C49AA85E2B7FF /* Check Pods Manifest.lock */,
+				DE8C6B93007C49AA85E2B7FF /* [CP] Check Pods Manifest.lock */,
 				F7A94D6218AD9CB000CB9EE0 /* Sources */,
 				F7A94D6318AD9CB000CB9EE0 /* Frameworks */,
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
-				D463D976382545778189AEE0 /* Copy Pods Resources */,
-				C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */,
+				D463D976382545778189AEE0 /* [CP] Copy Pods Resources */,
+				C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */,
 				2F7AB0BF1D12EEF7006F99FC /* Set Build Number */,
+				A1D054489921580AA44BF251 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1100,7 +1109,7 @@
 			shellPath = /bin/sh;
 			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
-		C7DD8C6A49EADCB550317B3D /* Embed Pods Frameworks */ = {
+		A1D054489921580AA44BF251 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1115,29 +1124,44 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D463D976382545778189AEE0 /* Copy Pods Resources */ = {
+		C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DE8C6B93007C49AA85E2B7FF /* Check Pods Manifest.lock */ = {
+		D463D976382545778189AEE0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DE8C6B93007C49AA85E2B7FF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1387,7 +1411,7 @@
 		};
 		F7A94D9918AD9CB000CB9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 46B6A7CF6172383A175FCA54 /* Pods-MAGE.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1398,7 +1422,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.MAGE;
 				PRODUCT_NAME = MAGE;
@@ -1409,7 +1433,7 @@
 		};
 		F7A94D9A18AD9CB000CB9EE0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */;
+			baseConfigurationReference = 2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1420,7 +1444,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.MAGE;
 				PRODUCT_NAME = MAGE;

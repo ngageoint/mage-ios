@@ -91,6 +91,9 @@
     self.usernameField.textColor = [UIColor blackColor];
     self.passwordField.textColor = [UIColor blackColor];
     
+    self.usernameField.text = @"";
+    self.passwordField.text = @"";
+    
     self.loginStatus.hidden = YES;
     self.statusButton.hidden = YES;
     

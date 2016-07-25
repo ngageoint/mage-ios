@@ -15,21 +15,12 @@ static NSString * const kKeyChainService = @"mil.nga.giat.mage.uuid";
 
 + (NSUUID *) retrieveDeviceUUID {
 	
-    // First, check NSUserDefaults so that we're not hitting the KeyChain every single time
-    NSString *uuidString = [[NSUserDefaults standardUserDefaults] stringForKey:kKeyChainService];
-	if ([uuidString length] != 0) {
-		return [[NSUUID alloc] initWithUUIDString:uuidString];
-	}
-	
-	uuidString = [DeviceUUID retrieveUUIDFromKeyChain];
+	NSString *uuidString = [DeviceUUID retrieveUUIDFromKeyChain];
 	
     // Failed to read the UUID from the KeyChain, so create a new UUID and store it
     if ([uuidString length] == 0) {
 		uuidString = [DeviceUUID persistUUIDToKeyChain];
     }
-	
-    // Save UUID to NSUserDefaults so that we can avoid the KeyChain next time
-	[[NSUserDefaults standardUserDefaults] setObject:uuidString forKey:kKeyChainService];
 	
     return [[NSUUID alloc] initWithUUIDString:uuidString];
 }
@@ -72,12 +63,12 @@ static NSString * const kKeyChainService = @"mil.nga.giat.mage.uuid";
     NSString *uuidString = [uuid UUIDString];
 	
 	// Now store it in the KeyChain
-	NSDictionary *query = @{
-		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-		(__bridge id)kSecAttrService: kKeyChainService,
-		(__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-		(__bridge id)kSecValueData: [uuidString dataUsingEncoding:NSUTF8StringEncoding]
-	};
+    NSDictionary *query = @{
+        (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService: kKeyChainService,
+        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+        (__bridge id)kSecValueData: [uuidString dataUsingEncoding:NSUTF8StringEncoding]
+    };
 	
 	OSStatus result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
 	if (result != noErr) {

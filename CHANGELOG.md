@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * TBD
 
 ##### Features
+* Turn on App Transport Security.
 
 ##### Bug Fixes
 * Fixed bug where persons location was set to your location when viewing persons info.
