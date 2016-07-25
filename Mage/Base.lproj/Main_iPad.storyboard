@@ -4691,7 +4691,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="Kpb-O9-EVE"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="wGk-kI-CCC" id="rHH-2G-hix"/>
                                                         <outlet property="nextField" destination="9lY-uQ-0XA" id="5US-Lv-ZlX"/>
