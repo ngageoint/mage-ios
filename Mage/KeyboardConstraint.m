@@ -14,8 +14,8 @@ CGFloat initialConstant;
 - (void) awakeFromNib {
     [super awakeFromNib];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -26,15 +26,18 @@ CGFloat initialConstant;
 }
 
 - (void) dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
--(void)keyboardWillShow: (NSNotification *) notification {
-    NSDictionary *userInfo = notification.userInfo;
-    CGRect r = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    self.constant = initialConstant + r.size.height;
+-(void)keyboardDidShow: (NSNotification *) notification {
     
+    UIView *view = self.firstItem;
+    CGRect frame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameInViewCoordinates = [view convertRect:frame fromView:nil];
+    self.constant = CGRectGetHeight(view.bounds) - keyboardFrameInViewCoordinates.origin.y;
+    
+    [view layoutIfNeeded];
     dispatch_async(dispatch_get_main_queue(), ^{
         UITableView *table = self.secondItem;
         UIView *responder = [UIResponder currentFirstResponder];
@@ -43,7 +46,8 @@ CGFloat initialConstant;
             cell = cell.superview;
         }
         if (cell != nil) {
-            [table setContentOffset:CGPointMake(table.contentOffset.x, cell.frame.origin.y+initialConstant - 20)];
+            CGRect textFieldRect = [table convertRect:cell.bounds fromView:cell];
+            [table scrollRectToVisible:textFieldRect animated:NO];
         }
 
     });
