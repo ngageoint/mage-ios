@@ -14,19 +14,27 @@
     return [Server getPropertyForKey:@"serverUrl"];
 }
 
-+(void) setServerUrl:(NSString *) serverUrl {
-    [Server setProperty:serverUrl forKey:@"serverUrl"];
++ (void) setServerUrl:(NSString *) serverUrl {
+    [Server setServerUrl:serverUrl completion:nil];
 }
 
-+(NSNumber *) currentEventId {
++ (void) setServerUrl:(NSString *) serverUrl completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    [Server setProperty:serverUrl forKey:@"serverUrl" completion:completion];
+}
+
++ (NSNumber *) currentEventId {
     return [Server getPropertyForKey:@"currentEventId"];
 }
 
-+(void) setCurrentEventId: (NSNumber *) eventId {
-    [Server setProperty:eventId forKey:@"currentEventId"];
++ (void) setCurrentEventId: (NSNumber *) eventId {
+    [Server setCurrentEventId:eventId completion:nil];
 }
 
-+(id) getPropertyForKey:(NSString *) key {
++ (void) setCurrentEventId: (NSNumber *) eventId completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    [Server setProperty:eventId forKey:@"currentEventId" completion:completion];
+}
+
++ (id) getPropertyForKey:(NSString *) key {
     Server *server = [Server MR_findFirst];
     
     id property = nil;
@@ -38,8 +46,8 @@
     return property;
 }
 
-+(void) setProperty:(id) property forKey:(NSString *) key {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
++ (void) setProperty:(id) property forKey:(NSString *) key completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         Server *server = [Server MR_findFirstInContext:localContext];
         if (server) {
             NSMutableDictionary *properties = [server.properties mutableCopy];
@@ -48,6 +56,10 @@
         } else {
             server = [Server MR_createEntityInContext:localContext];
             server.properties = @{key: property};
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        if (completion) {
+            completion(contextDidSave, error);
         }
     }];
 }

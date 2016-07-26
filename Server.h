@@ -15,8 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(NSString *) serverUrl;
 +(void) setServerUrl:(NSString *) serverUrl;
++ (void) setServerUrl:(NSString *) serverUrl completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
+
+
 +(NSNumber *) currentEventId;
 +(void) setCurrentEventId:(NSNumber *) eventId;
++ (void) setCurrentEventId: (NSNumber *) eventId completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 
 @end
 
