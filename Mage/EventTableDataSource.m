@@ -164,13 +164,14 @@
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
     
-    [Server setCurrentEventId:event.remoteId];
     [self.eventSelectionDelegate didSelectEvent:event];
-
     [tableView beginUpdates];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView endUpdates];
-    [tableView reloadData];
+    
+    [Server setCurrentEventId:event.remoteId completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        [tableView reloadData];
+    }];
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
