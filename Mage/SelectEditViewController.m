@@ -114,7 +114,14 @@
     if (!self.multiselect && [self.selectedChoices count]) {
         NSString *selectedChoice = [self.selectedChoices objectAtIndex:0];
         
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[self.choices indexOfObject:selectedChoice] inSection:0]];
+        NSUInteger selectedIndex = 0;
+        if (self.searchController.active && [self.searchController.searchBar.text length]) {
+            selectedIndex = [self.filteredChoices indexOfObject:selectedChoice];
+        } else {
+            selectedIndex = [self.choices indexOfObject:selectedChoice];
+        }
+        
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
         cell.accessoryType = UITableViewCellAccessoryNone;
 
         [self.selectedChoices removeObject:selectedChoice];
