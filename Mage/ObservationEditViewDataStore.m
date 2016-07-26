@@ -173,7 +173,7 @@
     
     if (reload == YES) {
         [self.editTable beginUpdates];
-        [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+        [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.editTable endUpdates];
     }
     
