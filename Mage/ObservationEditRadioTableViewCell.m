@@ -92,6 +92,7 @@
     
     if (valid) {
         self.valueTextField.layer.borderColor = nil;
+        self.valueTextField.layer.borderWidth = 0.0f;
     } else {
         self.valueTextField.layer.cornerRadius = 4.0f;
         self.valueTextField.layer.masksToBounds = YES;

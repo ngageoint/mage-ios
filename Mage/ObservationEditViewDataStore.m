@@ -138,7 +138,7 @@
     
     [cell populateCellWithFormField:field andObservation:self.observation];
     [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
-
+    
     return cell;
 }
 
@@ -171,15 +171,12 @@
     NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
     
-    if (reload == YES) {
-        [self.editTable beginUpdates];
-        [self.editTable reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.editTable endUpdates];
-    }
-    
-    if ([self.invalidIndexPaths containsObject:indexPath]) {
+    if (reload == YES || [self.invalidIndexPaths containsObject:indexPath]) {
         [self.invalidIndexPaths removeObject:indexPath];
-        [self.editTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        id cell = [self.editTable cellForRowAtIndexPath:indexPath];
+        [cell populateCellWithFormField:field andObservation:self.observation];
+        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
     if ([fieldKey isEqualToString:@"type"] && self.annotationChangedDelegate) {
