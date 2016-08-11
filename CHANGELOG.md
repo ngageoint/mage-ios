@@ -3,9 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.1.0 (TBD)
+## 1.2.1 (TBD)
 
 * TBD
+
+##### Features
+
+##### Bug Fixes
+
+## 1.2.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.2.0) (08-11-2016)
 
 ##### Features
 * Multi select support. 
