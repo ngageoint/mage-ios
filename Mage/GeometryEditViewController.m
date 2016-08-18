@@ -100,8 +100,8 @@
 - (IBAction) saveLocation {
     self.navigationItem.prompt = nil;
     
-    self.geoPoint.location = [[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude];
-    [self.propertyEditDelegate setValue:self.geoPoint forFieldDefinition:self.fieldDefinition];
+    GeoPoint *location = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude]];
+    [self.propertyEditDelegate setValue:location forFieldDefinition:self.fieldDefinition];
     
     [self.navigationController popViewControllerAnimated:YES];
 }

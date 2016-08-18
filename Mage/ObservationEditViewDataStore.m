@@ -158,15 +158,21 @@
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
-    NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
     
-    if (value == nil) {
-        [newProperties removeObjectForKey:fieldKey];
+    if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
+        // Geometry is not stored in properties
+        self.observation.geometry = value;
     } else {
-        [newProperties setObject:value forKey:fieldKey];
+        NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
+        
+        if (value == nil) {
+            [newProperties removeObjectForKey:fieldKey];
+        } else {
+            [newProperties setObject:value forKey:fieldKey];
+        }
+        
+        self.observation.properties = newProperties;
     }
-    
-    self.observation.properties = newProperties;
     
     NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
