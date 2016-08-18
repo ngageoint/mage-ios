@@ -122,10 +122,10 @@ NSNumber *_currentEventId;
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
             GeoPoint *point = value;
-            [jsonProperties setObject:@{@"x": [NSNumber numberWithDouble:point.location.coordinate.latitude],
-                                        @"y": [NSNumber numberWithDouble: point.location.coordinate.longitude]
-                                        } forKey: key];
-            
+            [jsonProperties setObject:@{
+                                         @"type": @"Point",
+                                         @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
+                                         } forKey:key];
         }
     }
     
@@ -172,8 +172,8 @@ NSNumber *_currentEventId;
         id value = [propertyJson objectForKey:key];
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:[[value objectForKey:@"x"] floatValue] longitude:[[value objectForKey:@"y"] floatValue]];
-            
+            NSArray *coordinates = [value valueForKeyPath:@"coordinates"];
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
             [parsedProperties setObject:[[GeoPoint alloc] initWithLocation:location] forKey:key];
         }
     }
