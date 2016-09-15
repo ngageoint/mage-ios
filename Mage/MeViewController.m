@@ -35,6 +35,10 @@
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UIView *phoneView;
+@property (weak, nonatomic) IBOutlet UITextView *phoneNumber;
+@property (weak, nonatomic) IBOutlet UIView *emailView;
+@property (weak, nonatomic) IBOutlet UITextView *email;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -57,12 +61,19 @@ bool currentUserIsMe = NO;
         self.title = self.user.name;
     }
 
-    NSDictionary *textAttributes = @{
-                                     NSStrokeColorAttributeName : [UIColor grayColor],
-                                     NSForegroundColorAttributeName : [UIColor whiteColor],
-                                     NSStrokeWidthAttributeName : [NSNumber numberWithInt:-4]
-                                     };
-    self.name.attributedText = [[NSAttributedString alloc] initWithString:self.user.name attributes:textAttributes];
+    // TODO put in storyboard
+//    self.avatar.layer.cornerRadius = 4;
+//    self.avatar.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    self.avatar.layer.borderWidth = 4;
+//    self.avatar.layer.masksToBounds = YES;
+
+    self.name.text = self.user.name;
+    
+    self.phoneNumber.text = self.user.phone;
+    self.phoneView.hidden = self.user.phone ? NO : YES;
+
+    self.email.text = self.user.email;
+    self.emailView.hidden = self.user.email ? NO : YES;
     
     Observations *observations = [Observations observationsForUser:self.user];
     [self.observationDataStore startFetchControllerWithObservations:observations];
