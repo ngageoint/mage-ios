@@ -61,12 +61,6 @@ bool currentUserIsMe = NO;
         self.title = self.user.name;
     }
 
-    // TODO put in storyboard
-//    self.avatar.layer.cornerRadius = 4;
-//    self.avatar.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    self.avatar.layer.borderWidth = 4;
-//    self.avatar.layer.masksToBounds = YES;
-
     self.name.text = self.user.name;
     
     self.phoneNumber.text = self.user.phone;
@@ -90,7 +84,7 @@ bool currentUserIsMe = NO;
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:self.user.avatarUrl];
-    if([[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
+    if(self.user.avatarUrl && [[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
         self.avatar.image = [UIImage imageWithContentsOfFile:avatarFile];
     }
     
