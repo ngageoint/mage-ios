@@ -22,6 +22,8 @@
 @implementation ObservationEditNumberFieldTableViewCell
 
 - (void) awakeFromNib {
+    [super awakeFromNib];
+    
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     
