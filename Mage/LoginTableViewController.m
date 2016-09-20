@@ -36,6 +36,7 @@
     @property (weak, nonatomic) IBOutlet UIButton *statusButton;
     @property (strong, nonatomic) MageServer *server;
     @property (nonatomic) BOOL allowLogin;
+    @property (nonatomic) BOOL loginFailure;
     @property (strong, nonatomic) UIFont *passwordFont;
 @end
 
@@ -59,8 +60,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.usernameField setText:@""];
-    [self.passwordField setText:@""];
+    [self resetLogin:YES];
     [self.passwordField setDelegate:self];
 }
 
@@ -78,7 +78,6 @@
 }
 
 - (void) authenticationWasSuccessful {
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
@@ -88,26 +87,21 @@
         [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
     }
     
-    self.usernameField.textColor = [UIColor blackColor];
-    self.passwordField.textColor = [UIColor blackColor];
-    
-    self.usernameField.text = @"";
-    self.passwordField.text = @"";
-    
-    self.loginStatus.hidden = YES;
-    self.statusButton.hidden = YES;
-    
-    [self resetLogin];
+    [self resetLogin:YES];
+    [self endLogin];
 }
 
 - (void) authenticationHadFailure {
     self.statusButton.hidden = NO;
     self.loginStatus.hidden = NO;
+    
     self.loginStatus.text = @"The username or password you entered is incorrect";
     self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-
-    [self resetLogin];
+    
+    self.loginFailure = YES;
+    [self endLogin];
+    [self.tableView reloadData];
 }
 
 - (void) registrationWasSuccessful {
@@ -119,10 +113,25 @@
                           otherButtonTitles:nil];
 	
 	[alert show];
-    [self resetLogin];
+    [self resetLogin:NO];
+    [self endLogin];
 }
 
-- (void) resetLogin {
+- (void) resetLogin: (BOOL) clear {
+
+    self.loginFailure = NO;
+    self.loginStatus.hidden = YES;
+    self.statusButton.hidden = YES;
+    self.usernameField.textColor = [UIColor blackColor];
+    self.passwordField.textColor = [UIColor blackColor];
+    
+    if (clear) {
+        [self.usernameField setText:@""];
+        [self.passwordField setText:@""];
+    }
+}
+
+- (void) endLogin {
     [self.loginButton setEnabled:YES];
     [self.loginIndicator stopAnimating];
     [self.usernameField setEnabled:YES];
@@ -307,7 +316,7 @@
         case 2:
             return localAuthentication ? 1 : 0;
         case 4:
-            return self.allowLogin ? 0 : 1;
+            return !self.allowLogin || self.loginFailure ? 1 : 0;
         default:
             return localAuthentication || googleAuthentication ? 1 : 0;
     }
