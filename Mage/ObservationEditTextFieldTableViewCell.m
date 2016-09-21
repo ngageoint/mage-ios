@@ -31,8 +31,6 @@
     
     if (value != nil) {
         [self.textField setText:value];
-    } else {
-        [self.textField setText:[field objectForKey:@"value"]];
     }
     
     self.value = self.textField.text;

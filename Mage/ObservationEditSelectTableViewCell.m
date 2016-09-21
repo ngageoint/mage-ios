@@ -14,15 +14,6 @@
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
     self.value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    if (!self.value) {
-        self.value = [field objectForKey:@"value"];
-        
-        if (self.value) {
-            if (self.delegate) {
-                [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
-            }
-        }
-    }
     
     if ([@"multiselectdropdown" isEqualToString:[self.fieldDefinition objectForKey:@"type"] ]) {
         self.valueField.text = [self.value componentsJoinedByString:@", "];

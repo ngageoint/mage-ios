@@ -28,8 +28,6 @@
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
     if (value != nil) {
         [self.textArea setText:value];
-    } else {
-        [self.textArea setText:[field objectForKey:@"value"]];
     }
     
     self.value = self.textArea.text;

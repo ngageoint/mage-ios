@@ -50,6 +50,20 @@
     if (self.observation == nil) {
         self.navigationItem.title = @"Create Observation";
         self.observation = [Observation observationWithLocation:self.location inManagedObjectContext:self.managedObjectContext];
+        
+        // fill in defaults
+        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
+        Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+        NSArray *fields = [event.form objectForKey:@"fields"];
+        for (NSDictionary *field in fields) {
+            id value = [field objectForKey:@"value"];
+            
+            if (value) {
+                [properties setObject:value forKey:[field objectForKey:@"name"]];
+            }
+        }
+        self.observation.properties = properties;
+        
     } else {
         self.navigationItem.title = @"Edit Observation";
         self.observation = [self.observation MR_inContext:self.managedObjectContext];

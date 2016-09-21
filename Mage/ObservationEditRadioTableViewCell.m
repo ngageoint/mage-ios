@@ -32,15 +32,8 @@
     [self.keyLabel setText:[field objectForKey:@"title"]];
     if ([observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]] != nil) {
         [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
-    } else {
-        id value =[field objectForKey:@"value"];
-        [self.valueTextField setText:value];
-        if (value) {
-            if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-                [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
-            }
-        }
     }
+    
     NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
     if (index != NSNotFound) {
         [self.picker selectRow:index inComponent:0 animated:NO];

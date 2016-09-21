@@ -56,9 +56,8 @@
     
     if (value != nil) {
         [self.textField setText:[value stringValue]];
-    } else {
-        [self.textField setText:[[field objectForKey:@"value"] stringValue]];
     }
+
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
