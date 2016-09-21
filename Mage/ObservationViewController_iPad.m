@@ -86,8 +86,9 @@
     }
     
     NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
-    NSArray *keysWithEmptyString = [propertiesWithValue allKeysForObject:@""];
-    [propertiesWithValue removeObjectsForKeys:keysWithEmptyString];
+    NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
+    [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
+    [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
