@@ -30,7 +30,7 @@
         _attributions = [NSArray arrayWithObjects:
         @{
            @"title": @"GeoPackage",
-           @"copyright": @"Copyright (c) 2015 Bit Systems",
+           @"copyright": @"Copyright (c) 2015 BIT Systems",
            @"text": [self string:@"This product includes software licensed under the MIT license." withLink:@"https://raw.githubusercontent.com/ngageoint/geopackage-ios/master/LICENSE" forText:@"MIT license"]
          },
          @{
