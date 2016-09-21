@@ -148,7 +148,8 @@
 
 + (NSDate *) fetchLastLocationDate {
     NSDate *date = nil;
-    Location *location = [Location MR_findFirstOrderedByAttribute:@"timestamp" ascending:NO];
+
+    Location *location = [Location MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]] sortedBy:@"timestamp" ascending:NO];
     if (location) {
         date = location.timestamp;
     }
