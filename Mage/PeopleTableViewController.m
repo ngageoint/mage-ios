@@ -67,7 +67,7 @@
 - (IBAction)refreshPeople:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];
     
-    NSOperation *userFetchOperation = [User operationToFetchUsersWithSuccess:^{
+    NSOperation *userFetchOperation = [Location operationToPullLocationsWithSuccess:^{
         [self.refreshControl endRefreshing];
     } failure:^(NSError* error) {
         [self.refreshControl endRefreshing];
