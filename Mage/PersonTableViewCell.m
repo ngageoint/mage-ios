@@ -12,12 +12,14 @@
 
 @implementation PersonTableViewCell
 
-- (id) populateCellWithUser:(User *) user {    
-    if ([user avatarUrl] != nil) {
-        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-        self.icon.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]];
+- (id) populateCellWithUser:(User *) user {
+    
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:user.avatarUrl];
+    if(user.avatarUrl && [[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
+        self.icon.image = [UIImage imageWithContentsOfFile:avatarFile];
     } else {
-        self.icon.image = [UIImage imageNamed:@"avatar"];
+        self.icon.image = [UIImage imageNamed:@"avatar_small"];
     }
     
     self.name.text = user.name;
