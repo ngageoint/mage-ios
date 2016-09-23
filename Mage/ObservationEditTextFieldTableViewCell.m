@@ -28,11 +28,7 @@
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    
-    if (value != nil) {
-        [self.textField setText:value];
-    }
-    
+    [self.textField setText:value];    
     self.value = self.textField.text;
     
     [self.keyLabel setText:[field objectForKey:@"title"]];

@@ -56,6 +56,8 @@
     
     if (value != nil) {
         [self.textField setText:[value stringValue]];
+    } else {
+        [self.textField setText:@""];
     }
 
     
