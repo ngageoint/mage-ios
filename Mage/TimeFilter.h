@@ -22,9 +22,9 @@ extern NSString * const kTimeFilterKey;
 
 + (TimeFilterType) getTimeFilter;
 + (void) setTimeFilter:(TimeFilterType) timeFilter;
-+ (UIAlertController *) createFilterActionSheet;
 
 + (NSString *) getTimeFilterString;
-+ (NSPredicate *) getTimePredicateForField:(NSString *) field;
+
++ (NSPredicate *) getTimePredicateForField:(NSString *) timeField;
 
 @end

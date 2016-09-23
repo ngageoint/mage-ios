@@ -87,16 +87,6 @@
     [self performSegueWithIdentifier:@"DisplayPersonSegue" sender:user];
 }
 
-- (IBAction)showFilterActionSheet:(id)sender {
-    UIAlertController *alert = [TimeFilter createFilterActionSheet];
-    
-    [alert.popoverPresentationController setPermittedArrowDirections:0];
-    alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = self.view.frame;
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (IBAction)moreTapped:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
                                                                    message:nil
@@ -107,7 +97,7 @@
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Filter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self showFilterActionSheet:self];
+        [self performSegueWithIdentifier:@"FilterSegue" sender:self];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"My Profile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

@@ -83,6 +83,16 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
+    [defaults addObserver:self
+               forKeyPath:kImportantFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kFavortiesFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
     Event *currentEvent = [Event getCurrentEvent];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
@@ -101,8 +111,7 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
-    //start the timer for updating the circles
-    // TODO turn this off on view disappear
+    // Start the timer for updating the circles
     [self scheduleColorUpdateTimer];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
@@ -127,7 +136,7 @@
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
     [defaults removeObserver:self forKeyPath:kTimeFilterKey];
     
-    //stop the timer for updating the circles
+    // Stop the timer for updating the circles
     if (_locationColorUpdateTimer != nil) {
         [_locationColorUpdateTimer invalidate];
     }
@@ -155,11 +164,11 @@
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     } else if ([kTimeFilterKey isEqualToString:keyPath]) {
-        if ([keyPath isEqualToString:kTimeFilterKey]) {
-            self.mapDelegate.observations = [Observations observations];
-            self.mapDelegate.locations = [Locations locationsForAllUsers];
-            [self setNavBarTitle];
-        }
+        self.mapDelegate.observations = [Observations observations];
+        self.mapDelegate.locations = [Locations locationsForAllUsers];
+        [self setNavBarTitle];
+    } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
+        self.mapDelegate.observations = [Observations observations];
     }
 }
 
@@ -310,11 +319,5 @@
     [self.trackingButton setHidden:!authorized];
     [self.reportLocationButton setHidden:!authorized];
 }
-
-- (IBAction)showFilterActionSheet:(id)sender {
-    UIAlertController *alert = [TimeFilter createFilterActionSheet];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 
 @end

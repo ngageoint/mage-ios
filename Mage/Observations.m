@@ -11,12 +11,45 @@
 
 @implementation Observations
 
+NSString * const kImportantFilterKey = @"importantFilterKey";
+NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
+
++ (BOOL) getImportantFilter {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:kImportantFilterKey];
+}
+
++ (void) setImportantFilter:(BOOL) filter {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:filter forKey:kImportantFilterKey];
+    [defaults synchronize];
+}
+
++ (BOOL) getFavoritesFilter {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:kFavortiesFilterKey];
+}
+
++ (void) setFavoritesFilter:(BOOL) filter {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:filter forKey:kFavortiesFilterKey];
+    [defaults synchronize];
+}
+
 + (id) observations {
     
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:@"timestamp"];
     if (timePredicate) {
         [predicates addObject:timePredicate];
+    }
+    
+    if ([Observations getImportantFilter]) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"observationImportant.important = %@", [NSNumber numberWithBool:YES]]];
+    }
+    
+    if ([Observations getFavoritesFilter]) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@", [NSNumber numberWithBool:YES]]];
     }
     
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];

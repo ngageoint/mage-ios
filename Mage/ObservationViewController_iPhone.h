@@ -5,12 +5,11 @@
 //
 
 #import <Observation.h>
+#import "ObservationViewController.h"
 #import "AttachmentSelectionDelegate.h"
+#import "ObservationActionsTableViewCell.h"
+#import "ObservationImportantTableViewCell.h"
 
-@interface ObservationViewController_iPhone : UIViewController <UITableViewDelegate, UITableViewDataSource, AttachmentSelectionDelegate>
-
-@property (strong, nonatomic) Observation *observation;
-@property (weak, nonatomic) IBOutlet UITableView *propertyTable;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@interface ObservationViewController_iPhone : ObservationViewController
 
 @end

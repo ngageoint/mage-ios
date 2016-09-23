@@ -76,11 +76,6 @@
     [[HttpManager singleton].manager.operationQueue addOperation:userFetchOperation];
 }
 
-- (IBAction)showFilterActionSheet:(id)sender {
-    UIAlertController *alert = [TimeFilter createFilterActionSheet];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) observeValueForKeyPath:(NSString *)keyPath
                        ofObject:(id)object
                          change:(NSDictionary *)change

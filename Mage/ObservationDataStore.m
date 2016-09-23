@@ -76,11 +76,6 @@
     [self.tableView reloadData];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Observation *o = [self observationAtIndexPath:indexPath];
-    return o.attachments.count > 0 ? 130 : 75;
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return CGFLOAT_MIN;
 }
@@ -94,6 +89,7 @@
 	
 	Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
 	[observationCell populateCellWithObservation:observation];
+    observationCell.observationActionsDelegate = self;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -107,7 +103,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
-	[self configureCell: cell atIndexPath:indexPath];
+	[self configureCell:cell atIndexPath:indexPath];
 	
     return cell;
 }
@@ -194,6 +190,21 @@
     UIView *view = [[UIView alloc] init];
     
     return view;
+}
+
+- (void) observationFavoriteTapped:(ObservationTableViewCell *) tableViewCell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
+    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+    [observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSDictionary *favorites = [observation getFavoritesMap];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void) observationShareTapped:(ObservationTableViewCell *) tableViewCell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
+    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+    [observation shareObservationForViewController:self.viewController];
 }
 
 @end

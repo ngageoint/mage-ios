@@ -3,11 +3,20 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.2.1 (TBD)
+## 1.3.1 (TBD)
 
 * TBD
 
 ##### Features
+
+##### Bug Fixes
+
+## 1.3.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.3.0) (11-03-2016)
+
+##### Features
+* Users can now favorite observations
+* Users with event edit permission can flag observations as important
+* Users can share observations with other applications on the device, ie email.
 
 ##### Bug Fixes
 

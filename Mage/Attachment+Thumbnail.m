@@ -15,7 +15,7 @@ NSString *const AttachmentFamily = @"AttachmentFamily";
 
 NSString *const AttachmentSmallSquare = @"AttachmentSmallSquare";
 NSString *const AttachmentMediumSquare = @"AttachmentMediumSquare";
-CGSize const AttachmentSquareImageSize = {50, 50};
+CGSize const AttachmentSquareImageSize = {75, 75};
 CGSize const AttachmentiPadSquareImageSize = {100, 100};
 
 @implementation Attachment (Thumbnail)
@@ -35,7 +35,7 @@ CGSize const AttachmentiPadSquareImageSize = {100, 100};
 }
 
 - (NSURL *)sourceImageURLWithFormatName:(NSString *)formatName {
-    NSInteger size = [AttachmentSmallSquare isEqualToString:formatName] ? 50 : 100 * [UIScreen mainScreen].scale;
+    NSInteger size = [AttachmentSmallSquare isEqualToString:formatName] ? 75 : 100 * [UIScreen mainScreen].scale;
     return [self sourceURLWithSize:size];
 }
 

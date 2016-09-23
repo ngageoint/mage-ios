@@ -9,7 +9,7 @@
 #import "Observations.h"
 #import "ObservationSelectionDelegate.h"
 
-@interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, ObservationActionsDelegate>
 
 @property (strong, nonatomic) Observations *observations;
 @property (strong, nonatomic) NSDictionary *form;

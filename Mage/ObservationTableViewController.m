@@ -18,6 +18,7 @@
 #import "HttpManager.h"
 #import <LocationService.h>
 #import "TimeFilter.h"
+#import "Observations.h"
 
 @implementation ObservationTableViewController
 
@@ -32,6 +33,9 @@
     });
     
     self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 160;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -52,6 +56,16 @@
                forKeyPath:kTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kImportantFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kFavortiesFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -59,6 +73,8 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kImportantFilterKey];
+    [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
 }
 
 - (void) setNavBarTitle {
@@ -130,11 +146,6 @@
     }
 }
 
-- (IBAction)showFilterActionSheet:(id)sender {
-    UIAlertController *alert = [TimeFilter createFilterActionSheet];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) observeValueForKeyPath:(NSString *)keyPath
                        ofObject:(id)object
                          change:(NSDictionary *)change
@@ -143,6 +154,8 @@
     if ([keyPath isEqualToString:kTimeFilterKey]) {
         [self.observationDataStore startFetchController];
         [self setNavBarTitle];
+    } else if ([keyPath isEqualToString:kImportantFilterKey] || [keyPath isEqualToString:kFavortiesFilterKey]) {
+        [self.observationDataStore startFetchController];
     }
 }
 
