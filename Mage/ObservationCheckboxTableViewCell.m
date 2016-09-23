@@ -14,6 +14,8 @@
     if (value != nil) {
         [self.checkboxSwitch setOn:[value boolValue]];
         [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
+    } else {
+        [self.checkboxSwitch setOn:NO];
     }
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
