@@ -507,7 +507,6 @@
     if([segue.identifier isEqualToString:@"geometrySegue"]) {
         GeometryEditViewController *gvc = [segue destinationViewController];
         ObservationEditGeometryTableViewCell *cell = sender;
-        gvc.geoPoint = cell.geoPoint;
         gvc.fieldDefinition = cell.fieldDefinition;
         gvc.observation = self.observation;
         gvc.propertyEditDelegate = self;

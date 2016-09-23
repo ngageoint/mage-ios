@@ -14,7 +14,6 @@
 @interface GeometryEditViewController : UIViewController <MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *map;
-@property (nonatomic, strong) GeoPoint *geoPoint;
 @property (nonatomic, strong) Observation *observation;
 @property (strong, nonatomic) id fieldDefinition;
 @property (weak, nonatomic) id<PropertyEditDelegate> propertyEditDelegate;

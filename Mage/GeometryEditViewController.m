@@ -9,6 +9,7 @@
 #import "ObservationAnnotationView.h"
 #import "ObservationImage.h"
 #import <GeoPoint.h>
+#import "LocationService.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property NSObject<MKAnnotation> *annotation;
@@ -32,17 +33,6 @@
     
     [self.latitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-        
-    if (self.geoPoint) {
-        CLLocationDistance latitudeMeters = 2500;
-        CLLocationDistance longitudeMeters = 2500;
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.geoPoint.location.coordinate, latitudeMeters, longitudeMeters);
-        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-        [self.map setRegion:viewRegion];
-    } else {
-        self.geoPoint = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:0 longitude:0]];
-        self.map.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
-    }
     
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
         GeoPoint *point = (GeoPoint *)[self.observation geometry];
@@ -52,11 +42,24 @@
     } else {
         GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
         self.annotation = [[MKPointAnnotation alloc] init];
-        self.annotation.coordinate = point.location.coordinate;
+
+        if (point) {
+            self.annotation.coordinate = point.location.coordinate;
+        } else {
+            CLLocation *location = [[LocationService singleton] location];
+            // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
+            self.annotation.coordinate = location ? [location coordinate] :CLLocationCoordinate2DMake(1.0, 1.0);
+        }
     }
     
+    CLLocationDistance latitudeMeters = 2500;
+    CLLocationDistance longitudeMeters = 2500;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.annotation.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+    [self.map setRegion:viewRegion];
+    
     [self setLocationTextFields];
-
+    
     [self.map addAnnotation:self.annotation];
     [self.map selectAnnotation:self.annotation animated:NO];
         
@@ -127,7 +130,7 @@
         
         if (!pinView) {
             pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-            [pinView setPinColor:MKPinAnnotationColorGreen];
+            [pinView setPinTintColor:[UIColor greenColor]];
             pinView.draggable = YES;
         } else {
             pinView.annotation = annotation;
