@@ -38,11 +38,23 @@
     
     self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     
-    self.title = [[UILabel alloc] init];
-    self.title.text = [NSString stringWithFormat:@"Between %@ and %@", self.min, self.max];
-    [self.title setFont:[UIFont systemFontOfSize:13]];
-    [self.title sizeToFit];
-    
+    if (self.min || self.max) {
+        self.title = [[UILabel alloc] init];
+        
+        NSString *title = nil;
+        if (self.min && self.max) {
+            title = [NSString stringWithFormat:@"Between %@ and %@", self.min, self.max];
+        } else if (self.min) {
+            title = [NSString stringWithFormat:@"Greater than %@", self.min];
+        } else if (self.max) {
+            title = [NSString stringWithFormat:@"Less than %@", self.max];
+        }
+        
+        self.title.text = title;
+        [self.title setFont:[UIFont systemFontOfSize:13]];
+        [self.title sizeToFit];
+    }
+
     UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
@@ -114,7 +126,9 @@
     NSNumber *number = [self.decimalFormatter numberFromString:text];
 
     if (number != nil) {
-        if ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue]) {
+        if ((self.min && self.max && ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue])) ||
+            (self.min && ([number doubleValue] < [self.min doubleValue])) ||
+            (self.max && ([number doubleValue] > [self.max doubleValue])))  {
             self.title.textColor = [UIColor redColor];
             self.doneButton.enabled = NO;
         } else {
