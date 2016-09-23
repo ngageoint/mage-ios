@@ -30,9 +30,8 @@
     self.valueTextField.inputAccessoryView = toolbar;
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
-    if ([observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]] != nil) {
-        [self.valueTextField setText:[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
-    }
+    id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
+    [self.valueTextField setText:value];
     
     NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
     if (index != NSNotFound) {
