@@ -10,7 +10,7 @@ The **M**obile **A**wareness **G**EOINT **E**nvironment, or MAGE, provides mobil
 
 The app remains functional if your mobile device loses its network connection, and will upload its local content when a connection is re-established. When disconnected from the network, MAGE will use local data layers to continue to provide relevant GEOINT. Data layers, including map tiles and vector data, can stored on your mobile device and are available at all times.
 
-MAGE is very customizable and can be tailored for you situation.
+MAGE is very customizable and can be tailored for your situation.
 
 MAGE iOS was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the Apache license.
 
