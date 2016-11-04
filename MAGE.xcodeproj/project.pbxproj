@@ -31,6 +31,7 @@
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
 		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
+		2F389C921DCD21D100F05C95 /* MapSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F389C901DCD21D100F05C95 /* MapSettings.storyboard */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
@@ -213,6 +214,7 @@
 		2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationContainerViewController.m; sourceTree = "<group>"; };
 		2F3826AE1D9C252D007E0D75 /* ObservationImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantTableViewCell.h; sourceTree = "<group>"; };
 		2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportantTableViewCell.m; sourceTree = "<group>"; };
+		2F389C911DCD21D100F05C95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MapSettings.storyboard; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
@@ -521,6 +523,18 @@
 			);
 			name = Cache;
 			path = Map/Cache;
+			sourceTree = "<group>";
+		};
+		2F389C931DCD24E200F05C95 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
+				2F389C901DCD21D100F05C95 /* MapSettings.storyboard */,
+				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
+				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
+				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		2F4551831BA33A7700EE3DA6 /* Date */ = {
@@ -992,10 +1006,7 @@
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
-				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
-				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
-				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
-				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
+				2F389C931DCD24E200F05C95 /* Views */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
 				F7994AB5190EF7BD00A90A1D /* MageRootViewController.h */,
@@ -1141,6 +1152,7 @@
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
+				2F389C921DCD21D100F05C95 /* MapSettings.storyboard in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
@@ -1415,6 +1427,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		2F389C901DCD21D100F05C95 /* MapSettings.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F389C911DCD21D100F05C95 /* Base */,
+			);
+			name = MapSettings.storyboard;
+			sourceTree = "<group>";
+		};
 		2FB41CDE1DC79436005C18F9 /* Filter.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
