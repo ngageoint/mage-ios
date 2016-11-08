@@ -32,18 +32,12 @@
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
 		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
 		2F389C921DCD21D100F05C95 /* MapSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F389C901DCD21D100F05C95 /* MapSettings.storyboard */; };
+		2F389C961DCD26C100F05C95 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F389C941DCD26C100F05C95 /* Settings.storyboard */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
-		2F5F2E9E19E074CF005BA157 /* SettingsSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9D19E074CF005BA157 /* SettingsSplitViewController.m */; };
-		2F5F2EA519E31DEE005BA157 /* SettingsTableViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EA419E31DEE005BA157 /* SettingsTableViewController_iPad.m */; };
-		2F5F2EA819E374B4005BA157 /* LocationTimeIntervalDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EA719E374B4005BA157 /* LocationTimeIntervalDataSource.m */; };
-		2F5F2EAE19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EAD19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m */; };
-		2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB019E45172005BA157 /* GPSSensitivityDataSource.m */; };
-		2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB319E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m */; };
-		2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */; };
-		2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */; };
+		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
 		2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */; };
@@ -116,7 +110,7 @@
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
-		F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsViewController.m */; };
+		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
@@ -215,6 +209,7 @@
 		2F3826AE1D9C252D007E0D75 /* ObservationImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantTableViewCell.h; sourceTree = "<group>"; };
 		2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportantTableViewCell.m; sourceTree = "<group>"; };
 		2F389C911DCD21D100F05C95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MapSettings.storyboard; sourceTree = "<group>"; };
+		2F389C951DCD26C100F05C95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
@@ -225,22 +220,8 @@
 		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
 		2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedDelegate_iPhone.h; sourceTree = "<group>"; };
 		2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedDelegate_iPhone.m; sourceTree = "<group>"; };
-		2F5F2E9C19E074CF005BA157 /* SettingsSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSplitViewController.h; sourceTree = "<group>"; };
-		2F5F2E9D19E074CF005BA157 /* SettingsSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSplitViewController.m; sourceTree = "<group>"; };
-		2F5F2EA319E31DEE005BA157 /* SettingsTableViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController_iPad.h; sourceTree = "<group>"; };
-		2F5F2EA419E31DEE005BA157 /* SettingsTableViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController_iPad.m; sourceTree = "<group>"; };
-		2F5F2EA619E374B4005BA157 /* LocationTimeIntervalDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationTimeIntervalDataSource.h; sourceTree = "<group>"; };
-		2F5F2EA719E374B4005BA157 /* LocationTimeIntervalDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationTimeIntervalDataSource.m; sourceTree = "<group>"; };
-		2F5F2EAC19E442B3005BA157 /* LocationSettingsTableViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSettingsTableViewController_iPad.h; sourceTree = "<group>"; };
-		2F5F2EAD19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSettingsTableViewController_iPad.m; sourceTree = "<group>"; };
-		2F5F2EAF19E45172005BA157 /* GPSSensitivityDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSSensitivityDataSource.h; sourceTree = "<group>"; };
-		2F5F2EB019E45172005BA157 /* GPSSensitivityDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSSensitivityDataSource.m; sourceTree = "<group>"; };
-		2F5F2EB219E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController_iPad.h; sourceTree = "<group>"; };
-		2F5F2EB319E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController_iPad.m; sourceTree = "<group>"; };
-		2F5F2EB519E48CC9005BA157 /* UserFetchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserFetchDataSource.h; sourceTree = "<group>"; };
-		2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserFetchDataSource.m; sourceTree = "<group>"; };
-		2F5F2EB819E48DC6005BA157 /* ObservationFetchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchDataSource.h; sourceTree = "<group>"; };
-		2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchDataSource.m; sourceTree = "<group>"; };
+		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
 		2F81C4221C692C30006897E7 /* AttributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionsViewController.h; sourceTree = "<group>"; };
 		2F81C4231C692C30006897E7 /* AttributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionsViewController.m; sourceTree = "<group>"; };
@@ -384,8 +365,8 @@
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
-		F783AD3318B812AC00BCED14 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		F783AD3418B812AC00BCED14 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
+		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
@@ -529,10 +510,11 @@
 			isa = PBXGroup;
 			children = (
 				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
+				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
+				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
+				2F389C941DCD26C100F05C95 /* Settings.storyboard */,
 				2F389C901DCD21D100F05C95 /* MapSettings.storyboard */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
-				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
-				4C3A805F18B6F67B00B1BA12 /* Main_iPad.storyboard */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -551,46 +533,6 @@
 			children = (
 				2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */,
 				2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */,
-			);
-			name = iPhone;
-			sourceTree = "<group>";
-		};
-		2F5F2EBB19E599B1005BA157 /* iPad */ = {
-			isa = PBXGroup;
-			children = (
-				2F5F2E9C19E074CF005BA157 /* SettingsSplitViewController.h */,
-				2F5F2E9D19E074CF005BA157 /* SettingsSplitViewController.m */,
-				2F5F2EA319E31DEE005BA157 /* SettingsTableViewController_iPad.h */,
-				2F5F2EA419E31DEE005BA157 /* SettingsTableViewController_iPad.m */,
-				2F5F2EAC19E442B3005BA157 /* LocationSettingsTableViewController_iPad.h */,
-				2F5F2EAD19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m */,
-				2F5F2EAF19E45172005BA157 /* GPSSensitivityDataSource.h */,
-				2F5F2EB019E45172005BA157 /* GPSSensitivityDataSource.m */,
-				2F5F2EA619E374B4005BA157 /* LocationTimeIntervalDataSource.h */,
-				2F5F2EA719E374B4005BA157 /* LocationTimeIntervalDataSource.m */,
-				2F5F2EB219E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.h */,
-				2F5F2EB319E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m */,
-				2F5F2EB519E48CC9005BA157 /* UserFetchDataSource.h */,
-				2F5F2EB619E48CC9005BA157 /* UserFetchDataSource.m */,
-				2F5F2EB819E48DC6005BA157 /* ObservationFetchDataSource.h */,
-				2F5F2EB919E48DC6005BA157 /* ObservationFetchDataSource.m */,
-			);
-			name = iPad;
-			sourceTree = "<group>";
-		};
-		2F5F2EBC19E599C8005BA157 /* iPhone */ = {
-			isa = PBXGroup;
-			children = (
-				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
-				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
-				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
-				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
-				F783AD3318B812AC00BCED14 /* SettingsViewController.h */,
-				F783AD3418B812AC00BCED14 /* SettingsViewController.m */,
-				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
-				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
-				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
-				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 			);
 			name = iPhone;
 			sourceTree = "<group>";
@@ -750,12 +692,22 @@
 		4C6A9BBD19813C64004A6205 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				2F5F2EBC19E599C8005BA157 /* iPhone */,
-				2F5F2EBB19E599B1005BA157 /* iPad */,
 				2F81C4221C692C30006897E7 /* AttributionsViewController.h */,
 				2F81C4231C692C30006897E7 /* AttributionsViewController.m */,
 				2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */,
 				2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */,
+				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
+				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
+				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
+				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				2F763C8E1DD10D2900780250 /* SettingsViewController.h */,
+				2F763C8F1DD10D2900780250 /* SettingsViewController.m */,
+				F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */,
+				F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */,
+				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
+				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
+				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
+				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1162,6 +1114,7 @@
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
 				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
+				2F389C961DCD26C100F05C95 /* Settings.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1305,21 +1258,19 @@
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
-				2F5F2EB419E484B8005BA157 /* DataFetchSettingsTableViewController_iPad.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
+				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */,
 				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
-				2F5F2EA519E31DEE005BA157 /* SettingsTableViewController_iPad.m in Sources */,
 				2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */,
 				2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */,
-				2F5F2EAE19E442B3005BA157 /* LocationSettingsTableViewController_iPad.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
@@ -1327,9 +1278,7 @@
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
 				F727517719C895CA006C63CB /* PeopleDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
-				2F5F2EB719E48CC9005BA157 /* UserFetchDataSource.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
-				2F5F2EA819E374B4005BA157 /* LocationTimeIntervalDataSource.m in Sources */,
 				F70EAF3B199BF31300909C8A /* AttachmentViewController.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
@@ -1338,7 +1287,6 @@
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
-				2F5F2E9E19E074CF005BA157 /* SettingsSplitViewController.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
@@ -1359,7 +1307,6 @@
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
-				2F5F2EBA19E48DC6005BA157 /* ObservationFetchDataSource.m in Sources */,
 				2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
@@ -1382,7 +1329,7 @@
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
-				F783AD3518B812AC00BCED14 /* SettingsViewController.m in Sources */,
+				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */,
@@ -1401,7 +1348,6 @@
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */,
-				2F5F2EB119E45172005BA157 /* GPSSensitivityDataSource.m in Sources */,
 				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
@@ -1433,6 +1379,14 @@
 				2F389C911DCD21D100F05C95 /* Base */,
 			);
 			name = MapSettings.storyboard;
+			sourceTree = "<group>";
+		};
+		2F389C941DCD26C100F05C95 /* Settings.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F389C951DCD26C100F05C95 /* Base */,
+			);
+			name = Settings.storyboard;
 			sourceTree = "<group>";
 		};
 		2FB41CDE1DC79436005C18F9 /* Filter.storyboard */ = {

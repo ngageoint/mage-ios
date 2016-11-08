@@ -1,156 +1,65 @@
 //
-//  SettingsViewController.m
-//  Mage
+//  MainSettingsViewController.m
+//  MAGE
 //
+//  Created by William Newman on 11/7/16.
+//  Copyright © 2016 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import "SettingsViewController.h"
-#import "User.h"
-#import "LocationService.h"
-#import "MageServer.h"
-#import "EventChooserController.h"
-#import "Event.h"
+#import "SettingsTableViewController.h"
 
-@interface SettingsViewController ()<UITableViewDelegate>
+@interface SettingsViewController ()<UISplitViewControllerDelegate>
 
-    @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *user;
-    @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-    @property (strong, nonatomic) CLLocationManager *locationManager;
-    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-    @property (nonatomic, assign) BOOL showDisclaimer;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
-    @property (assign, nonatomic) NSInteger versionCellSelectionCount;
+@property (nonatomic, weak) UISplitViewController *splitViewController;
+@property (nonatomic, assign) BOOL isCollapsed;
+
 @end
 
 @implementation SettingsViewController
 
-- (void) viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
     
-    self.versionCellSelectionCount = 0;
+    self.splitViewController = (UISplitViewController *) [self.viewControllers firstObject];
+    [self.splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+    self.splitViewController.delegate = self;
     
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    _user.text = user.name;
-    
-    [self setLocationServicesLabel];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.baseServerUrlLabel.text = [[MageServer baseURL] absoluteString];
-    
-    if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
-        [self.dataFetchStatus setText:@"On"];
-    } else {
-        [self.dataFetchStatus setText:@"Off"];
-    }
-    
-    Event *e = [Event getCurrentEvent];
-    self.eventNameLabel.text = e.name;
-    
-    [self setPreferenceDisplayLabel:_imageUploadSizeLabel forPreference:@"imageUploadSizes"];
-}
-
-- (void) setLocationServicesLabel {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    CLAuthorizationStatus authorizationStatus =[CLLocationManager authorizationStatus];
-    if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        if ([defaults boolForKey:kReportLocationKey]) {
-            [self.locationServicesStatus setText:@"On"];
-        } else {
-            [self.locationServicesStatus setText:@"Off"];
-        }
-    } else {
-        [self.locationServicesStatus setText:@"Disabled"];
+    if (self.dismissable) {
+        UINavigationController *detailController = [self.splitViewController.viewControllers lastObject];
+        detailController.topViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
     }
 }
 
-- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+-(BOOL) splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
     
-    NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
-    NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
-    NSArray *values = [frequencyDictionary valueForKey:@"values"];
-    
-    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
-    
-    for (int i = 0; i < values.count; i++) {
-        if ([frequency integerValue] == [[values objectAtIndex:i] integerValue]) {
-            [label setText:[labels objectAtIndex:i]];
-            break;
-        }
-    }
-    
+    return YES;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
+    self.isCollapsed = YES;
+    [self reloadSettingsTable];
+
+    return nil;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([segue.identifier hasPrefix:@"value_"]) {
-        ValuePickerTableViewController *vc = [segue destinationViewController];
-        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        vc.title = [valueDictionary valueForKey:@"title"];
-        vc.section = [valueDictionary valueForKey:@"section"];
-        vc.labels = [valueDictionary valueForKey:@"labels"];
-        vc.values = [valueDictionary valueForKey:@"values"];
-        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
-    } else if ([segue.identifier isEqualToString:@"unwindToEventChooserSegue"]) {
-        EventChooserController *viewController = [segue destinationViewController];
-        [viewController setForcePick:YES];
-    }
+- (UIViewController *)primaryViewControllerForExpandingSplitViewController:(UISplitViewController *)splitViewController {
+    self.isCollapsed = NO;
+    [self reloadSettingsTable];
+
+    return nil;
 }
 
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    [self setLocationServicesLabel];
+- (void) reloadSettingsTable {
+    UINavigationController *masterController = [self.splitViewController.viewControllers firstObject];
+    SettingsTableViewController *settingsTableViewController = [masterController.viewControllers firstObject];
+    settingsTableViewController.showDisclosureIndicator = self.isCollapsed;
+    [settingsTableViewController.tableView reloadData];
 }
 
-- (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
-    if ([tableView cellForRowAtIndexPath:indexPath] == self.versionCell) {
-        self.versionCellSelectionCount++;
-        
-        if (self.versionCellSelectionCount == 5) {
-            [tableView reloadData];
-        }
-    }
+-(void) done:(UIBarButtonItem *) sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3 && [indexPath row] == 0) {
-        cell.hidden = !self.showDisclaimer;
-    } else if (cell == self.versionCell) {
-        NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-        NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-        
-        if (self.versionCellSelectionCount == 5) {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
-        } else {
-            cell.detailTextLabel.text = versionString;
-        }
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3 && [indexPath row] == 0 && !self.showDisclaimer) {
-        return 0;
-    }
-                                     
-    return UITableViewAutomaticDimension;
-}
 
 @end

@@ -12,6 +12,7 @@
 #import <Location.h>
 #import <Event.h>
 #import "TimeFilter.h"
+#import "SettingsViewController.h"
 
 @interface MapViewController_iPad ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -48,6 +49,9 @@
         GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
         
         [editViewController setLocation:point];
+    } else if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
+        SettingsViewController *settingsViewController = segue.destinationViewController;
+        settingsViewController.dismissable = YES;
     } else {
         [super prepareForSegue:segue sender:sender];
     }
