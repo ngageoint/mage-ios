@@ -21,7 +21,6 @@
     @property(nonatomic, weak) MageTabBarController *tabBarController;
     @property(nonatomic, weak) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
-    @property(nonatomic, weak) UIPopoverController *masterViewPopover;
     @property(nonatomic, strong) NSArray *mapCalloutDelegates;
 @end
 
@@ -35,14 +34,10 @@
     self.delegate = self;
     
     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
-    
-    // TODO hooking these up to the spilt view programatically as there is a bug with hooking them up
-    // in the storyboard (iOS 8.3).  As soon as apple fixes that bug we should revert these changes.
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
-    UINavigationController *detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MageDetailViewController"];
-    
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
 
+    UINavigationController *detailViewController = [self.viewControllers lastObject];
+     
+    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
     ObservationContainerViewController *observationViewController = (ObservationContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
@@ -50,32 +45,6 @@
     
     PeopleContainerViewController *peopleViewController = (PeopleContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
     peopleViewController.delegate = self;
-    
-    NSMutableArray *viewControllers = [self.viewControllers mutableCopy];
-    [viewControllers addObject:detailViewController];
-    self.viewControllers = viewControllers;
-    
-    // End hack fix to be remove when apple fixes bug
-    
-    
-    /*
-     Old working code prior to 8.3 bug.  Put this back and add back in master/detail relationships in storyboard
-     when apple fixes the bug
-     
-     UINavigationController *detailViewController = [self.viewControllers lastObject];
-     
-     self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
-     self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
-     
-     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
-     
-     ObservationTableViewController *observationTableViewController = [[(ObservationTableViewController *) [self.tabBarController.viewControllers objectAtIndex:0] childViewControllers] firstObject];
-     observationTableViewController.observationDataStore.observationSelectionDelegate = self;
-     observationTableViewController.attachmentDelegate = self;
-     
-     PeopleTableViewController *peopleTableViewController = [[(PeopleTableViewController *) [self.tabBarController.viewControllers objectAtIndex:1] childViewControllers] firstObject];
-     peopleTableViewController.peopleDataStore.personSelectionDelegate = self;
-     */
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -136,10 +105,9 @@
     [self.mapViewController.toolbar setItems:items];
 }
 
-- (void)splitViewController:(UISplitViewController *)svc
-    willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+- (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
     NSLog(@"will change to display mode");
-    // never called in ios 7
+    
     self.masterViewButton = svc.displayModeButtonItem;
     if (displayMode == UISplitViewControllerDisplayModePrimaryOverlay) {
         [self ensureButtonVisible];
@@ -151,36 +119,11 @@
         [self.mapViewController.toolbar setItems:items];
         
         self.masterViewButton = nil;
-        self.masterViewPopover = nil;
         
         for (UIViewController *viewController in self.tabBarController.viewControllers) {
             [viewController.view setNeedsLayout];
         }
     }
-}
-
--(void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *) button {
-    NSLog(@"will show view controller");
-    // never called in ios 8
-    self.masterViewButton = nil;
-    self.masterViewPopover = nil;
-    
-    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
-    [items removeObject:button];
-    [self.mapViewController.toolbar setItems:items];
-}
-
-
--(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)button forPopoverController:(UIPopoverController *) pc {
-    NSLog(@"will hide view controller");
-    self.masterViewButton = button;
-    self.masterViewPopover = pc;
-    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
-        return;
-    }
-    
-    // always called in both ios8 and 7
-    [self ensureButtonVisible];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
