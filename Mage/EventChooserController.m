@@ -24,7 +24,7 @@ BOOL unwind = NO;
     
     if (self.passthrough) {
         self.passthrough = NO;
-        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
+        [self segueToApplication];
     } else if (!unwind) {
         self.loadingView.alpha = 1.0f;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
@@ -53,7 +53,7 @@ BOOL unwind = NO;
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:sender];
+        [self segueToApplication];
     }
 }
 
@@ -81,7 +81,7 @@ BOOL unwind = NO;
                self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 &&
                [Event getCurrentEvent].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
         // they only have one event and have already picked it so move on to the map
-        [self performSegueWithIdentifier:@"DisplayRootViewSegue" sender:self];
+        [self segueToApplication];
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
@@ -105,6 +105,14 @@ BOOL unwind = NO;
 
 - (IBAction) unwindToEventChooser:(UIStoryboardSegue *) unwindSegue {
     unwind = YES;
+}
+
+- (void) segueToApplication {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        [self performSegueWithIdentifier:@"iPad" sender:self];
+    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        [self performSegueWithIdentifier:@"iPhone" sender:self];
+    }
 }
 
 @end
