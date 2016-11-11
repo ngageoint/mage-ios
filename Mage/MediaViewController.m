@@ -128,26 +128,34 @@
 
         NSURL *url = [NSURL fileURLWithPath:self.recorderFilePath];
         err = nil;
-        self.recorder = [[ AVAudioRecorder alloc] initWithURL:url settings:settings error:&err];
-        if(!self.recorder){
-            UIAlertView *alert =
-            [[UIAlertView alloc] initWithTitle: @"Unable to record" message: [err localizedDescription] delegate: nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
+        self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&err];
+        if (!self.recorder || err != nil) {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable To Record"
+                                                                            message:[err localizedDescription]
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            
             return;
         }
         
-            //prepare to record
+        BOOL audioHWAvailable = audioSession.inputAvailable;
+        if (!audioHWAvailable) {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Warning"
+                                                                            message:@"Audio input hardware not available"
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            return;
+        }
+        
+        //prepare to record
         [self.recorder setDelegate:self];
         [self.recorder prepareToRecord];
         self.recorder.meteringEnabled = YES;
-        
-        BOOL audioHWAvailable = audioSession.inputAvailable;
-        if (! audioHWAvailable) {
-            UIAlertView *cantRecordAlert =
-            [[UIAlertView alloc] initWithTitle: @"Warning" message: @"Audio input hardware not available" delegate: nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [cantRecordAlert show];
-            return;
-        }
         
         if (_sliderTimer != nil && _sliderTimer.isValid) {
             [_sliderTimer invalidate];

@@ -225,26 +225,30 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             }
         }
         
-        if([self.mapCacheOverlays count] > 0){
+        if ([self.mapCacheOverlays count] > 0) {
             NSMutableString * clickMessage = [[NSMutableString alloc] init];
-            for(CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+            for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
                 NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-                if(message != nil){
-                    if([clickMessage length] > 0){
+                if (message != nil){
+                    if ([clickMessage length] > 0){
                         [clickMessage appendString:@"\n\n"];
                     }
                     [clickMessage appendString:message];
                 }
             }
-            if([clickMessage length] > 0){
-                UIAlertView *alert = [[UIAlertView alloc]
-                                      initWithTitle:nil
-                                      message:clickMessage
-                                      delegate:self
-                                      cancelButtonTitle:nil
-                                      otherButtonTitles:@"OK",
-                                      nil];
-                [alert show];
+            
+            if ([clickMessage length] > 0) {
+                if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
+                    [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
+                }
+                
+//                UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
+//                                                                                message:clickMessage
+//                                                                         preferredStyle:UIAlertControllerStyleAlert];
+//                
+//                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+//                [self presentViewController:alert animated:YES completion:nil];
+
             }
         }
     }

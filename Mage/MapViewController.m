@@ -31,7 +31,7 @@
 #import "Event.h"
 #import "GPSLocation.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -59,6 +59,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
 }
@@ -183,18 +184,10 @@
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
         CLLocation *location = [[LocationService singleton] location];
-        if (location == nil) {
-            location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Unknown"
-                                                            message:@"MAGE was unable to determine your location.  The new observation will be created in the center of the current map view.  Please confirm the location of the observation."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-
+        if (location) {
+            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+            [editViewController setLocation:point];
         }
-        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-        [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
         
@@ -212,30 +205,34 @@
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         if (![[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
-                                                            message:@"You cannot create observations for an event you are not part of."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"You are not part of this event"
+                                         message:@"You cannot create observations for an event you are not part of."
+                                         preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            
             return false;
         }
     }
+    
     return true;
 }
 
-- (IBAction)onReportLocationButtonPressed:(id)sender {
+- (IBAction) onReportLocationButtonPressed:(id)sender {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     BOOL inEvent = [[Event getCurrentEvent] isUserInEvent:user];
     if (!inEvent) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
-                                                        message:@"You cannot report your location for an event you are not part of."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Not In Event"
+                                                                        message:@"You cannot report your location for an event you are not part of."
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        
         return;
     } else if (newState) {
         self.toastText.text = @"You are now reporting your location.";
@@ -318,6 +315,15 @@
     BOOL authorized = status == kCLAuthorizationStatusAuthorizedAlways  || status == kCLAuthorizationStatusAuthorizedWhenInUse;
     [self.trackingButton setHidden:!authorized];
     [self.reportLocationButton setHidden:!authorized];
+}
+
+- (void) onCacheOverlayTapped:(NSString *)message {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
+                                                                    message:message
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

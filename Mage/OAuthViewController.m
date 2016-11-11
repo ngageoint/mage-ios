@@ -51,25 +51,27 @@
     __weak typeof(self) weakSelf = self;
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"Account Creation Success"
-                                  message:@"Your account has been successfully created.  An administrator must approve your account before you can login"
-                                  delegate:weakSelf
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"Account Creation Success"
+                                         message:@"Your account has been successfully created.  An administrator must approve your account before you can login"
+                                         preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert show];
-            [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf performSegueWithIdentifier:@"unwindToInitialSegue" sender:self];
+            }]];
+            
+            [weakSelf presentViewController:alert animated:YES completion:nil];            
         } else {
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"Signup error"
-                                  message:[result valueForKey:@"errorMessage"]
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"Signup error"
+                                         message:[result valueForKey:@"errorMessage"]
+                                         preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert show];
-            [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
     }];
 }
@@ -81,6 +83,7 @@
                                  @"result": result
                                  };
     
+    __weak typeof(self) weakSelf = self;
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {            
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -91,25 +94,28 @@
                 [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
             }
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"Registration Sent"
-                                  message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"Registration Sent"
+                                         message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
+                                         preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert show];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+            
         } else {
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"Signin Failed"
-                                  message:[result valueForKey:@"errorMessage"]
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"Signin Failed"
+                                         message:[result valueForKey:@"errorMessage"]
+                                         preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert show];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
     }];
 }

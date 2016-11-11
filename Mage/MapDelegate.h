@@ -28,11 +28,18 @@
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
 @end
 
+@protocol CacheOverlayDelegate <NSObject>
+
+@optional
+- (void) onCacheOverlayTapped:(NSString *) message;
+@end
+
 
 @interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;
+@property (nonatomic, weak) id<CacheOverlayDelegate> cacheOverlayDelegate;
 
 @property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
 @property (nonatomic, strong) Locations *locations;

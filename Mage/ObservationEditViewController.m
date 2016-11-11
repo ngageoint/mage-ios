@@ -88,6 +88,16 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    if (!self.location) {
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Location Unknown"
+                                     message:@"MAGE was unable to determine your location.  Please manually set the location of the new observation."
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void) viewDidDisappear:(BOOL)animated {

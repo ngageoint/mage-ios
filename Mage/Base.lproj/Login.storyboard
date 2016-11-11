@@ -1033,7 +1033,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="pl4-aF-Rn4">
-                                <rect key="frame" x="16" y="53" width="343" height="546"/>
+                                <rect key="frame" x="16" y="33" width="343" height="566"/>
                                 <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1043,18 +1043,18 @@
                                         <rect key="frame" x="0.0" y="22" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e8T-gE-hF0" id="TsE-nN-hHn">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fxt-Qi-5H9">
-                                                    <rect key="frame" x="15" y="2" width="46.5" height="26.5"/>
+                                                    <rect key="frame" x="15" y="1" width="47" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="G35-Y1-Pmv">
-                                                    <rect key="frame" x="15" y="28.5" width="40.5" height="13.5"/>
+                                                    <rect key="frame" x="15" y="28" width="41" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1097,7 +1097,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose An Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1aJ-eh-rtd">
-                                <rect key="frame" x="16" y="24" width="343" height="21"/>
+                                <rect key="frame" x="16" y="4" width="343" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="nAf-ws-qnD"/>
                                 </constraints>
@@ -1106,17 +1106,17 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnE-4z-lNl">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="-20" width="375" height="687"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="bln-jK-zuv">
-                                        <rect key="frame" x="67.5" y="311" width="240" height="45"/>
+                                        <rect key="frame" x="67.5" y="321" width="240" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="iqg-7u-SG2"/>
                                             <constraint firstAttribute="width" constant="240" id="kGK-bG-KH8"/>
                                         </constraints>
                                     </imageView>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="n8y-Rr-gVM">
-                                        <rect key="frame" x="169.5" y="364" width="37" height="37"/>
+                                        <rect key="frame" x="169.5" y="374" width="37" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="N67-5F-6zQ"/>
                                             <constraint firstAttribute="width" constant="37" id="TN2-dU-SnM"/>
@@ -1198,7 +1198,7 @@
         <image name="mage_logo" width="331" height="82"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TJf-7K-a76"/>
+        <segue reference="QDp-Db-7H5"/>
         <segue reference="h1z-Q6-YaZ"/>
         <segue reference="HoK-QE-1BH"/>
     </inferredMetricsTieBreakers>

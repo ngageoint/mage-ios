@@ -50,14 +50,13 @@
     } else if ([self.passwordConfirm.text length] == 0) {
         [self showDialogForRequiredField:@"Password Confirm"];
     } else if (![self.password.text isEqualToString:self.passwordConfirm.text]) {
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Error"
-                              message:@"Passwords do not match"
-                              delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Passwords Do Not Match"
+                                     message:@"Please update password fields to match."
+                                     preferredStyle:UIAlertControllerStyleAlert];
         
-        [alert show];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
     } else {
         // All fields validated
         NSDictionary *parameters = @{
@@ -78,14 +77,13 @@
 }
 
 - (void) showDialogForRequiredField:(NSString *) field {
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Missing required field"
-                          message:[NSString stringWithFormat:@"'%@' is required.", field]
-                          delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
-	
-	[alert show];
+    UIAlertController * alert = [UIAlertController
+                                 alertControllerWithTitle:[NSString stringWithFormat:@"%@ Is Required", field]
+                                 message:[NSString stringWithFormat:@"Please fill out the '%@' field.", field]
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) signupWithParameters:(NSDictionary *) parameters url:(NSString *) baseUrl {

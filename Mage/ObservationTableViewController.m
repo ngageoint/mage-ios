@@ -99,13 +99,6 @@
         if (location != nil) {
             GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
             [editViewController setLocation:point];
-        } else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Unknown"
-                                                            message:@"MAGE was unable to determine your location.  Please manually set the location of the new observation."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
         }
     }
 }
@@ -113,12 +106,14 @@
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         if (![[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not part of this event"
-                                                            message:@"You cannot create observations for an event you are not part of."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:@"You are not part of this event"
+                                         message:@"You cannot create observations for an event you are not part of."
+                                         preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+
             return false;
         }
     }

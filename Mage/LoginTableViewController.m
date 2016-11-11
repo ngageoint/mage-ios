@@ -105,14 +105,14 @@
 }
 
 - (void) registrationWasSuccessful {
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Registration Sent"
-                          message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-                          delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
-	
-	[alert show];
+    UIAlertController * alert = [UIAlertController
+                                 alertControllerWithTitle:@"Registration Sent"
+                                 message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+    
     [self resetLogin:NO];
     [self endLogin];
 }
