@@ -8,16 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ObservationHeaderTableViewCell.h"
+#import "ObservationActionsDelegate.h"
 
 @class ObservationActionsTableViewCell;
-
-@protocol ObservationActionsDelegate <NSObject>
-
-@required
-- (void) observationFavoriteChanged;
-- (void) observationShareTapped;
-
-@end
 
 @interface ObservationActionsTableViewCell : ObservationHeaderTableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;

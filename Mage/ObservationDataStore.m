@@ -196,7 +196,6 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     [observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSDictionary *favorites = [observation getFavoritesMap];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
 }

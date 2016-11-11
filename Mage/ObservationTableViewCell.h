@@ -7,16 +7,9 @@
 #import <UIKit/UIKit.h>
 #import <Observation.h>
 #import "AttachmentSelectionDelegate.h"
+#import "ObservationActionsDelegate.h"
 
 @class ObservationTableViewCell;
-
-@protocol ObservationActionsDelegate <NSObject>
-
-@required
-- (void) observationFavoriteTapped:(ObservationTableViewCell *) tableViewCell;
-- (void) observationShareTapped:(ObservationTableViewCell *) tableViewCell;
-
-@end
 
 @class ObservationFavoriteDelegate;
 

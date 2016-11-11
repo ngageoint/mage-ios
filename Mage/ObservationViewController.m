@@ -278,7 +278,7 @@
     return self.currentUser && [self.currentUser.role.permissions containsObject:@"UPDATE_EVENT"];
 }
 
-- (void) observationFavoriteChanged {
+- (void) observationFavoriteTapped:(id)sender {
     __weak typeof(self) weakSelf = self;
     [self.observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
         [weakSelf updateFavorites];
@@ -300,7 +300,7 @@
     [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void) observationShareTapped {
+-(void) observationShareTapped:(id)sender {
     [self.observation shareObservationForViewController:self];
 }
 

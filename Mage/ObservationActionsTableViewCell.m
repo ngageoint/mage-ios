@@ -42,13 +42,13 @@
 
 - (IBAction) onFavoriteTapped:(id)sender {
     if (self.observationActionsDelegate) {
-        [self.observationActionsDelegate observationFavoriteChanged];
+        [self.observationActionsDelegate observationFavoriteTapped:sender];
     }
 }
 
 - (IBAction) onShareTapped:(id)sender {
     if (self.observationActionsDelegate) {
-        [self.observationActionsDelegate observationShareTapped];
+        [self.observationActionsDelegate observationShareTapped:sender];
     }
 }
 
