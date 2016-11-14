@@ -422,7 +422,7 @@
             
             [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
         } else if ([attachment.contentType hasPrefix:@"audio"]) {
-            sourceImage = [UIImage imageNamed:@"play_thumbnail"];
+            sourceImage = [UIImage imageNamed:@"audio_thumbnail"];
             dispatch_async(dispatch_get_main_queue(), ^{
                 completionBlock(sourceImage);
             });

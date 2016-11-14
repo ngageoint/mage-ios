@@ -50,67 +50,6 @@
                                             <constraint firstItem="P1f-Pc-cSe" firstAttribute="top" secondItem="Px8-Fg-txD" secondAttribute="top" id="lEM-wo-Kn2"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7p-OO-eYT" userLabel="Audio Player View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VrB-Pj-MdP">
-                                                <rect key="frame" x="135.5" y="239.5" width="104" height="48"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="48" id="fSs-aP-E7s"/>
-                                                    <constraint firstAttribute="width" constant="104" id="jeq-DD-FWi"/>
-                                                </constraints>
-                                                <state key="normal" image="play">
-                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="playButtonPressed:" destination="OEf-mv-UeA" eventType="touchUpInside" id="u3m-M7-BtT"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k09-xs-psB">
-                                                <rect key="frame" x="16" y="300.5" width="54" height="20"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="U9r-O7-h6z"/>
-                                                    <constraint firstAttribute="width" constant="54" id="xiN-c2-PFS"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="40B-Eh-YXi">
-                                                <rect key="frame" x="67" y="295.5" width="238" height="31"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="BQS-0p-3ub"/>
-                                                </constraints>
-                                                <connections>
-                                                    <action selector="sliderChanged:" destination="OEf-mv-UeA" eventType="touchUpInside" id="O2C-xE-pan"/>
-                                                    <action selector="sliderStartChange:" destination="OEf-mv-UeA" eventType="touchDown" id="To9-bD-ycT"/>
-                                                </connections>
-                                            </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:02" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vcu-zj-F3I">
-                                                <rect key="frame" x="305" y="300.5" width="54" height="20"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="hBu-Wt-hq7"/>
-                                                    <constraint firstAttribute="width" constant="54" id="wjy-9I-7i2"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="centerY" secondItem="Vcu-zj-F3I" secondAttribute="centerY" constant="23" id="0zI-uL-FFD"/>
-                                            <constraint firstAttribute="centerX" secondItem="40B-Eh-YXi" secondAttribute="centerX" constant="1.5" id="18z-Wg-AEt"/>
-                                            <constraint firstAttribute="centerX" secondItem="VrB-Pj-MdP" secondAttribute="centerX" id="AaA-az-nM5"/>
-                                            <constraint firstItem="Vcu-zj-F3I" firstAttribute="leading" secondItem="40B-Eh-YXi" secondAttribute="trailing" constant="2" id="CGn-gb-OBr"/>
-                                            <constraint firstItem="40B-Eh-YXi" firstAttribute="top" secondItem="VrB-Pj-MdP" secondAttribute="bottom" constant="8" id="IeK-Lc-hea"/>
-                                            <constraint firstAttribute="centerY" secondItem="k09-xs-psB" secondAttribute="centerY" constant="23" id="Itf-FU-jDz"/>
-                                            <constraint firstAttribute="trailing" secondItem="Vcu-zj-F3I" secondAttribute="trailing" constant="16" id="SuY-7N-kUk"/>
-                                            <constraint firstItem="40B-Eh-YXi" firstAttribute="leading" secondItem="k09-xs-psB" secondAttribute="trailing" constant="-1" id="ffJ-He-UTA"/>
-                                            <constraint firstAttribute="centerY" secondItem="VrB-Pj-MdP" secondAttribute="centerY" constant="70" id="jbU-D4-PeK"/>
-                                            <constraint firstItem="k09-xs-psB" firstAttribute="leading" secondItem="z7p-OO-eYT" secondAttribute="leading" constant="16" id="sbN-7w-EGi"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vaw-wp-9VW" userLabel="Progress View Container">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <subviews>
@@ -150,17 +89,13 @@
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Px8-Fg-txD" secondAttribute="trailing" id="169-RI-VrQ"/>
-                                    <constraint firstAttribute="trailing" secondItem="z7p-OO-eYT" secondAttribute="trailing" id="1YK-WP-Fcc"/>
                                     <constraint firstItem="Px8-Fg-txD" firstAttribute="top" secondItem="iWm-LS-i4J" secondAttribute="top" id="4dZ-eK-mkw"/>
-                                    <constraint firstItem="z7p-OO-eYT" firstAttribute="leading" secondItem="iWm-LS-i4J" secondAttribute="leading" id="7lB-9M-kvH"/>
-                                    <constraint firstAttribute="bottom" secondItem="z7p-OO-eYT" secondAttribute="bottom" id="8DY-lQ-PNr"/>
                                     <constraint firstItem="Px8-Fg-txD" firstAttribute="leading" secondItem="iWm-LS-i4J" secondAttribute="leading" id="8g5-vs-Nts"/>
                                     <constraint firstAttribute="bottom" secondItem="Vaw-wp-9VW" secondAttribute="bottom" id="LKv-WI-yei"/>
                                     <constraint firstAttribute="bottom" secondItem="Px8-Fg-txD" secondAttribute="bottom" id="VJD-lR-RKA"/>
-                                    <constraint firstItem="z7p-OO-eYT" firstAttribute="top" secondItem="iWm-LS-i4J" secondAttribute="top" id="kHz-sW-I11"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vaw-wp-9VW" secondAttribute="trailing" id="XTb-wZ-ZXO"/>
                                     <constraint firstItem="Vaw-wp-9VW" firstAttribute="top" secondItem="iWm-LS-i4J" secondAttribute="top" id="u87-EE-Kce"/>
-                                    <constraint firstItem="z7p-OO-eYT" firstAttribute="trailing" secondItem="Vaw-wp-9VW" secondAttribute="trailing" id="uWn-WB-CyI"/>
-                                    <constraint firstItem="z7p-OO-eYT" firstAttribute="leading" secondItem="Vaw-wp-9VW" secondAttribute="leading" id="ug1-ws-py4"/>
+                                    <constraint firstItem="Vaw-wp-9VW" firstAttribute="leading" secondItem="iWm-LS-i4J" secondAttribute="leading" id="xt4-z6-RbX"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -174,10 +109,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="34E-ii-Agv"/>
                     <connections>
-                        <outlet property="audioLength" destination="Vcu-zj-F3I" id="fix-Te-I0K"/>
-                        <outlet property="audioPlayButton" destination="VrB-Pj-MdP" id="IxR-Nl-RQU"/>
-                        <outlet property="audioPlayerView" destination="z7p-OO-eYT" id="5f0-b5-BSf"/>
-                        <outlet property="audioProgressSlider" destination="40B-Eh-YXi" id="HoS-fJ-nn5"/>
                         <outlet property="downloadProgressBar" destination="8SS-h5-Irv" id="3Bm-uu-oLx"/>
                         <outlet property="imageActivityIndicator" destination="hDf-fS-axz" id="qvt-vs-lxq"/>
                         <outlet property="imageView" destination="P1f-Pc-cSe" id="aNZ-RQ-rYw"/>
@@ -192,7 +123,4 @@
             <point key="canvasLocation" x="182" y="-233"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="play" width="48" height="48"/>
-    </resources>
 </document>

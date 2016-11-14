@@ -11,6 +11,7 @@
 #import "AVFoundation/AVFoundation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AVKit/AVKit.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface AttachmentViewController () <AVAudioPlayerDelegate>
@@ -24,12 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *progressPercentLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
-@property (strong, nonatomic) MPMoviePlayerController *videoPlayerView;
-@property (weak, nonatomic) IBOutlet UIView *audioPlayerView;
-@property (weak, nonatomic) IBOutlet UILabel *audioLength;
-@property (weak, nonatomic) IBOutlet UIButton *audioPlayButton;
-@property (weak, nonatomic) IBOutlet UISlider *audioProgressSlider;
-@property (strong, nonatomic) NSTimer *sliderTimer;
+@property (strong, nonatomic) AVPlayerViewController *playerViewController;
 
 @end
 
@@ -53,7 +49,6 @@
             
             [self.imageViewHolder setHidden:NO];
             [self.progressView setHidden:YES];
-            [self.audioPlayerView setHidden:YES];
             [self.imageActivityIndicator setHidden:YES];
             [self.imageActivityIndicator stopAnimating];
             
@@ -81,14 +76,10 @@
     self.imageView.image = nil;
     [self.operationQueue cancelAllOperations];
     
-    if (self.videoPlayerView) {
-        [self.videoPlayerView stop];
-        [self.videoPlayerView.view removeFromSuperview];
-        self.videoPlayerView = nil;
-    }
-    
-    if (self.audioPlayer) {
-        [self stopAudio];
+    if (self.playerViewController) {
+        [self.playerViewController.player pause];
+        [self.playerViewController.view removeFromSuperview];
+        self.playerViewController = nil;
     }
 }
 
@@ -108,7 +99,6 @@
     if ([self.attachment.contentType hasPrefix:@"image"]) {
         [self.imageViewHolder setHidden:NO];
         [self.progressView setHidden:YES];
-        [self.audioPlayerView setHidden:YES];
         
         [self.imageActivityIndicator startAnimating];
         
@@ -195,96 +185,14 @@
     NSURL *url = [NSURL fileURLWithPath:fromPath];
     NSLog(@"Playing %@", url);
     
-    if ([type hasPrefix:@"video"]) {
-        self.videoPlayerView = [[MPMoviePlayerController alloc] initWithContentURL:url];
-        self.videoPlayerView.view.frame = self.mediaHolderView.bounds;
-        [self.videoPlayerView.view setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-
-        self.videoPlayerView.scalingMode = MPMovieScalingModeAspectFit;
-        self.videoPlayerView.initialPlaybackTime = 0.0;
-        self.videoPlayerView.movieSourceType = MPMovieSourceTypeFile;
-        [self.mediaHolderView addSubview:self.videoPlayerView.view];
-        [self.videoPlayerView play];
-    } else if ([type hasPrefix:@"audio"]) {
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-        
-        NSError *error;
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        self.audioPlayer.delegate = self;
-        [self.audioPlayer setVolume:1.0];
-        self.audioPlayer.numberOfLoops = 0;
-        
-        NSTimeInterval totalSeconds = self.audioPlayer.duration;
-        
-        int seconds = (int)totalSeconds % 60;
-        int minutes = ((int)totalSeconds / 60) % 60;
-        int hours = totalSeconds / 3600;
-        NSLog(@"starting to play the sound from url %@ duration seconds %f", url, totalSeconds);
-        
-        self.audioLength.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
-        
-        [self.audioPlayerView setHidden:NO];
-
-        [self playAudio];
-    }
-}
-
-- (IBAction)playButtonPressed:(id)sender {
-    self.audioPlayer.playing ? [self stopAudio] : [self playAudio];
-}
-
-- (void) stopAudio {
-    if (self.audioPlayer.isPlaying) {
-        [self.audioPlayer stop];
-    }
+    self.playerViewController = [[AVPlayerViewController alloc] init];
+    self.playerViewController.player = [AVPlayer playerWithURL:url];
     
-    [self.audioPlayButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-    [self updateSlider];
-    [self.sliderTimer invalidate];
-}
-
-- (void) playAudio {
-    if (self.sliderTimer != nil && self.sliderTimer.isValid) {
-        [self.sliderTimer invalidate];
-    }
+    self.playerViewController.view.frame = self.mediaHolderView.frame;
+    [self.playerViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     
-    // Set a timer which keep getting the current music time and update the UISlider in 1 sec interval
-    _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
-    // Set the maximum value of the UISlider
-    self.audioProgressSlider.maximumValue = self.audioPlayer.duration;
-    // Set the valueChanged target
-    
-    [self.audioPlayer prepareToPlay];
-    [self.audioPlayer play];
-    [self.audioPlayButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-}
-
-- (void)updateSlider {
-    // Update the slider about the music time
-    self.audioProgressSlider.value = self.audioPlayer.currentTime;
-}
-
-- (IBAction)sliderStartChange:(id)sender {
-    [self.audioPlayer stop];
-    [self.sliderTimer invalidate];
-}
-
-- (IBAction)sliderChanged:(UISlider *)sender {
-    // Fast skip the music when user scroll the UISlider
-    [self.audioPlayer stop];
-    [self.audioPlayer setCurrentTime:self.audioProgressSlider.value];
-    [self playAudio];
-}
-
-- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    NSLog(@"played the sound");
-    [self stopAudio];
-}
-
-- (void) audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
-    NSLog(@"Error playing the sound");
-    [self stopAudio];
+    [self.mediaHolderView addSubview:self.playerViewController.view];
+    [self.playerViewController.player play];
 }
 
 @end
