@@ -940,7 +940,7 @@
         <scene sceneID="Fwf-DH-hHp">
             <objects>
                 <navigationController navigationBarHidden="YES" id="ULt-lH-XLM" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="N2S-nA-2js">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="N2S-nA-2js">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -974,7 +974,7 @@
         <scene sceneID="qmD-7J-9em">
             <objects>
                 <navigationController storyboardIdentifier="MageDetailViewController" id="biE-nW-pHC" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="WMu-eP-G37">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="WMu-eP-G37">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.97530043125152588" green="0.97527122497558594" blue="0.9752877950668335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
