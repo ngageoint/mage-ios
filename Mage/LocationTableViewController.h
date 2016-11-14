@@ -6,12 +6,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Locations.h"
-#import "PeopleDataStore.h"
+#import "LocationDataStore.h"
 #import "MAGEMasterSelectionDelegate.h"
 
-@interface PeopleTableViewController : UITableViewController
+@interface LocationTableViewController : UITableViewController
 
-@property (strong, nonatomic) IBOutlet PeopleDataStore *peopleDataStore;
+@property (strong, nonatomic) IBOutlet LocationDataStore *locationDataStore;
 @property (nonatomic, assign) IBOutlet id<MAGEMasterSelectionDelegate> masterSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 

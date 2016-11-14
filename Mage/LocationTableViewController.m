@@ -4,7 +4,7 @@
 //
 //
 
-#import "PeopleTableViewController.h"
+#import "LocationTableViewController.h"
 #import "Location.h"
 #import "MeViewController.h"
 #import <Event.h>
@@ -12,7 +12,7 @@
 #import "TimeFilter.h"
 #import "UINavigationItem+Subtitle.h"
 
-@implementation PeopleTableViewController
+@implementation LocationTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,7 +33,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.peopleDataStore startFetchController];
+    [self.locationDataStore startFetchController];
     [self setNavBarTitle];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -59,7 +59,7 @@
     if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
         MeViewController *destination = (MeViewController *)[segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Location *location = [self.peopleDataStore locationAtIndexPath:indexPath];
+		Location *location = [self.locationDataStore locationAtIndexPath:indexPath];
 		[destination setUser:location.user];
     }
 }
@@ -82,7 +82,7 @@
                         context:(void *)context {
     
     if ([keyPath isEqualToString:kTimeFilterKey]) {
-        [self.peopleDataStore startFetchController];
+        [self.locationDataStore startFetchController];
         [self setNavBarTitle];
     }
 }

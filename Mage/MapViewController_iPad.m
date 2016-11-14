@@ -23,7 +23,9 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController.navigationBar setTranslucent:NO];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
     lblTitle.backgroundColor = [UIColor clearColor];
@@ -37,8 +39,8 @@
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO];
     [super viewDidDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

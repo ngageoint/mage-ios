@@ -4,19 +4,19 @@
 //
 //
 
-#import "PeopleDataStore.h"
+#import "LocationDataStore.h"
 #import "PersonTableViewCell.h"
 #import "Location.h"
 #import "Locations.h"
 #import "NSDate+DateTools.h"
 
-@interface PeopleDataStore ()
+@interface LocationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
     @property (nonatomic) NSDateFormatter *dateFormatter;
     @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
 
-@implementation PeopleDataStore
+@implementation LocationDataStore
 
 - (NSDateFormatter *) dateFormatter {
     if (_dateFormatter == nil) {

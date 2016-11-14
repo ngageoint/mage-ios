@@ -11,7 +11,7 @@
 #import "MageTabBarController.h"
 #import "ObservationTableViewController.h"
 #import "ObservationContainerViewController.h"
-#import "PeopleTableViewController.h"
+#import "LocationTableViewController.h"
 #import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "AttachmentViewController.h"

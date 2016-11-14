@@ -83,12 +83,12 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
+    if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
 		[destination setObservation:observation];
-    } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+    } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];

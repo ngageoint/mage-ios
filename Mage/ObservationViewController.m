@@ -17,6 +17,7 @@
 #import "ObservationImportant.h"
 #import "ObservationPropertyTableViewCell.h"
 #import "ObservationEditViewController.h"
+#import "UserTableViewController.h"
 #import "MapDelegate.h"
 #import "AttachmentViewController.h"
 
@@ -258,15 +259,23 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[self.observation.properties valueForKey:@"type"] style: UIBarButtonItemStylePlain target:nil action:nil];
     
     // Make sure your segue name in storyboard is the same as this line
-    if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
+    if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    } else if ([[segue identifier] isEqualToString:@"observationEditSegue"]) {
+    } else if ([segue.identifier isEqualToString:@"observationEditSegue"]) {
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style: UIBarButtonItemStylePlain target:nil action:nil];
         ObservationEditViewController *vc = [segue destinationViewController];
         [vc setObservation:self.observation];
+    } else if ([segue.identifier isEqualToString:@"FavoriteUsersSegue"]) {
+        NSMutableArray *userIds = [[NSMutableArray alloc] init];
+        [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {
+            [userIds addObject:favorite.userId];
+        }];
+        
+        UserTableViewController *vc = [segue destinationViewController];
+        vc.userIds = userIds;
     }
 }
 

@@ -5,7 +5,7 @@
 //
 
 #import "PeopleContainerViewController.h"
-#import "PeopleTableViewController.h"
+#import "LocationTableViewController.h"
 
 @interface PeopleContainerViewController ()
 
@@ -15,8 +15,8 @@
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString: @"PeopleTableViewControllerSegue"]) {
-        PeopleTableViewController *peopleTableViewController = (PeopleTableViewController *) [segue destinationViewController];
-        peopleTableViewController.peopleDataStore.personSelectionDelegate = self.delegate;
+        LocationTableViewController *locationTableViewController = (LocationTableViewController *) [segue destinationViewController];
+        locationTableViewController.locationDataStore.personSelectionDelegate = self.delegate;
     }
 }
 
