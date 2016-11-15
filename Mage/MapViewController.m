@@ -136,6 +136,8 @@
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
     [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
+    [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     
     // Stop the timer for updating the circles
     if (_locationColorUpdateTimer != nil) {
