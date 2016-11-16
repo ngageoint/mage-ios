@@ -47,9 +47,10 @@
     self.primaryField.text = type;
     NSString *variantText = [observation.properties objectForKey:variantField];
     if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
+        self.variantField.hidden = NO;
         self.variantField.text = variantText;
     } else {
-        self.variantField.text = nil;
+        self.variantField.hidden = YES;
     }
     
     self.icon.image = [ObservationImage imageForObservation:observation];
