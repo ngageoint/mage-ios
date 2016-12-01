@@ -92,6 +92,16 @@
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     NSLog(@"applicationWillResignActive");
+    
+    self.splashView = [[UIView alloc]initWithFrame:[self.window frame]];
+    self.splashView.backgroundColor = [UIColor colorWithRed:17.0/255 green:84.0/255 blue:164.0/255 alpha:1];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 240, 45))];
+    imageView.image = [UIImage imageNamed:@"mage_logo"];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [imageView setCenter:CGPointMake(self.splashView.bounds.size.width/2, self.splashView.bounds.size.height/2)];
+
+    [self.splashView addSubview:imageView];
+    [self.window addSubview:self.splashView];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
@@ -123,6 +133,11 @@
 - (void) applicationDidBecomeActive:(UIApplication *) application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
+    
+    if(self.splashView != nil) {
+        [self.splashView removeFromSuperview];
+        self.splashView = nil;
+    }
 
     if(self.splashView != nil) {
         [self.splashView removeFromSuperview];
