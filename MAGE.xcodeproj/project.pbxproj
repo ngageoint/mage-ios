@@ -263,6 +263,7 @@
 		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		2FD307681B47538900ACFE68 /* PeopleContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleContainerViewController.h; sourceTree = "<group>"; };
 		2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleContainerViewController.m; sourceTree = "<group>"; };
+		2FD37EC71DF0AC1700429653 /* MAGE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MAGE.entitlements; path = ../MAGE/MAGE.entitlements; sourceTree = "<group>"; };
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
@@ -904,6 +905,7 @@
 		F76949131AA6434A00CB680B /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				2FB41CE11DC79C5D005C18F9 /* Filter */,
 				F76949141AA6436000CB680B /* EventChooserController.h */,
 				F76949151AA6436000CB680B /* EventChooserController.m */,
 				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
@@ -967,7 +969,6 @@
 				2FD853701BDAAB2300602CEA /* Authentication */,
 				2F4551831BA33A7700EE3DA6 /* Date */,
 				F76949131AA6434A00CB680B /* Event */,
-				2FB41CE11DC79C5D005C18F9 /* Filter */,
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
 				2FF467091A12794000BA8357 /* Categories */,
 				F727516B19C888A3006C63CB /* Fetch */,
@@ -1004,6 +1005,7 @@
 			isa = PBXGroup;
 			children = (
 				2FDE67FC1DF7518B00864966 /* MAGE.entitlements */,
+				2FD37EC71DF0AC1700429653 /* MAGE.entitlements */,
 				F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */,
 				F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */,
 				F7A94D7718AD9CB000CB9EE0 /* main.m */,
@@ -1089,6 +1091,15 @@
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+							com.apple.Siri = {
+								enabled = 0;
 							};
 						};
 					};
