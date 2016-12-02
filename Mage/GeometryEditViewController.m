@@ -36,6 +36,11 @@
     
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
         GeoPoint *point = (GeoPoint *)[self.observation geometry];
+        if (!point) {
+            // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
+            point = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:1.0 longitude:1.0]];
+        }
+        
         self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
         self.annotation.coordinate = point.location.coordinate;
         

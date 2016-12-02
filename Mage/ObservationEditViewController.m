@@ -89,7 +89,7 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
-    if (!self.location) {
+    if (!self.observation.geometry) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Location Unknown"
                                      message:@"MAGE was unable to determine your location.  Please manually set the location of the new observation."
