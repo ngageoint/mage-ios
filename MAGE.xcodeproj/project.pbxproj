@@ -251,6 +251,7 @@
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
+		2FDE67FC1DF7518B00864966 /* MAGE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MAGE.entitlements; path = ../MAGE/MAGE.entitlements; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
@@ -283,6 +284,7 @@
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpTableViewController.h; sourceTree = "<group>"; };
 		4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpTableViewController.m; sourceTree = "<group>"; };
+		5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A622B3962D4C72B0951A4A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
@@ -723,6 +725,7 @@
 				0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */,
 				0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */,
 				2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */,
+				5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -980,6 +983,7 @@
 		F7A94D7218AD9CB000CB9EE0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2FDE67FC1DF7518B00864966 /* MAGE.entitlements */,
 				F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */,
 				F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */,
 				F7A94D7718AD9CB000CB9EE0 /* main.m */,
@@ -1059,6 +1063,11 @@
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
 						DevelopmentTeam = ZL8G5D9G2H;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1179,7 +1188,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1427,12 +1436,13 @@
 		};
 		F7A94D9918AD9CB000CB9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
@@ -1456,6 +1466,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
