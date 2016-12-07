@@ -50,7 +50,6 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
 - (void) scheduleTimer {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"in the main queue scheduling the timer");
         _locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
     });
 }
@@ -69,10 +68,10 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
             [self scheduleTimer];
         }
     } failure:^(NSError* error) {
-        NSLog(@"failed to pull locations");
-        NSLog(@"Scheduling the timer again");
+        NSLog(@"Failed to pull locations, scheduling the timer again");
         [self scheduleTimer];
     }];
+    
     NSLog(@"pulling locations");
     [[HttpManager singleton].manager.operationQueue addOperation:locationFetchOperation];
 }

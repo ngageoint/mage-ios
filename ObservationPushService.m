@@ -109,7 +109,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     NSLog(@"about to push an additional %lu observations", (unsigned long) observationsToPush.count);
     __weak ObservationPushService *weakSelf = self;
     for (Observation *observation in [observationsToPush allValues]) {
-        NSLog(@"submitting observation %@", observation);
+        NSLog(@"submitting observation %@", observation.remoteId);
         NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {

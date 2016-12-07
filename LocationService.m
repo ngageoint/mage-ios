@@ -135,7 +135,6 @@ NSInteger const kLocationPushLimit = 100;
         
         for (GPSLocation *l in locations) {
             GeoPoint *point = l.geometry;
-            NSLog(@"Got this point from the server %.20f, %.20f", point.location.coordinate.latitude, point.location.coordinate.longitude);
         }
         
         self.isPushingLocations = YES;
