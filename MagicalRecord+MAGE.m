@@ -24,12 +24,21 @@
                              NSFileProtectionCompleteUnlessOpen, NSPersistentStoreFileProtectionKey,
                              sqliteOptions, NSSQLitePragmasOption,
                              nil];
-    
+
     [coordinator MR_addSqliteStoreNamed:@"Mage.sqlite" withOptions:options];
     [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:coordinator];
-
     
     [NSManagedObjectContext MR_initializeDefaultContextWithCoordinator:coordinator];
+    
+    
+    // Prevent MAGE database from being backed up
+    NSURL *storeURL = [[NSPersistentStore MR_urlForStoreName:@"Mage.sqlite"] URLByDeletingLastPathComponent];
+    NSError *error = nil;
+    BOOL success = [storeURL setResourceValue:[NSNumber numberWithBool: YES] forKey:NSURLIsExcludedFromBackupKey error: &error];
+    if (!success) {
+        NSLog(@"Error excluding %@ from backup %@", storeURL, error);
+    }
+
 }
 
 +(void) deleteAndSetupMageCoreDataStack {
@@ -54,5 +63,7 @@
         NSLog(@"shm description: %@", shmError.description);
     }
 }
+
+
 
 @end
