@@ -94,7 +94,6 @@
     NSDictionary *loginParameters = @{
                                    @"username": username,
                                    @"serverUrl": [[MageServer baseURL] absoluteString],
-                                   @"token": token,
                                    @"tokenExpirationDate": tokenExpirationDate
                                    };
 
@@ -108,6 +107,7 @@
     [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
     [defaults synchronize];
     [StoredPassword persistPasswordToKeyChain:password];
+    [StoredPassword persistTokenToKeyChain:token];
     
     complete(AUTHENTICATION_SUCCESS);
 }

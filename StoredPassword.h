@@ -8,6 +8,9 @@
 
 @interface StoredPassword : NSObject
 
++ (NSString *) retrieveStoredToken;
++ (NSString *) persistTokenToKeyChain: (NSString *) token;
+
 + (NSString *) retrieveStoredPassword;
 + (NSString *) persistPasswordToKeyChain: (NSString *) password;
 

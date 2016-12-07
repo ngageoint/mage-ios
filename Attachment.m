@@ -9,6 +9,7 @@
 #import "Attachment.h"
 #import "Observation.h"
 #import "NSDate+iso8601.h"
+#import "StoredPassword.h"
 
 @implementation Attachment
 
@@ -46,8 +47,8 @@
     if (self.localPath) {
         return [NSURL fileURLWithPath:self.localPath];
     } else {
-        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        return [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@&size=%ld", self.url, [defaults valueForKeyPath:@"loginParameters.token"], (long) size]];
+        NSString *token = [StoredPassword retrieveStoredToken];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@&size=%ld", self.url, token, (long) size]];
     }
 }
 

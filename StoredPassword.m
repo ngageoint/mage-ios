@@ -7,17 +7,37 @@
 #import "StoredPassword.h"
 #import <Security/Security.h>
 
+
 @implementation StoredPassword
 
-static NSString * const kKeyChainService = @"mil.nga.giat.mage.pass";
+static NSString * const kKeyChainPassword = @"mil.nga.mage.password";
+static NSString * const kKeyChainToken = @"mil.nga.mage.token";
 
-+ (NSString *) retrieveStoredPassword{
++ (NSString *) retrieveStoredToken {
+    return [StoredPassword retrieveStoredItemWithService:kKeyChainToken];
+}
+
++ (NSString *) persistTokenToKeyChain: (NSString *) token {
+    NSString *currentToken = [self retrieveStoredToken];
+    return [StoredPassword persistItemToKeyChain:token withService:kKeyChainToken forCurrentItem:currentToken];
+}
+
++ (NSString *) retrieveStoredPassword {
+    return [StoredPassword retrieveStoredItemWithService:kKeyChainPassword];
+}
+
++ (NSString *) persistPasswordToKeyChain: (NSString *) password {
+    NSString *currentPassword = [self retrieveStoredPassword];
+    return [StoredPassword persistItemToKeyChain:password withService:kKeyChainPassword forCurrentItem:currentPassword];
+}
+
++ (NSString *) retrieveStoredItemWithService:(NSString *) service {
     
-    NSString *passwordString = nil;
+    NSString *item = nil;
     
     NSDictionary *query = @{
                             (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-                            (__bridge id)kSecAttrService: kKeyChainService,
+                            (__bridge id)kSecAttrService: service,
                             (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitOne,
                             (__bridge id)kSecReturnAttributes: (__bridge id)kCFBooleanTrue
                             };
@@ -31,43 +51,57 @@ static NSString * const kKeyChainService = @"mil.nga.giat.mage.pass";
         [valueQuery setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         [valueQuery setObject:(__bridge id)kCFBooleanTrue forKey:(__bridge id)kSecReturnData];
         
-        CFTypeRef passwordDataRef = NULL;
-        OSStatus result = SecItemCopyMatching((__bridge CFDictionaryRef)valueQuery, &passwordDataRef);
+        CFTypeRef dataRef = NULL;
+        OSStatus result = SecItemCopyMatching((__bridge CFDictionaryRef)valueQuery, &dataRef);
         if (result == noErr) {
-            NSData *passwordData = (__bridge_transfer NSData *)passwordDataRef;
-            passwordString = [[NSString alloc] initWithBytes:[passwordData bytes] length:[passwordData length] encoding:NSUTF8StringEncoding];
+            NSData *data = (__bridge_transfer NSData *) dataRef;
+            item = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
         }
     }
     
-    return passwordString;
+    return item;
 }
 
-+ (NSString *) persistPasswordToKeyChain: (NSString *) password {
++ (NSString *) persistItemToKeyChain: (NSString *) item withService: (NSString *) service forCurrentItem:(NSString *) currentItem {
+    
+    BOOL isMainThread = [NSThread isMainThread];
     
     // Now store it in the KeyChain
     NSDictionary *query = @{
                             (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-                            (__bridge id)kSecAttrService: kKeyChainService,
+                            (__bridge id)kSecAttrService: service,
                             (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                            (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding]
+                            (__bridge id)kSecValueData: [item dataUsingEncoding:NSUTF8StringEncoding]
                             };
-    NSString *currentPw = [self retrieveStoredPassword];
-    if (currentPw == nil) {
+    
+    if (currentItem == nil) {
+        
         OSStatus result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
         if (result != noErr) {
             NSLog(@"ERROR: Couldn't add to the Keychain. Result = %d; Query = %@", (int)result, query);
             return nil;
         }
     } else {
-        SecItemDelete((__bridge CFDictionaryRef)query);
-        OSStatus result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+        NSDictionary *query = @{
+                                (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+                                (__bridge id)kSecAttrService: service,
+                                (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                                };
+        
+        NSDictionary *update = @{
+                                 (__bridge id)kSecValueData: [item dataUsingEncoding:NSUTF8StringEncoding]
+                                 };
+        
+        
+        OSStatus result = SecItemUpdate((__bridge CFDictionaryRef) query, (__bridge CFDictionaryRef) update);
         if (result != noErr) {
             NSLog(@"ERROR: Couldn't add to the Keychain. Result = %d; Query = %@", (int)result, query);
             return nil;
         }
+        
     }
     
-    return password;
+    return item;
 }
 
 

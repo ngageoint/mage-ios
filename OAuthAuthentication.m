@@ -13,6 +13,7 @@
 #import "NSDate+iso8601.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
+#import "StoredPassword.h"
 
 @implementation OAuthAuthentication
 
@@ -64,7 +65,6 @@
             
         } completion:^(BOOL contextDidSave, NSError *error) {
             NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-            NSString *token = [parameters objectForKey:@"token"];
             
             // Always use this locale when parsing fixed format date strings
             NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[parameters objectForKey:@"expirationDate"]];
@@ -76,7 +76,6 @@
             
             NSDictionary *loginParameters = @{
                                               @"serverUrl": [[MageServer baseURL] absoluteString],
-                                              @"token": token,
                                               @"tokenExpirationDate": tokenExpirationDate
                                               };
             
@@ -86,6 +85,8 @@
             NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
             [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
             [defaults synchronize];
+            
+            [StoredPassword persistTokenToKeyChain:token];
             
             complete(AUTHENTICATION_SUCCESS);
         }];
