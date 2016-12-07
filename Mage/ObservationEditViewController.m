@@ -472,7 +472,7 @@
             NSLog(@"Error saving observation to persistent store %@", error);
         }
         
-        NSLog(@"saved the observation: %@", weakSelf.observation);
+        NSLog(@"saved the observation: %@", weakSelf.observation.remoteId);
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
 }

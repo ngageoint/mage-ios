@@ -28,7 +28,6 @@
     _lineColor = [UIColor colorWithHexString:hex];
 }
 - (void) setTitlet:(NSString *)title {
-    NSLog(@"clown");
     self.title = title;
 }
 
