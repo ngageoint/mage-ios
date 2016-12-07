@@ -11,6 +11,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 
+## 1.2.1 (https://github.com/ngageoint/mage-ios/releases/tag/1.2.1) (12-06-2016)
+
+##### Features
+* Added multitasking screenshot
+* Added file protection entitlements file
+
+##### Bug Fixes
+
 ## 1.2.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.2.0) (08-11-2016)
 
 ##### Features

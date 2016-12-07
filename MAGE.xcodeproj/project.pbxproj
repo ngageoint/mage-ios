@@ -185,8 +185,6 @@
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
-		0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OZZipFile+OfflineMap.h"; sourceTree = "<group>"; };
 		2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OZZipFile+OfflineMap.m"; sourceTree = "<group>"; };
@@ -720,8 +718,6 @@
 		A4CA82D2E2C618015C18DA14 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0E384E12A73DCCAC9264B9D0 /* Pods.debug.xcconfig */,
-				0ED57388AD09C0E7A9796D5D /* Pods.release.xcconfig */,
 				2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */,
 				5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */,
 			);
