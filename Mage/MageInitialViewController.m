@@ -13,6 +13,7 @@
 #import "Mage.h"
 #import "Server.h"
 #import "EventChooserController.h"
+#import "StoredPassword.h"
 
 @interface MageInitialViewController ()
 
@@ -25,14 +26,13 @@
     
     [[Mage singleton] stopServices];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
     // if the token is not expired skip the login module
     if ([[UserUtility singleton] isTokenExpired]) {
 		[self performSegueWithIdentifier:@"DisplayLoginViewSegue" sender:nil];
         return;
     }
-    NSString *token = [defaults valueForKeyPath:@"loginParameters.token"];
+
+    NSString *token = [StoredPassword retrieveStoredToken];
     [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     

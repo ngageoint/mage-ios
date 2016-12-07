@@ -9,6 +9,7 @@
 #import "UIImage+Resize.h"
 #import <Location.h>
 #import <NSDate+DateTools.h>
+#import "StoredPassword.h"
 
 @implementation MKAnnotationView (PersonIcon)
 
@@ -35,8 +36,8 @@
     
     UIImage *image = nil;
     if ([[user.iconUrl lowercaseString] hasPrefix:@"http"]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, [defaults valueForKeyPath:@"loginParameters.token"]]]]];
+        NSString *token = [StoredPassword retrieveStoredToken];
+        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?access_token=%@", user.iconUrl, token]]]];
     } else {
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.iconUrl]]];
