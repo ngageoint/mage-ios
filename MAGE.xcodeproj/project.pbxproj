@@ -69,7 +69,6 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
 		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
-		52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A622B3962D4C72B0951A4A /* libPods.a */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -466,7 +465,6 @@
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
-				52F2298FB4B240518C6F9ECE /* libPods.a in Frameworks */,
 				17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1143,7 +1141,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */ = {

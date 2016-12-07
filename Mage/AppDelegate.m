@@ -37,6 +37,7 @@
 #import "GPKGFeatureTileTableLinker.h"
 
 @interface AppDelegate ()
+@property (nonatomic, strong) UIView *splashView;
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
 @property (nonatomic, strong) NSString *addedCacheOverlay;
 @end
@@ -98,6 +99,16 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
+    self.splashView = [[UIView alloc]initWithFrame:[self.window frame]];
+    self.splashView.backgroundColor = [UIColor colorWithRed:17.0/255 green:84.0/255 blue:164.0/255 alpha:1];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 240, 45))];
+    imageView.image = [UIImage imageNamed:@"mage_logo"];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [imageView setCenter:CGPointMake(self.splashView.bounds.size.width/2, self.splashView.bounds.size.height/2)];
+    
+    [self.splashView addSubview:imageView];
+    [self.window addSubview:self.splashView];
+    
     [[Mage singleton] stopServices];
 }
 
@@ -113,6 +124,11 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
 
+    if(self.splashView != nil) {
+        [self.splashView removeFromSuperview];
+        self.splashView = nil;
+    }
+    
     [self processOfflineMapArchives];
 }
 
