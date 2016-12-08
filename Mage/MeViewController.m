@@ -56,10 +56,10 @@
     if (self.user == nil) {
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         self.currentUserIsMe = YES;
-        self.title = @"Me";
+        self.navigationItem.title = @"Me";
     } else {
         self.currentUserIsMe = NO;
-        self.title = self.user.name;
+        self.navigationItem.title = self.user.name;
     }
 }
 
