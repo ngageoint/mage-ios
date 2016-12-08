@@ -51,6 +51,10 @@ bool currentUserIsMe = NO;
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     if (self.user == nil) {
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
@@ -60,12 +64,12 @@ bool currentUserIsMe = NO;
         currentUserIsMe = NO;
         self.title = self.user.name;
     }
-
+    
     self.name.text = self.user.name;
     
     self.phoneNumber.text = self.user.phone;
     self.phoneView.hidden = self.user.phone ? NO : YES;
-
+    
     self.email.text = self.user.email;
     self.emailView.hidden = self.user.email ? NO : YES;
     
@@ -77,10 +81,6 @@ bool currentUserIsMe = NO;
         Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:self.user.avatarUrl];
