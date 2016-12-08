@@ -41,29 +41,30 @@
 @property (weak, nonatomic) IBOutlet UITextView *email;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (assign, nonatomic) BOOL currentUserIsMe;
+
 @end
 
 @implementation MeViewController
 
-bool currentUserIsMe = NO;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:NO];
+    
+    if (self.user == nil) {
+        self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        self.currentUserIsMe = YES;
+        self.title = @"Me";
+    } else {
+        self.currentUserIsMe = NO;
+        self.title = self.user.name;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if (self.user == nil) {
-        self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        currentUserIsMe = YES;
-        self.title = @"Me";
-    } else {
-        currentUserIsMe = NO;
-        self.title = self.user.name;
-    }
     
     self.name.text = self.user.name;
     
@@ -89,7 +90,7 @@ bool currentUserIsMe = NO;
     }
     
     CLLocation *location = nil;
-    if (currentUserIsMe) {
+    if (self.currentUserIsMe) {
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
@@ -135,7 +136,7 @@ bool currentUserIsMe = NO;
         [weakSelf performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
     }]];
     
-    if (currentUserIsMe) {
+    if (self.currentUserIsMe) {
         [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
                 if (granted) {
