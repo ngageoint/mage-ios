@@ -7,6 +7,8 @@
 //
 
 #import "Observation.h"
+#import "ObservationImportant.h"
+#import "ObservationFavorite.h"
 #import "Attachment.h"
 #import "User.h"
 #import "Server.h"
@@ -226,6 +228,65 @@ NSNumber *_currentEventId;
     return operation;
 }
 
++ (NSOperation *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
+    NSNumber *eventId = [Server currentEventId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], eventId, favorite.observation.remoteId];
+    NSLog(@"Trying to push favorite to server %@", url);
+    
+    HttpManager *http = [HttpManager singleton];
+    NSString *requestMethod = @"PUT";
+    if (!favorite.favorite) {
+        requestMethod = @"DELETE";
+    }
+    
+    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:nil error: nil];
+    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        failure(error);
+    }];
+    
+    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Could not complete favorite push before expiration");
+    }];
+    
+    return operation;
+}
+
++ (NSOperation *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
+    NSNumber *eventId = [Server currentEventId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], eventId, important.observation.remoteId];
+    NSLog(@"Trying to push important to server %@", url);
+    
+    HttpManager *http = [HttpManager singleton];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    NSString *requestMethod = @"PUT";
+    if ([important.important isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+        [parameters setObject:important.reason forKey:@"description"];
+    } else {
+        requestMethod = @"DELETE";
+    }
+    
+    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:parameters error: nil];
+    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        failure(error);
+    }];
+    
+    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Could not complete important push before expiration");
+    }];
+    
+    return operation;
+}
+
 + (NSOperation *) operationToPullObservationsWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
     
     __block NSNumber *eventId = [Server currentEventId];
@@ -259,11 +320,39 @@ NSNumber *_currentEventId;
                     Observation *observation = [Observation MR_createEntityInContext:localContext];
                     [observation populateObjectFromJson:feature];
                     observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
-                                        
+                
+                    
+                    NSDictionary *importantJson = [feature objectForKey:@"important"];
+                    if (importantJson) {
+                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
+                        important.observation = observation;
+                        observation.observationImportant = important;
+                    }
+                
+                    for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
+                        ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
+                        favorite.observation = observation;
+                        [observation addFavoritesObject:favorite];
+                    }
+                    
+                    NSDictionary *importantJson = [feature objectForKey:@"important"];
+                    if (importantJson) {
+                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
+                        important.observation = observation;
+                        observation.observationImportant = important;
+                    }
+                
+                    for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
+                        ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
+                        favorite.observation = observation;
+                        [observation addFavoritesObject:favorite];
+                    }
+                    
                     for (id attachmentJson in [feature objectForKey:@"attachments"]) {
                         Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
                         [observation addAttachmentsObject:attachment];
                     }
+                    
                     [observation setEventId:eventId];
                     NSLog(@"Saving new observation with id: %@", observation.remoteId);
                 } else if (state != Archive && ![existingObservation.dirty boolValue]) {
@@ -271,10 +360,39 @@ NSNumber *_currentEventId;
                     [existingObservation populateObjectFromJson:feature];
                     existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
                     
-                    BOOL found = NO;
+                    NSDictionary *importantJson = [feature objectForKey:@"important"];
+                    if (importantJson) {
+                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
+                        important.observation = existingObservation;
+                        existingObservation.observationImportant = important;
+                    } else {
+                        if (existingObservation.observationImportant) {
+                            [existingObservation.observationImportant MR_deleteEntityInContext:localContext];
+                            existingObservation.observationImportant = nil;
+                        }
+                    }
+                    
+                    NSDictionary *favoritesMap = [existingObservation getFavoritesMap];
+                    NSArray *favoriteUserIds = [feature objectForKey:@"favoriteUserIds"];
+                    for (NSString *userId in favoriteUserIds) {
+                        ObservationFavorite *favorite = [favoritesMap objectForKey:userId];
+                        if (!favorite) {
+                            favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
+                            favorite.observation = existingObservation;
+                            [existingObservation addFavoritesObject:favorite];
+                        }
+                    }
+                    
+                    for (ObservationFavorite *favorite in [favoritesMap allValues]) {
+                        if (![favoriteUserIds containsObject:favorite.userId]) {
+                            [favorite MR_deleteEntityInContext:localContext];
+                            [existingObservation removeFavoritesObject:favorite];
+                        }
+                    }
+                    
                     for (id attachmentJson in [feature objectForKey:@"attachments"]) {
                         NSString *remoteId = [attachmentJson objectForKey:@"id"];
-                        found = NO;
+                        BOOL attachmentFound = NO;
                         for (Attachment *attachment in existingObservation.attachments) {
                             if (remoteId != nil && [remoteId isEqualToString:attachment.remoteId]) {
                                 attachment.contentType = [attachmentJson objectForKey:@"contentType"];
@@ -283,11 +401,12 @@ NSNumber *_currentEventId;
                                 attachment.size = [attachmentJson objectForKey:@"size"];
                                 attachment.url = [attachmentJson objectForKey:@"url"];
                                 attachment.observation = existingObservation;
-                                found = YES;
+                                attachmentFound = YES;
                                 break;
                             }
                         }
-                        if (!found) {
+                        
+                        if (!attachmentFound) {
                             Attachment *newAttachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
                             [existingObservation addAttachmentsObject:newAttachment];
                         }
@@ -316,6 +435,245 @@ NSNumber *_currentEventId;
     }];
     
     return operation;
+}
+
+- (void) shareObservationForViewController:(UIViewController *) viewController {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Downloading Attachments"
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    progressView.translatesAutoresizingMaskIntoConstraints = NO;
+    [progressView setProgress:0.0];
+    [alert.view addSubview:progressView];
+    
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:progressView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:alert.view attribute:NSLayoutAttributeTop multiplier:1 constant:80];
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:progressView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:alert.view attribute:NSLayoutAttributeLeading multiplier:1 constant:16];
+    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:alert.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:progressView attribute:NSLayoutAttributeTrailing multiplier:1 constant:16];
+    [alert.view addConstraints:@[topConstraint, leftConstraint, rightConstraint]];
+    
+    // download the attachments (if we don't have them)
+    HttpManager *http = [HttpManager singleton];
+    NSMutableArray *requests = [[NSMutableArray alloc] init];
+    NSMutableArray *urls = [[NSMutableArray alloc] init];
+    for (Attachment *attachment in self.attachments) {
+        NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
+            AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
+            } failure:nil];
+            
+            [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    progressView.progress = (float)totalBytesRead / totalBytesExpectedToRead;
+                });
+            }];
+            
+            [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+            operation.responseSerializer = [AFHTTPResponseSerializer serializer];
+            operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+            
+            [requests addObject:operation];
+        } else {
+            NSURL *url = [NSURL fileURLWithPath:path isDirectory:NO];
+            [urls addObject:url];
+        }
+    }
+    
+    __block Boolean cancelled = NO;
+    if ([requests count]) {
+        [alert setMessage:[NSString stringWithFormat:@"1 of %lu\n\n", [requests count]]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            cancelled = YES;
+            for (AFHTTPRequestOperation *request in requests) {
+                [request cancel];
+            }
+        }]];
+        
+        [viewController presentViewController:alert animated:YES completion:nil];
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    NSArray *operations = [AFURLConnectionOperation batchOfRequestOperations:requests progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
+        if (numberOfFinishedOperations < totalNumberOfOperations) {
+            [alert setMessage:[NSString stringWithFormat:@"%lu of %lu\n\n", numberOfFinishedOperations + 1, totalNumberOfOperations]];
+        }
+        progressView.progress = 0.0;
+    } completionBlock:^(NSArray *operations) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+        
+        if (cancelled) {
+            return;
+        }
+        
+        NSMutableArray *items = [[NSMutableArray alloc] init];
+        [items addObject:[weakSelf observationText]];
+        [items addObjectsFromArray:urls];
+        
+        UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
+        [controller setValue:@"MAGE Observation" forKey:@"subject"];
+        
+        if (controller.popoverPresentationController) {
+            controller.popoverPresentationController.sourceView = viewController.view;
+            controller.popoverPresentationController.sourceRect = viewController.view.frame;
+            controller.popoverPresentationController.permittedArrowDirections = 0;
+        }
+        
+        [viewController presentViewController:controller animated:YES completion:nil];
+    }];
+    
+    [[NSOperationQueue mainQueue] addOperations:operations waitUntilFinished:NO];
+
+}
+
+- (NSString *) observationText {
+    Event *event = [Event MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", self.eventId]];
+    NSDictionary *form = event.form;
+    NSMutableArray *generalFields = [NSMutableArray arrayWithObjects:@"timestamp", @"geometry", @"type", nil];
+    
+    NSMutableString *text = [[NSMutableString alloc] init];
+    
+    NSMutableDictionary *nameToField = [[NSMutableDictionary alloc] init];
+    for (NSDictionary *field in [form objectForKey:@"fields"]) {
+        [nameToField setObject:field forKey:[field objectForKey:@"name"]];
+    }
+    
+    // user
+    [text appendFormat:@"Created by:\n%@\n\n", self.user.name];
+    
+    // timestamp
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateStyle = NSDateFormatterLongStyle;
+    dateFormatter.timeStyle = NSDateFormatterLongStyle;
+    [text appendFormat:@"Date:\n%@\n\n", [dateFormatter stringFromDate:self.timestamp]];
+    
+    // geometry
+    GeoPoint* point = (GeoPoint *) self.geometry;
+    [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    
+    // type
+    [text appendString:[self propertyText:[self.properties objectForKey:@"type"] forField:[nameToField objectForKey:@"type"]]];
+    
+    // variant
+    NSString *variantField = [form objectForKey:@"variantField"];;
+    if (variantField) {
+        [generalFields addObject:variantField];
+        
+        id variant = [self.properties objectForKey:variantField];
+        if (variant) {
+            [text appendString:[self propertyText:variant forField:[nameToField objectForKey:variantField]]];
+        }
+    }
+    
+    for (NSDictionary *field in [form objectForKey:@"fields"]) {
+        if ([generalFields containsObject:[field objectForKey:@"name"]]) {
+            continue;
+        }
+        
+        if ([field objectForKey:@"archived"]) {
+            continue;
+        }
+        
+        id value = [self.properties objectForKey:[field objectForKey:@"name"]];
+        if (![value length] || ([value isKindOfClass:[NSArray class]] && ![value count])) {
+            continue;
+        }
+        
+        [text appendString:[self propertyText:value forField:field]];
+    }
+    
+    return text;
+}
+
+- (NSString *) propertyText:(id) property forField:(NSDictionary *) field {
+    return [NSString stringWithFormat:@"%@:\n%@\n\n", [field objectForKey:@"title"], property];
+}
+
+- (Boolean) isImportant {
+    return self.observationImportant != nil && [self.observationImportant.important isEqualToNumber:[NSNumber numberWithBool:YES]];
+}
+
+- (void) toggleFavoriteWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
+        ObservationFavorite *favorite = [[weakSelf getFavoritesMap] objectForKey:[currentUser remoteId]];
+        ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
+        
+        NSLog(@"toggle favorite %@", localFavorite);
+        if (localFavorite && localFavorite.favorite) {
+            // toggle off
+            localFavorite.dirty = YES;
+            localFavorite.favorite = NO;
+        } else {
+            // toggle on
+            if (!localFavorite) {
+                localFavorite = [ObservationFavorite MR_createEntityInContext:localContext];
+                [localObservation addFavoritesObject:localFavorite];
+            }
+            
+            localFavorite.dirty = YES;
+            localFavorite.favorite = YES;
+            localFavorite.userId = [currentUser remoteId];
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        if (completion) {
+            completion(contextDidSave, error);
+        }
+    }];
+}
+
+- (NSDictionary *) getFavoritesMap {
+    NSMutableDictionary *favorites = [[NSMutableDictionary alloc] init];
+    for (ObservationFavorite *favorite in self.favorites) {
+        [favorites setObject:favorite forKey:favorite.userId];
+    }
+    
+    return favorites;
+}
+
+- (void) flagImportantWithDescription:(NSString *) description completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
+        
+        ObservationImportant *important = localObservation.observationImportant;
+        if (!important) {
+            important = [ObservationImportant MR_createEntityInContext:localContext];
+            important.observation = localObservation;
+            localObservation.observationImportant = important;
+        }
+        
+        important.dirty = [NSNumber numberWithBool:YES];
+        important.important = [NSNumber numberWithBool:YES];
+        important.userId = currentUser.remoteId;
+        important.reason = description;
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        if (completion) {
+            completion(contextDidSave, error);
+        }
+    }];
+}
+
+- (void) removeImportantWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
+        
+        ObservationImportant *important = localObservation.observationImportant;
+        if (important) {
+            important.dirty = [NSNumber numberWithBool:YES];
+            important.important = [NSNumber numberWithBool:NO];
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        if (completion) {
+            completion(contextDidSave, error);
+        }
+    }];
 }
 
 + (NSDate *) fetchLastObservationDate {

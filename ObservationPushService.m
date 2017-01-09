@@ -7,6 +7,8 @@
 #import "ObservationPushService.h"
 #import "HttpManager.h"
 #import "Observation.h"
+#import "ObservationFavorite.h"
+#import "ObservationImportant.h"
 #import "Attachment.h"
 #import "UserUtility.h"
 
@@ -16,7 +18,11 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 @property (nonatomic) NSTimeInterval interval;
 @property (nonatomic, strong) NSTimer* observationPushTimer;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *favoritesFetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *importantFetchedResultsController;
 @property (nonatomic, strong) NSMutableDictionary *pushingObservations;
+@property (nonatomic, strong) NSMutableDictionary *pushingFavorites;
+@property (nonatomic, strong) NSMutableDictionary *pushingImportant;
 @end
 
 @implementation ObservationPushService
@@ -37,6 +43,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         
         _interval = [[defaults valueForKey:kObservationPushFrequencyKey] doubleValue];
         _pushingObservations = [[NSMutableDictionary alloc] init];
+        _pushingFavorites = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -54,6 +61,25 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     
     [self pushObservations:self.fetchedResultsController.fetchedObjects];
     
+    self.favoritesFetchedResultsController = [ObservationFavorite MR_fetchAllSortedBy:@"observation.timestamp"
+                                                           ascending:NO
+                                                       withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
+                                                             groupBy:nil
+                                                            delegate:self
+                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
+    
+    self.importantFetchedResultsController = [ObservationImportant MR_fetchAllSortedBy:@"observation.timestamp"
+                                                                            ascending:NO
+                                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
+                                                                              groupBy:nil
+                                                                             delegate:self
+                                                                            inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
+
+    
     [self scheduleTimer];
 }
 
@@ -70,44 +96,86 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 - (void) onTimerFire {
     if (![[UserUtility singleton] isTokenExpired]) {
         [self pushObservations:self.fetchedResultsController.fetchedObjects];
+        [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
+        [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
     }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
-    switch(type) {
-        case NSFetchedResultsChangeInsert: {
-            NSLog(@"observations inserted, push em");
-            [self pushObservations:@[anObject]];
+    if ([anObject isKindOfClass:[Observation class]]) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert: {
+                NSLog(@"observations inserted, push em");
+                [self pushObservations:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeDelete:
+                break;
+            case NSFetchedResultsChangeUpdate: {
+                NSLog(@"observations updated, push em");
+                if ([anObject remoteId]) [self pushObservations:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeMove:
+                break;
+        }
+    } else if ([anObject isKindOfClass:[ObservationFavorite class]]) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert: {
+                NSLog(@"favorites inserted, push em");
+                [self pushFavorites:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeDelete:
+                NSLog(@"favorites deleted, push em");
+                if ([[anObject observation] remoteId]) [self pushFavorites:@[anObject]];
+                break;
+            case NSFetchedResultsChangeUpdate: {
+                NSLog(@"favorites updated, push em");
+                if ([[anObject observation] remoteId]) [self pushFavorites:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeMove:
+                break;
+        }
+    } else if ([anObject isKindOfClass:[ObservationImportant class]]) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert: {
+                NSLog(@"important inserted, push em");
+                [self pushImportant:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeDelete: {
+                NSLog(@"important deleted, push em");
+                if ([[anObject observation] remoteId]) [self pushImportant:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeUpdate: {
+                NSLog(@"important updated, push em");
+                if ([[anObject observation] remoteId]) [self pushImportant:@[anObject]];
+                break;
+            }
+            case NSFetchedResultsChangeMove:
             break;
         }
-        case NSFetchedResultsChangeDelete:
-            break;
-        case NSFetchedResultsChangeUpdate: {
-            NSLog(@"observations updated, push em");
-            Observation *observation = anObject;
-            if (observation.remoteId) [self pushObservations:@[anObject]];
-            break;
-        }
-        case NSFetchedResultsChangeMove:
-            break;
     }
 }
 
 
 - (void) pushObservations:(NSArray *) observations {
-    NSLog(@"currently still pushing %lu observations", (unsigned long)self.pushingObservations.count);
+    NSLog(@"currently still pushing %lu observations", (unsigned long) self.pushingObservations.count);
     
     // only push observations that haven't already been told to be pushed
     NSMutableDictionary *observationsToPush = [[NSMutableDictionary alloc] init];
     for (Observation *observation in observations) {
-        if ([self.pushingObservations objectForKey:observation.objectID] == nil){
+        if ([self.pushingObservations objectForKey:observation.objectID] == nil) {
             [self.pushingObservations setObject:observation forKey:observation.objectID];
             [observationsToPush setObject:observation forKey:observation.objectID];
         }
     }
     
     NSLog(@"about to push an additional %lu observations", (unsigned long) observationsToPush.count);
-    __weak ObservationPushService *weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     for (Observation *observation in [observationsToPush allValues]) {
         NSLog(@"submitting observation %@", observation.remoteId);
         NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^(id response) {
@@ -130,6 +198,70 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         }];
         
         [[HttpManager singleton].manager.operationQueue addOperation:observationPushOperation];
+    }
+}
+
+- (void) pushFavorites:(NSArray *) favorites {
+    NSLog(@"currently still pushing %lu favorites", (unsigned long) self.pushingFavorites.count);
+    
+    // only push favorites that haven't already been told to be pushed
+    NSMutableDictionary *favoritesToPush = [[NSMutableDictionary alloc] init];
+    for (ObservationFavorite *favorite in favorites) {
+        if ([self.pushingFavorites objectForKey:favorite.objectID] == nil) {
+            [self.pushingFavorites setObject:favorite forKey:favorite.objectID];
+            [favoritesToPush setObject:favorite forKey:favorite.objectID];
+        }
+    }
+    
+    NSLog(@"about to push an additional %lu favorites", (unsigned long) favoritesToPush.count);
+    __weak typeof(self) weakSelf = self;
+    for (ObservationFavorite *favorite in [favoritesToPush allValues]) {
+        NSOperation *favoritePushOperation = [Observation operationToPushFavorite:favorite success:^(id response) {
+            NSLog(@"Successfully submitted favorite");
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
+                localFavorite.dirty = NO;
+            } completion:^(BOOL success, NSError *error) {
+                [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
+            }];
+        } failure:^(NSError* error) {
+            NSLog(@"Error submitting favorite");
+            [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
+        }];
+        
+        [[HttpManager singleton].manager.operationQueue addOperation:favoritePushOperation];
+    }
+}
+
+- (void) pushImportant:(NSArray *) importants {
+    NSLog(@"currently still pushing %lu important changes", (unsigned long) self.pushingImportant.count);
+    
+    // only push important changes that haven't already been told to be pushed
+    NSMutableDictionary *importantsToPush = [[NSMutableDictionary alloc] init];
+    for (ObservationImportant *important in importants) {
+        if ([self.pushingImportant objectForKey:important.objectID] == nil) {
+            [self.pushingImportant setObject:important forKey:important.objectID];
+            [importantsToPush setObject:important forKey:important.objectID];
+        }
+    }
+    
+    NSLog(@"about to push an additional %lu importants", (unsigned long) importantsToPush.count);
+    __weak typeof(self) weakSelf = self;
+    for (ObservationImportant *important in [importantsToPush allValues]) {
+        NSOperation *importantPushOperation = [Observation operationToPushImportant:important success:^(id response) {
+            NSLog(@"Successfully submitted important");
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                ObservationImportant *localImportant = [important MR_inContext:localContext];
+                localImportant.dirty = NO;
+            } completion:^(BOOL success, NSError *error) {
+                [weakSelf.pushingImportant removeObjectForKey:important.objectID];
+            }];
+        } failure:^(NSError* error) {
+            NSLog(@"Error submitting important");
+            [weakSelf.pushingFavorites removeObjectForKey:important.objectID];
+        }];
+        
+        [[HttpManager singleton].manager.operationQueue addOperation:importantPushOperation];
     }
 }
 

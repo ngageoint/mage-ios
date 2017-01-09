@@ -2,32 +2,35 @@
 //  Observation+CoreDataProperties.h
 //  mage-ios-sdk
 //
-//  Created by William Newman on 4/18/16.
+//  Created by William Newman on 9/20/16.
 //  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
 #import "Observation.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Observation (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSString *deviceId;
-@property (nullable, nonatomic, retain) NSNumber *dirty;
-@property (nullable, nonatomic, retain) NSNumber *eventId;
-@property (nullable, nonatomic, retain) id geometry;
-@property (nullable, nonatomic, retain) NSDate *lastModified;
++ (NSFetchRequest<Observation *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSString *deviceId;
+@property (nullable, nonatomic, copy) NSNumber *dirty;
+@property (nullable, nonatomic, copy) NSNumber *eventId;
+@property (nullable, nonatomic, retain) NSObject *geometry;
+@property (nullable, nonatomic, copy) NSDate *lastModified;
 @property (nullable, nonatomic, retain) id properties;
-@property (nullable, nonatomic, retain) NSString *remoteId;
-@property (nullable, nonatomic, retain) NSNumber *state;
-@property (nullable, nonatomic, retain) NSDate *timestamp;
-@property (nullable, nonatomic, retain) NSString *url;
-@property (nullable, nonatomic, retain) NSString *userId;
+@property (nullable, nonatomic, copy) NSString *remoteId;
+@property (nullable, nonatomic, copy) NSNumber *state;
+@property (nullable, nonatomic, copy) NSDate *timestamp;
+@property (nullable, nonatomic, copy) NSString *url;
+@property (nullable, nonatomic, copy) NSString *userId;
+@property (nullable, nonatomic, retain) NSObject *attribute;
 @property (nullable, nonatomic, retain) NSSet<Attachment *> *attachments;
+@property (nullable, nonatomic, retain) ObservationImportant *observationImportant;
 @property (nullable, nonatomic, retain) User *user;
+@property (nullable, nonatomic, retain) NSSet<ObservationFavorite *> *favorites;
 
 @end
 
@@ -37,6 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAttachmentsObject:(Attachment *)value;
 - (void)addAttachments:(NSSet<Attachment *> *)values;
 - (void)removeAttachments:(NSSet<Attachment *> *)values;
+
+- (void)addFavoritesObject:(ObservationFavorite *)value;
+- (void)removeFavoritesObject:(ObservationFavorite *)value;
+- (void)addFavorites:(NSSet<ObservationFavorite *> *)values;
+- (void)removeFavorites:(NSSet<ObservationFavorite *> *)values;
 
 @end
 
