@@ -86,14 +86,12 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 }
 
 - (BOOL) isUserInEvent: (User *) user {
-    for (Team *t in user.teams) {
-        // doing this because chcking if the team is in the set didn't work
-        for(Team* eventTeam in self.teams) {
-            if ([eventTeam.remoteId isEqualToString:t.remoteId]) {
-                return true;
-            }
+    for (Team *eventTeam in self.teams) {
+        if ([eventTeam.users containsObject:user]) {
+            return true;
         }
     }
+    
     NSLog(@"User %@ is not in the event %@", user.name, self.name);
     return false;
 }

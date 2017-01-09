@@ -48,9 +48,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     server.reachabilityManager = [AFNetworkReachabilityManager managerForDomain:url.host];
     [server.reachabilityManager startMonitoring];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if ([url.absoluteString isEqualToString:[defaults valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
+    if ([url.absoluteString isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
         success(server);
         return;
     }
@@ -58,6 +56,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     HttpManager *http = [HttpManager singleton];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
     [http.manager GET:apiURL parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
         NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
