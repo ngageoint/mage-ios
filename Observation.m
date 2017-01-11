@@ -321,20 +321,6 @@ NSNumber *_currentEventId;
                     [observation populateObjectFromJson:feature];
                     observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
                 
-                    
-                    NSDictionary *importantJson = [feature objectForKey:@"important"];
-                    if (importantJson) {
-                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
-                        important.observation = observation;
-                        observation.observationImportant = important;
-                    }
-                
-                    for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
-                        ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
-                        favorite.observation = observation;
-                        [observation addFavoritesObject:favorite];
-                    }
-                    
                     NSDictionary *importantJson = [feature objectForKey:@"important"];
                     if (importantJson) {
                         ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
