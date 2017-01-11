@@ -14,7 +14,8 @@
 #import "AttachmentCollectionDataStore.h"
 
 @interface ObservationViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, ObservationActionsDelegate, ObservationImportantDelegate, AttachmentSelectionDelegate>
-
+@property (strong, nonatomic) NSMutableArray *tableLayout;
+@property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 @property (strong, nonatomic) IBOutlet AttachmentCollectionDataStore *attachmentCollectionDataStore;
 
 @property (strong, nonatomic) Observation *observation;

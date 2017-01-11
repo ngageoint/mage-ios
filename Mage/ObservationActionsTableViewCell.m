@@ -52,6 +52,11 @@
     }
 }
 
+- (IBAction) onDirectionTapped:(id)sender {
+    if (self.observationActionsDelegate) {
+        [self.observationActionsDelegate observationDirectionsTapped:sender];
+    }
+}
 
 
 @end

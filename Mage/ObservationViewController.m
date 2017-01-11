@@ -25,7 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet UILabel *primaryFieldLabel;
 @property (weak, nonatomic) IBOutlet UILabel *secondaryFieldLabel;
-@property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
@@ -33,7 +32,6 @@
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *fields;
 @property (strong, nonatomic) NSString *variantField;
-@property (strong, nonatomic) NSMutableArray *tableLayout;
 @property (nonatomic, strong) NSFetchedResultsController *favoritesFetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *importantFetchedResultsController;
 @end
@@ -113,14 +111,6 @@
     
     [self.tableLayout addObject:[self getHeaderSection]];
     [self.tableLayout addObject:[self getAttachmentsSection]];
-    
-    NSMutableArray *favoritesSection = [[NSMutableArray alloc] initWithObjects:@"actions", nil];
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    if ([favorites count]) {
-        [favoritesSection insertObject:@"favorites" atIndex:0];
-    };
-    
-    [self.tableLayout addObject:favoritesSection];
 
     NSMutableArray *importantSection = [[NSMutableArray alloc] init];
     if ([self canEditObservationImportant] && !self.observation.isImportant) {
@@ -218,10 +208,6 @@
             [cell setAttachmentSelectionDelegate:self];
         }
         
-        if ([cell respondsToSelector:@selector(setObservationActionsDelegate:)]) {
-            [cell setObservationActionsDelegate:self];
-        }
-        
         if ([cell respondsToSelector:@selector(setObservationImportantDelegate:)]) {
             [cell setObservationImportantDelegate:self];
         }
@@ -287,7 +273,7 @@
     return self.currentUser && [self.currentUser.role.permissions containsObject:@"UPDATE_EVENT"];
 }
 
-- (void) observationFavoriteTapped:(id)sender {
+- (IBAction) observationFavoriteTapped:(id)sender {
     __weak typeof(self) weakSelf = self;
     [self.observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
         [weakSelf updateFavorites];
@@ -295,22 +281,34 @@
 }
 
 - (void) updateFavorites {
-    NSMutableArray *favoriteSection = [self.tableLayout objectAtIndex:2];
     
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    NSInteger favoritesCount = [favorites count];
-    
-    if ([favoriteSection containsObject:@"favorites"] && favoritesCount == 0) {
-        [favoriteSection removeObjectAtIndex:0];
-    } else if (![favoriteSection containsObject:@"favorites"] && favoritesCount > 0) {
-        [favoriteSection insertObject:@"favorites" atIndex:0];
-    }
-    
-    [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 }
 
--(void) observationShareTapped:(id)sender {
+-(IBAction) observationShareTapped:(id)sender {
     [self.observation shareObservationForViewController:self];
+}
+
+- (IBAction) observationDirectionsTapped:(id)sender {
+    CLLocationCoordinate2D coordinate = ((GeoPoint *) self.observation.geometry).location.coordinate;
+    
+    NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
+    if ([[UIApplication sharedApplication] canOpenURL:mapsUrl]) {
+        NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
+                                       @"comgooglemaps-x-callback",
+                                       coordinate.latitude,
+                                       coordinate.longitude,
+                                       @"mage://?resume=true",
+                                       "MAGE"];
+        NSURL *directionsURL = [NSURL URLWithString:directionsRequest];
+        [[UIApplication sharedApplication] openURL:directionsURL];
+    } else {
+        NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
+        MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
+        MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+        [mapItem setName:[self.observation.properties valueForKey:@"type"]];
+        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+        [mapItem openInMapsWithLaunchOptions:options];
+    }
 }
 
 - (void) removeObservationImportant {
@@ -366,14 +364,14 @@
 - (void) updateImportant {
     BOOL isImportant = self.observation.isImportant;
     if (!isImportant && [self canEditObservationImportant]) {
-        [self.tableLayout replaceObjectAtIndex:3 withObject:@[@"addImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableLayout replaceObjectAtIndex:2 withObject:@[@"addImportant"]];
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
     } else if (isImportant) {
-        [self.tableLayout replaceObjectAtIndex:3 withObject:@[@"updateImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableLayout replaceObjectAtIndex:2 withObject:@[@"updateImportant"]];
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
     } else if (!isImportant) {
-        [self.tableLayout replaceObjectAtIndex:3 withObject:@[]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableLayout replaceObjectAtIndex:2 withObject:@[]];
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

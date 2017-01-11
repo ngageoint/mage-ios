@@ -13,5 +13,6 @@
 @required
 - (void) observationFavoriteTapped:(id) sender;
 - (void) observationShareTapped:(id) sender;
+- (void) observationDirectionsTapped:(id) sender;
 
 @end

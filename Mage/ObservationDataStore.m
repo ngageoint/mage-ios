@@ -206,4 +206,30 @@
     [observation shareObservationForViewController:self.viewController];
 }
 
+- (void) observationDirectionsTapped:(ObservationTableViewCell *) tableViewCell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
+    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    CLLocationCoordinate2D coordinate = ((GeoPoint *) observation.geometry).location.coordinate;
+    
+    NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
+    if ([[UIApplication sharedApplication] canOpenURL:mapsUrl]) {
+        NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
+                                       @"comgooglemaps-x-callback",
+                                       coordinate.latitude,
+                                       coordinate.longitude,
+                                       @"mage://?resume=true",
+                                       "MAGE"];
+        NSURL *directionsURL = [NSURL URLWithString:directionsRequest];
+        [[UIApplication sharedApplication] openURL:directionsURL];
+    } else {
+        NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
+        MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
+        MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+        [mapItem setName:[observation.properties valueForKey:@"type"]];
+        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+        [mapItem openInMapsWithLaunchOptions:options];
+    }
+}
+
 @end

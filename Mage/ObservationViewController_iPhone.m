@@ -9,7 +9,14 @@
 @implementation ObservationViewController_iPhone
 
 - (NSMutableArray *) getHeaderSection {
-    return [[NSMutableArray alloc] initWithObjects:@"header", @"map", @"directions", nil];
+    NSMutableArray *headerSection = [[NSMutableArray alloc] initWithObjects:@"header", @"map", @"actions", nil];
+    
+    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
+    if ([favorites count]) {
+        [headerSection insertObject:@"favorites" atIndex:2];
+    };
+    
+    return headerSection;
 }
 
 - (NSMutableArray *) getAttachmentsSection {
@@ -20,6 +27,24 @@
     }
     
     return attachmentsSection;
+}
+
+- (void) updateFavorites {
+    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
+
+    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:0];
+    
+    NSInteger favoritesCount = [favorites count];
+    
+    if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
+        [headerSection removeObjectAtIndex:2];
+        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
+        [headerSection insertObject:@"favorites" atIndex:2];
+        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 @end

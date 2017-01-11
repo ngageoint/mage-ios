@@ -106,4 +106,10 @@
     }
 }
 
+- (IBAction)onDirectionsTapped:(id)sender {
+    if (self.observationActionsDelegate) {
+        [self.observationActionsDelegate observationDirectionsTapped:self];
+    }
+}
+
 @end
