@@ -14,8 +14,6 @@
 
 @implementation MapSettings
 
-bool originalNavBarHidden;
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     

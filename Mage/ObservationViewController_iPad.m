@@ -74,7 +74,7 @@
 
 - (void) updateFavorites {
     NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    NSInteger favoritesCount = [favorites count];
+    NSUInteger favoritesCount = [favorites count];
     
     if (favoritesCount == 0) {
         self.favoritesView.hidden = YES;
@@ -82,30 +82,8 @@
     } else {
         self.favoritesView.hidden = NO;
         self.favoriteButton.tintColor = self.favoriteHighlightColor;
-        [self.favoritesButton setTitle:[NSString stringWithFormat:@"%ld %@", favoritesCount, favoritesCount > 1 ? @"FAVORITES" : @"FAVORITE"] forState:UIControlStateNormal];
+        [self.favoritesButton setTitle:[NSString stringWithFormat:@"%lu %@", (unsigned long)favoritesCount, favoritesCount > 1 ? @"FAVORITES" : @"FAVORITE"] forState:UIControlStateNormal];
     }
 }
-
-//- (IBAction) getDirections:(id)sender {
-//    CLLocationCoordinate2D coordinate = ((GeoPoint *) self.observation.geometry).location.coordinate;
-//    NSURL *testURL = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
-//    if ([[UIApplication sharedApplication] canOpenURL:testURL]) {
-//        NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
-//                                       @"comgooglemaps-x-callback",
-//                                       coordinate.latitude,
-//                                       coordinate.longitude,
-//                                       @"mage://?resume=true",
-//                                       "MAGE"];
-//        NSURL *directionsURL = [NSURL URLWithString:directionsRequest];
-//        [[UIApplication sharedApplication] openURL:directionsURL];
-//    } else {
-//        NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
-//        MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
-//        MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-//        [mapItem setName:[self.observation.properties valueForKey:@"type"]];
-//        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-//        [mapItem openInMapsWithLaunchOptions:options];
-//    }
-//}
 
 @end
