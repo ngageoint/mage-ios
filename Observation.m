@@ -342,8 +342,16 @@ NSNumber *_currentEventId;
                     [observation setEventId:eventId];
                     NSLog(@"Saving new observation with id: %@", observation.remoteId);
                 } else if (state != Archive && ![existingObservation.dirty boolValue]) {
+                    NSDate *lastModified = existingObservation.lastModified;
+                    
                     // if the observation is not dirty, update it
                     [existingObservation populateObjectFromJson:feature];
+                    
+                    if ([lastModified compare:existingObservation.lastModified] == NSOrderedSame) {
+                        // If the last modified date for this observation has not changed no need to update.
+                        continue;
+                    }
+                    
                     existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
                     
                     NSDictionary *importantJson = [feature objectForKey:@"important"];
@@ -638,6 +646,10 @@ NSNumber *_currentEventId;
         important.important = [NSNumber numberWithBool:YES];
         important.userId = currentUser.remoteId;
         important.reason = description;
+        
+        // This will get overriden by the server, but lets set an inital value
+        // so the UI has something to display
+        important.timestamp = [NSDate date];
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
