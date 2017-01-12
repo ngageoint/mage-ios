@@ -30,7 +30,7 @@
 
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterLongStyle;
+    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
     
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }
