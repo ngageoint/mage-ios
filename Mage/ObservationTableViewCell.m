@@ -88,7 +88,7 @@
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     if ([favorites count]) {
         self.favoriteNumber.hidden = NO;
-        self.favoriteNumber.text = [favorites count] <= 99 ? [@([favoritesMap count]) stringValue] : @"99+";
+        self.favoriteNumber.text = [favorites count] <= 99 ? [@([favorites count]) stringValue] : @"99+";
     } else {
         self.favoriteNumber.hidden = YES;
     }

@@ -38,12 +38,16 @@
     
     if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
         [headerSection removeObjectAtIndex:2];
+        [self.propertyTable beginUpdates];
         [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.propertyTable endUpdates];
     } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
         [headerSection insertObject:@"favorites" atIndex:2];
         [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    } else if ([headerSection containsObject:@"favorites"]) {
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0], [NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

@@ -276,7 +276,7 @@
 - (IBAction) observationFavoriteTapped:(id)sender {
     __weak typeof(self) weakSelf = self;
     [self.observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        [weakSelf updateFavorites];
+        // No-op favorites FRC will catch update and handle
     }];
 }
 
