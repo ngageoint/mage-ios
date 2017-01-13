@@ -49,7 +49,8 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     }
     
     if ([Observations getFavoritesFilter]) {
-        [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@", [NSNumber numberWithBool:YES]]];
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
