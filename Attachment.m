@@ -43,8 +43,8 @@
     return self;
 }
 
-- (NSURL *) sourceURLWithSize:(NSInteger) size {
-    if (self.localPath) {
+- (NSURL *) sourceURLWithSize:(NSInteger) size {    
+    if (self.localPath && [[NSFileManager defaultManager] fileExistsAtPath:self.localPath]) {
         return [NSURL fileURLWithPath:self.localPath];
     } else {
         NSString *token = [StoredPassword retrieveStoredToken];
