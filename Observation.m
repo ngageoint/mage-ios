@@ -342,16 +342,15 @@ NSNumber *_currentEventId;
                     [observation setEventId:eventId];
                     NSLog(@"Saving new observation with id: %@", observation.remoteId);
                 } else if (state != Archive && ![existingObservation.dirty boolValue]) {
-                    NSDate *lastModified = existingObservation.lastModified;
                     
-                    // if the observation is not dirty, update it
-                    [existingObservation populateObjectFromJson:feature];
-                    
+                    // if the observation is not dirty, and has been updated, update it
+                    NSDate *lastModified = [NSDate dateFromIso8601String:[feature objectForKey:@"lastModified"]];
                     if ([lastModified compare:existingObservation.lastModified] == NSOrderedSame) {
                         // If the last modified date for this observation has not changed no need to update.
                         continue;
                     }
                     
+                    [existingObservation populateObjectFromJson:feature];
                     existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
                     
                     NSDictionary *importantJson = [feature objectForKey:@"important"];
