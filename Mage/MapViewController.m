@@ -30,6 +30,7 @@
 #import "AttachmentViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
+#import "Filter.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -119,8 +120,8 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [TimeFilter getTimeFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
+    NSString *timeFilterString = [Filter getFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:timeFilterString];
 }
 
 

@@ -43,6 +43,7 @@
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
 		2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */; };
+		2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* Filter.m */; };
 		2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43A31CE4F68400D99AAF /* TimeFilter.m */; };
 		2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */; };
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
@@ -234,6 +235,8 @@
 		2F81C4231C692C30006897E7 /* AttributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionsViewController.m; sourceTree = "<group>"; };
 		2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionTableViewCell.h; sourceTree = "<group>"; };
 		2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionTableViewCell.m; sourceTree = "<group>"; };
+		2F99EC1F1E2982E700E0CBB6 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		2F99EC201E2982E700E0CBB6 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
 		2F9F43A21CE4F68400D99AAF /* TimeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFilter.h; sourceTree = "<group>"; };
 		2F9F43A31CE4F68400D99AAF /* TimeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeFilter.m; sourceTree = "<group>"; };
 		2F9F43A91CE5050400D99AAF /* UINavigationItem+Subtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+Subtitle.h"; sourceTree = "<group>"; };
@@ -559,6 +562,8 @@
 				2FB41CE31DC79C8F005C18F9 /* FilterTableViewController.m */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
+				2F99EC1F1E2982E700E0CBB6 /* Filter.h */,
+				2F99EC201E2982E700E0CBB6 /* Filter.m */,
 			);
 			name = Filter;
 			sourceTree = "<group>";
@@ -1360,6 +1365,7 @@
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
+				2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */,
 				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */,

@@ -10,6 +10,7 @@
 #import <Event.h>
 #import "HttpManager.h"
 #import "TimeFilter.h"
+#import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
 
 @implementation LocationTableViewController
@@ -51,7 +52,7 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    NSString *timeFilterString = [Filter getFilterString];
     [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 

@@ -50,29 +50,6 @@ NSString * const kTimeFilterKey = @"timeFilterKey";
     }
 }
 
-//+ (NSPredicate *) getFilterPredicateForTimeField:(NSString *) timeField {
-//    NSMutableArray *predicates = [[NSMutableArray alloc] init];
-//    
-//    NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:timeField];
-//    if (timePredicate) {
-//        [predicates addObject:timePredicate];
-//    }
-//    
-//    if ([self getImportantFilter]) {
-//        [predicates addObject:[NSPredicate predicateWithFormat:@"observationImportant.important = %@", [NSNumber numberWithBool:YES]]];
-//    }
-//    
-//    if ([self getFavoritesFilter]) {
-////        [predicates addObject:[NSPredicate predicateWithFormat:@"important.important = %@", [NSNumber numberWithBool:YES]]];
-//    }
-//    
-//    if (![predicates count]) {
-//        return nil;
-//    }
-//
-//    return [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
-//}
-
 + (NSPredicate *) getTimePredicateForField:(NSString *) field {
     TimeFilterType timeFilter = [TimeFilter getTimeFilter];
     switch (timeFilter) {
@@ -107,33 +84,5 @@ NSString * const kTimeFilterKey = @"timeFilterKey";
         }
     }
 }
-
-//+ (UIAlertController *) createFilterActionSheet {
-//    
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Filter"
-//                                                                   message:@"Filter observations and people by time"
-//                                                            preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    for (int type = TimeFilterAll; type <= TimeFilterLastMonth; ++type) {
-//        UIAlertAction *action = [self createAlertAction:type];
-//        [alert addAction:action];
-//    }
-//    
-//    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-//    
-//    return alert;
-//}
-
-//+ (UIAlertAction *) createAlertAction:(TimeFilterType) timeFilter {
-//    TimeFilterType currentFilter = [TimeFilter getTimeFilter];
-//
-//    UIAlertAction *action = [UIAlertAction actionWithTitle:[TimeFilter timeFilterStringForType:timeFilter] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        [TimeFilter setTimeFilter:timeFilter];
-//    }];
-//    action.enabled = currentFilter != timeFilter;
-//
-//    return action;
-//}
-
 
 @end

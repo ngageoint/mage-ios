@@ -17,7 +17,7 @@
 #import "ObservationEditViewController.h"
 #import "HttpManager.h"
 #import <LocationService.h>
-#import "TimeFilter.h"
+#import "Filter.h"
 #import "Observations.h"
 
 @implementation ObservationTableViewController
@@ -78,7 +78,7 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    NSString *timeFilterString = [Filter getFilterString];
     [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
