@@ -11,7 +11,7 @@
 @implementation AttachmentCell
 
 - (void)prepareForReuse {
-    self.imageView.image = nil;
+    self.imageView.image = [UIImage imageNamed:@"download_thumbnail"];
 }
 
 -(void) setImageForAttachament:(Attachment *) attachment withFormatName:(NSString *) formatName {
@@ -22,7 +22,6 @@
         // This completion block may be called much later, check to make sure this cell hasn't been reused for a different attachment before displaying the image that has loaded.
         if (attachment == [self attachment]) {
             weakSelf.imageView.image = image;
-            [weakSelf.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
             weakSelf.imageView.layer.cornerRadius = 5;
             weakSelf.imageView.clipsToBounds = YES;
         }

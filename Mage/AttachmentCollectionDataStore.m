@@ -11,7 +11,7 @@
 @implementation AttachmentCollectionDataStore
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *allAttachments = [NSMutableArray arrayWithArray:[self.observation.attachments allObjects]];
+    NSMutableArray *allAttachments = [[self.observation.attachments sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
     [allAttachments addObjectsFromArray:self.observation.transientAttachments];
     
     AttachmentCell *cell = [self.attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
