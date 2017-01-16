@@ -241,7 +241,7 @@
         self.toastText.text = @"You are now reporting your location.";
         self.toastView.backgroundColor = [UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0];
     } else {
-        self.toastText.text = @"Location reporting has been disabled";
+        self.toastText.text = @"Location reporting has been disabled.";
         self.toastView.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0];
     }
     [self setupReportLocationButtonWithTrackingState:newState userInEvent:inEvent];
