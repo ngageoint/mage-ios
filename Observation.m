@@ -498,6 +498,11 @@ NSNumber *_currentEventId;
         [alert dismissViewControllerAnimated:YES completion:nil];
         
         if (cancelled) {
+            // clean up attachments
+            for (NSURL *url in urls) {
+                [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
+            }
+            
             return;
         }
         
