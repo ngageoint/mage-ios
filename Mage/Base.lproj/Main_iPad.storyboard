@@ -1195,7 +1195,7 @@
                                                     </cells>
                                                 </collectionView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="Nnn-Z2-ZuY">
-                                                    <rect key="frame" x="0.0" y="91" width="196" height="36"/>
+                                                    <rect key="frame" x="0.0" y="91" width="122" height="36"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4tt-up-9s2">
                                                             <rect key="frame" x="0.0" y="0.0" width="48" height="36"/>
@@ -1230,21 +1230,8 @@
                                                                 <constraint firstAttribute="width" constant="48" id="v0t-uT-pzg"/>
                                                             </constraints>
                                                         </view>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cgs-dp-lXv">
-                                                            <rect key="frame" x="84" y="0.0" width="38" height="36"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="36" id="PHE-TA-a6T"/>
-                                                                <constraint firstAttribute="width" constant="38" id="y5R-52-NNY"/>
-                                                            </constraints>
-                                                            <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                                            <state key="normal" image="share"/>
-                                                            <state key="highlighted" image="share_highlight"/>
-                                                            <connections>
-                                                                <action selector="onShareTapped:" destination="sBs-KB-keM" eventType="touchUpInside" id="IPW-x8-UXo"/>
-                                                            </connections>
-                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hyA-HY-n0d">
-                                                            <rect key="frame" x="158" y="0.0" width="38" height="36"/>
+                                                            <rect key="frame" x="84" y="0.0" width="38" height="36"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="36" id="IJT-GC-R7x"/>
                                                                 <constraint firstAttribute="width" constant="38" id="fCZ-h0-aLC"/>
@@ -1490,7 +1477,7 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="XeY-xk-z8p">
-                                                <rect key="frame" x="0.0" y="8.5" width="192" height="24"/>
+                                                <rect key="frame" x="0.0" y="8.5" width="120" height="24"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PLX-MG-zmT">
                                                         <rect key="frame" x="0.0" y="0.0" width="48" height="24"/>
@@ -1504,21 +1491,8 @@
                                                             <action selector="observationFavoriteTapped:" destination="Lx3-sm-j1G" eventType="touchUpInside" id="JZM-rT-d8G"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y6z-tw-Eeu">
-                                                        <rect key="frame" x="72" y="0.0" width="48" height="24"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="24" id="6WB-Hk-bAP"/>
-                                                            <constraint firstAttribute="width" constant="48" id="Q2T-bD-NTv"/>
-                                                        </constraints>
-                                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <state key="normal" image="share"/>
-                                                        <state key="highlighted" image="share_highlight"/>
-                                                        <connections>
-                                                            <action selector="observationShareTapped:" destination="Lx3-sm-j1G" eventType="touchUpInside" id="d6Y-4h-PVt"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Egf-K2-6pm">
-                                                        <rect key="frame" x="144" y="0.0" width="48" height="24"/>
+                                                        <rect key="frame" x="72" y="0.0" width="48" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="48" id="H2Z-1w-Yl8"/>
                                                             <constraint firstAttribute="height" constant="24" id="c2B-G7-bQ4"/>

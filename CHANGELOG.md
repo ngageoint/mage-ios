@@ -16,7 +16,6 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 * Users can now favorite observations
 * Users with event edit permission can flag observations as important
-* Users can share observations with other applications on the device, ie email.
 
 ##### Bug Fixes
 
