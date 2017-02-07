@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString * const MAGEEventsFetched;
 + (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
 + (void) sendRecentEvent;
-+ (Event *) getCurrentEvent;
++ (Event *) getCurrentEventInContext:(NSManagedObjectContext *) context;
 - (BOOL) isUserInEvent: (User *) user;
 
 @end

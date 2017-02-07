@@ -102,7 +102,7 @@ NSInteger const kLocationPushLimit = 100;
     __block NSTimeInterval interval;
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        if ([[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
+        if ([[Event getCurrentEventInContext:localContext] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
             NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
             for (CLLocation *location in locations) {
                 [locationEntities addObject:[GPSLocation gpsLocationForLocation:location inManagedObjectContext:localContext]];
