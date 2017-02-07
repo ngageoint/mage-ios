@@ -49,7 +49,8 @@
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
@@ -95,7 +96,7 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
-    Event *currentEvent = [Event getCurrentEvent];
+    Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     
     [defaults addObserver:self
@@ -121,7 +122,7 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:timeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:timeFilterString];
 }
 
 
@@ -166,7 +167,8 @@
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
     } else if ([kTimeFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
         self.mapDelegate.locations = [Locations locationsForAllUsers];
@@ -207,7 +209,8 @@
 
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        if (![[Event getCurrentEvent] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]) {
+        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
             UIAlertController * alert = [UIAlertController
                                          alertControllerWithTitle:@"You are not part of this event"
                                          message:@"You cannot create observations for an event you are not part of."
@@ -226,8 +229,8 @@
 - (IBAction) onReportLocationButtonPressed:(id)sender {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
-    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    BOOL inEvent = [[Event getCurrentEvent] isUserInEvent:user];
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+    BOOL inEvent = [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]];
     if (!inEvent) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Not In Event"
                                                                         message:@"You cannot report your location for an event you are not part of."

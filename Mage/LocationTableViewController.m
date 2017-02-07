@@ -15,7 +15,7 @@
 
 @implementation LocationTableViewController
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     // bug in ios smashes the refresh text into the
@@ -26,10 +26,6 @@
     });
     
     self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
-    
-    Event *currentEvent = [Event getCurrentEvent];
-    self.eventNameLabel.text = @"All";
-    [self.navigationItem setTitle:currentEvent.name];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -53,7 +49,7 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEvent].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

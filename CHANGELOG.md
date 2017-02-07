@@ -3,13 +3,21 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.3.1 (TBD)
+## 1.3.2 (TBD)
 
 * TBD
 
 ##### Features
 
 ##### Bug Fixes
+
+## 1.3.1 (https://github.com/ngageoint/mage-ios/releases/tag/1.3.1) (02-07-2017)
+
+##### Features
+
+##### Bug Fixes
+* Update to new mage-ios-sdk  This will ensure when checking that a user exists in an event the same
+  managed object context is used.
 
 ## 1.3.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.3.0) (11-03-2016)
 

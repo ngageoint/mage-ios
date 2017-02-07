@@ -79,7 +79,7 @@ BOOL unwind = NO;
     } else if (!self.forcePick &&
                self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&
                self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 &&
-               [Event getCurrentEvent].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
+               [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
         // they only have one event and have already picked it so move on to the map
         [self segueToApplication];
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {

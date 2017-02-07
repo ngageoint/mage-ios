@@ -32,7 +32,7 @@
     lblTitle.textColor = [UIColor whiteColor];
     lblTitle.font = [UIFont boldSystemFontOfSize:18];
     lblTitle.textAlignment = NSTextAlignmentLeft;
-    lblTitle.text = [Event getCurrentEvent].name;
+    lblTitle.text = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name;
     [lblTitle sizeToFit];
     
     [self.eventNameItem setCustomView:lblTitle];

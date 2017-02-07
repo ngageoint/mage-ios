@@ -58,7 +58,7 @@
         [self.dataFetchStatus setText:@"Off"];
     }
 
-    Event *e = [Event getCurrentEvent];
+    Event *e = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     self.eventNameLabel.text = e.name;
 
     [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
