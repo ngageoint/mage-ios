@@ -133,7 +133,7 @@
 }
 
 -(void) downloadAndPlayMediaType: (NSString *) type fromUrl: (NSString *) url andSaveTo: (NSString *) downloadPath {
-    HttpManager *http = [HttpManager singleton];
+
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
         // save the local path
         NSLog(@"playing locally");
@@ -143,21 +143,31 @@
         NSLog(@"Downloading to %@", downloadPath);
         [self.progressView setHidden:NO];
         
-        NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
         __weak AttachmentViewController *weakSelf = self;
-        AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        
+        NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:^(NSProgress * downloadProgress){
+            dispatch_async(dispatch_get_main_queue(), ^{;
+                float progress = downloadProgress.fractionCompleted;
+                weakSelf.downloadProgressBar.progress = progress;
+                weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
+            });
+        } success:^(NSURLSessionTask *task, id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
                     [weakSelf.progressView setHidden:YES];
                     [weakSelf playMediaType: type FromDocumentsFolder:downloadPath];
                 }
             });
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSLog(@"Error: %@", error);
             //delete the file
             NSError *deleteError;
             [[NSFileManager defaultManager] removeItemAtPath:downloadPath error:&deleteError];
         }];
+        
         NSError *error;
         if (![[NSFileManager defaultManager] fileExistsAtPath:[downloadPath stringByDeletingLastPathComponent]]) {
             NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
@@ -165,18 +175,10 @@
         }
         
         [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
-        operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
+        // TODO output in success block?
+        //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
         
-        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                float progress = (float)totalBytesRead / totalBytesExpectedToRead;
-                weakSelf.downloadProgressBar.progress = progress;
-                weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
-            });
-        }];
-        
-        [self.operationQueue addOperation:operation];
+        [task resume];
     }
 
 }

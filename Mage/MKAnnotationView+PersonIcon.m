@@ -5,7 +5,6 @@
 //
 
 #import "MKAnnotationView+PersonIcon.h"
-#import "AFHTTPRequestOperation.h"
 #import "UIImage+Resize.h"
 #import <Location.h>
 #import <NSDate+DateTools.h>
