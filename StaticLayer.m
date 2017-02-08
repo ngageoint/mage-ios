@@ -32,16 +32,15 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     }
 }
 
-+ (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer {
++ (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer {
     HttpManager *http = [HttpManager singleton];
     __block NSNumber *layerId = layer.remoteId;
     __block NSNumber *eventId = layer.eventId;
     
     // put this line back when the event endpoint returns the proper url for the layer
-    //    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/features", layer.url] parameters: nil error: nil];
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:[NSString stringWithFormat:@"%@/api/events/%@/layers/%@/features", [MageServer baseURL], eventId, layerId] parameters: nil error: nil];
-    
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    //NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/features", layer.url]];
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/events/%@/layers/%@/features", [MageServer baseURL], eventId, layerId]];
+    NSURLSessionDataTask * task = [http.manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         StaticLayer *fetchedLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, eventId]];
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             StaticLayer *localLayer = [fetchedLayer MR_inContext:localContext];
@@ -73,11 +72,11 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
                 [[NSNotificationCenter defaultCenter] postNotificationName:StaticLayerLoaded object:localLayer];
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    return operation;
     
+    return task;
 }
 
 @end

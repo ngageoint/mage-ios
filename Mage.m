@@ -37,9 +37,7 @@
 - (void) startServices {
     [[LocationService singleton] start];
 
-    NSOperation *rolesPullOp = [Role operationToFetchRolesWithSuccess:nil failure:nil];
-    
-    NSOperation *usersPullOp = [User operationToFetchUsersWithSuccess:^{
+    NSURLSessionDataTask *usersPullTask = [User operationToFetchUsersWithSuccess:^{
         NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
         [[ObservationFetchService singleton] start];
@@ -47,14 +45,15 @@
         NSLog(@"Failed to pull users");
     }];
     
-    [usersPullOp addDependency:rolesPullOp];
+    NSURLSessionDataTask *rolesPullTask = [Role operationToFetchRolesWithSuccess:^{
+        [usersPullTask resume];
+    } failure:nil];
     
     [[ObservationPushService singleton] start];
     [[AttachmentPushService singleton] start];
     
     // Add the operations to the queue
-    [[HttpManager singleton].manager.operationQueue addOperation:rolesPullOp];
-    [[HttpManager singleton].manager.operationQueue addOperation:usersPullOp];
+    [rolesPullTask resume];
 }
 
 - (void) stopServices {
@@ -65,9 +64,9 @@
 }
 
 - (void) fetchEvents {
-    NSOperation *myselfOp = [User operationToFetchMyselfWithSuccess:^{
+    NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^{
         
-        NSOperation *eventOp = [Event operationToFetchEventsWithSuccess:^{
+        NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
             NSArray *events = [Event MR_findAll];
             [self addFormFetchOperationsForEvents: events];
             // also go fetch any static data for the static layers
@@ -76,23 +75,23 @@
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
         }];
-        [[HttpManager singleton].manager.operationQueue addOperation: eventOp];
+        [eventTask resume];
     } failure:^(NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
     }];
-    [[HttpManager singleton].manager.operationQueue addOperation:myselfOp];
+    [myselfTask resume];
 }
 
 - (void) addFormFetchOperationsForEvents: (NSArray *) events {
     for (Event *e in events) {
-        NSOperation *formOp = [Form operationToPullFormForEvent:e.remoteId
+        NSURLSessionTask *formTask = [Form operationToPullFormForEvent:e.remoteId
                                                         success: ^{
                                                             NSLog(@"Pulled form for event");
                                                         } failure:^(NSError* error) {
                                                             NSLog(@"failed to pull form for event");
                                                         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:formOp];
+        [formTask resume];
     }
 }
 
@@ -103,8 +102,8 @@
         for (StaticLayer *s in staticLayers) {
             if (s.data == nil) {
                 NSLog(@"Static layer data is nil for %@ in event %@ retrieving data", s.name, s.eventId);
-                NSOperation *layerOp = [StaticLayer operationToFetchStaticLayerData:s];
-                [[HttpManager singleton].manager.operationQueue addOperation:layerOp];
+                NSURLSessionDataTask *layerTask = [StaticLayer operationToFetchStaticLayerData:s];
+                [layerTask resume];
             }
         }
     }

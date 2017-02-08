@@ -57,20 +57,21 @@ static User *currentUser = nil;
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString *userIconRelativePath = [NSString stringWithFormat:@"userIcons/%@", user.remoteId];
     NSString *userIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userIconRelativePath];
-    HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSURLSessionDataTask *task = [manager GET:user.iconUrl parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *localUser = [user MR_inContext:localContext];
             localUser.iconUrl = userIconRelativePath;
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         //delete the file
         NSError *deleteError;
         [[NSFileManager defaultManager] removeItemAtPath:userIconPath error:&deleteError];
     }];
+    
     NSError *error;
     if (![[NSFileManager defaultManager] fileExistsAtPath:[userIconPath stringByDeletingLastPathComponent]]) {
         NSLog(@"Creating directory %@", [userIconPath stringByDeletingLastPathComponent]);
@@ -78,26 +79,26 @@ static User *currentUser = nil;
     }
     
     [[NSFileManager defaultManager] createFileAtPath:userIconPath contents:nil attributes:nil];
-    operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userIconPath append:NO];
+    // TODO stream in the success?
+    //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userIconPath append:NO];
     
-    [operation start];
-}
+    [task resume];
+};
 
 + (void) pullUserAvatar: (User *) user {
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString *userAvatarRelativePath = [NSString stringWithFormat:@"userAvatars/%@", user.remoteId];
     NSString *userAvatarPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userAvatarRelativePath];
     
-    HttpManager *http = [HttpManager singleton];
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSURLSessionDataTask *task = [manager GET:user.avatarUrl parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *localUser = [user MR_inContext:localContext];
             localUser.avatarUrl = userAvatarRelativePath;
             NSLog(@"set the avatar url on the user to: %@", localUser.avatarUrl);
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         //delete the file
         NSError *deleteError;
@@ -110,13 +111,13 @@ static User *currentUser = nil;
     }
     
     [[NSFileManager defaultManager] createFileAtPath:userAvatarPath contents:nil attributes:nil];
-    operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userAvatarPath append:NO];
+    // TODO stream in the success?
+    //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userAvatarPath append:NO];
     
-    [operation start];
+    [task resume];
 }
 
-+ (NSOperation *) operationToFetchUsersWithSuccess: (void (^)())success
++ (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void (^)())success
                                            failure:(void (^)(NSError *error))failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"];
     
@@ -124,8 +125,7 @@ static User *currentUser = nil;
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id users) {
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get roles
@@ -199,13 +199,14 @@ static User *currentUser = nil;
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         failure(error);
     }];
-    return operation;
+    
+    return task;
 }
 
-+ (NSOperation *) operationToFetchMyselfWithSuccess: (void (^)())success
++ (NSURLSessionDataTask *) operationToFetchMyselfWithSuccess: (void (^)())success
                                             failure:(void (^)(NSError *error))failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
     
@@ -213,8 +214,7 @@ static User *currentUser = nil;
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id myself) {
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             
@@ -253,10 +253,12 @@ static User *currentUser = nil;
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         failure(error);
     }];
-    return operation;
+    
+    return task;
 }
 
 @end

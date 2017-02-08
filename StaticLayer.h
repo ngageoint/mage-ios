@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const StaticLayerLoaded;
 
-+ (NSOperation *) operationToFetchStaticLayerData: (StaticLayer *) layer;
++ (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer;
 + (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 
 @end

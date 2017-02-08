@@ -8,6 +8,6 @@
 
 @interface Form : NSObject
 
-+ (NSOperation *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (NSURLSessionDownloadTask *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure;
 
 @end

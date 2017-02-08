@@ -114,11 +114,10 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         HttpManager *http = [HttpManager singleton];
         NSString *url = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
 
-        NSMutableURLRequest *request = [http.sessionManager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSURL *URL = [NSURL URLWithString:url];
+        NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
-        } error:nil];
-
-        AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        } progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Attachment *localAttachment = [attachment MR_inContext:localContext];
                 localAttachment.remoteId = [responseObject valueForKey:@"id"];
@@ -134,16 +133,12 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             } completion:^(BOOL success, NSError *error) {
                 [attachmentsToPush removeObjectForKey:attachment.objectID];
             }];
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSLog(@"Error: %@", error);
             [attachmentsToPush removeObjectForKey:attachment.objectID];
         }];
         
-        [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
-            NSLog(@"failed to upload attachments in background");
-        }];
-        
-        [http.manager.operationQueue addOperation:operation];
+        [task resume];
     }
 }
 

@@ -59,7 +59,7 @@
 }
 
 
-+ (NSOperation *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations/users", [MageServer baseURL], [Server currentEventId]];
     NSLog(@"Trying to fetch locations from server %@", url);
     
@@ -71,8 +71,7 @@
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id allUserLocations) {
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id allUserLocations) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[allUserLocations count]);
             User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
@@ -136,14 +135,14 @@
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         if (failure) {
             failure(error);
         }
     }];
     
-    return operation;
+    return task;
 }
 
 + (NSDate *) fetchLastLocationDate {

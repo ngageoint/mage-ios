@@ -55,12 +55,12 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     
     HttpManager *http = [HttpManager singleton];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
-    [http.manager GET:apiURL parameters:nil success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+    NSURLSessionDataTask *task = [http.manager GET:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
         NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
-
+        
         NSNumber *serverMajorVersion = [response valueForKeyPath:@"version.major"];
         NSNumber *serverMinorVersion = [response valueForKeyPath:@"version.minor"];
         
@@ -81,7 +81,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         server.authenticationModules = authenticationModules;
         
         [defaults synchronize];
-
+        
         if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion) {
             [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
             [defaults synchronize];
@@ -91,14 +91,14 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             failure([[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [response valueForKeyPath:@"version.major"], [response valueForKeyPath:@"version.minor"], [response valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]]);
             return;
         }
-    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         // check if the error indicates that the network is unavailable
         // and return a local authentication module
         if ([error.domain isEqualToString:NSURLErrorDomain]
             && (error.code == NSURLErrorCannotConnectToHost
-            || error.code == NSURLErrorNetworkConnectionLost
-            || error.code == NSURLErrorNotConnectedToInternet
-            || error.code == NSURLErrorTimedOut)) {
+                || error.code == NSURLErrorNetworkConnectionLost
+                || error.code == NSURLErrorNotConnectedToInternet
+                || error.code == NSURLErrorTimedOut)) {
                 id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
                     server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
@@ -106,10 +106,13 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 } else {
                     failure(error);
                 }
-        } else {
-            failure(error);
-        }
+            } else {
+                failure(error);
+            }
     }];
+    
+    [task resume];
+    
 }
 
 @end

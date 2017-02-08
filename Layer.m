@@ -35,29 +35,28 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
 }
 
 + (void) refreshLayersForEvent:(NSNumber *)eventId {
-    [[HttpManager singleton].manager.operationQueue addOperation:[Layer operationToPullLayersForEvent:eventId success:^{
+    NSURLSessionDataTask *task = [Layer operationToPullLayersForEvent:eventId success:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
         NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
         for (StaticLayer *l in staticLayers) {
-            NSOperation *fetchFeaturesOperation = [StaticLayer operationToFetchStaticLayerData:l];
-            [[HttpManager singleton].manager.operationQueue addOperation:fetchFeaturesOperation];
+            NSURLSessionDataTask *fetchFeaturesTask = [StaticLayer operationToFetchStaticLayerData:l];
+            [fetchFeaturesTask resume];
         }
     } failure:^(NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
-    }]];
+    }];
+    [task resume];
 }
 
-+ (NSOperation *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
     
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
     HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId] inContext:localContext];
-
+            
             NSArray *layers = responseObject;
             
             NSMutableArray *layerRemoteIds = [[NSMutableArray alloc] init];
@@ -90,12 +89,13 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         if (failure) {
             failure(error);
         }
     }];
-    return operation;
+    
+    return task;
 }
 @end

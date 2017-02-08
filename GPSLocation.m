@@ -45,7 +45,7 @@
     return [GPSLocation MR_executeFetchRequest:fetchRequest];
 }
 
-+ (NSOperation *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations", [MageServer baseURL], [Server currentEventId]];
     NSLog(@"Pushing locations to server %@", url);
     
@@ -64,22 +64,17 @@
                                 }];
     }
     
-    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
+    NSURLSessionDataTask *task = [http.manager POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         if (success) {
             success();
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         if (failure) {
             failure(error);
         }
     }];
     
-    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
-        NSLog(@"Failed to push location after entering background");
-    }];
-    
-    return operation;
+    return task;
 }
 @end

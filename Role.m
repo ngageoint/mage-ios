@@ -24,17 +24,14 @@
     [self setPermissions:[json objectForKey:@"permissions"]];
 }
 
-+ (NSOperation *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
++ (NSURLSessionDataTask *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
                                            failure:(void (^ _Nullable)(NSError *error)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/roles"];
     
     NSLog(@"Trying to fetch users from server %@", url);
     
     HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id roles) {
-        
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get the user ids to query
             NSMutableArray *roleIds = [[NSMutableArray alloc] init];
@@ -71,12 +68,13 @@
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         if (failure) {
             failure(error);
         }
     }];
     
-    return operation;
+    return task;
 }
 @end

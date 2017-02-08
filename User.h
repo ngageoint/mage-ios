@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (User *) insertUserForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context;
 + (User *) fetchUserForId:(NSString *) userId inManagedObjectContext: (NSManagedObjectContext *) context;
 + (User *) fetchCurrentUserInManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
-+ (NSOperation *) operationToFetchMyselfWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
-+ (NSOperation *) operationToFetchUsersWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
++ (NSURLSessionDataTask *) operationToFetchMyselfWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
++ (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void(^)()) success failure: (void(^)(NSError *)) failure;
 
 - (void) updateUserForJson: (NSDictionary *) json;
 @end

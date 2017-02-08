@@ -45,14 +45,15 @@
     HttpManager *http = [HttpManager singleton];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
     
-    [http.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+    NSURL *URL = [NSURL URLWithString:url];
+    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSDictionary *userJson = [response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
             if (!user) {
-                 [User insertUserForJson:userJson inManagedObjectContext:localContext];
+                [User insertUserForJson:userJson inManagedObjectContext:localContext];
             } else {
                 [user updateUserForJson:userJson];
             }
@@ -60,21 +61,23 @@
         } completion:^(BOOL contextDidSave, NSError *error) {
             [self finishLoginForParameters: parameters withResponse:response complete:complete];
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         // if the error was a network error try to login with the local auth module
         if ([error.domain isEqualToString:NSURLErrorDomain]
-        && (error.code == NSURLErrorCannotConnectToHost
-            || error.code == NSURLErrorNetworkConnectionLost
-            || error.code == NSURLErrorNotConnectedToInternet)) {
-            id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
-            [local loginWithParameters:parameters complete:complete];
-        } else {
-            NSLog(@"Error logging in: %@", error);
-            // try to register again
-            [defaults setBool:NO forKey:@"deviceRegistered"];
-            [self registerDevice:parameters complete:complete];
-        }
+            && (error.code == NSURLErrorCannotConnectToHost
+                || error.code == NSURLErrorNetworkConnectionLost
+                || error.code == NSURLErrorNotConnectedToInternet)) {
+                id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
+                [local loginWithParameters:parameters complete:complete];
+            } else {
+                NSLog(@"Error logging in: %@", error);
+                // try to register again
+                [defaults setBool:NO forKey:@"deviceRegistered"];
+                [self registerDevice:parameters complete:complete];
+            }
     }];
+    
+    [task resume];
 }
 
 - (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
@@ -117,7 +120,9 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     HttpManager *http = [HttpManager singleton];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/devices"];
-    [http.manager POST: url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+    
+    NSURL *URL = [NSURL URLWithString:url];
+    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         BOOL registered = [[response objectForKey:@"registered"] boolValue];
         if (registered) {
             NSLog(@"Device was registered already, logging in");
@@ -128,9 +133,11 @@
             NSLog(@"Registration was successful");
             complete(REGISTRATION_SUCCESS);
         }
-    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         complete(AUTHENTICATION_ERROR);
     }];
+    
+    [task resume];
 }
 
 @end

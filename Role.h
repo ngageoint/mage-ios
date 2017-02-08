@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Role : NSManagedObject
 
 + (Role *) insertRoleForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context;
-+ (NSOperation *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
++ (NSURLSessionDataTask *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
                                            failure:(void (^ _Nullable)(NSError *error)) failure;
 
 - (void) updateRoleForJson: (NSDictionary *) json;

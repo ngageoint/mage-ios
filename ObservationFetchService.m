@@ -62,7 +62,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) pullObservations {
-    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
         if (![[UserUtility singleton] isTokenExpired]) {
             [self scheduleTimer];
         }
@@ -72,7 +72,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
         }
     }];
     
-    [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
+    [observationFetchTask resume];
 }
 
 - (void) stop {

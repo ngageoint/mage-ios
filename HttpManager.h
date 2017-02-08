@@ -12,7 +12,7 @@
 extern NSString * const MAGETokenExpiredNotification;
 
 + (HttpManager *) singleton;
-@property(strong) AFHTTPRequestOperationManager *manager;
+@property(strong) AFHTTPSessionManager *manager;
 @property(strong) AFHTTPSessionManager *sessionManager;
 
 @end

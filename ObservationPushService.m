@@ -178,7 +178,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     __weak typeof(self) weakSelf = self;
     for (Observation *observation in [observationsToPush allValues]) {
         NSLog(@"submitting observation %@", observation.remoteId);
-        NSOperation *observationPushOperation = [Observation operationToPushObservation:observation success:^(id response) {
+        NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Observation *localObservation = [observation MR_inContext:localContext];
@@ -197,7 +197,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:observationPushOperation];
+        [observationPushTask resume];
     }
 }
 
@@ -216,7 +216,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     NSLog(@"about to push an additional %lu favorites", (unsigned long) favoritesToPush.count);
     __weak typeof(self) weakSelf = self;
     for (ObservationFavorite *favorite in [favoritesToPush allValues]) {
-        NSOperation *favoritePushOperation = [Observation operationToPushFavorite:favorite success:^(id response) {
+        NSURLSessionDataTask *favoritePushTask = [Observation operationToPushFavorite:favorite success:^(id response) {
             NSLog(@"Successfully submitted favorite");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
@@ -229,7 +229,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:favoritePushOperation];
+        [favoritePushTask resume];
     }
 }
 
@@ -248,7 +248,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     NSLog(@"about to push an additional %lu importants", (unsigned long) importantsToPush.count);
     __weak typeof(self) weakSelf = self;
     for (ObservationImportant *important in [importantsToPush allValues]) {
-        NSOperation *importantPushOperation = [Observation operationToPushImportant:important success:^(id response) {
+        NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportant:important success:^(id response) {
             NSLog(@"Successfully submitted important");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationImportant *localImportant = [important MR_inContext:localContext];
@@ -261,7 +261,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             [weakSelf.pushingFavorites removeObjectForKey:important.objectID];
         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:importantPushOperation];
+        [importantPushTask resume];
     }
 }
 

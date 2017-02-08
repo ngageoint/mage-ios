@@ -144,7 +144,7 @@ NSInteger const kLocationPushLimit = 100;
         __weak LocationService *weakSelf = self;
         
         
-        NSOperation *locationPushOperation = [GPSLocation operationToPushGPSLocations:locations success:^{
+        NSURLSessionDataTask *locationTask = [GPSLocation operationToPushGPSLocations:locations success:^{
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 for (GPSLocation *location in locations) {
                     [location MR_deleteEntityInContext:localContext];
@@ -161,7 +161,7 @@ NSInteger const kLocationPushLimit = 100;
             self.isPushingLocations = NO;
         }];
         
-        [[HttpManager singleton].manager.operationQueue addOperation:locationPushOperation];
+        [locationTask resume];
     }
 }
 

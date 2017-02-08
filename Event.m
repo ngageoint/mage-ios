@@ -96,15 +96,14 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return false;
 }
 
-+ (NSOperation *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/events"];
     
     NSLog(@"Pulling events from the server %@", url);
     
+    NSURL *URL = [NSURL URLWithString:url];
     HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id events) {
+    NSURLSessionDataTask *task = [http.manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *localUser = [User fetchCurrentUserInManagedObjectContext:localContext];
             
@@ -132,27 +131,28 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 success();
             }
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         if (failure) {
             failure(error);
         }
     }];
-    return operation;
+    
+    return task;
 }
 
 + (void) sendRecentEvent {
     User *u = [User fetchCurrentUserInManagedObjectContext: [NSManagedObjectContext MR_defaultContext]];
     NSString *url = [NSString stringWithFormat:@"%@/api/users/%@/events/%@/recent", [MageServer baseURL], u.remoteId, [Server currentEventId]];
     
+    NSURL *URL = [NSURL URLWithString:url];
     HttpManager *http = [HttpManager singleton];
-    
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters: nil error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id repsonse) {
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
+        
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
     
-    [http.manager.operationQueue addOperation:operation];
+    [task resume];
 }
 
 + (Event *) getCurrentEventInContext:(NSManagedObjectContext *) context {

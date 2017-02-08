@@ -195,7 +195,7 @@ NSNumber *_currentEventId;
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
-+ (NSOperation *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Trying to push observation to server %@", url);
@@ -205,89 +205,104 @@ NSNumber *_currentEventId;
     NSObject *json = [observation createJsonToSubmit];
     [parameters addObject:json];
     
-    NSString *requestMethod = @"POST";
+    NSURLSessionDataTask *task = nil;
+    
     if (observation.remoteId != nil) {
-        requestMethod = @"PUT";
         url = observation.url;
+        task = [http.manager PUT:url parameters:json success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+    }else{
+        task = [http.manager POST:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
     }
     
-    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:json error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
-        if (success) {
-            success(response);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        failure(error);
-    }];
-    
-    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
-        NSLog(@"Could not complete observation push");
-    }];
-    
-    return operation;
+    return task;
 }
 
-+ (NSOperation *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], eventId, favorite.observation.remoteId];
     NSLog(@"Trying to push favorite to server %@", url);
     
     HttpManager *http = [HttpManager singleton];
-    NSString *requestMethod = @"PUT";
+
+    NSURLSessionDataTask *task = nil;
+    
     if (!favorite.favorite) {
-        requestMethod = @"DELETE";
+        
+        task = [http.manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+        
+    }else{
+        
+        task = [http.manager PUT:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
     }
     
-    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:nil error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
-        if (success) {
-            success(response);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        failure(error);
-    }];
-    
-    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
-        NSLog(@"Could not complete favorite push before expiration");
-    }];
-    
-    return operation;
+    return task;
 }
 
-+ (NSOperation *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], eventId, important.observation.remoteId];
     NSLog(@"Trying to push important to server %@", url);
     
     HttpManager *http = [HttpManager singleton];
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    NSString *requestMethod = @"PUT";
+    
+    NSURLSessionDataTask *task = nil;
+    
     if ([important.important isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+        NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
         [parameters setObject:important.reason forKey:@"description"];
+        
+        task = [http.manager PUT:url parameters:parameters success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+        
     } else {
-        requestMethod = @"DELETE";
+        task = [http.manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
     }
     
-    NSMutableURLRequest *request = [http.manager.requestSerializer requestWithMethod:requestMethod URLString:url parameters:parameters error: nil];
-    AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id response) {
-        if (success) {
-            success(response);
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        failure(error);
-    }];
-    
-    [operation setShouldExecuteAsBackgroundTaskWithExpirationHandler:^{
-        NSLog(@"Could not complete important push before expiration");
-    }];
-    
-    return operation;
+    return task;
 }
 
-+ (NSOperation *) operationToPullObservationsWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
++ (NSURLSessionDataTask *) operationToPullObservationsWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
     
     __block NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
@@ -301,8 +316,7 @@ NSNumber *_currentEventId;
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: parameters error: nil];
-    NSOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id features) {
+    NSURLSessionDataTask *task = [http.manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Observation request complete");
             
@@ -320,14 +334,14 @@ NSNumber *_currentEventId;
                     Observation *observation = [Observation MR_createEntityInContext:localContext];
                     [observation populateObjectFromJson:feature];
                     observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
-                
+                    
                     NSDictionary *importantJson = [feature objectForKey:@"important"];
                     if (importantJson) {
                         ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
                         important.observation = observation;
                         observation.observationImportant = important;
                     }
-                
+                    
                     for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
                         ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
                         favorite.observation = observation;
@@ -419,15 +433,14 @@ NSNumber *_currentEventId;
                 success();
             }
         }];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         if (failure) {
             failure(error);
         }
     }];
     
-    return operation;
+    return task;
 }
 
 - (void) shareObservationForViewController:(UIViewController *) viewController {
@@ -446,28 +459,36 @@ NSNumber *_currentEventId;
     [alert.view addConstraints:@[topConstraint, leftConstraint, rightConstraint]];
     
     // download the attachments (if we don't have them)
-    HttpManager *http = [HttpManager singleton];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    dispatch_group_t group = dispatch_group_create();
+    
     NSMutableArray *requests = [[NSMutableArray alloc] init];
     NSMutableArray *urls = [[NSMutableArray alloc] init];
     for (Attachment *attachment in self.attachments) {
         NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-            NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
-            AFHTTPRequestOperation *operation = [http.manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
-            } failure:nil];
             
-            [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+            NSURL *URL = [NSURL URLWithString:attachment.url];
+            
+            NSURLSessionDataTask *task = [manager GET:URL.absoluteString parameters:nil progress:^(NSProgress *downloadProgress){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    progressView.progress = (float)totalBytesRead / totalBytesExpectedToRead;
+                    progressView.progress = downloadProgress.fractionCompleted;
                 });
+            } success:^(NSURLSessionTask *task, id responseObject) {
+                [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
+                dispatch_group_leave(group);
+            } failure:^(NSURLSessionTask *operation, NSError *error) {
+                dispatch_group_leave(group);
             }];
             
             [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
-            operation.responseSerializer = [AFHTTPResponseSerializer serializer];
-            operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
             
-            [requests addObject:operation];
+            // TODO set in success block?
+            //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+            
+            [requests addObject:task];
         } else {
             NSURL *url = [NSURL fileURLWithPath:path isDirectory:NO];
             [urls addObject:url];
@@ -480,7 +501,7 @@ NSNumber *_currentEventId;
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             cancelled = YES;
-            for (AFHTTPRequestOperation *request in requests) {
+            for (NSURLSessionDataTask *request in requests) {
                 [request cancel];
             }
         }]];
@@ -489,12 +510,12 @@ NSNumber *_currentEventId;
     }
     
     __weak typeof(self) weakSelf = self;
-    NSArray *operations = [AFURLConnectionOperation batchOfRequestOperations:requests progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        if (numberOfFinishedOperations < totalNumberOfOperations) {
-            [alert setMessage:[NSString stringWithFormat:@"%lu of %lu\n\n", numberOfFinishedOperations + 1, totalNumberOfOperations]];
-        }
-        progressView.progress = 0.0;
-    } completionBlock:^(NSArray *operations) {
+    for(NSURLSessionDataTask *request in requests){
+        dispatch_group_enter(group);
+        [request resume];
+    }
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         [alert dismissViewControllerAnimated:YES completion:nil];
         
         if (cancelled) {
@@ -520,9 +541,7 @@ NSNumber *_currentEventId;
         }
         
         [viewController presentViewController:controller animated:YES completion:nil];
-    }];
-    
-    [[NSOperationQueue mainQueue] addOperations:operations waitUntilFinished:NO];
+    });
 
 }
 
