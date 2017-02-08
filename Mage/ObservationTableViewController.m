@@ -125,13 +125,13 @@
 - (IBAction)refreshObservations:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];
     
-    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
         [self.refreshControl endRefreshing];
     } failure:^(NSError* error) {
         [self.refreshControl endRefreshing];
     }];
     
-    [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
+    [observationFetchTask resume];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

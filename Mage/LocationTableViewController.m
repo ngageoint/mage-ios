@@ -64,13 +64,13 @@
 - (IBAction)refreshPeople:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];
     
-    NSOperation *userFetchOperation = [Location operationToPullLocationsWithSuccess:^{
+    NSURLSessionDataTask *userFetchTask = [Location operationToPullLocationsWithSuccess:^{
         [self.refreshControl endRefreshing];
     } failure:^(NSError* error) {
         [self.refreshControl endRefreshing];
     }];
     
-    [[HttpManager singleton].manager.operationQueue addOperation:userFetchOperation];
+    [userFetchTask resume];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath
