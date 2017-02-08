@@ -33,8 +33,7 @@
     }
 
     NSString *token = [StoredPassword retrieveStoredToken];
-    [[HttpManager singleton].manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-    [[HttpManager singleton].sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    [[HttpManager singleton] setToken:token];
     
     [self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
 }

@@ -145,27 +145,33 @@
         
         __weak AttachmentViewController *weakSelf = self;
         
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        HttpManager *http = [HttpManager singleton];
+        NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
         
-        NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:^(NSProgress * downloadProgress){
+        NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
             dispatch_async(dispatch_get_main_queue(), ^{;
                 float progress = downloadProgress.fractionCompleted;
                 weakSelf.downloadProgressBar.progress = progress;
                 weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
             });
-        } success:^(NSURLSessionTask *task, id responseObject) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
-                    [weakSelf.progressView setHidden:YES];
-                    [weakSelf playMediaType: type FromDocumentsFolder:downloadPath];
-                }
-            });
-        } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            //delete the file
-            NSError *deleteError;
-            [[NSFileManager defaultManager] removeItemAtPath:downloadPath error:&deleteError];
+        } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            return [NSURL fileURLWithPath:downloadPath];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            if(!error){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
+                        [weakSelf.progressView setHidden:YES];
+                        [weakSelf playMediaType: type FromDocumentsFolder:downloadPath];
+                    }
+                });
+            }else{
+                NSLog(@"Error: %@", error);
+                //delete the file
+                NSError *deleteError;
+                [[NSFileManager defaultManager] removeItemAtPath:downloadPath error:&deleteError];
+            }
+
         }];
         
         NSError *error;
@@ -175,8 +181,6 @@
         }
         
         [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
-        // TODO output in success block?
-        //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:NO];
         
         [task resume];
     }
