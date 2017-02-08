@@ -22,12 +22,10 @@
     
     NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@", eventId]];
     
-    // TODO download manager?
     HttpManager *http = [HttpManager singleton];
-    http.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:stringPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         

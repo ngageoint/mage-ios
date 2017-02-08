@@ -459,8 +459,7 @@ NSNumber *_currentEventId;
     [alert.view addConstraints:@[topConstraint, leftConstraint, rightConstraint]];
     
     // download the attachments (if we don't have them)
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    HttpManager *http = [HttpManager singleton];
     
     dispatch_group_t group = dispatch_group_create();
     
@@ -470,23 +469,24 @@ NSNumber *_currentEventId;
         NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
             
-            NSURL *URL = [NSURL URLWithString:attachment.url];
+            NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
             
-            NSURLSessionDataTask *task = [manager GET:URL.absoluteString parameters:nil progress:^(NSProgress *downloadProgress){
+            NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     progressView.progress = downloadProgress.fractionCompleted;
                 });
-            } success:^(NSURLSessionTask *task, id responseObject) {
-                [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
+            } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                return [NSURL fileURLWithPath:path];
+            } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                
+                if(!error){
+                    [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
+                }
                 dispatch_group_leave(group);
-            } failure:^(NSURLSessionTask *operation, NSError *error) {
-                dispatch_group_leave(group);
+                
             }];
             
             [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
-            
-            // TODO set in success block?
-            //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
             
             [requests addObject:task];
         } else {
@@ -501,7 +501,7 @@ NSNumber *_currentEventId;
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             cancelled = YES;
-            for (NSURLSessionDataTask *request in requests) {
+            for (NSURLSessionDownloadTask *request in requests) {
                 [request cancel];
             }
         }]];
@@ -510,7 +510,7 @@ NSNumber *_currentEventId;
     }
     
     __weak typeof(self) weakSelf = self;
-    for(NSURLSessionDataTask *request in requests){
+    for(NSURLSessionDownloadTask *request in requests){
         dispatch_group_enter(group);
         [request resume];
     }

@@ -43,10 +43,14 @@ static HttpManager *sharedSingleton = nil;
         
         _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         [_manager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+        _sessionManager = [AFHTTPSessionManager manager];
+        
+        _downloadManager = [AFHTTPSessionManager manager];
+        _downloadManager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        
+        _downloadManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
+        [_downloadManager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(networkRequestDidFinish:)
@@ -54,6 +58,20 @@ static HttpManager *sharedSingleton = nil;
                                                    object:nil];
     }
     return self;
+}
+
+-(void) setToken: (NSString *) token{
+    [self setToken:token inSessionManager:_manager];
+    [self setToken:token inSessionManager:_sessionManager];
+    [self setToken:token inSessionManager:_downloadManager];
+}
+
+-(void) clearToken{
+    [self setToken:nil];
+}
+
+-(void) setToken: (NSString *) token inSessionManager: (AFHTTPSessionManager *) sessionManager{
+    [sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
 }
 
 - (void)networkRequestDidFinish:(NSNotification *)notification {

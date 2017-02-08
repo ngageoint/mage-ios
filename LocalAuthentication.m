@@ -43,8 +43,7 @@
             [newLoginParameters setValue:newExpirationDate forKey:@"tokenExpirationDate"];
             [defaults setObject:newLoginParameters forKey:@"loginParameters"];
             [defaults synchronize];
-            [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
-            [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [oldLoginParameters objectForKey:@"token"]] forHTTPHeaderField:@"Authorization"];
+            [http setToken:[oldLoginParameters objectForKey:@"token"]];
             [[UserUtility singleton] resetExpiration];
             
             complete(AUTHENTICATION_SUCCESS);

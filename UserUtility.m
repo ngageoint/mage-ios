@@ -75,8 +75,7 @@
     [loginParameters removeObjectForKey:@"acceptedConsent"];
     
     HttpManager *http = [HttpManager singleton];
-    [http.manager.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
-    [http.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
+    [http clearToken];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     

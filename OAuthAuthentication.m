@@ -70,8 +70,7 @@
             NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[parameters objectForKey:@"expirationDate"]];
             HttpManager *http = [HttpManager singleton];
             
-            [http.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-            [http.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+            [http setToken:token];
             [[UserUtility singleton] resetExpiration];
             
             NSDictionary *loginParameters = @{

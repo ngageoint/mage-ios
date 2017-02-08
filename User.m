@@ -58,18 +58,26 @@ static User *currentUser = nil;
     NSString *userIconRelativePath = [NSString stringWithFormat:@"userIcons/%@", user.remoteId];
     NSString *userIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userIconRelativePath];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSURLSessionDataTask *task = [manager GET:user.iconUrl parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            User *localUser = [user MR_inContext:localContext];
-            localUser.iconUrl = userIconRelativePath;
-        }];
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        //delete the file
-        NSError *deleteError;
-        [[NSFileManager defaultManager] removeItemAtPath:userIconPath error:&deleteError];
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
+    
+    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        return [NSURL fileURLWithPath:userIconPath];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        
+        if(!error){
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                User *localUser = [user MR_inContext:localContext];
+                localUser.iconUrl = userIconRelativePath;
+            }];
+        }else{
+            NSLog(@"Error: %@", error);
+            //delete the file
+            NSError *deleteError;
+            [[NSFileManager defaultManager] removeItemAtPath:userIconPath error:&deleteError];
+        }
+        
     }];
     
     NSError *error;
@@ -79,8 +87,6 @@ static User *currentUser = nil;
     }
     
     [[NSFileManager defaultManager] createFileAtPath:userIconPath contents:nil attributes:nil];
-    // TODO stream in the success?
-    //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userIconPath append:NO];
     
     [task resume];
 };
@@ -90,20 +96,29 @@ static User *currentUser = nil;
     NSString *userAvatarRelativePath = [NSString stringWithFormat:@"userAvatars/%@", user.remoteId];
     NSString *userAvatarPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userAvatarRelativePath];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSURLSessionDataTask *task = [manager GET:user.avatarUrl parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            User *localUser = [user MR_inContext:localContext];
-            localUser.avatarUrl = userAvatarRelativePath;
-            NSLog(@"set the avatar url on the user to: %@", localUser.avatarUrl);
-        }];
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        //delete the file
-        NSError *deleteError;
-        [[NSFileManager defaultManager] removeItemAtPath:userAvatarPath error:&deleteError];
+    HttpManager *http = [HttpManager singleton];
+    
+    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
+    
+    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        return [NSURL fileURLWithPath:userAvatarPath];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        
+        if(!error){
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                User *localUser = [user MR_inContext:localContext];
+                localUser.avatarUrl = userAvatarRelativePath;
+                NSLog(@"set the avatar url on the user to: %@", localUser.avatarUrl);
+            }];
+        }else{
+            NSLog(@"Error: %@", error);
+            //delete the file
+            NSError *deleteError;
+            [[NSFileManager defaultManager] removeItemAtPath:userAvatarPath error:&deleteError];
+        }
+        
     }];
+    
     NSError *error;
     if (![[NSFileManager defaultManager] fileExistsAtPath:[userAvatarPath stringByDeletingLastPathComponent]]) {
         NSLog(@"Creating directory %@", [userAvatarPath stringByDeletingLastPathComponent]);
@@ -111,8 +126,6 @@ static User *currentUser = nil;
     }
     
     [[NSFileManager defaultManager] createFileAtPath:userAvatarPath contents:nil attributes:nil];
-    // TODO stream in the success?
-    //operation.outputStream = [NSOutputStream outputStreamToFileAtPath:userAvatarPath append:NO];
     
     [task resume];
 }
