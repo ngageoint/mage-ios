@@ -158,18 +158,20 @@
             return [NSURL fileURLWithPath:downloadPath];
         } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
             
+            NSString * fileString = [filePath path];
+            
             if(!error){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]){
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
                         [weakSelf.progressView setHidden:YES];
-                        [weakSelf playMediaType: type FromDocumentsFolder:downloadPath];
+                        [weakSelf playMediaType: type FromDocumentsFolder:fileString];
                     }
                 });
             }else{
                 NSLog(@"Error: %@", error);
                 //delete the file
                 NSError *deleteError;
-                [[NSFileManager defaultManager] removeItemAtPath:downloadPath error:&deleteError];
+                [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
             }
 
         }];
@@ -179,8 +181,6 @@
             NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
             [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
         }
-        
-        [[NSFileManager defaultManager] createFileAtPath:downloadPath contents:nil attributes:nil];
         
         [task resume];
     }
