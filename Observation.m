@@ -480,13 +480,11 @@ NSNumber *_currentEventId;
             } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                 
                 if(!error){
-                    [urls addObject:[NSURL fileURLWithPath:path isDirectory:NO]];
+                    [urls addObject:filePath];
                 }
                 dispatch_group_leave(group);
                 
             }];
-            
-            [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
             
             [requests addObject:task];
         } else {

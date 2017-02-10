@@ -75,7 +75,8 @@ static User *currentUser = nil;
             NSLog(@"Error: %@", error);
             //delete the file
             NSError *deleteError;
-            [[NSFileManager defaultManager] removeItemAtPath:userIconPath error:&deleteError];
+            NSString * fileString = [filePath path];
+            [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
         }
         
     }];
@@ -85,8 +86,6 @@ static User *currentUser = nil;
         NSLog(@"Creating directory %@", [userIconPath stringByDeletingLastPathComponent]);
         [[NSFileManager defaultManager] createDirectoryAtPath:[userIconPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
     }
-    
-    [[NSFileManager defaultManager] createFileAtPath:userIconPath contents:nil attributes:nil];
     
     [task resume];
 };
@@ -114,7 +113,8 @@ static User *currentUser = nil;
             NSLog(@"Error: %@", error);
             //delete the file
             NSError *deleteError;
-            [[NSFileManager defaultManager] removeItemAtPath:userAvatarPath error:&deleteError];
+            NSString * fileString = [filePath path];
+            [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
         }
         
     }];
@@ -124,8 +124,6 @@ static User *currentUser = nil;
         NSLog(@"Creating directory %@", [userAvatarPath stringByDeletingLastPathComponent]);
         [[NSFileManager defaultManager] createDirectoryAtPath:[userAvatarPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
     }
-    
-    [[NSFileManager defaultManager] createFileAtPath:userAvatarPath contents:nil attributes:nil];
     
     [task resume];
 }

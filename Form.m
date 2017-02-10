@@ -32,8 +32,10 @@
         if(!error){
             NSLog(@"event form icon request complete");
             
+            NSString * fileString = [filePath path];
+            
             NSError *error = nil;
-            OZZipFile *unzipFile = [[OZZipFile alloc] initWithFileName:stringPath mode:OZZipFileModeUnzip error:&error];
+            OZZipFile *unzipFile = [[OZZipFile alloc] initWithFileName:fileString mode:OZZipFileModeUnzip error:&error];
             
             NSArray *infos = [unzipFile listFileInZipInfosWithError:&error];
             for (OZFileInZipInfo *info in infos) {
@@ -67,8 +69,8 @@
             }
             
             [unzipFile closeWithError:nil];
-            if ([[NSFileManager defaultManager] isDeletableFileAtPath:stringPath]) {
-                BOOL successfulRemoval = [[NSFileManager defaultManager] removeItemAtPath:stringPath error:&error];
+            if ([[NSFileManager defaultManager] isDeletableFileAtPath:fileString]) {
+                BOOL successfulRemoval = [[NSFileManager defaultManager] removeItemAtPath:fileString error:&error];
                 if (!successfulRemoval) {
                     NSLog(@"Error removing file at path: %@", error.localizedDescription);
                 }
@@ -87,8 +89,6 @@
     NSError *error = nil;
     if (![[NSFileManager defaultManager] fileExistsAtPath:stringPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:[stringPath stringByDeletingLastPathComponent] withIntermediateDirectories:NO attributes:nil error:&error];
-    
-    [[NSFileManager defaultManager] createFileAtPath:stringPath contents:nil attributes:nil];
     
     return task;
     
