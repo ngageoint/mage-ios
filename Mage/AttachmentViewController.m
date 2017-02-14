@@ -7,7 +7,7 @@
 #import "AttachmentViewController.h"
 #import <FICImageCache.h>
 #import "AppDelegate.h"
-#import <HttpManager.h>
+#import <MageSessionManager.h>
 #import "AVFoundation/AVFoundation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
@@ -145,10 +145,10 @@
         
         __weak AttachmentViewController *weakSelf = self;
         
-        HttpManager *http = [HttpManager singleton];
-        NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+        MageSessionManager *manager = [MageSessionManager manager];
+        NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
         
-        NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+        NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
             dispatch_async(dispatch_get_main_queue(), ^{;
                 float progress = downloadProgress.fractionCompleted;
                 weakSelf.downloadProgressBar.progress = progress;

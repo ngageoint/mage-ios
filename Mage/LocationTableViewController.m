@@ -8,7 +8,7 @@
 #import "Location.h"
 #import "MeViewController.h"
 #import <Event.h>
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"

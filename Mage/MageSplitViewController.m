@@ -6,7 +6,7 @@
 
 #import "MageSplitViewController.h"
 #import "UserUtility.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MapViewController_iPad.h"
 #import "MageTabBarController.h"
 #import "ObservationTableViewController.h"

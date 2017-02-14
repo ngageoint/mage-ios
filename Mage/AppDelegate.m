@@ -21,7 +21,7 @@
 
 #import "OZZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
-#import <HttpManager.h>
+#import <MageSessionManager.h>
 
 #import "MagicalRecord+MAGE.h"
 #import "GPKGGeoPackageFactory.h"

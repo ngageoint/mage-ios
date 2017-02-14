@@ -14,7 +14,7 @@
 #import <Form.h>
 #import <Mage.h>
 #import "AppDelegate.h"
-#import <HttpManager.h>
+#import <MageSessionManager.h>
 #import "MageRootViewController.h"
 #import <UserUtility.h>
 #import "DeviceUUID.h"
