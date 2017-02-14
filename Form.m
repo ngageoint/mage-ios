@@ -24,8 +24,8 @@
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:stringPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         

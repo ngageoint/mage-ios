@@ -12,13 +12,18 @@ NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expire
 
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
-    // TODO AFURLConnectionOperation replacement?
     if ([[notification object] respondsToSelector:@selector(originalRequest)]) {
         request = [[notification object] originalRequest];
     }
     
     return request;
 }
+
+@interface HttpManager()
+
+@property (nonatomic, strong)  NSString * token;
+
+@end
 
 @implementation HttpManager
 
@@ -35,22 +40,19 @@ static HttpManager *sharedSingleton = nil;
 
 - (id) init {
     if ((self = [super init])) {
-        _manager = [AFHTTPSessionManager manager];
         
-        AFJSONResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
-        responseSerializer.removesKeysWithNullValues = YES;
-        _manager.responseSerializer = responseSerializer;
+        AFJSONResponseSerializer *jsonSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        jsonSerializer.removesKeysWithNullValues = YES;
+        
+        AFHTTPResponseSerializer * httpSerializer = [AFHTTPResponseSerializer serializer];
+        
+        AFCompoundResponseSerializer *compoundSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[jsonSerializer, httpSerializer]];
+        
+        _manager = [AFHTTPSessionManager manager];
+        _manager.responseSerializer = compoundSerializer;
         
         _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         [_manager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-        
-        _sessionManager = [AFHTTPSessionManager manager];
-        
-        _downloadManager = [AFHTTPSessionManager manager];
-        _downloadManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        
-        _downloadManager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
-        [_downloadManager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(networkRequestDidFinish:)
@@ -61,17 +63,22 @@ static HttpManager *sharedSingleton = nil;
 }
 
 -(void) setToken: (NSString *) token{
-    [self setToken:token inSessionManager:_manager];
-    [self setToken:token inSessionManager:_sessionManager];
-    [self setToken:token inSessionManager:_downloadManager];
+    _token = token;
+    [self setTokenInRequestSerializer:_manager.requestSerializer];
 }
 
 -(void) clearToken{
     [self setToken:nil];
 }
 
--(void) setToken: (NSString *) token inSessionManager: (AFHTTPSessionManager *) sessionManager{
-    [sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+-(void) setTokenInRequestSerializer: (AFHTTPRequestSerializer *) requestSerializer{
+    [requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", _token] forHTTPHeaderField:@"Authorization"];
+}
+
+-(AFHTTPRequestSerializer *) httpRequestSerializer{
+    AFHTTPRequestSerializer *requestSerializer = [AFHTTPRequestSerializer serializer];
+    [self setTokenInRequestSerializer:requestSerializer];
+    return requestSerializer;
 }
 
 - (void)networkRequestDidFinish:(NSNotification *)notification {

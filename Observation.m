@@ -469,9 +469,9 @@ NSNumber *_currentEventId;
         NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
             
-            NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
+            NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
             
-            NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+            NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     progressView.progress = downloadProgress.fractionCompleted;
                 });

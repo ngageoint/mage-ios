@@ -60,9 +60,9 @@ static User *currentUser = nil;
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
     
-    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:userIconPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         
@@ -97,9 +97,9 @@ static User *currentUser = nil;
     
     HttpManager *http = [HttpManager singleton];
     
-    NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
+    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
     
-    NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:userAvatarPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         
