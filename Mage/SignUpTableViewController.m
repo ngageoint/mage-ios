@@ -6,7 +6,7 @@
 
 #import "SignUpTableViewController.h"
 #import "UINextField.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
@@ -90,7 +90,7 @@
     __weak typeof(self) weakSelf = self;
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
     
-    NSURLSessionDataTask *task = [[HttpManager singleton].manager POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [[MageSessionManager manager] POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
         

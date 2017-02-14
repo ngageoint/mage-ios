@@ -11,7 +11,7 @@
 #import "GeometryEditViewController.h"
 #import "SelectEditViewController.h"
 #import "Observation.h"
-#import <HttpManager.h>
+#import <MageSessionManager.h>
 #import <AVFoundation/AVFoundation.h>
 #import "Attachment.h"
 #import <MediaPlayer/MediaPlayer.h>

@@ -15,7 +15,7 @@
 #import "Event.h"
 #import "User.h"
 #import "ObservationEditViewController.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import <LocationService.h>
 #import "Filter.h"
 #import "Observations.h"
