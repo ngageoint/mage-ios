@@ -146,9 +146,9 @@
         __weak AttachmentViewController *weakSelf = self;
         
         HttpManager *http = [HttpManager singleton];
-        NSURLRequest *request = [http.downloadManager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+        NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
         
-        NSURLSessionDownloadTask *task = [http.downloadManager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+        NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
             dispatch_async(dispatch_get_main_queue(), ^{;
                 float progress = downloadProgress.fractionCompleted;
                 weakSelf.downloadProgressBar.progress = progress;
