@@ -5,7 +5,7 @@
 //
 
 #import "AttachmentPushService.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "Attachment.h"
 #import "Observation.h"
 #import "UserUtility.h"
@@ -111,11 +111,11 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             continue;
         }
         
-        HttpManager *http = [HttpManager singleton];
+        MageSessionManager *manager = [MageSessionManager manager];
         NSString *url = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
 
         NSURL *URL = [NSURL URLWithString:url];
-        NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
         } progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {

@@ -8,7 +8,7 @@
 #import "Observation.h"
 #import "Layer.h"
 #import "Form.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "UserUtility.h"
 
 NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";

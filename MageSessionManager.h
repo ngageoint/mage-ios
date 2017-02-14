@@ -1,5 +1,5 @@
 //
-//  HttpManager.h
+//  MageSessionManager.h
 //  mage-ios-sdk
 //
 //
@@ -7,12 +7,11 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
 
-@interface HttpManager : NSObject
+@interface MageSessionManager : AFHTTPSessionManager
 
 extern NSString * const MAGETokenExpiredNotification;
 
-+ (HttpManager *) singleton;
-@property(strong) AFHTTPSessionManager *manager;
++ (MageSessionManager *) manager;
 
 -(void) setToken: (NSString *) token;
 

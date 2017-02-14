@@ -6,7 +6,7 @@
 
 #import "Form.h"
 #import <AFNetworking.h>
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "zlib.h"
 #import "Objective-Zip+NSError.h"
 #import "ObservationFetchService.h"
@@ -22,10 +22,10 @@
     
     NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@", eventId]];
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
-    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:stringPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         

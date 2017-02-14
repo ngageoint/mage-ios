@@ -5,7 +5,7 @@
 //
 
 #import "ObservationPushService.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "Observation.h"
 #import "ObservationFavorite.h"
 #import "ObservationImportant.h"

@@ -5,7 +5,7 @@
 //
 
 #import "MageServer.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
 #import "OAuthAuthentication.h"
@@ -53,9 +53,9 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         return;
     }
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
-    NSURLSessionDataTask *task = [http.manager GET:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager GET:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];

@@ -6,7 +6,7 @@
 
 #import "UserUtility.h"
 #import <NSDate+DateTools.h>
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 
 @interface UserUtility()
 
@@ -74,8 +74,8 @@
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
     [loginParameters removeObjectForKey:@"acceptedConsent"];
     
-    HttpManager *http = [HttpManager singleton];
-    [http clearToken];
+    MageSessionManager *manager = [MageSessionManager manager];
+    [manager clearToken];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     

@@ -5,7 +5,7 @@
 //
 
 #import "Mage.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "LocationService.h"
 #import "LocationFetchService.h"
 #import "ObservationFetchService.h"

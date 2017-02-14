@@ -6,7 +6,7 @@
 
 #import "ServerAuthentication.h"
 #import "StoredPassword.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "User.h"
 #import "UserUtility.h"
@@ -42,11 +42,11 @@
 - (void) performLogin: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
     
     NSURL *URL = [NSURL URLWithString:url];
-    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSDictionary *userJson = [response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         
@@ -88,9 +88,9 @@
     NSString *password = (NSString *) [parameters objectForKey:@"password"];
     // Always use this locale when parsing fixed format date strings
     NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[response objectForKey:@"expirationDate"]];
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
 
-    [http setToken:token];
+    [manager setToken:token];
     [[UserUtility singleton] resetExpiration];
 
     NSDictionary *loginParameters = @{
@@ -117,11 +117,11 @@
 - (void) registerDevice: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
     NSLog(@"Registering device");
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/devices"];
     
     NSURL *URL = [NSURL URLWithString:url];
-    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         BOOL registered = [[response objectForKey:@"registered"] boolValue];
         if (registered) {
             NSLog(@"Device was registered already, logging in");

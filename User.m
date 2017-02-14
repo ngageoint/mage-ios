@@ -12,7 +12,7 @@
 #import "Role.h"
 #import "Team.h"
 
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 
 @implementation User
@@ -58,11 +58,11 @@ static User *currentUser = nil;
     NSString *userIconRelativePath = [NSString stringWithFormat:@"userIcons/%@", user.remoteId];
     NSString *userIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userIconRelativePath];
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
+    NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
     
-    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:userIconPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         
@@ -95,11 +95,11 @@ static User *currentUser = nil;
     NSString *userAvatarRelativePath = [NSString stringWithFormat:@"userAvatars/%@", user.remoteId];
     NSString *userAvatarPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userAvatarRelativePath];
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
+    NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
     
-    NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:userAvatarPath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         
@@ -134,9 +134,9 @@ static User *currentUser = nil;
     
     NSLog(@"Trying to fetch users from server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
+    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get roles
@@ -223,9 +223,9 @@ static User *currentUser = nil;
     
     NSLog(@"Fetching myself from server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
+    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             

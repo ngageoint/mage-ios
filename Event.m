@@ -13,7 +13,7 @@
 #import "StaticLayer.h"
 
 #import "MageServer.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -102,8 +102,8 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     NSLog(@"Pulling events from the server %@", url);
     
     NSURL *URL = [NSURL URLWithString:url];
-    HttpManager *http = [HttpManager singleton];
-    NSURLSessionDataTask *task = [http.manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *localUser = [User fetchCurrentUserInManagedObjectContext:localContext];
             
@@ -145,8 +145,8 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     NSString *url = [NSString stringWithFormat:@"%@/api/users/%@/events/%@/recent", [MageServer baseURL], u.remoteId, [Server currentEventId]];
     
     NSURL *URL = [NSURL URLWithString:url];
-    HttpManager *http = [HttpManager singleton];
-    NSURLSessionDataTask *task = [http.manager POST:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
         
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);

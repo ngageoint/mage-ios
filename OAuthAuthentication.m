@@ -8,7 +8,7 @@
 
 #import "OAuthAuthentication.h"
 #import "User.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "UserUtility.h"
 #import "NSDate+iso8601.h"
 #import "MageServer.h"
@@ -68,9 +68,9 @@
             
             // Always use this locale when parsing fixed format date strings
             NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[parameters objectForKey:@"expirationDate"]];
-            HttpManager *http = [HttpManager singleton];
+            MageSessionManager *manager = [MageSessionManager manager];
             
-            [http setToken:token];
+            [manager setToken:token];
             [[UserUtility singleton] resetExpiration];
             
             NSDictionary *loginParameters = @{

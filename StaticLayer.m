@@ -8,7 +8,7 @@
 
 #import "StaticLayer.h"
 
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 
 @implementation StaticLayer
@@ -33,14 +33,14 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
 }
 
 + (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer {
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     __block NSNumber *layerId = layer.remoteId;
     __block NSNumber *eventId = layer.eventId;
     
     // put this line back when the event endpoint returns the proper url for the layer
     //NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/features", layer.url]];
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/events/%@/layers/%@/features", [MageServer baseURL], eventId, layerId]];
-    NSURLSessionDataTask * task = [http.manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    NSURLSessionDataTask * task = [manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         StaticLayer *fetchedLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, eventId]];
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             StaticLayer *localLayer = [fetchedLayer MR_inContext:localContext];

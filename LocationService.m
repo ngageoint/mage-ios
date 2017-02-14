@@ -10,7 +10,7 @@
 #import "GeoPoint.h"
 #import "Event.h"
 #import "Server.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSDistanceFilterKey = @"gpsDistanceFilter";

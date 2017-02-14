@@ -8,7 +8,7 @@
 
 #import "Role.h"
 #import "MageServer.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 
 @implementation Role
 
@@ -30,8 +30,8 @@
     
     NSLog(@"Trying to fetch users from server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get the user ids to query
             NSMutableArray *roleIds = [[NSMutableArray alloc] init];

@@ -10,7 +10,7 @@
 #import "User.h"
 #import "Server.h"
 #import "GeoPoint.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import <NSDate+DateTools.h>
@@ -69,9 +69,9 @@
         [parameters setObject:[lastLocationDate iso8601String] forKey:@"startDate"];
     }
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id allUserLocations) {
+    NSURLSessionDataTask *task = [manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id allUserLocations) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[allUserLocations count]);
             User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];

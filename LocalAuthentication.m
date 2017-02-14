@@ -9,7 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 
 #import "User.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "StoredPassword.h"
 #import "UserUtility.h"
@@ -36,14 +36,14 @@
         NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
         NSString *oldPassword = [StoredPassword retrieveStoredPassword];
         if (oldUsername != nil && oldPassword != nil && [oldUsername isEqualToString:username] && [oldPassword isEqualToString:password] && [oldUrl isEqualToString:[[MageServer baseURL] absoluteString]]) {
-            HttpManager *http = [HttpManager singleton];
+            MageSessionManager *manager = [MageSessionManager manager];
             NSTimeInterval tokenExpirationLength = [[defaults objectForKey:@"tokenExpirationLength"] doubleValue];
             NSDate *newExpirationDate = [[NSDate date] dateByAddingTimeInterval:tokenExpirationLength];
             NSMutableDictionary *newLoginParameters = [NSMutableDictionary dictionaryWithDictionary:oldLoginParameters];
             [newLoginParameters setValue:newExpirationDate forKey:@"tokenExpirationDate"];
             [defaults setObject:newLoginParameters forKey:@"loginParameters"];
             [defaults synchronize];
-            [http setToken:[oldLoginParameters objectForKey:@"token"]];
+            [manager setToken:[oldLoginParameters objectForKey:@"token"]];
             [[UserUtility singleton] resetExpiration];
             
             complete(AUTHENTICATION_SUCCESS);

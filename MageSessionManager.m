@@ -1,9 +1,9 @@
 //
-//  HttpManager.m
+//  MageSessionManager.m
 //  mage-ios-sdk
 //
 
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "UserUtility.h"
 #import "NSString+Contains.h"
 #import "MageServer.h"
@@ -19,40 +19,40 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
     return request;
 }
 
-@interface HttpManager()
+@interface MageSessionManager()
 
 @property (nonatomic, strong)  NSString * token;
 
 @end
 
-@implementation HttpManager
+@implementation MageSessionManager
 
-static HttpManager *sharedSingleton = nil;
+static MageSessionManager *managerSingleton = nil;
 
-+ (HttpManager *) singleton {
++ (MageSessionManager *) manager {
     
-    if (sharedSingleton == nil) {
-        sharedSingleton = [[super allocWithZone:NULL] init];
+    if (managerSingleton == nil) {
+        managerSingleton = [[self alloc] init];
     }
 
-    return sharedSingleton;
+    return managerSingleton;
 }
 
 - (id) init {
     if ((self = [super init])) {
         
-        AFJSONResponseSerializer *jsonSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
-        jsonSerializer.removesKeysWithNullValues = YES;
+        AFJSONResponseSerializer *responseJsonSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        responseJsonSerializer.removesKeysWithNullValues = YES;
         
-        AFHTTPResponseSerializer * httpSerializer = [AFHTTPResponseSerializer serializer];
+        AFHTTPResponseSerializer *responseHttpSerializer = [AFHTTPResponseSerializer serializer];
         
-        AFCompoundResponseSerializer *compoundSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[jsonSerializer, httpSerializer]];
+        AFCompoundResponseSerializer *resposneCompoundSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[responseJsonSerializer, responseHttpSerializer]];
         
-        _manager = [AFHTTPSessionManager manager];
-        _manager.responseSerializer = compoundSerializer;
+        [self setResponseSerializer:resposneCompoundSerializer];
         
-        _manager.requestSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
-        [_manager.requestSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        AFJSONRequestSerializer *requestJsonSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
+        [requestJsonSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [self setRequestSerializer:requestJsonSerializer];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(networkRequestDidFinish:)
@@ -64,7 +64,7 @@ static HttpManager *sharedSingleton = nil;
 
 -(void) setToken: (NSString *) token{
     _token = token;
-    [self setTokenInRequestSerializer:_manager.requestSerializer];
+    [self setTokenInRequestSerializer:self.requestSerializer];
 }
 
 -(void) clearToken{

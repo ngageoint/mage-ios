@@ -7,7 +7,7 @@
 //
 
 #import "Layer.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "StaticLayer.h"
 
@@ -52,8 +52,8 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
     
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
-    HttpManager *http = [HttpManager singleton];
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId] inContext:localContext];
             

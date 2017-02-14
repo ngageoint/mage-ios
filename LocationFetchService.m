@@ -6,7 +6,7 @@
 
 #import "LocationFetchService.h"
 #import "Location.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "UserUtility.h"
 
 NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";

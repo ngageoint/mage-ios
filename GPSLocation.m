@@ -8,7 +8,7 @@
 
 #import "GPSLocation.h"
 
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "NSDate+Iso8601.h"
 #import "GeoPoint.h"
 #import "MageServer.h"
@@ -50,7 +50,7 @@
     NSLog(@"Pushing locations to server %@", url);
     
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
         GeoPoint *point = location.geometry;
@@ -64,7 +64,7 @@
                                 }];
     }
     
-    NSURLSessionDataTask *task = [http.manager POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    NSURLSessionDataTask *task = [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         if (success) {
             success();
         }

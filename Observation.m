@@ -14,7 +14,7 @@
 #import "Server.h"
 #import "Event.h"
 
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageEnums.h"
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
@@ -200,7 +200,7 @@ NSNumber *_currentEventId;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Trying to push observation to server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     NSObject *json = [observation createJsonToSubmit];
     [parameters addObject:json];
@@ -209,7 +209,7 @@ NSNumber *_currentEventId;
     
     if (observation.remoteId != nil) {
         url = observation.url;
-        task = [http.manager PUT:url parameters:json success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT:url parameters:json success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -218,7 +218,7 @@ NSNumber *_currentEventId;
             failure(error);
         }];
     }else{
-        task = [http.manager POST:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager POST:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -236,13 +236,13 @@ NSNumber *_currentEventId;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], eventId, favorite.observation.remoteId];
     NSLog(@"Trying to push favorite to server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
 
     NSURLSessionDataTask *task = nil;
     
     if (!favorite.favorite) {
         
-        task = [http.manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -253,7 +253,7 @@ NSNumber *_currentEventId;
         
     }else{
         
-        task = [http.manager PUT:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -271,7 +271,7 @@ NSNumber *_currentEventId;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], eventId, important.observation.remoteId];
     NSLog(@"Trying to push important to server %@", url);
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
     NSURLSessionDataTask *task = nil;
     
@@ -279,7 +279,7 @@ NSNumber *_currentEventId;
         NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
         [parameters setObject:important.reason forKey:@"description"];
         
-        task = [http.manager PUT:url parameters:parameters success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT:url parameters:parameters success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -289,7 +289,7 @@ NSNumber *_currentEventId;
         }];
         
     } else {
-        task = [http.manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -314,9 +314,9 @@ NSNumber *_currentEventId;
         [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
     }
     
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [http.manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
+    NSURLSessionDataTask *task = [manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Observation request complete");
             
@@ -459,7 +459,7 @@ NSNumber *_currentEventId;
     [alert.view addConstraints:@[topConstraint, leftConstraint, rightConstraint]];
     
     // download the attachments (if we don't have them)
-    HttpManager *http = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     
     dispatch_group_t group = dispatch_group_create();
     
@@ -469,9 +469,9 @@ NSNumber *_currentEventId;
         NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
             
-            NSURLRequest *request = [http.manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
+            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:attachment.url parameters: nil error: nil];
             
-            NSURLSessionDownloadTask *task = [http.manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+            NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     progressView.progress = downloadProgress.fractionCompleted;
                 });
