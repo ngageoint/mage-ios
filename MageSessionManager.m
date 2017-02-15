@@ -46,9 +46,8 @@ static MageSessionManager *managerSingleton = nil;
         
         AFHTTPResponseSerializer *responseHttpSerializer = [AFHTTPResponseSerializer serializer];
         
-        AFCompoundResponseSerializer *resposneCompoundSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[responseJsonSerializer, responseHttpSerializer]];
-        
-        [self setResponseSerializer:resposneCompoundSerializer];
+        AFCompoundResponseSerializer *responseCompoundSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[responseJsonSerializer, responseHttpSerializer]];
+        [self setResponseSerializer:responseCompoundSerializer];
         
         AFJSONRequestSerializer *requestJsonSerializer = [AFJSONRequestSerializer serializerWithWritingOptions:NSJSONWritingPrettyPrinted];
         [requestJsonSerializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
@@ -101,4 +100,5 @@ static MageSessionManager *managerSingleton = nil;
     }
     return;
 }
+
 @end
