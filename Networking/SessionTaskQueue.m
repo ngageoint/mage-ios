@@ -215,7 +215,7 @@ static int defaultMaxConcurrentTasks = 4;
         
     }
     
-    NSLog(@"SessionTaskQueue Status, Active Tasks: %d, Task Queue: %d", (int)_activeTasks.count, (int)_taskQueue.count);
+    NSLog(@"%@ Status, Active Tasks: %d, Task Queue: %d", NSStringFromClass([self class]),(int)_activeTasks.count, (int)_taskQueue.count);
 }
 
 /**
@@ -253,7 +253,7 @@ static int defaultMaxConcurrentTasks = 4;
             NSURLRequest *request = activeTask.task.originalRequest;
             NSString * requestUrl = [[request URL] absoluteString];
             NSTimeInterval seconds = [endTime timeIntervalSinceDate:activeTask.startTime];
-            NSLog(@"SessionTaskQueue Timer, Request: %@, Seconds: %f", requestUrl, seconds);
+            NSLog(@"%@ Timer, Request: %@, Seconds: %f", NSStringFromClass([self class]), requestUrl, seconds);
             
             // Start the next task
             [self startNextTask];
