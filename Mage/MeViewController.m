@@ -317,7 +317,7 @@
         }
     }];
     
-    [uploadTask resume];
+    [manager addTask:uploadTask];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {

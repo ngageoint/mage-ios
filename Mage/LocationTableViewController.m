@@ -70,7 +70,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [userFetchTask resume];
+    [[MageSessionManager manager] addTask:userFetchTask];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath

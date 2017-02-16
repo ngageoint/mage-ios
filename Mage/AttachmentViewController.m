@@ -16,7 +16,6 @@
 
 @interface AttachmentViewController () <AVAudioPlayerDelegate>
 
-@property (strong, nonatomic) NSOperationQueue *operationQueue;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *imageViewHolder;
@@ -30,14 +29,6 @@
 @end
 
 @implementation AttachmentViewController
-
-- (NSOperationQueue *) operationQueue {
-    if (!_operationQueue) {
-        _operationQueue = [[NSOperationQueue alloc] init];
-    }
-    
-    return _operationQueue;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,7 +65,6 @@
 
 - (void) cleanup {
     self.imageView.image = nil;
-    [self.operationQueue cancelAllOperations];
     
     if (self.playerViewController) {
         [self.playerViewController.player pause];
@@ -182,7 +172,7 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
         }
         
-        [task resume];
+        [manager addTask:task];
     }
 
 }

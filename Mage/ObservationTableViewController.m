@@ -131,7 +131,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [observationFetchTask resume];
+    [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
