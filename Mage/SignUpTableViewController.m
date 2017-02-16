@@ -90,7 +90,8 @@
     __weak typeof(self) weakSelf = self;
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
     
-    NSURLSessionDataTask *task = [[MageSessionManager manager] POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
         
@@ -117,7 +118,7 @@
         });
     }];
     
-    [task resume];
+    [manager addTask:task];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
