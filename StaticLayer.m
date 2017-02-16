@@ -40,7 +40,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     // put this line back when the event endpoint returns the proper url for the layer
     //NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/features", layer.url]];
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/events/%@/layers/%@/features", [MageServer baseURL], eventId, layerId]];
-    NSURLSessionDataTask * task = [manager GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    NSURLSessionDataTask * task = [manager GET_TASK:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         StaticLayer *fetchedLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, eventId]];
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             StaticLayer *localLayer = [fetchedLayer MR_inContext:localContext];

@@ -115,7 +115,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
         NSString *url = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
 
         NSURL *URL = [NSURL URLWithString:url];
-        NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:attachmentData name:@"attachment" fileName:attachment.name mimeType:attachment.contentType];
         } progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
@@ -138,7 +138,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             [attachmentsToPush removeObjectForKey:attachment.objectID];
         }];
         
-        [task resume];
+        [manager addTask:task];
     }
 }
 

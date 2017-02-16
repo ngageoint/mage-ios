@@ -31,7 +31,7 @@
     NSLog(@"Trying to fetch users from server %@", url);
     
     MageSessionManager *manager = [MageSessionManager manager];
-    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get the user ids to query
             NSMutableArray *roleIds = [[NSMutableArray alloc] init];

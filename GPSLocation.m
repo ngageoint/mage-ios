@@ -64,7 +64,7 @@
                                 }];
     }
     
-    NSURLSessionDataTask *task = [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         if (success) {
             success();
         }

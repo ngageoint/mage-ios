@@ -24,7 +24,6 @@ NSInteger const kLocationPushLimit = 100;
     @property (nonatomic, strong) CLLocationManager *locationManager;
     @property (nonatomic, strong) NSDate *oldestLocationTime;
     @property (nonatomic) NSTimeInterval locationPushInterval;
-    @property (nonatomic, strong) NSOperationQueue *operationQueue;
     @property (nonatomic) BOOL reportLocation;
 @end
 
@@ -61,10 +60,6 @@ NSInteger const kLocationPushLimit = 100;
         if ([_locationManager respondsToSelector:@selector(allowsBackgroundLocationUpdates)]) {
             [_locationManager setAllowsBackgroundLocationUpdates:YES];
         }
-        
-        _operationQueue = [[NSOperationQueue alloc] init];
-        [_operationQueue setName:@"Location Push Operation Queue"];
-        [_operationQueue setMaxConcurrentOperationCount:1];
         
         [[NSUserDefaults standardUserDefaults] addObserver:self
                                                 forKeyPath:kLocationReportingFrequencyKey
@@ -161,7 +156,7 @@ NSInteger const kLocationPushLimit = 100;
             self.isPushingLocations = NO;
         }];
         
-        [locationTask resume];
+        [[MageSessionManager manager] addTask:locationTask];
     }
 }
 

@@ -87,7 +87,7 @@ static User *currentUser = nil;
         [[NSFileManager defaultManager] createDirectoryAtPath:[userIconPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
     }
     
-    [task resume];
+    [manager addTask:task];
 };
 
 + (void) pullUserAvatar: (User *) user {
@@ -125,7 +125,7 @@ static User *currentUser = nil;
         [[NSFileManager defaultManager] createDirectoryAtPath:[userAvatarPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
     }
     
-    [task resume];
+    [manager addTask:task];
 }
 
 + (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void (^)())success
@@ -136,7 +136,7 @@ static User *currentUser = nil;
     
     MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get roles
@@ -225,7 +225,7 @@ static User *currentUser = nil;
     
     MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
         
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             

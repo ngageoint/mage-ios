@@ -37,6 +37,8 @@
 - (void) startServices {
     [[LocationService singleton] start];
 
+    NSURLSessionDataTask *rolesPullTask = [Role operationToFetchRolesWithSuccess:nil failure:nil];
+    
     NSURLSessionDataTask *usersPullTask = [User operationToFetchUsersWithSuccess:^{
         NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
@@ -45,15 +47,14 @@
         NSLog(@"Failed to pull users");
     }];
     
-    NSURLSessionDataTask *rolesPullTask = [Role operationToFetchRolesWithSuccess:^{
-        [usersPullTask resume];
-    } failure:nil];
-    
     [[ObservationPushService singleton] start];
     [[AttachmentPushService singleton] start];
     
     // Add the operations to the queue
-    [rolesPullTask resume];
+    NSArray<NSURLSessionTask *> *tasks = [[NSArray alloc] initWithObjects:rolesPullTask, usersPullTask, nil];
+    SessionTask *sessionTask = [[SessionTask alloc] initWithTasks:tasks andMaxConcurrentTasks:1];
+    [[MageSessionManager manager] addSessionTask:sessionTask];
+
 }
 
 - (void) stopServices {
@@ -64,6 +65,7 @@
 }
 
 - (void) fetchEvents {
+    MageSessionManager *manager = [MageSessionManager manager];
     NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^{
         
         NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
@@ -75,14 +77,15 @@
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
         }];
-        [eventTask resume];
+        [manager addTask:eventTask];
     } failure:^(NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
     }];
-    [myselfTask resume];
+    [manager addTask:myselfTask];
 }
 
 - (void) addFormFetchOperationsForEvents: (NSArray *) events {
+    MageSessionManager *manager = [MageSessionManager manager];
     for (Event *e in events) {
         NSURLSessionTask *formTask = [Form operationToPullFormForEvent:e.remoteId
                                                         success: ^{
@@ -91,11 +94,12 @@
                                                             NSLog(@"failed to pull form for event");
                                                         }];
         
-        [formTask resume];
+        [manager addTask:formTask];
     }
 }
 
 - (void) addStaticLayerFetchOperations: (NSArray *) events {
+    MageSessionManager *manager = [MageSessionManager manager];
     for (Event *e in events) {
         
         NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", e.remoteId]];
@@ -103,7 +107,7 @@
             if (s.data == nil) {
                 NSLog(@"Static layer data is nil for %@ in event %@ retrieving data", s.name, s.eventId);
                 NSURLSessionDataTask *layerTask = [StaticLayer operationToFetchStaticLayerData:s];
-                [layerTask resume];
+                [manager addTask:layerTask];
             }
         }
     }

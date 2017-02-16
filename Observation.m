@@ -209,7 +209,7 @@ NSNumber *_currentEventId;
     
     if (observation.remoteId != nil) {
         url = observation.url;
-        task = [manager PUT:url parameters:json success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT_TASK:url parameters:json success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -218,7 +218,7 @@ NSNumber *_currentEventId;
             failure(error);
         }];
     }else{
-        task = [manager POST:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager POST_TASK:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -242,7 +242,7 @@ NSNumber *_currentEventId;
     
     if (!favorite.favorite) {
         
-        task = [manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager DELETE_TASK:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -253,7 +253,7 @@ NSNumber *_currentEventId;
         
     }else{
         
-        task = [manager PUT:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT_TASK:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -279,7 +279,7 @@ NSNumber *_currentEventId;
         NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
         [parameters setObject:important.reason forKey:@"description"];
         
-        task = [manager PUT:url parameters:parameters success:^(NSURLSessionTask *task, id response) {
+        task = [manager PUT_TASK:url parameters:parameters success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -289,7 +289,7 @@ NSNumber *_currentEventId;
         }];
         
     } else {
-        task = [manager DELETE:url parameters:nil success:^(NSURLSessionTask *task, id response) {
+        task = [manager DELETE_TASK:url parameters:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
             }
@@ -316,7 +316,7 @@ NSNumber *_currentEventId;
     
     MageSessionManager *manager = [MageSessionManager manager];
     
-    NSURLSessionDataTask *task = [manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Observation request complete");
             
@@ -510,7 +510,7 @@ NSNumber *_currentEventId;
     __weak typeof(self) weakSelf = self;
     for(NSURLSessionDownloadTask *request in requests){
         dispatch_group_enter(group);
-        [request resume];
+        [manager addTask:request];
     }
     
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{

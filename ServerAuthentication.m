@@ -46,7 +46,7 @@
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/login"];
     
     NSURL *URL = [NSURL URLWithString:url];
-    NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSDictionary *userJson = [response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         
@@ -77,7 +77,7 @@
             }
     }];
     
-    [task resume];
+    [manager addTask:task];
 }
 
 - (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
@@ -121,7 +121,7 @@
     NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"api/devices"];
     
     NSURL *URL = [NSURL URLWithString:url];
-    NSURLSessionDataTask *task = [manager POST:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         BOOL registered = [[response objectForKey:@"registered"] boolValue];
         if (registered) {
             NSLog(@"Device was registered already, logging in");
@@ -136,7 +136,7 @@
         complete(AUTHENTICATION_ERROR);
     }];
     
-    [task resume];
+    [manager addTask:task];
 }
 
 @end

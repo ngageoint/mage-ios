@@ -35,17 +35,18 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
 }
 
 + (void) refreshLayersForEvent:(NSNumber *)eventId {
+    MageSessionManager *manager = [MageSessionManager manager];
     NSURLSessionDataTask *task = [Layer operationToPullLayersForEvent:eventId success:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
         NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId]];
         for (StaticLayer *l in staticLayers) {
             NSURLSessionDataTask *fetchFeaturesTask = [StaticLayer operationToFetchStaticLayerData:l];
-            [fetchFeaturesTask resume];
+            [manager addTask:fetchFeaturesTask];
         }
     } failure:^(NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LayerFetched object:nil];
     }];
-    [task resume];
+    [manager addTask:task];
 }
 
 + (NSURLSessionDataTask *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
@@ -53,7 +54,7 @@ NSString * const LayerFetched = @"mil.nga.giat.mage.layer.fetched";
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
     MageSessionManager *manager = [MageSessionManager manager];
-    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", eventId] inContext:localContext];
             

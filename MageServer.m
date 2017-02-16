@@ -55,7 +55,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     
     MageSessionManager *manager = [MageSessionManager manager];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
-    NSURLSessionDataTask *task = [manager GET:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager GET_TASK:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
         NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
@@ -111,7 +111,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             }
     }];
     
-    [task resume];
+    [manager addTask:task];
     
 }
 

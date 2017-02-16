@@ -7,6 +7,7 @@
 #import "UserUtility.h"
 #import "NSString+Contains.h"
 #import "MageServer.h"
+#import "SessionTaskQueue.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
 
@@ -21,7 +22,8 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
 
 @interface MageSessionManager()
 
-@property (nonatomic, strong)  NSString * token;
+@property (nonatomic, strong)  NSString *token;
+@property (nonatomic, strong)  SessionTaskQueue *taskQueue;
 
 @end
 
@@ -57,6 +59,8 @@ static MageSessionManager *managerSingleton = nil;
                                                  selector:@selector(networkRequestDidFinish:)
                                                      name:AFNetworkingTaskDidCompleteNotification
                                                    object:nil];
+        
+        _taskQueue = [[SessionTaskQueue alloc] initWithMaxConcurrentTasks:4];
     }
     return self;
 }
@@ -99,6 +103,14 @@ static MageSessionManager *managerSingleton = nil;
         }
     }
     return;
+}
+
+-(void) addTask: (NSURLSessionTask *) task{
+    [_taskQueue addTask:task];
+}
+
+-(void) addSessionTask: (SessionTask *) task{
+    [_taskQueue addSessionTask:task];
 }
 
 @end

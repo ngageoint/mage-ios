@@ -73,7 +73,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
     }];
     
     NSLog(@"pulling locations");
-    [locationFetchTask resume];
+    [[MageSessionManager manager] addTask:locationFetchTask];
 }
 
 -(void) stop {

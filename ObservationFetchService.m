@@ -72,7 +72,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
         }
     }];
     
-    [observationFetchTask resume];
+    [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
 - (void) stop {
