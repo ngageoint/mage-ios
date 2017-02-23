@@ -15,7 +15,7 @@
 #import "Event.h"
 #import "User.h"
 #import "ObservationEditViewController.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import <LocationService.h>
 #import "Filter.h"
 #import "Observations.h"
@@ -125,13 +125,13 @@
 - (IBAction)refreshObservations:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];
     
-    NSOperation *observationFetchOperation = [Observation operationToPullObservationsWithSuccess:^{
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
         [self.refreshControl endRefreshing];
     } failure:^(NSError* error) {
         [self.refreshControl endRefreshing];
     }];
     
-    [[HttpManager singleton].manager.operationQueue addOperation:observationFetchOperation];
+    [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

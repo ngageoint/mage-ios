@@ -8,7 +8,7 @@
 #import "Location.h"
 #import "MeViewController.h"
 #import <Event.h>
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
@@ -64,13 +64,13 @@
 - (IBAction)refreshPeople:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];
     
-    NSOperation *userFetchOperation = [Location operationToPullLocationsWithSuccess:^{
+    NSURLSessionDataTask *userFetchTask = [Location operationToPullLocationsWithSuccess:^{
         [self.refreshControl endRefreshing];
     } failure:^(NSError* error) {
         [self.refreshControl endRefreshing];
     }];
     
-    [[HttpManager singleton].manager.operationQueue addOperation:userFetchOperation];
+    [[MageSessionManager manager] addTask:userFetchTask];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath

@@ -20,7 +20,7 @@
 #import <AFNetworking.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MageServer.h>
-#import <HttpManager.h>
+#import <MageSessionManager.h>
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
 #import <GeoPoint.h>
@@ -302,16 +302,14 @@
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 
-    HttpManager *manager = [HttpManager singleton];
+    MageSessionManager *manager = [MageSessionManager manager];
     NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
     
-    NSMutableURLRequest *request = [manager.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [[manager httpRequestSerializer] multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpeg" mimeType:@"image/jpeg"];
     } error:nil];
     
-    NSProgress *progress = nil;
-    
-    NSURLSessionUploadTask *uploadTask = [manager.sessionManager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
@@ -319,7 +317,7 @@
         }
     }];
     
-    [uploadTask resume];
+    [manager addTask:uploadTask];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {

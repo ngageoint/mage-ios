@@ -6,7 +6,7 @@
 
 #import "SignUpTableViewController.h"
 #import "UINextField.h"
-#import "HttpManager.h"
+#import "MageSessionManager.h"
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
@@ -89,10 +89,12 @@
 - (void) signupWithParameters:(NSDictionary *) parameters url:(NSString *) baseUrl {
     __weak typeof(self) weakSelf = self;
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
-    [[HttpManager singleton].manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+    
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
-		
+        
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
                                                                        message:[NSString stringWithFormat:@"%@ (%@) has been successfully created.  An administrator must approve your account before you can login", displayName, username]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
@@ -104,11 +106,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf presentViewController:alert animated:YES completion:nil];
         });
-                       
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
-                                                                       message:[operation responseString]
+                                                                       message:operation.error.localizedDescription
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -117,6 +117,8 @@
             [weakSelf presentViewController:alert animated:YES completion:nil];
         });
     }];
+    
+    [manager addTask:task];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
