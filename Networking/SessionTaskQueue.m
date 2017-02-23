@@ -44,12 +44,17 @@
 /**
  * Dictionary of session task identifiers and current number of active tasks allocated to the session task
  */
-@property (nonatomic, strong) NSMutableDictionary<NSUUID *, NSNumber *> *activePerSessionTask;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *activePerSessionTask;
 
 /**
  * Task queue of tasks to process sorted by priority
  */
 @property (nonatomic, strong) NSMutableOrderedSet<SessionTask *> *taskQueue;
+
+/**
+ * Task queue count of tasks, including embedded tasks
+ */
+@property (nonatomic) int taskQueueCount;
 
 /**
  * Flag indicating a requested stop
@@ -73,7 +78,10 @@ static int defaultMaxConcurrentTasks = 4;
         _activeTasks = [[NSMutableDictionary alloc] init];
         _activePerSessionTask = [[NSMutableDictionary alloc] init];
         _taskQueue = [[NSMutableOrderedSet alloc] init];
+        _taskQueueCount = 0;
         _stop = NO;
+        
+        NSLog(@"%@ Init, Max Concurrent Tasks: %d", NSStringFromClass([self class]), _maxConcurrentTasks);
         
         // Observe task notifications
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -92,6 +100,7 @@ static int defaultMaxConcurrentTasks = 4;
         [self removeObservers];
             
         [_taskQueue removeAllObjects];
+        _taskQueueCount = 0;
         [_activePerSessionTask removeAllObjects];
         
         for(ActiveSessionTask *activeTask in _activeTasks){
@@ -124,10 +133,19 @@ static int defaultMaxConcurrentTasks = 4;
 }
 
 -(void) addTask: (NSURLSessionTask *) task{
+    
+    if (![task isKindOfClass:[NSURLSessionTask class]]){
+        [NSException raise:@"Unexpected Task Type" format:@"Task must be a subtype of %@", NSStringFromClass([NSURLSessionTask class])];
+    }
+    
     [self addSessionTask:[[SessionTask alloc] initWithTask:task]];
 }
 
 -(void) addSessionTask: (SessionTask *) task{
+    
+    if (![task isKindOfClass:[SessionTask class]]){
+        [NSException raise:@"Unexpected Task Type" format:@"Task must be a subtype of %@", NSStringFromClass([SessionTask class])];
+    }
     
     [self verifyActive];
     
@@ -144,9 +162,12 @@ static int defaultMaxConcurrentTasks = 4;
             return result;
         }];
         [_taskQueue insertObject:task atIndex:insertLocation];
+        _taskQueueCount += [task remainingTasks];
         
         // Start the next task if active space available
-        [self startNextTask];
+        if(![self startNextTask]){
+            [self logStatus];
+        }
     }
 }
 
@@ -170,8 +191,12 @@ static int defaultMaxConcurrentTasks = 4;
 
 /**
  * Start the next task if a task is queued and active space is available
+ *
+ * @return YES if a task was started
  */
--(void) startNextTask{
+-(BOOL) startNextTask{
+    
+    BOOL started = NO;
     
     // Is there a task queues and is active space
     if(_taskQueue.count > 0 && _activeTasks.count < _maxConcurrentTasks){
@@ -207,15 +232,27 @@ static int defaultMaxConcurrentTasks = 4;
             [_activeTasks setObject:activeTask forKey:[NSNumber numberWithUnsignedInteger:runTask.taskIdentifier]];
             [_activePerSessionTask setObject:[NSNumber numberWithInt:[activeFromTask intValue] + 1] forKey:[sessionTask taskIdentifier]];
             
+            // One task in the queue was added to active
+            _taskQueueCount--;
+            
             // If all tasks from the sesion task have been started, remove from the task queue
             if(![sessionTask hasTask]){
                 [_taskQueue removeObjectAtIndex:taskIndex];
             }
+            
+            started = YES;
+            [self logStatus];
+            
+            // Check if another task should be started
+            [self startNextTask];
         }
-        
     }
     
-    NSLog(@"%@ Status, Active Tasks: %d, Task Queue: %d", NSStringFromClass([self class]),(int)_activeTasks.count, (int)_taskQueue.count);
+    return started;
+}
+
+-(void) logStatus{
+    NSLog(@"%@ Status, Active Tasks: %d, Task Queue: %d", NSStringFromClass([self class]),(int)_activeTasks.count, (int)_taskQueueCount);
 }
 
 /**
@@ -239,7 +276,7 @@ static int defaultMaxConcurrentTasks = 4;
             
             // Update active tasks per session task count
             SessionTask *sessionTask = activeTask.sessionTask;
-            NSUUID *sessionTaskIdentifier = [sessionTask taskIdentifier];
+            NSString *sessionTaskIdentifier = [sessionTask taskIdentifier];
             if([sessionTask hasTask]){
                 NSNumber *activeFromTask = [_activePerSessionTask objectForKey:sessionTaskIdentifier];
                 if(activeFromTask != nil && [activeFromTask intValue] > 0){
@@ -256,7 +293,9 @@ static int defaultMaxConcurrentTasks = 4;
             NSLog(@"%@ Timer, Request: %@, Seconds: %f", NSStringFromClass([self class]), requestUrl, seconds);
             
             // Start the next task
-            [self startNextTask];
+            if(![self startNextTask]){
+                [self logStatus];
+            }
             
             // Close the queue if stopped and finished
             [self closeIfFinished];

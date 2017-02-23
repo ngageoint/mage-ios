@@ -15,6 +15,9 @@
 @interface MageSessionManager : TaskSessionManager
 
 extern NSString * const MAGETokenExpiredNotification;
+extern NSInteger const MAGE_HTTPMaximumConnectionsPerHost;
+extern NSInteger const MAGE_MaxConcurrentTasks;
+extern NSInteger const MAGE_MaxConcurrentEvents;
 
 /**
  * Get the MAGE Session Manager instance

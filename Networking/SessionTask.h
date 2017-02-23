@@ -70,7 +70,7 @@
  *
  *  @return task identifier
  */
--(NSUUID *) taskIdentifier;
+-(NSString *) taskIdentifier;
 
 /**
  *  Add a url session task by priority order
@@ -99,5 +99,12 @@
  *  @return YES if at least one task
  */
 -(BOOL) hasTask;
+
+/**
+ *  Get the count of remaining tasks
+ *
+ *  @return count of tasks
+ */
+-(int) remainingTasks;
 
 @end

@@ -86,6 +86,7 @@
 
 - (void) addFormFetchOperationsForEvents: (NSArray *) events {
     MageSessionManager *manager = [MageSessionManager manager];
+    SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:MAGE_MaxConcurrentEvents];
     for (Event *e in events) {
         NSURLSessionTask *formTask = [Form operationToPullFormForEvent:e.remoteId
                                                         success: ^{
@@ -93,9 +94,9 @@
                                                         } failure:^(NSError* error) {
                                                             NSLog(@"failed to pull form for event");
                                                         }];
-        
-        [manager addTask:formTask];
+        [task addTask:formTask];
     }
+    [manager addSessionTask:task];
 }
 
 - (void) addStaticLayerFetchOperations: (NSArray *) events {

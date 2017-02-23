@@ -10,6 +10,9 @@
 #import "SessionTaskQueue.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
+NSInteger const MAGE_HTTPMaximumConnectionsPerHost = 6;
+NSInteger const MAGE_MaxConcurrentTasks = 6;
+NSInteger const MAGE_MaxConcurrentEvents = 4;
 
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
@@ -41,8 +44,10 @@ static MageSessionManager *managerSingleton = nil;
 }
 
 - (id) init {
-    if ((self = [super init])) {
-        
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPMaximumConnectionsPerHost = MAGE_HTTPMaximumConnectionsPerHost;
+    self = [super initWithSessionConfiguration:configuration];
+    if(self){
         AFJSONResponseSerializer *responseJsonSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
         responseJsonSerializer.removesKeysWithNullValues = YES;
         
@@ -60,7 +65,9 @@ static MageSessionManager *managerSingleton = nil;
                                                      name:AFNetworkingTaskDidCompleteNotification
                                                    object:nil];
         
-        _taskQueue = [[SessionTaskQueue alloc] initWithMaxConcurrentTasks:4];
+        _taskQueue = [[SessionTaskQueue alloc] initWithMaxConcurrentTasks:MAGE_MaxConcurrentTasks];
+        
+        NSLog(@"%@ Init, HTTP Maximum Connections Per Host: %d", NSStringFromClass([self class]), configuration.HTTPMaximumConnectionsPerHost);
     }
     return self;
 }

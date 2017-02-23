@@ -10,7 +10,7 @@
 
 @interface SessionTask()
 
-@property (nonatomic, strong) NSUUID *taskIdentifier;
+@property (nonatomic, strong) NSString *taskIdentifier;
 @property (nonatomic, strong) NSMutableOrderedSet<NSURLSessionTask *> *tasks;
 
 @end
@@ -46,7 +46,7 @@ static int defaultMaxConcurrentTasks = 1;
 -(instancetype) initWithTasks: (NSArray<NSURLSessionTask *> *) tasks andMaxConcurrentTasks: (int) maxConcurrentTasks{
     self = [super init];
     if(self){
-        _taskIdentifier = [NSUUID UUID];
+        _taskIdentifier = [[NSUUID UUID] UUIDString];
         _tasks = [[NSMutableOrderedSet alloc] init];
         _priority = NSURLSessionTaskPriorityDefault;
         [self insertTasks: tasks];
@@ -55,7 +55,7 @@ static int defaultMaxConcurrentTasks = 1;
     return self;
 }
 
--(NSUUID *) taskIdentifier{
+-(NSString *) taskIdentifier{
     return _taskIdentifier;
 }
 
@@ -89,7 +89,11 @@ static int defaultMaxConcurrentTasks = 1;
 }
 
 -(BOOL) hasTask{
-    return _tasks.count > 0;
+    return [self remainingTasks] > 0;
+}
+
+-(int) remainingTasks{
+    return _tasks.count;
 }
 
 /**
