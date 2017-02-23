@@ -8,6 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * TBD
 
 ##### Features
+* MAGE SDK upgrade to 1.2.2
+* GeoPackage iOS upgrade to 1.2.1
 
 ##### Bug Fixes
 
@@ -38,7 +40,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 1.2.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.2.0) (08-11-2016)
 
 ##### Features
-* Multi select support. 
+* Multi select support.
 * Filter select and multi select options
 * Turn on App Transport Security.
 
