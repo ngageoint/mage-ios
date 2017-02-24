@@ -13,6 +13,7 @@
 @property (nonatomic, strong) NSString *taskId;
 @property (nonatomic, strong) NSMutableOrderedSet<NSURLSessionTask *> *tasks;
 @property (nonatomic, strong) NSMutableOrderedSet<NSNumber *> *taskIds;
+@property (nonatomic) BOOL multi;
 
 @end
 
@@ -51,6 +52,7 @@ static int defaultMaxConcurrentTasks = 1;
         _tasks = [[NSMutableOrderedSet alloc] init];
         _taskIds = [[NSMutableOrderedSet alloc] init];
         _priority = NSURLSessionTaskPriorityDefault;
+        _multi = NO;
         [self insertTasks: tasks];
         _maxConcurrentTasks = maxConcurrentTasks > 0 ? maxConcurrentTasks : defaultMaxConcurrentTasks;
     }
@@ -97,6 +99,10 @@ static int defaultMaxConcurrentTasks = 1;
     return (int)_tasks.count;
 }
 
+-(BOOL) multi{
+    return _multi;
+}
+
 /**
  *  Insert the tasks in priority order
  *
@@ -135,6 +141,7 @@ static int defaultMaxConcurrentTasks = 1;
         }];
         [_tasks insertObject:task atIndex:insertLocation];
         [_taskIds insertObject:taskId atIndex:insertLocation];
+        _multi = YES;
     }
 }
 

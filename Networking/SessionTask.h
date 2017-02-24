@@ -108,6 +108,13 @@
 -(int) remainingTasks;
 
 /**
+ *  Determine if more than one url session tasks were added to this session task
+ *
+ *  @return YES if contains multiple url session tasks
+ */
+-(BOOL) multi;
+
+/**
  *  Check if contains the task with the identifier
  *
  *  @param taskIdentifier   url session task identifier

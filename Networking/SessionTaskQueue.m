@@ -86,6 +86,7 @@ static int defaultMaxConcurrentTasks = 4;
         _taskQueueIds = [[NSMutableOrderedSet alloc] init];
         _taskQueueCount = 0;
         _stop = NO;
+        _log = NO;
         
         NSLog(@"%@ Init, Max Concurrent Tasks: %d", NSStringFromClass([self class]), _maxConcurrentTasks);
         
@@ -174,7 +175,7 @@ static int defaultMaxConcurrentTasks = 4;
         
         // Start the next task if active space available
         if(![self startNextTask]){
-            [self logStatus];
+            [self logQueueStatus];
         }
     }
 }
@@ -229,13 +230,15 @@ static int defaultMaxConcurrentTasks = 4;
         if(sessionTask != nil){
             // Start the task
             NSURLSessionTask *runTask = [sessionTask removeTask];
-            NSDate * startTime = [NSDate date];
-            [runTask resume];
             
             ActiveSessionTask *activeTask = [[ActiveSessionTask alloc] init];
             [activeTask setSessionTask:sessionTask];
             [activeTask setTask:runTask];
-            [activeTask setStartTime:startTime];
+            [activeTask setStartTime:[NSDate date]];
+            
+            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Request" andEndTime:nil];
+            
+            [runTask resume];
             
             [_activeTasks setObject:activeTask forKey:[NSNumber numberWithUnsignedInteger:runTask.taskIdentifier]];
             [_activePerSessionTask setObject:[NSNumber numberWithInt:[activeFromTask intValue] + 1] forKey:[sessionTask taskId]];
@@ -250,7 +253,7 @@ static int defaultMaxConcurrentTasks = 4;
             }
             
             started = YES;
-            [self logStatus];
+            [self logQueueStatus];
             
             // Check if another task should be started
             [self startNextTask];
@@ -260,8 +263,31 @@ static int defaultMaxConcurrentTasks = 4;
     return started;
 }
 
--(void) logStatus{
-    NSLog(@"%@ Status, Active Tasks: %d, Task Queue: %d", NSStringFromClass([self class]),(int)_activeTasks.count, (int)_taskQueueCount);
+-(void) logQueueStatus{
+    if(_log){
+        NSLog(@"%@ Status, Active Tasks: %d, Task Queue: %d", NSStringFromClass([self class]),(int)_activeTasks.count, (int)_taskQueueCount);
+    }
+}
+
+-(void) logTaskStatusWithActiveTask: (ActiveSessionTask *) activeTask andLogName: (NSString *) name andEndTime: (NSDate *) endTime{
+    
+    if(_log){
+        SessionTask *sessionTask = activeTask.sessionTask;
+        NSURLSessionTask *task = activeTask.task;
+        NSUInteger taskIdentifier = task.taskIdentifier;
+        NSMutableString *priority = [NSMutableString stringWithFormat:@"%.02f", sessionTask.priority];
+        if([sessionTask multi]){
+            [priority appendFormat:@"/%@", [NSString stringWithFormat:@"%.02f", task.priority]];
+        }
+        NSURLRequest *request = task.originalRequest;
+        NSString *requestUrl = [[request URL] absoluteString];
+        NSString *timeLog = @"";
+        if(endTime != nil){
+            NSTimeInterval seconds = [endTime timeIntervalSinceDate:activeTask.startTime];
+            timeLog = [NSString stringWithFormat:@", Seconds: %@", [NSString stringWithFormat:@"%.03f", seconds]];
+        }
+        NSLog(@"%@ %@, Identifier: %lu, Priority: %@, URL: %@%@", NSStringFromClass([self class]), name, (unsigned long)taskIdentifier, priority, requestUrl, timeLog);
+    }
 }
 
 /**
@@ -295,15 +321,11 @@ static int defaultMaxConcurrentTasks = 4;
                 [_activePerSessionTask removeObjectForKey:sessionTaskIdentifier];
             }
             
-            // Log request url and execution time
-            NSURLRequest *request = activeTask.task.originalRequest;
-            NSString * requestUrl = [[request URL] absoluteString];
-            NSTimeInterval seconds = [endTime timeIntervalSinceDate:activeTask.startTime];
-            NSLog(@"%@ Timer, Request: %@, Seconds: %f", NSStringFromClass([self class]), requestUrl, seconds);
+            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Response" andEndTime:endTime];
             
             // Start the next task
             if(![self startNextTask]){
-                [self logStatus];
+                [self logQueueStatus];
             }
             
             // Close the queue if stopped and finished

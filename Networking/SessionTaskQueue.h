@@ -20,6 +20,11 @@
 @property (nonatomic) int maxConcurrentTasks;
 
 /**
+ * Flag indicating whether to log requests and responses
+ */
+@property (nonatomic) BOOL log;
+
+/**
  * Initialize with a default of 4 max concurrent tasks
  */
 -(instancetype) init;
