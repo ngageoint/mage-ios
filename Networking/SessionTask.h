@@ -19,7 +19,7 @@
 @property (nonatomic) int maxConcurrentTasks;
 
 /**
- * Task priority between 0.0 (NSURLSessionTaskPriorityLow) and 1.0 (NSURLSessionTaskPriorityHigh). Defaults to the max NSURLSessionTask.priority.
+ * Task priority between 0.0 and 1.0. Defaults to the max NSURLSessionTask.priority.
  */
 @property (nonatomic) float priority;
 
@@ -66,11 +66,11 @@
 -(instancetype) initWithTasks: (NSArray<NSURLSessionTask *> *) tasks andMaxConcurrentTasks: (int) maxConcurrentTasks;
 
 /**
- *  Get the unique session task identifier
+ *  Get the unique session task id
  *
- *  @return task identifier
+ *  @return task id
  */
--(NSString *) taskIdentifier;
+-(NSString *) taskId;
 
 /**
  *  Add a url session task by priority order
@@ -106,5 +106,21 @@
  *  @return count of tasks
  */
 -(int) remainingTasks;
+
+/**
+ *  Check if contains the task with the identifier
+ *
+ *  @param taskIdentifier   url session task identifier
+ *  @return YES if contains the task
+ */
+-(BOOL) containsTaskIdentifier: (NSUInteger) taskIdentifier;
+
+/**
+ *  Get and remove the task with the identifier if it exists
+ *
+ *  @param taskIdentifier   url session task identifier
+ *  @return url session task if found, nil if not
+ */
+-(NSURLSessionTask *) removeTaskWithIdentifier: (NSUInteger) taskIdentifier;
 
 @end

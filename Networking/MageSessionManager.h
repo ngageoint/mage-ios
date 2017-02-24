@@ -59,4 +59,20 @@ extern NSInteger const MAGE_MaxConcurrentEvents;
  */
 -(void) addSessionTask: (SessionTask *) task;
 
+/**
+ * If not already complete or active, remove a task from the waiting queue and run as a solo task with the new priority
+ *
+ * @param taskIdentifier   url session task identifier
+ * @param priority         new task priority
+ */
+-(BOOL) readdTaskWithIdentifier: (NSUInteger) taskIdentifier withPriority: (float) priority;
+
+/**
+ * If not already complete or fully active, remove a session task from the waiting queue and run with the new priority
+ *
+ * @param taskId     session task id
+ * @param priority   new session task priority
+ */
+-(BOOL) readdSessionTaskWithId: (NSString *) taskId withPriority: (float) priority;
+
 @end

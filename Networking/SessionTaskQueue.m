@@ -52,6 +52,11 @@
 @property (nonatomic, strong) NSMutableOrderedSet<SessionTask *> *taskQueue;
 
 /**
+ * Task queue of task ids to process sorted by priority
+ */
+@property (nonatomic, strong) NSMutableOrderedSet<NSString *> *taskQueueIds;
+
+/**
  * Task queue count of tasks, including embedded tasks
  */
 @property (nonatomic) int taskQueueCount;
@@ -78,6 +83,7 @@ static int defaultMaxConcurrentTasks = 4;
         _activeTasks = [[NSMutableDictionary alloc] init];
         _activePerSessionTask = [[NSMutableDictionary alloc] init];
         _taskQueue = [[NSMutableOrderedSet alloc] init];
+        _taskQueueIds = [[NSMutableOrderedSet alloc] init];
         _taskQueueCount = 0;
         _stop = NO;
         
@@ -100,6 +106,7 @@ static int defaultMaxConcurrentTasks = 4;
         [self removeObservers];
             
         [_taskQueue removeAllObjects];
+        [_taskQueueIds removeAllObjects];
         _taskQueueCount = 0;
         [_activePerSessionTask removeAllObjects];
         
@@ -162,6 +169,7 @@ static int defaultMaxConcurrentTasks = 4;
             return result;
         }];
         [_taskQueue insertObject:task atIndex:insertLocation];
+        [_taskQueueIds insertObject:[task taskId] atIndex:insertLocation];
         _taskQueueCount += [task remainingTasks];
         
         // Start the next task if active space available
@@ -208,7 +216,7 @@ static int defaultMaxConcurrentTasks = 4;
         // Find the next task in the queue that does not have max active task allocation provided to it
         for(taskIndex = 0; taskIndex < _taskQueue.count; taskIndex++){
             SessionTask *tempTask = [_taskQueue objectAtIndex:taskIndex];
-            activeFromTask = [_activePerSessionTask objectForKey:[tempTask taskIdentifier]];
+            activeFromTask = [_activePerSessionTask objectForKey:[tempTask taskId]];
             if(activeFromTask == nil){
                 activeFromTask = [NSNumber numberWithInt:0];
             }
@@ -230,7 +238,7 @@ static int defaultMaxConcurrentTasks = 4;
             [activeTask setStartTime:startTime];
             
             [_activeTasks setObject:activeTask forKey:[NSNumber numberWithUnsignedInteger:runTask.taskIdentifier]];
-            [_activePerSessionTask setObject:[NSNumber numberWithInt:[activeFromTask intValue] + 1] forKey:[sessionTask taskIdentifier]];
+            [_activePerSessionTask setObject:[NSNumber numberWithInt:[activeFromTask intValue] + 1] forKey:[sessionTask taskId]];
             
             // One task in the queue was added to active
             _taskQueueCount--;
@@ -238,6 +246,7 @@ static int defaultMaxConcurrentTasks = 4;
             // If all tasks from the sesion task have been started, remove from the task queue
             if(![sessionTask hasTask]){
                 [_taskQueue removeObjectAtIndex:taskIndex];
+                [_taskQueueIds removeObjectAtIndex:taskIndex];
             }
             
             started = YES;
@@ -276,7 +285,7 @@ static int defaultMaxConcurrentTasks = 4;
             
             // Update active tasks per session task count
             SessionTask *sessionTask = activeTask.sessionTask;
-            NSString *sessionTaskIdentifier = [sessionTask taskIdentifier];
+            NSString *sessionTaskIdentifier = [sessionTask taskId];
             if([sessionTask hasTask]){
                 NSNumber *activeFromTask = [_activePerSessionTask objectForKey:sessionTaskIdentifier];
                 if(activeFromTask != nil && [activeFromTask intValue] > 0){
@@ -316,5 +325,89 @@ static int defaultMaxConcurrentTasks = 4;
     return [NSNumber numberWithUnsignedInteger:taskIdentifier];
 }
 
+-(BOOL) queueContainsTaskIdentifier: (NSUInteger) taskIdentifier{
+    BOOL contains = NO;
+    NSArray<SessionTask *> *taskQueueCopy = [[_taskQueue array] copy];
+    for(SessionTask *sessionTask in taskQueueCopy){
+        contains = [sessionTask containsTaskIdentifier:taskIdentifier];
+        if(contains){
+            break;
+        }
+    }
+    return contains;
+}
+
+-(NSURLSessionTask *) removeTaskFromQueueWithIdentifier: (NSUInteger) taskIdentifier{
+    NSURLSessionTask *task = nil;
+    if([self queueContainsTaskIdentifier:taskIdentifier]){
+        @synchronized(self) {
+            for(int taskIndex = 0; taskIndex < _taskQueue.count; taskIndex++){
+                SessionTask *sessionTask = [_taskQueue objectAtIndex:taskIndex];
+                task = [sessionTask removeTaskWithIdentifier:taskIdentifier];
+                if(task != nil){
+                    // One task was removed
+                    _taskQueueCount--;
+                    // If all tasks from the sesion task have been removed, remove from the task queue
+                    if(![sessionTask hasTask]){
+                        [_taskQueue removeObjectAtIndex:taskIndex];
+                        [_taskQueueIds removeObjectAtIndex:taskIndex];
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return task;
+}
+
+-(BOOL) queueContainsSessionTaskId: (NSString *) taskId{
+    return [_taskQueueIds containsObject:taskId];
+}
+
+-(SessionTask *) removeSessionTaskFromQueueWithId: (NSString *) taskId{
+    SessionTask *sessionTask = nil;
+    if([self queueContainsSessionTaskId:taskId]){
+        @synchronized(self) {
+            NSUInteger location = [_taskQueueIds indexOfObject:taskId];
+            if(location != NSNotFound){
+                sessionTask = [_taskQueue objectAtIndex:location];
+                _taskQueueCount -= [sessionTask remainingTasks];
+                [_taskQueue removeObjectAtIndex:location];
+                [_taskQueueIds removeObjectAtIndex:location];
+            }
+        }
+    }
+    return sessionTask;
+}
+
+-(BOOL) readdTaskWithIdentifier: (NSUInteger) taskIdentifier{
+    return [self readdTaskWithIdentifier:taskIdentifier withPriority:-1];
+}
+
+-(BOOL) readdTaskWithIdentifier: (NSUInteger) taskIdentifier withPriority: (float) priority{
+    BOOL readded = NO;
+    NSURLSessionTask *task = [self removeTaskFromQueueWithIdentifier:taskIdentifier];
+    if(task != nil){
+        if(priority >= 0.0 && priority <= 1.0){
+            [task setPriority:priority];
+        }
+        [self addTask:task];
+        readded = YES;
+    }
+    return readded;
+}
+
+-(BOOL) readdSessionTaskWithId: (NSString *) taskId withPriority: (float) priority{
+    BOOL readded = NO;
+    SessionTask *sessionTask = [self removeSessionTaskFromQueueWithId:taskId];
+    if(sessionTask != nil){
+        if(priority >= 0.0 && priority <= 1.0){
+            [sessionTask setPriority:priority];
+        }
+        [self addSessionTask:sessionTask];
+        readded = YES;
+    }
+    return readded;
+}
 
 @end

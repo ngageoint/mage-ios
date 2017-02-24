@@ -85,7 +85,7 @@
 
 - (void) addFormAndStaticLayerFetchOperationsForEvents: (NSArray *) events {
     MageSessionManager *manager = [MageSessionManager manager];
-    SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:MAGE_MaxConcurrentEvents];
+    SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:(int)MAGE_MaxConcurrentEvents];
     
     NSNumber *currentEventId = [Server currentEventId];
     

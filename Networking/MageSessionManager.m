@@ -67,7 +67,7 @@ static MageSessionManager *managerSingleton = nil;
         
         _taskQueue = [[SessionTaskQueue alloc] initWithMaxConcurrentTasks:MAGE_MaxConcurrentTasks];
         
-        NSLog(@"%@ Init, HTTP Maximum Connections Per Host: %d", NSStringFromClass([self class]), configuration.HTTPMaximumConnectionsPerHost);
+        NSLog(@"%@ Init, HTTP Maximum Connections Per Host: %d", NSStringFromClass([self class]), (int)configuration.HTTPMaximumConnectionsPerHost);
     }
     return self;
 }
@@ -118,6 +118,13 @@ static MageSessionManager *managerSingleton = nil;
 
 -(void) addSessionTask: (SessionTask *) task{
     [_taskQueue addSessionTask:task];
+}
+
+-(BOOL) readdTaskWithIdentifier: (NSUInteger) taskIdentifier withPriority: (float) priority{
+    return [_taskQueue readdTaskWithIdentifier:taskIdentifier withPriority:priority];
+}
+-(BOOL) readdSessionTaskWithId: (NSString *) taskId withPriority: (float) priority{
+    return [_taskQueue readdSessionTaskWithId:taskId withPriority:priority];
 }
 
 @end

@@ -10,8 +10,9 @@
 
 @interface SessionTask()
 
-@property (nonatomic, strong) NSString *taskIdentifier;
+@property (nonatomic, strong) NSString *taskId;
 @property (nonatomic, strong) NSMutableOrderedSet<NSURLSessionTask *> *tasks;
+@property (nonatomic, strong) NSMutableOrderedSet<NSNumber *> *taskIds;
 
 @end
 
@@ -46,8 +47,9 @@ static int defaultMaxConcurrentTasks = 1;
 -(instancetype) initWithTasks: (NSArray<NSURLSessionTask *> *) tasks andMaxConcurrentTasks: (int) maxConcurrentTasks{
     self = [super init];
     if(self){
-        _taskIdentifier = [[NSUUID UUID] UUIDString];
+        _taskId = [[NSUUID UUID] UUIDString];
         _tasks = [[NSMutableOrderedSet alloc] init];
+        _taskIds = [[NSMutableOrderedSet alloc] init];
         _priority = NSURLSessionTaskPriorityDefault;
         [self insertTasks: tasks];
         _maxConcurrentTasks = maxConcurrentTasks > 0 ? maxConcurrentTasks : defaultMaxConcurrentTasks;
@@ -55,8 +57,8 @@ static int defaultMaxConcurrentTasks = 1;
     return self;
 }
 
--(NSString *) taskIdentifier{
-    return _taskIdentifier;
+-(NSString *) taskId{
+    return _taskId;
 }
 
 -(void) addTask: (NSURLSessionTask *) task{
@@ -80,8 +82,7 @@ static int defaultMaxConcurrentTasks = 1;
     if([self hasTask]){
         @synchronized(self) {
             if([self hasTask]){
-                task = [_tasks objectAtIndex:0];
-                [_tasks removeObjectAtIndex:0];
+                task = [self removeTaskAtIndex:0];
             }
         }
     }
@@ -93,7 +94,7 @@ static int defaultMaxConcurrentTasks = 1;
 }
 
 -(int) remainingTasks{
-    return _tasks.count;
+    return (int)_tasks.count;
 }
 
 /**
@@ -115,10 +116,12 @@ static int defaultMaxConcurrentTasks = 1;
  *  @param task   url session task
  */
 -(void) insertTask: (NSURLSessionTask *) task{
+    NSNumber *taskId = [NSNumber numberWithUnsignedInteger:task.taskIdentifier];
     if(_tasks.count == 0){
         // Add the first task and set priority to the task priority
         _priority = task.priority;
         [_tasks addObject:task];
+        [_taskIds addObject:taskId];
     }else{
         // Set the priority to max between task and current priority
         _priority = MAX(_priority, task.priority);
@@ -131,7 +134,32 @@ static int defaultMaxConcurrentTasks = 1;
             return result;
         }];
         [_tasks insertObject:task atIndex:insertLocation];
+        [_taskIds insertObject:taskId atIndex:insertLocation];
     }
+}
+
+-(BOOL) containsTaskIdentifier: (NSUInteger) taskIdentifier{
+    return [_taskIds containsObject:[NSNumber numberWithUnsignedInteger:taskIdentifier]];
+}
+
+-(NSURLSessionTask *) removeTaskWithIdentifier: (NSUInteger) taskIdentifier{
+    NSURLSessionTask *task = nil;
+    if([self containsTaskIdentifier:taskIdentifier]){
+        @synchronized(self) {
+            NSUInteger location = [_taskIds indexOfObject:[NSNumber numberWithUnsignedInteger:taskIdentifier]];
+            if(location != NSNotFound){
+                task = [self removeTaskAtIndex:location];
+            }
+        }
+    }
+    return task;
+}
+
+-(NSURLSessionTask *) removeTaskAtIndex: (NSUInteger) index{
+    NSURLSessionTask *task = [_tasks objectAtIndex:index];
+    [_tasks removeObjectAtIndex:index];
+    [_taskIds removeObjectAtIndex:index];
+    return task;
 }
 
 @end
