@@ -18,7 +18,7 @@
     [Server setServerUrl:serverUrl completion:nil];
 }
 
-+ (void) setServerUrl:(NSString *) serverUrl completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
++ (void) setServerUrl:(NSString *) serverUrl completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
     [Server setProperty:serverUrl forKey:@"serverUrl" completion:completion];
 }
 
@@ -30,7 +30,7 @@
     [Server setCurrentEventId:eventId completion:nil];
 }
 
-+ (void) setCurrentEventId: (NSNumber *) eventId completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
++ (void) setCurrentEventId: (NSNumber *) eventId completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
     [Server setProperty:eventId forKey:@"currentEventId" completion:completion];
 }
 
