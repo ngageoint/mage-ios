@@ -30,6 +30,8 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
 
 @end
 
+static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
+
 @implementation MageSessionManager
 
 static MageSessionManager *managerSingleton = nil;
@@ -66,6 +68,7 @@ static MageSessionManager *managerSingleton = nil;
                                                    object:nil];
         
         _taskQueue = [[SessionTaskQueue alloc] initWithMaxConcurrentTasks:MAGE_MaxConcurrentTasks];
+        [_taskQueue setLog:YES];
         
         NSLog(@"%@ Init, HTTP Maximum Connections Per Host: %d", NSStringFromClass([self class]), (int)configuration.HTTPMaximumConnectionsPerHost);
     }
@@ -125,6 +128,14 @@ static MageSessionManager *managerSingleton = nil;
 }
 -(BOOL) readdSessionTaskWithId: (NSString *) taskId withPriority: (float) priority{
     return [_taskQueue readdSessionTaskWithId:taskId withPriority:priority];
+}
+
++(void) setEventTasks: (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) tasks{
+    eventTasks = tasks;
+}
+
++(NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) eventTasks{
+    return eventTasks;
 }
 
 @end

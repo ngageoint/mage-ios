@@ -75,4 +75,18 @@ extern NSInteger const MAGE_MaxConcurrentEvents;
  */
 -(BOOL) readdSessionTaskWithId: (NSString *) taskId withPriority: (float) priority;
 
+/**
+ * Set the mapping between events and the corresponding network tasks
+ *
+ * @param tasks   event ids mapped to tasks
+ */
++(void) setEventTasks: (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) tasks;
+
+/**
+ * Get the mapping between events and the corresponding network tasks
+ *
+ * @return event ids mapped to tasks
+ */
++(NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) eventTasks;
+
 @end

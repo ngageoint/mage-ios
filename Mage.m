@@ -56,6 +56,7 @@
     SessionTask *sessionTask = [[SessionTask alloc] initWithTasks:tasks andMaxConcurrentTasks:1];
     [[MageSessionManager manager] addSessionTask:sessionTask];
 
+    [MageSessionManager setEventTasks:nil];
 }
 
 - (void) stopServices {
@@ -87,6 +88,7 @@
     MageSessionManager *manager = [MageSessionManager manager];
     SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:(int)MAGE_MaxConcurrentEvents];
     
+    NSMutableDictionary<NSNumber *, NSMutableArray<NSNumber *> *> * eventTasks = [[NSMutableDictionary alloc] init];
     NSNumber *currentEventId = [Server currentEventId];
     
     for (Event *e in events) {
@@ -101,6 +103,7 @@
             [manager addTask:formTask];
         }else{
             [task addTask:formTask];
+            [self addTask:formTask toTasks:eventTasks forEvent:e];
         }
     }
     
@@ -116,13 +119,26 @@
                     [manager addTask:layerTask];
                 }else{
                     [task addTask:layerTask];
+                    [self addTask:layerTask toTasks:eventTasks forEvent:e];
                 }
             }
         }
     }
     
+    [MageSessionManager setEventTasks:eventTasks];
+    
     [task setPriority:NSURLSessionTaskPriorityLow];
     [manager addSessionTask:task];
+}
+             
+-(void) addTask: (NSURLSessionTask *) task toTasks: (NSMutableDictionary<NSNumber *, NSMutableArray<NSNumber *> *> *) eventTasks forEvent: (Event *) event{
+    NSNumber *taskIdentifier = [NSNumber numberWithUnsignedInteger:task.taskIdentifier];
+    NSMutableArray<NSNumber *> * tasks = [eventTasks objectForKey:event.remoteId];
+    if(tasks == nil){
+        tasks = [[NSMutableArray alloc] init];
+        [eventTasks setObject:tasks forKey:event.remoteId];
+    }
+    [tasks addObject:taskIdentifier];
 }
 
 @end
