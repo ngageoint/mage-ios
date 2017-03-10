@@ -12,5 +12,7 @@
 	<integer>500</integer>
 	<key>geopackage_feature_tiles_min_zoom_offset</key>
 	<integer>0</integer>
+	<key>localTimeZome</key>
+	<true/>
 </dict>
 </plist>

@@ -24,6 +24,7 @@
     @property (nonatomic, assign) BOOL showDisclaimer;
     @property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
     @property (assign, nonatomic) NSInteger versionCellSelectionCount;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *timeZoneSelectionCell;
 
 @end
 
@@ -123,6 +124,20 @@
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
         } else {
             cell.detailTextLabel.text = versionString;
+        }
+    } else if (cell == self.timeZoneSelectionCell) {
+        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+        BOOL localTime = [defaults boolForKey:@"localTimeZome"];
+        if (localTime) {
+            cell.textLabel.text = @"Local Time";
+            NSDateFormatter *localTimeZoneFormatter = [NSDateFormatter new];
+            localTimeZoneFormatter.timeZone = [NSTimeZone localTimeZone];
+            localTimeZoneFormatter.dateFormat = @"Z";
+            NSString *localTimeZoneOffset = [localTimeZoneFormatter stringFromDate:[NSDate date]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"All times will be displayed in %@ (%@)", [[NSTimeZone localTimeZone] abbreviation], localTimeZoneOffset];
+        } else {
+            cell.textLabel.text = @"GMT Time";
+            cell.detailTextLabel.text = @"All times will be displayed in GMT";
         }
     }
 }
