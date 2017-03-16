@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="mrT-VE-lFy">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="mrT-VE-lFy">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,6 +35,7 @@
                                                         <segment title="Satellite"/>
                                                         <segment title="Hybrid"/>
                                                     </segments>
+                                                    <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="onMapTypeChanged:" destination="mrT-VE-lFy" eventType="valueChanged" id="Ylz-iJ-Kyt"/>
                                                     </connections>
@@ -62,6 +63,8 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ctV-28-o0R">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <accessibility key="accessibilityConfiguration" label="Show Observations"/>
+                                                    <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="onTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="onShowObservationsChanged:" destination="mrT-VE-lFy" eventType="valueChanged" id="J5u-Ti-JwZ"/>
                                                     </connections>
@@ -134,6 +137,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Omz-Gt-NSa">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <accessibility key="accessibilityConfiguration" label="Show People"/>
+                                                    <color key="onTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="onShowPeopleChanged:" destination="mrT-VE-lFy" eventType="valueChanged" id="aQz-eF-07H"/>
                                                     </connections>
@@ -208,7 +212,7 @@
                             <outlet property="delegate" destination="mrT-VE-lFy" id="Up8-Xp-Xoy"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="1ey-U4-Txu"/>
+                    <navigationItem key="navigationItem" title="Map Settings" id="1ey-U4-Txu"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO">
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -222,7 +226,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D78-nh-bQW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-571" y="1179"/>
+            <point key="canvasLocation" x="15.5" y="1178.5"/>
         </scene>
         <!--Static Layer Table View Controller-->
         <scene sceneID="KFs-bG-FP8">
@@ -302,7 +306,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vbg-3G-qvv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="62" y="855"/>
+            <point key="canvasLocation" x="648.5" y="854.5"/>
         </scene>
         <!--Offline Map Table View Controller-->
         <scene sceneID="p1e-n5-jSg">
@@ -451,7 +455,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOc-FH-g4u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="62" y="1486"/>
+            <point key="canvasLocation" x="649" y="1599"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
