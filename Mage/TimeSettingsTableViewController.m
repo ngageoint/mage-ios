@@ -7,6 +7,8 @@
 //
 
 #import "TimeSettingsTableViewController.h"
+#import "SettingsTableViewController.h"
+#import "NSDate+display.h"
 
 @interface TimeSettingsTableViewController ()
 
@@ -17,17 +19,18 @@
 
 @implementation TimeSettingsTableViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL localTime = [defaults boolForKey:@"localTimeZome"];
-    if (localTime) {
+    BOOL gmtTimeZome = [defaults boolForKey:@"gmtTimeZome"];
+    if (!gmtTimeZome) {
         self.localTimeCell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.gmtCell.accessoryType = UITableViewCellAccessoryNone;
     } else {
         self.localTimeCell.accessoryType = UITableViewCellAccessoryNone;
         self.gmtCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
+    self.localTimeCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [[NSTimeZone systemTimeZone] name]];
 }
 
 #pragma mark - Table view data source
@@ -43,22 +46,20 @@
     return 0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     long row = [indexPath row];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (row == 0) {
-        [defaults setBool:YES forKey:@"localTimeZone"];
+        [NSDate setDisplayGMT:NO];
         self.localTimeCell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.gmtCell.accessoryType = UITableViewCellAccessoryNone;
     } else {
-        [defaults setBool:NO forKey:@"localTimeZone"];
+        [NSDate setDisplayGMT:YES];
         self.localTimeCell.accessoryType = UITableViewCellAccessoryNone;
         self.gmtCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     [defaults synchronize];
     [tableView reloadData];
-
 }
 
 @end

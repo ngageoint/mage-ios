@@ -26,8 +26,8 @@
     self.splitViewController.delegate = self;
     
     if (self.dismissable) {
-        UINavigationController *detailController = [self.splitViewController.viewControllers lastObject];
-        detailController.topViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
+        UINavigationController *masterController = [self.splitViewController.viewControllers firstObject];
+        masterController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
     }
 }
 

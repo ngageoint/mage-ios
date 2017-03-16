@@ -10,6 +10,7 @@
 #import "MageServer.h"
 #import "EventChooserController.h"
 #import "Event.h"
+#import "NSDate+display.h"
 
 @interface SettingsTableViewController ()<UITableViewDelegate>
 
@@ -40,6 +41,10 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateFromDetail:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -47,22 +52,37 @@
     
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.user.text = user.name;
+    
+    Event *e = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
+    self.eventNameLabel.text = e.name;
 
+    [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+    [self populateSettingsTable];
+}
+
+- (void) updateFromDetail: (NSNotification *) notification {
+    [self populateSettingsTable];
+}
+
+- (void) populateSettingsTable {
     [self setLocationServicesLabel];
-
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.baseServerUrlLabel.text = [[MageServer baseURL] absoluteString];
-
+    
     if ([[defaults objectForKey:@"dataFetchEnabled"] boolValue]) {
         [self.dataFetchStatus setText:@"On"];
     } else {
         [self.dataFetchStatus setText:@"Off"];
     }
-
-    Event *e = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
-    self.eventNameLabel.text = e.name;
-
-    [self setPreferenceDisplayLabel:self.imageUploadSizeLabel forPreference:@"imageUploadSizes"];
+    
+    if (![NSDate isDisplayGMT]) {
+        self.timeZoneSelectionCell.textLabel.text = @"Local Time";
+        self.timeZoneSelectionCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [[NSTimeZone systemTimeZone] name]];
+    } else {
+        self.timeZoneSelectionCell.textLabel.text = @"GMT Time";
+        self.timeZoneSelectionCell.detailTextLabel.text = @"";
+    }
 }
 
 - (void) setLocationServicesLabel {
@@ -112,8 +132,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.accessoryType = self.showDisclosureIndicator ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    
     if ([indexPath section] == 3 && [indexPath row] == 0) {
         cell.hidden = !self.showDisclaimer;
     } else if (cell == self.versionCell) {
@@ -124,20 +142,6 @@
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
         } else {
             cell.detailTextLabel.text = versionString;
-        }
-    } else if (cell == self.timeZoneSelectionCell) {
-        NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-        BOOL localTime = [defaults boolForKey:@"localTimeZome"];
-        if (localTime) {
-            cell.textLabel.text = @"Local Time";
-            NSDateFormatter *localTimeZoneFormatter = [NSDateFormatter new];
-            localTimeZoneFormatter.timeZone = [NSTimeZone localTimeZone];
-            localTimeZoneFormatter.dateFormat = @"Z";
-            NSString *localTimeZoneOffset = [localTimeZoneFormatter stringFromDate:[NSDate date]];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"All times will be displayed in %@ (%@)", [[NSTimeZone localTimeZone] abbreviation], localTimeZoneOffset];
-        } else {
-            cell.textLabel.text = @"GMT Time";
-            cell.detailTextLabel.text = @"All times will be displayed in GMT";
         }
     }
 }

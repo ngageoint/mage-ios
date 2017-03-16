@@ -8,4 +8,6 @@
 
 @interface NSDate (display)
 - (NSString *) formattedDisplayDate;
++ (BOOL) isDisplayGMT;
++ (void) setDisplayGMT: (BOOL) gmt;
 @end

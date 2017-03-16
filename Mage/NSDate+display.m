@@ -6,7 +6,7 @@
 
 #import "NSDate+display.h"
 
-NSString * const kLocalTimeZome = @"localTimeZome";
+NSString * const kgmtTimeZome = @"gmtTimeZome";
 
 @implementation NSDate (display)
 
@@ -14,16 +14,14 @@ static NSDateFormatter *dateDisplayFormatter;
 static NSDateFormatter *gmtDateDisplayFormatter;
 
 - (NSString *) formattedDisplayDate {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    BOOL localTimeZone = [[defaults objectForKey:kLocalTimeZome] boolValue];
     
     if (dateDisplayFormatter == nil) {
         dateDisplayFormatter = [[NSDateFormatter alloc] init];
         [dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateDisplayFormatter setDateFormat:@"yyyy-MM-dd h:mm:ss a zzz"];
     }
-    
-    if (localTimeZone) {
+    BOOL gmtTimeZone = [NSDate isDisplayGMT];
+    if (!gmtTimeZone) {
         [dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
     } else {
         [dateDisplayFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -32,5 +30,15 @@ static NSDateFormatter *gmtDateDisplayFormatter;
     return [dateDisplayFormatter stringFromDate:self];
 }
 
++ (BOOL) isDisplayGMT {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:kgmtTimeZome];
+}
+
++ (void) setDisplayGMT: (BOOL) gmt {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:gmt forKey:kgmtTimeZome];
+    [defaults synchronize];
+}
 
 @end

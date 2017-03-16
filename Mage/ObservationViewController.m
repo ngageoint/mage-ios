@@ -45,6 +45,14 @@
     
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateUserDefaults:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
+}
+
+- (void) updateUserDefaults: (NSNotification *) notification {
+    [self.propertyTable reloadData];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
