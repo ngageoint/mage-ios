@@ -98,7 +98,16 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateUserDefaults:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 }
+
+- (void) updateUserDefaults: (NSNotification *) notification {
+    [self.editTable reloadData];
+}
+
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];

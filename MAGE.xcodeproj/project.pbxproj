@@ -89,6 +89,7 @@
 		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
 		F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */; };
 		F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */; };
+		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
@@ -325,6 +326,8 @@
 		F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewCell.m; sourceTree = "<group>"; };
 		F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextAreaTableViewCell.h; sourceTree = "<group>"; };
 		F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextAreaTableViewCell.m; sourceTree = "<group>"; };
+		F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSettingsTableViewController.h; sourceTree = "<group>"; };
+		F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSettingsTableViewController.m; sourceTree = "<group>"; };
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
 		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
 		F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
@@ -732,6 +735,8 @@
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
 				F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */,
 				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
+				F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */,
+				F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1321,6 +1326,7 @@
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
+				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
