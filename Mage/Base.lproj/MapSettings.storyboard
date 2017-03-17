@@ -63,7 +63,6 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ctV-28-o0R">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <accessibility key="accessibilityConfiguration" label="Show Observations"/>
-                                                    <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="onTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="onShowObservationsChanged:" destination="mrT-VE-lFy" eventType="valueChanged" id="J5u-Ti-JwZ"/>
