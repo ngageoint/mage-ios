@@ -15,7 +15,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
 * Choose between Local time and GMT for display and editing
-* MAGE SDK upgrade to 1.2.2
+* MAGE SDK upgrade to 1.3.0
 * GeoPackage iOS upgrade to 1.2.1
 
 ##### Bug Fixes
