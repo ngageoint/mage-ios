@@ -3,11 +3,18 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.3.2 (TBD)
+## 1.3.3 (TBD)
 
 * TBD
 
 ##### Features
+
+##### Bug Fixes
+
+## 1.3.2 (https://github.com/ngageoint/mage-ios/releases/tag/1.3.2) (03-28-2017)
+
+##### Features
+* Choose between Local time and GMT for display and editing
 * MAGE SDK upgrade to 1.2.2
 * GeoPackage iOS upgrade to 1.2.1
 
