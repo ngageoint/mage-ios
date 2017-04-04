@@ -5,7 +5,7 @@
 	<key>serverMajorVersion</key>
 	<integer>4</integer>
 	<key>serverMinorVersion</key>
-	<integer>4</integer>
+	<integer>5</integer>
 	<key>attachmentPushFrequency</key>
 	<integer>60</integer>
 	<key>baseServerUrl</key>

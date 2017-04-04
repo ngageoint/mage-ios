@@ -61,13 +61,14 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 - (void) start {
     NSLog(@"start pushing observations");
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     self.fetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
                                                            ascending:NO
                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                              groupBy:nil
                                                             delegate:self
-                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                           inContext:context];
     
     [self pushObservations:self.fetchedResultsController.fetchedObjects];
     
@@ -76,7 +77,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                              groupBy:nil
                                                             delegate:self
-                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                           inContext:context];
     
     [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
     
@@ -85,7 +86,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                                         withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                                               groupBy:nil
                                                                              delegate:self
-                                                                            inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                                            inContext:context];
     
     [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
 
@@ -173,7 +174,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 - (void) pushObservations:(NSArray *) observations {
     NSLog(@"currently still pushing %lu observations", (unsigned long) self.pushingObservations.count);
-    
+
     // only push observations that haven't already been told to be pushed
     NSMutableDictionary *observationsToPush = [[NSMutableDictionary alloc] init];
     for (Observation *observation in observations) {

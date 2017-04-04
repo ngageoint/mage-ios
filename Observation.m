@@ -192,38 +192,63 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+    NSURLSessionDataTask *task = observation.remoteId ?
+        [self operationToUpdateObservation:observation success:success failure:failure] :
+        [self operationToCreateObservation:observation success:success failure:failure];
 
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], event.remoteId];
-    NSLog(@"Trying to push observation to server %@", url);
-    
+    return task;
+}
+
++ (NSURLSessionDataTask *) operationToCreateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], [Server currentEventId]];
+    NSLog(@"Trying to create observation %@", url);
+
     MageSessionManager *manager = [MageSessionManager manager];
-    NSMutableArray *parameters = [[NSMutableArray alloc] init];
-    NSObject *json = [observation createJsonToSubmitForEvent:event];
-    [parameters addObject:json];
-    
-    NSURLSessionDataTask *task = nil;
-    
-    if (observation.remoteId != nil) {
-        url = observation.url;
-        task = [manager PUT_TASK:url parameters:json success:^(NSURLSessionTask *task, id response) {
-            if (success) {
-                success(response);
-            }
-        } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            failure(error);
+    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
+        NSLog(@"Successfully created location for observation resource");
+        
+        // TODO create temp url to PUT to correct place until we upgrade server to 5.0
+//        NSString *observationUrl = [response objectForKey:@"url"];
+        NSString *remoteId = [response objectForKey:@"id"];
+        NSString *observationUrl = [NSString stringWithFormat:@"%@/api/events/%@/observations/id/%@", [MageServer baseURL], [Server currentEventId], remoteId];
+
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            Observation *localObservation = [observation MR_inContext:localContext];
+            localObservation.remoteId = [response objectForKey:@"id"];
+            localObservation.url = observationUrl;
+        } completion:^(BOOL dbSuccess, NSError *error) {
+            Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+            NSURLSessionDataTask *putTask = [manager PUT_TASK:observationUrl parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+                if (success) {
+                    success(response);
+                }
+            } failure:^(NSURLSessionTask *operation, NSError *error) {
+                NSLog(@"Error: %@", error);
+                failure(error);
+            }];
+            
+            [manager addTask:putTask];
         }];
-    } else {
-        task = [manager POST_TASK:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
-            if (success) {
-                success(response);
-            }
-        } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            failure(error);
-        }];
-    }
+        
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        failure(error);
+    }];
+    
+    return task;
+}
+
++ (NSURLSessionDataTask *) operationToUpdateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
+    NSLog(@"Trying to update observation %@", observation.url);
+    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+    NSURLSessionDataTask *task = [[MageSessionManager manager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        failure(error);
+    }];
     
     return task;
 }
