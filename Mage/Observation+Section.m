@@ -12,7 +12,7 @@
 @implementation Observation (Section)
 
 - (NSString *) dateSection {
-    return [self.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterLongStyle];
+    return [self.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterNoStyle];
 }
 
 @end
