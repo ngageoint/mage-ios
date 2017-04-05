@@ -110,8 +110,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> theSection = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-    NSDate *date = [self.dateFormatterToDate dateFromString:[theSection name]];
-    return [self.dateFormatter stringFromDate:date];
+    return [theSection name];
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {

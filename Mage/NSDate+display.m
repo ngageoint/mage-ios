@@ -11,23 +11,34 @@ NSString * const kgmtTimeZome = @"gmtTimeZome";
 @implementation NSDate (display)
 
 static NSDateFormatter *dateDisplayFormatter;
-static NSDateFormatter *gmtDateDisplayFormatter;
 
 - (NSString *) formattedDisplayDate {
     
     if (dateDisplayFormatter == nil) {
         dateDisplayFormatter = [[NSDateFormatter alloc] init];
-        [dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-        [dateDisplayFormatter setDateFormat:@"yyyy-MM-dd h:mm:ss a zzz"];
+        dateDisplayFormatter.dateStyle = NSDateFormatterLongStyle;
+        dateDisplayFormatter.timeStyle = NSDateFormatterLongStyle;
     }
-    BOOL gmtTimeZone = [NSDate isDisplayGMT];
-    if (!gmtTimeZone) {
-        [dateDisplayFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    } else {
-        [dateDisplayFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    }
+    [self setTimeZoneForDateFormatter:dateDisplayFormatter];
     
     return [dateDisplayFormatter stringFromDate:self];
+}
+
+- (NSString *) formattedDisplayDateWithDateStyle: (NSDateFormatterStyle) dateStyle andTimeStyle: (NSDateFormatterStyle) timeStyle {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateStyle = dateStyle;
+    dateFormatter.timeStyle = timeStyle;
+    [self setTimeZoneForDateFormatter:dateFormatter];
+    return [dateFormatter stringFromDate:self];
+}
+
+- (void) setTimeZoneForDateFormatter: (NSDateFormatter *) dateFormatter {
+    BOOL gmtTimeZone = [NSDate isDisplayGMT];
+    if (!gmtTimeZone) {
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    } else {
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
 }
 
 + (BOOL) isDisplayGMT {

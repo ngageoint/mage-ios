@@ -127,6 +127,7 @@
 		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
 		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
 		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
+		F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
 		F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */; };
@@ -403,6 +404,8 @@
 		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
+		F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+Section.h"; sourceTree = "<group>"; };
+		F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Observation+Section.m"; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* MAGE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAGE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -774,6 +777,8 @@
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
 				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
+				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
+				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1398,6 +1403,7 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F70E6EED19781D37002D66F6 /* ObservationImage.m in Sources */,
+				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,

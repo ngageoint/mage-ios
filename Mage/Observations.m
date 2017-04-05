@@ -5,7 +5,7 @@
 //
 
 #import "Observations.h"
-#import "Observation.h"
+#import "Observation+Section.h"
 #import "Server.h"
 #import "TimeFilter.h"
 
@@ -56,7 +56,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                   managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                    sectionNameKeyPath:@"sectionName"
+                    sectionNameKeyPath:@"dateSection"
                              cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
@@ -66,7 +66,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                                 sectionNameKeyPath:@"sectionName"
+                                                                                                 sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
     
     

@@ -10,10 +10,10 @@
 #import "User.h"
 #import "Role.h"
 #import "ObservationImportant.h"
+#import "NSDate+display.h"
 
 @interface ObservationImportantTableViewCell()
 
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) User *currentUser;
 
 @property (weak, nonatomic) IBOutlet UILabel *userLabel;
@@ -27,10 +27,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-
-    self.dateFormatter = [[NSDateFormatter alloc] init];
-    self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
     
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }
@@ -42,7 +38,7 @@
     self.userLabel.hidden = user ? NO : YES;
     self.userLabel.text = [NSString stringWithFormat:@"%@ flagged as important", [user name]];
 
-    self.dateLabel.text = [self.dateFormatter stringFromDate:important.timestamp];
+    self.dateLabel.text = [important.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterLongStyle];
     
     self.descriptionLabel.hidden = [important.reason length] ? NO : YES;
     self.descriptionLabel.text = important.reason;
