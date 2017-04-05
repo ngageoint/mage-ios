@@ -21,8 +21,10 @@
 #import "AttachmentSelectionDelegate.h"
 #import "Server.h"
 #import "Event.h"
+#import "User.h"
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
+#import "NSDate+Iso8601.h"
 
 @import PhotosUI;
 
@@ -478,8 +480,12 @@
     if (![self.editDataStore validate]) {
         return;
     }
-    
+
     [self.editDataStore.editTable endEditing:YES];
+    
+    self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
+    self.observation.user = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
+    
     __weak typeof(self) weakSelf = self;
     [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
         if (!contextDidSave) {
