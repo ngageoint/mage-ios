@@ -31,8 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLLocation *) location;
 
-- (NSString *) sectionName;
-
 - (Boolean) isImportant;
 
 - (void) toggleFavoriteWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
