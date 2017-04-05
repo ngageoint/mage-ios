@@ -42,9 +42,8 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
     self.navigationItem.leftBarButtonItem = item;
     
-    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext = [NSManagedObjectContext MR_contextWithParent:[NSManagedObjectContext MR_defaultContext]];
     [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
-    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_defaultContext];
     
     // if self.observation is null create a new one
     if (self.observation == nil) {
