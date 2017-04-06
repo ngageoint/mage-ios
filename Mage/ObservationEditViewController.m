@@ -477,7 +477,10 @@
 }
 
 - (IBAction) saveObservation:(id)sender {
+    [self setNavBarButtonsEnabled:NO];
+
     if (![self.editDataStore validate]) {
+        [self setNavBarButtonsEnabled:YES];
         return;
     }
 
@@ -502,22 +505,20 @@
 }
 
 -(void) keyboardWillShow: (NSNotification *) notification {
-    if (self.navigationItem.leftBarButtonItem) {
-        self.navigationItem.leftBarButtonItem.enabled = NO;
-    }
-    
-    if (self.navigationItem.rightBarButtonItem) {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-    }
+    [self setNavBarButtonsEnabled:NO];
 }
 
 -(void) keyboardWillHide: (NSNotification *) notification {
+    [self setNavBarButtonsEnabled:YES];
+}
+
+- (void) setNavBarButtonsEnabled:(BOOL) enabled {
     if (self.navigationItem.leftBarButtonItem) {
-        self.navigationItem.leftBarButtonItem.enabled = YES;
+        self.navigationItem.leftBarButtonItem.enabled = enabled;
     }
     
     if (self.navigationItem.rightBarButtonItem) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.navigationItem.rightBarButtonItem.enabled = enabled;
     }
 }
 
