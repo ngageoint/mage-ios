@@ -10,7 +10,7 @@
 #import "Locations.h"
 #import "UserSelectionDelegate.h"
 
-@interface LocationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface LocationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, UserActionsDelegate>
 
 @property (strong, nonatomic) Locations *locations;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

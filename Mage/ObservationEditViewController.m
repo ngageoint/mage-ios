@@ -44,9 +44,10 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
     self.navigationItem.leftBarButtonItem = item;
     
-    self.managedObjectContext = [NSManagedObjectContext MR_contextWithParent:[NSManagedObjectContext MR_defaultContext]];
+    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
     [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
-    
+
     // if self.observation is null create a new one
     if (self.observation == nil) {
         self.navigationItem.title = @"Create Observation";
@@ -489,7 +490,14 @@
     self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
     self.observation.user = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
     
+    NSMutableDictionary *error = [self.observation.error mutableCopy];
+    if (error) {
+        [error removeAllObjects];
+        self.observation.error = error;
+    }
+    
     __weak typeof(self) weakSelf = self;
+    
     [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
         if (!contextDidSave) {
             NSLog(@"Error saving observation to persistent store, context did not save");

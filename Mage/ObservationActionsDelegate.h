@@ -15,4 +15,7 @@
 - (void) observationShareTapped:(id) sender;
 - (void) observationDirectionsTapped:(id) sender;
 
+@optional
+- (void) observationMapTapped:(id) sender;
+
 @end

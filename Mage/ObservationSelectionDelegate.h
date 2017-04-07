@@ -13,6 +13,6 @@
 @required
     - (void) selectedObservation:(Observation *) observation;
     - (void) selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region;
-- (void) observationDetailSelected: (Observation *) observation;
+    - (void) observationDetailSelected: (Observation *) observation;
 
 @end

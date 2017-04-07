@@ -30,6 +30,8 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
+@property (weak, nonatomic) IBOutlet UILabel *primaryFieldLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondaryFieldLabel;
 @property (weak, nonatomic) IBOutlet UIStackView *favoritesView;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButton;
@@ -54,35 +56,39 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.userLabel.text = self.observation.user.name;
-    
-    self.userLabel.text = self.observation.user.name;
-    self.timestampLabel.text = [self.observation.timestamp formattedDisplayDate];
-	
-	self.locationLabel.text = [NSString stringWithFormat:@"%.6f, %.6f", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude];
-    
-    self.attachmentCollectionDataStore.attachmentSelectionDelegate = self;
-    if (self.attachmentCollectionDataStore.observation == nil) {
-        self.attachmentCollectionDataStore.observation = self.observation;
-        [self.attachmentCollection reloadData];
-    } else {
-        [self.attachmentCollection reloadData];
-    }
-    
     [self updateFavorites];
+}
+
+- (NSMutableArray *) getHeaderSection {
+    NSMutableArray *headerSection = [[NSMutableArray alloc] initWithObjects:@"header", @"actions", nil];
+    
+    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
+    if ([favorites count]) {
+        [headerSection insertObject:@"favorites" atIndex:2];
+    };
+    
+    return headerSection;
 }
 
 - (void) updateFavorites {
     NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    NSUInteger favoritesCount = [favorites count];
     
-    if (favoritesCount == 0) {
-        self.favoritesView.hidden = YES;
-        self.favoriteButton.tintColor = self.favoriteDefaultColor;
-    } else {
-        self.favoritesView.hidden = NO;
-        self.favoriteButton.tintColor = self.favoriteHighlightColor;
-        [self.favoritesButton setTitle:[NSString stringWithFormat:@"%lu %@", (unsigned long)favoritesCount, favoritesCount > 1 ? @"FAVORITES" : @"FAVORITE"] forState:UIControlStateNormal];
+    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:2];
+    
+    NSInteger favoritesCount = [favorites count];
+    
+    if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
+        [headerSection removeObjectAtIndex:2];
+        [self.propertyTable beginUpdates];
+        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.propertyTable endUpdates];
+    } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
+        [headerSection insertObject:@"favorites" atIndex:2];
+        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
+    } else if ([headerSection containsObject:@"favorites"]) {
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

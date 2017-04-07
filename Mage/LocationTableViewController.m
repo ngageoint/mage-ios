@@ -26,6 +26,9 @@
     });
     
     self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 88;
 }
 
 - (void) viewWillAppear:(BOOL)animated {

@@ -40,23 +40,5 @@
     }
 }
 
-- (IBAction) onFavoriteTapped:(id)sender {
-    if (self.observationActionsDelegate) {
-        [self.observationActionsDelegate observationFavoriteTapped:sender];
-    }
-}
-
-- (IBAction) onShareTapped:(id)sender {
-    if (self.observationActionsDelegate) {
-        [self.observationActionsDelegate observationShareTapped:sender];
-    }
-}
-
-- (IBAction) onDirectionTapped:(id)sender {
-    if (self.observationActionsDelegate) {
-        [self.observationActionsDelegate observationDirectionsTapped:sender];
-    }
-}
-
 
 @end

@@ -8,6 +8,7 @@
 #import "Event.h"
 #import "Mage.h"
 #import "Server.h"
+#import "UserUtility.h"
 
 @implementation EventChooserController
 
@@ -15,6 +16,9 @@ BOOL unwind = NO;
 
 - (void)  viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.tableView.estimatedRowHeight = 52;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     self.actionButton.hidden = YES;
 }
@@ -46,35 +50,31 @@ BOOL unwind = NO;
 }
 
 -(void) didSelectEvent:(Event *) event {
-    self.actionButton.hidden = NO;
-}
-
-- (IBAction)actionButtonTapped:(id)sender {
-    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [self segueToApplication];
-    }
+    [self segueToApplication];
 }
 
 - (void) eventsFetched: (NSNotification *) notification {
     NSLog(@"Events were fetched");
     [self.eventDataSource startFetchController];
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
         
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
         messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
         messageLabel.textColor = [UIColor whiteColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];
+        [messageLabel sizeToFit];
+        
+        UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
+        [messageView addSubview:messageLabel];
         
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.backgroundView = messageLabel;
-        
+        self.tableView.backgroundView = messageView;
+    
         self.actionButton.hidden = NO;
-        self.actionButton.titleLabel.text = @"Return to Login";
         
+        [[UserUtility singleton] expireToken];
         [self.tableView reloadData];
     } else if (!self.forcePick &&
                self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&

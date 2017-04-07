@@ -30,16 +30,15 @@
 
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
 
+@property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
 @property (weak, nonatomic) IBOutlet MKMapView *map;
 @property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
-@property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UIView *phoneView;
 @property (weak, nonatomic) IBOutlet UITextView *phoneNumber;
 @property (weak, nonatomic) IBOutlet UIView *emailView;
 @property (weak, nonatomic) IBOutlet UITextView *email;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (assign, nonatomic) BOOL currentUserIsMe;
 
@@ -77,10 +76,9 @@
     self.email.text = self.user.email;
     self.emailView.hidden = self.user.email ? NO : YES;
     
-    Observations *observations = [Observations observationsForUser:self.user];
-    [self.observationDataStore startFetchControllerWithObservations:observations];
+    [self.observationDataStore startFetchControllerWithObservations:[Observations observationsForUser:self.user]];
     if (self.mapDelegate != nil) {
-        [self.mapDelegate setObservations:observations];
+        [self.mapDelegate setObservations:[Observations observationsForUser:self.user]];
         self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
@@ -102,7 +100,6 @@
         }
     }
     
-    
     if (!location) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
@@ -122,6 +119,28 @@
         MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
         [self.mapDelegate selectedUser:self.user region:viewRegion];
     }
+    
+    [self sizeHeaderToFit];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    // TODO make sure callback stop when I am not on this view
+    self.observationDataStore.observations.delegate = nil;
+}
+
+- (void) sizeHeaderToFit {
+    UIView *headerView = self.tableView.tableHeaderView;
+    
+    [headerView setNeedsLayout];
+    [headerView layoutIfNeeded];
+    
+    CGSize size = [headerView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    
+    CGRect frame = [headerView frame];
+    frame.size.height = size.height;
+    [headerView setFrame:frame];    
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

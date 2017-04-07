@@ -19,6 +19,7 @@
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView;
+
 - (void) startFetchController;
 - (void) startFetchControllerWithObservations: (Observations *) observations;
 
