@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "GeoPoint.h"
+#import "WKBGeometry.h"
 
 @class Attachment, User, ObservationImportant, ObservationFavorite;
 
@@ -30,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) shareObservationForViewController:(UIViewController *) viewController;
 
 - (CLLocation *) location;
+
+- (WKBGeometry *) getGeometry;
+- (void) setGeometry: (WKBGeometry *) geometry;
 
 - (Boolean) isImportant;
 

@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *deviceId;
 @property (nullable, nonatomic, copy) NSNumber *dirty;
 @property (nullable, nonatomic, copy) NSNumber *eventId;
-@property (nullable, nonatomic, retain) NSObject *geometry;
+@property (nullable, nonatomic, retain) NSData *geometryData;
 @property (nullable, nonatomic, copy) NSDate *lastModified;
 @property (nullable, nonatomic, retain) id properties;
 @property (nullable, nonatomic, copy) NSString *remoteId;

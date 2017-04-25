@@ -17,7 +17,7 @@
 @dynamic deviceId;
 @dynamic dirty;
 @dynamic eventId;
-@dynamic geometry;
+@dynamic geometryData;
 @dynamic lastModified;
 @dynamic properties;
 @dynamic remoteId;

@@ -18,6 +18,13 @@
 #import "MageEnums.h"
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
+#import "GeometryDeserializer.h"
+#import "WKBGeometry.h"
+#import "GeometryUtility.h"
+#import "GeometrySerializer.h"
+#import "WKBGeometry.h"
+#import "WKBPoint.h"
+#import "WKBGeometryUtils.h"
 
 @implementation Observation
 
@@ -110,11 +117,9 @@ NSNumber *_currentEventId;
                                  @"name": stringState
                                  } forKey:@"state"];
     
-    GeoPoint *point = (GeoPoint *)self.geometry;
-    [observationJson setObject:@{
-                                 @"type": @"Point",
-                                 @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
-                                 } forKey:@"geometry"];
+    WKBGeometry *geometry = [self getGeometry];
+    [observationJson setObject:[GeometrySerializer serializeGeometry:geometry] forKey:@"geometry"];
+    
     [observationJson setObject: [dateFormat stringFromDate:self.timestamp] forKey:@"timestamp"];
     
     NSMutableDictionary *jsonProperties = [[NSMutableDictionary alloc] initWithDictionary:self.properties];
@@ -159,10 +164,9 @@ NSNumber *_currentEventId;
     State state = [Observation  observationStateFromJson:json];
     [self setState:[NSNumber numberWithInt:(int) state]];
     
-    NSArray *coordinates = [json valueForKeyPath:@"geometry.coordinates"];
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
+    WKBGeometry * geometry = [GeometryDeserializer parseGeometry:[json valueForKeyPath:@"geometry"]];
+    [self setGeometry:geometry];
     
-    [self setGeometry:[[GeoPoint alloc] initWithLocation:location]];
     return self;
 }
 
@@ -184,8 +188,18 @@ NSNumber *_currentEventId;
 }
 
 - (CLLocation *) location {
-    GeoPoint *point = (GeoPoint *) self.geometry;
-    return point.location;
+    WKBGeometry *geometry = [self getGeometry];
+    // TODO Geometry
+    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    return [[CLLocation alloc] initWithLatitude:[point.y doubleValue] longitude:[point.x doubleValue]];
+}
+
+- (WKBGeometry *) getGeometry{
+    return [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+}
+
+- (void) setGeometry: (WKBGeometry *) geometry{
+    [self setGeometryData:[GeometryUtility toGeometryDataFromGeometry:geometry]];
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
@@ -558,8 +572,10 @@ NSNumber *_currentEventId;
     [text appendFormat:@"Date:\n%@\n\n", [dateFormatter stringFromDate:self.timestamp]];
     
     // geometry
-    GeoPoint* point = (GeoPoint *) self.geometry;
-    [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", point.location.coordinate.latitude, point.location.coordinate.longitude];
+    WKBGeometry *geometry = [self getGeometry];
+    // TODO Geometry
+    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
     
     // type
     [text appendString:[self propertyText:[self.properties objectForKey:@"type"] forField:[nameToField objectForKey:@"type"]]];
