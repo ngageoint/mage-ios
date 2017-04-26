@@ -8,8 +8,9 @@
 #import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
 #import "ObservationImage.h"
-#import <GeoPoint.h>
 #import "LocationService.h"
+#import "WKBPoint.h"
+#import "WKBGeometryUtils.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property NSObject<MKAnnotation> *annotation;
@@ -35,14 +36,17 @@
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        GeoPoint *point = (GeoPoint *)[self.observation geometry];
-        if (!point) {
+        // TODO Geometry
+        WKBGeometry *geometry = [self.observation getGeometry];
+        if (!geometry) {
             // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
-            point = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:1.0 longitude:1.0]];
+            geometry = [[WKBPoint alloc] initWithXValue:1.0 andYValue:1.0];
         }
         
         self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
-        self.annotation.coordinate = point.location.coordinate;
+        // TODO Geometry
+        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+        self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
         
     } else {
         GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];

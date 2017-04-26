@@ -9,6 +9,7 @@
 #import "Observation.h"
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
+#import "WKBGeometryUtils.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -24,14 +25,14 @@
     
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        self.geoPoint = (GeoPoint *)[observation geometry];
+        self.geometry = [observation getGeometry];
         self.isGeometryField = YES;
     } else {
         id geometry = [observation.properties objectForKey:[field objectForKey:@"name"]];
         if (geometry) {
-            self.geoPoint = (GeoPoint *) geometry;
+            self.geometry = (WKBGeometry *) geometry;
         } else {
-            self.geoPoint = nil;
+            self.geometry = nil;
         }
         self.isGeometryField = NO;
     }
@@ -46,9 +47,11 @@
     
     self.mapDelegate.hideStaticLayers = YES;
     
-    if (self.geoPoint) {
-        [self.latitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.latitude]];
-        [self.longitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.longitude]];
+    if (self.geometry) {
+        // TODO Geometry
+        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:self.geometry];
+        [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
+        [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
 
         if (self.isGeometryField) {
             self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
@@ -56,7 +59,8 @@
             self.annotation = [[MKPointAnnotation alloc] init];
         }
         
-        self.annotation.coordinate = self.geoPoint.location.coordinate;
+        // TODO Geometry
+        self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
         [self.mapView addAnnotation:self.annotation];
         
         MKCoordinateRegion region = MKCoordinateRegionMake(self.annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
@@ -72,7 +76,7 @@
 }
 
 - (BOOL) isEmpty {
-    return self.geoPoint == nil;
+    return self.geometry == nil;
 }
 
 - (void) setValid:(BOOL) valid {

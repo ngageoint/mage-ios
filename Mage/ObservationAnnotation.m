@@ -5,15 +5,18 @@
 //
 
 #import "ObservationAnnotation.h"
-#import "GeoPoint.h"
 #import "NSDate+DateTools.h"
 #import "ObservationImage.h"
+#import "WKBGeometryUtils.h"
 
 @implementation ObservationAnnotation
 
 -(id) initWithObservation:(Observation *) observation {
 	if ((self = [super init])) {
-        _coordinate = ((GeoPoint *) observation.geometry).location.coordinate;
+        WKBGeometry *geometry = [observation getGeometry];
+        // TODO Geometry
+        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+        _coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
 		
 		_observation = observation;
 		_title = [observation.properties objectForKey:@"type"];
