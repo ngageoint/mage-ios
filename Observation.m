@@ -195,11 +195,19 @@ NSNumber *_currentEventId;
 }
 
 - (WKBGeometry *) getGeometry{
-    return [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+    WKBGeometry *geometry = nil;
+    if(self.geometryData != nil){
+        geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+    }
+    return geometry;
 }
 
 - (void) setGeometry: (WKBGeometry *) geometry{
-    [self setGeometryData:[GeometryUtility toGeometryDataFromGeometry:geometry]];
+    NSData *data = nil;
+    if(geometry != nil){
+        data = [GeometryUtility toGeometryDataFromGeometry:geometry];
+    }
+    [self setGeometryData:data];
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
