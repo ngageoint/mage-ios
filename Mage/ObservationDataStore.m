@@ -12,6 +12,7 @@
 #import "Server.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
+#import "WKBGeometryUtils.h"
 
 @interface ObservationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
@@ -211,7 +212,10 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     
-    CLLocationCoordinate2D coordinate = ((GeoPoint *) observation.geometry).location.coordinate;
+    // TODO Geometry
+    WKBGeometry *geometry = [observation getGeometry];
+    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     
     NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
     if ([[UIApplication sharedApplication] canOpenURL:mapsUrl]) {
