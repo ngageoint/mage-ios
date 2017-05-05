@@ -12,17 +12,13 @@
     if ((self = [super init])) {
         
         NSArray *coordinates = [feature valueForKeyPath:@"geometry.coordinates"];
-        _coordinate = CLLocationCoordinate2DMake([[coordinates objectAtIndex: 1] floatValue], [[coordinates objectAtIndex: 0] floatValue]);
+        [self setCoordinate:CLLocationCoordinate2DMake([[coordinates objectAtIndex: 1] floatValue], [[coordinates objectAtIndex: 0] floatValue])];
         _iconUrl = [feature valueForKeyPath:@"properties.style.iconStyle.icon.href"];
-        _title = [feature valueForKeyPath: @"properties.name"];
-        _subtitle = [feature valueForKeyPath: @"properties.description"];
+        [self setTitle:[feature valueForKeyPath: @"properties.name"]];
+        [self setSubtitle:[feature valueForKeyPath: @"properties.description"]];
         _feature = feature;
     }
     return self;
-}
-
--(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
-    _coordinate = coordinate;
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {

@@ -16,22 +16,18 @@
         WKBGeometry *geometry = [observation getGeometry];
         // TODO Geometry
         WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
-        _coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
+        [self setCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
 		
 		_observation = observation;
-		_title = [observation.properties objectForKey:@"type"];
-        if (_title == nil) {
-            _title = @"Observation";
+        [self setTitle:[observation.properties objectForKey:@"type"]];
+        if (self.title == nil) {
+            [self setTitle:@"Observation"];
         }
-		_subtitle = observation.timestamp.timeAgoSinceNow;
+        [self setSubtitle:observation.timestamp.timeAgoSinceNow];
     }
     [self setAccessibilityLabel:@"Observation Annotation"];
     [self setAccessibilityValue:@"Observation Annotation"];
     return self;
-}
-
--(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
-	_coordinate = coordinate;
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {

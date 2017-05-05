@@ -6,24 +6,16 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-
+#import "MapAnnotation.h"
 #import "Location.h"
 
-@interface LocationAnnotation : NSObject <MKAnnotation>
+@interface LocationAnnotation : MapAnnotation
 
 @property (weak, nonatomic) Location *location;
-@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSDate *timestamp;
-
-@property (nonatomic, readonly, copy) NSString *title;
-@property (nonatomic, readonly, copy) NSString *subtitle;
 
 @property (nonatomic) NSString *name;
 
 - (id)initWithLocation:(Location *) location;
-
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
-
--(void) setSubtitle:(NSString *)subtitle;
 
 @end

@@ -8,10 +8,6 @@
 
 @implementation AreaAnnotation
 
--(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
-    _coordinate = coordinate;
-}
-
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"areaAnnotation"];
     
@@ -24,10 +20,6 @@
     }
     return annotationView;
 
-}
-
-- (void) setTitle:(NSString *)title {
-    _title = title;
 }
 
 @end

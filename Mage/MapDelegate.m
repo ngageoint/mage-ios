@@ -39,6 +39,7 @@
 #import "GPKGProjectionTransform.h"
 #import "GPKGProjectionConstants.h"
 #import "GPKGTileBoundingBoxUtils.h"
+#import "MapUtils.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -154,13 +155,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
         CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
         
-        CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
-        CLLocation *ll1 = [[CLLocation alloc] initWithLatitude:l1.latitude longitude:l1.longitude];
-        CLLocationCoordinate2D l2 = [self.mapView convertPoint:CGPointMake(0,500) toCoordinateFromView:self.mapView];
-        CLLocation *ll2 = [[CLLocation alloc] initWithLatitude:l2.latitude longitude:l2.longitude];
-        double mpp = [ll1 distanceFromLocation:ll2] / 500.0;
-        
-        double tolerance = mpp * sqrt(2.0) * 20.0;
+        double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
         
         if (_areaAnnotation != nil) {
             [_mapView deselectAnnotation:_areaAnnotation animated:NO];
@@ -933,22 +928,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;
-        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"gpsLocationAnnotation"];
-        
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"gpsLocationAnnotation"];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = self.canShowGpsLocationCallout;
-            
-            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            annotationView.rightCalloutAccessoryView = rightButton;
-            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-        } else {
-            annotationView.annotation = annotation;
-        }
-        
-        [annotationView setImageForUser:gpsAnnotation.user];
-        
+        MKAnnotationView *annotationView = [gpsAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.canShowCallout = self.canShowObservationCallout;
         return annotationView;
     } else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *staticAnnotation = annotation;

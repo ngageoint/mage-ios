@@ -8,6 +8,11 @@
 
 #import "MapShapeObservation.h"
 
+/**
+ * Observation represented by a polyline on the map
+ *
+ * @author osbornb
+ */
 @interface MapPolylineObservation : MapShapeObservation
 
 /**

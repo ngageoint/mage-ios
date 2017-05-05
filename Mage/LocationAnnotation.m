@@ -16,29 +16,20 @@
 	if ((self = [super init])) {
 		_location = location;
 		
-        _coordinate = ((GeoPoint *) location.geometry).location.coordinate;
+        [self setCoordinate:((GeoPoint *) location.geometry).location.coordinate];
 		_timestamp = location.timestamp;
 		
 		User *user = location.user;
-		_title = user.name;
-		_subtitle = location.timestamp.timeAgoSinceNow;
+        [self setTitle:user.name];
+        [self setSubtitle:location.timestamp.timeAgoSinceNow];
     }
 		
     return self;
 }
 
--(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
-	_coordinate = coordinate;
-}
-
 -(void) setLocation:(Location *)location {
     _location = location;
 }
-
--(void) setSubtitle:(NSString *)subtitle {
-    _subtitle = subtitle;
-}
-
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
