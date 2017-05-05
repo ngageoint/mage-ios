@@ -35,6 +35,8 @@
 -(void) hidden: (BOOL) hidden fromMapView: (MKMapView *) mapView{
     if(_view != nil){
         _view.hidden = hidden;
+        _view.accessibilityElementsHidden = hidden;
+        _view.enabled = !hidden;
     }
 }
 

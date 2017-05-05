@@ -40,6 +40,8 @@
 #import "GPKGProjectionConstants.h"
 #import "GPKGTileBoundingBoxUtils.h"
 #import "MapUtils.h"
+#import "MapObservationManager.h"
+#import "WKBGeometryUtils.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -62,6 +64,7 @@
     @property (nonatomic) BOOL canShowGpsLocationCallout;
 
     @property (strong, nonatomic) CLLocationManager *locationManager;
+    @property (strong, nonatomic) MapObservationManager *mapObservationManager;
 @end
 
 @implementation MapDelegate
@@ -286,8 +289,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     _observations = observations;
     _observations.delegate = self;
     
-    [self.mapView removeAnnotations:[self.observationAnnotations allValues]];
-    [self.observationAnnotations removeAllObjects];
+    [self.mapObservations clear];
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
@@ -301,6 +303,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
+    
+    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:mapView];
+    _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
@@ -339,7 +344,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void) setHideObservations:(BOOL) hideObservations {
     _hideObservations = hideObservations;
-    [self hideAnnotations:[self.observationAnnotations allValues] hide:hideObservations];
+    [self.mapObservations hidden:hideObservations];
 }
 
 - (void) hideAnnotations:(NSArray *) annotations hide:(BOOL) hide {
@@ -1065,12 +1070,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     return _locationAnnotations;
 }
 
-- (NSMutableDictionary *) observationAnnotations {
-    if (!_observationAnnotations) {
-        _observationAnnotations = [[NSMutableDictionary alloc] init];
+- (MapObservations *) observationAnnotations {
+    if (!_mapObservations && !_mapView) {
+        _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     }
     
-    return _observationAnnotations;
+    return _mapObservations;
 }
 
 #pragma mark - NSFetchResultsController
@@ -1170,22 +1175,13 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) updateObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    if (annotation == nil) {
-        annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [_mapView addAnnotation:annotation];
-        [self.observationAnnotations setObject:annotation forKey:observation.objectID];
-    } else {
-        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [ObservationImage imageForObservation:observation inMapView:self.mapView];
-        [annotation setCoordinate:[observation location].coordinate];
-    }
+    [self.mapObservations removeById:observation.objectID];
+    MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation];
+    [self.mapObservations addMapObservation:mapObservation];
 }
 
 - (void) deleteObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    [_mapView removeAnnotation:annotation];
-    [self.observationAnnotations removeObjectForKey:observation.objectID];
+    [self.mapObservations removeById:observation.objectID];
 }
 
 - (void)selectedUser:(User *) user {
@@ -1204,16 +1200,25 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 - (void)selectedObservation:(Observation *) observation {
     [self.mapView setCenterCoordinate:[observation location].coordinate];
-    
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    [self.mapView selectAnnotation:annotation animated:YES];
+    [self selectObservation:observation];
 }
 
 - (void)selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region {
-    LocationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
-    
     [self.mapView setRegion:region animated:YES];
-    [self.mapView selectAnnotation:annotation animated:YES];
+    [self selectObservation:observation];
+}
+
+- (void)selectObservation:(Observation *) observation{
+    MapObservation *mapObservation = [self.mapObservations observationOfId:observation.objectID];
+    if (mapObservation != nil) {
+        if([MapObservations isAnnotation: mapObservation]){
+            [self.mapView selectAnnotation:[((MapAnnotationObservation *)mapObservation) annotation] animated:YES];
+        }else{
+            // TODO Geometry click location?
+            MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:[observation location] andHidden:self.hideObservations];
+            [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:(MapShapeObservation *)mapObservation];
+        }
+    }
 }
 
 - (void)observationDetailSelected:(Observation *)observation {

@@ -13,6 +13,7 @@
 #import "Observations.h"
 #import <GPSLocation.h>
 #import "CacheOverlayListener.h"
+#import "MapObservations.h"
 
 
 @protocol UserTrackingModeChanged <NSObject>
@@ -48,7 +49,7 @@
 @property (nonatomic) BOOL hideObservations;
 @property (nonatomic) BOOL hideStaticLayers;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
-@property (nonatomic, strong) NSMutableDictionary *observationAnnotations;
+@property (nonatomic, strong) MapObservations *mapObservations;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateObservations:(NSArray *) observations;

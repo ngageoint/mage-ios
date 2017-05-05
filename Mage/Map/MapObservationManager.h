@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MapObservation.h"
+#import "MapAnnotation.h"
 
 /**
  * Handles adding Observations to the map as markers or shapes
@@ -41,5 +42,14 @@
  * @return map observation
  */
 -(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden;
+
+/**
+ * Add a shape marker to the map at the location.  A shape marker is a transparent icon for allowing shape info windows.
+ *
+ * @param latLng  lat lng location
+ * @param visible visible state
+ * @return shape marker
+ */
+-(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocation *) location andHidden: (BOOL) hidden;
 
 @end
