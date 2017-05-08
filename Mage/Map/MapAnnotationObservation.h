@@ -26,10 +26,11 @@
  *  Initializer
  *
  *  @param observation  observation
+ *  @param annotation   annotation
  *
  *  @return new instance
  */
--(instancetype) initWithObservation: (Observation *) observation;
+-(instancetype) initWithObservation: (Observation *) observation andAnnotation: (ObservationAnnotation *) annotation;
 
 /**
  * Get the observation annotation

@@ -16,10 +16,10 @@
 
 @implementation MapAnnotationObservation
 
--(instancetype) initWithObservation: (Observation *) observation{
+-(instancetype) initWithObservation: (Observation *) observation andAnnotation: (ObservationAnnotation *) annotation{
     self = [super initWithObservation:observation];
     if(self){
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        self.annotation = annotation;
     }
     return self;
 }

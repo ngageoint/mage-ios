@@ -40,7 +40,11 @@
     
     if(geometry.geometryType == WKB_POINT){
         // TODO Geometry annotation options?
-        observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation];
+        
+        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        [_mapView addAnnotation:annotation];
+        
+        observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
     } else{
         
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
