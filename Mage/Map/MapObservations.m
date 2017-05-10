@@ -93,6 +93,12 @@
     _shapeObservation = shapeObservation;
 }
 
+-(void) selectShapeAnnotation{
+    if (_shapeAnnotation != nil) {
+        [_mapView selectAnnotation:_shapeAnnotation animated:YES];
+    }
+}
+
 -(void) clearShapeAnnotation{
     if (_shapeAnnotation != nil) {
         [_mapView removeAnnotation:_shapeAnnotation];
@@ -110,20 +116,34 @@
     [_annotationIds removeAllObjects];
 }
 
--(MapShapeObservation *) clickedShapeWithLocation: (CLLocation *) location{
+-(MapShapeObservation *) clickedShapeAtLocation: (CLLocationCoordinate2D) location{
     
-    // how many meters away from the click can the geometry be?
-    double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
+    BOOL checkShapes = YES;
+    CGPoint point = [self.mapView convertCoordinate:location toPointToView:self.mapView];
+    for (MapAnnotationObservation *observationAnnotation in [self annotations]) {
+        MKAnnotationView* view = [self.mapView viewForAnnotation:[observationAnnotation annotation]];
+        if(CGRectContainsPoint(view.frame, point)) {
+            checkShapes = NO;
+            break;
+        }
+    }
     
-    // Find the first polyline with the point on it, else find the first polygon
     MapShapeObservation *mapShapeObservation = nil;
-    for (MapShapeObservation *observationShape in [self shapes]) {
-        enum GPKGMapShapeType shapeType = observationShape.shape.shapeType;
-        if (mapShapeObservation == nil || shapeType == GPKG_MST_POLYLINE) {
-            if([observationShape isOnShapeWithLocation:location andTolerance:tolerance]){
-                mapShapeObservation = observationShape;
-                if (shapeType == GPKG_MST_POLYLINE) {
-                    break;
+    if(checkShapes){
+
+        // Screen click map width tolerance
+        float screenPercentage = [[NSUserDefaults standardUserDefaults] floatForKey:@"shape_screen_click_percentage"];
+        double tolerance = self.mapView.visibleMapRect.size.width * screenPercentage;
+        
+        // Find the first polyline with the point on it, else find the first polygon
+        for (MapShapeObservation *observationShape in [self shapes]) {
+            enum GPKGMapShapeType shapeType = observationShape.shape.shapeType;
+            if (mapShapeObservation == nil || shapeType == GPKG_MST_POLYLINE) {
+                if([observationShape isOnShapeAtLocation:location withTolerance:tolerance andMapView:self.mapView]){
+                    mapShapeObservation = observationShape;
+                    if (shapeType == GPKG_MST_POLYLINE) {
+                        break;
+                    }
                 }
             }
         }
@@ -146,7 +166,7 @@
 @implementation MapAnnotationObservationEnumerator
 
 -(instancetype) initWithObservations: (NSArray<MapObservation *> *) observations{
-    self = [super initWithType:[MapAnnotation class] andObservations:observations];
+    self = [super initWithType:[MapAnnotationObservation class] andObservations:observations];
     return self;
 }
 
@@ -155,7 +175,7 @@
 @implementation MapShapeObservationEnumerator
 
 -(instancetype) initWithObservations: (NSArray<MapObservation *> *) observations{
-    self = [super initWithType:[MapObservation class] andObservations:observations];
+    self = [super initWithType:[MapShapeObservation class] andObservations:observations];
     return self;
 }
 
@@ -193,7 +213,7 @@
     _observation = [_observations nextObject];
     while(_observation != nil){
         // Check if the desired type
-        if([_observation class] == _type){
+        if([_observation isKindOfClass:_type]){
             break;
         }
         _observation = [_observations nextObject];

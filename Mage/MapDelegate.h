@@ -56,5 +56,6 @@
 - (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user andCenter: (BOOL) shouldCenter;
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
+- (void) mapClickAtPoint: (CGPoint) point;
 
 @end

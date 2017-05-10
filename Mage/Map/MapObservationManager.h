@@ -47,9 +47,10 @@
  * Add a shape marker to the map at the location.  A shape marker is a transparent icon for allowing shape info windows.
  *
  * @param latLng  lat lng location
+ * @param observation observation
  * @param visible visible state
  * @return shape marker
  */
--(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocation *) location andHidden: (BOOL) hidden;
+-(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocationCoordinate2D) location forObservation: (Observation *) observation andHidden: (BOOL) hidden;
 
 @end

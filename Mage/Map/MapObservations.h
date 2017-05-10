@@ -111,6 +111,11 @@
 -(void) setShapeAnnotation: (MapAnnotation *) shapeAnnotation withShapeObservation: (MapShapeObservation *) shapeObservation;
 
 /**
+ * If one exists, select the shape annotation
+ */
+-(void) selectShapeAnnotation;
+
+/**
  * Clear the shape annotation from the map
  */
 -(void) clearShapeAnnotation;
@@ -126,7 +131,7 @@
  * @param location click location
  * @return map shape observation
  */
--(MapShapeObservation *) clickedShapeWithLocation: (CLLocation *) location;
+-(MapShapeObservation *) clickedShapeAtLocation: (CLLocationCoordinate2D) location;
 
 /**
  * Get all annotations as a fast enumeration

@@ -58,10 +58,9 @@
     return observationShape;
 }
 
--(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocation *) location andHidden: (BOOL) hidden{
-    // TODO Geometry add shape annotations?
-    MapAnnotation *annotation = [[MapAnnotation alloc] init];
-    [annotation setCoordinate:location.coordinate];
+-(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocationCoordinate2D) location forObservation: (Observation *) observation andHidden: (BOOL) hidden{
+    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andLocation:location];
+    [annotation setCoordinate:location];
     [self.mapView addAnnotation:annotation];
     if(hidden){
         [self.mapView viewForAnnotation:annotation].hidden = hidden;

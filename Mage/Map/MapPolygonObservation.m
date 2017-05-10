@@ -24,9 +24,14 @@
     return self;
 }
 
--(BOOL) isOnShapeWithLocation: (CLLocation *) location andTolerance: (double) tolerance{
-    // TODO Geometry
-    return NO;
+-(BOOL) isOnShapeAtLocation: (CLLocationCoordinate2D) location withTolerance: (double) tolerance andMapView: (MKMapView *) mapView{
+    
+    MKPolygonRenderer *polygonRenderer = (MKPolygonRenderer *)[mapView rendererForOverlay:self.polygon];
+    MKMapPoint mapPoint = MKMapPointForCoordinate(location);
+    CGPoint point = [polygonRenderer pointForMapPoint:mapPoint];
+    BOOL onShape = CGPathContainsPoint(polygonRenderer.path, NULL, point, NO);
+    
+    return onShape;
 }
 
 @end

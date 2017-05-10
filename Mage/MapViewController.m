@@ -64,6 +64,16 @@
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
+    
+    UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(singleTapGesture:)];
+    singleTapGesture.numberOfTapsRequired = 1;
+    [self.mapView addGestureRecognizer:singleTapGesture];
+    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(doubleTapGesture:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [self.mapView addGestureRecognizer:doubleTapGesture];
+    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -330,6 +340,18 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
+    if(tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
+        CGPoint cgPoint = [tapGestureRecognizer locationInView:self.mapView];
+        [self.mapDelegate mapClickAtPoint:cgPoint];
+    }
+}
+
+-(void) doubleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
 }
 
 @end

@@ -57,7 +57,7 @@ static BOOL const GEODESIC = NO;
     [_shape hidden:hidden fromMapView:mapView];
 }
 
--(BOOL) isOnShapeWithLocation: (CLLocation *) location andTolerance: (double) tolerance{
+-(BOOL) isOnShapeAtLocation: (CLLocationCoordinate2D) location withTolerance: (double) tolerance andMapView: (MKMapView *) mapView{
     [NSException raise:@"No Implementation" format:@"Implementation must be provided by an extending map shape observation type"];
     return NO;
 }

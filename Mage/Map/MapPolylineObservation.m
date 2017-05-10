@@ -24,9 +24,16 @@
     return self;
 }
 
--(BOOL) isOnShapeWithLocation: (CLLocation *) location andTolerance: (double) tolerance{
-    // TODO Geometry
-    return NO;
+-(BOOL) isOnShapeAtLocation: (CLLocationCoordinate2D) location withTolerance: (double) tolerance andMapView: (MKMapView *) mapView{
+    
+    MKPolylineRenderer *polylineRenderer = (MKPolylineRenderer *)[mapView rendererForOverlay:self.polyline];
+    MKMapPoint mapPoint = MKMapPointForCoordinate(location);
+    CGPoint point = [polylineRenderer pointForMapPoint:mapPoint];
+    CGPathRef strokedPath = CGPathCreateCopyByStrokingPath(polylineRenderer.path, NULL, tolerance, kCGLineCapRound, kCGLineJoinRound, 1);
+    BOOL onShape = CGPathContainsPoint(strokedPath, NULL, point, NO);
+    CGPathRelease(strokedPath);
+    return onShape;
+
 }
 
 @end

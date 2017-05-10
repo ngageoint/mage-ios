@@ -45,10 +45,11 @@
 /**
  * Determine if the point is on the shape, either on a polygon or within the distance tolerance of a line
  *
- * @param latLng    point
- * @param tolerance line tolerance
+ * @param location    location
+ * @param tolerance line width tolerance
+ * @param mapView map view
  * @return true if point is on shape
  */
--(BOOL) isOnShapeWithLocation: (CLLocation *) location andTolerance: (double) tolerance;
+-(BOOL) isOnShapeAtLocation: (CLLocationCoordinate2D) location withTolerance: (double) tolerance andMapView: (MKMapView *) mapView;
 
 @end

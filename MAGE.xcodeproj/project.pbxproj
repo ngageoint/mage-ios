@@ -20,6 +20,15 @@
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
+		04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED963E1EB7AB8700B6AD8D /* MapObservation.m */; };
+		04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96411EB7B15900B6AD8D /* MapAnnotationObservation.m */; };
+		04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96441EB7D1D000B6AD8D /* MapShapeObservation.m */; };
+		04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96471EB7DFB600B6AD8D /* MapPolylineObservation.m */; };
+		04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED964A1EB7DFD500B6AD8D /* MapPolygonObservation.m */; };
+		04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED964D1EB8D09C00B6AD8D /* MapObservationManager.m */; };
+		04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96501EB8FBB300B6AD8D /* MapObservations.m */; };
+		04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96531EBA3AE100B6AD8D /* MapAnnotation.m */; };
+		04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96561EBB60AC00B6AD8D /* MapUtils.m */; };
 		17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
@@ -195,6 +204,24 @@
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
+		04ED963D1EB7AB8700B6AD8D /* MapObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapObservation.h; path = Map/MapObservation.h; sourceTree = "<group>"; };
+		04ED963E1EB7AB8700B6AD8D /* MapObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapObservation.m; path = Map/MapObservation.m; sourceTree = "<group>"; };
+		04ED96401EB7B15900B6AD8D /* MapAnnotationObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapAnnotationObservation.h; path = Map/MapAnnotationObservation.h; sourceTree = "<group>"; };
+		04ED96411EB7B15900B6AD8D /* MapAnnotationObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapAnnotationObservation.m; path = Map/MapAnnotationObservation.m; sourceTree = "<group>"; };
+		04ED96431EB7D1D000B6AD8D /* MapShapeObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapShapeObservation.h; path = Map/MapShapeObservation.h; sourceTree = "<group>"; };
+		04ED96441EB7D1D000B6AD8D /* MapShapeObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapeObservation.m; path = Map/MapShapeObservation.m; sourceTree = "<group>"; };
+		04ED96461EB7DFB600B6AD8D /* MapPolylineObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPolylineObservation.h; path = Map/MapPolylineObservation.h; sourceTree = "<group>"; };
+		04ED96471EB7DFB600B6AD8D /* MapPolylineObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPolylineObservation.m; path = Map/MapPolylineObservation.m; sourceTree = "<group>"; };
+		04ED96491EB7DFD500B6AD8D /* MapPolygonObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPolygonObservation.h; path = Map/MapPolygonObservation.h; sourceTree = "<group>"; };
+		04ED964A1EB7DFD500B6AD8D /* MapPolygonObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPolygonObservation.m; path = Map/MapPolygonObservation.m; sourceTree = "<group>"; };
+		04ED964C1EB8D09C00B6AD8D /* MapObservationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapObservationManager.h; path = Map/MapObservationManager.h; sourceTree = "<group>"; };
+		04ED964D1EB8D09C00B6AD8D /* MapObservationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapObservationManager.m; path = Map/MapObservationManager.m; sourceTree = "<group>"; };
+		04ED964F1EB8FBB300B6AD8D /* MapObservations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapObservations.h; path = Map/MapObservations.h; sourceTree = "<group>"; };
+		04ED96501EB8FBB300B6AD8D /* MapObservations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapObservations.m; path = Map/MapObservations.m; sourceTree = "<group>"; };
+		04ED96521EBA3AE100B6AD8D /* MapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapAnnotation.h; path = Map/MapAnnotation.h; sourceTree = "<group>"; };
+		04ED96531EBA3AE100B6AD8D /* MapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapAnnotation.m; path = Map/MapAnnotation.m; sourceTree = "<group>"; };
+		04ED96551EBB60AC00B6AD8D /* MapUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapUtils.h; path = Map/MapUtils.h; sourceTree = "<group>"; };
+		04ED96561EBB60AC00B6AD8D /* MapUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapUtils.m; path = Map/MapUtils.m; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
@@ -686,8 +713,8 @@
 				2FFBCA0E19DB43C80033132F /* iPad */,
 				F7531EF819100E7D00CA084C /* MapViewController.h */,
 				F7531EF919100E7D00CA084C /* MapViewController.m */,
-				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
 				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
+				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
 				F725A9CA195CB819002A699C /* ObservationAnnotation.h */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
 				2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */,
@@ -715,6 +742,24 @@
 				F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */,
 				F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */,
 				F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */,
+				04ED963D1EB7AB8700B6AD8D /* MapObservation.h */,
+				04ED963E1EB7AB8700B6AD8D /* MapObservation.m */,
+				04ED96401EB7B15900B6AD8D /* MapAnnotationObservation.h */,
+				04ED96411EB7B15900B6AD8D /* MapAnnotationObservation.m */,
+				04ED96431EB7D1D000B6AD8D /* MapShapeObservation.h */,
+				04ED96441EB7D1D000B6AD8D /* MapShapeObservation.m */,
+				04ED96461EB7DFB600B6AD8D /* MapPolylineObservation.h */,
+				04ED96471EB7DFB600B6AD8D /* MapPolylineObservation.m */,
+				04ED96491EB7DFD500B6AD8D /* MapPolygonObservation.h */,
+				04ED964A1EB7DFD500B6AD8D /* MapPolygonObservation.m */,
+				04ED964C1EB8D09C00B6AD8D /* MapObservationManager.h */,
+				04ED964D1EB8D09C00B6AD8D /* MapObservationManager.m */,
+				04ED964F1EB8FBB300B6AD8D /* MapObservations.h */,
+				04ED96501EB8FBB300B6AD8D /* MapObservations.m */,
+				04ED96521EBA3AE100B6AD8D /* MapAnnotation.h */,
+				04ED96531EBA3AE100B6AD8D /* MapAnnotation.m */,
+				04ED96551EBB60AC00B6AD8D /* MapUtils.h */,
+				04ED96561EBB60AC00B6AD8D /* MapUtils.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1095,13 +1140,14 @@
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
-						DevelopmentTeam = ZL8G5D9G2H;
+						DevelopmentTeam = D9RZD6V2U8;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
@@ -1222,7 +1268,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */ = {
@@ -1293,6 +1339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */,
+				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
@@ -1300,10 +1347,12 @@
 				2FB41CE41DC79C8F005C18F9 /* FilterTableViewController.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
+				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
+				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
@@ -1319,6 +1368,7 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
+				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
@@ -1335,8 +1385,11 @@
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
+				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
+				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
+				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
@@ -1357,6 +1410,7 @@
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
+				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
@@ -1385,6 +1439,7 @@
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */,
+				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
@@ -1600,15 +1655,16 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				DEVELOPMENT_TEAM = D9RZD6V2U8;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.osbornb.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1624,15 +1680,16 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				DEVELOPMENT_TEAM = D9RZD6V2U8;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.osbornb.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

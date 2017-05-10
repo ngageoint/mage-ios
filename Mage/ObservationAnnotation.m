@@ -8,17 +8,28 @@
 #import "NSDate+DateTools.h"
 #import "ObservationImage.h"
 #import "WKBGeometryUtils.h"
+#import "MapShapeObservation.h"
+
+@interface ObservationAnnotation ()
+
+@property (nonatomic) BOOL point;
+
+@end
 
 @implementation ObservationAnnotation
 
 -(id) initWithObservation:(Observation *) observation {
-	if ((self = [super init])) {
-        WKBGeometry *geometry = [observation getGeometry];
-        // TODO Geometry
-        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
-        [self setCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
-		
-		_observation = observation;
+    WKBGeometry *geometry = [observation getGeometry];
+    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
+    self.point = YES;
+    return [self initWithObservation:observation andLocation:location];
+}
+
+- (id)initWithObservation:(Observation *) observation andLocation:(CLLocationCoordinate2D) location{
+    if ((self = [super init])) {
+        _observation = observation;
+        [self setCoordinate:location];
         [self setTitle:[observation.properties objectForKey:@"type"]];
         if (self.title == nil) {
             [self setTitle:@"Observation"];
@@ -32,17 +43,23 @@
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
     UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
-    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+    NSString *accessibilityIdentifier = self.point ? [image accessibilityIdentifier] : NSStringFromClass([MapShapeObservation class]);
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:accessibilityIdentifier];
     
     if (annotationView == nil) {
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:[image accessibilityIdentifier]];
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier];
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
         annotationView.rightCalloutAccessoryView = rightButton;
-        annotationView.image = image;
-        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+        if(self.point){
+            annotationView.image = image;
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+        }else{
+            annotationView.image = nil;
+            annotationView.centerOffset = CGPointMake(0, 0);
+        }
     } else {
         annotationView.annotation = self;
     }

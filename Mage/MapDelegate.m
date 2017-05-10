@@ -149,6 +149,9 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             (CGRectContainsPoint(r, lineStart) && CGRectContainsPoint(r, lineEnd)));
 }
 
+-(void)mapView:(MKMapView *)mv didAddAnnotationViews:(NSArray *)views{
+    [self.mapObservations selectShapeAnnotation];
+}
 
 -(void)mapTap:(UIGestureRecognizer*)gesture {
     UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
@@ -1214,8 +1217,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         if([MapObservations isAnnotation: mapObservation]){
             [self.mapView selectAnnotation:[((MapAnnotationObservation *)mapObservation) annotation] animated:YES];
         }else{
-            // TODO Geometry click location?
-            MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:[observation location] andHidden:self.hideObservations];
+            MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:[observation location].coordinate forObservation:observation andHidden:self.hideObservations];
             [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:(MapShapeObservation *)mapObservation];
         }
     }
@@ -1235,5 +1237,17 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
+- (void) mapClickAtPoint: (CGPoint) point{
+    
+    CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
+    
+    [self.mapObservations clearShapeAnnotation];
+    
+    MapShapeObservation *mapShapeObservation = [self.mapObservations clickedShapeAtLocation:location];
+    if (mapShapeObservation != nil) {
+        MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:location forObservation:mapShapeObservation.observation andHidden:self.hideObservations];
+        [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:mapShapeObservation];
+    }
+}
 
 @end

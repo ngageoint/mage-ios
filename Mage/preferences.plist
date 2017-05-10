@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>shape_screen_click_percentage</key>
+	<real>0.03</real>
 	<key>geopackage_feature_tiles_max_points_per_tile</key>
 	<integer>1000</integer>
 	<key>geopackage_feature_tiles_max_features_per_tile</key>
