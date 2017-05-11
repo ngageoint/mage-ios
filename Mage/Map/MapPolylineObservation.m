@@ -7,6 +7,7 @@
 //
 
 #import "MapPolylineObservation.h"
+#import "GPKGMapShapeConverter.h"
 
 @interface MapPolylineObservation ()
 
@@ -32,6 +33,18 @@
     CGPathRef strokedPath = CGPathCreateCopyByStrokingPath(polylineRenderer.path, NULL, tolerance, kCGLineCapRound, kCGLineJoinRound, 1);
     BOOL onShape = CGPathContainsPoint(strokedPath, NULL, point, NO);
     CGPathRelease(strokedPath);
+    
+    // If not on the line, check the complementary line path in case it crosses -180 / 180 longitude
+    if(!onShape){
+        CGPathRef complementaryPath = [GPKGMapShapeConverter complementaryWorldPathOfPolyline:self.polyline];
+        if(complementaryPath != nil){
+            CGPathRef complementaryStrokedPath = CGPathCreateCopyByStrokingPath(complementaryPath, NULL, tolerance, kCGLineCapRound, kCGLineJoinRound, 1);
+            onShape = CGPathContainsPoint(complementaryStrokedPath, NULL, CGPointMake(mapPoint.x, mapPoint.y), NO);
+            CGPathRelease(complementaryStrokedPath);
+        }
+        CGPathRelease(complementaryPath);
+    }
+    
     return onShape;
 
 }

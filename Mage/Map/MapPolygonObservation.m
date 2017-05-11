@@ -7,6 +7,7 @@
 //
 
 #import "MapPolygonObservation.h"
+#import "GPKGMapShapeConverter.h"
 
 @interface MapPolygonObservation ()
 
@@ -30,6 +31,13 @@
     MKMapPoint mapPoint = MKMapPointForCoordinate(location);
     CGPoint point = [polygonRenderer pointForMapPoint:mapPoint];
     BOOL onShape = CGPathContainsPoint(polygonRenderer.path, NULL, point, NO);
+    
+    // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
+    if(!onShape){
+        CGPathRef complementaryPath = [GPKGMapShapeConverter complementaryWorldPathOfPolygon:self.polygon];
+        onShape = CGPathContainsPoint(complementaryPath, NULL, CGPointMake(mapPoint.x, mapPoint.y), NO);
+        CGPathRelease(complementaryPath);
+    }
     
     return onShape;
 }
