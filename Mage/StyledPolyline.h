@@ -8,8 +8,9 @@
 
 @interface StyledPolyline : MKPolyline
 
-@property (nonatomic, readonly) UIColor *lineColor;
+@property (nonatomic) UIColor *lineColor;
 @property (nonatomic) CGFloat lineWidth;
++(StyledPolyline *) createWithPolyline: (MKPolyline *) polyline;
 - (void) lineColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha;
 - (void) lineColorWithHexString: (NSString *) hex;
 

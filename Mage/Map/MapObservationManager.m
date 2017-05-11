@@ -11,6 +11,8 @@
 #import "GPKGMapShapeConverter.h"
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
+#import "StyledPolygon.h"
+#import "StyledPolyline.h"
 
 @interface MapObservationManager ()
 
@@ -39,7 +41,6 @@
     WKBGeometry *geometry = [observation getGeometry];
     
     if(geometry.geometryType == WKB_POINT){
-        // TODO Geometry annotation options?
         
         ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
         [_mapView addAnnotation:annotation];
@@ -49,7 +50,25 @@
         
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
         GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:geometry];
-        // TODO Geometry shape options ?
+        switch(shape.shapeType){
+            case GPKG_MST_POLYLINE:
+                {
+                    StyledPolyline *styledPolyline = [StyledPolyline createWithPolyline:(MKPolyline *)shape.shape];
+                    [self setPolylineStyle: styledPolyline];
+                    [shape setShape:styledPolyline];
+                }
+                break;
+            case GPKG_MST_POLYGON:
+                {
+                    StyledPolygon *styledPolygon = [StyledPolygon createWithPolygon:(MKPolygon *)shape.shape];
+                    [self setPolygonStyle: styledPolygon];
+                    [shape setShape:styledPolygon];
+                }
+                break;
+            default:
+                [NSException raise:@"Unsupported Shape Type" format:@"Unsupported shape type: %u", shape.shapeType];
+        }
+
         GPKGMapShape *mapShape = [GPKGMapShapeConverter addMapShape:shape toMapView:_mapView];
         
         observationShape = [MapShapeObservation createWithObservation:observation andMapShape:mapShape];
@@ -68,5 +87,17 @@
     return annotation;
 }
 
+-(void) setPolylineStyle: (StyledPolyline *) polyline{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [polyline lineColorWithHexString:[defaults stringForKey:@"polyline_color"] andAlpha:[defaults integerForKey:@"polyline_color_alpha"] / 255.0];
+    [polyline setLineWidth:1.0];
+}
+
+-(void) setPolygonStyle: (StyledPolygon *) polygon{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [polygon lineColorWithHexString:[defaults stringForKey:@"polygon_color"] andAlpha:[defaults integerForKey:@"polygon_color_alpha"] / 255.0];
+    [polygon fillColorWithHexString:[defaults stringForKey:@"polygon_fill_color"] andAlpha:[defaults integerForKey:@"polygon_fill_color_alpha"] / 255.0];
+    [polygon setLineWidth:1.0];
+}
 
 @end
