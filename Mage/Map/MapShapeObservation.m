@@ -74,10 +74,8 @@ static BOOL const GEODESIC = NO;
     MKCoordinateRegion expandedRegion = MKCoordinateRegionMakeWithDistance(center, expandedHeight, expandedWidth);
 
     double latitudeRange = expandedRegion.span.latitudeDelta / 2.0;
-    double longitudeRange = expandedRegion.span.longitudeDelta / 2.0;
 
-    if(expandedRegion.center.latitude + latitudeRange > 90.0 || expandedRegion.center.latitude - latitudeRange < -90.0
-       || expandedRegion.center.longitude + longitudeRange > 180.0 || expandedRegion.center.longitude - longitudeRange < -180.0){
+    if(expandedRegion.center.latitude + latitudeRange > 90.0 || expandedRegion.center.latitude - latitudeRange < -90.0){
         expandedRegion = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360));
     }
     
