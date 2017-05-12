@@ -36,4 +36,9 @@
     [NSException raise:@"No Implementation" format:@"Implementation must be provided by an extending map observation type"];
 }
 
+-(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView{
+    [NSException raise:@"No Implementation" format:@"Implementation must be provided by an extending map observation type"];
+    return MKCoordinateRegionMake(CLLocationCoordinate2DMake(0, 0), MKCoordinateSpanMake(0, 0));
+}
+
 @end

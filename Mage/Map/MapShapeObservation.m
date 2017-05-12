@@ -18,6 +18,8 @@
 
 @implementation MapShapeObservation
 
+static float paddingPercentage = .1;
+
 // TODO Geometry use this?
 static BOOL const GEODESIC = NO;
 
@@ -60,6 +62,26 @@ static BOOL const GEODESIC = NO;
 -(BOOL) isOnShapeAtLocation: (CLLocationCoordinate2D) location withTolerance: (double) tolerance andMapView: (MKMapView *) mapView{
     [NSException raise:@"No Implementation" format:@"Implementation must be provided by an extending map shape observation type"];
     return NO;
+}
+
+-(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView{
+    GPKGBoundingBox *bbox = [_shape boundingBox];
+    struct GPKGBoundingBoxSize size = [bbox sizeInMeters];
+    double expandedHeight = size.height + (2 * (size.height * paddingPercentage));
+    double expandedWidth = size.width + (2 * (size.width * paddingPercentage));
+
+    CLLocationCoordinate2D center = [bbox getCenter];
+    MKCoordinateRegion expandedRegion = MKCoordinateRegionMakeWithDistance(center, expandedHeight, expandedWidth);
+
+    double latitudeRange = expandedRegion.span.latitudeDelta / 2.0;
+    double longitudeRange = expandedRegion.span.longitudeDelta / 2.0;
+
+    if(expandedRegion.center.latitude + latitudeRange > 90.0 || expandedRegion.center.latitude - latitudeRange < -90.0
+       || expandedRegion.center.longitude + longitudeRange > 180.0 || expandedRegion.center.longitude - longitudeRange < -180.0){
+        expandedRegion = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360));
+    }
+    
+    return expandedRegion;
 }
 
 @end

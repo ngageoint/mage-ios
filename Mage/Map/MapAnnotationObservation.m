@@ -40,4 +40,23 @@
     }
 }
 
+-(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView{
+    CLLocationDistance latitudeMeters = 2500;
+    CLLocationDistance longitudeMeters = 2500;
+    Observation *observation = [self observation];
+    NSDictionary *properties = observation.properties;
+    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+    if (accuracyProperty != nil) {
+        double accuracy = [accuracyProperty doubleValue];
+        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    }
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(observation.location.coordinate, latitudeMeters, longitudeMeters);
+    
+    MKCoordinateRegion viewRegion = [mapView regionThatFits:region];
+    
+    return viewRegion;
+}
+
 @end

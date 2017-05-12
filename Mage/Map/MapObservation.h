@@ -48,4 +48,13 @@
  */
 -(void) hidden: (BOOL) hidden fromMapView: (MKMapView *) mapView;
 
+/**
+ * Get the view region of the map view for the observation
+ *
+ * @param mapView map view
+ *
+ * @return coordinate region
+ */
+-(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView;
+
 @end
