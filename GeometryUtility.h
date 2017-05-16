@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "WKBGeometry.h"
+#import "WKBPoint.h"
 
 @interface GeometryUtility : NSObject
 
 +(WKBGeometry *) toGeometryFromGeometryData: (NSData *) geometryData;
 
 +(NSData *) toGeometryDataFromGeometry: (WKBGeometry *) geometry;
+
++(WKBPoint *) centroidOfGeometry: (WKBGeometry *) geometry;
 
 @end

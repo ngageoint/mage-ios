@@ -11,6 +11,7 @@
 #import "WKBGeometryReader.h"
 #import "WKBByteWriter.h"
 #import "WKBGeometryWriter.h"
+#import "WKBGeometryUtils.h"
 
 @implementation GeometryUtility
 
@@ -34,6 +35,19 @@
         [writer close];
     }
     return data;
+}
+
++(WKBPoint *) centroidOfGeometry: (WKBGeometry *) geometry{
+    WKBPoint *centroid = nil;
+    if(geometry.geometryType == WKB_POINT){
+        centroid = (WKBPoint *) geometry;
+    }else{
+        WKBGeometry *clonedGeometry = [geometry mutableCopy];
+        [WKBGeometryUtils minimizeGeometry:clonedGeometry withWorldWidth:360.0];
+        centroid = [WKBGeometryUtils centroidOfGeometry:clonedGeometry];
+        [WKBGeometryUtils normalizeGeometry:centroid withWorldWidth:360.0];
+    }
+    return centroid;
 }
 
 @end
