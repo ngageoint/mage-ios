@@ -24,7 +24,9 @@
 #import "GeometrySerializer.h"
 #import "WKBGeometry.h"
 #import "WKBPoint.h"
-#import "WKBGeometryUtils.h"
+#import "GeometryUtility.h"
+#import "WKBPolygon.h"
+#import "WKBLineString.h"
 
 @implementation Observation
 
@@ -189,8 +191,7 @@ NSNumber *_currentEventId;
 
 - (CLLocation *) location {
     WKBGeometry *geometry = [self getGeometry];
-    // TODO Geometry
-    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     return [[CLLocation alloc] initWithLatitude:[point.y doubleValue] longitude:[point.x doubleValue]];
 }
 
@@ -208,6 +209,67 @@ NSNumber *_currentEventId;
         data = [GeometryUtility toGeometryDataFromGeometry:geometry];
     }
     [self setGeometryData:data];
+}
+
+- (NSString *) shapeLabel{
+    WKBGeometry * geometry = [self getGeometry];
+    enum WKBGeometryType geometryType = geometry.geometryType;
+    NSString *label = nil;
+    switch(geometryType){
+        case WKB_POINT:
+            label = [WKBGeometryTypes name:geometryType];
+            break;
+        case WKB_LINESTRING:
+            label = @"Line";
+            break;
+        case WKB_POLYGON:
+            {
+                WKBPolygon *polygon = (WKBPolygon *) geometry;
+                NSMutableArray *rings = polygon.rings;
+                if(rings.count > 0 && [Observation checkIfRectangle:((WKBLineString *)[rings objectAtIndex:0]).points]){
+                    label = @"Rectangle";
+                }else{
+                    label = [WKBGeometryTypes name:geometryType];
+                }
+            }
+            break;
+        default:
+            
+            break;
+    }
+    
+    label = [label capitalizedString];
+    
+    return label;
+}
+
++(BOOL) checkIfRectangle: (NSArray<WKBPoint *> *) points{
+    return [Observation checkIfRectangleAndFindSide:points] != nil;
+}
+
++(NSNumber *) checkIfRectangleAndFindSide: (NSArray<WKBPoint *> *) points{
+    NSNumber *sameXSide1 = nil;
+    int size = (int)points.count;
+    if (size == 4 || size == 5) {
+        WKBPoint *point1 = [points objectAtIndex:0];
+        WKBPoint *lastPoint = [points objectAtIndex:size - 1];
+        BOOL closed = [point1.x isEqualToNumber:lastPoint.x] && [point1.y isEqualToNumber:lastPoint.y];
+        if ((closed && size == 5) || (!closed && size == 4)) {
+            WKBPoint *point2 = [points objectAtIndex:1];
+            WKBPoint *point3 = [points objectAtIndex:2];
+            WKBPoint *point4 = [points objectAtIndex:3];
+            if ([point1.x isEqualToNumber:point2.x] && [point2.y isEqualToNumber:point3.y]) {
+                if ([point1.y isEqualToNumber:point4.y] && [point3.x isEqualToNumber:point4.x]) {
+                    sameXSide1 = [NSNumber numberWithInt:1];
+                }
+            } else if ([point1.y isEqualToNumber:point2.y] && [point2.x isEqualToNumber:point3.x]) {
+                if ([point1.x isEqualToNumber:point4.x] && [point3.y isEqualToNumber:point4.y]) {
+                    sameXSide1 = false;
+                }
+            }
+        }
+    }
+    return sameXSide1;
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
@@ -581,9 +643,12 @@ NSNumber *_currentEventId;
     
     // geometry
     WKBGeometry *geometry = [self getGeometry];
-    // TODO Geometry
-    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
-    [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
+    if(geometry.geometryType == WKB_POINT){
+        WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+        [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
+    }else{
+        [text appendString:[self shapeLabel]];
+    }
     
     // type
     [text appendString:[self propertyText:[self.properties objectForKey:@"type"] forField:[nameToField objectForKey:@"type"]]];
