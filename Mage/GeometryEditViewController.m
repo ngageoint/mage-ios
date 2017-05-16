@@ -10,7 +10,7 @@
 #import "ObservationImage.h"
 #import "LocationService.h"
 #import "WKBPoint.h"
-#import "WKBGeometryUtils.h"
+#import "GeometryUtility.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property NSObject<MKAnnotation> *annotation;
@@ -45,7 +45,7 @@
         
         self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
         // TODO Geometry
-        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+        WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
         self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
         
     } else {

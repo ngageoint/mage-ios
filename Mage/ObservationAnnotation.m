@@ -7,7 +7,7 @@
 #import "ObservationAnnotation.h"
 #import "NSDate+DateTools.h"
 #import "ObservationImage.h"
-#import "WKBGeometryUtils.h"
+#import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 
 @interface ObservationAnnotation ()
@@ -20,7 +20,7 @@
 
 -(id) initWithObservation:(Observation *) observation {
     WKBGeometry *geometry = [observation getGeometry];
-    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;
     return [self initWithObservation:observation andLocation:location];

@@ -9,7 +9,7 @@
 #import "Observation.h"
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
-#import "WKBGeometryUtils.h"
+#import "GeometryUtility.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -49,7 +49,7 @@
     
     if (self.geometry) {
         // TODO Geometry
-        WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:self.geometry];
+        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
         [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
         [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
 

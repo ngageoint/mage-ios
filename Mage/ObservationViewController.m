@@ -20,7 +20,7 @@
 #import "UserTableViewController.h"
 #import "MapDelegate.h"
 #import "AttachmentViewController.h"
-#import "WKBGeometryUtils.h"
+#import "GeometryUtility.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -299,7 +299,7 @@
 - (IBAction) observationDirectionsTapped:(id)sender {
     // TODO Geometry
     WKBGeometry *geometry = [self.observation getGeometry];
-    WKBPoint *point = [WKBGeometryUtils centroidOfGeometry:geometry];
+    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     
     NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];

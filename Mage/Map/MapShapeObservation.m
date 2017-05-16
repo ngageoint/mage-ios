@@ -20,9 +20,6 @@
 
 static float paddingPercentage = .1;
 
-// TODO Geometry use this?
-static BOOL const GEODESIC = NO;
-
 +(MapShapeObservation *) createWithObservation: (Observation *) observation andMapShape: (GPKGMapShape *) shape{
     
     MapShapeObservation *observationShape = nil;
