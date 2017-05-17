@@ -12,6 +12,7 @@
 #import "WKBByteWriter.h"
 #import "WKBGeometryWriter.h"
 #import "WKBGeometryUtils.h"
+#import "GPKGProjectionConstants.h"
 
 @implementation GeometryUtility
 
@@ -43,9 +44,9 @@
         centroid = (WKBPoint *) geometry;
     }else{
         WKBGeometry *clonedGeometry = [geometry mutableCopy];
-        [WKBGeometryUtils minimizeGeometry:clonedGeometry withWorldWidth:360.0];
+        [WKBGeometryUtils minimizeGeometry:clonedGeometry withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
         centroid = [WKBGeometryUtils centroidOfGeometry:clonedGeometry];
-        [WKBGeometryUtils normalizeGeometry:centroid withWorldWidth:360.0];
+        [WKBGeometryUtils normalizeGeometry:centroid withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
     }
     return centroid;
 }
