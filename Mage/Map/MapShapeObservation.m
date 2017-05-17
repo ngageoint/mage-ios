@@ -9,6 +9,7 @@
 #import "MapShapeObservation.h"
 #import "MapPolylineObservation.h"
 #import "MapPolygonObservation.h"
+#import "GPKGProjectionConstants.h"
 
 @interface MapShapeObservation ()
 
@@ -72,7 +73,7 @@ static float paddingPercentage = .1;
 
     double latitudeRange = expandedRegion.span.latitudeDelta / 2.0;
 
-    if(expandedRegion.center.latitude + latitudeRange > 90.0 || expandedRegion.center.latitude - latitudeRange < -90.0){
+    if(expandedRegion.center.latitude + latitudeRange > PROJ_WGS84_HALF_WORLD_LAT_HEIGHT || expandedRegion.center.latitude - latitudeRange < -PROJ_WGS84_HALF_WORLD_LAT_HEIGHT){
         expandedRegion = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake(180, 360));
     }
     
