@@ -212,7 +212,6 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     
-    // TODO Geometry
     WKBGeometry *geometry = [observation getGeometry];
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);

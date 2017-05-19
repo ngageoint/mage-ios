@@ -10,11 +10,14 @@
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
 #import "GeometryUtility.h"
+#import "MapObservationManager.h"
+#import "MapAnnotationObservation.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
 @property (strong, nonatomic) MapDelegate *mapDelegate;
-@property (strong, nonatomic) id<MKAnnotation> annotation;
+@property (strong, nonatomic) MapObservation *mapObservation;
+@property (strong, nonatomic) MapObservationManager *observationManager;
 @property (assign, nonatomic) BOOL isGeometryField;
 
 @end
@@ -48,24 +51,35 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-        // TODO Geometry
-        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
-        [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
-        [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
-
+        
+        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView];
         if (self.isGeometryField) {
-            self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        } else {
-            self.annotation = [[MKPointAnnotation alloc] init];
+            self.mapObservation = [self.observationManager addToMapWithObservation:observation];
+            MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
+            [self.mapView setRegion:viewRegion animated:NO];
         }
         
-        // TODO Geometry
-        self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-        [self.mapView addAnnotation:self.annotation];
+        if(self.geometry.geometryType == WKB_POINT){
         
-        MKCoordinateRegion region = MKCoordinateRegionMake(self.annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
-        MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-        [self.mapView setRegion:viewRegion animated:NO];
+            WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
+            [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
+            [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
+
+            if (!self.isGeometryField) {
+                MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+                annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
+                [self.mapView addAnnotation:annotation];
+                MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
+                MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+                [self.mapView setRegion:viewRegion animated:NO];
+            }
+            
+        }else{
+            [self.latitudeLabel setText:[observation shapeLabel]];
+            [self.longitudeLabel setText:@""];
+            [self.latitude setText:@""];
+            [self.longitude setText:@""];
+        }
     } else {
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
@@ -93,17 +107,15 @@
 
 - (void) typeChanged:(Observation *) observation {
     if (self.isGeometryField) {
-        [self.mapView removeAnnotation:self.annotation];
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [self.mapView addAnnotation:self.annotation];
+        [self.mapObservation removeFromMapView:self.mapView];
+        self.mapObservation = [self.observationManager addToMapWithObservation:observation];
     }
 }
 
 - (void) variantChanged:(Observation *)observation {
     if (self.isGeometryField) {
-        [self.mapView removeAnnotation:self.annotation];
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [self.mapView addAnnotation:self.annotation];
+        [self.mapObservation removeFromMapView:self.mapView];
+        self.mapObservation = [self.observationManager addToMapWithObservation:observation];
     }
 }
 

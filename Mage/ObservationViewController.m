@@ -297,7 +297,7 @@
 }
 
 - (IBAction) observationDirectionsTapped:(id)sender {
-    // TODO Geometry
+
     WKBGeometry *geometry = [self.observation getGeometry];
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
