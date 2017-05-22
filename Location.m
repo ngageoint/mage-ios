@@ -9,19 +9,19 @@
 #import "Location.h"
 #import "User.h"
 #import "Server.h"
-#import "GeoPoint.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import <NSDate+DateTools.h>
+#import "WKBGeometryUtils.h"
 
 @implementation Location
 
 @synthesize geometry;
 
 - (CLLocation *) location {
-    GeoPoint *point = (GeoPoint *) self.geometry;
-    return point.location;
+    WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:self.geometry];
+    return [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
 }
 
 - (NSString *) sectionName {
@@ -51,7 +51,8 @@
                                     speed:[[jsonLocation valueForKeyPath:@"properties.speed"] floatValue]
                                     timestamp:date];
             
-            [self setGeometry:[[GeoPoint alloc] initWithLocation:location]];
+            // TODO Geometry
+            [self setGeometry:[[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude]];
         }
     } else {
         // delete user record from core data

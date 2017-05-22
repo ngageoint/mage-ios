@@ -27,6 +27,7 @@
 #import "GeometryUtility.h"
 #import "WKBPolygon.h"
 #import "WKBLineString.h"
+#import "WKBGeometryUtils.h"
 
 @implementation Observation
 
@@ -36,7 +37,7 @@ NSDictionary *_fieldNameToField;
 NSNumber *_currentEventId;
 
 
-+ (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
++ (Observation *) observationWithGeometry:(WKBGeometry *) geometry inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
     
     [observation setTimestamp:[NSDate date]];
@@ -46,7 +47,7 @@ NSNumber *_currentEventId;
     
     [observation setProperties:properties];
     [observation setUser:[User fetchCurrentUserInManagedObjectContext:mangedObjectContext]];
-    [observation setGeometry:location];
+    [observation setGeometry:geometry];
     [observation setDirty:[NSNumber numberWithBool:NO]];
     [observation setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
     [observation setEventId:[Server currentEventId]];
@@ -130,10 +131,12 @@ NSNumber *_currentEventId;
         id value = [self.properties objectForKey:key];
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            GeoPoint *point = value;
+            // TODO Geometry
+            WKBGeometry *point = value;
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:point];
             [jsonProperties setObject:@{
                                          @"type": @"Point",
-                                         @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
+                                         @"coordinates": @[centroid.x, centroid.y]
                                          } forKey:key];
         }
     }
@@ -180,9 +183,9 @@ NSNumber *_currentEventId;
         id value = [propertyJson objectForKey:key];
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
+            // TODO Geometry
             NSArray *coordinates = [value valueForKeyPath:@"coordinates"];
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
-            [parsedProperties setObject:[[GeoPoint alloc] initWithLocation:location] forKey:key];
+            [parsedProperties setObject:[[WKBPoint alloc] initWithXValue:[[coordinates objectAtIndex:0] floatValue] andYValue:[[coordinates objectAtIndex:1] floatValue]] forKey:key];
         }
     }
     

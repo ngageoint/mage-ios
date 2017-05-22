@@ -10,16 +10,17 @@
 
 #import "MageSessionManager.h"
 #import "NSDate+Iso8601.h"
-#import "GeoPoint.h"
 #import "MageServer.h"
 #import "Server.h"
+#import "WKBPoint.h"
+#import "WKBGeometryUtils.h"
 
 @implementation GPSLocation
 
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
     GPSLocation *gpsLocation = [GPSLocation MR_createEntityInContext:managedObjectContext];
     
-    gpsLocation.geometry = [[GeoPoint alloc] initWithLocation:location];
+    gpsLocation.geometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
     gpsLocation.timestamp = location.timestamp;
     gpsLocation.eventId = [Server currentEventId];
     gpsLocation.properties = @{
@@ -53,12 +54,12 @@
     MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
-        GeoPoint *point = location.geometry;
-        
+        WKBGeometry *point = location.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:point];
         [parameters addObject:@{
                                 @"geometry": @{
                                         @"type": @"Point",
-                                        @"coordinates": @[[NSNumber numberWithDouble:point.location.coordinate.longitude], [NSNumber numberWithDouble:point.location.coordinate.latitude]]
+                                        @"coordinates": @[centroid.x, centroid.y]
                                         },
                                 @"properties": [NSDictionary dictionaryWithDictionary:location.properties]
                                 }];

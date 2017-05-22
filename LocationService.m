@@ -7,7 +7,6 @@
 #import "LocationService.h"
 #import "User.h"
 #import "GPSLocation.h"
-#import "GeoPoint.h"
 #import "Event.h"
 #import "Server.h"
 #import "MageSessionManager.h"
@@ -127,10 +126,6 @@ NSInteger const kLocationPushLimit = 100;
         NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:[NSManagedObjectContext MR_defaultContext]];
         
         if (![locations count]) return;
-        
-        for (GPSLocation *l in locations) {
-            GeoPoint *point = l.geometry;
-        }
         
         self.isPushingLocations = YES;
         NSLog(@"Pushing locations...");

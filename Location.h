@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
-#import "Geometry.h"
+#import "WKBGeometry.h"
 
 @class User;
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Location : NSManagedObject
 
-@property (nonatomic, retain) Geometry* geometry;
+@property (nonatomic, retain) WKBGeometry* geometry;
 
 -(CLLocation *) location;
 - (NSString *) sectionName;

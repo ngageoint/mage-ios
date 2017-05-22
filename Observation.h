@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "GeoPoint.h"
+#import <CoreLocation/CoreLocation.h>
 #import "WKBGeometry.h"
 
 @class Attachment, User, ObservationImportant, ObservationFavorite;
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 
-+ (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
++ (Observation *) observationWithGeometry:(WKBGeometry *) geometry inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 - (void) addTransientAttachment: (Attachment *) attachment;
