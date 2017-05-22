@@ -12,7 +12,6 @@
 #import "User.h"
 #import "Location.h"
 #import "UIImage+Resize.h"
-#import <GeoPoint.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
 #import <StaticLayer.h>
@@ -1163,14 +1162,17 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
-        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
-        [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+        WKBGeometry * geometry = location.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
-        [annotation setCoordinate:geoPoint.location.coordinate];
+        WKBGeometry * geometry = location.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
+        [annotation setCoordinate:coordinate];
         if (shouldCenter) {
-            [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+            [self.mapView setCenterCoordinate:coordinate];
         }
         
         [annotationView setImageForUser:user];

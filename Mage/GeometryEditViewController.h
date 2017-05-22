@@ -9,7 +9,6 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "ObservationEditViewController.h"
-#import <GeoPoint.h>
 
 @interface GeometryEditViewController : UIViewController <MKMapViewDelegate>
 

@@ -8,8 +8,6 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
-#import "Geometry.h"
-#import "GeoPoint.h"
 #import "User.h"
 #import "Location.h"
 #import "LocationAnnotation.h"
@@ -31,6 +29,7 @@
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"
+#import "WKBPoint.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -200,13 +199,13 @@
         ObservationEditViewController *editViewController = segue.destinationViewController;
         CLLocation *location = [[LocationService singleton] location];
         if (location) {
-            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
             [editViewController setLocation:point];
         }
     } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
         
-        GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
+        WKBPoint *point = [[WKBPoint alloc] initWithXValue:self.mapPressLocation.coordinate.longitude andYValue:self.mapPressLocation.coordinate.latitude];
         
         [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {

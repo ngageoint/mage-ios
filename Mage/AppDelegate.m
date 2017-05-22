@@ -7,7 +7,6 @@
 #import "AppDelegate.h"
 #import <Mage.h>
 #import <User.h>
-#import <GeoPoint.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <FICImageCache.h>

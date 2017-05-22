@@ -19,6 +19,7 @@
 #import <LocationService.h>
 #import "Filter.h"
 #import "Observations.h"
+#import "WKBPoint.h"
 
 @implementation ObservationTableViewController
 
@@ -97,7 +98,7 @@
         ObservationEditViewController *editViewController = segue.destinationViewController;
         CLLocation *location = [[LocationService singleton] location];
         if (location != nil) {
-            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
             [editViewController setLocation:point];
         }
     }

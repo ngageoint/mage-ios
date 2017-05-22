@@ -11,6 +11,7 @@
 #import "LocationService.h"
 #import "WKBPoint.h"
 #import "GeometryUtility.h"
+#import "WKBGeometryUtils.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property NSObject<MKAnnotation> *annotation;
@@ -36,7 +37,7 @@
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        // TODO Geometry
+
         WKBGeometry *geometry = [self.observation getGeometry];
         if (!geometry) {
             // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
@@ -49,11 +50,13 @@
         self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
         
     } else {
-        GeoPoint *point = (GeoPoint *)[self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
+        // TODO Geometry
+        WKBGeometry *geometry = [self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
         self.annotation = [[MKPointAnnotation alloc] init];
 
-        if (point) {
-            self.annotation.coordinate = point.location.coordinate;
+        if (geometry) {
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+            self.annotation.coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         } else {
             CLLocation *location = [[LocationService singleton] location];
             // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
@@ -112,7 +115,8 @@
 - (IBAction) saveLocation {
     self.navigationItem.prompt = nil;
     
-    GeoPoint *location = [[GeoPoint alloc] initWithLocation:[[CLLocation alloc] initWithLatitude:self.annotation.coordinate.latitude longitude:self.annotation.coordinate.longitude]];
+    // TODO Geometry
+    WKBPoint *location = [[WKBPoint alloc] initWithXValue:self.annotation.coordinate.longitude andYValue:self.annotation.coordinate.latitude];
     [self.propertyEditDelegate setValue:location forFieldDefinition:self.fieldDefinition];
     
     [self.navigationController popViewControllerAnimated:YES];

@@ -6,13 +6,13 @@
 
 #import "MapViewController_iPad.h"
 #import "ObservationEditViewController.h"
-#import <GeoPoint.h>
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import <Location.h>
 #import <Event.h>
 #import "TimeFilter.h"
 #import "SettingsViewController.h"
+#import "WKBPoint.h"
 
 @interface MapViewController_iPad ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -48,7 +48,7 @@
         ObservationEditViewController *editViewController = segue.destinationViewController;
         
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
-        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
         
         [editViewController setLocation:point];
     } else if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {

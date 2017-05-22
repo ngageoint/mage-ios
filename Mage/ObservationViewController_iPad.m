@@ -5,7 +5,6 @@
 //
 
 #import "ObservationViewController_iPad.h"
-#import "GeoPoint.h"
 #import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"

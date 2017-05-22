@@ -23,8 +23,8 @@
 #import <MageSessionManager.h>
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
-#import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
+#import "WKBGeometryUtils.h"
 
 @import PhotosUI;
 
@@ -97,7 +97,8 @@
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            location = ((GeoPoint *) gpsLocation.geometry).location;
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
     }
@@ -106,7 +107,8 @@
     if (!location) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
-            location = ((GeoPoint *) [[locations objectAtIndex:0] geometry]).location;
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         }
     }
     

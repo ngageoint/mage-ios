@@ -8,7 +8,7 @@
 #import <Observation.h>
 #import "ObservationEditListener.h"
 #import "AttachmentCollectionDataStore.h"
-#import <GeoPoint.h>
+#import "WKBGeometry.h"
 
 @protocol PropertyEditDelegate <NSObject>
 - (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
@@ -17,7 +17,7 @@
 @interface ObservationEditViewController : UIViewController<PropertyEditDelegate>
 
 @property (strong, nonatomic) Observation *observation;
-@property (strong, nonatomic) GeoPoint *location;
+@property (strong, nonatomic) WKBGeometry *location;
 
 @property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
 

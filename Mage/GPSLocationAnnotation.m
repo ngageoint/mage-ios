@@ -5,17 +5,20 @@
 //
 
 #import "GPSLocationAnnotation.h"
-#import <GeoPoint.h>
 #import <NSDate+DateTools.h>
 #import "MKAnnotationView+PersonIcon.h"
+#import "WKBGeometry.h"
+#import "WKBGeometryUtils.h"
 
 @implementation GPSLocationAnnotation
 
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation andUser: (User *) user {
     if ((self = [super init])) {
         _gpsLocation = gpsLocation;
-        GeoPoint *point = (GeoPoint *)gpsLocation.geometry;
-        [self setCoordinate:point.location.coordinate];
+        WKBGeometry *geometry = (WKBGeometry *)gpsLocation.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        CLLocationCoordinate2D location = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
+        [self setCoordinate:location];
         _timestamp = gpsLocation.timestamp;
         
         [self setTitle:user.name];
