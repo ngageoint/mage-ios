@@ -12,17 +12,42 @@
 #import "WKBPoint.h"
 #import "GeometryUtility.h"
 #import "WKBGeometryUtils.h"
+#import "MapObservation.h"
+#import "MapObservationManager.h"
+#import "GPKGMapShapeConverter.h"
+#import <HexColor.h>
+#import "MapShapePointsObservation.h"
+#import "MapAnnotationObservation.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
-@property NSObject<MKAnnotation> *annotation;
+@property (strong, nonatomic) MapObservation *mapObservation;
+@property (strong, nonatomic) MapObservationManager *observationManager;
+@property (strong, nonatomic) GPKGMapShapeConverter *shapeConverter;
+@property (nonatomic) BOOL newDrawing;
+@property (nonatomic) enum WKBGeometryType shapeType;
+@property (nonatomic) BOOL isRectangle;
+@property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
+@property (strong, nonatomic) GPKGMapPoint *rectangleSameXMarker;
+@property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
+@property (nonatomic) BOOL rectangleSameXSide1;
+@property (nonatomic) BOOL validLocation;
 @property (weak, nonatomic) IBOutlet UITextField *latitudeField;
 @property (weak, nonatomic) IBOutlet UITextField *longitudeField;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
+@property (nonatomic, strong) UIColor * editPolylineColor;
+@property (nonatomic) double editPolylineLineWidth;
+@property (nonatomic, strong) UIColor * editPolygonColor;
+@property (nonatomic) double editPolygonLineWidth;
+@property (nonatomic, strong) UIColor * editPolygonFillColor;
+
 @end
 
 @implementation GeometryEditViewController
+
+static NSString *mapPointImageReuseIdentifier = @"mapPointImageReuseIdentifier";
+static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -30,50 +55,51 @@
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     
+    self.observationManager = [[MapObservationManager alloc] initWithMapView:self.map];
+    self.shapeConverter = [[GPKGMapShapeConverter alloc] init];
+    
     [self.latitudeField setDelegate: self];
     [self.longitudeField setDelegate: self];
     
     [self.latitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
+    WKBGeometry *geometry = nil;
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
 
-        WKBGeometry *geometry = [self.observation getGeometry];
+        geometry = [self.observation getGeometry];
         if (!geometry) {
             // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
             geometry = [[WKBPoint alloc] initWithXValue:1.0 andYValue:1.0];
         }
         
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:self.observation];
-        // TODO Geometry
-        WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
-        self.annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-        
     } else {
-        // TODO Geometry
-        WKBGeometry *geometry = [self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
-        self.annotation = [[MKPointAnnotation alloc] init];
-
-        if (geometry) {
-            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
-            self.annotation.coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
-        } else {
+        
+        geometry = [self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
+        if(!geometry){
             CLLocation *location = [[LocationService singleton] location];
-            // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
-            self.annotation.coordinate = location ? [location coordinate] :CLLocationCoordinate2DMake(1.0, 1.0);
+            if(location){
+                geometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+            }else{
+                // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
+                geometry = [[WKBPoint alloc] initWithXValue:1.0 andYValue:1.0];
+            }
         }
     }
     
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.annotation.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+    // Set the default edit shape draw options
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.editPolylineColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polyline_color"] alpha:[defaults integerForKey:@"edit_polyline_color_alpha"] / 255.0];
+    self.editPolylineLineWidth = 1.0;
+    self.editPolygonColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polygon_color"] alpha:[defaults integerForKey:@"edit_polygon_color_alpha"] / 255.0];
+    self.editPolygonLineWidth = 1.0;
+    self.editPolygonFillColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polygon_fill_color"] alpha:[defaults integerForKey:@"edit_polygon_fill_color_alpha"] / 255.0];
+    
+    [self setShapeTypeFromGeometry:geometry];
+    [self addMapShape:geometry];
+    
+    MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.map];
     [self.map setRegion:viewRegion];
-    
-    [self setLocationTextFields];
-    
-    [self.map addAnnotation:self.annotation];
-    [self.map selectAnnotation:self.annotation animated:NO];
         
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -116,54 +142,133 @@
     self.navigationItem.prompt = nil;
     
     // TODO Geometry
-    WKBPoint *location = [[WKBPoint alloc] initWithXValue:self.annotation.coordinate.longitude andYValue:self.annotation.coordinate.latitude];
-    [self.propertyEditDelegate setValue:location forFieldDefinition:self.fieldDefinition];
+//    WKBPoint *location = [[WKBPoint alloc] initWithXValue:self.annotation.coordinate.longitude andYValue:self.annotation.coordinate.latitude];
+//    [self.propertyEditDelegate setValue:location forFieldDefinition:self.fieldDefinition];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>) annotation {
     
+    MKAnnotationView *view = nil;
+    
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        UIImage *image = [ObservationImage imageForObservation:observationAnnotation.observation inMapView:mapView];
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.map dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
-        
-        if (annotationView == nil) {
-            annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:[image accessibilityIdentifier]];
-            annotationView.draggable = YES;
-            annotationView.image = image;
-        } else {
-            annotationView.annotation = annotation;
+        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.map];
+        view = annotationView;
+    } else if([annotation isKindOfClass:[GPKGMapPoint class]]){
+        GPKGMapPoint * mapPoint = (GPKGMapPoint *) annotation;
+        if(mapPoint.options.image != nil){
+            MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointImageReuseIdentifier];
+            if (mapPointImageView == nil)
+            {
+                mapPointImageView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier];
+            }
+            mapPointImageView.image = mapPoint.options.image;
+            mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;
+            
+            view = mapPointImageView;
+        }else{
+            MKPinAnnotationView *mapPointPinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointPinReuseIdentifier];
+            if(mapPointPinView == nil){
+                mapPointPinView = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:mapPointPinReuseIdentifier];
+            }
+            mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
+            view = mapPointPinView;
         }
-        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-        return annotationView;
-    } else {
+    }else {
         MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
-        
         if (!pinView) {
             pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
             [pinView setPinTintColor:[UIColor greenColor]];
-            pinView.draggable = YES;
         } else {
             pinView.annotation = annotation;
         }
-        
-        return pinView;
+        view = pinView;
     }
     
-    return nil;
+    view.draggable = YES;
+    return view;
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id)overlay {
+    MKOverlayRenderer * renderer = nil;
+    if ([overlay isKindOfClass:[MKPolygon class]]) {
+        MKPolygonRenderer * polygonRenderer = [[MKPolygonRenderer alloc] initWithPolygon:overlay];
+        polygonRenderer.strokeColor = self.editPolygonColor;
+        polygonRenderer.lineWidth = self.editPolygonLineWidth;
+        if(self.editPolygonFillColor != nil){
+            polygonRenderer.fillColor = self.editPolygonFillColor;
+        }
+        renderer = polygonRenderer;
+    }else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolylineRenderer * polylineRenderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
+        polylineRenderer.strokeColor = self.editPolylineColor;
+        polylineRenderer.lineWidth = self.editPolylineLineWidth;
+        renderer = polylineRenderer;
+    }else if ([overlay isKindOfClass:[MKTileOverlay class]]) {
+        renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
+    }
+    return renderer;
+}
+
+- (void)selectAnnotation:(id)annotation{
+    [self.map selectAnnotation:annotation animated:YES];
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+    
+    if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
+        [self selectShapePoint:mapPoint];
+    }
+    
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
-    if (newState == MKAnnotationViewDragStateEnding) {
-        [self setLocationTextFields];
+    
+    CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
+    
+    if ([annotationView.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        GPKGMapPoint *mapPoint = (GPKGMapPoint *) annotationView.annotation;
+        coordinate = mapPoint.coordinate;
+    }else if([annotationView.annotation isKindOfClass:[ObservationAnnotation class]]){
+        ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotationView.annotation;
+        coordinate = observationAnnotation.coordinate;
     }
-}
-
-- (void) setLocationTextFields {
-    self.latitudeField.text = [NSString stringWithFormat:@"%f", self.annotation.coordinate.latitude];
-    self.longitudeField.text = [NSString stringWithFormat:@"%f", self.annotation.coordinate.longitude];
+    
+    if(CLLocationCoordinate2DIsValid(coordinate)){
+        switch(newState){
+            case MKAnnotationViewDragStateStarting:
+            {
+                [self updateHintWithDragging:YES];
+                if (self.isRectangle && [self isShape]) {
+                    [[((MapShapePointsObservation *)self.mapObservation) shapePoints] hiddenPoints:YES];
+                }
+            }
+                break;
+            case MKAnnotationViewDragStateDragging:
+            {
+                [self updateLocationTextWithCoordinate:coordinate];
+                [self updateShape:coordinate];
+            }
+                break;
+            case MKAnnotationViewDragStateEnding:
+            {
+                [self updateLocationTextWithCoordinate:coordinate];
+                [self updateShape:coordinate];
+                if (self.isRectangle && [self isShape]) {
+                    [[((MapShapePointsObservation *)self.mapObservation) shapePoints] hiddenPoints:NO];
+                }
+                [self updateHint];
+                annotationView.dragState = MKAnnotationViewDragStateNone;
+            }
+                break;
+            default:
+                break;
+                
+        }
+    }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -208,12 +313,12 @@
 }
 
 - (void) onLatLonTextChanged {
-    self.annotation.coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [self.longitudeField.text doubleValue]);
+//    self.annotation.coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [self.longitudeField.text doubleValue]);
     
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.annotation.coordinate, latitudeMeters, longitudeMeters);
-    [self.map setRegion:region animated:NO];
+//    CLLocationDistance latitudeMeters = 2500;
+//    CLLocationDistance longitudeMeters = 2500;
+//    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.annotation.coordinate, latitudeMeters, longitudeMeters);
+//    [self.map setRegion:region animated:NO];
 }
 
 - (void) keyboardWillShow: (NSNotification *) notification {
@@ -228,6 +333,322 @@
     self.bottomConstraint.constant = 0;
 }
 
+-(void) setShapeTypeFromGeometry: (WKBGeometry *) geometry{
+    _shapeType = geometry.geometryType;
+    [self checkIfRectangle:geometry];
+    [self setShapeTypeSelection];
+}
 
+-(void) checkIfRectangle: (WKBGeometry *) geometry{
+    _isRectangle = false;
+    if(geometry.geometryType == WKB_POLYGON){
+        WKBPolygon *polygon = (WKBPolygon *) geometry;
+        WKBLineString *ring = [polygon.rings objectAtIndex:0];
+        NSArray *points = ring.points;
+        [self updateIfRectangle: points];
+    }
+}
+
+-(void) updateIfRectangle: (NSArray *) points{
+    NSUInteger size = points.count;
+    if(size == 4 || size == 5){
+        WKBPoint *point1 = [points objectAtIndex:0];
+        WKBPoint *lastPoint = [points objectAtIndex:size - 1];
+        BOOL closed = [point1.x isEqualToNumber:lastPoint.x] && [point1.y isEqualToNumber:lastPoint.y];
+        if ((closed && size == 5) || (!closed && size == 4)) {
+            WKBPoint *point2 = [points objectAtIndex:1];
+            WKBPoint *point3 = [points objectAtIndex:2];
+            WKBPoint *point4 = [points objectAtIndex:3];
+            if ([point1.x isEqualToNumber:point2.x] && [point2.y isEqualToNumber:point3.y]) {
+                if ([point1.y isEqualToNumber:point4.y] && [point3.x isEqualToNumber:point4.x]) {
+                    self.isRectangle = true;
+                    self.rectangleSameXSide1 = true;
+                }
+            } else if ([point1.y isEqualToNumber:point2.y] && [point2.x isEqualToNumber:point3.x]) {
+                if ([point1.x isEqualToNumber:point4.x] && [point3.y isEqualToNumber:point4.y]) {
+                    self.isRectangle = true;
+                    self.rectangleSameXSide1 = false;
+                }
+            }
+        }
+    }
+}
+
+-(void) revertShapeType{
+    [self setShapeTypeSelection];
+}
+
+-(void) setShapeTypeSelection{
+    // TODO Geometry
+    //pointButton.setSelected(shapeType == GeometryType.POINT);
+    //lineButton.setSelected(shapeType == GeometryType.LINESTRING);
+    //rectangleButton.setSelected(shapeType == GeometryType.POLYGON && isRectangle);
+    //polygonButton.setSelected(shapeType == GeometryType.POLYGON && !isRectangle);
+}
+
+-(void) addMapShape: (WKBGeometry *) geometry{
+    
+    CLLocationCoordinate2D previousSelectedPointLocation = kCLLocationCoordinate2DInvalid;
+    if(self.selectedMapPoint != nil){
+        previousSelectedPointLocation = self.selectedMapPoint.coordinate;
+        self.selectedMapPoint = nil;
+        [self clearRectangleCorners];
+    }
+    if(self.mapObservation != nil){
+        [self.mapObservation removeFromMapView:self.map];
+        self.mapObservation = nil;
+    }
+    if(geometry.geometryType == WKB_POINT){
+        self.mapObservation = [self.observationManager addToMapWithObservation:self.observation];
+        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+        [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
+        [self selectAnnotation:mapAnnotationObservation.annotation];
+    }else{
+        GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
+        GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:nil andPolylinePointOptions:[self editPointOptions] andPolygonPointOptions:[self editPointOptions] andPolygonPointHoleOptions:nil];
+        self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
+        NSArray *points = [self shapePoints];
+        GPKGMapPoint *selectPoint = [points objectAtIndex:0];
+        if(CLLocationCoordinate2DIsValid(previousSelectedPointLocation)){
+            for(GPKGMapPoint *point in points){
+                if(point.coordinate.latitude == previousSelectedPointLocation.latitude && point.coordinate.longitude == previousSelectedPointLocation.longitude){
+                    selectPoint = point;
+                    break;
+                }
+            }
+        }
+        [self selectAnnotation:selectPoint];
+    }
+    
+    [self updateHint];
+}
+
+/**
+ * Update the hint text
+ */
+-(void) updateHint{
+    [self updateHintWithDragging:NO];
+}
+
+/**
+ * Update the hint text
+ *
+ * @param dragging true if a point is currently being dragged
+ */
+-(void) updateHintWithDragging: (BOOL) dragging{
+    // TODO Geometry
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param annotationObservation map annotation observation
+ */
+- (void) updateLocationTextWithAnnotationObservation: (MapAnnotationObservation *) annotationObservation {
+    [self updateLocationTextWithCoordinate:annotationObservation.annotation.coordinate];
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param coordinate location coordinate
+ */
+- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate {
+    [self updateLocationTextWithLatitude:coordinate.latitude andLongitude:coordinate.longitude];
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param latitude  latitude
+ * @param longitude longitude
+ */
+- (void) updateLocationTextWithLatitude: (double) latitude andLongitude: (double) longitude {
+    self.latitudeField.text = [NSString stringWithFormat:@"%f", latitude];
+    self.longitudeField.text = [NSString stringWithFormat:@"%f", longitude];
+}
+
+/**
+ * Find the neighboring rectangle corners
+ *
+ * @param point selected point
+ */
+-(void) findRectangleCorners: (GPKGMapPoint *) point{
+    [self clearRectangleCorners];
+    if ([self isShape] && self.isRectangle) {
+        NSArray* points = [self shapePoints];
+        BOOL afterMatchesX = self.rectangleSameXSide1;
+        for (int i = 0; i < points.count; i++) {
+            GPKGMapPoint *mapPoint = [points objectAtIndex:i];
+            if (mapPoint.id == point.id) {
+                int beforeIndex = i > 0 ? i - 1 : (int)points.count - 1;
+                int afterIndex = i < points.count - 1 ? i + 1 : 0;
+                GPKGMapPoint *before = [points objectAtIndex:beforeIndex];
+                GPKGMapPoint *after = [points objectAtIndex:afterIndex];
+                if (afterMatchesX) {
+                    self.rectangleSameXMarker = after;
+                    self.rectangleSameYMarker = before;
+                } else {
+                    self.rectangleSameXMarker = before;
+                    self.rectangleSameYMarker = after;
+                }
+            }
+            afterMatchesX = !afterMatchesX;
+        }
+    }
+}
+
+/**
+ * Update the neighboring rectangle corners from the modified coordinate
+ *
+ * @param coordinate modified point coordinate
+ */
+-(void) updateRectangleCorners: (CLLocationCoordinate2D) coordinate{
+    if (self.rectangleSameXMarker != nil) {
+        [self.rectangleSameXMarker setCoordinate:CLLocationCoordinate2DMake(self.rectangleSameXMarker.coordinate.latitude, coordinate.longitude)];
+    }
+    if (self.rectangleSameYMarker != nil) {
+        [self.rectangleSameYMarker setCoordinate:CLLocationCoordinate2DMake(coordinate.latitude, self.rectangleSameYMarker.coordinate.longitude)];
+    }
+}
+
+/**
+ * Clear the rectangle corners
+ */
+-(void) clearRectangleCorners{
+    self.rectangleSameXMarker = nil;
+    self.rectangleSameYMarker = nil;
+}
+
+/**
+ * Select the provided shape point
+ *
+ * @param point point to select
+ */
+-(void) selectShapePoint: (GPKGMapPoint *) point{
+    [self clearRectangleCorners];
+    if(self.selectedMapPoint != nil && self.selectedMapPoint.id != point.id){
+        //self.selectedMapPoint.options.image = [UIImage imageNamed:@"location_tracking_on"];
+        MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
+        view.image= [UIImage imageNamed:@"location_tracking_on"];
+        // TODO Geometry selectedMarker.setZIndex(0.0f);
+    }
+    self.selectedMapPoint = point;
+    [self updateLocationTextWithCoordinate:point.coordinate];
+    //point.options.image = [UIImage imageNamed:@"location_tracking_off"];
+    MKAnnotationView *view = [self.map viewForAnnotation:point];
+    view.image= [UIImage imageNamed:@"location_tracking_off"];
+    // TODO Geometry marker.setZIndex(1.0f);
+    [self findRectangleCorners:point];
+}
+
+/**
+ * Update the shape with any modifications, adjust the accept menu button state
+ *
+ * @param selectedCoordinate selected coordinate
+ */
+-(void) updateShape: (CLLocationCoordinate2D) selectedCoordinate{
+    [self updateRectangleCorners:selectedCoordinate];
+    if ([self isShape]) {
+        GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
+        [mapShapePoints updateWithMapView:self.map];
+        if ([mapShapePoints isEmpty]) {
+            self.mapObservation = nil;
+        }
+    }
+    [self updateAcceptState];
+}
+
+/**
+ * Update the accept button state
+ */
+-(void) updateAcceptState{
+    BOOL acceptEnabled = NO;
+    if (self.shapeType == WKB_POINT) {
+        acceptEnabled = YES;
+    } else if ([self isShape]) {
+        acceptEnabled = [self shapePointsValid];
+    }
+    acceptEnabled = acceptEnabled && self.validLocation;
+    // TODO Geometry
+    //if (acceptMenuItem != null) {
+    //    acceptMenuItem.setEnabled(acceptEnabled);
+    //}
+}
+
+/**
+ * Validate that the shape points are a valid shape and contain multiple unique positions
+ *
+ * @return true if valid
+ */
+-(BOOL) shapePointsValid{
+    return [self multipleShapePointPositions] && [[self mapShapePoints] isValid];
+}
+
+/**
+ * Determine if there are multiple unique locational positions in the shape points
+ *
+ * @return true if multiple positions
+ */
+-(BOOL) multipleShapePointPositions{
+    BOOL multiple = NO;
+    if ([self isShape]) {
+        multiple = [self multiplePointPositions:[self shapePoints]];
+    }
+    return multiple;
+}
+
+/**
+ * Determine if the are multiple unique locational positions in the points
+ *
+ * @param points points
+ * @return true if multiple positions
+ */
+-(BOOL) multiplePointPositions: (NSArray *) points{
+    BOOL multiple = NO;
+    CLLocationCoordinate2D position = kCLLocationCoordinate2DInvalid;
+    for(GPKGMapPoint *point in points){
+        if (!CLLocationCoordinate2DIsValid(position)) {
+            position = point.coordinate;
+        }else if(point.coordinate.latitude != position.latitude || point.coordinate.longitude != position.longitude){
+            multiple = true;
+            break;
+        }
+    }
+    return multiple;
+}
+
+/**
+ * Get the shape points
+ *
+ * @return shape points
+ */
+-(NSArray *) shapePoints{
+    GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
+    NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
+    return [shapePoints getPoints];
+}
+
+/**
+ * Get the options for an edit point in a shape
+ *
+ * @return map point options
+ */
+-(GPKGMapPointOptions *) editPointOptions{
+    GPKGMapPointOptions * options = [[GPKGMapPointOptions alloc] init];
+    options.draggable = true;
+    [options setImage:[UIImage imageNamed:@"location_tracking_on"]]; // TODO Geometry point icons
+    return options;
+}
+
+-(BOOL) isShape{
+    return self.mapObservation != nil && [self.mapObservation isKindOfClass:[MapShapePointsObservation class]];
+}
+
+-(GPKGMapShapePoints *) mapShapePoints{
+    MapShapePointsObservation *shapePointsObservation = (MapShapePointsObservation *)self.mapObservation;
+    GPKGMapShapePoints * mapShapePoints = [shapePointsObservation shapePoints];
+    return mapShapePoints;
+}
 
 @end

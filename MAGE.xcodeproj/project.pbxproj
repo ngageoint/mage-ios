@@ -29,6 +29,7 @@
 		04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96501EB8FBB300B6AD8D /* MapObservations.m */; };
 		04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96531EBA3AE100B6AD8D /* MapAnnotation.m */; };
 		04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96561EBB60AC00B6AD8D /* MapUtils.m */; };
+		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
@@ -222,6 +223,8 @@
 		04ED96531EBA3AE100B6AD8D /* MapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapAnnotation.m; path = Map/MapAnnotation.m; sourceTree = "<group>"; };
 		04ED96551EBB60AC00B6AD8D /* MapUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapUtils.h; path = Map/MapUtils.h; sourceTree = "<group>"; };
 		04ED96561EBB60AC00B6AD8D /* MapUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapUtils.m; path = Map/MapUtils.m; sourceTree = "<group>"; };
+		04F833FB1ED4872A00B5FE1E /* MapShapePointsObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapShapePointsObservation.h; path = Map/MapShapePointsObservation.h; sourceTree = "<group>"; };
+		04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointsObservation.m; path = Map/MapShapePointsObservation.m; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
@@ -752,6 +755,8 @@
 				04ED96471EB7DFB600B6AD8D /* MapPolylineObservation.m */,
 				04ED96491EB7DFD500B6AD8D /* MapPolygonObservation.h */,
 				04ED964A1EB7DFD500B6AD8D /* MapPolygonObservation.m */,
+				04F833FB1ED4872A00B5FE1E /* MapShapePointsObservation.h */,
+				04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */,
 				04ED964C1EB8D09C00B6AD8D /* MapObservationManager.h */,
 				04ED964D1EB8D09C00B6AD8D /* MapObservationManager.m */,
 				04ED964F1EB8FBB300B6AD8D /* MapObservations.h */,
@@ -1378,6 +1383,7 @@
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
+				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,

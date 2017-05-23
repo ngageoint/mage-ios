@@ -16,6 +16,18 @@
 	<string>#000000</string>
 	<key>polygon_fill_color_alpha</key>
 	<integer>32</integer>
+	<key>edit_polyline_color</key>
+	<string>#000000</string>
+	<key>edit_polyline_color_alpha</key>
+	<integer>222</integer>
+	<key>edit_polygon_color</key>
+	<string>#000000</string>
+	<key>edit_polygon_color_alpha</key>
+	<integer>222</integer>
+	<key>edit_polygon_fill_color</key>
+	<string>#000000</string>
+	<key>edit_polygon_fill_color_alpha</key>
+	<integer>32</integer>
 	<key>geopackage_feature_tiles_max_points_per_tile</key>
 	<integer>1000</integer>
 	<key>geopackage_feature_tiles_max_features_per_tile</key>
