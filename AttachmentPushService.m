@@ -137,7 +137,7 @@ NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
             NSLog(@"Error: %@", error);
             [attachmentsToPush removeObjectForKey:attachment.objectID];
         }];
-        
+                
         [manager addTask:task];
     }
 }

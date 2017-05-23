@@ -9,10 +9,25 @@
 #import "Server.h"
 #import "MageSessionManager.h"
 
+NSString * const kCurrentEventIdKey = @"currentEventId";
+
 @implementation Server
 
-+(NSString *) serverUrl {
-    return [Server getPropertyForKey:@"serverUrl"];
+// TODO Move, not really stored in database
++ (NSNumber *) currentEventId {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentEventIdKey];
+}
+
++ (void) setCurrentEventId: (NSNumber *) eventId {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self raiseEventTaskPriorities:eventId];
+    });
+    
+    [[NSUserDefaults standardUserDefaults] setObject:eventId forKey:kCurrentEventIdKey];
+}
+
++ (NSString *) serverUrl {
+    return [Server getPropertyForKey:@"serverUrl" inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }
 
 + (void) setServerUrl:(NSString *) serverUrl {
@@ -23,20 +38,14 @@
     [Server setProperty:serverUrl forKey:@"serverUrl" completion:completion];
 }
 
-+ (NSNumber *) currentEventId {
-    return [Server getPropertyForKey:@"currentEventId"];
-}
 
-+ (void) setCurrentEventId: (NSNumber *) eventId {
-    [Server setCurrentEventId:eventId completion:nil];
-}
 
-+ (void) setCurrentEventId: (NSNumber *) eventId completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self raiseEventTaskPriorities:eventId];
-    });
-    [Server setProperty:eventId forKey:@"currentEventId" completion:completion];
-}
+//+ (void) setCurrentEventId: (NSNumber *) eventId completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        [self raiseEventTaskPriorities:eventId];
+//    });
+//    [Server setProperty:eventId forKey:@"currentEventId" completion:completion];
+//}
 
 + (void) raiseEventTaskPriorities: (NSNumber *) eventId{
     if(eventId != nil){
@@ -53,8 +62,8 @@
     }
 }
 
-+ (id) getPropertyForKey:(NSString *) key {
-    Server *server = [Server MR_findFirst];
++ (id) getPropertyForKey:(NSString *) key inManagedObjectContext:(NSManagedObjectContext *) context {
+    Server *server = [Server MR_findFirstInContext:context];
     
     id property = nil;
     if (server) {

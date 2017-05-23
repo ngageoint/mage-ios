@@ -13,11 +13,14 @@
 #import "User.h"
 #import "Server.h"
 #import "Event.h"
-
 #import "MageSessionManager.h"
 #import "MageEnums.h"
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
+
+NSString * const kObservationErrorStatusCode = @"errorStatusCode";
+NSString * const kObservationErrorDescription = @"errorDescription";
+NSString * const kObservationErrorMessage = @"errorMessage";
 
 @implementation Observation
 
@@ -25,7 +28,6 @@ NSMutableArray *_transientAttachments;
 
 NSDictionary *_fieldNameToField;
 NSNumber *_currentEventId;
-
 
 + (Observation *) observationWithLocation:(GeoPoint *) location inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
@@ -62,13 +64,13 @@ NSNumber *_currentEventId;
     return _transientAttachments;
 }
 
-- (NSDictionary *)fieldNameToField {
-    if (_fieldNameToField != nil && [_currentEventId isEqualToNumber:[Server currentEventId]]) {
+- (NSDictionary *)fieldNameToFieldForEvent:(Event *) event {
+    if (_fieldNameToField != nil && [_currentEventId isEqualToNumber:event.remoteId]) {
         return _fieldNameToField;
     }
-    _currentEventId = [Server currentEventId];
-    Event *currentEvent = [Event MR_findFirstByAttribute:@"remoteId" withValue:_currentEventId];
-    NSDictionary *form = currentEvent.form;
+    
+    _currentEventId = event.remoteId;
+    NSDictionary *form = event.form;
     NSMutableDictionary *fieldNameToFieldMap = [[NSMutableDictionary alloc] init];
     // run through the form and map the row indexes to fields
     for (id field in [form objectForKey:@"fields"]) {
@@ -79,7 +81,7 @@ NSNumber *_currentEventId;
     return _fieldNameToField;
 }
 
-- (NSDictionary *) createJsonToSubmit {
+- (NSDictionary *) createJsonToSubmitForEvent:(Event *) event {
     
     NSDateFormatter *dateFormat = [NSDateFormatter new];
     [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
@@ -121,7 +123,7 @@ NSNumber *_currentEventId;
     
     for (id key in self.properties) {
         id value = [self.properties objectForKey:key];
-        id field = [[self fieldNameToField] objectForKey:key];
+        id field = [[self fieldNameToFieldForEvent:event] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
             GeoPoint *point = value;
             [jsonProperties setObject:@{
@@ -167,12 +169,13 @@ NSNumber *_currentEventId;
 }
 
 - (NSDictionary *) generatePropertiesFromRaw: (NSDictionary *) propertyJson {
+    Event *event = [Event getCurrentEventInContext:self.managedObjectContext];
     
     NSMutableDictionary *parsedProperties = [[NSMutableDictionary alloc] initWithDictionary:propertyJson];
     
     for (id key in propertyJson) {
         id value = [propertyJson objectForKey:key];
-        id field = [[self fieldNameToField] objectForKey:key];
+        id field = [[self fieldNameToFieldForEvent:event] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
             NSArray *coordinates = [value valueForKeyPath:@"coordinates"];
             CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates objectAtIndex:0] floatValue]];
@@ -189,13 +192,14 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    NSNumber *eventId = [Server currentEventId];
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
+    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], event.remoteId];
     NSLog(@"Trying to push observation to server %@", url);
     
     MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
-    NSObject *json = [observation createJsonToSubmit];
+    NSObject *json = [observation createJsonToSubmitForEvent:event];
     [parameters addObject:json];
     
     NSURLSessionDataTask *task = nil;
@@ -210,7 +214,7 @@ NSNumber *_currentEventId;
             NSLog(@"Error: %@", error);
             failure(error);
         }];
-    }else{
+    } else {
         task = [manager POST_TASK:url parameters:json progress:nil success:^(NSURLSessionTask *task, id response) {
             if (success) {
                 success(response);
@@ -302,7 +306,7 @@ NSNumber *_currentEventId;
     NSLog(@"Fetching observations from event %@", eventId);
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    __block NSDate *lastObservationDate = [Observation fetchLastObservationDate];
+    __block NSDate *lastObservationDate = [Observation fetchLastObservationDateInContext:[NSManagedObjectContext MR_defaultContext]];
     if (lastObservationDate != nil) {
         [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
     }
@@ -599,38 +603,54 @@ NSNumber *_currentEventId;
     return [NSString stringWithFormat:@"%@:\n%@\n\n", [field objectForKey:@"title"], property];
 }
 
+- (Boolean) isDirty {
+    return [self.dirty isEqualToNumber:[NSNumber numberWithBool:YES]];
+}
+
 - (Boolean) isImportant {
     return self.observationImportant != nil && [self.observationImportant.important isEqualToNumber:[NSNumber numberWithBool:YES]];
 }
 
-- (void) toggleFavoriteWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-    __weak typeof(self) weakSelf = self;
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
-        Observation *localObservation = [weakSelf MR_inContext:localContext];
-        ObservationFavorite *favorite = [[weakSelf getFavoritesMap] objectForKey:[currentUser remoteId]];
-        ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
-        
-        NSLog(@"toggle favorite %@", localFavorite);
-        if (localFavorite && localFavorite.favorite) {
-            // toggle off
-            localFavorite.dirty = YES;
-            localFavorite.favorite = NO;
-        } else {
-            // toggle on
-            if (!localFavorite) {
-                localFavorite = [ObservationFavorite MR_createEntityInContext:localContext];
-                [localObservation addFavoritesObject:localFavorite];
-            }
-            
-            localFavorite.dirty = YES;
-            localFavorite.favorite = YES;
-            localFavorite.userId = [currentUser remoteId];
+- (Boolean) hasValidationError {
+    return [self.error objectForKey:kObservationErrorStatusCode] != nil;
+}
+
+- (NSString *) errorMessage {
+    NSString *errorMessage = [self.error objectForKey:kObservationErrorMessage];
+    if (!errorMessage) {
+        errorMessage = [self.error objectForKey:kObservationErrorDescription];
+    }
+    
+    return errorMessage;
+}
+
+- (void) toggleFavoriteWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    NSManagedObjectContext *context = self.managedObjectContext;
+    User *user = [User fetchCurrentUserInManagedObjectContext:context];
+    ObservationFavorite *favorite = [[self getFavoritesMap] objectForKey:user.remoteId];
+    
+    NSLog(@"toggle favorite %@", favorite);
+    if (favorite && favorite.favorite) {
+        // toggle off
+        favorite.dirty = YES;
+        favorite.favorite = NO;
+    } else {
+        // toggle on
+        if (!favorite) {
+            favorite = [ObservationFavorite MR_createEntityInContext:context];
+            [self addFavoritesObject:favorite];
+            favorite.observation = self;
         }
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        
+        favorite.dirty = YES;
+        favorite.favorite = YES;
+        favorite.userId = user.remoteId;
+    }
+    
+    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
-        }
+        };
     }];
 }
 
@@ -643,54 +663,53 @@ NSNumber *_currentEventId;
     return favorites;
 }
 
-- (void) flagImportantWithDescription:(NSString *) description completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-    __weak typeof(self) weakSelf = self;
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
-        Observation *localObservation = [weakSelf MR_inContext:localContext];
-        
-        ObservationImportant *important = localObservation.observationImportant;
-        if (!important) {
-            important = [ObservationImportant MR_createEntityInContext:localContext];
-            important.observation = localObservation;
-            localObservation.observationImportant = important;
-        }
-        
+- (void) flagImportantWithDescription:(NSString *) description completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    NSManagedObjectContext *context = self.managedObjectContext;
+    User *currentUser = [User fetchCurrentUserInManagedObjectContext:context];
+    
+    ObservationImportant *important = self.observationImportant;
+    if (!important) {
+        important = [ObservationImportant MR_createEntityInContext:context];
+        important.observation = self;
+        self.observationImportant = important;
+    }
+    
+    important.dirty = [NSNumber numberWithBool:YES];
+    important.important = [NSNumber numberWithBool:YES];
+    important.userId = currentUser.remoteId;
+    important.reason = description;
+    
+    // This will get overriden by the server, but lets set an inital value
+    // so the UI has something to display
+    important.timestamp = [NSDate date];
+    
+    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        if (completion) {
+            completion(contextDidSave, error);
+        };
+    }];
+}
+
+- (void) removeImportantWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
+    NSManagedObjectContext *context = self.managedObjectContext;
+
+    ObservationImportant *important = self.observationImportant;
+    if (important) {
         important.dirty = [NSNumber numberWithBool:YES];
-        important.important = [NSNumber numberWithBool:YES];
-        important.userId = currentUser.remoteId;
-        important.reason = description;
-        
-        // This will get overriden by the server, but lets set an inital value
-        // so the UI has something to display
-        important.timestamp = [NSDate date];
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        important.important = [NSNumber numberWithBool:NO];
+    }
+    
+    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
-        }
+        };
     }];
 }
 
-- (void) removeImportantWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-    __weak typeof(self) weakSelf = self;
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Observation *localObservation = [weakSelf MR_inContext:localContext];
-        
-        ObservationImportant *important = localObservation.observationImportant;
-        if (important) {
-            important.dirty = [NSNumber numberWithBool:YES];
-            important.important = [NSNumber numberWithBool:NO];
-        }
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        if (completion) {
-            completion(contextDidSave, error);
-        }
-    }];
-}
-
-+ (NSDate *) fetchLastObservationDate {
++ (NSDate *) fetchLastObservationDateInContext:(NSManagedObjectContext *) context {
     NSDate *date = nil;
-    Observation *observation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]
+    User *user = [User fetchCurrentUserInManagedObjectContext:context];
+    Observation *observation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND user.remoteId != %@", [Server currentEventId], user.remoteId]
                                                              sortedBy:@"lastModified"
                                                             ascending:NO];
     if (observation) {

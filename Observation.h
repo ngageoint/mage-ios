@@ -10,6 +10,10 @@
 #import <CoreData/CoreData.h>
 #import "GeoPoint.h"
 
+extern NSString * _Nonnull const kObservationErrorStatusCode;
+extern NSString * _Nullable const kObservationErrorDescription;
+extern NSString * _Nullable const kObservationErrorMessage;
+
 @class Attachment, User, ObservationImportant, ObservationFavorite;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,13 +35,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLLocation *) location;
 
+- (Boolean) isDirty;
 - (Boolean) isImportant;
+- (Boolean) hasValidationError;
+- (NSString *) errorMessage;
 
-- (void) toggleFavoriteWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
+- (void) toggleFavoriteWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 - (NSDictionary *) getFavoritesMap;
 
-- (void) flagImportantWithDescription:(NSString *) description completion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
-- (void) removeImportantWithCompletion:(void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
+- (void) flagImportantWithDescription:(NSString *) description completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
+- (void) removeImportantWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 
 @end
 
