@@ -51,7 +51,6 @@
                                     speed:[[jsonLocation valueForKeyPath:@"properties.speed"] floatValue]
                                     timestamp:date];
             
-            // TODO Geometry
             [self setGeometry:[[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude]];
         }
     } else {

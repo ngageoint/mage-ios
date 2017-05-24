@@ -178,9 +178,8 @@ NSNumber *_currentEventId;
         id value = [propertyJson objectForKey:key];
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            // TODO Geometry
-            NSArray *coordinates = [value valueForKeyPath:@"coordinates"];
-            [parsedProperties setObject:[[WKBPoint alloc] initWithXValue:[[coordinates objectAtIndex:0] floatValue] andYValue:[[coordinates objectAtIndex:1] floatValue]] forKey:key];
+            WKBGeometry * geometry = [GeometryDeserializer parseGeometry:value];
+            [parsedProperties setObject:geometry forKey:key];
         }
     }
     
