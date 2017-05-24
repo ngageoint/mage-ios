@@ -47,6 +47,7 @@
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
     [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
     
     self.mapDelegate.hideStaticLayers = YES;
     
