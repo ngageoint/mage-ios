@@ -692,16 +692,14 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 -(void) selectShapePoint: (GPKGMapPoint *) point{
     [self clearRectangleCorners];
     if(self.selectedMapPoint != nil && self.selectedMapPoint.id != point.id){
-        //self.selectedMapPoint.options.image = [UIImage imageNamed:@"location_tracking_on"];
         MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
-        view.image= [UIImage imageNamed:@"location_tracking_on"];
+        view.image= [UIImage imageNamed:@"location_tracking_on"]; // TODO Geometry point icons
         // TODO Geometry selectedMarker.setZIndex(0.0f);
     }
     self.selectedMapPoint = point;
     [self updateLocationTextWithCoordinate:point.coordinate];
-    //point.options.image = [UIImage imageNamed:@"location_tracking_off"];
     MKAnnotationView *view = [self.map viewForAnnotation:point];
-    view.image= [UIImage imageNamed:@"location_tracking_off"];
+    view.image= [UIImage imageNamed:@"location_tracking_off"]; // TODO Geometry point icons
     // TODO Geometry marker.setZIndex(1.0f);
     [self findRectangleCorners:point];
 }
