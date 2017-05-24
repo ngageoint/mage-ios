@@ -348,12 +348,46 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 }
 
 - (void) onLatLonTextChanged {
-//    self.annotation.coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [self.longitudeField.text doubleValue]);
     
-//    CLLocationDistance latitudeMeters = 2500;
-//    CLLocationDistance longitudeMeters = 2500;
-//    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.annotation.coordinate, latitudeMeters, longitudeMeters);
-//    [self.map setRegion:region animated:NO];
+    NSString *latitudeString = self.latitudeField.text;
+    NSString *longitudeString = self.longitudeField.text;
+    
+    NSDecimalNumber *latitude = nil;
+    if(latitudeString.length > 0){
+        @try {
+            latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
+        } @catch (NSException *exception) {
+        }
+    }
+    NSDecimalNumber *longitude = nil;
+    if(longitudeString.length > 0){
+        @try {
+            longitude = [[NSDecimalNumber alloc] initWithDouble:[longitudeString doubleValue]];
+        } @catch (NSException *exception) {
+        }
+    }
+    
+    self.validLocation = latitude != nil && longitude != nil;
+    
+    if (latitude == nil) {
+        latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+    }
+    if (longitude == nil) {
+        longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+    }
+    
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
+    
+    [self.map setCenterCoordinate:coordinate];
+    if (self.selectedMapPoint != nil) {
+        [self.selectedMapPoint setCoordinate:coordinate];
+        [self updateShape:coordinate];
+    } else if([self.mapObservation isKindOfClass:[MapAnnotationObservation class]]){
+        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+        mapAnnotationObservation.annotation.coordinate = coordinate;
+        [self updateAcceptState];
+    }
+    
 }
 
 - (void) keyboardWillShow: (NSNotification *) notification {
