@@ -142,9 +142,16 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 - (IBAction) saveLocation {
     self.navigationItem.prompt = nil;
     
-    // TODO Geometry
-//    WKBPoint *location = [[WKBPoint alloc] initWithXValue:self.annotation.coordinate.longitude andYValue:self.annotation.coordinate.latitude];
-//    [self.propertyEditDelegate setValue:location forFieldDefinition:self.fieldDefinition];
+    WKBGeometry *geometry = nil;
+    if(self.shapeType == WKB_POINT){
+        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
+        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+    }else{
+        geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+    }
+
+    [self.propertyEditDelegate setValue:geometry forFieldDefinition:self.fieldDefinition];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
