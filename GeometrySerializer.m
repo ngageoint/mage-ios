@@ -21,31 +21,31 @@
     switch(geometry.geometryType){
         case WKB_POINT:
             [json setObject:@"Point" forKey:@"type"];
-            
+            [json setObject:[self serializePoint:(WKBPoint *)geometry] forKey:@"coordinates"];
             break;
         case WKB_MULTIPOINT:
             [json setObject:@"MultiPoint" forKey:@"type"];
-            
+            [json setObject:[self serializeMultiPoint:(WKBMultiPoint *)geometry] forKey:@"coordinates"];
             break;
         case WKB_LINESTRING:
             [json setObject:@"LineString" forKey:@"type"];
-            
+            [json setObject:[self serializeLineString:(WKBLineString *)geometry] forKey:@"coordinates"];
             break;
         case WKB_MULTILINESTRING:
             [json setObject:@"MultiLineString" forKey:@"type"];
-            
+            [json setObject:[self serializeMultiLineString:(WKBMultiLineString *)geometry] forKey:@"coordinates"];
             break;
         case WKB_POLYGON:
             [json setObject:@"Polygon" forKey:@"type"];
-            
+            [json setObject:[self serializePolygon:(WKBPolygon*)geometry] forKey:@"coordinates"];
             break;
         case WKB_MULTIPOLYGON:
             [json setObject:@"MultiPolygon" forKey:@"type"];
-            
+            [json setObject:[self serializeMultiPolygon:(WKBMultiPolygon *)geometry] forKey:@"coordinates"];
             break;
         case WKB_GEOMETRYCOLLECTION:
             [json setObject:@"GeometryCollection" forKey:@"type"];
-            
+            [json setObject:[self serializeGeometryCollection:(WKBGeometryCollection *)geometry] forKey:@"geometries"];
             break;
         default:
             [NSException raise:@"Unsupported Geometry" format:@"Unsupported geometry type: %u", geometry.geometryType];
@@ -65,7 +65,7 @@
 +(NSArray *) serializePolygon: (WKBPolygon *) polygon{
     NSMutableArray *coordinates = [[NSMutableArray alloc] init];
     [coordinates addObject:[self serializeLineString:[polygon.rings objectAtIndex:0] andClose:true]];
-    for(int i = 1; i < (int)[polygon numRings]; i++){
+    for(int i = 1; i < [[polygon numRings] intValue]; i++){
         [coordinates addObject:[self serializeLineString:[polygon.rings objectAtIndex:i] andClose:true]];
     }
     return coordinates;

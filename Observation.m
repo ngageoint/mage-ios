@@ -131,13 +131,8 @@ NSNumber *_currentEventId;
         id value = [self.properties objectForKey:key];
         id field = [[self fieldNameToField] objectForKey:key];
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            // TODO Geometry
-            WKBGeometry *point = value;
-            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:point];
-            [jsonProperties setObject:@{
-                                         @"type": @"Point",
-                                         @"coordinates": @[centroid.x, centroid.y]
-                                         } forKey:key];
+            WKBGeometry *fieldGeometry = value;
+            [jsonProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
         }
     }
     
