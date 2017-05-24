@@ -18,6 +18,7 @@
 #import <HexColor.h>
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
+#import "MapShapePointAnnotationView.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -162,7 +163,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointImageReuseIdentifier];
             if (mapPointImageView == nil)
             {
-                mapPointImageView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier];
+                mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier];
             }
             mapPointImageView.image = mapPoint.options.image;
             mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;

@@ -9,6 +9,7 @@
 #import "ObservationImage.h"
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
+#import "ObservationAnnotationView.h"
 
 @interface ObservationAnnotation ()
 
@@ -47,7 +48,7 @@
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:accessibilityIdentifier];
     
     if (annotationView == nil) {
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier];
+        annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier];
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
