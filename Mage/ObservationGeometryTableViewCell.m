@@ -11,7 +11,6 @@
 @implementation ObservationGeometryTableViewCell
 
 - (void) populateCellWithKey:(id) key andValue:(id) value {
-    // TODO Geometry
     if ([value isKindOfClass:[WKBGeometry class]]) {
         WKBGeometry *geometry = value;
         WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];

@@ -16,7 +16,6 @@
 	if ((self = [super init])) {
 		_location = location;
 		
-        // TODO Geometry
         WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:location.geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [self setCoordinate:coordinate];
