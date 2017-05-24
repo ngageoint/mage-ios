@@ -104,6 +104,19 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
     self.navigationItem.leftBarButtonItem = backButton;
+    
+    UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(singleTapGesture:)];
+    singleTapGesture.numberOfTapsRequired = 1;
+    [self.map addGestureRecognizer:singleTapGesture];
+    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(doubleTapGesture:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [self.map addGestureRecognizer:doubleTapGesture];
+    [self.map addGestureRecognizer:[[UILongPressGestureRecognizer alloc]
+                                        initWithTarget:self action:@selector(longPressGesture:)]];
+    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -139,6 +152,11 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) clearLatitudeAndLongitudeFocus{
+    [self.latitudeField resignFirstResponder];
+    [self.longitudeField resignFirstResponder];
+}
+
 - (IBAction) saveLocation {
     self.navigationItem.prompt = nil;
     
@@ -164,6 +182,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         ObservationAnnotation *observationAnnotation = annotation;
         MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.map];
         view = annotationView;
+        [observationAnnotation setView:view];
     } else if([annotation isKindOfClass:[GPKGMapPoint class]]){
         GPKGMapPoint * mapPoint = (GPKGMapPoint *) annotation;
         if(mapPoint.options.image != nil){
@@ -184,6 +203,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
             view = mapPointPinView;
         }
+        [mapPoint setView:view];
     }else {
         MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
         if (!pinView) {
@@ -226,6 +246,8 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
+    [self clearLatitudeAndLongitudeFocus];
+    
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         [self selectShapePoint:mapPoint];
@@ -234,6 +256,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
+    
+    if(newState == MKAnnotationViewDragStateStarting){
+        [self clearLatitudeAndLongitudeFocus];
+    }
     
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
     
@@ -252,6 +278,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
                 [self updateHintWithDragging:YES];
                 if (self.isRectangle && [self isShape]) {
                     [[((MapShapePointsObservation *)self.mapObservation) shapePoints] hiddenPoints:YES];
+                    [self.selectedMapPoint hidden:NO];
                 }
             }
                 break;
@@ -526,6 +553,101 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 -(void) clearRectangleCorners{
     self.rectangleSameXMarker = nil;
     self.rectangleSameYMarker = nil;
+}
+
+-(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
+    if(tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
+        [self clearLatitudeAndLongitudeFocus];
+    }
+}
+
+-(void) doubleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
+}
+
+-(void) longPressGesture:(UILongPressGestureRecognizer *) longPressGestureRecognizer{
+    
+    if(longPressGestureRecognizer.state == UIGestureRecognizerStateBegan){
+    
+        CGPoint cgPoint = [longPressGestureRecognizer locationInView:self.map];
+        CLLocationCoordinate2D point = [self.map convertPoint:cgPoint toCoordinateFromView:self.map];
+        
+        // Add a new point to a line or polygon
+        if (self.shapeType != WKB_POINT) {
+            
+            if (!self.isRectangle) {
+                
+                if (self.mapObservation == nil) {
+                    WKBGeometry *geometry = nil;
+                    WKBPoint *firstPoint = [[WKBPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+                    switch (self.shapeType) {
+                        case WKB_LINESTRING:
+                            {
+                                WKBLineString *lineString = [[WKBLineString alloc] init];
+                                [lineString addPoint:firstPoint];
+                                geometry = lineString;
+                            }
+                            break;
+                        case WKB_POLYGON:
+                            {
+                                WKBPolygon *polygon = [[WKBPolygon alloc] init];
+                                WKBLineString *ring = [[WKBLineString alloc] init];
+                                [ring addPoint:firstPoint];
+                                [polygon addRing: ring];
+                                geometry = polygon;
+                            }
+                            break;
+                        default:
+                            [NSException raise:@"Unsupported Geometry Type" format:@"Unsupported Geometry Type: %u", self.shapeType];
+                    }
+                    [self addMapShape:geometry];
+                } else {
+                    GPKGMapPoint *mapPoint = [[GPKGMapPoint alloc] initWithLocation:point];
+                    mapPoint.options = [self editPointOptions];
+                    [self.map addAnnotation:mapPoint];
+                    NSObject<GPKGShapePoints> *shape = nil;
+                    GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
+                    GPKGMapShape *mapShape = mapShapePoints.shape;
+                    switch(mapShape.shapeType){
+                        case GPKG_MST_POLYLINE_POINTS:
+                            {
+                                GPKGPolylinePoints *polylinePoints = (GPKGPolylinePoints *) mapShape.shape;
+                                shape = polylinePoints;
+                                if(self.newDrawing){
+                                    [polylinePoints addPoint:mapPoint];
+                                }else{
+                                    [polylinePoints addNewPoint:mapPoint];
+                                }
+                            }
+                            break;
+                        case GPKG_MST_POLYGON_POINTS:
+                            {
+                                GPKGPolygonPoints *polygonPoints = (GPKGPolygonPoints *) mapShape.shape;
+                                shape = polygonPoints;
+                                if(self.newDrawing){
+                                    [polygonPoints addPoint:mapPoint];
+                                }else{
+                                    [polygonPoints addNewPoint:mapPoint];
+                                }
+                            }
+                            break;
+                        default:
+                            [NSException raise:@"Unsupported Shape Type" format:@"Unsupported Shape Type: %u", mapShape.shapeType];
+                    }
+                    [mapShapePoints addPoint:mapPoint withShape:shape];
+                    [self selectAnnotation:mapPoint];
+                    [self updateShape:mapPoint.coordinate];
+                }
+            } else if (![self shapePointsValid] && self.selectedMapPoint != nil) {
+                // Allow long click to expand a zero area rectangle
+                [self.selectedMapPoint setCoordinate:point];
+                [self updateShape:point];
+                [self updateHint];
+            }
+        }
+    }
+    
 }
 
 /**
