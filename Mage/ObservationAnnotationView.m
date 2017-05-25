@@ -7,7 +7,23 @@
 
 #import "ObservationAnnotationView.h"
 
+@interface ObservationAnnotationView ()
+
+@property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, strong) NSObject<AnnotationDragCallback> *dragCallback;
+
+@end
+
 @implementation ObservationAnnotationView
+
+- (instancetype)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier andMapView: (MKMapView *) mapView andDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if(self){
+        self.mapView = mapView;
+        self.dragCallback = dragCallback;
+    }
+    return self;
+}
 
 - (void)setDragState:(MKAnnotationViewDragState)newDragState animated:(BOOL)animated {
     [super setDragState:newDragState animated:animated];
@@ -49,6 +65,15 @@
          completion:^(BOOL finished) {
              self.dragState = MKAnnotationViewDragStateNone;
          }];
+    }
+}
+
+- (void) setCenter:(CGPoint)center{
+    [super setCenter:center];
+    if(self.dragCallback != nil){
+        CGPoint point = CGPointMake(center.x, center.y - self.centerOffset.y);
+        CLLocationCoordinate2D coordinate = [_mapView convertPoint:point toCoordinateFromView:self.superview];
+        [self.dragCallback draggingAnnotationView:self atCoordinate:coordinate];
     }
 }
 

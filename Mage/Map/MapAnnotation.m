@@ -28,6 +28,10 @@ static NSUInteger idCounter = 0;
     return nil;
 }
 
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
+    return [self viewForAnnotationOnMapView:mapView];
+}
+
 -(void) hidden: (BOOL) hidden{
     if(self.view != nil){
         self.view.hidden = hidden;

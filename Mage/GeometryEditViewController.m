@@ -180,7 +180,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.map];
+        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.map withDragCallback:self];
         view = annotationView;
         [observationAnnotation setView:view];
     } else if([annotation isKindOfClass:[GPKGMapPoint class]]){
@@ -189,7 +189,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointImageReuseIdentifier];
             if (mapPointImageView == nil)
             {
-                mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier];
+                mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier andMapView:self.map andDragCallback:self];
             }
             mapPointImageView.image = mapPoint.options.image;
             mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;
@@ -255,6 +255,12 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
 }
 
+- (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
+    [self updateLocationTextWithCoordinate:coordinate];
+    [annotationView.annotation setCoordinate:coordinate];
+    [self updateShape:coordinate];
+}
+
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
     
     if(newState == MKAnnotationViewDragStateStarting){
@@ -263,13 +269,12 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
     
-    if ([annotationView.annotation isKindOfClass:[GPKGMapPoint class]]) {
-        GPKGMapPoint *mapPoint = (GPKGMapPoint *) annotationView.annotation;
-        coordinate = mapPoint.coordinate;
-    }else if([annotationView.annotation isKindOfClass:[ObservationAnnotation class]]){
-        ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotationView.annotation;
-        coordinate = observationAnnotation.coordinate;
-    }
+     if ([annotationView.annotation isKindOfClass:[GPKGMapPoint class]]) {
+         coordinate = [self.map convertPoint:annotationView.center toCoordinateFromView:self.map];
+     }else if([annotationView.annotation isKindOfClass:[ObservationAnnotation class]]){
+         ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotationView.annotation;
+         coordinate = observationAnnotation.coordinate;
+     }
     
     if(CLLocationCoordinate2DIsValid(coordinate)){
         switch(newState){
@@ -283,8 +288,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             }
                 break;
             case MKAnnotationViewDragStateDragging:
+            case MKAnnotationViewDragStateNone:
             {
                 [self updateLocationTextWithCoordinate:coordinate];
+                [annotationView.annotation setCoordinate:coordinate];
                 [self updateShape:coordinate];
             }
                 break;

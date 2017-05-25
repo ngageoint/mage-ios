@@ -8,9 +8,25 @@
 
 #import "MapShapePointAnnotationView.h"
 
+@interface MapShapePointAnnotationView ()
+
+@property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, strong) NSObject<AnnotationDragCallback> *dragCallback;
+
+@end
+
 @implementation MapShapePointAnnotationView
 
 static float popUpHeightPercentage = 1.5;
+
+- (instancetype)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier andMapView: (MKMapView *) mapView andDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if(self){
+        self.mapView = mapView;
+        self.dragCallback = dragCallback;
+    }
+    return self;
+}
 
 - (void)setDragState:(MKAnnotationViewDragState)newDragState animated:(BOOL)animated {
     [super setDragState:newDragState animated:animated];
@@ -50,6 +66,14 @@ static float popUpHeightPercentage = 1.5;
                          completion:^(BOOL finished) {
                              self.dragState = MKAnnotationViewDragStateNone;
                          }];
+    }
+}
+
+- (void) setCenter:(CGPoint)center{
+    [super setCenter:center];
+    if(self.dragCallback != nil){
+        CLLocationCoordinate2D coordinate = [_mapView convertPoint:center toCoordinateFromView:self.superview];
+        [self.dragCallback draggingAnnotationView:self atCoordinate:coordinate];
     }
 }
 

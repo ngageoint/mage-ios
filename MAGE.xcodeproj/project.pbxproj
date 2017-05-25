@@ -228,6 +228,7 @@
 		04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointsObservation.m; path = Map/MapShapePointsObservation.m; sourceTree = "<group>"; };
 		04F833FE1ED5C3B200B5FE1E /* MapShapePointAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapShapePointAnnotationView.h; path = Map/MapShapePointAnnotationView.h; sourceTree = "<group>"; };
 		04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointAnnotationView.m; path = Map/MapShapePointAnnotationView.m; sourceTree = "<group>"; };
+		04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnnotationDragCallback.h; path = Map/AnnotationDragCallback.h; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
@@ -770,6 +771,7 @@
 				04ED96561EBB60AC00B6AD8D /* MapUtils.m */,
 				04F833FE1ED5C3B200B5FE1E /* MapShapePointAnnotationView.h */,
 				04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */,
+				04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */,
 			);
 			name = Map;
 			sourceTree = "<group>";

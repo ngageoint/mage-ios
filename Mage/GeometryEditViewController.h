@@ -9,8 +9,9 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "ObservationEditViewController.h"
+#import "AnnotationDragCallback.h"
 
-@interface GeometryEditViewController : UIViewController <MKMapViewDelegate>
+@interface GeometryEditViewController : UIViewController <MKMapViewDelegate, AnnotationDragCallback>
 
 @property (weak, nonatomic) IBOutlet MKMapView *map;
 @property (nonatomic, strong) Observation *observation;

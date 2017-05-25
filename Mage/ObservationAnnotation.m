@@ -43,12 +43,16 @@
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
+    return [self viewForAnnotationOnMapView:mapView withDragCallback:nil];
+}
+
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
     UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
     NSString *accessibilityIdentifier = self.point ? [image accessibilityIdentifier] : NSStringFromClass([MapShapeObservation class]);
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:accessibilityIdentifier];
     
     if (annotationView == nil) {
-        annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier];
+        annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier andMapView:mapView andDragCallback:dragCallback];
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
