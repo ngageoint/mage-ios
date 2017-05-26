@@ -42,6 +42,7 @@
 @property (nonatomic, strong) UIColor * editPolygonColor;
 @property (nonatomic) double editPolygonLineWidth;
 @property (nonatomic, strong) UIColor * editPolygonFillColor;
+@property (nonatomic) double lastAnnotationSelectedTime;
 
 @end
 
@@ -142,8 +143,6 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self.navigationItem setPrompt:@"Long press marker and drag to a new location."];
 }
 
 - (void) cancelButtonPressed {
@@ -249,8 +248,27 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self clearLatitudeAndLongitudeFocus];
     
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
-        [self selectShapePoint:mapPoint];
+        
+        if (self.selectedMapPoint == nil || self.selectedMapPoint.id != mapPoint.id) {
+            self.lastAnnotationSelectedTime = [NSDate timeIntervalSinceReferenceDate];
+            [self selectShapePoint:mapPoint];
+        }
+    }
+    
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
+    
+    if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
+        if(self.selectedMapPoint != nil && self.selectedMapPoint.id == mapPoint.id){
+            MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
+            view.image= [UIImage imageNamed:@"location_tracking_on"]; // TODO Geometry point icons
+            // TODO Geometry selectedMarker.setZIndex(0.0f);
+            self.selectedMapPoint = nil;
+        }
     }
     
 }
@@ -513,6 +531,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
  */
 -(void) updateHintWithDragging: (BOOL) dragging{
     // TODO Geometry
+    [self.navigationItem setPrompt:@"TODO"];
 }
 
 /**
@@ -600,6 +619,63 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
     if(tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
         [self clearLatitudeAndLongitudeFocus];
+        
+        if(self.selectedMapPoint != nil && !self.isRectangle && [self shapePoints].count > 1 && [NSDate timeIntervalSinceReferenceDate] - self.lastAnnotationSelectedTime >= 0.1){
+            CGPoint cgPoint = [tapGestureRecognizer locationInView:self.map];
+            for (NSObject<MKAnnotation> *annotation in [self.map annotations]) {
+                if([annotation isKindOfClass:[GPKGMapPoint class]]){
+                    MKAnnotationView* view = [self.map viewForAnnotation:annotation];
+                    if(CGRectContainsPoint(view.frame, cgPoint)) {
+                        GPKGMapPoint *mapPoint = (GPKGMapPoint *) annotation;
+                        if(self.selectedMapPoint.id == mapPoint.id){
+                            
+                            UIAlertController * alert = [UIAlertController
+                                                         alertControllerWithTitle:@"Delete Point"
+                                                         message:[NSString stringWithFormat:@"Do you want to delete this point?\n%f, %f", mapPoint.coordinate.latitude, mapPoint.coordinate.longitude]
+                                                         preferredStyle:UIAlertControllerStyleAlert];
+                            
+                            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:nil]];
+                            
+                            [alert addAction:[UIAlertAction actionWithTitle:@"DELETE" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                NSArray<GPKGMapPoint *> *points = [self shapePoints];
+                                
+                                // Find the index of the point being deleted
+                                int index = 1;
+                                for (int i = 0; i < points.count; i++) {
+                                    if([points objectAtIndex:i].id == mapPoint.id){
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                                // Get the previous point index
+                                if (index > 0) {
+                                    index--;
+                                } else if (self.shapeType == WKB_LINESTRING) {
+                                    // Select next point in the line
+                                    index++;
+                                } else {
+                                    // Select previous polygon point
+                                    index = (int)points.count - 1;
+                                }
+                                // Get the new point to select
+                                GPKGMapPoint *selectPoint = [points objectAtIndex:index];
+                                
+                                // Delete the point, select the new, and update the shape
+                                [[self mapShapePoints] deletePoint:mapPoint fromMapView:self.map];
+                                self.selectedMapPoint = nil;
+                                [self selectAnnotation:selectPoint];
+                                [self updateShape:selectPoint.coordinate];
+                                [self updateHint];
+                            }]];
+                            
+                            [self presentViewController:alert animated:YES completion:nil];
+                            
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -698,11 +774,6 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
  */
 -(void) selectShapePoint: (GPKGMapPoint *) point{
     [self clearRectangleCorners];
-    if(self.selectedMapPoint != nil && self.selectedMapPoint.id != point.id){
-        MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
-        view.image= [UIImage imageNamed:@"location_tracking_on"]; // TODO Geometry point icons
-        // TODO Geometry selectedMarker.setZIndex(0.0f);
-    }
     self.selectedMapPoint = point;
     [self updateLocationTextWithCoordinate:point.coordinate];
     MKAnnotationView *view = [self.map viewForAnnotation:point];
