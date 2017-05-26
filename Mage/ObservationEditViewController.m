@@ -399,10 +399,10 @@
                             [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
                             [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
                             
-                            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-                            attachment.observation = self.observation;
-                            
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                                Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
+                                attachment.observation = self.observation;
+                                
                                 [self.editDataStore.editTable beginUpdates];
                                 [self.editDataStore.editTable reloadData];
                                 [self.editDataStore.editTable endUpdates];

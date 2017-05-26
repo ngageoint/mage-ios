@@ -383,8 +383,10 @@
 }
 
 - (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock {
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:[NSManagedObjectContext MR_defaultContext]];
-
+    Attachment *attachment = (Attachment *) entity;
+    [attachment.managedObjectContext obtainPermanentIDsForObjects:@[attachment] error:nil];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:attachment.managedObjectContext];
+    
     [localContext performBlock:^{
         Attachment *localAttachment = [(Attachment *) entity MR_inContext:localContext];
         

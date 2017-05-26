@@ -87,7 +87,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Observation Changes Not Pushed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFt-j1-kzs">
                                                     <rect key="frame" x="85" y="7" width="205" height="25.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" red="1" green="0.59607843140000005" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.93725490196078431" green="0.42352941176470588" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cached" translatesAutoresizingMaskIntoConstraints="NO" id="LBW-pZ-vn0">
@@ -98,7 +98,7 @@
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
-                                                            <color key="value" red="1" green="0.59607843140000005" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="value" red="0.93725490196078431" green="0.42352941176470588" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
@@ -207,7 +207,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PUSH NOW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="psQ-C5-y4t">
                                                     <rect key="frame" x="16" y="7" width="351" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" red="1" green="0.59607843140000005" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.93725490196078431" green="0.42352941176470588" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1519,7 +1519,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="BEj-Ik-6TY" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Observations" image="observations" id="VMp-ah-9ay"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Wys-E9-8Ks">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Wys-E9-8Ks">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1846,7 +1846,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="ebu-M3-ht6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="People" image="people" id="l7S-b8-jEg"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="w8s-07-A7p">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="w8s-07-A7p">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1985,7 +1985,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="ZWa-MC-1pT" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="skc-FT-cQl"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="H8Y-IJ-huv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="H8Y-IJ-huv">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2035,7 +2035,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="H0M-W5-7fi" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Me" image="me" id="zNR-S6-oQC"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="dPE-Td-44g">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="dPE-Td-44g">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

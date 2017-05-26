@@ -95,7 +95,7 @@
         self.favoriteNumber.hidden = YES;
     }
     
-    if (observation.isDirty) {
+    if (observation.error != nil) {
         BOOL hasValidationError = [observation hasValidationError];
         self.syncBadge.hidden = hasValidationError;
         self.errorBadge.hidden = !hasValidationError;
