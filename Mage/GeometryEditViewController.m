@@ -269,6 +269,9 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             // TODO Geometry selectedMarker.setZIndex(0.0f);
             self.selectedMapPoint = nil;
         }
+    }else if([view.annotation isKindOfClass:[ObservationAnnotation class]]){
+        // Reselect the single observation point if it is deselected (clicking on the map, etc)
+        [self selectAnnotation:view.annotation];
     }
     
 }
