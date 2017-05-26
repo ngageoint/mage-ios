@@ -154,6 +154,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 - (void) clearLatitudeAndLongitudeFocus{
     [self.latitudeField resignFirstResponder];
     [self.longitudeField resignFirstResponder];
+    [self updateHint];
 }
 
 - (IBAction) saveLocation {
@@ -249,6 +250,8 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
         
+        [self locationEnabled:YES];
+        
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         
         if (self.selectedMapPoint == nil || self.selectedMapPoint.id != mapPoint.id) {
@@ -262,6 +265,9 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
     
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        
+        [self locationEnabled:NO];
+        
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         if(self.selectedMapPoint != nil && self.selectedMapPoint.id == mapPoint.id){
             MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
@@ -274,6 +280,17 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         [self selectAnnotation:view.annotation];
     }
     
+}
+
+- (void) locationEnabled: (BOOL) enabled{
+    self.latitudeField.enabled = enabled;
+    self.longitudeField.enabled = enabled;
+    UIColor *backgroundColor = nil;
+    if(!enabled){
+        backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
+    }
+    self.latitudeField.backgroundColor = backgroundColor;
+    self.longitudeField.backgroundColor = backgroundColor;
 }
 
 - (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
@@ -424,6 +441,8 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     self.bottomConstraint.constant = CGRectGetHeight(self.view.bounds) - keyboardFrameInViewCoordinates.origin.y;
     
     [self.view layoutIfNeeded];
+    
+    [self updateHint];
 }
 
 - (void) keyboardWillHide: (NSNotification *) notification {
@@ -533,8 +552,52 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
  * @param dragging true if a point is currently being dragged
  */
 -(void) updateHintWithDragging: (BOOL) dragging{
-    // TODO Geometry
-    [self.navigationItem setPrompt:@"TODO"];
+    
+    BOOL locationEdit = self.latitudeField.isEditing || self.longitudeField.isEditing;
+    
+    NSString *hint = @"";
+    
+    switch (self.shapeType) {
+        case WKB_POINT:
+        {
+            if (locationEdit) {
+                hint = @"Manually modify point coordinates";
+            } else {
+                hint = @"Drap map to move point";
+            }
+        }
+            break;
+        case WKB_POLYGON:
+        {
+            if (self.isRectangle) {
+                if (locationEdit) {
+                    hint = @"Manually modify corner coordinates";
+                } else if (dragging) {
+                    hint = @"Drag and release to adjust corner";
+                } else if (![self multipleShapePointPositions]) {
+                    hint = @"Long click map or point to draw rectangle";
+                } else {
+                    hint = @"Long click point to adjust corner";
+                }
+                break;
+            }
+        }
+        case WKB_LINESTRING:
+            if (locationEdit) {
+                hint = @"Manually modify point coordinates";
+            } else if (dragging) {
+                hint = @"Drag and release to adjust location";
+            } else if (self.newDrawing) {
+                hint = @"Long click map to add next point";
+            } else {
+                hint = @"Long click map to insert point between nearest points";
+            }
+            break;
+        default:
+            break;
+    }
+    
+    [self.navigationItem setPrompt:hint];
 }
 
 /**
@@ -562,8 +625,18 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
  * @param longitude longitude
  */
 - (void) updateLocationTextWithLatitude: (double) latitude andLongitude: (double) longitude {
-    self.latitudeField.text = [NSString stringWithFormat:@"%f", latitude];
-    self.longitudeField.text = [NSString stringWithFormat:@"%f", longitude];
+    [self updateLocationTextWithLatitudeString:[NSString stringWithFormat:@"%f", latitude] andLongitudeString:[NSString stringWithFormat:@"%f", longitude]];
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param latitude  latitude
+ * @param longitude longitude
+ */
+- (void) updateLocationTextWithLatitudeString: (NSString *) latitude andLongitudeString: (NSString *) longitude {
+    self.latitudeField.text = latitude;
+    self.longitudeField.text = longitude;
 }
 
 /**
