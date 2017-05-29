@@ -340,7 +340,7 @@
         <scene sceneID="ET0-kX-cMw">
             <objects>
                 <navigationController id="AH1-5F-Bwy" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Ld4-1R-NT1">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Ld4-1R-NT1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1016,8 +1016,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="MJb-9A-Ze8" firstAttribute="centerY" secondItem="1yI-Ve-t18" secondAttribute="centerY" constant="-42" id="6ba-ah-85Z"/>
-                            <constraint firstItem="rQY-Ix-ETD" firstAttribute="trailing" secondItem="1yI-Ve-t18" secondAttribute="trailingMargin" id="9KX-km-nnk"/>
-                            <constraint firstItem="rQY-Ix-ETD" firstAttribute="leading" secondItem="1yI-Ve-t18" secondAttribute="leadingMargin" id="Cjc-Af-duD"/>
+                            <constraint firstItem="rQY-Ix-ETD" firstAttribute="trailing" secondItem="1yI-Ve-t18" secondAttribute="trailingMargin" priority="999" id="9KX-km-nnk"/>
+                            <constraint firstItem="rQY-Ix-ETD" firstAttribute="leading" secondItem="1yI-Ve-t18" secondAttribute="leadingMargin" priority="999" id="Cjc-Af-duD"/>
                             <constraint firstItem="MJb-9A-Ze8" firstAttribute="centerX" secondItem="1yI-Ve-t18" secondAttribute="centerX" id="DQb-Qo-P7z"/>
                             <constraint firstItem="rQY-Ix-ETD" firstAttribute="top" secondItem="MJb-9A-Ze8" secondAttribute="bottom" constant="8" id="nTd-hd-3y2"/>
                         </constraints>
@@ -1035,7 +1035,7 @@
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" id="tRv-lZ-Ngx" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="Muk-lh-Mg6"/>
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Uzc-TE-Jx6">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="Uzc-TE-Jx6">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1057,7 +1057,7 @@
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" id="bwL-By-oxe" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="i8Z-Pu-32D">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="i8Z-Pu-32D">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1081,7 +1081,7 @@
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" id="iTc-aP-jdF" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="R9x-Cx-PaX"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="uKm-Jb-19Z">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="uKm-Jb-19Z">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1104,7 +1104,7 @@
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" id="1ex-64-z4E" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="Bzh-w3-1ma"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="DyV-dZ-gVp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="DyV-dZ-gVp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1126,7 +1126,7 @@
             <objects>
                 <navigationController title="Master" extendedLayoutIncludesOpaqueBars="YES" id="Qpu-tQ-zcg" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="d6K-It-0DH">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="d6K-It-0DH">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1148,7 +1148,7 @@
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" navigationBarHidden="YES" id="Fs5-8U-FlA" customClass="SettingsViewController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Fuz-pb-ts9">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Fuz-pb-ts9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1182,7 +1182,7 @@
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="aDA-Ib-tIn" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="tCk-00-AQO">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="tCk-00-AQO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
