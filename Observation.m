@@ -200,7 +200,7 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToCreateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], [Server currentEventId]];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], observation.eventId];
     NSLog(@"Trying to create observation %@", url);
 
     MageSessionManager *manager = [MageSessionManager manager];
@@ -210,7 +210,7 @@ NSNumber *_currentEventId;
         // TODO create temp url to PUT to correct place until we upgrade server to 5.0
 //        NSString *observationUrl = [response objectForKey:@"url"];
         NSString *remoteId = [response objectForKey:@"id"];
-        NSString *observationUrl = [NSString stringWithFormat:@"%@/api/events/%@/observations/id/%@", [MageServer baseURL], [Server currentEventId], remoteId];
+        NSString *observationUrl = [NSString stringWithFormat:@"%@/api/events/%@/observations/id/%@", [MageServer baseURL], observation.eventId, remoteId];
 
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             Observation *localObservation = [observation MR_inContext:localContext];
