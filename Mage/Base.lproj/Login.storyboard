@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="dQw-Zy-0E4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="dQw-Zy-0E4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -1032,81 +1032,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="pl4-aF-Rn4">
-                                <rect key="frame" x="16" y="53" width="343" height="606"/>
-                                <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <prototypes>
-                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventCell" rowHeight="63" id="e8T-gE-hF0" customClass="EventTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="343" height="63"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e8T-gE-hF0" id="TsE-nN-hHn">
-                                            <rect key="frame" x="0.0" y="0.0" width="310" height="62.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eEo-e5-Q7a">
-                                                    <rect key="frame" x="8" y="8" width="302" height="46.5"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="AYi-cc-Tgy">
-                                                            <rect key="frame" x="0.0" y="3" width="282" height="41"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHZ-h8-wJw">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="126" height="26.5"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                                                    <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AFc-9B-K1V">
-                                                                    <rect key="frame" x="0.0" y="26.5" width="100" height="14.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                    <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                        </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpD-lT-7sz">
-                                                            <rect key="frame" x="282" y="15" width="20" height="17"/>
-                                                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="17" id="C1a-px-1Z2"/>
-                                                                <constraint firstAttribute="width" priority="999" constant="20" id="X2m-YC-YWC"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                </stackView>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstItem="eEo-e5-Q7a" firstAttribute="top" secondItem="TsE-nN-hHn" secondAttribute="topMargin" id="5Eb-0H-cRv"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="eEo-e5-Q7a" secondAttribute="bottom" id="QvL-G7-GC3"/>
-                                                <constraint firstItem="eEo-e5-Q7a" firstAttribute="leading" secondItem="TsE-nN-hHn" secondAttribute="leadingMargin" id="nck-7N-Vl2"/>
-                                                <constraint firstAttribute="trailing" secondItem="eEo-e5-Q7a" secondAttribute="trailing" id="rZl-pq-mEl"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="cellView" destination="eEo-e5-Q7a" id="ggo-mN-79u"/>
-                                            <outlet property="eventBadgeLabel" destination="lpD-lT-7sz" id="Z9Z-wk-iKL"/>
-                                            <outlet property="eventBadgeLabelHeight" destination="C1a-px-1Z2" id="mg3-QB-NN9"/>
-                                            <outlet property="eventBadgeLabelWidth" destination="X2m-YC-YWC" id="7OV-1H-wKg"/>
-                                            <outlet property="eventDescription" destination="AFc-9B-K1V" id="ube-La-mfT"/>
-                                            <outlet property="eventName" destination="JHZ-h8-wJw" id="b9m-Hi-9dt"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                                <sections/>
-                                <connections>
-                                    <outlet property="dataSource" destination="g7b-X4-IMt" id="mpq-wr-u3U"/>
-                                    <outlet property="delegate" destination="g7b-X4-IMt" id="PP1-pA-XYM"/>
-                                </connections>
-                            </tableView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="P1c-2h-HrE">
                                 <rect key="frame" x="16" y="607" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.1110333651" green="0.25266155600000001" blue="0.40621557829999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1165,6 +1090,85 @@
                                     <constraint firstItem="n8y-Rr-gVM" firstAttribute="top" secondItem="bln-jK-zuv" secondAttribute="bottom" constant="8" id="zOy-qH-K7P"/>
                                 </constraints>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="pl4-aF-Rn4">
+                                <rect key="frame" x="16" y="53" width="343" height="606"/>
+                                <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <prototypes>
+                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventCell" rowHeight="63" id="e8T-gE-hF0" customClass="EventTableViewCell">
+                                        <rect key="frame" x="0.0" y="22" width="343" height="63"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e8T-gE-hF0" id="TsE-nN-hHn">
+                                            <rect key="frame" x="0.0" y="0.0" width="310" height="62.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eEo-e5-Q7a">
+                                                    <rect key="frame" x="8" y="8" width="302" height="46.5"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="AYi-cc-Tgy">
+                                                            <rect key="frame" x="0.0" y="3" width="282" height="41"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHZ-h8-wJw">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="126" height="26.5"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                                    <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AFc-9B-K1V">
+                                                                    <rect key="frame" x="0.0" y="26.5" width="100" height="14.5"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                    <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpD-lT-7sz">
+                                                            <rect key="frame" x="282" y="15" width="20" height="17"/>
+                                                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="17" id="C1a-px-1Z2"/>
+                                                                <constraint firstAttribute="width" priority="999" constant="20" id="X2m-YC-YWC"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="lpD-lT-7sz" firstAttribute="leading" secondItem="AYi-cc-Tgy" secondAttribute="trailing" id="6qf-bX-DAp"/>
+                                                        <constraint firstAttribute="trailing" secondItem="lpD-lT-7sz" secondAttribute="trailing" id="G4w-Si-Xgc"/>
+                                                    </constraints>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstItem="eEo-e5-Q7a" firstAttribute="top" secondItem="TsE-nN-hHn" secondAttribute="topMargin" id="5Eb-0H-cRv"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="eEo-e5-Q7a" secondAttribute="bottom" id="QvL-G7-GC3"/>
+                                                <constraint firstItem="eEo-e5-Q7a" firstAttribute="leading" secondItem="TsE-nN-hHn" secondAttribute="leadingMargin" id="nck-7N-Vl2"/>
+                                                <constraint firstAttribute="trailing" secondItem="eEo-e5-Q7a" secondAttribute="trailing" id="rZl-pq-mEl"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="cellView" destination="eEo-e5-Q7a" id="ggo-mN-79u"/>
+                                            <outlet property="eventBadgeLabel" destination="lpD-lT-7sz" id="Z9Z-wk-iKL"/>
+                                            <outlet property="eventBadgeLabelHeight" destination="C1a-px-1Z2" id="mg3-QB-NN9"/>
+                                            <outlet property="eventBadgeLabelWidth" destination="X2m-YC-YWC" id="7OV-1H-wKg"/>
+                                            <outlet property="eventDescription" destination="AFc-9B-K1V" id="ube-La-mfT"/>
+                                            <outlet property="eventName" destination="JHZ-h8-wJw" id="b9m-Hi-9dt"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="g7b-X4-IMt" id="mpq-wr-u3U"/>
+                                    <outlet property="delegate" destination="g7b-X4-IMt" id="PP1-pA-XYM"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <accessibility key="accessibilityConfiguration" label="">
