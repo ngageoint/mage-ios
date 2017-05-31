@@ -28,6 +28,12 @@ NSString * const kCurrentEventIdKey = @"currentEventId";
     [defaults synchronize];
 }
 
++ (void) removeCurrentEventId {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:kCurrentEventIdKey];
+    [defaults synchronize];
+}
+
 + (NSString *) serverUrl {
     return [Server getPropertyForKey:@"serverUrl" inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }

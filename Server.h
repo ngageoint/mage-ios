@@ -21,6 +21,7 @@ extern NSString * const kCurrentEventIdKey;
 
 + (NSNumber *) currentEventId;
 + (void) setCurrentEventId:(NSNumber *) eventId;
++ (void) removeCurrentEventId;
 
 @end
 
