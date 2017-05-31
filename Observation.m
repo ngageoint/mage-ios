@@ -254,8 +254,7 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    NSNumber *eventId = [Server currentEventId];
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], eventId, favorite.observation.remoteId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], favorite.observation.eventId, favorite.observation.remoteId];
     NSLog(@"Trying to push favorite to server %@", url);
     
     MageSessionManager *manager = [MageSessionManager manager];
@@ -289,8 +288,7 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    NSNumber *eventId = [Server currentEventId];
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], eventId, important.observation.remoteId];
+    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], important.observation.eventId, important.observation.remoteId];
     NSLog(@"Trying to push important to server %@", url);
     
     MageSessionManager *manager = [MageSessionManager manager];
