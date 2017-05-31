@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (nonatomic, assign) BOOL manualSync;
-@property (nonatomic, assign) BOOL isImportant;
 
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *fields;
@@ -66,7 +65,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [super viewWillAppear:animated];
     
     self.manualSync = NO;
-    self.isImportant = [self.observation isImportant];
     self.tableLayout = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_SECTIONS];
     
     self.favoritesFetchedResultsController = [ObservationFavorite MR_fetchAllSortedBy:@"observation.timestamp"
@@ -290,9 +288,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[self.observation.properties valueForKey:@"type"] style: UIBarButtonItemStylePlain target:nil action:nil];
     
-    // Make sure your segue name in storyboard is the same as this line
     if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
@@ -399,15 +395,27 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) updateImportant {
-    if (!self.isImportant && [self canEditObservationImportant]) {
-        [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"addImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (self.isImportant) {
-        [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"updateImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (!self.isImportant) {
-        [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+    BOOL isImportant = [self.observation isImportant];
+    NSArray *importantSection = [self.tableLayout objectAtIndex:IMPORTANT_SECTION];
+    if (!isImportant && [self canEditObservationImportant]) {
+        if (![importantSection containsObject:@"addImportant"]) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"addImportant"]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } else if (isImportant) {
+        if (![importantSection containsObject:@"updateImportant"]) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"updateImportant"]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [UIView performWithoutAnimation:^{
+                [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:IMPORTANT_SECTION]] withRowAnimation:UITableViewRowAnimationNone];
+            }];
+        }
+    } else if (!isImportant) {
+        if ([importantSection count] > 0) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
 }
 
@@ -417,11 +425,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if ([anObject isKindOfClass:[ObservationFavorite class]]) {
         [self updateFavorites];
     } else if ([anObject isKindOfClass:[ObservationImportant class]]) {
-        ObservationImportant *important = (ObservationImportant *) anObject;
-        if (self.isImportant != [self.observation isImportant]) {
-            self.isImportant = [self.observation isImportant];
-            [self updateImportant];
-        }
+        [self updateImportant];
     }
 }
 
