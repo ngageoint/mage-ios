@@ -23,7 +23,9 @@ NSString * const kCurrentEventIdKey = @"currentEventId";
         [self raiseEventTaskPriorities:eventId];
     });
     
-    [[NSUserDefaults standardUserDefaults] setObject:eventId forKey:kCurrentEventIdKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:eventId forKey:kCurrentEventIdKey];
+    [defaults synchronize];
 }
 
 + (NSString *) serverUrl {
@@ -38,23 +40,14 @@ NSString * const kCurrentEventIdKey = @"currentEventId";
     [Server setProperty:serverUrl forKey:@"serverUrl" completion:completion];
 }
 
-
-
-//+ (void) setCurrentEventId: (NSNumber *) eventId completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [self raiseEventTaskPriorities:eventId];
-//    });
-//    [Server setProperty:eventId forKey:@"currentEventId" completion:completion];
-//}
-
-+ (void) raiseEventTaskPriorities: (NSNumber *) eventId{
-    if(eventId != nil){
++ (void) raiseEventTaskPriorities: (NSNumber *) eventId {
+    if (eventId != nil) {
         NSDictionary<NSNumber *, NSArray<NSNumber *> *> *eventTasks = [MageSessionManager eventTasks];
-        if(eventTasks != nil){
+        if (eventTasks != nil) {
             NSArray<NSNumber *> *tasks = [eventTasks objectForKey:eventId];
-            if(tasks != nil){
+            if (tasks != nil) {
                 MageSessionManager *manager = [MageSessionManager manager];
-                for(NSNumber *taskIdentifier in tasks){
+                for (NSNumber *taskIdentifier in tasks) {
                     [manager readdTaskWithIdentifier:[taskIdentifier unsignedIntegerValue] withPriority:NSURLSessionTaskPriorityHigh];
                 }
             }
