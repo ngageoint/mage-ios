@@ -17,7 +17,7 @@
 
 @implementation MapShapePointAnnotationView
 
-static float popUpHeightPercentage = 1.5;
+static float popUpHeightPercentage = 1.0;
 
 - (instancetype)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier andMapView: (MKMapView *) mapView andDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
