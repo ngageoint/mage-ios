@@ -251,10 +251,9 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
     [self clearLatitudeAndLongitudeFocus];
+    [self locationEnabled:YES];
     
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
-        
-        [self locationEnabled:YES];
         
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         
@@ -698,6 +697,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
                         [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
                         [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
                         [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
+                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
                         [self updateIfRectangle:lineString.points];
                     }
                     
