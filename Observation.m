@@ -22,8 +22,6 @@
 #import "WKBGeometry.h"
 #import "GeometryUtility.h"
 #import "GeometrySerializer.h"
-#import "WKBGeometry.h"
-#import "WKBPoint.h"
 #import "GeometryUtility.h"
 #import "WKBPolygon.h"
 #import "WKBLineString.h"

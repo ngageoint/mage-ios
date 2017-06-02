@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import "WKBGeometry.h"
+#import "WKBPoint.h"
 
 @class Attachment, User, ObservationImportant, ObservationFavorite;
 
@@ -23,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 
 + (Observation *) observationWithGeometry:(WKBGeometry *) geometry inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
++ (BOOL) checkIfRectangle: (NSArray<WKBPoint *> *) points;
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 - (void) addTransientAttachment: (Attachment *) attachment;
