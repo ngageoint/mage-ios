@@ -20,7 +20,10 @@
 @implementation ObservationAnnotation
 
 -(id) initWithObservation:(Observation *) observation {
-    WKBGeometry *geometry = [observation getGeometry];
+    return [self initWithObservation:observation andGeometry:[observation getGeometry]];
+}
+
+-(id) initWithObservation:(Observation *) observation andGeometry: (WKBGeometry *) geometry {
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;

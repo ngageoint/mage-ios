@@ -52,7 +52,7 @@
         longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
     }
     
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(observation.location.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(_annotation.coordinate, latitudeMeters, longitudeMeters);
     
     MKCoordinateRegion viewRegion = [mapView regionThatFits:region];
     

@@ -35,7 +35,7 @@
 -(MapObservation *) addToMapWithObservation: (Observation *) observation;
 
 /**
- * Add an observation to the map as a marker or shape
+ * Add an observation to the map as an annotation or shape
  *
  * @param observation observation
  * @param hidden     hidden state
@@ -44,12 +44,31 @@
 -(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden;
 
 /**
- * Add a shape marker to the map at the location.  A shape marker is a transparent icon for allowing shape info windows.
+ * Add an observation using the geometry to the map as an annotation or shape
  *
- * @param latLng  lat lng location
  * @param observation observation
- * @param visible visible state
- * @return shape marker
+ * @param geometry    geometry
+ * @return map observation
+ */
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry;
+
+/**
+ * Add an observation using the geometry to the map as an annotation or shape
+ *
+ * @param observation observation
+ * @param geometry    geometry
+ * @param hidden     hidden state
+ * @return map observation
+ */
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden;
+
+/**
+ * Add a shape annotation to the map at the location.  A shape annotation is a transparent icon for shape info windows.
+ *
+ * @param location  coordinate location
+ * @param observation observation
+ * @param hidden hidden state
+ * @return map annotation
  */
 -(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocationCoordinate2D) location forObservation: (Observation *) observation andHidden: (BOOL) hidden;
 

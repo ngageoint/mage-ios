@@ -19,6 +19,8 @@
 
 - (id)initWithObservation:(Observation *) observation;
 
+- (id)initWithObservation:(Observation *) observation andGeometry: (WKBGeometry *) geometry;
+
 - (id)initWithObservation:(Observation *) observation andLocation:(CLLocationCoordinate2D) location;
 
 @end

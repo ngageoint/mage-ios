@@ -35,14 +35,20 @@
 }
 
 -(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden{
+    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:hidden];
+}
+
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry{
+    return [self addToMapWithObservation:observation withGeometry:geometry andHidden:NO];
+}
+
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden{
     
     MapObservation *observationShape = nil;
     
-    WKBGeometry *geometry = [observation getGeometry];
-    
     if(geometry.geometryType == WKB_POINT){
         
-        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
+        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andGeometry:geometry];
         [_mapView addAnnotation:annotation];
         
         observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];

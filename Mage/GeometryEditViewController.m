@@ -19,6 +19,9 @@
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
+#import "GPKGProjectionConstants.h"
+#import "WKBGeometryEnvelopeBuilder.h"
+#import "Observation.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -59,6 +62,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     
     self.observationManager = [[MapObservationManager alloc] initWithMapView:self.map];
     self.shapeConverter = [[GPKGMapShapeConverter alloc] init];
+    self.validLocation = YES;
     
     [self.latitudeField setDelegate: self];
     [self.longitudeField setDelegate: self];
@@ -272,9 +276,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         if(self.selectedMapPoint != nil && self.selectedMapPoint.id == mapPoint.id){
             MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
             view.image= [UIImage imageNamed:@"location_tracking_on"]; // TODO Geometry point icons
-            // TODO Geometry selectedMarker.setZIndex(0.0f);
             self.selectedMapPoint = nil;
         }
+        self.validLocation = YES;
+        [self updateAcceptState];
     }else if([view.annotation isKindOfClass:[ObservationAnnotation class]]){
         // Reselect the single observation point if it is deselected (clicking on the map, etc)
         [self selectAnnotation:view.annotation];
@@ -502,6 +507,243 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     //polygonButton.setSelected(shapeType == GeometryType.POLYGON && !isRectangle);
 }
 
+- (IBAction)pointButtonClick:(UIButton *)sender {
+    [self confirmAndChangeShapeType:WKB_POINT andRectangle:NO];
+}
+
+- (IBAction)lineButtonClick:(UIButton *)sender {
+    [self confirmAndChangeShapeType:WKB_LINESTRING andRectangle:NO];
+}
+
+- (IBAction)rectangleButtonClick:(UIButton *)sender {
+    [self confirmAndChangeShapeType:WKB_POLYGON andRectangle:YES];
+}
+
+- (IBAction)polygonButtonClick:(UIButton *)sender {
+    [self confirmAndChangeShapeType:WKB_POLYGON andRectangle:NO];
+}
+
+-(void) confirmAndChangeShapeType: (enum WKBGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
+    
+    // Only care if not the current shape type
+    if (selectedType != self.shapeType || selectedRectangle != self.isRectangle) {
+        
+        [self clearLatitudeAndLongitudeFocus];
+        
+        NSString *title = nil;
+        NSString *message = nil;
+        
+        // Changing to a point or rectangle, and there are multiple unique positions in the shape
+        if ((selectedType == WKB_POINT || selectedRectangle) && [self multipleShapePointPositions]) {
+            
+            if (selectedRectangle) {
+                // Changing to a rectangle
+                NSArray *points = [self shapePoints];
+                BOOL formRectangle = NO;
+                if (points.count == 4 || points.count == 5) {
+                    NSMutableArray<WKBPoint *> *checkPoints = [[NSMutableArray alloc] init];
+                    for (GPKGMapPoint *point in points) {
+                        [checkPoints addObject:[self.shapeConverter toPointWithMapPoint:point]];
+                    }
+                    formRectangle = [Observation checkIfRectangle:checkPoints];
+                }
+                if (!formRectangle) {
+                    // Points currently do not form a rectangle
+                    title = @"Change to Rectangle";
+                    message = @"Change to a shape encompassing rectangle?";
+                }
+                
+            } else {
+                // Changing to a point
+                CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
+                title = @"Change to Point";
+                message = [NSString stringWithFormat:@"Change shape to a single point? %.6f, %.6f", newPointPosition.latitude, newPointPosition.longitude];
+            }
+            
+        }
+        
+        // If changing to a point and there are multiple points in the current shape, confirm selection
+        if (message != nil) {
+            
+            UIAlertController * alert = [UIAlertController
+                                         alertControllerWithTitle:title
+                                         message:message
+                                         preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self revertShapeType];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"CHANGE" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self changeShapeType:selectedType andRectangle:selectedRectangle];
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+        } else {
+            [self changeShapeType:selectedType andRectangle:selectedRectangle];
+        }
+    }
+}
+
+-(void) changeShapeType: (enum WKBGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
+    
+    self.isRectangle = selectedRectangle;
+    
+    WKBGeometry *geometry = nil;
+    
+    // Changing from point to a shape
+    if (self.shapeType == WKB_POINT) {
+        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
+        WKBPoint *firstPoint = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+        WKBLineString *lineString = [[WKBLineString alloc] init];
+        [lineString addPoint:firstPoint];
+        // Changing to a rectangle
+        if (selectedRectangle) {
+            // Closed rectangle polygon all at the same point
+            [lineString addPoint:firstPoint];
+            [lineString addPoint:firstPoint];
+            [lineString addPoint:firstPoint];
+            [lineString addPoint:firstPoint];
+        }
+        // Changing to a line or polygon
+        else {
+            self.newDrawing = true;
+        }
+        switch (selectedType) {
+            case WKB_LINESTRING:
+                geometry = lineString;
+                break;
+            case WKB_POLYGON:
+                {
+                    WKBPolygon *polygon = [[WKBPolygon alloc] init];
+                    [polygon addRing:lineString];
+                    geometry = polygon;
+                }
+                break;
+            default:
+                [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+        }
+    }
+    // Changing from line or polygon to a point
+    else if (selectedType == WKB_POINT) {
+        CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
+        geometry = [[WKBPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+        self.newDrawing = NO;
+    }
+    // Changing from between a line, polygon, and rectangle
+    else {
+        
+        WKBLineString *lineString = nil;
+        if (self.mapObservation != nil) {
+            
+            NSArray *points = [self shapePoints];
+            
+            // If all points are in the same spot only keep one
+            if (points.count > 0 && ![self multiplePointPositions:points]) {
+                points = [points subarrayWithRange:NSMakeRange(0, 1)];
+            }
+            
+            // Add each point location and find the selected point index
+            NSMutableArray<GPKGMapPoint *> *mapPoints = [[NSMutableArray alloc] init];
+            NSNumber *startLocation = nil;
+            for (GPKGMapPoint *point in points) {
+                if (startLocation == nil && self.selectedMapPoint != nil && self.selectedMapPoint.id == point.id) {
+                    startLocation = [NSNumber numberWithUnsignedInteger:mapPoints.count];
+                }
+                [mapPoints addObject:point];
+            }
+            
+            // When going from the polygon or rectangle to a line
+            if (selectedType == WKB_LINESTRING) {
+                // Break the polygon closure when changing to a line
+                if (mapPoints.count > 1 && [mapPoints objectAtIndex:0].id == [mapPoints objectAtIndex:mapPoints.count - 1].id) {
+                    [mapPoints removeObjectAtIndex:mapPoints.count - 1];
+                }
+                // Break the line apart at the selected location
+                if (startLocation != nil && [startLocation intValue] < mapPoints.count) {
+                    NSMutableArray<GPKGMapPoint *> *mapPointsTemp = [[NSMutableArray alloc] init];
+                    [mapPointsTemp addObjectsFromArray:[points subarrayWithRange:NSMakeRange([startLocation intValue], mapPoints.count - [startLocation intValue])]];
+                    [mapPointsTemp addObjectsFromArray:[points subarrayWithRange:NSMakeRange(0, [startLocation intValue])]];
+                    mapPoints = mapPointsTemp;
+                }
+            }
+            
+            lineString = [self.shapeConverter toLineStringWithMapPoints:mapPoints];
+        } else {
+            CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
+            lineString = [[WKBLineString alloc] init];
+            [lineString addPoint:[[WKBPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude]];
+        }
+        
+        switch (selectedType) {
+                
+            case WKB_LINESTRING:
+                {
+                    self.newDrawing = [[lineString numPoints] intValue] <= 1;
+                    geometry = lineString;
+                }
+                break;
+                
+            case WKB_POLYGON:
+                {
+                    // If converting to a rectangle, use the current shape bounds
+                    if (selectedRectangle) {
+                        WKBLineString *lineStringCopy = [lineString mutableCopy];
+                        [WKBGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
+                        WKBGeometryEnvelope *envelope = [WKBGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
+                        lineString = [[WKBLineString alloc] init];
+                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
+                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
+                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
+                        [self updateIfRectangle:lineString.points];
+                    }
+                    
+                    WKBPolygon *polygon = [[WKBPolygon alloc] init];
+                    [polygon addRing:lineString];
+                    self.newDrawing = [[lineString numPoints] intValue] <= 2;
+                    geometry = polygon;
+                }
+                break;
+                
+            default:
+                [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+        }
+    }
+    
+    self.shapeType = selectedType;
+    [self addMapShape:geometry];
+    [self setShapeTypeSelection];
+    [self updateAcceptState];
+    
+    //if (selectedType == WKB_POINT) {
+    //    MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.map];
+    //    [self.map setRegion:viewRegion];
+    //}
+}
+
+-(CLLocationCoordinate2D) shapeToPointLocation{
+    CLLocationCoordinate2D newPointPosition = kCLLocationCoordinate2DInvalid;
+    if(self.selectedMapPoint != nil){
+        newPointPosition = self.selectedMapPoint.coordinate;
+    } else{
+        NSString *latitudeString = self.latitudeField.text;
+        NSString *longitudeString = self.longitudeField.text;
+        double latitude = 0;
+        double longitude = 0;
+        if (latitudeString.length > 0 && longitudeString.length > 0) {
+            latitude = [latitudeString doubleValue];
+            longitude = [longitudeString doubleValue];
+            newPointPosition = CLLocationCoordinate2DMake(latitude, longitude);
+        } else {
+            newPointPosition = [self.map convertPoint:self.map.center toCoordinateFromView:self.map];
+        }
+    }
+    return newPointPosition;
+}
+
 -(void) addMapShape: (WKBGeometry *) geometry{
     
     CLLocationCoordinate2D previousSelectedPointLocation = kCLLocationCoordinate2DInvalid;
@@ -515,7 +757,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         self.mapObservation = nil;
     }
     if(geometry.geometryType == WKB_POINT){
-        self.mapObservation = [self.observationManager addToMapWithObservation:self.observation];
+        self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
         MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
         [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
         [self selectAnnotation:mapAnnotationObservation.annotation];
@@ -854,7 +1096,6 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self updateLocationTextWithCoordinate:point.coordinate];
     MKAnnotationView *view = [self.map viewForAnnotation:point];
     view.image= [UIImage imageNamed:@"location_tracking_off"]; // TODO Geometry point icons
-    // TODO Geometry marker.setZIndex(1.0f);
     [self findRectangleCorners:point];
 }
 
@@ -886,10 +1127,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         acceptEnabled = [self shapePointsValid];
     }
     acceptEnabled = acceptEnabled && self.validLocation;
-    // TODO Geometry
-    //if (acceptMenuItem != null) {
-    //    acceptMenuItem.setEnabled(acceptEnabled);
-    //}
+    self.saveButton.enabled = acceptEnabled;
 }
 
 /**
