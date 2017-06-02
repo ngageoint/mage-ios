@@ -989,12 +989,11 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HKR-Q4-dh4" userLabel="Point Button">
                                         <rect key="frame" x="16" y="25" width="35" height="35"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="Report Location"/>
+                                        <accessibility key="accessibilityConfiguration" label="Point"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="35" id="9pE-W5-41g"/>
                                             <constraint firstAttribute="height" constant="35" id="Vya-gC-dqC"/>
                                         </constraints>
-                                        <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="observations"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1023,12 +1022,11 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oXd-vi-nxh" userLabel="Line Button">
                                         <rect key="frame" x="16" y="68" width="35" height="35"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="Location Tracking"/>
+                                        <accessibility key="accessibilityConfiguration" label="Line"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="35" id="Rca-CP-vJO"/>
                                             <constraint firstAttribute="height" constant="35" id="Yg1-bb-H5M"/>
                                         </constraints>
-                                        <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="ray_start_end"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1057,12 +1055,11 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EB0-ex-b2O" userLabel="Rectangle Button">
                                         <rect key="frame" x="16" y="111" width="35" height="35"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="Report Location"/>
+                                        <accessibility key="accessibilityConfiguration" label="Rectangle"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="FMR-8I-b7v"/>
                                             <constraint firstAttribute="width" constant="35" id="NZs-Hh-mse"/>
                                         </constraints>
-                                        <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="square_outline"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1148,12 +1145,11 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySK-FV-8eW" userLabel="Polygon Button">
                                         <rect key="frame" x="16" y="154" width="35" height="35"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" label="Map Settings"/>
+                                        <accessibility key="accessibilityConfiguration" label="Polygon"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="5q9-4Y-RAP"/>
                                             <constraint firstAttribute="width" constant="35" id="7sn-jl-Q1P"/>
                                         </constraints>
-                                        <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="pentagon_outline"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">

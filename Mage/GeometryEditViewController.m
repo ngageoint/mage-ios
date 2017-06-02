@@ -499,11 +499,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 }
 
 -(void) setShapeTypeSelection{
-    // TODO Geometry
-    //pointButton.setSelected(shapeType == GeometryType.POINT);
-    //lineButton.setSelected(shapeType == GeometryType.LINESTRING);
-    //rectangleButton.setSelected(shapeType == GeometryType.POLYGON && isRectangle);
-    //polygonButton.setSelected(shapeType == GeometryType.POLYGON && !isRectangle);
+    self.pointButton.selected = self.shapeType == WKB_POINT;
+    self.lineButton.selected = self.shapeType == WKB_LINESTRING;
+    self.rectangleButton.selected = self.shapeType == WKB_POLYGON && self.isRectangle;
+    self.polygonButton.selected = self.shapeType == WKB_POLYGON && !self.isRectangle;
 }
 
 - (IBAction)pointButtonClick:(UIButton *)sender {
