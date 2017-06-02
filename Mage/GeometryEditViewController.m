@@ -718,10 +718,11 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self setShapeTypeSelection];
     [self updateAcceptState];
     
-    //if (selectedType == WKB_POINT) {
-    //    MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.map];
-    //    [self.map setRegion:viewRegion];
-    //}
+    if (selectedType == WKB_POINT) {
+        WKBPoint *centroidPoint = [WKBGeometryUtils centroidOfGeometry:geometry];
+        CLLocationCoordinate2D centroidLocation = CLLocationCoordinate2DMake([centroidPoint.y doubleValue], [centroidPoint.x doubleValue]);
+        [self.map setCenterCoordinate:centroidLocation animated:YES];
+    }
 }
 
 -(CLLocationCoordinate2D) shapeToPointLocation{
