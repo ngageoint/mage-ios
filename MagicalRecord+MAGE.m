@@ -55,7 +55,7 @@
     if([[NSFileManager defaultManager] removeItemAtURL:storeURL error:&storeError] &&
        [[NSFileManager defaultManager] removeItemAtURL:walURL error:&walError] &&
        [[NSFileManager defaultManager] removeItemAtURL:shmURL error:&shmError]) {
-        [self setupCoreDataStack];
+        [self setupMageCoreDataStack];
     } else {
         NSLog(@"An error has occurred while deleting %@", @"Mage.sqlite");
         NSLog(@"store error description: %@", storeError.description);

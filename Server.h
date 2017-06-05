@@ -11,16 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString * const kCurrentEventIdKey;
+
 @interface Server : NSManagedObject
 
-+(NSString *) serverUrl;
-+(void) setServerUrl:(NSString *) serverUrl;
++ (NSString *) serverUrl;
++ (void) setServerUrl:(NSString *) serverUrl;
 + (void) setServerUrl:(NSString *) serverUrl completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 
-
-+(NSNumber *) currentEventId;
-+(void) setCurrentEventId:(NSNumber *) eventId;
-+ (void) setCurrentEventId: (NSNumber *) eventId completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
++ (NSNumber *) currentEventId;
++ (void) setCurrentEventId:(NSNumber *) eventId;
++ (void) removeCurrentEventId;
 
 @end
 

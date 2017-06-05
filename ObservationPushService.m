@@ -16,6 +16,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 @interface ObservationPushService () <NSFetchedResultsControllerDelegate>
 @property (nonatomic) NSTimeInterval interval;
+@property (nonatomic, strong) NSMutableSet<id<ObservationPushDelegate>>* delegates;
 @property (nonatomic, strong) NSTimer* observationPushTimer;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *favoritesFetchedResultsController;
@@ -44,20 +45,30 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         _interval = [[defaults valueForKey:kObservationPushFrequencyKey] doubleValue];
         _pushingObservations = [[NSMutableDictionary alloc] init];
         _pushingFavorites = [[NSMutableDictionary alloc] init];
+        _delegates = [NSMutableSet set];
     }
     
     return self;
 }
 
+- (void) addObservationPushDelegate:(id<ObservationPushDelegate>) delegate {
+    [self.delegates addObject:delegate];
+}
+
+- (void) removeObservationPushDelegate:(id<ObservationPushDelegate>) delegate {
+    [self.delegates removeObject:delegate];
+}
+
 - (void) start {
     NSLog(@"start pushing observations");
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     self.fetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
                                                            ascending:NO
                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                              groupBy:nil
                                                             delegate:self
-                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                           inContext:context];
     
     [self pushObservations:self.fetchedResultsController.fetchedObjects];
     
@@ -66,7 +77,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                              groupBy:nil
                                                             delegate:self
-                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                           inContext:context];
     
     [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
     
@@ -75,7 +86,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                                         withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                                               groupBy:nil
                                                                              delegate:self
-                                                                            inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                                            inContext:context];
     
     [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
 
@@ -161,16 +172,18 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     }
 }
 
-
 - (void) pushObservations:(NSArray *) observations {
     NSLog(@"currently still pushing %lu observations", (unsigned long) self.pushingObservations.count);
-    
+
     // only push observations that haven't already been told to be pushed
     NSMutableDictionary *observationsToPush = [[NSMutableDictionary alloc] init];
     for (Observation *observation in observations) {
+        [[observation managedObjectContext] obtainPermanentIDsForObjects:@[observation] error:nil];
+        
         if ([self.pushingObservations objectForKey:observation.objectID] == nil) {
             [self.pushingObservations setObject:observation forKey:observation.objectID];
             [observationsToPush setObject:observation forKey:observation.objectID];
+            observation.syncing = YES;
         }
     }
     
@@ -185,17 +198,44 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 Observation *localObservation = [observation MR_inContext:localContext];
                 [localObservation populateObjectFromJson:response];
                 localObservation.dirty = [NSNumber numberWithBool:NO];
+                localObservation.error = nil;
                 
                 for (Attachment *attachment in localObservation.attachments) {
                     attachment.observationRemoteId = localObservation.remoteId;
                 }
             } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
-
+                
+                for (id<ObservationPushDelegate> delegate in self.delegates) {
+                    [delegate didPushObservation:observation success:success error:error];
+                }
             }];
         } failure:^(NSError* error) {
             NSLog(@"Error submitting observation");
-            [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+            // TODO check for 400
+
+                        
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Observation *localObservation = [observation MR_inContext:localContext];
+                
+                NSHTTPURLResponse *response = error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey];
+                
+                NSMutableDictionary *localError = localObservation.error ? [localObservation.error mutableCopy] : [NSMutableDictionary dictionary];
+                [localError setObject:[error localizedDescription] forKey:kObservationErrorDescription];
+                
+                if (response) {
+                    [localError setObject:[NSNumber numberWithInteger:response.statusCode] forKey:kObservationErrorStatusCode];
+                    [localError setObject:[[NSString alloc] initWithData:(NSData *) error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding] forKey:kObservationErrorMessage];
+                }
+                
+                localObservation.error = localError;
+            } completion:^(BOOL success, NSError *coreDataError) {
+                [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+                
+                for (id<ObservationPushDelegate> delegate in self.delegates) {
+                    [delegate didPushObservation:observation success:NO error:error];
+                }
+            }];
         }];
         
         [manager addTask:observationPushTask];
