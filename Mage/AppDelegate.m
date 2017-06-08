@@ -134,6 +134,15 @@
     [self processOfflineMapArchives];
 }
 
+- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+    // Handle attachments uploaded in the background
+    if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
+        NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");
+        AttachmentPushService *service = [AttachmentPushService singleton];
+        service.backgroundSessionCompletionHandler = completionHandler;
+    }
+}
+
 - (void) processOfflineMapArchives {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -351,10 +360,8 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [[LocationFetchService singleton] stop];
-    [[ObservationFetchService singleton] stop];
-    [[ObservationPushService singleton] stop];
-    [[AttachmentPushService singleton] stop];
+    [[Mage singleton] stopServices];
+    
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]
         || [currentController isKindOfClass:[LoginViewController class]]

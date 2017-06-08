@@ -8,8 +8,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * TBD
 
 ##### Features
+* Hook up new mage-ios-sdk background upload service for attachments.
 
 ##### Bug Fixes
+* Don't save (duplicate) media picked from the gallery.
+* Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
 
 ## 1.4.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.0) (05-26-2017)
 

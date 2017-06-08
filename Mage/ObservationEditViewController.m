@@ -361,6 +361,7 @@
     picker.delegate = self;
     picker.allowsEditing = NO;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
     picker.mediaTypes = [NSArray arrayWithObjects:(NSString*)kUTTypeMovie, (NSString*) kUTTypeImage, nil];
     
     [self presentViewController:picker animated:YES completion:NULL];
@@ -372,52 +373,61 @@
         NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
         NSString *moviePath = [videoUrl path];
         
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
+        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath) && picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
             UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
-            [picker dismissViewControllerAnimated:YES completion:NULL];
+        }
+        
+        [picker dismissViewControllerAnimated:YES completion:NULL];
+        
+        AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
+        NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+        if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
+            AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
             
-            AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
-            NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
-            if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
-                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
-                NSString *mp4Path = [[moviePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"mp4"];
-
-                exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
-                exportSession.outputFileType = AVFileTypeMPEG4;
-                [exportSession exportAsynchronouslyWithCompletionHandler:^{
-                    switch ([exportSession status]) {
-                        case AVAssetExportSessionStatusFailed:
-                            NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
-                            break;
-                        case AVAssetExportSessionStatusCancelled:
-                            NSLog(@"Export canceled");
-                            break;
-                        case AVAssetExportSessionStatusCompleted: {
-                            NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-                            [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
-                            [attachmentJson setValue:mp4Path forKey:@"localPath"];
-                            [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
-                            [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
+            
+            NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
+            NSString *mp4Path = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.mp4", [dateFormatter stringFromDate: [NSDate date]]]];
+            
+            exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
+            exportSession.outputFileType = AVFileTypeMPEG4;
+            [exportSession exportAsynchronouslyWithCompletionHandler:^{
+                switch ([exportSession status]) {
+                    case AVAssetExportSessionStatusFailed:
+                        NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
+                        break;
+                    case AVAssetExportSessionStatusCancelled:
+                        NSLog(@"Export canceled");
+                        break;
+                    case AVAssetExportSessionStatusCompleted: {
+                        NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
+                        [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
+                        [attachmentJson setValue:mp4Path forKey:@"localPath"];
+                        [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
+                        [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
+                        
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
+                            attachment.observation = self.observation;
                             
-                            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-                                attachment.observation = self.observation;
-                                
-                                [self.editDataStore.editTable beginUpdates];
-                                [self.editDataStore.editTable reloadData];
-                                [self.editDataStore.editTable endUpdates];
-                            }];
-
-                        }
-                        default:
-                            break;
+                            [self.editDataStore.editTable beginUpdates];
+                            [self.editDataStore.editTable reloadData];
+                            [self.editDataStore.editTable endUpdates];
+                        }];
+                        
                     }
-                }];
-            }
+                    default:
+                        break;
+                }
+            }];
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        }
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
