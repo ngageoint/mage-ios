@@ -4,11 +4,16 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import <AFNetworking.h>
 
-@interface AttachmentPushService : NSObject
+extern NSString * const kAttachmentBackgroundSessionIdentifier;
+
+@interface AttachmentPushService : AFHTTPSessionManager
+
+@property (copy) void (^backgroundSessionCompletionHandler)();
 
 + (instancetype) singleton;
+
 - (void) start;
 - (void) stop;
 

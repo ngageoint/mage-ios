@@ -25,5 +25,6 @@
 @dynamic size;
 @dynamic url;
 @dynamic observation;
+@dynamic taskIdentifier;
 
 @end

@@ -63,9 +63,7 @@ static NSString * const kKeyChainToken = @"mil.nga.mage.token";
 }
 
 + (NSString *) persistItemToKeyChain: (NSString *) item withService: (NSString *) service forCurrentItem:(NSString *) currentItem {
-    
-    BOOL isMainThread = [NSThread isMainThread];
-    
+        
     // Now store it in the KeyChain
     NSDictionary *query = @{
                             (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,

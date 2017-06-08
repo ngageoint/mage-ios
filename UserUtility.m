@@ -74,8 +74,7 @@
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
     [loginParameters removeObjectForKey:@"acceptedConsent"];
     
-    MageSessionManager *manager = [MageSessionManager manager];
-    [manager clearToken];
+    [[MageSessionManager manager] clearToken];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     
