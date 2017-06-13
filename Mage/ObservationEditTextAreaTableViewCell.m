@@ -44,9 +44,14 @@
 
 - (void) doneButtonPressed {
     [self.textArea resignFirstResponder];
-    self.value = self.textArea.text;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if (![self.value isEqualToString:self.textArea.text]) {
+        self.value = self.textArea.text;
+        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+        }
     }
 }
 

@@ -28,6 +28,7 @@
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, doneBarButton, nil];
     self.valueTextField.inputView = self.picker;
     self.valueTextField.inputAccessoryView = toolbar;
+    [self.valueTextField setDelegate:self];
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
     id value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
@@ -59,20 +60,29 @@
 }
 
 - (void) cancelButtonPressed {
+    NSUInteger index = [self.pickerValues indexOfObject:self.valueTextField.text];
+    if (index != NSNotFound) {
+        [self.picker selectRow:index inComponent:0 animated:NO];
+    }
     [self.valueTextField resignFirstResponder];
 }
 
 - (void) doneButtonPressed {
     [self.valueTextField resignFirstResponder];
-    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     NSUInteger row = [self.picker selectedRowInComponent:0];
     if (row >= [self.pickerValues count]) return;
     
     NSString *newValue = [self.pickerValues objectAtIndex:row];
-    self.valueTextField.text = newValue;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
+    if (![self.valueTextField.text isEqualToString:[self.pickerValues objectAtIndex:row]]) {
+        self.valueTextField.text = newValue;
+        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+            [self.delegate observationField:self.fieldDefinition valueChangedTo:newValue reloadCell:NO];
+        }
     }
+
 }
 
 - (BOOL) isEmpty {

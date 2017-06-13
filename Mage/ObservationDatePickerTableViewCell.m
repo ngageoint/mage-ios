@@ -10,18 +10,19 @@
 
 @interface ObservationDatePickerTableViewCell ()
 @property (strong, nonatomic) UIDatePicker *datePicker;
+@property (strong, nonatomic) NSDate *date;
 @end
 
 @implementation ObservationDatePickerTableViewCell
 
 - (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    NSDate *date = nil;
+    self.date = nil;
     NSString *timestamp = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
     if ([timestamp length] > 0) {
-        date = [NSDate dateFromIso8601String:timestamp];
+        self.date = [NSDate dateFromIso8601String:timestamp];
     } else {
-        date = [[NSDate alloc] init];
-        [self.delegate observationField:field valueChangedTo:[date iso8601String] reloadCell:NO];
+        self.date = [[NSDate alloc] init];
+        [self.delegate observationField:field valueChangedTo:[self.date iso8601String] reloadCell:NO];
     }
     
     self.datePicker = [[UIDatePicker alloc] init];
@@ -30,7 +31,7 @@
     } else {
         self.datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
     }
-    self.datePicker.date = date;
+    self.datePicker.date = self.date;
     [self.textField setText:[_datePicker.date formattedDisplayDate]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
     UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
@@ -43,6 +44,7 @@
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, [[UIBarButtonItem alloc] initWithCustomView:timeZoneLabel], flexSpace, doneBarButton, nil];
     self.textField.inputView = self.datePicker;
     self.textField.inputAccessoryView = toolbar;
+    [self.textField setDelegate:self];
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
@@ -55,16 +57,21 @@
 }
 
 - (void) cancelButtonPressed {
+    self.datePicker.date = self.date;
     [self.textField resignFirstResponder];
 }
 
 - (void) doneButtonPressed {
     [self.textField resignFirstResponder];
-    NSString *newValue = [self.datePicker.date formattedDisplayDate];
-    self.textField.text = newValue;
+}
 
-    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:[self.datePicker.date iso8601String] reloadCell:NO];
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    NSString *newValue = [self.datePicker.date formattedDisplayDate];
+    if (![self.datePicker.date isEqualToDate:self.date]) {
+        self.textField.text = newValue;
+        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+            [self.delegate observationField:self.fieldDefinition valueChangedTo:[self.datePicker.date iso8601String] reloadCell:NO];
+        }
     }
 }
 
