@@ -3,11 +3,18 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.1 (TBD)
+## 1.4.2 (TBD)
 
 * TBD
 
 ##### Features
+
+##### Bug Fixes
+
+## 1.4.1 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.1) (06-13-2017)
+
+##### Features
+* Functional improvements to observation form fields.  Users no longer have to tap the 'Done' button when moving between observation form fields.
 
 ##### Bug Fixes
 
