@@ -57,6 +57,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    // These two lines required to get the prompt to resize the view and not cover the buttons
+    [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController setNavigationBarHidden:NO];
+    
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     
