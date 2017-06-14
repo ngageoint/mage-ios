@@ -28,7 +28,7 @@
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -105,22 +105,34 @@
         if ([locations count]) {
             location = ((GeoPoint *) [[locations objectAtIndex:0] geometry]).location;
         }
+        [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
     }
     
     if (location) {
-        // Zoom and center the map
-        CLLocationDistance latitudeMeters = 500;
-        CLLocationDistance longitudeMeters = 500;
-        double accuracy = location.horizontalAccuracy;
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-        
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
-        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-        [self.mapDelegate selectedUser:self.user region:viewRegion];
-    }
+        [self zoomAndCenterMapOnLocation:location];
+     }
     
     [self sizeHeaderToFit];
+}
+
+- (void) zoomAndCenterMapOnLocation: (CLLocation *) location {
+    CLLocationDistance latitudeMeters = 500;
+    CLLocationDistance longitudeMeters = 500;
+    double accuracy = location.horizontalAccuracy;
+    latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+    longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+    [self.mapDelegate selectedUser:self.user region:viewRegion];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
+    [self.mapDelegate updateLocations: locations];
+    if ([locations count]) {
+        [self zoomAndCenterMapOnLocation:((GeoPoint *) [[locations objectAtIndex:0] geometry]).location];
+    }
 }
 
 -(void) viewWillDisappear:(BOOL)animated {

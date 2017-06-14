@@ -1209,6 +1209,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 - (void)selectedUser:(User *) user {
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
     
     [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
@@ -1218,6 +1219,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     
     [self.mapView setRegion:region animated:YES];
+    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 
