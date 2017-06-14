@@ -25,6 +25,7 @@
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
 #import "UINextField.h"
+#import "MageOfflineObservationManager.h"
 
 @interface LoginTableViewController ()
     @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
@@ -154,10 +155,33 @@
 - (void) verifyLogin {
     if (!self.allowLogin) return;
     
-    if (self.server.reachabilityManager.reachable && ([self userChanged])) {
-        [MagicalRecord deleteAndSetupMageCoreDataStack];
+    if (self.server.reachabilityManager.reachable && [self userChanged]) {
+        if ([MageOfflineObservationManager offlineObservationCount] > 0) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
+                                                                           message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            __weak __typeof__(self) weakSelf = self;
+            [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [MagicalRecord deleteAndSetupMageCoreDataStack];
+                [weakSelf login];
+                
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            [MagicalRecord deleteAndSetupMageCoreDataStack];
+            [self login];
+        }
+        
+    } else {
+        [self login];
     }
-    
+}
+
+- (void) login {
 	// setup authentication
     [self startLogin];
     NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];

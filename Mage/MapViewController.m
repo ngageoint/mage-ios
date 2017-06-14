@@ -124,7 +124,17 @@
                   context:NULL];
     
     // Start the timer for updating the circles
-    [self scheduleColorUpdateTimer];
+    [self startColorUpdateTimer];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActive)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
 }
@@ -132,11 +142,6 @@
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:timeFilterString];
-}
-
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -150,20 +155,37 @@
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     
-    // Stop the timer for updating the circles
-    if (_locationColorUpdateTimer != nil) {
-        [_locationColorUpdateTimer invalidate];
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+
+    [self stopColorUpdateTimer];
 }
 
-- (void) scheduleColorUpdateTimer {
+- (void) applicationWillResignActive {
+    [self stopColorUpdateTimer];
+}
+
+- (void) applicationDidBecomeActive {
+    [self startColorUpdateTimer];
+}
+
+- (void) startColorUpdateTimer {
+    __weak __typeof__(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        _locationColorUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onColorUpdateTimerFire) userInfo:nil repeats:YES];
+        weakSelf.locationColorUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onColorUpdateTimerFire) userInfo:nil repeats:YES];
     });
 }
 
+- (void) stopColorUpdateTimer {
+    // Stop the timer for updating the circles
+    if (self.locationColorUpdateTimer != nil) {
+        [self.locationColorUpdateTimer invalidate];
+        self.locationColorUpdateTimer = nil;
+    }
+}
+
 - (void) onColorUpdateTimerFire {
-    NSLog(@"Update the colors");
+    NSLog(@"Update the user location icon colors");
     [self.mapDelegate updateLocations:[self.mapDelegate.locations.fetchedResultsController fetchedObjects]];
 }
 

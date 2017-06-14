@@ -76,6 +76,8 @@
     [defaults removeObserver:self forKeyPath:kTimeFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
+    
+    self.observationDataStore.observations.delegate = nil;
 }
 
 - (void) setNavBarTitle {

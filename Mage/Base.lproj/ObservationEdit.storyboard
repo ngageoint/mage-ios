@@ -140,7 +140,7 @@
                                                     <rect key="frame" x="8" y="8" width="359" height="50.5"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="50.5" id="FU5-DB-AJH"/>
+                                                        <constraint firstAttribute="height" priority="999" constant="50" id="FU5-DB-AJH"/>
                                                     </constraints>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4jF-t2-eUg">
                                                         <size key="itemSize" width="50" height="50"/>
@@ -175,8 +175,8 @@
                                                 </collectionView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="GVY-4G-lIp" firstAttribute="top" secondItem="une-cg-uup" secondAttribute="topMargin" id="Egi-OT-1kg"/>
-                                                <constraint firstItem="GVY-4G-lIp" firstAttribute="trailing" secondItem="une-cg-uup" secondAttribute="trailingMargin" id="fCB-gT-g0p"/>
+                                                <constraint firstItem="GVY-4G-lIp" firstAttribute="top" secondItem="une-cg-uup" secondAttribute="topMargin" priority="999" id="Egi-OT-1kg"/>
+                                                <constraint firstItem="GVY-4G-lIp" firstAttribute="trailing" secondItem="une-cg-uup" secondAttribute="trailingMargin" priority="999" id="fCB-gT-g0p"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="GVY-4G-lIp" secondAttribute="bottom" id="hJA-aG-tkH"/>
                                                 <constraint firstItem="GVY-4G-lIp" firstAttribute="leading" secondItem="une-cg-uup" secondAttribute="leadingMargin" id="sbC-wF-1Yw"/>
                                             </constraints>

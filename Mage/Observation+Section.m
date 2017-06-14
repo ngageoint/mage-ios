@@ -15,4 +15,12 @@
     return [self.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterNoStyle];
 }
 
+- (NSString *) dirtySection {
+    if ([self.dirty isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+        return @"Observations Awaiting Sync";
+    } else {
+        return [self.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterNoStyle];
+    }
+}
+
 @end

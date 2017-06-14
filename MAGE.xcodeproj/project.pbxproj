@@ -32,6 +32,7 @@
 		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */; };
 		17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */; };
+		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
@@ -55,6 +56,8 @@
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
 		2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */; };
 		2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* Filter.m */; };
+		2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */; };
+		2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */; };
 		2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43A31CE4F68400D99AAF /* TimeFilter.m */; };
 		2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */; };
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
@@ -72,6 +75,7 @@
 		2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD307691B47538900ACFE68 /* PeopleContainerViewController.m */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
+		2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
@@ -230,6 +234,9 @@
 		04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointAnnotationView.m; path = Map/MapShapePointAnnotationView.m; sourceTree = "<group>"; };
 		04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnnotationDragCallback.h; path = Map/AnnotationDragCallback.h; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
+		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate.h; sourceTree = "<group>"; };
+		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
+		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OZZipFile+OfflineMap.h"; sourceTree = "<group>"; };
@@ -273,6 +280,10 @@
 		2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionTableViewCell.m; sourceTree = "<group>"; };
 		2F99EC1F1E2982E700E0CBB6 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		2F99EC201E2982E700E0CBB6 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
+		2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageOfflineObservationManager.h; sourceTree = "<group>"; };
+		2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageOfflineObservationManager.m; sourceTree = "<group>"; };
+		2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
+		2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
 		2F9F43A21CE4F68400D99AAF /* TimeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFilter.h; sourceTree = "<group>"; };
 		2F9F43A31CE4F68400D99AAF /* TimeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeFilter.m; sourceTree = "<group>"; };
 		2F9F43A91CE5050400D99AAF /* UINavigationItem+Subtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+Subtitle.h"; sourceTree = "<group>"; };
@@ -305,6 +316,8 @@
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
+		2FDB66A31EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusErrorTableViewCell.h; sourceTree = "<group>"; };
+		2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusErrorTableViewCell.m; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
@@ -816,6 +829,7 @@
 			children = (
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
+				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
 				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
 				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
 				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
@@ -964,6 +978,10 @@
 				F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */,
 				F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */,
 				F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */,
+				2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */,
+				2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */,
+				2FDB66A31EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.h */,
+				2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -976,6 +994,8 @@
 				F76949151AA6436000CB680B /* EventChooserController.m */,
 				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
 				F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */,
+				2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */,
+				2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -1063,6 +1083,8 @@
 				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */,
 				04E0CB0D1C40161C00E34F9C /* MageConstants.h */,
 				04E0CB0E1C40161C00E34F9C /* MageConstants.m */,
+				2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */,
+				2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -1427,6 +1449,7 @@
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
+				2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
@@ -1440,6 +1463,7 @@
 				2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
+				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
@@ -1450,6 +1474,7 @@
 				F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
+				2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */,
@@ -1479,6 +1504,7 @@
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */,
+				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,

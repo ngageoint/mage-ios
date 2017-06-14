@@ -34,6 +34,7 @@
 #import "GeoPackageFeatureTableCacheOverlay.h"
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
+#import "MageOfflineObservationManager.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) UIView *splashView;
@@ -83,6 +84,8 @@
     
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
+    
+    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil]];
 	 
 	return YES;
 }
@@ -106,6 +109,10 @@
     [[Mage singleton] stopServices];
 }
 
+- (void) applicationWillResignActive:(UIApplication *)application {
+    application.applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
+}
+
 - (void) applicationWillEnterForeground:(UIApplication *) application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
@@ -124,6 +131,15 @@
     }
     
     [self processOfflineMapArchives];
+}
+
+- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+    // Handle attachments uploaded in the background
+    if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
+        NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");
+        AttachmentPushService *service = [AttachmentPushService singleton];
+        service.backgroundSessionCompletionHandler = completionHandler;
+    }
 }
 
 - (void) processOfflineMapArchives {
@@ -343,10 +359,8 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [[LocationFetchService singleton] stop];
-    [[ObservationFetchService singleton] stop];
-    [[ObservationPushService singleton] stop];
-    [[AttachmentPushService singleton] stop];
+    [[Mage singleton] stopServices];
+    
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]
         || [currentController isKindOfClass:[LoginViewController class]]
@@ -375,19 +389,24 @@
 }
 
 - (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    Attachment *attachment = (Attachment *) entity;
+    [attachment.managedObjectContext obtainPermanentIDsForObjects:@[attachment] error:nil];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:attachment.managedObjectContext];
+    
+    [localContext performBlock:^{
+        Attachment *localAttachment = [(Attachment *) entity MR_inContext:localContext];
+        
         // Fetch the desired source image by making a network request
-        Attachment *attachment = (Attachment *)entity;
         UIImage *sourceImage = nil;
-        NSLog(@"content type %@", attachment.contentType);
-        if ([attachment.contentType hasPrefix:@"image"]) {
-            NSURL *url = [entity sourceImageURLWithFormatName:formatName];
+        NSLog(@"content type %@", localAttachment.contentType);
+        if ([localAttachment.contentType hasPrefix:@"image"]) {
+            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
             sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 completionBlock(sourceImage);
             });
-        } else if ([attachment.contentType hasPrefix:@"video"]) {
-            NSURL *url = [entity sourceImageURLWithFormatName:formatName];
+        } else if ([localAttachment.contentType hasPrefix:@"video"]) {
+            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
             AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
             AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
             generator.appliesPreferredTrackTransform = YES;
@@ -402,7 +421,7 @@
                 UIImage *sourceImage = [UIImage imageWithCGImage:image];
                 UIImage *thumbnail = [sourceImage thumbnailWithSize:thumbnailSize];
                 UIImage *playOverlay = [UIImage imageNamed:@"play_overlay"];
-
+                
                 UIGraphicsBeginImageContextWithOptions(thumbnail.size, NO, 0.0);
                 [thumbnail drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
                 [playOverlay drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
@@ -415,7 +434,7 @@
             };
             
             [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
-        } else if ([attachment.contentType hasPrefix:@"audio"]) {
+        } else if ([localAttachment.contentType hasPrefix:@"audio"]) {
             sourceImage = [UIImage imageNamed:@"audio_thumbnail"];
             dispatch_async(dispatch_get_main_queue(), ^{
                 completionBlock(sourceImage);
@@ -426,7 +445,7 @@
                 completionBlock(sourceImage);
             });
         }
-    });
+    }];
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *) url sourceApplication:(NSString *) sourceApplication annotation:(id) annotation {

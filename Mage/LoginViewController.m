@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "MageServer.h"
+#import "Server.h"
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
@@ -28,5 +29,8 @@
     } else {
         [self.serverURL setTitle:[url absoluteString] forState:UIControlStateNormal];
     }
+    
+    // If the user is logging in, force them to pick the event again
+    [Server removeCurrentEventId];
 }
 @end

@@ -65,6 +65,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)userDetailSelected:(User *) user {
+    [self.mapViewController userDetailSelected:user];
+}
+
 - (void)selectedUser:(User *) user {
     [self.mapViewController selectedUser:user];
 }
@@ -84,11 +88,6 @@
 - (void)observationDetailSelected:(Observation *)observation {
     [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
     [self.mapViewController observationDetailSelected:observation];
-}
-
-- (void)userDetailSelected:(User *)user {
-    [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
-    [self.mapViewController userDetailSelected:user];
 }
 
 - (void) ensureButtonVisible {

@@ -9,55 +9,83 @@
 #import <User.h>
 #import <Server.h>
 #import "EventChooserController.h"
+#import "Observation.h"
+#import "EventTableViewCell.h"
+
+@interface EventTableDataSource()
+
+@property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
+
+@end
 
 @implementation EventTableDataSource
 
 - (id) init {
     if (self = [super init]) {
-        NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
-        
-        User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
-        
-        NSFetchRequest *recentFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
-        [recentFetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
-        
-        self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentFetchRequest
-                                                                                  managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                    sectionNameKeyPath:nil
-                                                                                             cacheName:nil];
-        self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
-        self.recentFetchedResultsController.delegate = self;
-        
-        NSFetchRequest *allFetchRequest = [Event MR_requestAllWithPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]];
-        NSSortDescriptor *allSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-        [allFetchRequest setSortDescriptors:[NSArray arrayWithObject:allSort]];
-        
-        self.otherFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:allFetchRequest
-                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                 sectionNameKeyPath:nil
-                                                                                          cacheName:nil];
-        self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
-        self.otherFetchedResultsController.delegate = self;
-        
+
     }
     return self;
 }
 
 // This method should not be called until the events have been loaded from the server
 - (void) startFetchController {
+    
+    User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
+    
+    self.otherFetchedResultsController = [Event MR_fetchAllSortedBy:@"name"
+                                                      ascending:YES
+                                                  withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]
+                                                        groupBy:nil
+                                                       delegate:self
+                                                      inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
+    
+    self.recentFetchedResultsController = [Event MR_fetchAllSortedBy:@"recentSortOrder"
+                                                       ascending:YES
+                                                   withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]
+                                                         groupBy:nil
+                                                        delegate:self
+                                                       inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
+
     NSError *error;
     if (![self.otherFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
+        
     if (![self.recentFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:[Observation MR_entityName]];
+    
+    NSExpression *eventExpression = [NSExpression expressionForKeyPath:@"eventId"];
+    NSExpressionDescription *countExpression = [[NSExpressionDescription alloc] init];
+    
+    countExpression.name = @"count";
+    countExpression.expression = [NSExpression expressionForFunction:@"count:" arguments:@[eventExpression]];
+    countExpression.expressionResultType = NSInteger64AttributeType;
+    
+    request.resultType = NSDictionaryResultType;
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
+    request.propertiesToGroupBy = @[@"eventId"];
+    request.propertiesToFetch = @[@"eventId", countExpression];
+    request.predicate = [NSPredicate predicateWithFormat:@"error != nil"];
+    
+    NSArray *groups = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:request error:nil];
+    NSMutableDictionary *offlineCount = [[NSMutableDictionary alloc] init];
+    for (NSDictionary *group in groups) {
+        [offlineCount setObject:[group objectForKey:@"count"] forKey:[group objectForKey:@"eventId"]];
+    }
+    self.eventIdToOfflineObservationCount = offlineCount;
+
     
     [self.tableView reloadData];
 }
@@ -87,26 +115,16 @@
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
-    Event *e = nil;
+    EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+    Event *event = nil;
     if (indexPath.section == 1) {
-        e = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-        cell.textLabel.text = e.name;
-        cell.detailTextLabel.text = e.eventDescription;
+        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     } else if (indexPath.section == 2) {
-        e = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-        cell.textLabel.text = e.name;
-        cell.detailTextLabel.text = e.eventDescription;
+        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
     
-    if ([Server currentEventId] != nil && [e.remoteId isEqualToNumber:[Server currentEventId]]) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.eventSelectionDelegate didSelectEvent:e];
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    }
+    [cell populateCellWithEvent:event offlineObservationCount:[[self.eventIdToOfflineObservationCount objectForKey:event.remoteId] integerValue]];
     
-    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
@@ -163,15 +181,11 @@
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
-    
+
+    [Server setCurrentEventId:event.remoteId];
     [self.eventSelectionDelegate didSelectEvent:event];
-    [tableView beginUpdates];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [tableView endUpdates];
     
-    [Server setCurrentEventId:event.remoteId completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        [tableView reloadData];
-    }];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

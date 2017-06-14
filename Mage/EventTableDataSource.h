@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet id<EventSelectionDelegate> eventSelectionDelegate;
 
-
 - (void) startFetchController;
 
 @end

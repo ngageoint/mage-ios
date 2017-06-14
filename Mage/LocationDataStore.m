@@ -66,6 +66,7 @@
 	
 	Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
     [personCell populateCellWithUser:location.user];
+    personCell.userActionsDelegate = self;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -145,17 +146,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
     if (self.personSelectionDelegate) {
-        [self.personSelectionDelegate selectedUser:location.user];
+        [self.personSelectionDelegate userDetailSelected:location.user];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+- (void) userMapTapped:(PersonTableViewCell *) tableViewCell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
     if (self.personSelectionDelegate) {
-        [self.personSelectionDelegate userDetailSelected:location.user];
+        [self.personSelectionDelegate selectedUser:location.user];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

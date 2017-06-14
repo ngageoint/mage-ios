@@ -3,11 +3,24 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.3.3 (TBD)
+## 1.4.1 (TBD)
 
 * TBD
 
 ##### Features
+* Hook up new mage-ios-sdk background upload service for attachments.
+
+##### Bug Fixes
+* Don't save (duplicate) media picked from the gallery.
+* Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
+
+## 1.4.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.0) (05-26-2017)
+
+##### Features
+* Uses mage-sdk 1.4 which will obtain an observation id from the server before pushing observation infomation.  This will
+  prevent a duplicate observation in the case that the client drops a successful create attempt and retries.
+* You can view observation sync status in observation view, profile, and main application badge.
+* You can manually attempt to sync observations.
 
 ##### Bug Fixes
 

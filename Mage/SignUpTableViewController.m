@@ -10,6 +10,7 @@
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
+#import <NBAsYouTypeFormatter.h>
 
 @interface SignUpTableViewController ()
     @property (weak, nonatomic) IBOutlet UITextField *displayName;
@@ -17,6 +18,7 @@
     @property (weak, nonatomic) IBOutlet UITextField *password;
     @property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
     @property (weak, nonatomic) IBOutlet UITextField *email;
+    @property (weak, nonatomic) IBOutlet UITextField *phone;
 @end
 
 @implementation SignUpTableViewController
@@ -38,6 +40,27 @@
     
     return YES;
     
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == _phone) {
+        NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
+        
+        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        rawString = [rawString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
+        NBAsYouTypeFormatter *aFormatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:[[NSLocale currentLocale] countryCode]];
+        NSString *formattedString = [aFormatter inputString:rawString];
+        
+        if (aFormatter.isSuccessfulFormatting) {
+            textField.text = formattedString;
+        } else {
+            textField.text = textFieldString;
+        }
+        
+        return NO;
+    }
+    return YES;
 }
 
 - (IBAction) onSignup:(id) sender {
@@ -63,6 +86,7 @@
             @"username": [self.username.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"displayName": [self.displayName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"email": [self.email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+            @"phone": [self.phone.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"password": [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
             @"passwordconfirm": [self.passwordConfirm.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
         };

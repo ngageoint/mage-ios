@@ -136,22 +136,4 @@
     [self.tableView endUpdates];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    User *user = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    if (self.userSelectionDelegate) {
-        [self.userSelectionDelegate selectedUser:user];
-    }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    User *user = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    if (self.userSelectionDelegate) {
-        [self.userSelectionDelegate userDetailSelected:user];
-    }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
 @end

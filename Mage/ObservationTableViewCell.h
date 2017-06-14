@@ -21,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteNumber;
-@property (weak, nonatomic) IBOutlet UIImageView *importantIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *importantBadge;
 @property (weak, nonatomic) IBOutlet NSObject<ObservationActionsDelegate> *observationActionsDelegate;
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;

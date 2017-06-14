@@ -22,6 +22,8 @@
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) UIColor *favoriteDefaultColor;
 @property (strong, nonatomic) UIColor *favoriteHighlightColor;
+@property (weak, nonatomic) IBOutlet UIImageView *syncBadge;
+@property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
 
 @end
 
@@ -32,7 +34,7 @@
     
     if (self) {
         self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:.54];
+        self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:.38];
         self.favoriteHighlightColor = [UIColor colorWithRed:126/255.0 green:211/255.0 blue:33/255.0 alpha:1.0];
     }
     
@@ -73,7 +75,7 @@
         self.attachmentCollection.hidden = YES;
     }
     
-    self.importantIcon.hidden = ![observation isImportant];
+    self.importantBadge.hidden = ![observation isImportant];
     
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
@@ -92,11 +94,26 @@
     } else {
         self.favoriteNumber.hidden = YES;
     }
+    
+    if (observation.error != nil) {
+        BOOL hasValidationError = [observation hasValidationError];
+        self.syncBadge.hidden = hasValidationError;
+        self.errorBadge.hidden = !hasValidationError;
+    } else {
+        self.syncBadge.hidden = YES;
+        self.errorBadge.hidden = YES;
+    }
 }
 
 - (IBAction)onFavoriteTapped:(id)sender {
     if (self.observationActionsDelegate) {
         [self.observationActionsDelegate observationFavoriteTapped:self];
+    }
+}
+
+- (IBAction)onMapTapped:(id)sender {
+    if ([self.observationActionsDelegate respondsToSelector:@selector(observationMapTapped:)]) {
+        [self.observationActionsDelegate observationMapTapped:self];
     }
 }
 

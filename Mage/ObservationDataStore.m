@@ -15,10 +15,9 @@
 #import "GeometryUtility.h"
 
 @interface ObservationDataStore ()
-    @property (weak, nonatomic) IBOutlet UIViewController *viewController;
-    @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
-    @property (nonatomic) NSDateFormatter *dateFormatter;
-    @property (nonatomic) NSDateFormatter *dateFormatterToDate;
+@property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
+@property (nonatomic) NSDateFormatter *dateFormatter;
+@property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
 
 @implementation ObservationDataStore
@@ -122,6 +121,7 @@
     return cell;
 }
 
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
 	
     UITableView *tableView = self.tableView;
@@ -148,12 +148,12 @@
 }
 
 - (void) controller:(NSFetchedResultsController *)controller didChangeSection:(id) sectionInfo atIndex:(NSUInteger) sectionIndex forChangeType:(NSFetchedResultsChangeType) type {
-	
+    
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-			
+            
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -175,23 +175,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     if (self.observationSelectionDelegate) {
-        [self.observationSelectionDelegate selectedObservation:observation];
-    }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
-    if (self.observationSelectionDelegate) {
         [self.observationSelectionDelegate observationDetailSelected:observation];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void) observationMapTapped:(ObservationTableViewCell *) tableViewCell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
+    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+    [self.observationSelectionDelegate selectedObservation:observation];
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *view = [[UIView alloc] init];
-    
-    return view;
+    return [[UIView alloc] init];
 }
 
 - (void) observationFavoriteTapped:(ObservationTableViewCell *) tableViewCell {
@@ -203,9 +199,9 @@
 }
 
 - (void) observationShareTapped:(ObservationTableViewCell *) tableViewCell {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
-    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
-    [observation shareObservationForViewController:self.viewController];
+//    NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
+//    Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
+//    [observation shareObservationForViewController:self.viewController];
 }
 
 - (void) observationDirectionsTapped:(ObservationTableViewCell *) tableViewCell {

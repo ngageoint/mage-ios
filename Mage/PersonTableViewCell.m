@@ -28,4 +28,10 @@
     return self;
 }
 
+- (IBAction)onMapTapped:(id)sender {
+    if ([self.userActionsDelegate respondsToSelector:@selector(userMapTapped:)]) {
+        [self.userActionsDelegate userMapTapped:self];
+    }
+}
+
 @end

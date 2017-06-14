@@ -8,7 +8,7 @@
 
 #import "ServerURLController.h"
 #import "MageServer.h"
-#import "MagicalRecord+delete.h"
+#import "MagicalRecord+MAGE.h"
 
 @interface ServerURLController ()
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -41,8 +41,7 @@
         weakSelf.errorStatus.hidden = YES;
         weakSelf.errorButton.hidden = YES;
         
-        [MagicalRecord deleteCoreDataStack];
-        [MagicalRecord setupCoreDataStackWithStoreNamed:@"Mage.sqlite"];
+        [MagicalRecord deleteAndSetupMageCoreDataStack];
         
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(NSError *error) {

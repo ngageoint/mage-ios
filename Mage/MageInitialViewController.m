@@ -6,7 +6,7 @@
 
 #import "MageInitialViewController.h"
 #import <UserUtility.h>
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 #import "MageRootViewController.h"
 #import "DeviceUUID.h"
 #import <LocationService.h>
@@ -32,8 +32,7 @@
         return;
     }
 
-    NSString *token = [StoredPassword retrieveStoredToken];
-    [[MageSessionManager manager] setToken:token];
+    [MageSessionManager manager].token = [StoredPassword retrieveStoredToken];
     
     [self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
 }

@@ -32,22 +32,22 @@
 - (void) updateFavorites {
     NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
 
-    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:0];
+    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:2];
     
     NSInteger favoritesCount = [favorites count];
     
     if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
         [headerSection removeObjectAtIndex:2];
         [self.propertyTable beginUpdates];
-        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
         [self.propertyTable endUpdates];
     } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
         [headerSection insertObject:@"favorites" atIndex:2];
-        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
     } else if ([headerSection containsObject:@"favorites"]) {
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0], [NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2], [NSIndexPath indexPathForRow:3 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

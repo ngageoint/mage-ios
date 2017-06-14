@@ -21,14 +21,12 @@
 #import "MapDelegate.h"
 #import "AttachmentViewController.h"
 #import "GeometryUtility.h"
+#import "ObservationPushService.h"
 
-@interface ObservationViewController ()<NSFetchedResultsControllerDelegate>
+@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
-@property (weak, nonatomic) IBOutlet UILabel *primaryFieldLabel;
-@property (weak, nonatomic) IBOutlet UILabel *secondaryFieldLabel;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) IBOutlet MapDelegate *mapDelegate;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
+@property (nonatomic, assign) BOOL manualSync;
 
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *fields;
@@ -39,13 +37,21 @@
 
 @implementation ObservationViewController
 
+static NSInteger const NUMBER_OF_SECTIONS = 5;
+static NSInteger const STATUS_SECTION = 0;
+static NSInteger const SYNC_SECTION = 1;
+static NSInteger const HEADER_SECTION = 2;
+static NSInteger const ATTACHMENT_SECTION = 3;
+static NSInteger const IMPORTANT_SECTION = 4;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    
+
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateUserDefaults:)
                                                  name:NSUserDefaultsDidChangeNotification
@@ -58,23 +64,24 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.tableLayout = [[NSMutableArray alloc] init];
-    
+
+    self.manualSync = NO;
+    self.tableLayout = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_SECTIONS];
+
     self.favoritesFetchedResultsController = [ObservationFavorite MR_fetchAllSortedBy:@"observation.timestamp"
                                                                             ascending:NO
                                                                         withPredicate:[NSPredicate predicateWithFormat:@"observation == %@", self.observation]
                                                                               groupBy:nil
                                                                              delegate:self
                                                                             inContext:[NSManagedObjectContext MR_defaultContext]];
-    
+
     self.importantFetchedResultsController = [ObservationImportant MR_fetchAllSortedBy:@"observation.timestamp"
                                                                              ascending:NO
                                                                          withPredicate:[NSPredicate predicateWithFormat:@"observation == %@", self.observation]
                                                                                groupBy:nil
                                                                               delegate:self
                                                                              inContext:[NSManagedObjectContext MR_defaultContext]];
-    
+
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     if ([self userHasEditPermissions:user]) {
         self.editButton.style = UIBarButtonItemStylePlain;
@@ -85,86 +92,61 @@
         self.editButton.enabled = NO;
         self.editButton.title = nil;
     }
-    
-    NSString *name = [self.observation.properties valueForKey:@"type"];
-    if (name != nil) {
-        self.primaryFieldLabel.text = name;
+
+    self.navigationItem.title = [self.observation.properties valueForKey:@"type"];
+
+    if (self.observation.isDirty) {
+        if ([self.observation hasValidationError]) {
+            [self.tableLayout insertObject:@[@"statusError"] atIndex:STATUS_SECTION];
+        } else {
+            [self.tableLayout insertObject:@[@"statusNeedsSync"] atIndex:STATUS_SECTION];
+        }
     } else {
-        self.primaryFieldLabel.text = @"Observation";
+        [self.tableLayout insertObject:@[@"statusOk"] atIndex:STATUS_SECTION];
     }
-    self.navigationItem.title = self.navigationItem.title = name;
 
-    Observations *observations = [Observations observationsForObservation:self.observation];
-    [self.observationDataStore startFetchControllerWithObservations:observations];
-    if (self.mapDelegate != nil) {
-        [self.mapDelegate setObservations:observations];
-        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-        [self.mapDelegate selectedObservation:self.observation];
-    }
-    [self.mapDelegate setObservations:observations];
-    
-    CLLocationDistance latitudeMeters = 500;
-    CLLocationDistance longitudeMeters = 500;
-    NSDictionary *properties = self.observation.properties;
-    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-    if (accuracyProperty != nil) {
-        double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-    }
-    
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.observation.location.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-    
-    [self.mapDelegate selectedObservation:self.observation region:viewRegion];
-    
-    [self.tableLayout addObject:[self getHeaderSection]];
-    [self.tableLayout addObject:[self getAttachmentsSection]];
+    [self.tableLayout insertObject:@[] atIndex:SYNC_SECTION];
+    [self.tableLayout insertObject:[self getHeaderSection] atIndex:HEADER_SECTION];
+    [self.tableLayout insertObject:[self getAttachmentsSection] atIndex:ATTACHMENT_SECTION];
 
-    NSMutableArray *importantSection = [[NSMutableArray alloc] init];
     if ([self canEditObservationImportant] && !self.observation.isImportant) {
-        [importantSection addObject:@"addImportant"];
+        [self.tableLayout insertObject:@[@"addImportant"] atIndex:IMPORTANT_SECTION];
     } else if (self.observation.isImportant) {
-        [importantSection addObject:@"updateImportant"];
+        [self.tableLayout insertObject:@[@"updateImportant"] atIndex:IMPORTANT_SECTION];
     }
-    [self.tableLayout addObject:importantSection];
-    
+
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSString *variantText = [self.observation.properties objectForKey:variantField];
-    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && variantText.length > 0) {
-        self.secondaryFieldLabel.text = [self.observation.properties objectForKey:variantField];
-    } else {
-        [self.secondaryFieldLabel removeFromSuperview];
-    }
-    
+
     NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
     NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
     [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
     [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
-    
+
     NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"type", @"geometry", nil];
     self.variantField = [event.form objectForKey:@"variantField"];
     if (self.variantField) {
         [generalProperties addObject:self.variantField];
     }
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    
+
     [self.propertyTable reloadData];
+
+    [[ObservationPushService singleton] addObservationPushDelegate:self];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     self.favoritesFetchedResultsController.delegate = nil;
     self.favoritesFetchedResultsController = nil;
-    
+
     self.importantFetchedResultsController.delegate = nil;
     self.importantFetchedResultsController = nil;
+
+    [[ObservationPushService singleton] removeObservationPushDelegate:self];
 }
 
 - (NSMutableArray *) getHeaderSection {
@@ -179,23 +161,22 @@
     return self.tableLayout.count + 1;
 }
 
+
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
     if (section < self.tableLayout.count) {
-        NSLog(@"header section count %lu", (unsigned long)[self.tableLayout[section] count]);
         return [self.tableLayout[section] count];
     } else {
-        NSLog(@"fields count %lu", (unsigned long)[self.fields count]);
         return [self.fields count];
     }
 }
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
-    
+
     NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
     id title = [field objectForKey:@"title"];
     id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
-    
+
     [observationCell populateCellWithKey:title andValue:value];
 }
 
@@ -203,46 +184,101 @@
     NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
     ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field valueForKey:@"type"]];
     cell.fieldDefinition = field;
-    
+
     return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     if (indexPath.section < self.tableLayout.count) {
         id cell = [tableView dequeueReusableCellWithIdentifier:self.tableLayout[indexPath.section][indexPath.row]];
-        [cell configureCellForObservation:self.observation];
-        
+
+        if ([cell respondsToSelector:@selector(configureCellForObservation:)]) {
+            [cell configureCellForObservation:self.observation];
+        }
+
         if ([cell respondsToSelector:@selector(setAttachmentSelectionDelegate:)]) {
             [cell setAttachmentSelectionDelegate:self];
         }
-        
+
         if ([cell respondsToSelector:@selector(setObservationImportantDelegate:)]) {
             [cell setObservationImportantDelegate:self];
         }
-        
+
         return cell;
     } else {
         ObservationPropertyTableViewCell *cell = [self cellForObservationAtIndex:indexPath inTableView:tableView];
         [self configureCell:cell atIndexPath:indexPath];
         [cell.valueTextView.textContainer setLineBreakMode:NSLineBreakByWordWrapping];
-        
+
         cell.separatorInset = UIEdgeInsetsMake(0.f, cell.bounds.size.width, 0.f, 0.f);
-        
+
         return cell;
     }
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section < self.tableLayout.count && [self.tableLayout[section] count] == 0) {
-        return 0.01;
+- (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
+    BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] containsObject:@"syncObservation"];
+    if (!isSyncSectionShowing && indexPath.section == STATUS_SECTION && [[self.tableLayout objectAtIndex:STATUS_SECTION] containsObject:@"statusNeedsSync"]) {
+        [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[@"syncObservation"]];
+
+        [tableView cellForRowAtIndexPath:indexPath].selectionStyle = UITableViewCellSelectionStyleNone;
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationTop];
+    } else if (isSyncSectionShowing && indexPath.section == SYNC_SECTION && !self.manualSync) {
+        self.manualSync = YES;
+        [self.tableLayout replaceObjectAtIndex:STATUS_SECTION withObject:@[@"statusSyncing"]];
+        [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[@"syncingObservation"]];
+
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:STATUS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationNone];
+
+        [[ObservationPushService singleton] pushObservations:@[self.observation]];
     }
-    
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSString *)tableView:(UITableView *) tableView titleForHeaderInSection:(NSInteger) section {
+    NSString *title = nil;
+
+    BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] count];
+    if (isSyncSectionShowing && section == SYNC_SECTION) {
+        title = @"Manually push";
+    }
+
+    return title;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    NSString *title = nil;
+
+    BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] count];
+    if (isSyncSectionShowing && section == SYNC_SECTION) {
+        title = @"MAGE will automatically send your changes to the server, you can also manually attempt to send your changes now.";
+    }
+
+    return title;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == STATUS_SECTION) {
+        return CGFLOAT_MIN;
+    }
+
+    if (section < [self.tableLayout count] && ![[self.tableLayout objectAtIndex:section] count]) {
+        return CGFLOAT_MIN;
+    }
+
     return UITableViewAutomaticDimension;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0.01;
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] count];
+    if (isSyncSectionShowing && section == SYNC_SECTION) {
+        return UITableViewAutomaticDimension;
+    }
+
+    return CGFLOAT_MIN;
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
@@ -252,10 +288,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[self.observation.properties valueForKey:@"type"] style: UIBarButtonItemStylePlain target:nil action:nil];
-    
-    // Make sure your segue name in storyboard is the same as this line
+
     if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
@@ -268,7 +302,7 @@
         [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {
             [userIds addObject:favorite.userId];
         }];
-        
+
         UserTableViewController *vc = [segue destinationViewController];
         vc.userIds = userIds;
     }
@@ -283,13 +317,11 @@
 }
 
 - (IBAction) observationFavoriteTapped:(id)sender {
-    [self.observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        // No-op favorites FRC will catch update and handle
-    }];
+    [self.observation toggleFavoriteWithCompletion:nil];
 }
 
 - (void) updateFavorites {
-    
+
 }
 
 -(IBAction) observationShareTapped:(id)sender {
@@ -301,7 +333,7 @@
     WKBGeometry *geometry = [self.observation getGeometry];
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-    
+
     NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
     if ([[UIApplication sharedApplication] canOpenURL:mapsUrl]) {
         NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
@@ -326,73 +358,120 @@
     UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"Remove Important Flag"
                                                                               message:@"Are you sure you want to remove this observations important flag?"
                                                                        preferredStyle:UIAlertControllerStyleAlert];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:@"Remove Flag" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        __weak typeof(self) weakSelf = self;
-        [self.observation removeImportantWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-            [weakSelf updateImportant];
-        }];
+        [self.observation removeImportantWithCompletion:nil];
     }]];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
+
     [self presentViewController:alertController animated:YES completion:nil];
-    
+
 }
 
 - (void) flagObservationImportant {
     UIAlertController * alertController = [UIAlertController alertControllerWithTitle:nil
                                                                               message:@"Description (optional)"
                                                                        preferredStyle:UIAlertControllerStyleAlert];
-    
+
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"description";
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.borderStyle = UITextBorderStyleNone;
         textField.backgroundColor = [UIColor clearColor];
-        
+
         ObservationImportant *important = self.observation.observationImportant;
         if (important && [important.important isEqualToNumber:[NSNumber numberWithBool:YES]]) {
             textField.text = important.reason;
         }
     }];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         NSArray * textfields = alertController.textFields;
         UITextField *textField = textfields[0];
-        
-        __weak typeof(self) weakSelf = self;
-        [self.observation flagImportantWithDescription:textField.text completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-            [weakSelf updateImportant];
-        }];
+
+        [self.observation flagImportantWithDescription:textField.text completion:nil];
     }]];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
+
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void) updateImportant {
-    BOOL isImportant = self.observation.isImportant;
+    BOOL isImportant = [self.observation isImportant];
+    NSArray *importantSection = [self.tableLayout objectAtIndex:IMPORTANT_SECTION];
     if (!isImportant && [self canEditObservationImportant]) {
-        [self.tableLayout replaceObjectAtIndex:2 withObject:@[@"addImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+        if (![importantSection containsObject:@"addImportant"]) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"addImportant"]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        }
     } else if (isImportant) {
-        [self.tableLayout replaceObjectAtIndex:2 withObject:@[@"updateImportant"]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+        if (![importantSection containsObject:@"updateImportant"]) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"updateImportant"]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [UIView performWithoutAnimation:^{
+                [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:IMPORTANT_SECTION]] withRowAnimation:UITableViewRowAnimationNone];
+            }];
+        }
     } else if (!isImportant) {
-        [self.tableLayout replaceObjectAtIndex:2 withObject:@[]];
-        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+        if ([importantSection count] > 0) {
+            [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
-    [[NSManagedObjectContext MR_defaultContext] refreshObject:self.observation mergeChanges:NO];
+    [[NSManagedObjectContext MR_defaultContext] refreshObject:self.observation mergeChanges:YES];
 
     if ([anObject isKindOfClass:[ObservationFavorite class]]) {
         [self updateFavorites];
     } else if ([anObject isKindOfClass:[ObservationImportant class]]) {
         [self updateImportant];
+    }
+}
+
+- (void) didPushObservation:(Observation *) observation success:(BOOL) success error:(NSError *) error {
+    if (![observation.objectID isEqual:self.observation.objectID]) {
+        return;
+    }
+
+    if (![observation isDirty] && observation.error == nil) {
+        [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[]];
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+
+        [self.tableLayout replaceObjectAtIndex:STATUS_SECTION withObject:@[@"statusOk"]];
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:STATUS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+    } else {
+        if ([self.observation hasValidationError]) {
+            [self.tableLayout replaceObjectAtIndex:STATUS_SECTION withObject:@[@"statusError"]];
+
+            [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[]];
+            [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [self.tableLayout replaceObjectAtIndex:STATUS_SECTION withObject:@[@"statusNeedsSync"]];
+        }
+
+        [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:STATUS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+
+        if (self.manualSync) {
+            self.manualSync = NO;
+
+            if ([[self.tableLayout objectAtIndex:SYNC_SECTION] containsObject:@"syncingObservation"]) {
+                [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[@"syncObservation"]];
+                [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationFade];
+            }
+
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Observation Not Synced"
+                                                                           message:[observation errorMessage]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 
