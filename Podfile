@@ -10,7 +10,6 @@ target 'MAGE' do
     pod 'HexColors', '~> 2.2.1'
     #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '1.4'
     pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
-    pod 'geopackage-ios', '~> 1.2.1'
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
 end
