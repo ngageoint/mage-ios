@@ -60,27 +60,19 @@
             [self.mapView setRegion:viewRegion animated:NO];
         }
         
-        if(self.geometry.geometryType == WKB_POINT){
-        
-            WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
-            [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
-            [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
+        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
+        [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
+        [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
 
-            if (!self.isGeometryField) {
-                MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-                annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-                [self.mapView addAnnotation:annotation];
-                MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
-                MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-                [self.mapView setRegion:viewRegion animated:NO];
-            }
-            
-        }else{
-            [self.latitudeLabel setText:[observation shapeLabel]];
-            [self.longitudeLabel setText:@""];
-            [self.latitude setText:@""];
-            [self.longitude setText:@""];
+        if (!self.isGeometryField) {
+            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+            annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
+            [self.mapView addAnnotation:annotation];
+            MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
+            MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+            [self.mapView setRegion:viewRegion animated:NO];
         }
+            
     } else {
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
