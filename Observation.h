@@ -40,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WKBGeometry *) getGeometry;
 - (void) setGeometry: (WKBGeometry *) geometry;
-- (NSString *) shapeLabel;
 
 - (Boolean) isDirty;
 - (Boolean) isImportant;

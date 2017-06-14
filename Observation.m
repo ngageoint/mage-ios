@@ -209,38 +209,6 @@ NSNumber *_currentEventId;
     [self setGeometryData:data];
 }
 
-- (NSString *) shapeLabel{
-    WKBGeometry * geometry = [self getGeometry];
-    enum WKBGeometryType geometryType = geometry.geometryType;
-    NSString *label = nil;
-    switch(geometryType){
-        case WKB_POINT:
-            label = [WKBGeometryTypes name:geometryType];
-            break;
-        case WKB_LINESTRING:
-            label = @"Line";
-            break;
-        case WKB_POLYGON:
-            {
-                WKBPolygon *polygon = (WKBPolygon *) geometry;
-                NSMutableArray *rings = polygon.rings;
-                if(rings.count > 0 && [Observation checkIfRectangle:((WKBLineString *)[rings objectAtIndex:0]).points]){
-                    label = @"Rectangle";
-                }else{
-                    label = [WKBGeometryTypes name:geometryType];
-                }
-            }
-            break;
-        default:
-
-            break;
-    }
-
-    label = [label capitalizedString];
-
-    return label;
-}
-
 +(BOOL) checkIfRectangle: (NSArray<WKBPoint *> *) points{
     return [Observation checkIfRectangleAndFindSide:points] != nil;
 }
@@ -665,12 +633,8 @@ NSNumber *_currentEventId;
 
     // geometry
     WKBGeometry *geometry = [self getGeometry];
-    if(geometry.geometryType == WKB_POINT){
-        WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
-        [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
-    }else{
-        [text appendString:[self shapeLabel]];
-    }
+    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
 
     // type
     [text appendString:[self propertyText:[self.properties objectForKey:@"type"] forField:[nameToField objectForKey:@"type"]]];
