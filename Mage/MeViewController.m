@@ -133,7 +133,9 @@
     NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
     [self.mapDelegate updateLocations: locations];
     if ([locations count]) {
-        [self zoomAndCenterMapOnLocation:((GeoPoint *) [[locations objectAtIndex:0] geometry]).location];
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
+        [self zoomAndCenterMapOnLocation:location];
     }
 }
 
