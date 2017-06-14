@@ -36,15 +36,15 @@
         NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
         NSString *oldPassword = [StoredPassword retrieveStoredPassword];
         if (oldUsername != nil && oldPassword != nil && [oldUsername isEqualToString:username] && [oldPassword isEqualToString:password] && [oldUrl isEqualToString:[[MageServer baseURL] absoluteString]]) {
-            MageSessionManager *manager = [MageSessionManager manager];
             NSTimeInterval tokenExpirationLength = [[defaults objectForKey:@"tokenExpirationLength"] doubleValue];
             NSDate *newExpirationDate = [[NSDate date] dateByAddingTimeInterval:tokenExpirationLength];
             NSMutableDictionary *newLoginParameters = [NSMutableDictionary dictionaryWithDictionary:oldLoginParameters];
             [newLoginParameters setValue:newExpirationDate forKey:@"tokenExpirationDate"];
             [defaults setObject:newLoginParameters forKey:@"loginParameters"];
             [defaults synchronize];
-            [manager setToken:[oldLoginParameters objectForKey:@"token"]];
             [[UserUtility singleton] resetExpiration];
+            
+            [MageSessionManager manager].token = [oldLoginParameters objectForKey:@"token"];
             
             complete(AUTHENTICATION_SUCCESS);
             return;

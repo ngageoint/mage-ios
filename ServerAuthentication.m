@@ -10,7 +10,7 @@
 #import "MageServer.h"
 #import "User.h"
 #import "UserUtility.h"
-#import "NSDate+iso8601.h"
+#import "NSDate+Iso8601.h"
 
 @implementation ServerAuthentication
 
@@ -88,9 +88,9 @@
     NSString *password = (NSString *) [parameters objectForKey:@"password"];
     // Always use this locale when parsing fixed format date strings
     NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[response objectForKey:@"expirationDate"]];
-    MageSessionManager *manager = [MageSessionManager manager];
+    
+    [MageSessionManager manager].token = token;
 
-    [manager setToken:token];
     [[UserUtility singleton] resetExpiration];
 
     NSDictionary *loginParameters = @{
