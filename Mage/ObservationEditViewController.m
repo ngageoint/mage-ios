@@ -74,7 +74,7 @@
     self.observation.dirty = [NSNumber numberWithBool:YES];
     self.editDataStore.observation = self.observation;
     
-    [self.editTable setEstimatedRowHeight:50.0f];
+    [self.editTable setEstimatedRowHeight:126.0f];
     [self.editTable setRowHeight:UITableViewAutomaticDimension];
 }
 
