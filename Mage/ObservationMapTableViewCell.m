@@ -19,7 +19,9 @@
 - (void) configureCellForObservation: (Observation *) observation {
     Observations *observations = [Observations observationsForObservation:observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
-    self.mapDelegate = [[MapDelegate alloc] init];
+    if(self.mapDelegate == nil){
+        self.mapDelegate = [[MapDelegate alloc] init];
+    }
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
     
