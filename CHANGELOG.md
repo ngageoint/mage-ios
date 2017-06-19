@@ -9,6 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
 * Hook up new mage-ios-sdk background upload service for attachments.
+* Observation geometry support for lines and polygons
 
 ##### Bug Fixes
 * Don't save (duplicate) media picked from the gallery.
