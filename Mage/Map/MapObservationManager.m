@@ -13,6 +13,8 @@
 #import "MapAnnotationObservation.h"
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
+#import "ObservationShapeStyle.h"
+#import "ObservationShapeStyleParser.h"
 
 @interface MapObservationManager ()
 
@@ -54,20 +56,22 @@
         observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
     } else{
         
+        ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation: observation];
+        
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
         GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:geometry];
         switch(shape.shapeType){
             case GPKG_MST_POLYLINE:
                 {
                     StyledPolyline *styledPolyline = [StyledPolyline createWithPolyline:(MKPolyline *)shape.shape];
-                    [self setPolylineStyle: styledPolyline];
+                    [self setStyledPolyline: styledPolyline withStyle:style];
                     [shape setShape:styledPolyline];
                 }
                 break;
             case GPKG_MST_POLYGON:
                 {
                     StyledPolygon *styledPolygon = [StyledPolygon createWithPolygon:(MKPolygon *)shape.shape];
-                    [self setPolygonStyle: styledPolygon];
+                    [self setStyledPolygon: styledPolygon withStyle:style];
                     [shape setShape:styledPolygon];
                 }
                 break;
@@ -93,17 +97,15 @@
     return annotation;
 }
 
--(void) setPolylineStyle: (StyledPolyline *) polyline{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [polyline lineColorWithHexString:[defaults stringForKey:@"polyline_color"] andAlpha:[defaults integerForKey:@"polyline_color_alpha"] / 255.0];
-    [polyline setLineWidth:1.0];
+-(void) setStyledPolyline: (StyledPolyline *) polyline withStyle: (ObservationShapeStyle *) style{
+    [polyline setLineWidth:style.lineWidth];
+    [polyline setLineColor:style.strokeColor];
 }
 
--(void) setPolygonStyle: (StyledPolygon *) polygon{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [polygon lineColorWithHexString:[defaults stringForKey:@"polygon_color"] andAlpha:[defaults integerForKey:@"polygon_color_alpha"] / 255.0];
-    [polygon fillColorWithHexString:[defaults stringForKey:@"polygon_fill_color"] andAlpha:[defaults integerForKey:@"polygon_fill_color_alpha"] / 255.0];
-    [polygon setLineWidth:1.0];
+-(void) setStyledPolygon: (StyledPolygon *) polygon withStyle: (ObservationShapeStyle *) style{
+    [polygon setLineWidth:style.lineWidth];
+    [polygon setLineColor:style.strokeColor];
+    [polygon setFillColor:style.fillColor];
 }
 
 @end

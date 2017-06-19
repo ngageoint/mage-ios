@@ -22,6 +22,7 @@
 #import "GPKGProjectionConstants.h"
 #import "WKBGeometryEnvelopeBuilder.h"
 #import "Observation.h"
+#import "ObservationShapeStyle.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -40,11 +41,7 @@
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
-@property (nonatomic, strong) UIColor * editPolylineColor;
-@property (nonatomic) double editPolylineLineWidth;
-@property (nonatomic, strong) UIColor * editPolygonColor;
-@property (nonatomic) double editPolygonLineWidth;
-@property (nonatomic, strong) UIColor * editPolygonFillColor;
+@property (nonatomic, strong) ObservationShapeStyle *editStyle;
 @property (nonatomic) double lastAnnotationSelectedTime;
 
 @end
@@ -98,12 +95,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     }
     
     // Set the default edit shape draw options
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.editPolylineColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polyline_color"] alpha:[defaults integerForKey:@"edit_polyline_color_alpha"] / 255.0];
-    self.editPolylineLineWidth = 1.0;
-    self.editPolygonColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polygon_color"] alpha:[defaults integerForKey:@"edit_polygon_color_alpha"] / 255.0];
-    self.editPolygonLineWidth = 1.0;
-    self.editPolygonFillColor = [UIColor colorWithHexString:[defaults stringForKey:@"edit_polygon_fill_color"] alpha:[defaults integerForKey:@"edit_polygon_fill_color_alpha"] / 255.0];
+    self.editStyle = [[ObservationShapeStyle alloc] init];
     
     [self setShapeTypeFromGeometry:geometry];
     [self addMapShape:geometry];
@@ -231,16 +223,16 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     MKOverlayRenderer * renderer = nil;
     if ([overlay isKindOfClass:[MKPolygon class]]) {
         MKPolygonRenderer * polygonRenderer = [[MKPolygonRenderer alloc] initWithPolygon:overlay];
-        polygonRenderer.strokeColor = self.editPolygonColor;
-        polygonRenderer.lineWidth = self.editPolygonLineWidth;
-        if(self.editPolygonFillColor != nil){
-            polygonRenderer.fillColor = self.editPolygonFillColor;
+        polygonRenderer.strokeColor = self.editStyle.strokeColor;
+        polygonRenderer.lineWidth = self.editStyle.lineWidth;
+        if(self.editStyle.fillColor != nil){
+            polygonRenderer.fillColor = self.editStyle.fillColor;
         }
         renderer = polygonRenderer;
     }else if ([overlay isKindOfClass:[MKPolyline class]]) {
         MKPolylineRenderer * polylineRenderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
-        polylineRenderer.strokeColor = self.editPolylineColor;
-        polylineRenderer.lineWidth = self.editPolylineLineWidth;
+        polylineRenderer.strokeColor = self.editStyle.strokeColor;
+        polylineRenderer.lineWidth = self.editStyle.lineWidth;
         renderer = polylineRenderer;
     }else if ([overlay isKindOfClass:[MKTileOverlay class]]) {
         renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];

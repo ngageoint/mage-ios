@@ -18,6 +18,8 @@
 		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; };
 		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; };
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
+		04D747791EF827E600D7DABF /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D747781EF827E600D7DABF /* ObservationShapeStyle.m */; };
+		04D7477C1EF830AB00D7DABF /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
 		04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED963E1EB7AB8700B6AD8D /* MapObservation.m */; };
@@ -206,6 +208,10 @@
 		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCacheOverlayTableCell.m; sourceTree = "<group>"; };
 		046877F91C6D121400967470 /* CacheOverlayUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayUpdate.h; sourceTree = "<group>"; };
 		046877FA1C6D121400967470 /* CacheOverlayUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayUpdate.m; sourceTree = "<group>"; };
+		04D747771EF827E600D7DABF /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
+		04D747781EF827E600D7DABF /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
+		04D7477A1EF830AB00D7DABF /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
+		04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
@@ -850,6 +856,10 @@
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
+				04D747771EF827E600D7DABF /* ObservationShapeStyle.h */,
+				04D747781EF827E600D7DABF /* ObservationShapeStyle.m */,
+				04D7477A1EF830AB00D7DABF /* ObservationShapeStyleParser.h */,
+				04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1403,6 +1413,7 @@
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
+				04D7477C1EF830AB00D7DABF /* ObservationShapeStyleParser.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
@@ -1415,6 +1426,7 @@
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
+				04D747791EF827E600D7DABF /* ObservationShapeStyle.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
