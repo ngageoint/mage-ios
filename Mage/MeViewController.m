@@ -165,42 +165,49 @@
 }
 
 - (IBAction)portraitClick:(id)sender {
+    
+    if (!self.currentUserIsMe) {
+        [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+        
+        return;
+    }
+
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Avatar"
                                                                    message:@"Change or view your avatar"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-
+    
     __weak typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:@"View Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
     }]];
     
-    if (self.currentUserIsMe) {
-        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
-                if (granted) {
-                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                    picker.delegate = weakSelf;
-                    picker.allowsEditing = YES;
-                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-                    
-                    [weakSelf presentViewController:picker animated:YES completion:NULL];                }
-            }];
-        }]];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar From Gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf checkGalleryPermissionsWithCompletion:^(BOOL granted) {
-                if (granted) {
-                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                    picker.delegate = weakSelf;
-                    picker.allowsEditing = YES;
-                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    
-                    [weakSelf presentViewController:picker animated:YES completion:NULL];
-                }
-            }];
-        }]];
-    }
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
+            if (granted) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = weakSelf;
+                picker.allowsEditing = YES;
+                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+                
+                [weakSelf presentViewController:picker animated:YES completion:NULL];
+            }
+        }];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar From Gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf checkGalleryPermissionsWithCompletion:^(BOOL granted) {
+            if (granted) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = weakSelf;
+                picker.allowsEditing = YES;
+                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                
+                [weakSelf presentViewController:picker animated:YES completion:NULL];
+            }
+        }];
+    }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
@@ -210,7 +217,7 @@
         alert.popoverPresentationController.sourceRect = self.view.frame;
         alert.popoverPresentationController.permittedArrowDirections = 0;
     }
-
+    
     [self presentViewController:alert animated:YES completion:nil];
 }
 
