@@ -210,6 +210,7 @@
         [self setNavBarTitle];
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
+        [self setNavBarTitle];
     }
 }
 
