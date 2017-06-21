@@ -42,15 +42,15 @@
     [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController.navigationBar setTranslucent:NO];
 
-    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
-    lblTitle.backgroundColor = [UIColor clearColor];
-    lblTitle.textColor = [UIColor whiteColor];
-    lblTitle.font = [UIFont boldSystemFontOfSize:18];
-    lblTitle.textAlignment = NSTextAlignmentLeft;
-    lblTitle.text = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name;
-    [lblTitle sizeToFit];
-
-    [self.eventNameItem setCustomView:lblTitle];
+//    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
+//    lblTitle.backgroundColor = [UIColor clearColor];
+//    lblTitle.textColor = [UIColor whiteColor];
+//    lblTitle.font = [UIFont boldSystemFontOfSize:18];
+//    lblTitle.textAlignment = NSTextAlignmentLeft;
+//    lblTitle.text = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name;
+//    [lblTitle sizeToFit];
+//
+//    [self.eventNameItem setCustomView:lblTitle];
 
     self.offlineObservationManager = [[MageOfflineObservationManager alloc] initWithDelegate:self];
     [self.offlineObservationManager start];
@@ -66,6 +66,46 @@
     [super viewDidDisappear:animated];
 
     [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (void) setNavBarTitle: (NSString *) title andSubtitle: (NSString *) subtitle {
+
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
+    titleLabel.text = title;
+    [titleLabel sizeToFit];
+    
+    if ([subtitle length] == 0) {
+        [self.eventNameItem setCustomView:titleLabel];
+        return;
+    }
+    
+    UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
+    subtitleLabel.backgroundColor = [UIColor clearColor];
+    subtitleLabel.textColor = [UIColor whiteColor];
+    subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
+    subtitleLabel.text = subtitle;
+    [subtitleLabel sizeToFit];
+    
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX(titleLabel.frame.size.width, subtitleLabel.frame.size.width), 30)];
+    [titleView addSubview:titleLabel];
+    [titleView addSubview:subtitleLabel];
+    
+    // Center title or subtitle on screen (depending on which is larger)
+    if (titleLabel.frame.size.width >= subtitleLabel.frame.size.width) {
+        CGRect adjustment = subtitleLabel.frame;
+        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (subtitleLabel.frame.size.width/2);
+        subtitleLabel.frame = adjustment;
+    } else {
+        CGRect adjustment = titleLabel.frame;
+        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (titleLabel.frame.size.width/2);
+        titleLabel.frame = adjustment;
+    }
+    
+    [self.eventNameItem setCustomView:titleView];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

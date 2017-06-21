@@ -141,7 +141,11 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:timeFilterString];
+    [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:timeFilterString];
+}
+
+- (void) setNavBarTitle: (NSString *) title andSubtitle: (NSString *) subtitle {
+    [self.navigationItem setTitle:title subtitle:subtitle];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
