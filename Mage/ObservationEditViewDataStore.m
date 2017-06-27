@@ -13,6 +13,9 @@
 #import <Server.h>
 #import <Event.h>
 
+static NSInteger const ATTACHMENT_SECTION = 0;
+static NSInteger const PROPERTIES_SECTION = 1;
+
 @interface ObservationEditViewDataStore ()
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
@@ -30,8 +33,8 @@
 - (BOOL) validate {
     self.invalidIndexPaths = [[NSMutableArray alloc] init];
     
-    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:0]; ++i) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:PROPERTIES_SECTION]; ++i) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:PROPERTIES_SECTION];
         ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
         if (![cell isValid]) {
             [self.invalidIndexPaths addObject:indexPath];
@@ -59,10 +62,6 @@
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *rowToField = [[NSMutableArray alloc] init];
     NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
-    // add the attachment cell first and then do the other fields
-    [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:@"attachments"];
-    [cells addObject:@"attachmentView"];
-    [rowToField addObject:@{}];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
@@ -106,19 +105,25 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self rowToField].count;
+    if (section == ATTACHMENT_SECTION) {
+        return [self.observation.attachments count] > 0 ? 1 : 0;
+    } else {
+        return [self rowToField].count;
+    }
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
+}
+
+- (NSString *) getCellTypeAtIndexPath:(NSIndexPath *) indexPath {
+    return indexPath.section == ATTACHMENT_SECTION ? @"attachmentView" : [self rowToCellType][indexPath.row];
 }
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    NSString *cellType = (NSString *)[self rowToCellType][indexPath.row];
-    id field = [self rowToField][indexPath.row];
-    
+    NSString *cellType = [self getCellTypeAtIndexPath:indexPath];
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
-    cell.fieldDefinition = field;
+    cell.fieldDefinition = [self rowToField][indexPath.row];
     
     if ([cell isKindOfClass:[ObservationEditGeometryTableViewCell class]]) {
         self.annotationChangedDelegate = (ObservationEditGeometryTableViewCell *) cell;
@@ -147,14 +152,6 @@
     [cell selectRow];
 }
 
-- (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
-    if ([indexPath row] == 0 && [self.observation.attachments count] == 0) {
-        return 0.0;
-    }
-    
-    return UITableViewAutomaticDimension;
-}
-
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
@@ -175,7 +172,7 @@
     }
     
     NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:PROPERTIES_SECTION];
     
     if (reload == YES || [self.invalidIndexPaths containsObject:indexPath]) {
         [self.invalidIndexPaths removeObject:indexPath];

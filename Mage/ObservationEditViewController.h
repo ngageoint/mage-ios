@@ -1,24 +1,16 @@
 //
 //  ObservationEditViewController.h
-//  Mage
+//  MAGE
 //
+//  Created by William Newman on 6/26/17.
+//  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import <Observation.h>
-#import "ObservationEditListener.h"
-#import "AttachmentCollectionDataStore.h"
-#import <GeoPoint.h>
+#import "Observation.h"
+#import "GeoPoint.h"
 
-@protocol PropertyEditDelegate <NSObject>
-- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
-@end
-
-@interface ObservationEditViewController : UIViewController<PropertyEditDelegate>
-
+@interface ObservationEditViewController : UIViewController
 @property (strong, nonatomic) Observation *observation;
 @property (strong, nonatomic) GeoPoint *location;
-
-@property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
-
 @end

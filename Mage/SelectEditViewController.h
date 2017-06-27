@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ObservationEditViewController.h"
+#import "ObservationEditTableViewController.h"
 
 @interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 @property (weak, nonatomic) NSDictionary *fieldDefinition;

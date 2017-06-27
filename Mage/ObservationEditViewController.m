@@ -15,7 +15,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Attachment.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "AudioRecordingDelegate.h"
 #import "MediaViewController.h"
 #import "AttachmentViewController.h"
 #import "AttachmentSelectionDelegate.h"
@@ -28,26 +27,22 @@
 
 @import PhotosUI;
 
-@interface ObservationEditViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecordingDelegate, AttachmentSelectionDelegate>
+@interface ObservationEditViewController ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (weak, nonatomic) IBOutlet UITableView *editTable;
-@property (weak, nonatomic) IBOutlet ObservationEditViewDataStore *editDataStore;
+@property (nonatomic, weak) ObservationEditTableViewController *tableViewController;
 @end
 
 @implementation ObservationEditViewController
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:NO];
-
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
-    self.navigationItem.leftBarButtonItem = item;
     
     self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
     self.managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
     [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
-
+    
     // if self.observation is null create a new one
     if (self.observation == nil) {
         self.navigationItem.title = @"Create Observation";
@@ -72,10 +67,8 @@
     }
     
     self.observation.dirty = [NSNumber numberWithBool:YES];
-    self.editDataStore.observation = self.observation;
     
-    [self.editTable setEstimatedRowHeight:126.0f];
-    [self.editTable setRowHeight:UITableViewAutomaticDimension];
+    self.tableViewController.observation = self.observation;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -100,16 +93,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateUserDefaults:)
-                                                 name:NSUserDefaultsDidChangeNotification
-                                               object:nil];
 }
-
-- (void) updateUserDefaults: (NSNotification *) notification {
-    [self.editTable reloadData];
-}
-
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -118,7 +102,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
--(void) cancel:(id)sender {
+- (IBAction) cancel:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Discard Changes"
                                                                    message:@"Do you want to discard your changes?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -165,7 +149,7 @@
     __weak typeof(self) weakSelf = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = weakSelf;
+        picker.delegate = weakSelf.tableViewController;
         picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         picker.mediaTypes = [NSArray arrayWithObject:(NSString*) kUTTypeMovie];
@@ -187,7 +171,7 @@
     __weak typeof(self) weakSelf = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = weakSelf;
+        picker.delegate = weakSelf.tableViewController;
         picker.allowsEditing = NO;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         
@@ -249,7 +233,7 @@
             break;
         }
     }
-
+    
 }
 
 - (void) checkMicrophonePermissionsWithCompletion:(void (^)(BOOL granted)) complete {
@@ -358,7 +342,7 @@
 
 - (void) presentGallery {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
+    picker.delegate = self.tableViewController;
     picker.allowsEditing = NO;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     picker.mediaTypes = [NSArray arrayWithObjects:(NSString*)kUTTypeMovie, (NSString*) kUTTypeImage, nil];
@@ -366,127 +350,14 @@
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
-    if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
-        NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
-        NSString *moviePath = [videoUrl path];
-        
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
-            [picker dismissViewControllerAnimated:YES completion:NULL];
-            
-            AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
-            NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
-            if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
-                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
-                NSString *mp4Path = [[moviePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"mp4"];
-
-                exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
-                exportSession.outputFileType = AVFileTypeMPEG4;
-                [exportSession exportAsynchronouslyWithCompletionHandler:^{
-                    switch ([exportSession status]) {
-                        case AVAssetExportSessionStatusFailed:
-                            NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
-                            break;
-                        case AVAssetExportSessionStatusCancelled:
-                            NSLog(@"Export canceled");
-                            break;
-                        case AVAssetExportSessionStatusCompleted: {
-                            NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-                            [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
-                            [attachmentJson setValue:mp4Path forKey:@"localPath"];
-                            [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
-                            [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-                            
-                            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-                                attachment.observation = self.observation;
-                                
-                                [self.editDataStore.editTable beginUpdates];
-                                [self.editDataStore.editTable reloadData];
-                                [self.editDataStore.editTable endUpdates];
-                            }];
-
-                        }
-                        default:
-                            break;
-                    }
-                }];
-            }
-        }
-    } else {
-        UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
-        
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
-        
-        NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
-        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
-        NSFileManager *manager = [NSFileManager defaultManager];
-        BOOL isDirectory;
-        if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
-            NSError *error = nil;
-            NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                             forKey:NSFileProtectionKey];
-            [manager createDirectoryAtPath:attachmentsDirectory
-               withIntermediateDirectories:YES
-                                attributes:attr
-                                     error:&error];
-            if (error)
-                NSLog(@"Error creating directory path: %@", [error localizedDescription]);
-        }
-        
-        NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
-        BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
-        if (!success) {
-            NSLog(@"Error: Could not write image to destination");
-        }
-
-        NSLog(@"successfully wrote file %d", success);
-        
-        NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-        [attachmentJson setValue:@"image/jpeg" forKey:@"contentType"];
-        [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
-        [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
-        [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-        
-        Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-        attachment.observation = self.observation;
-        
-        [self.editDataStore.editTable beginUpdates];
-        [self.editDataStore.editTable reloadData];
-        [self.editDataStore.editTable endUpdates];
-        [picker dismissViewControllerAnimated:YES completion:NULL];
-    }
-}
-
-- (void) recordingAvailable:(Recording *)recording {
-    NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
-    [attachmentJson setValue:recording.mediaType forKey:@"contentType"];
-    [attachmentJson setValue:recording.filePath forKey:@"localPath"];
-    [attachmentJson setValue:recording.fileName forKey:@"name"];
-    [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
-    
-    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.managedObjectContext];
-    attachment.observation = self.observation;
-    
-    [self.editDataStore.editTable beginUpdates];
-    [self.editDataStore.editTable reloadData];
-    [self.editDataStore.editTable endUpdates];
-}
-
 - (IBAction) saveObservation:(id)sender {
     [self setNavBarButtonsEnabled:NO];
-
-    if (![self.editDataStore validate]) {
+    
+    if (![self.tableViewController validate]) {
         [self setNavBarButtonsEnabled:YES];
         return;
     }
-
-    [self.editDataStore.editTable endEditing:YES];
-    
+        
     self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
     self.observation.user = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
     
@@ -530,39 +401,16 @@
     }
 }
 
-- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition {
-    [self.editDataStore observationField:fieldDefinition valueChangedTo:value reloadCell:YES];
-}
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"geometrySegue"]) {
-        GeometryEditViewController *gvc = [segue destinationViewController];
-        ObservationEditGeometryTableViewCell *cell = sender;
-        gvc.fieldDefinition = cell.fieldDefinition;
-        gvc.observation = self.observation;
-        gvc.propertyEditDelegate = self;
-    } else if ([segue.identifier isEqualToString:@"selectSegue"]) {
-        SelectEditViewController *viewController = [segue destinationViewController];
-        ObservationEditSelectTableViewCell *cell = sender;
-        viewController.fieldDefinition = cell.fieldDefinition;
-        viewController.value = cell.value;
-        viewController.propertyEditDelegate = self;
-    } else if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
+    if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
         MediaViewController *mvc = [segue destinationViewController];
-        mvc.delegate = self;
-    } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
+        mvc.delegate = self.tableViewController;
+    } else if ([segue.identifier isEqualToString:@"editTableViewSegue"]) {
+        self.tableViewController = [segue destinationViewController];
+        self.tableViewController.observation = self.observation;
     }
-}
-
-- (void) selectedAttachment:(Attachment *)attachment {
-    NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
 }
 
 
