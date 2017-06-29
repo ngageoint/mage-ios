@@ -6,6 +6,7 @@
 
 #import "EventChooserController.h"
 #import "Event.h"
+#import "Form.h"
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
@@ -13,9 +14,13 @@
 @implementation EventChooserController
 
 BOOL unwind = NO;
+BOOL checkForms = NO;
+NSMutableArray *formsFetched;
+NSNumber *eventToSegueTo;
 
 - (void)  viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.loadingLabel.text = @"Loading Events";
     
     self.tableView.estimatedRowHeight = 52;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -26,12 +31,19 @@ BOOL unwind = NO;
 - (void) viewDidAppear:(BOOL) animated {
     [super viewDidAppear:animated];
     
+    checkForms = NO;
+    
     if (self.passthrough) {
         self.passthrough = NO;
         [self segueToApplication];
     } else if (!unwind) {
         self.loadingView.alpha = 1.0f;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name:MAGEFormFetched object:nil];
+        formsFetched = [[NSMutableArray alloc] init];
+        eventToSegueTo = [NSNumber numberWithInteger:NSIntegerMin];
+        checkForms = YES;
+        
         [[Mage singleton] fetchEvents];
     } else {
         [self eventsFetched:nil];
@@ -50,7 +62,33 @@ BOOL unwind = NO;
 }
 
 -(void) didSelectEvent:(Event *) event {
-    [self segueToApplication];
+    
+    if (!checkForms) {
+        [self segueToApplication];
+    }
+    
+    // first ensure the form for that event was pulled or else we will just wait for the form fetched notification
+    eventToSegueTo = event.remoteId;
+    if ([formsFetched containsObject:event.remoteId]) {
+        [self segueToApplication];
+    } else {
+        // show the loading indicator
+        self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
+        [UIView animateWithDuration:0.75f animations:^{
+            self.loadingView.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            self.loadingView.alpha = 1.0;
+        }];
+        
+    }
+}
+
+- (void) formFetched: (NSNotification *) notification {
+    Event *event = (Event *)notification.object;
+    if ([eventToSegueTo isEqualToNumber:event.remoteId]) {
+        [self segueToApplication];
+    }
+    [formsFetched addObject:event.remoteId];
 }
 
 - (void) eventsFetched: (NSNotification *) notification {
