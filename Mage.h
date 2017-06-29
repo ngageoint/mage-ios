@@ -13,5 +13,6 @@
 - (void) startServices;
 - (void) stopServices;
 - (void) fetchEvents;
+- (void) fetchFormAndStaticLayerForEvents: (NSArray *) events;
 
 @end

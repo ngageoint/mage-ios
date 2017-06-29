@@ -13,6 +13,8 @@
 #import "MageServer.h"
 #import "Server.h"
 
+NSString * const MAGEFormFetched = @"mil.nga.giat.mage.form.fetched";
+
 @implementation Form
 
 + (NSURLSessionDownloadTask *) operationToPullFormForEvent: (NSNumber *) eventId success: (void (^)()) success failure: (void (^)(NSError *)) failure {
@@ -23,6 +25,7 @@
     NSString *folderToUnzipTo = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@", eventId]];
     
     MageSessionManager *manager = [MageSessionManager manager];
+    
     
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {

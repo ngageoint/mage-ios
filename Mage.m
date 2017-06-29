@@ -72,7 +72,7 @@
         
         NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
             NSArray *events = [Event MR_findAll];
-            [self addFormAndStaticLayerFetchOperationsForEvents: events];
+            [self fetchFormAndStaticLayerForEvents: events];
         } failure:^(NSError *error) {
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
@@ -84,7 +84,7 @@
     [manager addTask:myselfTask];
 }
 
-- (void) addFormAndStaticLayerFetchOperationsForEvents: (NSArray *) events {
+- (void) fetchFormAndStaticLayerForEvents: (NSArray *) events {
     MageSessionManager *manager = [MageSessionManager manager];
     SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:(int)MAGE_MaxConcurrentEvents];
     
@@ -95,11 +95,13 @@
         NSURLSessionTask *formTask = [Form operationToPullFormForEvent:e.remoteId
                                                         success: ^{
                                                             NSLog(@"Pulled form for event");
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEFormFetched object:e];
                                                         } failure:^(NSError* error) {
                                                             NSLog(@"failed to pull form for event");
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEFormFetched object:e];
                                                         }];
-        
         if(currentEventId != nil && [currentEventId isEqualToNumber:e.remoteId]){
+            [formTask setPriority:NSURLSessionTaskPriorityHigh];
             [manager addTask:formTask];
         }else{
             [task addTask:formTask];
@@ -130,7 +132,7 @@
     [task setPriority:NSURLSessionTaskPriorityLow];
     [manager addSessionTask:task];
 }
-             
+
 -(void) addTask: (NSURLSessionTask *) task toTasks: (NSMutableDictionary<NSNumber *, NSMutableArray<NSNumber *> *> *) eventTasks forEvent: (Event *) event{
     NSNumber *taskIdentifier = [NSNumber numberWithUnsignedInteger:task.taskIdentifier];
     NSMutableArray<NSNumber *> * tasks = [eventTasks objectForKey:event.remoteId];
