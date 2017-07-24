@@ -54,7 +54,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kObservationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -73,7 +73,7 @@
     [super viewWillDisappear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     
@@ -150,7 +150,7 @@
                          change:(NSDictionary *)change
                        context:(void *)context {
     
-    if ([keyPath isEqualToString:kTimeFilterKey]) {
+    if ([keyPath isEqualToString:kObservationTimeFilterKey]) {
         [self.observationDataStore startFetchController];
         [self setNavBarTitle];
     } else if ([keyPath isEqualToString:kImportantFilterKey] || [keyPath isEqualToString:kFavortiesFilterKey]) {

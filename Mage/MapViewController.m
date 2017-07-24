@@ -91,7 +91,7 @@
     [self setNavBarTitle];
     
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kObservationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -140,8 +140,11 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [Filter getFilterString];
-    [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:timeFilterString];
+    if ([[Filter getFilterString] length] != 0 || [[Filter getLocationFilterString] length] != 0) {
+        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
+    } else {
+        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
+    }
 }
 
 - (void) setNavBarTitle: (NSString *) title andSubtitle: (NSString *) subtitle {
@@ -155,7 +158,7 @@
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     
@@ -204,7 +207,7 @@
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
-    } else if ([kTimeFilterKey isEqualToString:keyPath]) {
+    } else if ([kObservationTimeFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
         self.mapDelegate.locations = [Locations locationsForAllUsers];
         [self setNavBarTitle];

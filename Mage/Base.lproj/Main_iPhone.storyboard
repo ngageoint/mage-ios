@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TUi-FW-u5I">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TUi-FW-u5I">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="3Lb-XA-VxK">
+            <objects>
+                <navigationController id="Bsn-Xa-Klb" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="VdX-tK-9ig">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.065599299967288971" green="0.32899433374404907" blue="0.64471054077148438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="UlW-JS-jkC" kind="relationship" relationship="rootViewController" id="hMC-QN-Yir"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QV1-rH-XM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="169" y="-2310"/>
+        </scene>
+        <!--observationFilter-->
+        <scene sceneID="4z3-R1-Owa">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Filter" referencedIdentifier="observationFilter" id="UlW-JS-jkC" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="2Yx-UW-NJv"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mLy-La-pgO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="829" y="-2311"/>
+        </scene>
         <!--Observation View Controller i Phone-->
         <scene sceneID="L3p-DK-Lu8">
             <objects>
@@ -19,11 +49,11 @@
                         <viewControllerLayoutGuide type="bottom" id="oTV-eA-AAp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Igh-1x-94E">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="SUG-4H-QMK">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                                 <prototypes>
@@ -1182,7 +1212,7 @@
             <objects>
                 <tableViewController id="H8A-0T-nME" customClass="UserTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="2kg-oN-jFz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -1282,10 +1312,10 @@
             </objects>
             <point key="canvasLocation" x="926" y="-594"/>
         </scene>
-        <!--FilterViewController-->
+        <!--Filter-->
         <scene sceneID="lIG-Nh-O9l">
             <objects>
-                <viewControllerPlaceholder storyboardName="Filter" referencedIdentifier="FilterViewController" id="jnx-Oa-HdL" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Filter" id="jnx-Oa-HdL" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9b3-BG-qz1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1533" y="-979"/>
@@ -1774,7 +1804,7 @@
                     <navigationItem key="navigationItem" title="Observations" id="Obl-yE-cUx">
                         <barButtonItem key="leftBarButtonItem" title="Filter" id="Amt-LH-w6i">
                             <connections>
-                                <segue destination="q0F-Kt-rqb" kind="presentation" id="hib-HR-XWE"/>
+                                <segue destination="Bsn-Xa-Klb" kind="show" id="HgC-j6-BWb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="New" id="o7u-pY-Y5Y">
@@ -1819,7 +1849,7 @@
                 <viewControllerPlaceholder storyboardName="ObservationEdit" id="8Vj-oQ-BLo" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xSE-6i-Lo8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-506" y="-2429"/>
+            <point key="canvasLocation" x="-507" y="-2355"/>
         </scene>
         <!--Attachment-->
         <scene sceneID="wV8-XW-X6q">
@@ -1827,15 +1857,7 @@
                 <viewControllerPlaceholder storyboardName="Attachment" id="su7-bG-iWI" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Th-on-IqM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-526" y="-2310"/>
-        </scene>
-        <!--FilterViewController-->
-        <scene sceneID="hSx-6Z-5E8">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Filter" referencedIdentifier="FilterViewController" id="q0F-Kt-rqb" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5hi-zL-PK3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-486" y="-2211"/>
+            <point key="canvasLocation" x="-486" y="-2265"/>
         </scene>
         <!--People-->
         <scene sceneID="Zwl-BP-sWR">
@@ -1859,13 +1881,15 @@
             </objects>
             <point key="canvasLocation" x="-2185" y="192"/>
         </scene>
-        <!--FilterViewController-->
+        <!--locationFilter-->
         <scene sceneID="Hcb-OP-Mig">
             <objects>
-                <viewControllerPlaceholder storyboardName="Filter" referencedIdentifier="FilterViewController" id="Bnb-oG-ITR" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Filter" referencedIdentifier="locationFilter" id="Bnb-oG-ITR" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="NF2-dd-dtn"/>
+                </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z2M-1K-1gu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-486" y="192"/>
+            <point key="canvasLocation" x="514" y="192"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="wwb-yA-QJp">
@@ -1942,7 +1966,7 @@
                     <navigationItem key="navigationItem" id="his-tj-3TY">
                         <barButtonItem key="leftBarButtonItem" title="Filter" id="leW-uy-Q89">
                             <connections>
-                                <segue destination="Bnb-oG-ITR" kind="presentation" id="QZQ-SM-Asc"/>
+                                <segue destination="hSo-PA-Hyh" kind="presentation" id="QZQ-SM-Asc"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2063,7 +2087,7 @@
             <objects>
                 <tableViewController id="HsP-f4-6A2" customClass="MeViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ntk-Dg-GHg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
@@ -2531,6 +2555,28 @@
             </objects>
             <point key="canvasLocation" x="-4196.8000000000002" y="779.91004497751135"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wnA-dQ-isd">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hSo-PA-Hyh" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="fuG-cD-Tfi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Bnb-oG-ITR" kind="relationship" relationship="rootViewController" id="ttz-Ro-AEX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uAc-Fy-OPx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-150" y="192"/>
+        </scene>
     </scenes>
     <resources>
         <image name="avatar_small" width="40" height="40"/>
@@ -2558,7 +2604,7 @@
         <image name="sync_badge" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="RgJ-f6-fFG"/>
         <segue reference="Rud-Q7-HcV"/>
-        <segue reference="heM-Kh-vSl"/>
     </inferredMetricsTieBreakers>
 </document>

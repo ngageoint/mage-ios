@@ -38,7 +38,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kLocationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
 }
@@ -47,11 +47,11 @@
     [super viewWillDisappear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [Filter getFilterString];
+    NSString *timeFilterString = [Filter getLocationFilterString];
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
@@ -81,7 +81,7 @@
                          change:(NSDictionary *)change
                         context:(void *)context {
     
-    if ([keyPath isEqualToString:kTimeFilterKey]) {
+    if ([keyPath isEqualToString:kLocationTimeFilterKey]) {
         [self.locationDataStore startFetchController];
         [self setNavBarTitle];
     }

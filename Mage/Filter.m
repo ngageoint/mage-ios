@@ -13,7 +13,7 @@
 
 + (NSString *) getFilterString {
     NSMutableArray *filters = [[NSMutableArray alloc] init];
-    NSString *timeFilterString = [TimeFilter getTimeFilterString];
+    NSString *timeFilterString = [TimeFilter getObservationTimeFilterString];
     if ([timeFilterString length] && ![timeFilterString isEqualToString:@"All"]) {
         [filters addObject:timeFilterString];
     }
@@ -35,5 +35,14 @@
     return [filters componentsJoinedByString:@", "];
 }
 
++ (NSString *) getLocationFilterString {
+    NSMutableArray *filters = [[NSMutableArray alloc] init];
+    NSString *timeFilterString = [TimeFilter getLocationTimeFilterString];
+    if ([timeFilterString length] && ![timeFilterString isEqualToString:@"All"]) {
+        [filters addObject:timeFilterString];
+    }
+    
+    return [filters componentsJoinedByString:@", "];
+}
 
 @end

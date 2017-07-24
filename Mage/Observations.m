@@ -39,7 +39,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
 + (id) observations {
     
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-    NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:@"timestamp"];
+    NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp"];
     if (timePredicate) {
         [predicates addObject:timePredicate];
     }

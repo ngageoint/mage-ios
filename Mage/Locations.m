@@ -18,7 +18,7 @@
                                   [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
                                   nil];
 
-    NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:@"timestamp"];
+    NSPredicate *timePredicate = [TimeFilter getLocationTimePredicateForField:@"timestamp"];
     if (timePredicate) {
         [predicates addObject:timePredicate];
     }
