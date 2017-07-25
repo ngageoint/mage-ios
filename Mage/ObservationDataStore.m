@@ -78,6 +78,16 @@
     [self.tableView reloadData];
 }
 
+- (void) updatePredicates {
+    [self.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Observations getPredicatesForObservations]]];
+    NSError *error;
+    if (![self.observations.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
+    
+    [self.tableView reloadData];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return CGFLOAT_MIN;
 }

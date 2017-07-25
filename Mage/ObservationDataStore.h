@@ -22,5 +22,6 @@
 
 - (void) startFetchController;
 - (void) startFetchControllerWithObservations: (Observations *) observations;
+- (void) updatePredicates;
 
 @end

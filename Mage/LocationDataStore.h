@@ -18,5 +18,6 @@
 
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath;
 - (void) startFetchController;
+- (void) updatePredicates;
 
 @end

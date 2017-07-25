@@ -13,6 +13,12 @@
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
 
+@interface LocationTableViewController()
+
+@property (nonatomic, strong) NSTimer* updateTimer;
+
+@end
+
 @implementation LocationTableViewController
 
 - (void) viewDidLoad {
@@ -41,6 +47,8 @@
                forKeyPath:kLocationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    [self startUpdateTimer];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -48,6 +56,36 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+    
+    [self stopUpdateTimer];
+}
+
+- (void) applicationWillResignActive {
+    [self stopUpdateTimer];
+}
+
+- (void) applicationDidBecomeActive {
+    [self startUpdateTimer];
+}
+
+- (void) startUpdateTimer {
+    __weak __typeof__(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) stopUpdateTimer {
+    // Stop the timer for updating the circles
+    if (self.updateTimer != nil) {
+        
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+- (void) onUpdateTimerFire {
+    [self.locationDataStore updatePredicates];
 }
 
 - (void) setNavBarTitle {

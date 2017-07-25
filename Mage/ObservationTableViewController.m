@@ -21,6 +21,12 @@
 #import "Observations.h"
 #import "WKBPoint.h"
 
+@interface ObservationTableViewController()
+
+@property (nonatomic, strong) NSTimer* updateTimer;
+
+@end
+
 @implementation ObservationTableViewController
 
 - (void)viewDidLoad {
@@ -67,6 +73,8 @@
                forKeyPath:kFavortiesFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    [self startUpdateTimer];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -78,6 +86,36 @@
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     
     self.observationDataStore.observations.delegate = nil;
+    
+    [self stopUpdateTimer];
+}
+
+- (void) applicationWillResignActive {
+    [self stopUpdateTimer];
+}
+
+- (void) applicationDidBecomeActive {
+    [self startUpdateTimer];
+}
+
+- (void) startUpdateTimer {
+    __weak __typeof__(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) stopUpdateTimer {
+    // Stop the timer for updating the circles
+    if (self.updateTimer != nil) {
+        
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+- (void) onUpdateTimerFire {
+    [self.observationDataStore updatePredicates];
 }
 
 - (void) setNavBarTitle {
