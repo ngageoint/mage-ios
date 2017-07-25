@@ -179,7 +179,7 @@
 - (void) startMapAnnotationsUpdateTimer {
     __weak __typeof__(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.mapAnnotationsUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(onMapAnnotationsUpdateTimerFire) userInfo:nil repeats:YES];
+        weakSelf.mapAnnotationsUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onMapAnnotationsUpdateTimerFire) userInfo:nil repeats:YES];
     });
 }
 

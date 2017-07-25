@@ -101,7 +101,7 @@
 - (void) startUpdateTimer {
     __weak __typeof__(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
+        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
     });
 }
 
