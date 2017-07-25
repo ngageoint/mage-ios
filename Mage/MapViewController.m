@@ -39,7 +39,7 @@
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (strong, nonatomic) CLLocation *mapPressLocation;
-    @property (nonatomic, strong) NSTimer* locationColorUpdateTimer;
+    @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end
@@ -124,7 +124,7 @@
                   context:NULL];
     
     // Start the timer for updating the circles
-    [self startColorUpdateTimer];
+    [self startMapAnnotationsUpdateTimer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive)
@@ -165,35 +165,37 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
-    [self stopColorUpdateTimer];
+    [self stopMapAnnotationsUpdateTimer];
 }
 
 - (void) applicationWillResignActive {
-    [self stopColorUpdateTimer];
+    [self stopMapAnnotationsUpdateTimer];
 }
 
 - (void) applicationDidBecomeActive {
-    [self startColorUpdateTimer];
+    [self startMapAnnotationsUpdateTimer];
 }
 
-- (void) startColorUpdateTimer {
+- (void) startMapAnnotationsUpdateTimer {
     __weak __typeof__(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.locationColorUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onColorUpdateTimerFire) userInfo:nil repeats:YES];
+        weakSelf.mapAnnotationsUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(onMapAnnotationsUpdateTimerFire) userInfo:nil repeats:YES];
     });
 }
 
-- (void) stopColorUpdateTimer {
+- (void) stopMapAnnotationsUpdateTimer {
     // Stop the timer for updating the circles
-    if (self.locationColorUpdateTimer != nil) {
-        [self.locationColorUpdateTimer invalidate];
-        self.locationColorUpdateTimer = nil;
+    if (self.mapAnnotationsUpdateTimer != nil) {
+        
+        [self.mapAnnotationsUpdateTimer invalidate];
+        self.mapAnnotationsUpdateTimer = nil;
     }
 }
 
-- (void) onColorUpdateTimerFire {
+- (void) onMapAnnotationsUpdateTimerFire {
     NSLog(@"Update the user location icon colors");
-    [self.mapDelegate updateLocations:[self.mapDelegate.locations.fetchedResultsController fetchedObjects]];
+    [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
+    [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath

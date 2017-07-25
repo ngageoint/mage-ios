@@ -96,6 +96,13 @@
 -(MapObservation *) removeById: (NSManagedObjectID *) observationId;
 
 /**
+ * Remove observations from the map that are not in the array
+ *
+ * @param idArray observations to keep
+ */
+- (void) removeObservationsNotInArray: (NSArray<NSManagedObjectID *> *) idArray;
+
+/**
  * Set the visibility on all map observations
  *
  * @param visible visible flag

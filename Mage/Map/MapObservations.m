@@ -67,6 +67,14 @@
     return [mapObservation class] == [MapShapeObservation class];
 }
 
+- (void) removeObservationsNotInArray: (NSArray<NSManagedObjectID *> *) idArray {
+    NSMutableArray<NSManagedObjectID *> *ids = [NSMutableArray arrayWithArray:[_observationIds allKeys]];
+    [ids removeObjectsInArray:idArray];
+    for (NSManagedObjectID *observationId in ids) {
+        [self removeById:observationId];
+    }
+}
+
 -(MapObservation *) removeById: (NSManagedObjectID *) observationId{
     MapObservation *mapObservation = [_observationIds objectForKey:observationId];
     if (mapObservation != nil) {

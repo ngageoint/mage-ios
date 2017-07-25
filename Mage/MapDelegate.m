@@ -303,6 +303,47 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
 }
 
+- (void) updateObservationPredicates: (NSMutableArray *) predicates {
+    [self.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSError *error;
+    if (![self.observations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+    NSArray *observations = [self.observations.fetchedResultsController fetchedObjects];
+    NSMutableArray *observationIds = [[NSMutableArray alloc] initWithCapacity:observations.count];
+    for (Observation *observation in observations) {
+        [observationIds addObject:observation.objectID];
+    }
+    [self.mapObservations removeObservationsNotInArray:observationIds];
+}
+
+- (void) updateLocationPredicates: (NSMutableArray *) predicates {
+    [self.locations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    
+    NSError *error;
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+    
+    NSArray *locations = [self.locations.fetchedResultsController fetchedObjects];
+    NSMutableArray *userRemoteIds = [[NSMutableArray alloc] initWithCapacity:locations.count];
+    for (Location *location in locations) {
+        [userRemoteIds addObject:location.user.remoteId];
+    }
+    
+    NSMutableArray *ids = [NSMutableArray arrayWithArray:[self.locationAnnotations allKeys]];
+    [ids removeObjectsInArray:userRemoteIds];
+    
+    for (NSString *userRemoteId in ids) {
+        [self removeLocationForUser:userRemoteId];
+    }
+    [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
+}
+
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
     
@@ -1137,6 +1178,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     for (Observation *observation in observations) {
         [self updateObservation:observation];
     }
+}
+
+- (LocationAnnotation *) removeLocationForUser: (NSString *) remoteId {
+    LocationAnnotation *annotation = [self.locationAnnotations objectForKey:remoteId];
+    if (annotation != nil) {
+        [_mapView removeAnnotation:annotation];
+        [self.locationAnnotations removeObjectForKey:remoteId];
+    }
+    return annotation;
 }
 
 - (void) updateLocation:(Location *) location {
