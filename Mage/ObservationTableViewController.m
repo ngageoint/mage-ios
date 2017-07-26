@@ -65,6 +65,16 @@
                   context:NULL];
     
     [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
                forKeyPath:kImportantFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
@@ -82,6 +92,8 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     
@@ -188,7 +200,7 @@
                          change:(NSDictionary *)change
                        context:(void *)context {
     
-    if ([keyPath isEqualToString:kObservationTimeFilterKey]) {
+    if ([keyPath isEqualToString:kObservationTimeFilterKey] || [keyPath isEqualToString:kObservationTimeFilterNumberKey] || [keyPath isEqualToString:kObservationTimeFilterUnitKey]) {
         [self.observationDataStore startFetchController];
         [self setNavBarTitle];
     } else if ([keyPath isEqualToString:kImportantFilterKey] || [keyPath isEqualToString:kFavortiesFilterKey]) {

@@ -29,12 +29,6 @@
     self.timeFilter = [TimeFilter getLocationTimeFilter];
     self.customTimeUnit = [TimeFilter getLocationCustomTimeFilterUnit];
     self.customTimeNumber = [TimeFilter getLocationCustomTimeFilterNumber];
-    
-    
-    self.isPopover = self.parentViewController.popoverPresentationController != nil;
-    if (self.isPopover) {
-        self.navigationController.navigationBarHidden = YES;
-    }
 }
 
 #pragma mark - Table view data source
@@ -62,9 +56,7 @@
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
     self.timeFilter = [indexPath row];
     
-    if (self.isPopover) {
-        [TimeFilter setLocationTimeFilter:self.timeFilter];
-    }
+    [self applyFilter];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -77,20 +69,32 @@
     return UITableViewAutomaticDimension;
 }
 
+- (void) applyFilter {
+    if ([TimeFilter getLocationTimeFilter] != self.timeFilter) {
+        [TimeFilter setLocationTimeFilter:self.timeFilter];
+    }
+    if ([TimeFilter getLocationCustomTimeFilterUnit] != self.customTimeUnit) {
+        [TimeFilter setLocationCustomTimeFilterUnit:self.customTimeUnit];
+    }
+    if ([TimeFilter getLocationCustomTimeFilterNumber] != self.customTimeNumber) {
+        [TimeFilter setLocationCustomTimeFilterNumber:self.customTimeNumber];
+    }
+}
+
 - (IBAction)customTimeNumberEdited:(id)sender {
     UITextField *customTimeNumberField = (UITextField *) sender;
     self.customTimeNumber = [customTimeNumberField.text integerValue];
+    [self applyFilter];
 }
 
 - (IBAction)customTimeUnitChanged:(id)sender {
     UISegmentedControl *customTimeUnitControl = (UISegmentedControl *) sender;
     self.customTimeUnit = customTimeUnitControl.selectedSegmentIndex;
+    [self applyFilter];
 }
 
 - (IBAction)onApplyFilterTapped:(id)sender {
-    [TimeFilter setLocationTimeFilter:self.timeFilter];
-    [TimeFilter setLocationCustomTimeFilterUnit:self.customTimeUnit];
-    [TimeFilter setLocationCustomTimeFilterNumber:self.customTimeNumber];
+    [self applyFilter];
     
     if ([self.navigationController.viewControllers count] == 1) {
         [self dismissViewControllerAnimated:YES completion:nil];

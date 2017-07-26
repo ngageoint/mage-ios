@@ -10,13 +10,19 @@
 #import "Filter.h"
 
 @interface FilterTableViewController ()
-
+@property (assign, nonatomic) BOOL isPopover;
 @end
 
 @implementation FilterTableViewController
 
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    [self setPreferredContentSize:CGSizeMake(340.0f, 550.0f)];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.tableView reloadData];
 }
 

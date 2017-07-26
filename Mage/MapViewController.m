@@ -96,6 +96,16 @@
                   context:NULL];
     
     [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
                forKeyPath:kImportantFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
@@ -120,6 +130,21 @@
     
     [defaults addObserver:self
                forKeyPath:kReportLocationKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -159,6 +184,11 @@
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
     [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     
@@ -209,8 +239,10 @@
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
-    } else if ([kObservationTimeFilterKey isEqualToString:keyPath]) {
+    } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
+        [self setNavBarTitle];
+    } else if ([kLocationTimeFilterKey isEqualToString:keyPath] || [kLocationTimeFilterUnitKey isEqualToString:keyPath] || [kLocationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.locations = [Locations locationsForAllUsers];
         [self setNavBarTitle];
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {

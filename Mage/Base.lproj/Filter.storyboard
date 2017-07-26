@@ -312,7 +312,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Observation Filter" id="s0l-rJ-eeb">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="Cdi-KX-gjP">
+                        <barButtonItem key="leftBarButtonItem" title="Done" id="Cdi-KX-gjP">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="onApplyFilterTapped:" destination="lxw-ua-vn3" id="ueT-FM-EEG"/>
@@ -398,7 +398,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Filter" id="Fks-Cl-rEh">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="top-h3-mzv">
+                        <barButtonItem key="leftBarButtonItem" title="Done" id="top-h3-mzv">
                             <connections>
                                 <action selector="backButtonPressed:" destination="7fn-pF-cAw" id="icc-cB-6RQ"/>
                             </connections>
@@ -412,10 +412,9 @@
         <!--Navigation Controller-->
         <scene sceneID="b5P-bk-GLL">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ywE-Dy-UFo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="FilterViewController" automaticallyAdjustsScrollViewInsets="NO" id="iSs-JE-kHG" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="rOa-zV-IPb">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="rOa-zV-IPb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -433,6 +432,7 @@
                         <segue destination="7fn-pF-cAw" kind="relationship" relationship="rootViewController" id="fSd-nr-9NN"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ywE-Dy-UFo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-153" y="-27"/>
         </scene>
@@ -646,7 +646,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Locations Filter" id="LmQ-uf-5ls">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="zSW-Yb-qcQ">
+                        <barButtonItem key="leftBarButtonItem" title="Done" id="zSW-Yb-qcQ">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="onApplyFilterTapped:" destination="SBo-t7-r4v" id="VRV-ZU-Rwd"/>

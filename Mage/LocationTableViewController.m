@@ -48,6 +48,16 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
     [self startUpdateTimer];
 }
 
@@ -56,6 +66,8 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     
     [self stopUpdateTimer];
 }
@@ -119,7 +131,7 @@
                          change:(NSDictionary *)change
                         context:(void *)context {
     
-    if ([keyPath isEqualToString:kLocationTimeFilterKey]) {
+    if ([keyPath isEqualToString:kLocationTimeFilterKey] || [keyPath isEqualToString:kLocationTimeFilterNumberKey] || [keyPath isEqualToString:kLocationTimeFilterUnitKey]) {
         [self.locationDataStore startFetchController];
         [self setNavBarTitle];
     }

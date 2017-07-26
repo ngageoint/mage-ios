@@ -35,11 +35,7 @@
     self.customTimeUnit = [TimeFilter getObservationCustomTimeFilterUnit];
     self.customTimeNumber = [TimeFilter getObservationCustomTimeFilterNumber];
     
-    
-    self.isPopover = self.parentViewController.popoverPresentationController != nil;
-    if (self.isPopover) {
-        self.navigationController.navigationBarHidden = YES;
-    }
+    self.navigationController.navigationBarHidden = NO;
 }
 
 #pragma mark - Table view data source
@@ -83,9 +79,7 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.timeFilter = [indexPath row];
         
-        if (self.isPopover) {
-            [TimeFilter setObservationTimeFilter:self.timeFilter];
-        }
+        [self applyFilter];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }
@@ -99,22 +93,38 @@
     return UITableViewAutomaticDimension;
 }
 
+- (void) applyFilter {
+    if ([TimeFilter getObservationTimeFilter] != self.timeFilter) {
+        [TimeFilter setObservationTimeFilter:self.timeFilter];
+    }
+    if ([Observations getImportantFilter] != self.importantFilter) {
+        [Observations setImportantFilter:self.importantFilter];
+    }
+    if ([Observations getFavoritesFilter] != self.favoritesFilter) {
+        [Observations setFavoritesFilter:self.favoritesFilter];
+    }
+    if ([TimeFilter getObservationCustomTimeFilterUnit] != self.customTimeUnit) {
+        [TimeFilter setObservationCustomTimeFilterUnit:self.customTimeUnit];
+    }
+    if ([TimeFilter getObservationCustomTimeFilterNumber] != self.customTimeUnit) {
+        [TimeFilter setObservationCustomTimeFilterNumber:self.customTimeNumber];
+    }
+}
+
 - (IBAction)customTimeNumberEdited:(id)sender {
     UITextField *customTimeNumberField = (UITextField *) sender;
     self.customTimeNumber = [customTimeNumberField.text integerValue];
+    [self applyFilter];
 }
 
 - (IBAction)customTimeUnitChanged:(id)sender {
     UISegmentedControl *customTimeUnitControl = (UISegmentedControl *) sender;
     self.customTimeUnit = customTimeUnitControl.selectedSegmentIndex;
+    [self applyFilter];
 }
 
 - (IBAction)onApplyFilterTapped:(id)sender {
-    [TimeFilter setObservationTimeFilter:self.timeFilter];
-    [Observations setImportantFilter:self.importantFilter];
-    [Observations setFavoritesFilter:self.favoritesFilter];
-    [TimeFilter setObservationCustomTimeFilterUnit:self.customTimeUnit];
-    [TimeFilter setObservationCustomTimeFilterNumber:self.customTimeNumber];
+    [self applyFilter];
     
     if ([self.navigationController.viewControllers count] == 1) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -126,17 +136,13 @@
 - (IBAction)onFavoritesFilterChanged:(UISwitch *)sender {
     self.favoritesFilter = [sender isOn];
     
-    if (self.isPopover) {
-        [Observations setFavoritesFilter:self.favoritesFilter];
-    }
+    [self applyFilter];
 }
 
 - (IBAction)onImportantFilterChanged:(UISwitch *)sender {
     self.importantFilter = [sender isOn];
     
-    if (self.isPopover) {
-        [Observations setImportantFilter:self.importantFilter];
-    }
+    [self applyFilter];
 }
 
 @end
