@@ -67,7 +67,6 @@
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
 		2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
-		2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
 		2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */; };
@@ -289,8 +288,6 @@
 		2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusErrorTableViewCell.m; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
-		2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditRadioTableViewCell.h; sourceTree = "<group>"; };
-		2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditRadioTableViewCell.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
@@ -873,8 +870,6 @@
 				F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */,
 				2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */,
 				2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */,
-				2FEA40CB1D05FA3600851E26 /* ObservationEditRadioTableViewCell.h */,
-				2FEA40CC1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1205,7 +1200,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		9234FE93B973ED1E145F6F5B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1249,7 +1244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */ = {
@@ -1440,7 +1435,6 @@
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
-				2FEA40CD1D05FA3600851E26 /* ObservationEditRadioTableViewCell.m in Sources */,
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,

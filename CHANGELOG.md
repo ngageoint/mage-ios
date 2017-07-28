@@ -3,13 +3,20 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.2 (TBD)
+## 1.4.3 (TBD)
 
 * TBD
 
 ##### Features
 
 ##### Bug Fixes
+
+## 1.4.2 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.2) (07-28-2017)
+
+##### Features
+
+##### Bug Fixes
+* Allow empty date field
 
 ## 1.4.1 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.1) (06-13-2017)
 
