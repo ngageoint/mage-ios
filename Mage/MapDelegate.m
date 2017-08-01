@@ -154,93 +154,93 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void)mapTap: (CGPoint) tapPoint {
 
-        CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
-        MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
-        CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
-        
-        double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
-        
-        if (_areaAnnotation != nil) {
-            [_mapView deselectAnnotation:_areaAnnotation animated:NO];
-            [_mapView removeAnnotation:_areaAnnotation];
-            _areaAnnotation = nil;
-        }
-        
-        CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
-        
-        for (NSString* layerId in self.staticLayers) {
-            NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
-            for (id feature in layerFeatures) {
-                if ([feature isKindOfClass:[MKPolyline class]]) {
-                    MKPolyline *polyline = (MKPolyline *) feature;
-                    
-                    MKMapPoint *polylinePoints = polyline.points;
-                    
-                    for (int p=0; p < polyline.pointCount-1; p++){
-                        MKMapPoint mp = polylinePoints[p];
-                        MKMapPoint mp2 = polylinePoints[p+1];
-                        if (RectContainsLine(tapRect, CGPointMake(mp.x, mp.y), CGPointMake(mp2.x, mp2.y))) {
-                            NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
-                            _areaAnnotation = [[AreaAnnotation alloc] init];
-                            _areaAnnotation.title = polyline.title;
-                            _areaAnnotation.coordinate = tapCoord;
-                            
-                            [_mapView addAnnotation:_areaAnnotation];
-                            [_mapView selectAnnotation:_areaAnnotation animated:NO];
-
-                        }
-                    }
-                } else if ([feature isKindOfClass:[MKPolygon class]]){
-                    MKPolygon *polygon = (MKPolygon*) feature;
-                    
-                    CGMutablePathRef mpr = CGPathCreateMutable();
-                    
-                    MKMapPoint *polygonPoints = polygon.points;
-                    
-                    for (int p=0; p < polygon.pointCount; p++){
-                        MKMapPoint mp = polygonPoints[p];
-                        if (p == 0)
-                            CGPathMoveToPoint(mpr, NULL, mp.x, mp.y);
-                        else
-                            CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
-                    }
-                    
-                    
-                    
-                    if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
-                        NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
+    CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
+    MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
+    CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
+    
+    double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
+    
+    if (_areaAnnotation != nil) {
+        [_mapView deselectAnnotation:_areaAnnotation animated:NO];
+        [_mapView removeAnnotation:_areaAnnotation];
+        _areaAnnotation = nil;
+    }
+    
+    CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
+    
+    for (NSString* layerId in self.staticLayers) {
+        NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
+        for (id feature in layerFeatures) {
+            if ([feature isKindOfClass:[MKPolyline class]]) {
+                MKPolyline *polyline = (MKPolyline *) feature;
+                
+                MKMapPoint *polylinePoints = polyline.points;
+                
+                for (int p=0; p < polyline.pointCount-1; p++){
+                    MKMapPoint mp = polylinePoints[p];
+                    MKMapPoint mp2 = polylinePoints[p+1];
+                    if (RectContainsLine(tapRect, CGPointMake(mp.x, mp.y), CGPointMake(mp2.x, mp2.y))) {
+                        NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
                         _areaAnnotation = [[AreaAnnotation alloc] init];
-                        _areaAnnotation.title = polygon.title;
+                        _areaAnnotation.title = polyline.title;
                         _areaAnnotation.coordinate = tapCoord;
                         
                         [_mapView addAnnotation:_areaAnnotation];
                         [_mapView selectAnnotation:_areaAnnotation animated:NO];
-                    }
-                    
-                    CGPathRelease(mpr);
-                }
 
+                    }
+                }
+            } else if ([feature isKindOfClass:[MKPolygon class]]){
+                MKPolygon *polygon = (MKPolygon*) feature;
+                
+                CGMutablePathRef mpr = CGPathCreateMutable();
+                
+                MKMapPoint *polygonPoints = polygon.points;
+                
+                for (int p=0; p < polygon.pointCount; p++){
+                    MKMapPoint mp = polygonPoints[p];
+                    if (p == 0)
+                        CGPathMoveToPoint(mpr, NULL, mp.x, mp.y);
+                    else
+                        CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
+                }
+                
+                
+                
+                if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
+                    NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
+                    _areaAnnotation = [[AreaAnnotation alloc] init];
+                    _areaAnnotation.title = polygon.title;
+                    _areaAnnotation.coordinate = tapCoord;
+                    
+                    [_mapView addAnnotation:_areaAnnotation];
+                    [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                }
+                
+                CGPathRelease(mpr);
+            }
+
+        }
+    }
+    
+    if ([self.mapCacheOverlays count] > 0) {
+        NSMutableString * clickMessage = [[NSMutableString alloc] init];
+        for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+            NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
+            if (message != nil){
+                if ([clickMessage length] > 0){
+                    [clickMessage appendString:@"\n\n"];
+                }
+                [clickMessage appendString:message];
             }
         }
         
-        if ([self.mapCacheOverlays count] > 0) {
-            NSMutableString * clickMessage = [[NSMutableString alloc] init];
-            for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-                NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-                if (message != nil){
-                    if ([clickMessage length] > 0){
-                        [clickMessage appendString:@"\n\n"];
-                    }
-                    [clickMessage appendString:message];
-                }
-            }
-            
-            if ([clickMessage length] > 0) {
-                if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
-                    [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
-                }
+        if ([clickMessage length] > 0) {
+            if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
+                [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
             }
         }
+    }
 }
 
 - (void) dealloc {
