@@ -152,10 +152,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     [self.mapObservations selectShapeAnnotation];
 }
 
--(void)mapTap:(UIGestureRecognizer*)gesture {
-    UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
-    if (tap.state == UIGestureRecognizerStateEnded) {
-        CGPoint tapPoint = [tap locationInView:self.mapView];
+-(void)mapTap: (CGPoint) tapPoint {
+
         CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
         MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
         CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
@@ -241,17 +239,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
                     [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
                 }
-                
-//                UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
-//                                                                                message:clickMessage
-//                                                                         preferredStyle:UIAlertControllerStyleAlert];
-//                
-//                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-//                [self presentViewController:alert animated:YES completion:nil];
-
             }
         }
-    }
 }
 
 - (void) dealloc {
@@ -357,10 +346,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
-    if (!self.hideStaticLayers) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mapTap:)];
-        [self.mapView addGestureRecognizer:tap];
-    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -1301,6 +1286,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     if (mapShapeObservation != nil) {
         MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:location forObservation:mapShapeObservation.observation andHidden:self.hideObservations];
         [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:mapShapeObservation];
+    }
+    
+    if (!self.hideStaticLayers) {
+        [self mapTap:point];
     }
 }
 
