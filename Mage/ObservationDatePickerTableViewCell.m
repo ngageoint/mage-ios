@@ -55,6 +55,11 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    // don't allow users to type or paste into this field, they need to use date picker to populate the date.
+    return NO;
+}
+
 - (void) setTextFieldValue {
     if (self.value) {
         [self.textField setText:[self.value formattedDisplayDate]];
@@ -73,13 +78,11 @@
 
 - (void) cancelButtonPressed {
     self.date = self.value;
-    self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
     [self setTextFieldValue];
     [self.textField resignFirstResponder];
 }
 
 - (void) doneButtonPressed {
-    self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
     [self.textField resignFirstResponder];
 }
 
@@ -105,6 +108,7 @@
             [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
         }
     }
+    self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
     self.value = self.date;
 }
 
