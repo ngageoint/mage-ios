@@ -48,16 +48,23 @@
     [timeZoneLabel sizeToFit];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, [[UIBarButtonItem alloc] initWithCustomView:timeZoneLabel], flexSpace, doneBarButton, nil];
+    
     self.textField.inputView = self.datePicker;
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.textField.inputAccessoryView = toolbar;
     [self.textField setDelegate:self];
+
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
 
-- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    // don't allow users to type or paste into this field, they need to use date picker to populate the date.
-    return NO;
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:NO];
+    }];
+    
+    return [super canPerformAction:action withSender:sender];
 }
 
 - (void) setTextFieldValue {
@@ -117,6 +124,7 @@
     
     if (valid) {
         self.textField.layer.borderColor = nil;
+        self.textField.layer.borderWidth = 0.0f;
     } else {
         self.textField.layer.cornerRadius = 4.0f;
         self.textField.layer.masksToBounds = YES;

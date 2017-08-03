@@ -137,6 +137,7 @@
     
     if (valid) {
         self.textField.layer.borderColor = nil;
+        self.textField.layer.borderWidth = 0.0f;
         self.title.textColor = [UIColor blackColor];
     } else {
         self.title.textColor = [UIColor redColor];
