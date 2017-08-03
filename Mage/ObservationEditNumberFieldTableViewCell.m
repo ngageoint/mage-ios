@@ -76,7 +76,7 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     self.value = [formatter numberFromString:self.textField.text];
-    
+    [self setValid:[self isValid]];
     [self.keyLabel setText:[field objectForKey:@"title"]];
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
 }
@@ -92,15 +92,40 @@
 
 - (void) doneButtonPressed {
     [self.textField resignFirstResponder];
-    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     // validate maybe, unless shouldChangeCharactersInRange already validated
+    NSString *text = textField.text;
+    NSNumber *number = [self.decimalFormatter numberFromString:text];
+    [self setValid:[self isValid:number]];
+    
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    self.value = [formatter numberFromString:self.textField.text];
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+    if (![[self.value stringValue] isEqualToString:self.textField.text]) {
+        self.value = [formatter numberFromString:self.textField.text];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+        }
     }
+}
+
+- (BOOL) isValid {
+    return [self isValid:self.value];
+}
+
+- (BOOL) isValid: (NSNumber *) number {
+    
+    if (number != nil) {
+        if ((self.min && self.max && ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue])) ||
+            (self.min && ([number doubleValue] < [self.min doubleValue])) ||
+            (self.max && ([number doubleValue] > [self.max doubleValue])))  {
+            return NO;
+        }
+    }
+
+    return YES;
 }
 
 - (BOOL) isEmpty {
@@ -112,7 +137,9 @@
     
     if (valid) {
         self.textField.layer.borderColor = nil;
+        self.title.textColor = [UIColor blackColor];
     } else {
+        self.title.textColor = [UIColor redColor];
         self.textField.layer.cornerRadius = 4.0f;
         self.textField.layer.masksToBounds = YES;
         self.textField.layer.borderColor = [[UIColor redColor] CGColor];
@@ -120,26 +147,13 @@
     }
 }
 
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     NSNumber *number = [self.decimalFormatter numberFromString:text];
-
-    if (number != nil) {
-        if ((self.min && self.max && ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue])) ||
-            (self.min && ([number doubleValue] < [self.min doubleValue])) ||
-            (self.max && ([number doubleValue] > [self.max doubleValue])))  {
-            self.title.textColor = [UIColor redColor];
-            self.doneButton.enabled = NO;
-        } else {
-            self.title.textColor = [UIColor blackColor];
-            self.doneButton.enabled = YES;
-        }
-    } else {
-        self.title.textColor = [UIColor blackColor];
-        self.doneButton.enabled = YES;
-    }
-
+    
+    [self setValid:[self isValid:number]];
     
     // allow backspace
     if (!string.length) {

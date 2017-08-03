@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.1 (TBD)
+## 1.4.3 (TBD)
 
 * TBD
 
@@ -14,6 +14,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Bug Fixes
 * Don't save (duplicate) media picked from the gallery.
 * Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
+
+## 1.4.2 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.2) (07-28-2017)
+
+##### Features
+
+##### Bug Fixes
+* Allow empty date field
+
+## 1.4.1 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.1) (06-13-2017)
+
+##### Features
+* Functional improvements to observation form fields.  Users no longer have to tap the 'Done' button when moving between observation form fields.
+
+##### Bug Fixes
 
 ## 1.4.0 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.0) (05-26-2017)
 
