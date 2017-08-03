@@ -8,8 +8,6 @@
 
 @implementation NSDate (Iso8601)
 
-static NSDateFormatter* dateFormatter = nil;
-
 - (NSString *) iso8601String {
     return [[NSDate getDateFormatter] stringFromDate:self];
 }
@@ -19,11 +17,15 @@ static NSDateFormatter* dateFormatter = nil;
 }
 
 + (NSDateFormatter *) getDateFormatter {
-    if (dateFormatter == nil) {
+    static NSDateFormatter* dateFormatter = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-    }
+    });
+    
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
     
     return dateFormatter;
 }
