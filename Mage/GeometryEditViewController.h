@@ -8,7 +8,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import "Observation.h"
-#import "ObservationEditViewController.h"
+#import "ObservationEditTableViewController.h"
 #import "AnnotationDragCallback.h"
 
 @interface GeometryEditViewController : UIViewController <MKMapViewDelegate, AnnotationDragCallback>

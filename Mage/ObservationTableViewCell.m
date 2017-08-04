@@ -43,7 +43,7 @@
 
 - (void) populateCellWithObservation:(Observation *) observation {
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
+    NSDictionary *form = [event formForObservation:observation];
     NSString *variantField = [form objectForKey:@"variantField"];
     NSString *type = [observation.properties objectForKey:@"type"];
     self.primaryField.text = type;

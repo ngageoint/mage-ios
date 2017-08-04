@@ -56,8 +56,9 @@ static NSInteger const PROPERTIES_SECTION = 1;
     }
     
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = [event formForObservation:self.observation];
     self.eventId = [Server currentEventId];
-    self.variantField = [event.form objectForKey:@"variantField"];
+    self.variantField = [form objectForKey:@"variantField"];
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSMutableArray *rowToField = [[NSMutableArray alloc] init];
@@ -65,7 +66,7 @@ static NSInteger const PROPERTIES_SECTION = 1;
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    NSArray *fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    NSArray *fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
     
     // run through the form and map the row indexes to fields
     for (id field in fields) {

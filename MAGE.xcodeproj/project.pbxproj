@@ -53,7 +53,6 @@
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2F6557D41DD27FF1008C7922 /* ObservationEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F6557D21DD27FF1008C7922 /* ObservationEdit.storyboard */; };
 		2F6557D71DD28958008C7922 /* Attachment.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F6557D51DD28958008C7922 /* Attachment.storyboard */; };
-		2F719B191F016F88006FE1F0 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F719B181F016F88006FE1F0 /* ObservationEditViewController.m */; };
 		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
@@ -174,6 +173,7 @@
 		F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
 		F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */; };
+		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
@@ -279,8 +279,6 @@
 		2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedDelegate_iPhone.m; sourceTree = "<group>"; };
 		2F6557D31DD27FF1008C7922 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ObservationEdit.storyboard; sourceTree = "<group>"; };
 		2F6557D61DD28958008C7922 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Attachment.storyboard; sourceTree = "<group>"; };
-		2F719B171F016F88006FE1F0 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
-		2F719B181F016F88006FE1F0 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
@@ -513,6 +511,8 @@
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
 		F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+Thumbnail.h"; sourceTree = "<group>"; };
 		F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+Thumbnail.m"; sourceTree = "<group>"; };
+		F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObservationEditViewController.h; path = Mage/ObservationEditViewController.h; sourceTree = "<group>"; };
+		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObservationEditViewController.m; path = Mage/ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -905,8 +905,6 @@
 				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
 				F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */,
 				F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */,
-				2F719B171F016F88006FE1F0 /* ObservationEditViewController.h */,
-				2F719B181F016F88006FE1F0 /* ObservationEditViewController.m */,
 				F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */,
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
@@ -1033,6 +1031,8 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */,
+				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				2FD853771BE1564F00602CEA /* Resources */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
@@ -1404,7 +1404,6 @@
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
-				2F719B191F016F88006FE1F0 /* ObservationEditViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
@@ -1423,6 +1422,7 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
+				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				04D7477C1EF830AB00D7DABF /* ObservationShapeStyleParser.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,

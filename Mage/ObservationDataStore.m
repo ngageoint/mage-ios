@@ -46,9 +46,12 @@
 }
 
 - (id) init {
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    self.variantField = [form objectForKey:@"variantField"];
+    self.event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    /*
+     NSArray *forms = event.forms;
+     NSDictionary *form = [forms objectAtIndex:0];
+     self.variantField = [form objectForKey:@"variantField"];
+     */
     return self;
 }
 

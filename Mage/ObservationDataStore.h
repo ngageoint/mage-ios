@@ -8,13 +8,13 @@
 #import "ObservationTableViewCell.h"
 #import "Observations.h"
 #import "ObservationSelectionDelegate.h"
+#import <Event.h>
 
 @interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, ObservationActionsDelegate>
 
 @property (strong, nonatomic) Observations *observations;
-@property (strong, nonatomic) NSDictionary *form;
+@property (strong, nonatomic) Event *event;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSString *variantField;
 @property (nonatomic, strong) id<ObservationSelectionDelegate> observationSelectionDelegate;
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;

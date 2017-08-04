@@ -51,7 +51,8 @@
         // fill in defaults
         NSMutableDictionary *properties = [self.observation.properties mutableCopy];
         Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-        NSArray *fields = [event.form objectForKey:@"fields"];
+        NSDictionary *form = [event formForObservation:self.observation];
+        NSArray *fields = [form objectForKey:@"fields"];
         for (NSDictionary *field in fields) {
             id value = [field objectForKey:@"value"];
             

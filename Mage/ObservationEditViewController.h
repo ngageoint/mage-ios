@@ -10,11 +10,7 @@
 #import "AttachmentCollectionDataStore.h"
 #import "WKBGeometry.h"
 
-@protocol PropertyEditDelegate <NSObject>
-- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
-@end
-
-@interface ObservationEditViewController : UIViewController<PropertyEditDelegate>
+@interface ObservationEditViewController : UIViewController
 
 @property (strong, nonatomic) Observation *observation;
 @property (strong, nonatomic) WKBGeometry *location;

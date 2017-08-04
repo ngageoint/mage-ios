@@ -116,6 +116,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     }
 
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    NSDictionary *form = [event formForObservation:self.observation];
 
     NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
     NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
@@ -123,14 +124,14 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
 
     NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"type", @"geometry", nil];
-    self.variantField = [event.form objectForKey:@"variantField"];
+    self.variantField = [form objectForKey:@"variantField"];
     if (self.variantField) {
         [generalProperties addObject:self.variantField];
     }
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    self.fields = [[[event.form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    self.fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
 
     [self.propertyTable reloadData];
 
