@@ -24,20 +24,27 @@
 @implementation ObservationCommonHeaderTableViewCell
 
 
-- (void) configureCellForObservation: (Observation *) observation {
-    NSString *name = [observation.properties valueForKey:@"type"];
-    if (name != nil) {
-        self.primaryFieldLabel.text = name;
-    } else {
-        self.primaryFieldLabel.text = @"Observation";
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
+    NSArray *observationForms = [observation.properties objectForKey:@"forms"];
+    NSDictionary *form;
+    for (NSDictionary *checkForm in forms) {
+        if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
+            form = checkForm;
+        }
     }
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = [event formForObservation:observation];
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSString *variantText = [observation.properties objectForKey:variantField];
-    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && variantText.length > 0) {
+    
+    NSString *primaryField = [form objectForKey:@"primaryField"];
+    NSString *variantField = [form objectForKey:@"secondaryField"];
+    
+    NSString *primaryText = [[observationForms objectAtIndex:0] objectForKey:primaryField];
+    if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
+        self.primaryFieldLabel.text = primaryText;
+    }
+    
+    NSString *variantText = [[observationForms objectAtIndex:0] objectForKey:variantField];
+    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
         self.variantFieldLabel.hidden = NO;
-        self.variantFieldLabel.text = [observation.properties objectForKey:variantField];
+        self.variantFieldLabel.text = variantText;
     } else {
         self.variantFieldLabel.hidden = YES;
     }

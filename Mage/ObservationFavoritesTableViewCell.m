@@ -10,7 +10,7 @@
 
 @implementation ObservationFavoritesTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     self.favoriteCountLabel.text = [@([favorites count]) stringValue];
     if ([favorites count] > 1) {

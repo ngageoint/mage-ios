@@ -12,6 +12,7 @@
 #import "GeometryUtility.h"
 #import "MapObservationManager.h"
 #import "MapAnnotationObservation.h"
+#import <Event.h>
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -44,6 +45,9 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
     
     self.mapDelegate = [[MapDelegate alloc] init];
+    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+    NSArray *forms = event.forms;
+
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
     [self.mapView removeAnnotations:self.mapView.annotations];
@@ -52,8 +56,7 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-        
-        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView];
+        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:forms];
         if (self.isGeometryField) {
             self.mapObservation = [self.observationManager addToMapWithObservation:observation];
             MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];

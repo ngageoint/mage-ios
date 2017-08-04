@@ -8,6 +8,7 @@
 #import "Observations.h"
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
+#import <Event.h>
 
 @interface ObservationMapTableViewCell ()
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
@@ -16,7 +17,7 @@
 
 @implementation ObservationMapTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     Observations *observations = [Observations observationsForObservation:observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
     if(self.mapDelegate == nil){

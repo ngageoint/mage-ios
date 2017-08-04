@@ -31,7 +31,7 @@
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     ObservationImportant *important = observation.observationImportant;
     
     User *user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", important.userId]];

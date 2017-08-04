@@ -8,6 +8,7 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "MapAnnotation.h"
+#import <Event.h>
 
 @interface ObservationAnnotation :  MapAnnotation
 
@@ -17,10 +18,10 @@
 
 @property (nonatomic) Observation *observation;
 
-- (id)initWithObservation:(Observation *) observation;
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
 
-- (id)initWithObservation:(Observation *) observation andGeometry: (WKBGeometry *) geometry;
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry;
 
-- (id)initWithObservation:(Observation *) observation andLocation:(CLLocationCoordinate2D) location;
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andLocation:(CLLocationCoordinate2D) location;
 
 @end

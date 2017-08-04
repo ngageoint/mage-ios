@@ -42,12 +42,25 @@
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = [event formForObservation:observation];
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSString *type = [observation.properties objectForKey:@"type"];
-    self.primaryField.text = type;
-    NSString *variantText = [observation.properties objectForKey:variantField];
+    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+    NSArray *observationForms = [observation.properties objectForKey:@"forms"];
+    NSDictionary *form;
+    for (NSDictionary *checkForm in event.forms) {
+        if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
+            form = checkForm;
+        }
+    }
+    
+    NSString *primaryField = [form objectForKey:@"primaryField"];
+    NSString *variantField = [form objectForKey:@"secondaryField"];
+    
+    NSString *primaryText = [[observationForms objectAtIndex:0] objectForKey:primaryField];
+    if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
+        self.primaryField.text = primaryText;
+        self.primaryField.hidden = NO;
+    }
+    
+    NSString *variantText = [[observationForms objectAtIndex:0] objectForKey:variantField];
     if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
         self.variantField.hidden = NO;
         self.variantField.text = variantText;

@@ -33,6 +33,8 @@
 @property (strong, nonatomic) NSString *variantField;
 @property (nonatomic, strong) NSFetchedResultsController *favoritesFetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *importantFetchedResultsController;
+@property (nonatomic, strong) NSArray *forms;
+@property (nonatomic, strong) NSArray *observationForms;
 @end
 
 @implementation ObservationViewController
@@ -48,6 +50,9 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [super viewDidLoad];
 
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    self.forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
+    
+    self.observationForms = [self.observation.properties objectForKey:@"forms"];
 
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
@@ -115,23 +120,23 @@ static NSInteger const IMPORTANT_SECTION = 4;
         [self.tableLayout insertObject:@[@"updateImportant"] atIndex:IMPORTANT_SECTION];
     }
 
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = [event formForObservation:self.observation];
+//    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+//    NSDictionary *form = [event formForObservation:self.observation];
 
     NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
     NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
     [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
     [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
 
-    NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"type", @"geometry", nil];
-    self.variantField = [form objectForKey:@"variantField"];
-    if (self.variantField) {
-        [generalProperties addObject:self.variantField];
-    }
+    NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"geometry", nil];
+//    self.variantField = [form objectForKey:@"variantField"];
+//    if (self.variantField) {
+//        [generalProperties addObject:self.variantField];
+//    }
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    self.fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+//    self.fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
 
     [self.propertyTable reloadData];
 
@@ -159,7 +164,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
-    return self.tableLayout.count + 1;
+    NSArray *forms = [self.observation.properties objectForKey:@"forms"];
+    if (forms) {
+        return self.tableLayout.count + [forms count];
+    }
+    return self.tableLayout.count;
 }
 
 
@@ -167,25 +176,49 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if (section < self.tableLayout.count) {
         return [self.tableLayout[section] count];
     } else {
-        return [self.fields count];
+        return [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] count];
     }
 }
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
 
-    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
-    id title = [field objectForKey:@"title"];
-    id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+//    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
+//    id title = [field objectForKey:@"title"];
+//    id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
+    NSDictionary *eventForm = [self.forms objectAtIndex:([indexPath section] - self.tableLayout.count)];
+
+    NSDictionary *form = [self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)];
+    id title = [[form allKeys] objectAtIndex:[indexPath row]];
+    id value = [form objectForKey:title];
 
     [observationCell populateCellWithKey:title andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field valueForKey:@"type"]];
-    cell.fieldDefinition = field;
-
+    NSString *fieldName = [[[self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)] allKeys] objectAtIndex:[indexPath row]];
+    id formId = [[self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)] valueForKey:@"formId"];
+    // TODO must be a better way through this
+    NSDictionary *eventForm;
+    for (NSDictionary *formCheck in self.forms) {
+        if ([formCheck valueForKey:@"id"] == formId) {
+            eventForm = formCheck;
+        }
+    }
+    
+    // TODO probably a better way to do this
+    for (NSDictionary *field in [eventForm objectForKey:@"fields"]) {
+        if ([[field valueForKey:@"name"] isEqualToString:fieldName]) {
+            NSString *fieldType = [field objectForKey:@"type"];
+            ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:fieldType];
+            cell.fieldDefinition = field;
+            
+            return cell;
+        }
+    }
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"textfield"];
+    cell.fieldDefinition = nil;
+    
     return cell;
 }
 
@@ -194,8 +227,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if (indexPath.section < self.tableLayout.count) {
         id cell = [tableView dequeueReusableCellWithIdentifier:self.tableLayout[indexPath.section][indexPath.row]];
 
-        if ([cell respondsToSelector:@selector(configureCellForObservation:)]) {
-            [cell configureCellForObservation:self.observation];
+        if ([cell respondsToSelector:@selector(configureCellForObservation:withForms:)]) {
+            [cell configureCellForObservation:self.observation withForms:self.forms];
         }
 
         if ([cell respondsToSelector:@selector(setAttachmentSelectionDelegate:)]) {
@@ -245,6 +278,14 @@ static NSInteger const IMPORTANT_SECTION = 4;
     BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] count];
     if (isSyncSectionShowing && section == SYNC_SECTION) {
         title = @"Manually push";
+    } else if (section >= self.tableLayout.count) {
+        id formId = [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] valueForKey:@"formId"];
+        // TODO must be a better way through this
+        for (NSDictionary *eventForm in self.forms) {
+            if ([eventForm valueForKey:@"id"] == formId) {
+                return [eventForm objectForKey:@"name"];
+            }
+        }
     }
 
     return title;

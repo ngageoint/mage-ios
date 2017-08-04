@@ -41,6 +41,7 @@
 #import "MapUtils.h"
 #import "MapObservationManager.h"
 #import "WKBGeometryUtils.h"
+#import <Event.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -280,6 +281,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     _observations = observations;
     _observations.delegate = self;
     
+    Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
+    
+    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
+    _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
+    
     [self.mapObservations clear];
     
     NSError *error;
@@ -335,9 +341,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
-    
-    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:mapView];
-    _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];

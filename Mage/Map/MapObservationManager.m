@@ -19,15 +19,17 @@
 @interface MapObservationManager ()
 
 @property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, weak) NSArray *forms;
 
 @end
 
 @implementation MapObservationManager
 
--(instancetype) initWithMapView: (MKMapView *) mapView{
+-(instancetype) initWithMapView: (MKMapView *) mapView andEventForms: (NSArray *) forms {
     self = [super init];
     if(self){
         self.mapView = mapView;
+        self.forms = forms;
     }
     return self;
 }
@@ -50,7 +52,7 @@
     
     if(geometry.geometryType == WKB_POINT){
         
-        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andGeometry:geometry];
+        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andGeometry:geometry];
         [_mapView addAnnotation:annotation];
         
         observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
@@ -88,7 +90,7 @@
 }
 
 -(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocationCoordinate2D) location forObservation: (Observation *) observation andHidden: (BOOL) hidden{
-    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andLocation:location];
+    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andLocation:location];
     [annotation setCoordinate:location];
     [self.mapView addAnnotation:annotation];
     if(hidden){

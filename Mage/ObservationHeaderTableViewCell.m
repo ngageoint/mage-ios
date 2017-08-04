@@ -8,7 +8,7 @@
 
 @implementation ObservationHeaderTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
 
 }
 

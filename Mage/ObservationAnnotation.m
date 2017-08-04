@@ -19,22 +19,33 @@
 
 @implementation ObservationAnnotation
 
--(id) initWithObservation:(Observation *) observation {
-    return [self initWithObservation:observation andGeometry:[observation getGeometry]];
+-(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms {
+    return [self initWithObservation:observation andEventForms: forms andGeometry:[observation getGeometry]];
 }
 
--(id) initWithObservation:(Observation *) observation andGeometry: (WKBGeometry *) geometry {
+-(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry {
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;
-    return [self initWithObservation:observation andLocation:location];
+    return [self initWithObservation:observation andEventForms: forms andLocation:location];
 }
 
-- (id)initWithObservation:(Observation *) observation andLocation:(CLLocationCoordinate2D) location{
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andLocation:(CLLocationCoordinate2D) location{
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
-        [self setTitle:[observation.properties objectForKey:@"type"]];
+         
+        NSArray *observationForms = [observation.properties objectForKey:@"forms"];
+        NSDictionary *form;
+        for (NSDictionary *checkForm in forms) {
+            if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
+                form = checkForm;
+            }
+        }
+        
+        NSString *primaryField = [form objectForKey:@"primaryField"];
+       
+        [self setTitle:[[observationForms objectAtIndex:0] objectForKey:primaryField]];
         if (self.title == nil) {
             [self setTitle:@"Observation"];
         }

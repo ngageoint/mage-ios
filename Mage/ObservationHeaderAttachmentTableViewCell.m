@@ -15,7 +15,7 @@
 
 @implementation ObservationHeaderAttachmentTableViewCell
 
-- (void) configureCellForObservation:(Observation *)observation {
+- (void) configureCellForObservation:(Observation *)observation withForms:(NSArray *)forms {
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;

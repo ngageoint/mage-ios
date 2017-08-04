@@ -23,6 +23,7 @@
 #import "WKBGeometryEnvelopeBuilder.h"
 #import "Observation.h"
 #import "ObservationShapeStyle.h"
+#import "Event.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -61,7 +62,9 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     
-    self.observationManager = [[MapObservationManager alloc] initWithMapView:self.map];
+    Event *event = [Event getCurrentEventInContext:[self.observation managedObjectContext]];
+
+    self.observationManager = [[MapObservationManager alloc] initWithMapView:self.map andEventForms:event.forms];
     self.shapeConverter = [[GPKGMapShapeConverter alloc] init];
     self.validLocation = YES;
     

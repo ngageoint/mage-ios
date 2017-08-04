@@ -21,10 +21,11 @@
  *  Initializer
  *
  *  @param mapView  map view
+ *  @param eventForms forms for the event
  *
  *  @return new instance
  */
--(instancetype) initWithMapView: (MKMapView *) mapView;
+-(instancetype) initWithMapView: (MKMapView *) mapView andEventForms: (NSArray *) forms;
 
 /**
  * Add an observation to the map as a marker or shape

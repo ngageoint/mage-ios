@@ -9,6 +9,6 @@
 
 @interface ObservationHeaderTableViewCell : UITableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation;
+- (void) configureCellForObservation: (Observation *) observation withForms: (NSArray *) forms;
 
 @end

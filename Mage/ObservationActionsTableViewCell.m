@@ -28,7 +28,7 @@
     return self;
 }
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 
     NSDictionary *favoritesMap = [observation getFavoritesMap];
