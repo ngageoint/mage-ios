@@ -29,7 +29,7 @@
 @property (nonatomic, assign) BOOL manualSync;
 
 @property (strong, nonatomic) User *currentUser;
-@property (strong, nonatomic) NSArray *fields;
+@property (strong, nonatomic) NSMutableArray *formFields;
 @property (strong, nonatomic) NSString *variantField;
 @property (nonatomic, strong) NSFetchedResultsController *favoritesFetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *importantFetchedResultsController;
@@ -52,6 +52,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
     
+    self.formFields = [[NSMutableArray alloc] init];
     self.observationForms = [self.observation.properties objectForKey:@"forms"];
 
     [self.propertyTable setEstimatedRowHeight:44.0f];
@@ -86,58 +87,43 @@ static NSInteger const IMPORTANT_SECTION = 4;
                                                                                groupBy:nil
                                                                               delegate:self
                                                                              inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    [self setupEditButton];
+    [self setupNonPropertySections];
 
-    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    if ([self userHasEditPermissions:user]) {
-        self.editButton.style = UIBarButtonItemStylePlain;
-        self.editButton.enabled = YES;
-        self.editButton.title = @"Edit";
-    } else {
-        self.editButton.style = UIBarButtonItemStylePlain;
-        self.editButton.enabled = NO;
-        self.editButton.title = nil;
-    }
 
-    self.navigationItem.title = [self.observation.properties valueForKey:@"type"];
-
-    if (self.observation.isDirty) {
-        if ([self.observation hasValidationError]) {
-            [self.tableLayout insertObject:@[@"statusError"] atIndex:STATUS_SECTION];
-        } else {
-            [self.tableLayout insertObject:@[@"statusNeedsSync"] atIndex:STATUS_SECTION];
+    NSString *primaryField;
+    for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
+        
+        // TODO must be a better way through this
+        NSDictionary *eventForm;
+        for (NSDictionary *formCheck in self.forms) {
+            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
+                eventForm = formCheck;
+            }
         }
-    } else {
-        [self.tableLayout insertObject:@[@"statusOk"] atIndex:STATUS_SECTION];
+        
+        if (!primaryField) {
+            primaryField = [eventForm objectForKey:@"primaryField"];
+        }
+        
+        NSMutableDictionary *propertiesWithValue = [form mutableCopy];
+        NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
+        [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
+        [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
+        [propertiesWithValue removeObjectForKey:@"formId"];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (SELF.name IN %@) AND type IN %@", nil, [propertiesWithValue allKeys], [ObservationFields fields]];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+        
+        [self.formFields addObject:[[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]]];
     }
-
-    [self.tableLayout insertObject:@[] atIndex:SYNC_SECTION];
-    [self.tableLayout insertObject:[self getHeaderSection] atIndex:HEADER_SECTION];
-    [self.tableLayout insertObject:[self getAttachmentsSection] atIndex:ATTACHMENT_SECTION];
-
-    if ([self canEditObservationImportant] && !self.observation.isImportant) {
-        [self.tableLayout insertObject:@[@"addImportant"] atIndex:IMPORTANT_SECTION];
-    } else if (self.observation.isImportant) {
-        [self.tableLayout insertObject:@[@"updateImportant"] atIndex:IMPORTANT_SECTION];
+    
+    NSString *primaryText = [[self.observationForms objectAtIndex:0] objectForKey:primaryField];
+    if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
+        self.navigationItem.title = primaryText;
     }
-
-//    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-//    NSDictionary *form = [event formForObservation:self.observation];
-
-    NSMutableDictionary *propertiesWithValue = [self.observation.properties mutableCopy];
-    NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
-    [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
-    [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
-
-    NSMutableArray *generalProperties = [NSMutableArray arrayWithObjects:@"timestamp", @"geometry", nil];
-//    self.variantField = [form objectForKey:@"variantField"];
-//    if (self.variantField) {
-//        [generalProperties addObject:self.variantField];
-//    }
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (NOT (SELF.name IN %@)) AND (SELF.name IN %@) AND type IN %@", nil, generalProperties, [propertiesWithValue allKeys], [ObservationFields fields]];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-//    self.fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
-
+    
     [self.propertyTable reloadData];
 
     [[ObservationPushService singleton] addObservationPushDelegate:self];
@@ -155,6 +141,42 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [[ObservationPushService singleton] removeObservationPushDelegate:self];
 }
 
+- (void) setupNonPropertySections {
+    if (self.observation.isDirty) {
+        if ([self.observation hasValidationError]) {
+            [self.tableLayout insertObject:@[@"statusError"] atIndex:STATUS_SECTION];
+        } else {
+            [self.tableLayout insertObject:@[@"statusNeedsSync"] atIndex:STATUS_SECTION];
+        }
+    } else {
+        [self.tableLayout insertObject:@[@"statusOk"] atIndex:STATUS_SECTION];
+    }
+    
+    [self.tableLayout insertObject:@[] atIndex:SYNC_SECTION];
+    [self.tableLayout insertObject:[self getHeaderSection] atIndex:HEADER_SECTION];
+    [self.tableLayout insertObject:[self getAttachmentsSection] atIndex:ATTACHMENT_SECTION];
+    
+    if ([self canEditObservationImportant] && !self.observation.isImportant) {
+        [self.tableLayout insertObject:@[@"addImportant"] atIndex:IMPORTANT_SECTION];
+    } else if (self.observation.isImportant) {
+        [self.tableLayout insertObject:@[@"updateImportant"] atIndex:IMPORTANT_SECTION];
+    }
+
+}
+
+- (void) setupEditButton {
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    if ([self userHasEditPermissions:user]) {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = YES;
+        self.editButton.title = @"Edit";
+    } else {
+        self.editButton.style = UIBarButtonItemStylePlain;
+        self.editButton.enabled = NO;
+        self.editButton.title = nil;
+    }
+}
+
 - (NSMutableArray *) getHeaderSection {
     return [[NSMutableArray alloc] init];
 }
@@ -164,11 +186,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
-    NSArray *forms = [self.observation.properties objectForKey:@"forms"];
-    if (forms) {
-        return self.tableLayout.count + [forms count];
-    }
-    return self.tableLayout.count;
+    return self.tableLayout.count + [self.formFields count];
 }
 
 
@@ -176,48 +194,25 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if (section < self.tableLayout.count) {
         return [self.tableLayout[section] count];
     } else {
-        return [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] count];
+        return [[self.formFields objectAtIndex:(section - self.tableLayout.count)] count];
     }
 }
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     ObservationPropertyTableViewCell *observationCell = (ObservationPropertyTableViewCell *) cell;
-
-//    NSDictionary *field = [self.fields objectAtIndex:[indexPath row]];
-//    id title = [field objectForKey:@"title"];
-//    id value = [self.observation.properties objectForKey:[field objectForKey:@"name"]];
-    NSDictionary *eventForm = [self.forms objectAtIndex:([indexPath section] - self.tableLayout.count)];
-
-    NSDictionary *form = [self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)];
-    id title = [[form allKeys] objectAtIndex:[indexPath row]];
-    id value = [form objectForKey:title];
+    
+    NSDictionary *field = [[self.formFields objectAtIndex:([indexPath section] - self.tableLayout.count)] objectAtIndex:[indexPath row]];
+    id title = [field objectForKey:@"title"];
+    id value = [[self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)] objectForKey:[field objectForKey:@"name"]];
 
     [observationCell populateCellWithKey:title andValue:value];
 }
 
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
-    NSString *fieldName = [[[self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)] allKeys] objectAtIndex:[indexPath row]];
-    id formId = [[self.observationForms objectAtIndex:([indexPath section] - self.tableLayout.count)] valueForKey:@"formId"];
-    // TODO must be a better way through this
-    NSDictionary *eventForm;
-    for (NSDictionary *formCheck in self.forms) {
-        if ([formCheck valueForKey:@"id"] == formId) {
-            eventForm = formCheck;
-        }
-    }
-    
-    // TODO probably a better way to do this
-    for (NSDictionary *field in [eventForm objectForKey:@"fields"]) {
-        if ([[field valueForKey:@"name"] isEqualToString:fieldName]) {
-            NSString *fieldType = [field objectForKey:@"type"];
-            ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:fieldType];
-            cell.fieldDefinition = field;
-            
-            return cell;
-        }
-    }
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"textfield"];
-    cell.fieldDefinition = nil;
+    NSDictionary *field = [[self.formFields objectAtIndex:([indexPath section] - self.tableLayout.count)] objectAtIndex:[indexPath row]];
+
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field objectForKey:@"type"]];
+    cell.fieldDefinition = field;
     
     return cell;
 }
@@ -279,13 +274,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if (isSyncSectionShowing && section == SYNC_SECTION) {
         title = @"Manually push";
     } else if (section >= self.tableLayout.count) {
-        id formId = [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] valueForKey:@"formId"];
-        // TODO must be a better way through this
-        for (NSDictionary *eventForm in self.forms) {
-            if ([eventForm valueForKey:@"id"] == formId) {
-                return [eventForm objectForKey:@"name"];
-            }
-        }
+        title = [[self.forms objectAtIndex:(section - self.tableLayout.count)] objectForKey:@"name"];
     }
 
     return title;

@@ -722,8 +722,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3g-Ae-taJ">
-                                                    <rect key="frame" x="8" y="15" width="359" height="28"/>
-                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <rect key="frame" x="8" y="15" width="359" height="40"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -732,7 +732,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Axw-WO-Lpk" firstAttribute="leading" secondItem="cZZ-62-QoS" secondAttribute="leading" constant="8" id="BsK-4X-imM"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="m3g-Ae-taJ" secondAttribute="bottom" constant="3.5" id="N3m-tK-27v"/>
+                                                <constraint firstAttribute="bottom" secondItem="m3g-Ae-taJ" secondAttribute="bottom" id="N3m-tK-27v"/>
                                                 <constraint firstItem="m3g-Ae-taJ" firstAttribute="top" secondItem="Axw-WO-Lpk" secondAttribute="bottom" constant="-7" id="brG-8z-NJz"/>
                                                 <constraint firstAttribute="trailing" secondItem="Axw-WO-Lpk" secondAttribute="trailing" constant="8" id="eV3-u9-YTa"/>
                                                 <constraint firstItem="m3g-Ae-taJ" firstAttribute="leading" secondItem="cZZ-62-QoS" secondAttribute="leading" constant="8" id="pgm-iQ-CIP"/>
@@ -740,7 +740,7 @@
                                                 <constraint firstItem="Axw-WO-Lpk" firstAttribute="top" secondItem="cZZ-62-QoS" secondAttribute="topMargin" constant="-7" id="vhI-1v-Mzc"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="keyLabel" destination="Axw-WO-Lpk" id="8SL-am-IR8"/>
@@ -835,7 +835,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vHP-A3-S4h">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="textfield" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vHP-A3-S4h">
                                                     <rect key="frame" x="8" y="1" width="359" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="lUx-NQ-aXp"/>
