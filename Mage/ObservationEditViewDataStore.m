@@ -14,18 +14,21 @@
 #import <Event.h>
 
 static NSInteger const ATTACHMENT_SECTION = 0;
-static NSInteger const PROPERTIES_SECTION = 1;
+static NSInteger const COMMON_SECTION = 1;
 
 @interface ObservationEditViewDataStore ()
 @property (nonatomic, strong) NSDateFormatter *dateDisplayFormatter;
 @property (nonatomic, strong) NSDateFormatter *dateParseFormatter;
 @property (nonatomic, strong) NSArray *rowToCellType;
 @property (nonatomic, strong) NSArray *rowToField;
-@property (nonatomic, strong) NSDictionary *fieldToRow;
 @property (nonatomic, assign) NSInteger expandedRow;
 @property (nonatomic, strong) NSNumber *eventId;
 @property (nonatomic, strong) NSString *variantField;
 @property (nonatomic, strong) NSMutableArray *invalidIndexPaths;
+@property (nonatomic, strong) NSArray *forms;
+@property (nonatomic, strong) NSArray *observationForms;
+@property (strong, nonatomic) NSMutableArray *formFields;
+
 @end
 
 @implementation ObservationEditViewDataStore
@@ -33,101 +36,131 @@ static NSInteger const PROPERTIES_SECTION = 1;
 - (BOOL) validate {
     self.invalidIndexPaths = [[NSMutableArray alloc] init];
     
-    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:PROPERTIES_SECTION]; ++i) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:PROPERTIES_SECTION];
-        ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
-        if (![cell isValid]) {
-            [self.invalidIndexPaths addObject:indexPath];
-        }
-    }
-    
-    if ([self.invalidIndexPaths count] > 0) {
-        [self.editTable reloadRowsAtIndexPaths:self.invalidIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        [self.editTable scrollToRowAtIndexPath:[self.invalidIndexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-        return NO;
-    }
+//    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:PROPERTIES_SECTION]; ++i) {
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:PROPERTIES_SECTION];
+//        ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
+//        if (![cell isValid]) {
+//            [self.invalidIndexPaths addObject:indexPath];
+//        }
+//    }
+//    
+//    if ([self.invalidIndexPaths count] > 0) {
+//        [self.editTable reloadRowsAtIndexPaths:self.invalidIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+//        [self.editTable scrollToRowAtIndexPath:[self.invalidIndexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//        return NO;
+//    }
     
     return YES;
 }
 
-- (NSArray *) rowToCellType {
-    if (_rowToCellType != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
-        return _rowToCellType;
+- (NSArray *) forms {
+    if (_forms != nil) {
+        return _forms;
+    }
+    _forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
+    return _forms;
+}
+
+- (NSArray *) formFields {
+    if (_formFields != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
+        return _formFields;
     }
     
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = [event formForObservation:self.observation];
+    _formFields = [[NSMutableArray alloc] init];
     self.eventId = [Server currentEventId];
-    self.variantField = [form objectForKey:@"variantField"];
     
-    NSMutableArray *cells = [[NSMutableArray alloc] init];
-    NSMutableArray *rowToField = [[NSMutableArray alloc] init];
-    NSMutableDictionary *fieldToRowMap = [[NSMutableDictionary alloc] init];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    NSArray *fields = [[[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    
-    // run through the form and map the row indexes to fields
-    for (id field in fields) {
-        [fieldToRowMap setObject:[NSNumber numberWithInteger:rowToField.count] forKey:[field objectForKey:@"id"]];
-        [cells addObject:[field objectForKey:@"type"]];
-        [rowToField addObject:field];
+    NSString *primaryField;
+    for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
+        // TODO must be a better way through this
+        NSDictionary *eventForm;
+        for (NSDictionary *formCheck in self.forms) {
+            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
+                eventForm = formCheck;
+            }
+        }
+        
+        if (!primaryField) {
+            primaryField = [eventForm objectForKey:@"primaryField"];
+        }
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+        NSArray *fields = [[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        [_formFields addObject:fields];
     }
-    
-    self.fieldToRow = fieldToRowMap;
-    self.rowToField = rowToField;
-    _rowToCellType = cells;
-
-    return _rowToCellType;
-}
-
-- (NSArray *) rowToField {
-    if (_rowToField != nil) {
-        return _rowToField;
-    }
-    
-    [self rowToCellType];
-    return _rowToField;
-}
-
-- (NSDictionary *) fieldToRow {
-    if (!_fieldToRow) {
-        _fieldToRow = [[NSDictionary alloc] init];
-    }
-    
-    return _fieldToRow;
-}
-
-- (id) valueForIndexPath: (NSIndexPath *) indexPath {
-    id field = [self rowToField][indexPath.row];
-    id value = [self.observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
-    return value;
+    return _formFields;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == ATTACHMENT_SECTION) {
         return [self.observation.attachments count] > 0 ? 1 : 0;
+    } else if (section == COMMON_SECTION) {
+        return 2;
     } else {
-        return [self rowToField].count;
+        return [[self.formFields objectAtIndex:(section - 2)] count];
     }
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 2 + [[self.observation.properties objectForKey:@"forms"] count];
 }
 
 - (NSString *) getCellTypeAtIndexPath:(NSIndexPath *) indexPath {
-    return indexPath.section == ATTACHMENT_SECTION ? @"attachmentView" : [self rowToCellType][indexPath.row];
+    if (indexPath.section == ATTACHMENT_SECTION) {
+        return @"attachmentView";
+    } else if (indexPath.section == COMMON_SECTION) {
+        if (indexPath.row == 0) {
+            return @"date";
+        } else {
+            return @"geometry";
+        }
+    } else {
+        return  [[self fieldForIndexPath:indexPath] objectForKey:@"type"];
+    }
+}
+
+- (NSDictionary *) fieldForIndexPath: (NSIndexPath *) indexPath {
+    if ([indexPath section] > 1) {
+        NSMutableDictionary *field = [[NSMutableDictionary alloc] initWithDictionary:[[self.formFields objectAtIndex:([indexPath section] - 2)] objectAtIndex:[indexPath row]]];
+        [field setObject:[NSNumber numberWithInteger:([indexPath section]-2)] forKey: @"formIndex"];
+        [field setObject:[NSNumber numberWithInteger:[indexPath row]] forKey:@"fieldRow"];
+        return field;
+    } else if ([indexPath section] == COMMON_SECTION) {
+        NSMutableDictionary *field = [[NSMutableDictionary alloc] init];
+        if ([indexPath row] == 0) {
+            [field setObject:@"Date" forKey:@"title"];
+        } else if ([indexPath row] == 1) {
+            [field setObject:@"Location" forKey:@"title"];
+        }
+        return field;
+    }
+    return nil;
+}
+
+- (id) valueForIndexPath: (NSIndexPath *) indexPath {
+    if ([indexPath section] > 1) {
+        id field = [self fieldForIndexPath:indexPath];
+        id value = [[[self.observation.properties objectForKey:@"forms"] objectAtIndex:([indexPath section] - 2)] objectForKey:(NSString *)[field objectForKey:@"name"]];
+        return value;
+    } else if ([indexPath section] == COMMON_SECTION) {
+        if ([indexPath row] == 0) {
+            return [self.observation.properties objectForKey:@"timestamp"];
+        } else if ([indexPath row] == 1) {
+            return [self.observation getGeometry];
+        }
+    }
+    return nil;
 }
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     NSString *cellType = [self getCellTypeAtIndexPath:indexPath];
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
-    cell.fieldDefinition = [self rowToField][indexPath.row];
+    cell.fieldDefinition = [self fieldForIndexPath:indexPath];
     
     if ([cell isKindOfClass:[ObservationEditGeometryTableViewCell class]]) {
-        self.annotationChangedDelegate = (ObservationEditGeometryTableViewCell *) cell;
+        ObservationEditGeometryTableViewCell *gcell = (ObservationEditGeometryTableViewCell *) cell;
+        self.annotationChangedDelegate = gcell;
+        gcell.forms = self.forms;
     }
     
     return cell;
@@ -135,14 +168,14 @@ static NSInteger const PROPERTIES_SECTION = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
-    id field = [self rowToField][indexPath.row];
     [cell setDelegate:self];
     
     if ([cell respondsToSelector:@selector(attachmentSelectionDelegate)]) {
         [cell setAttachmentSelectionDelegate:self.attachmentSelectionDelegate];
     }
     
-    [cell populateCellWithFormField:field andObservation:self.observation];
+    id value = [self valueForIndexPath:indexPath];
+    [cell populateCellWithFormField:[self fieldForIndexPath:indexPath] andValue:value];
     [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     
     return cell;
@@ -156,30 +189,36 @@ static NSInteger const PROPERTIES_SECTION = 1;
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
     NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
+    NSNumber *number = [field objectForKey:@"formIndex"];
+    NSUInteger formIndex = [number integerValue];
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         // Geometry is not stored in properties
         self.observation.geometry = value;
     } else {
         NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
-        
+        NSMutableArray *forms = [newProperties objectForKey:@"forms"];
+        NSMutableDictionary *newFormProperties = [[NSMutableDictionary alloc] initWithDictionary:[forms objectAtIndex:formIndex]];
         if (value == nil) {
-            [newProperties removeObjectForKey:fieldKey];
+            [newFormProperties removeObjectForKey:fieldKey];
         } else {
-            [newProperties setObject:value forKey:fieldKey];
+            [newFormProperties setObject:value forKey:fieldKey];
         }
+        [forms replaceObjectAtIndex:formIndex withObject:newFormProperties];
+        [newProperties setObject:forms forKey:@"forms"];
         
         self.observation.properties = newProperties;
     }
     
-    NSInteger row = [[[self fieldToRow] objectForKey:[field objectForKey:@"id"]] integerValue];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem: row inSection:PROPERTIES_SECTION];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[field objectForKey:@"fieldRow"] integerValue] inSection:(formIndex+2)];
     
     if (reload == YES || [self.invalidIndexPaths containsObject:indexPath]) {
         [self.invalidIndexPaths removeObject:indexPath];
         
         id cell = [self.editTable cellForRowAtIndexPath:indexPath];
-        [cell populateCellWithFormField:field andObservation:self.observation];
+        if ([indexPath section] > 1) {
+            [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
+        }
         [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
@@ -194,6 +233,19 @@ static NSInteger const PROPERTIES_SECTION = 1;
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     return [[UIView alloc] init];
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section != ATTACHMENT_SECTION && section != COMMON_SECTION) {
+        NSDictionary *form = [[self.observation.properties objectForKey:@"forms"] objectAtIndex:(section - 2)];
+        // TODO must be a better way through this
+        for (NSDictionary *eventForm in self.forms) {
+            if ([eventForm valueForKey:@"id"] == [form objectForKey:@"formId"]) {
+                return [eventForm objectForKey:@"name"];
+            }
+        }
+    }
+    return nil;
 }
 
 

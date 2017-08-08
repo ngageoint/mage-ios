@@ -17,7 +17,7 @@
 
 @implementation ObservationDatePickerTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
     self.date = nil;
     self.canceled = NO;
     
@@ -28,8 +28,8 @@
         self.datePicker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
     }
     
-    if ([[observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]] length] > 0) {
-        self.value = [NSDate dateFromIso8601String: [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]]];
+    if ([value length] > 0) {
+        self.value = [NSDate dateFromIso8601String: (NSString *)value];
         self.datePicker.date = self.value;
     } else {
         self.value = nil;

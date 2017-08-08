@@ -52,7 +52,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
     
-    self.formFields = [[NSMutableArray alloc] init];
     self.observationForms = [self.observation.properties objectForKey:@"forms"];
 
     [self.propertyTable setEstimatedRowHeight:44.0f];
@@ -93,30 +92,12 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 
     NSString *primaryField;
-    for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
-        
-        // TODO must be a better way through this
-        NSDictionary *eventForm;
-        for (NSDictionary *formCheck in self.forms) {
-            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
-                eventForm = formCheck;
-            }
-        }
-        
-        if (!primaryField) {
+    // TODO must be a better way through this
+    for (NSDictionary *eventForm in self.forms) {
+        if ([eventForm valueForKey:@"id"] == [[self.observationForms objectAtIndex:0] objectForKey:@"formId"]) {
             primaryField = [eventForm objectForKey:@"primaryField"];
+            break;
         }
-        
-        NSMutableDictionary *propertiesWithValue = [form mutableCopy];
-        NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
-        [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
-        [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
-        [propertiesWithValue removeObjectForKey:@"formId"];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (SELF.name IN %@) AND type IN %@", nil, [propertiesWithValue allKeys], [ObservationFields fields]];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-        
-        [self.formFields addObject:[[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]]];
     }
     
     NSString *primaryText = [[self.observationForms objectAtIndex:0] objectForKey:primaryField];
@@ -338,6 +319,36 @@ static NSInteger const IMPORTANT_SECTION = 4;
         vc.userIds = userIds;
     }
 }
+
+- (NSArray *) formFields {
+    if (_formFields != nil) {
+        return _formFields;
+    }
+    _formFields = [[NSMutableArray alloc] init];
+    for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
+        
+        // TODO must be a better way through this
+        NSDictionary *eventForm;
+        for (NSDictionary *formCheck in self.forms) {
+            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
+                eventForm = formCheck;
+            }
+        }
+        
+        NSMutableDictionary *propertiesWithValue = [form mutableCopy];
+        NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];
+        [keyWithNoValue addObjectsFromArray:[propertiesWithValue allKeysForObject:@[]]];
+        [propertiesWithValue removeObjectsForKeys:keyWithNoValue];
+        [propertiesWithValue removeObjectForKey:@"formId"];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (SELF.name IN %@) AND type IN %@", nil, [propertiesWithValue allKeys], [ObservationFields fields]];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+        
+        [_formFields addObject:[[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]]];
+    }
+    return _formFields;
+}
+
 
 - (BOOL) userHasEditPermissions:(User *) user {
     return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];
