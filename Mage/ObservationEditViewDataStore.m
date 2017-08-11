@@ -28,6 +28,7 @@ static NSInteger const COMMON_SECTION = 1;
 @property (nonatomic, strong) NSArray *forms;
 @property (nonatomic, strong) NSArray *observationForms;
 @property (strong, nonatomic) NSMutableArray *formFields;
+@property (nonatomic, strong) NSString *primaryField;
 
 @end
 
@@ -69,7 +70,7 @@ static NSInteger const COMMON_SECTION = 1;
     _formFields = [[NSMutableArray alloc] init];
     self.eventId = [Server currentEventId];
     
-    NSString *primaryField;
+    
     for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
         // TODO must be a better way through this
         NSDictionary *eventForm;
@@ -79,8 +80,8 @@ static NSInteger const COMMON_SECTION = 1;
             }
         }
         
-        if (!primaryField) {
-            primaryField = [eventForm objectForKey:@"primaryField"];
+        if (!self.primaryField) {
+            self.primaryField = [eventForm objectForKey:@"primaryField"];
         }
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
@@ -129,8 +130,10 @@ static NSInteger const COMMON_SECTION = 1;
         NSMutableDictionary *field = [[NSMutableDictionary alloc] init];
         if ([indexPath row] == 0) {
             [field setObject:@"Date" forKey:@"title"];
+            [field setObject:@"timestamp" forKey:@"name"];
         } else if ([indexPath row] == 1) {
             [field setObject:@"Location" forKey:@"title"];
+            [field setObject:@"geometry" forKey:@"name"];
         }
         return field;
     }
@@ -188,14 +191,18 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
     
-    NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
-    NSNumber *number = [field objectForKey:@"formIndex"];
-    NSUInteger formIndex = [number integerValue];
+    NSIndexPath *indexPath;
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        // Geometry is not stored in properties
         self.observation.geometry = value;
+        indexPath = [NSIndexPath indexPathForRow:1 inSection:COMMON_SECTION];
+    } else if ([[field objectForKey:@"name"] isEqualToString:@"timestamp"]) {
+        [self.observation.properties setObject:value forKey:@"timestamp"];
+        indexPath = [NSIndexPath indexPathForRow:0 inSection:COMMON_SECTION];
     } else {
+        NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
+        NSNumber *number = [field objectForKey:@"formIndex"];
+        NSUInteger formIndex = [number integerValue];
         NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
         NSMutableArray *forms = [newProperties objectForKey:@"forms"];
         NSMutableDictionary *newFormProperties = [[NSMutableDictionary alloc] initWithDictionary:[forms objectAtIndex:formIndex]];
@@ -207,28 +214,28 @@ static NSInteger const COMMON_SECTION = 1;
         [forms replaceObjectAtIndex:formIndex withObject:newFormProperties];
         [newProperties setObject:forms forKey:@"forms"];
         
+        indexPath = [NSIndexPath indexPathForRow:[[field objectForKey:@"fieldRow"] integerValue] inSection:(formIndex+2)];
+        
         self.observation.properties = newProperties;
+        
+        if ([fieldKey isEqualToString:self.primaryField] && self.annotationChangedDelegate) {
+            [self.annotationChangedDelegate typeChanged:self.observation];
+        }
+        if (self.variantField && [fieldKey isEqualToString:self.variantField] && self.annotationChangedDelegate) {
+            [self.annotationChangedDelegate variantChanged:self.observation];
+        }
     }
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[field objectForKey:@"fieldRow"] integerValue] inSection:(formIndex+2)];
     
     if (reload == YES || [self.invalidIndexPaths containsObject:indexPath]) {
         [self.invalidIndexPaths removeObject:indexPath];
         
         id cell = [self.editTable cellForRowAtIndexPath:indexPath];
-        if ([indexPath section] > 1) {
+//        if ([indexPath section] > 1) {
             [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
-        }
+//        }
         [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
-    if ([fieldKey isEqualToString:@"type"] && self.annotationChangedDelegate) {
-        [self.annotationChangedDelegate typeChanged:self.observation];
-    }
-    
-    if (self.variantField && [fieldKey isEqualToString:self.variantField] && self.annotationChangedDelegate) {
-        [self.annotationChangedDelegate variantChanged:self.observation];
-    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

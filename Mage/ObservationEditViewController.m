@@ -24,50 +24,40 @@
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
 #import "NSDate+Iso8601.h"
+#import "FormsViewController.h"
 
 @import PhotosUI;
 
 @interface ObservationEditViewController ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, weak) ObservationEditTableViewController *tableViewController;
+@property (strong, nonatomic) Event *event;
+
 @end
 
 @implementation ObservationEditViewController
+
+- (instancetype) initWithDelegate: (id<ObservationEditViewControllerDelegate>) delegate andObservation: (Observation *) observation andNew: (BOOL) newObservation {
+    self = [super init];
+    if (!self) return nil;
+    
+    _delegate = delegate;
+    _observation = observation;
+    _newObservation = newObservation;
+    
+    return self;
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:NO];
     
-    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
-    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
-    [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
-    
-    // if self.observation is null create a new one
-    if (self.observation == nil) {
+    if (self.newObservation) {
         self.navigationItem.title = @"Create Observation";
-        self.observation = [Observation observationWithGeometry:self.location inManagedObjectContext:self.managedObjectContext];
-        
-        // fill in defaults
-        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
-        Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-        NSDictionary *form = [event formForObservation:self.observation];
-        NSArray *fields = [form objectForKey:@"fields"];
-        for (NSDictionary *field in fields) {
-            id value = [field objectForKey:@"value"];
-            
-            if (value) {
-                [properties setObject:value forKey:[field objectForKey:@"name"]];
-            }
-        }
-        self.observation.properties = properties;
-        
     } else {
         self.navigationItem.title = @"Edit Observation";
-        self.observation = [self.observation MR_inContext:self.managedObjectContext];
     }
-    
-    self.observation.dirty = [NSNumber numberWithBool:YES];
     
     self.tableViewController.observation = self.observation;
 }
@@ -94,6 +84,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
+    
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -109,7 +100,8 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Discard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.delegate editCanceled];
+//        [self.navigationController popViewControllerAnimated:YES];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
@@ -361,7 +353,6 @@
     }
         
     self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
-    self.observation.user = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
     
     NSMutableDictionary *error = [self.observation.error mutableCopy];
     if (error) {
@@ -369,20 +360,8 @@
         self.observation.error = error;
     }
     
-    __weak typeof(self) weakSelf = self;
+    [_delegate editComplete];
     
-    [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
-        if (!contextDidSave) {
-            NSLog(@"Error saving observation to persistent store, context did not save");
-        }
-        
-        if (error) {
-            NSLog(@"Error saving observation to persistent store %@", error);
-        }
-        
-        NSLog(@"saved the observation: %@", weakSelf.observation.remoteId);
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    }];
 }
 
 -(void) keyboardWillShow: (NSNotification *) notification {
@@ -412,6 +391,9 @@
     } else if ([segue.identifier isEqualToString:@"editTableViewSegue"]) {
         self.tableViewController = [segue destinationViewController];
         self.tableViewController.observation = self.observation;
+    } else if ([segue.identifier isEqualToString:@"formChooserSegue"]) {
+        FormsViewController *formsViewController = [segue destinationViewController];
+        formsViewController.forms = self.event.forms;
     }
 }
 

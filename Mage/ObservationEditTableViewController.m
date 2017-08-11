@@ -44,7 +44,7 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (!self.observation.location) {
+    if ([self.observation getGeometry] == nil) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Location Unknown"
                                      message:@"MAGE was unable to determine your location.  Please manually set the location of the new observation."

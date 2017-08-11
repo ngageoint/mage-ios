@@ -110,12 +110,17 @@
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
-        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-
-        [editViewController setLocation:point];
+//        ObservationEditCoordinator *edit;
+//        
+//        CLLocation *location = [[LocationService singleton] location];
+//        if (location) {
+//            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+//            edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andLocation:point];
+//        } else {
+//            edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self];
+//        }
+//        [self.childCoordinators addObject:edit];
+//        [edit start];
     } else if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
         SettingsViewController *settingsViewController = segue.destinationViewController;
         settingsViewController.dismissable = YES;

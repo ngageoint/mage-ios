@@ -22,6 +22,7 @@
 #import "MageRootViewController.h"
 #import "MapDelegate.h"
 #import "ObservationEditViewController.h"
+#import "FormsViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationViewController_iPad.h"
@@ -30,17 +31,19 @@
 #import "GPSLocation.h"
 #import "Filter.h"
 #import "WKBPoint.h"
+#import "ObservationEditCoordinator.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
     @property (weak, nonatomic) IBOutlet UILabel *toastText;
 
     @property (strong, nonatomic) Observations *observationResultsController;
-    @property (strong, nonatomic) CLLocation *mapPressLocation;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+// this property should exist in this view coordinator when we get to that
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
@@ -52,13 +55,16 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-        self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
-        [self performSegueWithIdentifier:@"CreateNewObservationAtPointSegue" sender:sender];
+        CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
+        
+        [self startCreateNewObservationAtLocation:mapPressLocation];
     }
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
@@ -251,6 +257,28 @@
     }
 }
 
+- (IBAction)createNewObservation:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+    [self startCreateNewObservationAtLocation:location];
+}
+
+- (void) startCreateNewObservationAtLocation: (CLLocation *) location {
+    ObservationEditCoordinator *edit;
+
+    if (location) {
+        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point];
+    } else {
+        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self];
+    }
+    [self.childCoordinators addObject:edit];
+    [edit start];
+}
+
+- (void) editComplete:(Observation *)observation {
+    
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
 		MeViewController *destinationViewController = segue.destinationViewController;
@@ -259,44 +287,12 @@
         // TODO fix me, this only works because both iPad and iPhone class respond to setObservation
 		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        CLLocation *location = [[LocationService singleton] location];
-        if (location) {
-            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-            [editViewController setLocation:point];
-        }
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        
-        WKBPoint *point = [[WKBPoint alloc] initWithXValue:self.mapPressLocation.coordinate.longitude andYValue:self.mapPressLocation.coordinate.latitude];
-        
-        [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }
-}
-
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"You are not part of this event"
-                                         message:@"You cannot create observations for an event you are not part of."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            return false;
-        }
-    }
-    
-    return true;
 }
 
 - (IBAction) onReportLocationButtonPressed:(id)sender {

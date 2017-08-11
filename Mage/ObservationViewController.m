@@ -22,8 +22,9 @@
 #import "AttachmentViewController.h"
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
+#import "ObservationEditCoordinator.h"
 
-@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate>
+@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (nonatomic, assign) BOOL manualSync;
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) NSFetchedResultsController *importantFetchedResultsController;
 @property (nonatomic, strong) NSArray *forms;
 @property (nonatomic, strong) NSArray *observationForms;
+@property (nonatomic, strong) NSMutableArray *childCoordinators;
 @end
 
 @implementation ObservationViewController
@@ -46,14 +48,19 @@ static NSInteger const HEADER_SECTION = 2;
 static NSInteger const ATTACHMENT_SECTION = 3;
 static NSInteger const IMPORTANT_SECTION = 4;
 
+- (void) editComplete: (Observation *) observation {
+    self.observation = [observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
+    [self setupObservation];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.childCoordinators = [[NSMutableArray alloc] init];
 
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
     
-    self.observationForms = [self.observation.properties objectForKey:@"forms"];
-
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
 
@@ -63,23 +70,19 @@ static NSInteger const IMPORTANT_SECTION = 4;
                                                object:nil];
 }
 
-- (void) updateUserDefaults: (NSNotification *) notification {
-    [self.propertyTable reloadData];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
+- (void) setupObservation {
+    self.observationForms = [self.observation.properties objectForKey:@"forms"];
+    
     self.manualSync = NO;
     self.tableLayout = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_SECTIONS];
-
+    
     self.favoritesFetchedResultsController = [ObservationFavorite MR_fetchAllSortedBy:@"observation.timestamp"
                                                                             ascending:NO
                                                                         withPredicate:[NSPredicate predicateWithFormat:@"observation == %@", self.observation]
                                                                               groupBy:nil
                                                                              delegate:self
                                                                             inContext:[NSManagedObjectContext MR_defaultContext]];
-
+    
     self.importantFetchedResultsController = [ObservationImportant MR_fetchAllSortedBy:@"observation.timestamp"
                                                                              ascending:NO
                                                                          withPredicate:[NSPredicate predicateWithFormat:@"observation == %@", self.observation]
@@ -89,8 +92,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
     
     [self setupEditButton];
     [self setupNonPropertySections];
-
-
+    
+    
     NSString *primaryField;
     // TODO must be a better way through this
     for (NSDictionary *eventForm in self.forms) {
@@ -106,7 +109,17 @@ static NSInteger const IMPORTANT_SECTION = 4;
     }
     
     [self.propertyTable reloadData];
+    
 
+}
+
+- (void) updateUserDefaults: (NSNotification *) notification {
+    [self.propertyTable reloadData];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setupObservation];
     [[ObservationPushService singleton] addObservationPushDelegate:self];
 }
 
@@ -293,6 +306,14 @@ static NSInteger const IMPORTANT_SECTION = 4;
     return CGFLOAT_MIN;
 }
 
+- (IBAction)editObservationTapped:(id)sender {
+    ObservationEditCoordinator *edit  = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation];
+
+    [self.childCoordinators addObject:edit];
+    [edit start];
+
+}
+
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"clicked attachment %@", attachment.url);
     [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
@@ -305,10 +326,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    } else if ([segue.identifier isEqualToString:@"observationEditSegue"]) {
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style: UIBarButtonItemStylePlain target:nil action:nil];
-        ObservationEditViewController *vc = [segue destinationViewController];
-        [vc setObservation:self.observation];
     } else if ([segue.identifier isEqualToString:@"FavoriteUsersSegue"]) {
         NSMutableArray *userIds = [[NSMutableArray alloc] init];
         [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {

@@ -20,17 +20,27 @@
 #import "Filter.h"
 #import "Observations.h"
 #import "WKBPoint.h"
+#import "ObservationEditCoordinator.h"
 
 @interface ObservationTableViewController()
 
 @property (nonatomic, strong) NSTimer* updateTimer;
+// this property should exist in this view coordinator when we get to that
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
+
 
 @end
 
 @implementation ObservationTableViewController
 
+- (void) editComplete: (Observation *) observation {
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     // bug in ios smashes the refresh text into the
     // spinner.  This is the only work around I have found
@@ -146,34 +156,23 @@
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        CLLocation *location = [[LocationService singleton] location];
-        if (location != nil) {
-            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-            [editViewController setLocation:point];
-        }
     }
 }
 
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"You are not part of this event"
-                                         message:@"You cannot create observations for an event you are not part of."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+- (IBAction)newButtonTapped:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
 
-            return false;
-        }
+    ObservationEditCoordinator *edit;
+    
+    if (location) {
+        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point];
+    } else {
+        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self];
     }
-    return true;
+    [self.childCoordinators addObject:edit];
+    [edit start];
 }
-
 
 - (IBAction)refreshObservations:(UIRefreshControl *)sender {
     [self.refreshControl beginRefreshing];

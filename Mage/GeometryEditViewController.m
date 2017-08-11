@@ -804,7 +804,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             if (locationEdit) {
                 hint = @"Manually modify point coordinates";
             } else {
-                hint = @"Drap map to move point";
+                hint = @"Long click point to modify location";
             }
         }
             break;
