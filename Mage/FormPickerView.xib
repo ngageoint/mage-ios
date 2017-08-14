@@ -11,7 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FormPickerViewController">
             <connections>
+                <outlet property="blurView" destination="YWy-yP-E2H" id="hSD-CJ-BAn"/>
                 <outlet property="collectionView" destination="Bx3-fo-aWS" id="bxn-JQ-lxu"/>
+                <outlet property="headerLabel" destination="pEr-0M-4d2" id="CGf-Du-mqs"/>
+                <outlet property="mapView" destination="WaT-Op-65Z" id="8BK-ps-S3W"/>
                 <outlet property="view" destination="Yf0-EB-QcZ" id="s7h-S3-A2m"/>
             </connections>
         </placeholder>
@@ -20,23 +23,47 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bx3-fo-aWS">
-                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WaT-Op-65Z">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </mapView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YWy-yP-E2H">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="e2o-7e-MpS">
-                        <size key="itemSize" width="150" height="150"/>
+                </view>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bx3-fo-aWS">
+                    <rect key="frame" x="0.0" y="41" width="375" height="626"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="5" id="e2o-7e-MpS">
+                        <size key="itemSize" width="90" height="120"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="sectionInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructions" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEr-0M-4d2">
+                    <rect key="frame" x="16" y="20" width="343" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="Bx3-fo-aWS" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="top" constant="20" id="5Or-Gh-TTZ"/>
+                <constraint firstItem="YWy-yP-E2H" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="24s-Ou-UEC"/>
+                <constraint firstAttribute="trailing" secondItem="pEr-0M-4d2" secondAttribute="trailing" constant="16" id="2da-Es-Pyt"/>
+                <constraint firstAttribute="bottom" secondItem="WaT-Op-65Z" secondAttribute="bottom" id="5TB-kj-OsO"/>
+                <constraint firstItem="Bx3-fo-aWS" firstAttribute="top" secondItem="pEr-0M-4d2" secondAttribute="bottom" id="5bP-u2-9j7"/>
+                <constraint firstItem="WaT-Op-65Z" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="C6m-Qt-wJy"/>
+                <constraint firstAttribute="bottom" secondItem="YWy-yP-E2H" secondAttribute="bottom" id="CHF-SB-e5V"/>
+                <constraint firstItem="pEr-0M-4d2" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="top" constant="20" id="Gb7-Wm-rBY"/>
+                <constraint firstAttribute="trailing" secondItem="WaT-Op-65Z" secondAttribute="trailing" id="MVb-vU-KJD"/>
                 <constraint firstAttribute="bottom" secondItem="Bx3-fo-aWS" secondAttribute="bottom" id="Thv-zE-2V1"/>
                 <constraint firstItem="Bx3-fo-aWS" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="X9z-Pe-5hs"/>
                 <constraint firstAttribute="trailing" secondItem="Bx3-fo-aWS" secondAttribute="trailing" id="bmg-MK-Rqs"/>
+                <constraint firstItem="WaT-Op-65Z" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="top" id="cFv-ZY-9vR"/>
+                <constraint firstItem="YWy-yP-E2H" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="top" id="dnf-WS-0om"/>
+                <constraint firstAttribute="trailing" secondItem="YWy-yP-E2H" secondAttribute="trailing" id="sKq-xa-Qrg"/>
+                <constraint firstItem="pEr-0M-4d2" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" constant="16" id="ufm-WC-iWf"/>
             </constraints>
             <point key="canvasLocation" x="-99.5" y="68.5"/>
         </view>

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WKBGeometry.h>
 
 @protocol FormPickedDelegate <NSObject>
 
@@ -18,6 +19,6 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
-- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms;
+- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (WKBGeometry *) location andNewObservation: (BOOL) newObservation;
 
 @end

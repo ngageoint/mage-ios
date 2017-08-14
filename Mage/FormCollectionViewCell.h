@@ -11,5 +11,9 @@
 @interface FormCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *formNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *markerView;
+@property (weak, nonatomic) IBOutlet UIView *circleView;
+
+- (void) configureCellForForm: (NSDictionary *) form;
 
 @end

@@ -34,18 +34,20 @@
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
-         
-        NSArray *observationForms = [observation.properties objectForKey:@"forms"];
-        NSDictionary *form;
-        for (NSDictionary *checkForm in forms) {
-            if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
-                form = checkForm;
-            }
-        }
         
-        NSString *primaryField = [form objectForKey:@"primaryField"];
-       
-        [self setTitle:[[observationForms objectAtIndex:0] objectForKey:primaryField]];
+        if (forms != nil && [forms count] > 0) {
+            NSArray *observationForms = [observation.properties objectForKey:@"forms"];
+            NSDictionary *form;
+            for (NSDictionary *checkForm in forms) {
+                if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
+                    form = checkForm;
+                }
+            }
+            
+            NSString *primaryField = [form objectForKey:@"primaryField"];
+           
+            [self setTitle:[[observationForms objectAtIndex:0] objectForKey:primaryField]];
+        }
         if (self.title == nil) {
             [self setTitle:@"Observation"];
         }

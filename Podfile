@@ -12,4 +12,5 @@ target 'MAGE' do
     pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
+    pod 'KTCenterFlowLayout'
 end

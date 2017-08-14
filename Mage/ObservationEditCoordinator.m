@@ -78,25 +78,10 @@
 }
 
 - (void) setupObservation {
-    
     // if self.observation is nil create a new one
     if (self.observation == nil) {
         self.newObservation = YES;
         self.observation = [Observation observationWithGeometry:self.location inManagedObjectContext:self.managedObjectContext];
-        
-        // fill in defaults
-        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
-        //        NSDictionary *form = [event formForObservation:self.observation];
-        //        NSArray *fields = [form objectForKey:@"fields"];
-        //        for (NSDictionary *field in fields) {
-        //            id value = [field objectForKey:@"value"];
-        //
-        //            if (value) {
-        //                [properties setObject:value forKey:[field objectForKey:@"name"]];
-        //            }
-        //        }
-        self.observation.properties = properties;
-        
     } else {
         self.observation = [self.observation MR_inContext:self.managedObjectContext];
     }
@@ -116,7 +101,14 @@
         [_rootViewController presentViewController:alert animated:YES completion:nil];
     } else {
         if (self.newObservation) {
-            [self startFormPicker];
+            if ([self.event.forms count] > 1) {
+                [self startFormPicker];
+            } else if ([self.event.forms count] == 1) {
+                [self addFormToObservation:[self.event.forms objectAtIndex:0]];
+                [self startEditObservationWithRootView:_rootViewController];
+            } else {
+                [self startEditObservationWithRootView:_rootViewController];
+            }
         } else {
             [self startEditObservationWithRootView:_rootViewController];
         }
@@ -124,7 +116,7 @@
 }
 
 - (void) startFormPicker {
-    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms];
+    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms andLocation: self.location andNewObservation:self.newObservation];
     [_rootViewController presentViewController:self.formController animated:YES completion:^{
         NSLog(@"Form Picker shown");
     }];
@@ -148,22 +140,36 @@
     }];
 }
 
-- (void) formPicked:(NSDictionary *)form {
-
-    NSLog(@"Form Picked %@", [form objectForKey:@"name"]);
+- (void) addFormToObservation: (NSDictionary *) form {
     NSMutableDictionary *newProperties = [self.observation.properties mutableCopy];
     
     NSMutableArray *observationForms = [[newProperties objectForKey:@"forms"] mutableCopy];
     NSMutableDictionary *newForm = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[form objectForKey:@"id"], @"formId", nil];
+    
+    // fill in defaults
+    NSArray *fields = [form objectForKey:@"fields"];
+    for (NSDictionary *field in fields) {
+        id value = [field objectForKey:@"value"];
+        
+        if (value) {
+            [newForm setObject:value forKey:[field objectForKey:@"name"]];
+        }
+    }
+    
     [observationForms addObject:newForm];
     
     [newProperties setObject:observationForms forKey:@"forms"];
     self.observation.properties = newProperties;
+}
+
+- (void) formPicked:(NSDictionary *)form {
+    NSLog(@"Form Picked %@", [form objectForKey:@"name"]);
+    [self addFormToObservation:form];
     [self startEditObservationWithRootView:self.formController];
 }
 
 - (void) editCanceled {
-    [_rootViewController dismissViewControllerAnimated:YES completion:^{
+    [_rootViewController dismissViewControllerAnimated:NO completion:^{
         NSLog(@"root view dismissed");
     }];
 }
@@ -186,12 +192,11 @@
         
         [weakSelf.delegate editComplete:weakSelf.observation];
 
-        [_rootViewController dismissViewControllerAnimated:YES completion:^{
+        [_rootViewController dismissViewControllerAnimated:NO completion:^{
             NSLog(@"root view dismissed");
         }];
     }];
 
 }
-
 
 @end

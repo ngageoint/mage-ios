@@ -133,6 +133,7 @@
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
+		F77FA1E01F423073004785B9 /* AudioRecordingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FA1DF1F423073004785B9 /* AudioRecordingView.xib */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
@@ -442,6 +443,7 @@
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
+		F77FA1DF1F423073004785B9 /* AudioRecordingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecordingView.xib; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -616,6 +618,7 @@
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
 				F7FC59211F3CE2280010351A /* FormPickerView.xib */,
 				F7FC59261F3CED5A0010351A /* FormCell.xib */,
+				F77FA1DF1F423073004785B9 /* AudioRecordingView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -800,13 +803,13 @@
 				04ED963E1EB7AB8700B6AD8D /* MapObservation.m */,
 				04ED96401EB7B15900B6AD8D /* MapAnnotationObservation.h */,
 				04ED96411EB7B15900B6AD8D /* MapAnnotationObservation.m */,
-				04ED96431EB7D1D000B6AD8D /* MapShapeObservation.h */,
 				04ED96441EB7D1D000B6AD8D /* MapShapeObservation.m */,
 				04ED96461EB7DFB600B6AD8D /* MapPolylineObservation.h */,
 				04ED96471EB7DFB600B6AD8D /* MapPolylineObservation.m */,
 				04ED96491EB7DFD500B6AD8D /* MapPolygonObservation.h */,
 				04ED964A1EB7DFD500B6AD8D /* MapPolygonObservation.m */,
 				04F833FB1ED4872A00B5FE1E /* MapShapePointsObservation.h */,
+				04ED96431EB7D1D000B6AD8D /* MapShapeObservation.h */,
 				04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */,
 				04ED964C1EB8D09C00B6AD8D /* MapObservationManager.h */,
 				04ED964D1EB8D09C00B6AD8D /* MapObservationManager.m */,
@@ -868,6 +871,7 @@
 				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
 				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
 				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
+				F70E6EEB19781D37002D66F6 /* ObservationImage.h */,
 				F70E6EEC19781D37002D66F6 /* ObservationImage.m */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
 				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
@@ -981,7 +985,6 @@
 				F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */,
 				F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */,
 				F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */,
-				F70E6EEB19781D37002D66F6 /* ObservationImage.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1274,6 +1277,7 @@
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				2F6557D71DD28958008C7922 /* Attachment.storyboard in Resources */,
 				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
+				F77FA1E01F423073004785B9 /* AudioRecordingView.xib in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,

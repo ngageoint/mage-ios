@@ -14,17 +14,25 @@ const CGFloat annotationScaleWidth = 35.0;
 
 + (NSString *) imageNameForObservation:(Observation *) observation {
 	if (!observation) return nil;
+    
+    NSString *primaryField;
+    NSString *secondaryField;
+    NSMutableArray *iconProperties = [[NSMutableArray alloc] init];
+    
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
     
     NSArray *observationForms = [observation.properties objectForKey:@"forms"];
-    NSDictionary *form = [event formWithId:(long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]];
-    
-    NSString *primaryField = [form objectForKey:@"primaryField"];
-    NSString *secondaryField = [form objectForKey:@"secondaryField"];
+    if (observationForms && [observationForms count] > 0 && [event.forms count] > 0) {
+        NSDictionary *form = [event formWithId:(long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]];
+        
+        primaryField = [form objectForKey:@"primaryField"];
+        secondaryField = [form objectForKey:@"secondaryField"];
+        
+        [iconProperties addObject:[[observationForms objectAtIndex:0] objectForKey:@"formId"]];
+    }
     
     NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@/icons", event.remoteId]];
 
-    NSMutableArray *iconProperties = [[NSMutableArray alloc] initWithArray: @[[[observationForms objectAtIndex:0] objectForKey:@"formId"]]];
     if (primaryField != nil && [[[observationForms objectAtIndex:0] objectForKey:primaryField] length]) {
         [iconProperties addObject: [[observationForms objectAtIndex:0] objectForKey:primaryField]];
     }

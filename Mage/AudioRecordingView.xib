@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MediaViewController">
+            <connections>
+                <outlet property="currentRecordingLength" destination="LGi-oB-59p" id="NfL-TA-tF3"/>
+                <outlet property="playButton" destination="98e-ow-iUf" id="xq1-Pw-GDt"/>
+                <outlet property="playSlider" destination="nFh-Gm-9aO" id="8b6-Dd-xjs"/>
+                <outlet property="recordBarButton" destination="Zkw-Gs-qCG" id="TmV-17-qna"/>
+                <outlet property="recordingLength" destination="246-VC-dxS" id="CfE-FF-flR"/>
+                <outlet property="recordingStartTime" destination="cyS-eu-I24" id="Crh-ue-Gqy"/>
+                <outlet property="trashButton" destination="cn9-KR-CeO" id="GAi-te-dk3"/>
+                <outlet property="useRecordingButton" destination="HgB-j3-SIc" id="TVJ-MI-8Um"/>
+                <outlet property="view" destination="kg3-92-hmj" id="aJa-vp-tAN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="kg3-92-hmj">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record Audio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YZ-B9-EIx">
+                    <rect key="frame" x="4" y="274.5" width="367" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="aC5-9C-CgW"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zkw-Gs-qCG">
+                    <rect key="frame" x="159" y="304.5" width="58" height="58"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="58" id="MlR-gB-5XW"/>
+                        <constraint firstAttribute="height" constant="58" id="kvd-JA-jcy"/>
+                    </constraints>
+                    <color key="tintColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="record" backgroundImage="record">
+                        <color key="titleColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="startRecording" destination="-1" eventType="touchUpInside" id="AKc-We-Gcs"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="98e-ow-iUf">
+                    <rect key="frame" x="97" y="313.5" width="41" height="41"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="41" id="U1I-CV-GKo"/>
+                        <constraint firstAttribute="height" constant="41" id="ctZ-k6-wgo"/>
+                    </constraints>
+                    <state key="normal" image="play"/>
+                    <connections>
+                        <action selector="playButtonPressed:" destination="-1" eventType="touchUpInside" id="rB2-rz-FZS"/>
+                        <action selector="playRecording:" destination="-1" eventType="touchUpInside" id="ygM-ds-dBS"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cn9-KR-CeO">
+                    <rect key="frame" x="252" y="321.5" width="28" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="MzC-lJ-k7X"/>
+                        <constraint firstAttribute="width" constant="28" id="lLR-S7-3xv"/>
+                    </constraints>
+                    <color key="tintColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="trash"/>
+                    <connections>
+                        <action selector="deleteRecording:" destination="-1" eventType="touchUpInside" id="6xD-Nc-IJZ"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LGi-oB-59p">
+                    <rect key="frame" x="4" y="367.5" width="367" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="iIF-Dd-m2h"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyS-eu-I24">
+                    <rect key="frame" x="4" y="396.5" width="58" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="58" id="9s7-hq-39c"/>
+                        <constraint firstAttribute="height" constant="21" id="M3O-gi-YGf"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:02" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="246-VC-dxS">
+                    <rect key="frame" x="313" y="396.5" width="58" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="58" id="D3p-lK-TCG"/>
+                        <constraint firstAttribute="height" constant="21" id="rsw-Yr-sQo"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HgB-j3-SIc">
+                    <rect key="frame" x="0.0" y="466.5" width="375" height="30"/>
+                    <state key="normal" title="Use This Recording">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="dismissAndSetObservationMedia:" destination="-1" eventType="touchUpInside" id="H7m-k2-d0O"/>
+                    </connections>
+                </button>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="nFh-Gm-9aO">
+                    <rect key="frame" x="61" y="392.5" width="254" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="H7A-B2-GBC"/>
+                    </constraints>
+                    <connections>
+                        <action selector="sliderChanged:" destination="-1" eventType="valueChanged" id="8GL-8R-SFp"/>
+                        <action selector="sliderStartChange:" destination="-1" eventType="valueChanged" id="Tyf-26-E00"/>
+                    </connections>
+                </slider>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Zkw-Gs-qCG" firstAttribute="top" secondItem="2YZ-B9-EIx" secondAttribute="bottom" constant="9" id="4k4-zn-PZi"/>
+                <constraint firstAttribute="trailing" secondItem="HgB-j3-SIc" secondAttribute="trailing" id="6rN-tu-9F3"/>
+                <constraint firstAttribute="trailingMargin" secondItem="2YZ-B9-EIx" secondAttribute="trailing" constant="-4" id="8Yv-nR-ghK"/>
+                <constraint firstItem="246-VC-dxS" firstAttribute="leading" secondItem="nFh-Gm-9aO" secondAttribute="trailing" id="9EJ-7a-LoV"/>
+                <constraint firstItem="HgB-j3-SIc" firstAttribute="leading" secondItem="kg3-92-hmj" secondAttribute="leading" id="A7S-iN-77V"/>
+                <constraint firstItem="nFh-Gm-9aO" firstAttribute="top" secondItem="LGi-oB-59p" secondAttribute="bottom" constant="4" id="BTq-cZ-FOT"/>
+                <constraint firstItem="Zkw-Gs-qCG" firstAttribute="centerY" secondItem="kg3-92-hmj" secondAttribute="centerY" id="BZd-X5-bLD"/>
+                <constraint firstAttribute="trailingMargin" secondItem="LGi-oB-59p" secondAttribute="trailing" constant="-4" id="DDE-ds-9IC"/>
+                <constraint firstItem="cn9-KR-CeO" firstAttribute="top" secondItem="Zkw-Gs-qCG" secondAttribute="bottom" constant="-41.5" id="F9k-fH-kdu"/>
+                <constraint firstItem="98e-ow-iUf" firstAttribute="top" secondItem="Zkw-Gs-qCG" secondAttribute="bottom" constant="-49.5" id="Gp6-jC-Guh"/>
+                <constraint firstItem="nFh-Gm-9aO" firstAttribute="leading" secondItem="cyS-eu-I24" secondAttribute="trailing" constant="1" id="MN0-iJ-cNw"/>
+                <constraint firstItem="Zkw-Gs-qCG" firstAttribute="centerX" secondItem="kg3-92-hmj" secondAttribute="centerX" id="ONT-8g-lOk"/>
+                <constraint firstItem="cn9-KR-CeO" firstAttribute="leading" secondItem="Zkw-Gs-qCG" secondAttribute="trailing" constant="35" id="W9w-Ts-3M1"/>
+                <constraint firstItem="2YZ-B9-EIx" firstAttribute="leading" secondItem="kg3-92-hmj" secondAttribute="leadingMargin" constant="-4" id="awG-l8-gZJ"/>
+                <constraint firstItem="HgB-j3-SIc" firstAttribute="top" secondItem="nFh-Gm-9aO" secondAttribute="bottom" constant="44" id="bRZ-bh-HIZ"/>
+                <constraint firstItem="cyS-eu-I24" firstAttribute="leading" secondItem="kg3-92-hmj" secondAttribute="leadingMargin" constant="-4" id="c1w-uK-gnf"/>
+                <constraint firstItem="Zkw-Gs-qCG" firstAttribute="leading" secondItem="98e-ow-iUf" secondAttribute="trailing" constant="21" id="e7T-yw-MCT"/>
+                <constraint firstItem="LGi-oB-59p" firstAttribute="leading" secondItem="kg3-92-hmj" secondAttribute="leadingMargin" constant="-4" id="fid-iI-vvw"/>
+                <constraint firstAttribute="trailingMargin" secondItem="246-VC-dxS" secondAttribute="trailing" constant="-4" id="tlD-P9-kew"/>
+                <constraint firstItem="cyS-eu-I24" firstAttribute="top" secondItem="LGi-oB-59p" secondAttribute="bottom" constant="8" id="vR2-OD-y5D"/>
+                <constraint firstItem="246-VC-dxS" firstAttribute="top" secondItem="LGi-oB-59p" secondAttribute="bottom" constant="8" id="w4Q-q1-hdd"/>
+                <constraint firstItem="LGi-oB-59p" firstAttribute="top" secondItem="Zkw-Gs-qCG" secondAttribute="bottom" constant="4.5" id="xLZ-26-tu7"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="play" width="48" height="48"/>
+        <image name="record" width="48" height="48"/>
+        <image name="trash" width="24" height="24"/>
+    </resources>
+</document>
