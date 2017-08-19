@@ -29,27 +29,39 @@ static NSInteger const COMMON_SECTION = 1;
 @property (nonatomic, strong) NSArray *observationForms;
 @property (strong, nonatomic) NSMutableArray *formFields;
 @property (nonatomic, strong) NSString *primaryField;
+@property (strong, nonatomic) id<ObservationEditFieldDelegate> delegate;
 
 @end
 
 @implementation ObservationEditViewDataStore
 
+- (instancetype) initWithObservation: (Observation *)observation andDelegate: (id<ObservationEditFieldDelegate>) delegate {
+    self = [super init];
+    if (!self) return nil;
+    
+    _observation = observation;
+    _delegate = delegate;
+    return self;
+}
+
 - (BOOL) validate {
     self.invalidIndexPaths = [[NSMutableArray alloc] init];
     
-//    for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:PROPERTIES_SECTION]; ++i) {
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:PROPERTIES_SECTION];
-//        ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
-//        if (![cell isValid]) {
-//            [self.invalidIndexPaths addObject:indexPath];
-//        }
-//    }
-//    
-//    if ([self.invalidIndexPaths count] > 0) {
-//        [self.editTable reloadRowsAtIndexPaths:self.invalidIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-//        [self.editTable scrollToRowAtIndexPath:[self.invalidIndexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//        return NO;
-//    }
+    for (NSInteger section = 1; section < [self.editTable numberOfSections]; section++) {
+        for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:section]; ++i) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+            ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
+            if (![cell isValid]) {
+                [self.invalidIndexPaths addObject:indexPath];
+            }
+        }
+    }
+    
+    if ([self.invalidIndexPaths count] > 0) {
+        [self.editTable reloadRowsAtIndexPaths:self.invalidIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [self.editTable scrollToRowAtIndexPath:[self.invalidIndexPaths firstObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        return NO;
+    }
     
     return YES;
 }
@@ -108,7 +120,7 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (NSString *) getCellTypeAtIndexPath:(NSIndexPath *) indexPath {
     if (indexPath.section == ATTACHMENT_SECTION) {
-        return @"attachmentView";
+        return @"attachment";
     } else if (indexPath.section == COMMON_SECTION) {
         if (indexPath.row == 0) {
             return @"date";
@@ -116,7 +128,11 @@ static NSInteger const COMMON_SECTION = 1;
             return @"geometry";
         }
     } else {
-        return  [[self fieldForIndexPath:indexPath] objectForKey:@"type"];
+        NSString *type = [[self fieldForIndexPath:indexPath] objectForKey:@"type"];
+        if ([type isEqualToString:@"radio"] || [type isEqualToString:@"multiselectdropdown"]) {
+            type = @"dropdown";
+        }
+        return type;
     }
 }
 
@@ -130,9 +146,11 @@ static NSInteger const COMMON_SECTION = 1;
         NSMutableDictionary *field = [[NSMutableDictionary alloc] init];
         if ([indexPath row] == 0) {
             [field setObject:@"Date" forKey:@"title"];
+            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
             [field setObject:@"timestamp" forKey:@"name"];
         } else if ([indexPath row] == 1) {
             [field setObject:@"Location" forKey:@"title"];
+            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
             [field setObject:@"geometry" forKey:@"name"];
         }
         return field;
@@ -151,6 +169,8 @@ static NSInteger const COMMON_SECTION = 1;
         } else if ([indexPath row] == 1) {
             return [self.observation getGeometry];
         }
+    } else if ([indexPath section] == ATTACHMENT_SECTION) {
+        return self.observation;
     }
     return nil;
 }
@@ -187,6 +207,7 @@ static NSInteger const COMMON_SECTION = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     ObservationEditTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell selectRow];
+    [self.delegate fieldSelected:[self fieldForIndexPath:indexPath]];
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
@@ -197,7 +218,11 @@ static NSInteger const COMMON_SECTION = 1;
         self.observation.geometry = value;
         indexPath = [NSIndexPath indexPathForRow:1 inSection:COMMON_SECTION];
     } else if ([[field objectForKey:@"name"] isEqualToString:@"timestamp"]) {
-        [self.observation.properties setObject:value forKey:@"timestamp"];
+        if (value == nil) {
+            [self.observation.properties removeObjectForKey:@"timestamp"];
+        } else {
+            [self.observation.properties setObject:value forKey:@"timestamp"];
+        }
         indexPath = [NSIndexPath indexPathForRow:0 inSection:COMMON_SECTION];
     } else {
         NSString *fieldKey = (NSString *)[field objectForKey:@"name"];

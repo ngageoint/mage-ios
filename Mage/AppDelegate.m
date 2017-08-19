@@ -35,6 +35,7 @@
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "MageOfflineObservationManager.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) UIView *splashView;
@@ -86,8 +87,18 @@
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
     [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil]];
-	 
+    
+    [self setupApplicationNavigationBar];
 	return YES;
+}
+
+- (void) setupApplicationNavigationBar {
+    [[UINavigationBar appearance] setBarTintColor:[UIColor mageBlue]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor whiteColor]
+                                                           }];
+    [[UINavigationBar appearance] setTranslucent:NO];
 }
 
 

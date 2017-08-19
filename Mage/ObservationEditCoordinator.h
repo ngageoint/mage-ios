@@ -17,11 +17,9 @@
 
 @end
 
-@interface ObservationEditCoordinator : NSObject <FormPickedDelegate, ObservationEditViewControllerDelegate>
+@interface ObservationEditCoordinator : NSObject <FormPickedDelegate>
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate;
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (WKBGeometry *) location;
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation;
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation andLocation: (WKBGeometry *) location;
 - (void) start;
 
 @end

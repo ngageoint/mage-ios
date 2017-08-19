@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ObservationEditViewController">
+            <connections>
+                <outlet property="tableContainerView" destination="qpx-BD-jOW" id="RHE-ra-lXI"/>
+                <outlet property="view" destination="htl-ml-yrc" id="iaB-qI-CcP"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="htl-ml-yrc">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0AS-Vv-PE0">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <items>
+                        <barButtonItem image="gallery" id="RLw-xA-nMx">
+                            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="accessibilityLabel" value="Gallery"/>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="isAccessibilityElement" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="addFromGallery:" destination="-1" id="PcO-MO-yvb"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Scw-Gj-hYo"/>
+                        <barButtonItem image="camera" id="60R-LA-JJA">
+                            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="addFromCamera:" destination="-1" id="Jiq-XZ-clk"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="IgR-Dx-h1Q"/>
+                        <barButtonItem image="video" id="zZ8-E8-G35">
+                            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="addVideo:" destination="-1" id="0MT-bH-Bm9"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Oag-IR-Ssn"/>
+                        <barButtonItem image="voice" id="3nh-qY-HjS">
+                            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="addVoice:" destination="-1" id="QFE-iL-tZH"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="barPosition">
+                            <integer key="value" value="3"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </toolbar>
+                <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qpx-BD-jOW">
+                    <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                </containerView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="qpx-BD-jOW" secondAttribute="bottom" id="0hV-FD-clY"/>
+                <constraint firstItem="0AS-Vv-PE0" firstAttribute="leading" secondItem="htl-ml-yrc" secondAttribute="leading" id="0m0-zP-ENt"/>
+                <constraint firstItem="0AS-Vv-PE0" firstAttribute="top" secondItem="htl-ml-yrc" secondAttribute="top" id="5NW-63-vrX"/>
+                <constraint firstAttribute="trailing" secondItem="0AS-Vv-PE0" secondAttribute="trailing" id="FI9-Qf-lda"/>
+                <constraint firstAttribute="trailing" secondItem="qpx-BD-jOW" secondAttribute="trailing" id="Is5-u2-kO3"/>
+                <constraint firstItem="qpx-BD-jOW" firstAttribute="top" secondItem="0AS-Vv-PE0" secondAttribute="bottom" id="KV5-yt-b25"/>
+                <constraint firstItem="qpx-BD-jOW" firstAttribute="leading" secondItem="htl-ml-yrc" secondAttribute="leading" id="V6J-Oz-vUt"/>
+            </constraints>
+            <point key="canvasLocation" x="33.5" y="-678.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="camera" width="24" height="24"/>
+        <image name="gallery" width="24" height="24"/>
+        <image name="video" width="24" height="24"/>
+        <image name="voice" width="24" height="24"/>
+    </resources>
+</document>

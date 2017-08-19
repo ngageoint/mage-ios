@@ -9,8 +9,11 @@
 #import "ObservationEditCoordinator.h"
 #import <Event.h>
 #import <User.h>
+#import <Attachment.h>
+#import "ObservationEditTableViewController.h"
+#import "ObservationPropertiesEditCoordinator.h"
 
-@interface ObservationEditCoordinator()
+@interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate>
 
 @property (strong, nonatomic) UIViewController *rootViewController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -18,49 +21,53 @@
 @property (nonatomic) BOOL newObservation;
 @property (strong, nonatomic) id<ObservationEditDelegate> delegate;
 @property (strong, nonatomic) FormPickerViewController *formController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) Observation *observation;
 @property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) NSMutableArray *viewControllers;
+@property (strong, nonatomic) NSDictionary *currentEditField;
+@property (strong, nonatomic) id currentEditValue;
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
 @implementation ObservationEditCoordinator
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate {
-    self = [super init];
-    if (!self) return nil;
-    
-    _rootViewController = rootViewController;
-    _delegate = delegate;
-    
-    [self setupObservation];
-
-    return self;
-}
-
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (WKBGeometry *) location {
-    self = [super init];
-    if (!self) return nil;
-    
-    _location = location;
-    _rootViewController = rootViewController;
-    _delegate = delegate;
-    
-    [self setupObservation];
-    
-    return self;
-}
-
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation {
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation andLocation: (WKBGeometry *) location {
     self = [super init];
     if (!self) return nil;
     
     _observation = observation;
+    _location = location;
     _rootViewController = rootViewController;
+    [self pushViewController:rootViewController];
     _delegate = delegate;
+    
+    _childCoordinators = [[NSMutableArray alloc] init];
+    
+    self.navigationController = [[UINavigationController alloc] init];
     
     [self setupObservation];
     
     return self;
+}
+
+- (NSMutableArray *) viewControllers {
+    if (_viewControllers != nil) return _viewControllers;
+    _viewControllers = [[NSMutableArray alloc] init];
+    return _viewControllers;
+}
+
+- (UIViewController *) currentViewController {
+    return [self.viewControllers lastObject];
+}
+
+- (void) popViewControllers {
+    [self.viewControllers removeLastObject];
+}
+
+- (void) pushViewController: (UIViewController *) viewController {
+    [self.viewControllers addObject:viewController];
 }
 
 - (NSManagedObjectContext *) managedObjectContext {
@@ -91,6 +98,9 @@
 }
 
 - (void) start {
+    [self.rootViewController presentViewController:self.navigationController animated:NO completion:^{
+        
+    }];
     if (![self.event isUserInEvent:[User fetchCurrentUserInManagedObjectContext:self.managedObjectContext]]) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"You are not part of this event"
@@ -98,46 +108,36 @@
                                      preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        [_rootViewController presentViewController:alert animated:YES completion:nil];
+        [self.rootViewController presentViewController:alert animated:YES completion:nil];
     } else {
         if (self.newObservation) {
             if ([self.event.forms count] > 1) {
                 [self startFormPicker];
             } else if ([self.event.forms count] == 1) {
                 [self addFormToObservation:[self.event.forms objectAtIndex:0]];
-                [self startEditObservationWithRootView:_rootViewController];
+                [self startEditObservationFields];
             } else {
-                [self startEditObservationWithRootView:_rootViewController];
+                [self startEditObservationFields];
             }
         } else {
-            [self startEditObservationWithRootView:_rootViewController];
+            [self startEditObservationFields];
         }
     }
 }
 
 - (void) startFormPicker {
     self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms andLocation: self.location andNewObservation:self.newObservation];
-    [_rootViewController presentViewController:self.formController animated:YES completion:^{
-        NSLog(@"Form Picker shown");
-    }];
+//    [self.currentViewController presentViewController:self.formController animated:YES completion:^{
+//        NSLog(@"Form Picker shown");
+//    }];
+    [self.navigationController pushViewController:self.formController animated:NO];
+//    [self pushViewController:self.formController];
 }
 
-- (void) startEditObservationWithRootView: (UIViewController *) rootView {
-    
-    // TODO this needs to not be in a storyboard and should be a coordinator...
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ObservationEdit" bundle:nil];
-    UINavigationController *vc = [storyboard instantiateInitialViewController];
-    [vc setModalPresentationStyle:UIModalPresentationCustom];
-    [vc setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    
-    ObservationEditViewController *editController = [vc.viewControllers firstObject];
-    editController.observation = self.observation;
-    editController.newObservation = self.newObservation;
-    editController.delegate = self;
-    
-    [rootView presentViewController:vc animated:YES completion:^{
-        NSLog(@"Edit View Controller shown");
-    }];
+- (void) startEditObservationFields {
+    ObservationPropertiesEditCoordinator *propertiesEditCoordinator = [[ObservationPropertiesEditCoordinator alloc] initWithObservation: self.observation andNewObservation: self.newObservation andNavigationController: self.navigationController andDelegate:self];
+    [_childCoordinators addObject:propertiesEditCoordinator];
+    [propertiesEditCoordinator start];
 }
 
 - (void) addFormToObservation: (NSDictionary *) form {
@@ -162,19 +162,25 @@
     self.observation.properties = newProperties;
 }
 
+#pragma mark - FormPickedDelegate methods
 - (void) formPicked:(NSDictionary *)form {
+    [self.navigationController popViewControllerAnimated:NO];
     NSLog(@"Form Picked %@", [form objectForKey:@"name"]);
     [self addFormToObservation:form];
-    [self startEditObservationWithRootView:self.formController];
+    [self startEditObservationFields];
 }
 
-- (void) editCanceled {
-    [_rootViewController dismissViewControllerAnimated:NO completion:^{
+#pragma
+
+#pragma mark - ObservationPropertiesEditDelegate methods
+- (void) propertiesEditCanceled {
+    [self.navigationController dismissViewControllerAnimated:NO completion:^{
         NSLog(@"root view dismissed");
     }];
+    
 }
 
-- (void) editComplete {
+- (void) propertiesEditComplete {
     __weak typeof(self) weakSelf = self;
     
     self.observation.user = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
@@ -191,12 +197,14 @@
         NSLog(@"saved the observation: %@", weakSelf.observation.remoteId);
         
         [weakSelf.delegate editComplete:weakSelf.observation];
-
+        
         [_rootViewController dismissViewControllerAnimated:NO completion:^{
             NSLog(@"root view dismissed");
         }];
     }];
-
 }
+
+#pragma
+
 
 @end

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="126" id="NPm-cy-E6f" customClass="ObservationEditGeometryTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="126"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NPm-cy-E6f" id="UUi-dG-znd">
+                <rect key="frame" x="0.0" y="0.0" width="342" height="126"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8WJ-fa-We9">
+                        <rect key="frame" x="4" y="0.0" width="7" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="NBk-o3-jaJ"/>
+                            <constraint firstAttribute="width" constant="7" id="iyr-MK-Eia"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5gK-3f-AoF">
+                        <rect key="frame" x="12" y="1" width="326" height="21"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="GUP-hg-zlz">
+                        <rect key="frame" x="8" y="26" width="144" height="95"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="95" id="2iI-R1-iAa"/>
+                            <constraint firstAttribute="width" constant="144" id="l4y-f8-xFb"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                <color key="value" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </mapView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZG9-9c-XOn" userLabel="Latitude Label">
+                        <rect key="frame" x="160" y="26" width="118" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="AP9-FD-Mi3"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="89.00005" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DPE-MV-nP7">
+                        <rect key="frame" x="160" y="47" width="182" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="2qu-d1-HZl"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="plf-Di-da5" userLabel="Longitude Label">
+                        <rect key="frame" x="160" y="68" width="118" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="QbS-qM-qgd"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="179.99999" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vWh-Lg-bee">
+                        <rect key="frame" x="160" y="89" width="182" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="SNk-GT-Qwy"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="vWh-Lg-bee" firstAttribute="leading" secondItem="GUP-hg-zlz" secondAttribute="trailing" constant="8" id="0XU-0Q-5Ql"/>
+                    <constraint firstItem="vWh-Lg-bee" firstAttribute="top" secondItem="plf-Di-da5" secondAttribute="bottom" id="7SX-C8-wbT"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="GUP-hg-zlz" secondAttribute="bottom" constant="-4" id="88u-TQ-8bu"/>
+                    <constraint firstItem="5gK-3f-AoF" firstAttribute="leading" secondItem="8WJ-fa-We9" secondAttribute="trailing" constant="1" id="JB3-dM-s3Q"/>
+                    <constraint firstItem="GUP-hg-zlz" firstAttribute="top" secondItem="5gK-3f-AoF" secondAttribute="bottom" constant="4" id="K0u-JC-X0F"/>
+                    <constraint firstAttribute="trailing" secondItem="DPE-MV-nP7" secondAttribute="trailing" id="Myr-Sd-Osh"/>
+                    <constraint firstItem="ZG9-9c-XOn" firstAttribute="leading" secondItem="GUP-hg-zlz" secondAttribute="trailing" constant="8" id="O7K-Tc-85t"/>
+                    <constraint firstItem="ZG9-9c-XOn" firstAttribute="top" secondItem="UUi-dG-znd" secondAttribute="topMargin" constant="18" id="SJt-wc-qoJ"/>
+                    <constraint firstAttribute="trailing" secondItem="ZG9-9c-XOn" secondAttribute="trailing" constant="64" id="WWh-8Y-pou"/>
+                    <constraint firstAttribute="trailing" secondItem="5gK-3f-AoF" secondAttribute="trailing" constant="4" id="ZdE-yw-v8v"/>
+                    <constraint firstItem="GUP-hg-zlz" firstAttribute="leading" secondItem="UUi-dG-znd" secondAttribute="leading" constant="8" id="bbv-DP-xK8"/>
+                    <constraint firstItem="plf-Di-da5" firstAttribute="leading" secondItem="GUP-hg-zlz" secondAttribute="trailing" constant="8" id="gS7-es-buU"/>
+                    <constraint firstAttribute="trailing" secondItem="vWh-Lg-bee" secondAttribute="trailing" id="gYs-3h-hpp"/>
+                    <constraint firstItem="8WJ-fa-We9" firstAttribute="leading" secondItem="UUi-dG-znd" secondAttribute="leading" constant="4" id="h3a-cR-y5c"/>
+                    <constraint firstItem="plf-Di-da5" firstAttribute="top" secondItem="DPE-MV-nP7" secondAttribute="bottom" id="hSh-ec-xgV"/>
+                    <constraint firstItem="DPE-MV-nP7" firstAttribute="top" secondItem="ZG9-9c-XOn" secondAttribute="bottom" id="k3a-bU-ZgW"/>
+                    <constraint firstItem="DPE-MV-nP7" firstAttribute="leading" secondItem="GUP-hg-zlz" secondAttribute="trailing" constant="8" id="sjr-ej-CFi"/>
+                    <constraint firstItem="5gK-3f-AoF" firstAttribute="top" secondItem="UUi-dG-znd" secondAttribute="topMargin" constant="-7" id="wKt-5U-1ZW"/>
+                    <constraint firstAttribute="trailing" secondItem="plf-Di-da5" secondAttribute="trailing" constant="64" id="xqx-Xh-4eP"/>
+                    <constraint firstItem="8WJ-fa-We9" firstAttribute="top" secondItem="UUi-dG-znd" secondAttribute="topMargin" constant="-8" id="zRk-f8-nxT"/>
+                </constraints>
+            </tableViewCellContentView>
+            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="keyLabel" destination="5gK-3f-AoF" id="wj3-3g-4jj"/>
+                <outlet property="latitude" destination="DPE-MV-nP7" id="dSA-q5-Man"/>
+                <outlet property="latitudeLabel" destination="ZG9-9c-XOn" id="YTL-5j-ML4"/>
+                <outlet property="longitude" destination="vWh-Lg-bee" id="Djv-VX-dhv"/>
+                <outlet property="longitudeLabel" destination="plf-Di-da5" id="evK-wu-gfG"/>
+                <outlet property="mapView" destination="GUP-hg-zlz" id="1Kb-jg-OSC"/>
+                <outlet property="requiredIndicator" destination="8WJ-fa-We9" id="wRf-eP-jBW"/>
+            </connections>
+            <point key="canvasLocation" x="18" y="5"/>
+        </tableViewCell>
+    </objects>
+</document>

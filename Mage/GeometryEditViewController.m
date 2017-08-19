@@ -52,6 +52,15 @@
 static NSString *mapPointImageReuseIdentifier = @"mapPointImageReuseIdentifier";
 static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
+- (instancetype) initWithField: (NSDictionary *) field {
+    self = [super init];
+    if (self == nil) return nil;
+    
+    _fieldDefinition = field;
+    
+    return self;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     

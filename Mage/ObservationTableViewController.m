@@ -164,12 +164,13 @@
 
     ObservationEditCoordinator *edit;
     
+    WKBPoint *point;
+    
     if (location) {
-        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point];
-    } else {
-        edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self];
+        point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
     }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation: nil andLocation:point];
+
     [self.childCoordinators addObject:edit];
     [edit start];
 }

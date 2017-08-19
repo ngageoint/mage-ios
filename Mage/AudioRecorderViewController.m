@@ -1,12 +1,12 @@
-#import "MediaViewController.h"
+#import "AudioRecorderViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "MobileCoreServices/UTCoreTypes.h"
 
-@interface MediaViewController ()<AVAudioRecorderDelegate,AVAudioPlayerDelegate>{
+@interface AudioRecorderViewController ()<AVAudioRecorderDelegate,AVAudioPlayerDelegate>{
     BOOL isRecording;
-
+    
 }
 
 @property (nonatomic,strong) NSString *voiceValue;
@@ -31,7 +31,7 @@
 - (IBAction) playRecording:(id)sender;
 -(void) performRecording;
 @end
-@implementation MediaViewController
+@implementation AudioRecorderViewController
 
 #pragma mark -
 #pragma mark View Life Cycle
@@ -60,7 +60,7 @@
     
     self.mediaFilePath = [self createFolderInTempDirectory];
     
-	isRecording = NO;
+    isRecording = NO;
     
     [self setupView:NO];
 }
@@ -83,11 +83,11 @@
     [self setupView:NO];
 }
 
-#pragma 
+#pragma
 #pragma mark - Voice Recording
 
 - (IBAction) startRecording{
-        [self performSelectorInBackground:@selector(performRecording) withObject:nil];
+    [self performSelectorInBackground:@selector(performRecording) withObject:nil];
 }
 
 -(void) performRecording{
@@ -97,10 +97,10 @@
         [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
         
         self.recording = [[Recording alloc]init];
-
+        
         self.recording.mediaType = @"audio/mp4";
         isRecording = YES;
-
+        
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         NSError *err = nil;
         [audioSession setCategory :AVAudioSessionCategoryPlayAndRecord error:&err];
@@ -122,19 +122,19 @@
         [settings setValue :[NSNumber numberWithInt:8] forKey:AVLinearPCMBitDepthKey];
         [settings setValue :[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsBigEndianKey];
         [settings setValue :[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsFloatKey];
-            //Encoder
+        //Encoder
         [settings setValue :[NSNumber numberWithInt:12000] forKey:AVEncoderBitRateKey];
         [settings setValue :[NSNumber numberWithInt:8] forKey:AVEncoderBitDepthHintKey];
         [settings setValue :[NSNumber numberWithInt:8] forKey:AVEncoderBitRatePerChannelKey];
         [settings setValue :[NSNumber numberWithInt:AVAudioQualityMin] forKey:AVEncoderAudioQualityKey];
-
+        
         NSNumber *num = [NSNumber numberWithLongLong:(long long)[[NSDate date] timeIntervalSince1970]];
         NSString *extensionName = [num stringValue];
         self.recording.fileName = [NSString stringWithFormat:@"%@%@%@",@"Voice_", extensionName, @".mp4"];
         self.recorderFilePath = [NSString stringWithFormat:@"%@/%@", self.mediaFilePath, self.recording.fileName];
         self.recording.filePath = self.recorderFilePath;
         NSLog(@"Recording path %@",self.recorderFilePath);
-
+        
         NSURL *url = [NSURL fileURLWithPath:self.recorderFilePath];
         err = nil;
         self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&err];
@@ -172,14 +172,14 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateRecordingLength) userInfo:nil repeats:YES];
         });
-
+        
         // start recording
         [self.recorder record];
         
     }else{
         isRecording = NO;
         [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
-		[self.recorder stop];
+        [self.recorder stop];
         if (_sliderTimer != nil && _sliderTimer.isValid) {
             [_sliderTimer invalidate];
         }
@@ -219,8 +219,8 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     NSURL *url = [NSURL fileURLWithPath:self.recording.filePath];
-
-	NSError *error;
+    
+    NSError *error;
     if (self.audioPlayer == nil) {
         self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
         self.audioPlayer.delegate = self;
@@ -292,14 +292,16 @@
 
 
 
-#pragma 
+#pragma
 #pragma mark - Media methods
 
 - (IBAction) dismissAndSetObservationMedia:(id)sender{
     if (self.delegate) {
         [self.delegate recordingAvailable:self.recording];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 @end

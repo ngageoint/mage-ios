@@ -15,7 +15,7 @@
                 <outlet property="collectionView" destination="Bx3-fo-aWS" id="bxn-JQ-lxu"/>
                 <outlet property="headerLabel" destination="pEr-0M-4d2" id="CGf-Du-mqs"/>
                 <outlet property="mapView" destination="WaT-Op-65Z" id="8BK-ps-S3W"/>
-                <outlet property="view" destination="Yf0-EB-QcZ" id="s7h-S3-A2m"/>
+                <outlet property="view" destination="Yf0-EB-QcZ" id="3l2-Wv-gyc"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

@@ -5,33 +5,16 @@
 //
 
 #import "ObservationEditViewController.h"
-#import "ObservationEditViewDataStore.h"
-#import "ObservationEditSelectTableViewCell.h"
-#import "ObservationEditGeometryTableViewCell.h"
-#import "GeometryEditViewController.h"
-#import "SelectEditViewController.h"
+#import "ObservationEditTableViewController.h"
 #import "Observation.h"
-#import <MageSessionManager.h>
-#import <AVFoundation/AVFoundation.h>
-#import "Attachment.h"
-#import <MediaPlayer/MediaPlayer.h>
-#import "MediaViewController.h"
-#import "AttachmentViewController.h"
-#import "AttachmentSelectionDelegate.h"
-#import "Server.h"
-#import "Event.h"
-#import "User.h"
-#import <ImageIO/ImageIO.h>
-#import "ObservationEditTextFieldTableViewCell.h"
 #import "NSDate+Iso8601.h"
-#import "FormsViewController.h"
 
 @import PhotosUI;
 
-@interface ObservationEditViewController ()
+@interface ObservationEditViewController () <ObservationEditFieldDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, weak) ObservationEditTableViewController *tableViewController;
-@property (strong, nonatomic) Event *event;
+@property (nonatomic, strong) ObservationEditTableViewController *tableViewController;
+@property (weak, nonatomic) IBOutlet UIView *tableContainerView;
 
 @end
 
@@ -50,6 +33,11 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.tableViewController = [[ObservationEditTableViewController alloc] initWithObservation:self.observation andDelegate: self];
+    [self addChildViewController:self.tableViewController];
+    [self.tableContainerView addSubview:self.tableViewController.view];
+    [self.tableViewController didMoveToParentViewController:self];
     
     [self.navigationController setNavigationBarHidden:NO];
     
@@ -94,275 +82,59 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (IBAction) cancel:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Discard Changes"
-                                                                   message:@"Do you want to discard your changes?"
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Discard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.delegate editCanceled];
-//        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+- (void) refreshObservation {
+    [self.tableViewController refreshObservation];
 }
+
+//- (IBAction) cancel:(id)sender {
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Discard Changes"
+//                                                                   message:@"Do you want to discard your changes?"
+//                                                            preferredStyle:UIAlertControllerStyleAlert];
+//    
+//    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Discard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self.delegate editCanceled];
+//    }]];
+//    
+//    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
+//    
+//    [self presentViewController:alert animated:YES completion:nil];
+//}
 
 - (IBAction) addVoice:(id)sender {
-    __weak typeof(self) weakSelf = self;
-    [self checkMicrophonePermissionsWithCompletion:^(BOOL granted) {
-        if (granted) {
-            [weakSelf presentVoiceRecorder:sender];
-        }
-    }];
-}
-
-- (void) presentVoiceRecorder :(id) sender {
-    __weak typeof(self) weakSelf = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [weakSelf performSegueWithIdentifier:@"recordAudioSegue" sender:sender];
-    }];
+    [self.delegate addVoiceAttachment];
 }
 
 - (IBAction) addVideo:(id)sender {
-    __weak typeof(self) weakSelf = self;
-    [self checkCameraPermissionsWithCompletion:^(BOOL granted) {
-        if (granted) {
-            [weakSelf checkMicrophonePermissionsWithCompletion:^(BOOL granted) {
-                if (granted) {
-                    [weakSelf presentVideo];
-                }
-            }];
-        }
-    }];
-}
-
-- (void) presentVideo {
-    __weak typeof(self) weakSelf = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = weakSelf.tableViewController;
-        picker.allowsEditing = YES;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.mediaTypes = [NSArray arrayWithObject:(NSString*) kUTTypeMovie];
-        
-        [weakSelf presentViewController:picker animated:YES completion:NULL];
-    }];
+    [self.delegate addVideoAttachment];
 }
 
 - (IBAction) addFromCamera:(id)sender {
-    __weak typeof(self) weakSelf = self;
-    [self checkCameraPermissionsWithCompletion:^(BOOL granted) {
-        if (granted) {
-            [weakSelf presentCamera];
-        }
-    }];
-}
-
-- (void) presentCamera {
-    __weak typeof(self) weakSelf = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = weakSelf.tableViewController;
-        picker.allowsEditing = NO;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
-        [weakSelf presentViewController:picker animated:YES completion:NULL];
-    }];
-}
-
-- (void) checkCameraPermissionsWithCompletion:(void (^)(BOOL granted)) complete {
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera"
-                                                                       message:@"Your device does not have a camera"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-        
-        complete(NO);
-        return;
-    }
-    
-    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    switch (authorizationStatus) {
-        case AVAuthorizationStatusAuthorized: {
-            complete(YES);
-            break;
-        }
-        case AVAuthorizationStatusNotDetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:complete];
-            break;
-        }
-        case AVAuthorizationStatusRestricted: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
-                                                                           message:@"You've been restricted from using the camera on this device. Please contact the device owner so they can give you access."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            complete(NO);
-            break;
-        }
-        default: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Camera"
-                                                                           message:@"MAGE has been denied access to the camera.  Please open Settings, and allow access to the camera."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            complete(NO);
-            break;
-        }
-    }
-    
-}
-
-- (void) checkMicrophonePermissionsWithCompletion:(void (^)(BOOL granted)) complete {
-    if (![[AVAudioSession sharedInstance] isInputAvailable]) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Microphone"
-                                                                       message:@"Your device does not have a microphone"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-        
-        complete(NO);
-        return;
-    }
-    
-    AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    switch (authorizationStatus) {
-        case AVAuthorizationStatusAuthorized: {
-            complete(YES);
-            break;
-        }
-        case AVAuthorizationStatusNotDetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:complete];
-            break;
-        }
-        case AVAuthorizationStatusRestricted: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
-                                                                           message:@"You've been restricted from using the microphone on this device. Please contact the device owner so they can give you access."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            complete(NO);
-            break;
-        }
-        default: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Microphone"
-                                                                           message:@"MAGE has been denied access to the microphone.  Please open Settings, and allow access to the microphone."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            complete(NO);
-            break;
-        }
-    }
-    
+    [self.delegate addCameraAttachment];
 }
 
 - (IBAction) addFromGallery:(id)sender {
-    
-    PHAuthorizationStatus authorizationStatus = [PHPhotoLibrary authorizationStatus];
-    switch (authorizationStatus) {
-        case PHAuthorizationStatusAuthorized: {
-            [self presentGallery];
-            break;
-        }
-        case PHAuthorizationStatusNotDetermined: {
-            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
-                    [self presentGallery];
-                }
-            }];
-            
-            break;
-        }
-        case PHAuthorizationStatusRestricted: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
-                                                                           message:@"You've been restricted from using the gallery on this device. Please contact the device owner so they can give you access."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            break;
-        }
-        default: {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
-                                                                           message:@"MAGE has been denied access to the gallery.  Please open Settings, and allow access to the gallery."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            break;
-        }
-    }
+    [self.delegate addGalleryAttachment];
 }
 
-- (void) presentGallery {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self.tableViewController;
-    picker.allowsEditing = NO;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
-    picker.mediaTypes = [NSArray arrayWithObjects:(NSString*)kUTTypeMovie, (NSString*) kUTTypeImage, nil];
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-}
-
-- (IBAction) saveObservation:(id)sender {
-    [self setNavBarButtonsEnabled:NO];
-    
-    if (![self.tableViewController validate]) {
-        [self setNavBarButtonsEnabled:YES];
-        return;
-    }
-        
-    self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
-    
-    NSMutableDictionary *error = [self.observation.error mutableCopy];
-    if (error) {
-        [error removeAllObjects];
-        self.observation.error = error;
-    }
-    
-    [_delegate editComplete];
-    
-}
+//- (IBAction) saveObservation:(id)sender {
+//    [self setNavBarButtonsEnabled:NO];
+//    
+//    if (![self.tableViewController validate]) {
+//        [self setNavBarButtonsEnabled:YES];
+//        return;
+//    }
+//        
+//    self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
+//    
+//    NSMutableDictionary *error = [self.observation.error mutableCopy];
+//    if (error) {
+//        [error removeAllObjects];
+//        self.observation.error = error;
+//    }
+//    
+//    [_delegate editComplete];
+//    
+//}
 
 -(void) keyboardWillShow: (NSNotification *) notification {
     [self setNavBarButtonsEnabled:NO];
@@ -382,18 +154,16 @@
     }
 }
 
+- (void) fieldSelected: (NSDictionary *) field {
+    [self.delegate fieldSelected:field];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"recordAudioSegue"]) {
-        MediaViewController *mvc = [segue destinationViewController];
-        mvc.delegate = self.tableViewController;
-    } else if ([segue.identifier isEqualToString:@"editTableViewSegue"]) {
+    if ([segue.identifier isEqualToString:@"editTableViewSegue"]) {
         self.tableViewController = [segue destinationViewController];
         self.tableViewController.observation = self.observation;
-    } else if ([segue.identifier isEqualToString:@"formChooserSegue"]) {
-        FormsViewController *formsViewController = [segue destinationViewController];
-        formsViewController.forms = self.event.forms;
     }
 }
 
