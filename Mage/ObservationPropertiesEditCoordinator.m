@@ -55,8 +55,14 @@
     self.editController = [[ObservationEditViewController alloc] initWithDelegate:self andObservation:self.observation andNew:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
-    [self.navigationController pushViewController:self.editController animated:YES];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = .3f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController pushViewController:self.editController animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void) editComplete {
