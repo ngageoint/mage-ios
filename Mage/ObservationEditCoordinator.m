@@ -127,11 +127,8 @@
 
 - (void) startFormPicker {
     self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms andLocation: self.location andNewObservation:self.newObservation];
-//    [self.currentViewController presentViewController:self.formController animated:YES completion:^{
-//        NSLog(@"Form Picker shown");
-//    }];
+    [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController pushViewController:self.formController animated:NO];
-//    [self pushViewController:self.formController];
 }
 
 - (void) startEditObservationFields {

@@ -56,6 +56,7 @@
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
     [self.navigationController pushViewController:self.editController animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void) editComplete {
