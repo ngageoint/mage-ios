@@ -11,18 +11,14 @@
 #import "ObservationEditTableViewController.h"
 #import "AnnotationDragCallback.h"
 
-@interface GeometryEditViewController : UIViewController <MKMapViewDelegate, AnnotationDragCallback>
+@interface GeometryEditViewController : UIViewController <AnnotationDragCallback>
 
 @property (weak, nonatomic) IBOutlet MKMapView *map;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *pointButton;
 @property (weak, nonatomic) IBOutlet UIButton *lineButton;
 @property (weak, nonatomic) IBOutlet UIButton *rectangleButton;
 @property (weak, nonatomic) IBOutlet UIButton *polygonButton;
-@property (nonatomic, strong) Observation *observation;
-@property (strong, nonatomic) id fieldDefinition;
-@property (weak, nonatomic) id<PropertyEditDelegate> propertyEditDelegate;
 
-- (IBAction) saveLocation;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andObservation: (Observation *) observation andDelegate:(id<PropertyEditDelegate>)delegate;
 
 @end

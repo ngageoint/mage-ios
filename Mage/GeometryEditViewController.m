@@ -24,15 +24,15 @@
 #import "Observation.h"
 #import "ObservationShapeStyle.h"
 #import "Event.h"
+#import "GeometryEditMapDelegate.h"
 
-@interface GeometryEditViewController()<UITextFieldDelegate>
+@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
 @property (strong, nonatomic) MapObservationManager *observationManager;
 @property (strong, nonatomic) GPKGMapShapeConverter *shapeConverter;
 @property (nonatomic) BOOL newDrawing;
 @property (nonatomic) enum WKBGeometryType shapeType;
 @property (nonatomic) BOOL isRectangle;
-@property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameXMarker;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
@@ -42,27 +42,34 @@
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
-@property (nonatomic, strong) ObservationShapeStyle *editStyle;
 @property (nonatomic) double lastAnnotationSelectedTime;
+@property (nonatomic, strong) Observation *observation;
+@property (strong, nonatomic) id fieldDefinition;
+@property (weak, nonatomic) id<PropertyEditDelegate> delegate;
+@property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
+@property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 
 @end
 
 @implementation GeometryEditViewController
 
-static NSString *mapPointImageReuseIdentifier = @"mapPointImageReuseIdentifier";
-static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
-
-- (instancetype) initWithField: (NSDictionary *) field {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andObservation: (Observation *) observation andDelegate:(id<PropertyEditDelegate>) delegate {
     self = [super init];
     if (self == nil) return nil;
     
-    _fieldDefinition = field;
+    _fieldDefinition = fieldDefinition;
+    _delegate = delegate;
+    _observation = observation;
     
+    _mapDelegate = [[GeometryEditMapDelegate alloc] initWithDragCallback:self andEditDelegate:self];
+        
     return self;
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.map.delegate = _mapDelegate;
     
     // These two lines required to get the prompt to resize the view and not cover the buttons
     [self.navigationController setNavigationBarHidden:YES];
@@ -74,6 +81,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     Event *event = [Event getCurrentEventInContext:[self.observation managedObjectContext]];
 
     self.observationManager = [[MapObservationManager alloc] initWithMapView:self.map andEventForms:event.forms];
+
     self.shapeConverter = [[GPKGMapShapeConverter alloc] init];
     self.validLocation = YES;
     
@@ -106,17 +114,11 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         }
     }
     
-    // Set the default edit shape draw options
-    self.editStyle = [[ObservationShapeStyle alloc] init];
-    
     [self setShapeTypeFromGeometry:geometry];
     [self addMapShape:geometry];
     
     MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.map];
     [self.map setRegion:viewRegion];
-        
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
-    self.navigationItem.leftBarButtonItem = backButton;
     
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
                                                  initWithTarget:self action:@selector(singleTapGesture:)];
@@ -148,19 +150,10 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    self.navigationItem.prompt = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void) cancelButtonPressed {
-    self.navigationItem.prompt = nil;
-
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) clearLatitudeAndLongitudeFocus{
@@ -169,95 +162,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self updateHint];
 }
 
-- (IBAction) saveLocation {
-    self.navigationItem.prompt = nil;
-    
-    WKBGeometry *geometry = nil;
-    if(self.shapeType == WKB_POINT){
-        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
-    }else{
-        geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
-    }
-
-    [self.propertyEditDelegate setValue:geometry forFieldDefinition:self.fieldDefinition];
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>) annotation {
-    
-    MKAnnotationView *view = nil;
-    
-    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-        ObservationAnnotation *observationAnnotation = annotation;
-        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.map withDragCallback:self];
-        view = annotationView;
-        [observationAnnotation setView:view];
-    } else if([annotation isKindOfClass:[GPKGMapPoint class]]){
-        GPKGMapPoint * mapPoint = (GPKGMapPoint *) annotation;
-        if(mapPoint.options.image != nil){
-            MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointImageReuseIdentifier];
-            if (mapPointImageView == nil)
-            {
-                mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier andMapView:self.map andDragCallback:self];
-            }
-            mapPointImageView.image = mapPoint.options.image;
-            mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;
-            
-            view = mapPointImageView;
-        }else{
-            MKPinAnnotationView *mapPointPinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointPinReuseIdentifier];
-            if(mapPointPinView == nil){
-                mapPointPinView = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:mapPointPinReuseIdentifier];
-            }
-            mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
-            view = mapPointPinView;
-        }
-        [mapPoint setView:view];
-    }else {
-        MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
-        if (!pinView) {
-            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-            [pinView setPinTintColor:[UIColor greenColor]];
-        } else {
-            pinView.annotation = annotation;
-        }
-        view = pinView;
-    }
-    
-    view.draggable = YES;
-    return view;
-}
-
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id)overlay {
-    MKOverlayRenderer * renderer = nil;
-    if ([overlay isKindOfClass:[MKPolygon class]]) {
-        MKPolygonRenderer * polygonRenderer = [[MKPolygonRenderer alloc] initWithPolygon:overlay];
-        polygonRenderer.strokeColor = self.editStyle.strokeColor;
-        polygonRenderer.lineWidth = self.editStyle.lineWidth;
-        if(self.editStyle.fillColor != nil){
-            polygonRenderer.fillColor = self.editStyle.fillColor;
-        }
-        renderer = polygonRenderer;
-    }else if ([overlay isKindOfClass:[MKPolyline class]]) {
-        MKPolylineRenderer * polylineRenderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
-        polylineRenderer.strokeColor = self.editStyle.strokeColor;
-        polylineRenderer.lineWidth = self.editStyle.lineWidth;
-        renderer = polylineRenderer;
-    }else if ([overlay isKindOfClass:[MKTileOverlay class]]) {
-        renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
-    }
-    return renderer;
-}
-
-- (void)selectAnnotation:(id)annotation{
-    [self.map selectAnnotation:annotation animated:YES];
-}
-
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
-    
+- (void) mapView: (MKMapView *) mapView didSelectAnnotationView: (MKAnnotationView *) view {
     [self clearLatitudeAndLongitudeFocus];
     [self locationEnabled:YES];
     
@@ -270,11 +175,9 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             [self selectShapePoint:mapPoint];
         }
     }
-    
 }
 
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
-    
+- (void) mapView: (MKMapView *) mapView didDeselectAnnotationView: (MKAnnotationView *) view {
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
         
         [self locationEnabled:NO];
@@ -291,40 +194,23 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
         // Reselect the single observation point if it is deselected (clicking on the map, etc)
         [self selectAnnotation:view.annotation];
     }
-    
-}
 
-- (void) locationEnabled: (BOOL) enabled{
-    self.latitudeField.enabled = enabled;
-    self.longitudeField.enabled = enabled;
-    UIColor *backgroundColor = nil;
-    if(!enabled){
-        backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
-    }
-    self.latitudeField.backgroundColor = backgroundColor;
-    self.longitudeField.backgroundColor = backgroundColor;
-}
-
-- (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
-    [self updateLocationTextWithCoordinate:coordinate];
-    [annotationView.annotation setCoordinate:coordinate];
-    [self updateShape:coordinate];
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
-    
+   
     if(newState == MKAnnotationViewDragStateStarting){
         [self clearLatitudeAndLongitudeFocus];
     }
     
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
     
-     if ([annotationView.annotation isKindOfClass:[GPKGMapPoint class]]) {
-         coordinate = [self.map convertPoint:annotationView.center toCoordinateFromView:self.map];
-     }else if([annotationView.annotation isKindOfClass:[ObservationAnnotation class]]){
-         ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotationView.annotation;
-         coordinate = observationAnnotation.coordinate;
-     }
+    if ([annotationView.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        coordinate = [self.map convertPoint:annotationView.center toCoordinateFromView:self.map];
+    }else if([annotationView.annotation isKindOfClass:[ObservationAnnotation class]]){
+        ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotationView.annotation;
+        coordinate = observationAnnotation.coordinate;
+    }
     
     if(CLLocationCoordinate2DIsValid(coordinate)){
         switch(newState){
@@ -361,6 +247,42 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
                 
         }
     }
+}
+
+
+- (void) updateGeometry {    
+    WKBGeometry *geometry = nil;
+    if(self.shapeType == WKB_POINT){
+        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
+        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+    }else{
+        geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+    }
+
+    [self.delegate setValue:geometry forFieldDefinition:self.fieldDefinition];
+    
+}
+
+- (void)selectAnnotation:(id)annotation{
+    [self.map selectAnnotation:annotation animated:YES];
+}
+
+- (void) locationEnabled: (BOOL) enabled{
+    self.latitudeField.enabled = enabled;
+    self.longitudeField.enabled = enabled;
+    UIColor *backgroundColor = nil;
+    if(!enabled){
+        backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
+    }
+    self.latitudeField.backgroundColor = backgroundColor;
+    self.longitudeField.backgroundColor = backgroundColor;
+}
+
+- (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
+    [self updateLocationTextWithCoordinate:coordinate];
+    [annotationView.annotation setCoordinate:coordinate];
+    [self updateShape:coordinate];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -576,11 +498,11 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
                                          message:message
                                          preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [self revertShapeType];
             }]];
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"CHANGE" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alert addAction:[UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self changeShapeType:selectedType andRectangle:selectedRectangle];
             }]];
             
@@ -1130,12 +1052,17 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 -(void) updateAcceptState{
     BOOL acceptEnabled = NO;
     if (self.shapeType == WKB_POINT) {
-        acceptEnabled = YES;
+        // could be in the process of deselecting the shape and changing to a point
+        if (![self isShape]) {
+            acceptEnabled = YES;
+        }
     } else if ([self isShape]) {
         acceptEnabled = [self shapePointsValid];
     }
     acceptEnabled = acceptEnabled && self.validLocation;
-    self.saveButton.enabled = acceptEnabled;
+    if (acceptEnabled) {
+        [self updateGeometry];
+    }
 }
 
 /**

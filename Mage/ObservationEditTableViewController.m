@@ -51,6 +51,7 @@
     [self registerCellTypes];
     
     _editDataStore = [[ObservationEditViewDataStore alloc] initWithObservation:self.observation andDelegate:self.delegate];
+    _editDataStore.attachmentSelectionDelegate = self;
 
     [self.tableView setDelegate:_editDataStore];
     [self.tableView setDataSource:_editDataStore];
@@ -113,34 +114,10 @@
     return [self.editDataStore validate];
 }
 
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"geometrySegue"]) {
-        GeometryEditViewController *gvc = [segue destinationViewController];
-        ObservationEditGeometryTableViewCell *cell = sender;
-        gvc.fieldDefinition = cell.fieldDefinition;
-        gvc.observation = self.observation;
-        gvc.propertyEditDelegate = self;
-    }
-    /*else if ([segue.identifier isEqualToString:@"selectSegue"]) {
-        SelectEditViewController *viewController = [segue destinationViewController];
-        ObservationEditSelectTableViewCell *cell = sender;
-        viewController.fieldDefinition = cell.fieldDefinition;
-        viewController.value = cell.value;
-        viewController.propertyEditDelegate = self;
-    }*/ 
-    else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
-    }
-}
-
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    
+    [self.delegate attachmentSelected:attachment];
 }
 
 

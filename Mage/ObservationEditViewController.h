@@ -16,6 +16,7 @@
 - (void) addCameraAttachment;
 - (void) addGalleryAttachment;
 - (void) fieldSelected: (NSDictionary *) field;
+- (void) attachmentSelected: (Attachment *) attachment;
 
 @end
 

@@ -86,20 +86,6 @@
     [self.tableViewController refreshObservation];
 }
 
-//- (IBAction) cancel:(id)sender {
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Discard Changes"
-//                                                                   message:@"Do you want to discard your changes?"
-//                                                            preferredStyle:UIAlertControllerStyleAlert];
-//    
-//    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Discard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        [self.delegate editCanceled];
-//    }]];
-//    
-//    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
-//    
-//    [self presentViewController:alert animated:YES completion:nil];
-//}
-
 - (IBAction) addVoice:(id)sender {
     [self.delegate addVoiceAttachment];
 }
@@ -115,26 +101,6 @@
 - (IBAction) addFromGallery:(id)sender {
     [self.delegate addGalleryAttachment];
 }
-
-//- (IBAction) saveObservation:(id)sender {
-//    [self setNavBarButtonsEnabled:NO];
-//    
-//    if (![self.tableViewController validate]) {
-//        [self setNavBarButtonsEnabled:YES];
-//        return;
-//    }
-//        
-//    self.observation.timestamp = [NSDate dateFromIso8601String:[self.observation.properties objectForKey:@"timestamp"]];
-//    
-//    NSMutableDictionary *error = [self.observation.error mutableCopy];
-//    if (error) {
-//        [error removeAllObjects];
-//        self.observation.error = error;
-//    }
-//    
-//    [_delegate editComplete];
-//    
-//}
 
 -(void) keyboardWillShow: (NSNotification *) notification {
     [self setNavBarButtonsEnabled:NO];
@@ -158,14 +124,8 @@
     [self.delegate fieldSelected:field];
 }
 
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"editTableViewSegue"]) {
-        self.tableViewController = [segue destinationViewController];
-        self.tableViewController.observation = self.observation;
-    }
+- (void) attachmentSelected:(Attachment *)attachment {
+    [self.delegate attachmentSelected: attachment];
 }
-
 
 @end

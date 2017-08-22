@@ -19,6 +19,7 @@
 #import "SelectEditViewController.h"
 #import "GeometryEditViewController.h"
 #import "ExternalDevice.h"
+#import "AttachmentViewController.h"
 
 @interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate>
 
@@ -106,8 +107,25 @@
         [editSelect.navigationItem setRightBarButtonItem:doneButton];
         [self.navigationController pushViewController:editSelect animated:YES];
     } else if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-        GeometryEditViewController *editGeometry = [[GeometryEditViewController alloc] init];
+        GeometryEditViewController *editGeometry = [[GeometryEditViewController alloc] initWithFieldDefinition: field andObservation: self.observation andDelegate: self];
+        editGeometry.title = [field valueForKey:@"title"];
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
+        [editGeometry.navigationItem setLeftBarButtonItem:backButton];
+        [editGeometry.navigationItem setRightBarButtonItem:doneButton];
+        [self.navigationController pushViewController:editGeometry animated:YES];
     }
+}
+
+- (void) attachmentSelected:(Attachment *)attachment {
+    AttachmentViewController *vc = [[AttachmentViewController alloc] init];
+    [vc setAttachment:attachment];
+    [vc setTitle:@"Attachment"];
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    //    AttachmentViewController *vc = [segue destinationViewController];
+    //    [vc setAttachment:attachment];
+    //    [vc setTitle:@"Attachment"];
 }
 
 - (void) fieldEditDone {

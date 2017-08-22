@@ -13,6 +13,7 @@
 @protocol ObservationEditFieldDelegate <NSObject>
 
 - (void) fieldSelected: (NSDictionary *) field;
+- (void) attachmentSelected: (Attachment *) attachment;
 
 @end
 

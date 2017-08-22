@@ -148,10 +148,12 @@ static NSInteger const COMMON_SECTION = 1;
             [field setObject:@"Date" forKey:@"title"];
             [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
             [field setObject:@"timestamp" forKey:@"name"];
+            [field setObject:@"date" forKey:@"type"];
         } else if ([indexPath row] == 1) {
             [field setObject:@"Location" forKey:@"title"];
             [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
             [field setObject:@"geometry" forKey:@"name"];
+            [field setObject:@"geometry" forKey:@"type"];
         }
         return field;
     }
