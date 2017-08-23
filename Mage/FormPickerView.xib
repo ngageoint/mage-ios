@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FormPickerViewController">
             <connections>
                 <outlet property="blurView" destination="YWy-yP-E2H" id="hSD-CJ-BAn"/>
+                <outlet property="closeButton" destination="MZR-DI-XDD" id="WgY-9N-EUt"/>
                 <outlet property="collectionView" destination="Bx3-fo-aWS" id="bxn-JQ-lxu"/>
                 <outlet property="headerLabel" destination="pEr-0M-4d2" id="CGf-Du-mqs"/>
                 <outlet property="mapView" destination="WaT-Op-65Z" id="8BK-ps-S3W"/>
@@ -46,6 +47,13 @@
                     <color key="textColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZR-DI-XDD">
+                    <rect key="frame" x="162" y="597" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="closeButtonTapped:" destination="-1" eventType="touchUpInside" id="ptq-3g-FCz"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>

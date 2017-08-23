@@ -29,5 +29,6 @@
 
 - (instancetype) initWithDelegate: (id<ObservationEditViewControllerDelegate>) delegate andObservation: (Observation *) observation andNew: (BOOL) newObservation;
 - (void) refreshObservation;
+- (BOOL) validate;
 
 @end

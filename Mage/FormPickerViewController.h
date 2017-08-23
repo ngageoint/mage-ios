@@ -12,6 +12,7 @@
 @protocol FormPickedDelegate <NSObject>
 
 - (void) formPicked: (NSDictionary *) form;
+- (void) cancelSelection;
 
 @end
 

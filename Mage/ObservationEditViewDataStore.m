@@ -35,12 +35,15 @@ static NSInteger const COMMON_SECTION = 1;
 
 @implementation ObservationEditViewDataStore
 
-- (instancetype) initWithObservation: (Observation *)observation andDelegate: (id<ObservationEditFieldDelegate>) delegate {
+- (instancetype) initWithObservation: (Observation *)observation andDelegate: (id<ObservationEditFieldDelegate>) delegate andAttachmentSelectionDelegate: (id<AttachmentSelectionDelegate>) attachmentDelegate andEditTable: (UITableView *) tableView {
     self = [super init];
     if (!self) return nil;
     
     _observation = observation;
     _delegate = delegate;
+    _attachmentSelectionDelegate = attachmentDelegate;
+    _editTable = tableView;
+    
     return self;
 }
 
@@ -169,7 +172,7 @@ static NSInteger const COMMON_SECTION = 1;
         if ([indexPath row] == 0) {
             return [self.observation.properties objectForKey:@"timestamp"];
         } else if ([indexPath row] == 1) {
-            return [self.observation getGeometry];
+            return [[NSDictionary alloc] initWithObjectsAndKeys:[self.observation getGeometry], @"geometry", self.observation, @"observation", self.forms, @"forms", nil];
         }
     } else if ([indexPath section] == ATTACHMENT_SECTION) {
         return self.observation;
@@ -217,7 +220,7 @@ static NSInteger const COMMON_SECTION = 1;
     NSIndexPath *indexPath;
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        self.observation.geometry = value;
+        self.observation.geometry = [value objectForKey:@"geometry"];
         indexPath = [NSIndexPath indexPathForRow:1 inSection:COMMON_SECTION];
     } else if ([[field objectForKey:@"name"] isEqualToString:@"timestamp"]) {
         if (value == nil) {
@@ -257,9 +260,7 @@ static NSInteger const COMMON_SECTION = 1;
         [self.invalidIndexPaths removeObject:indexPath];
         
         id cell = [self.editTable cellForRowAtIndexPath:indexPath];
-//        if ([indexPath section] > 1) {
-            [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
-//        }
+        [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
         [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
@@ -272,12 +273,10 @@ static NSInteger const COMMON_SECTION = 1;
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section != ATTACHMENT_SECTION && section != COMMON_SECTION) {
         NSDictionary *form = [[self.observation.properties objectForKey:@"forms"] objectAtIndex:(section - 2)];
-        // TODO must be a better way through this
-        for (NSDictionary *eventForm in self.forms) {
-            if ([eventForm valueForKey:@"id"] == [form objectForKey:@"formId"]) {
-                return [eventForm objectForKey:@"name"];
-            }
-        }
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [form objectForKey:@"formId"]];
+        NSArray *filteredArray = [self.forms filteredArrayUsingPredicate:predicate];
+        return [[filteredArray firstObject] objectForKey:@"name"];
     }
     return nil;
 }

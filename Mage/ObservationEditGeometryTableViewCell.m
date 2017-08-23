@@ -25,20 +25,20 @@
 @implementation ObservationEditGeometryTableViewCell
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
-    self.geometry = value;
-//    // special case if it is the actual observation geometry and not a field
-//    if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
+    self.geometry = [value objectForKey:@"geometry"];
+    // special case if it is the actual observation geometry and not a field
+    if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
 //        self.geometry = [observation getGeometry];
-//        self.isGeometryField = YES;
-//    } else {
-//        id geometry = [observation.properties objectForKey:[field objectForKey:@"name"]];
-//        if (geometry) {
-//            self.geometry = (WKBGeometry *) geometry;
-//        } else {
-//            self.geometry = nil;
-//        }
-//        self.isGeometryField = NO;
-//    }
+        self.isGeometryField = YES;
+    } else {
+        id geometry = [value objectForKey:@"geometry"];
+        if (geometry) {
+            self.geometry = (WKBGeometry *) geometry;
+        } else {
+            self.geometry = nil;
+        }
+        self.isGeometryField = NO;
+    }
 
     [self.keyLabel setText:[field objectForKey:@"title"]];
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
@@ -53,12 +53,12 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-//        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:self.forms];
-//        if (self.isGeometryField) {
-//            self.mapObservation = [self.observationManager addToMapWithObservation:observation];
-//            MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
-//            [self.mapView setRegion:viewRegion animated:NO];
-//        }
+        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
+        if (self.isGeometryField) {
+            self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
+            MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
+            [self.mapView setRegion:viewRegion animated:NO];
+        }
         
         WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
         [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];

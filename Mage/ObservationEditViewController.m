@@ -82,6 +82,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (BOOL) validate {
+    return [self.tableViewController validate];
+}
+
 - (void) refreshObservation {
     [self.tableViewController refreshObservation];
 }

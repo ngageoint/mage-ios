@@ -93,15 +93,9 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self setupEditButton];
     [self setupNonPropertySections];
     
-    
-    NSString *primaryField;
-    // TODO must be a better way through this
-    for (NSDictionary *eventForm in self.forms) {
-        if ([eventForm valueForKey:@"id"] == [[self.observationForms objectAtIndex:0] objectForKey:@"formId"]) {
-            primaryField = [eventForm objectForKey:@"primaryField"];
-            break;
-        }
-    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[self.observationForms objectAtIndex:0] objectForKey:@"formId"]];
+    NSArray *filteredArray = [self.forms filteredArrayUsingPredicate:predicate];
+    NSString *primaryField = [[filteredArray firstObject] objectForKey:@"primaryField"];
     
     NSString *primaryText = [[self.observationForms objectAtIndex:0] objectForKey:primaryField];
     if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
@@ -109,8 +103,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     }
     
     [self.propertyTable reloadData];
-    
-
 }
 
 - (void) updateUserDefaults: (NSNotification *) notification {
@@ -268,7 +260,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
     if (isSyncSectionShowing && section == SYNC_SECTION) {
         title = @"Manually push";
     } else if (section >= self.tableLayout.count) {
-        title = [[self.forms objectAtIndex:(section - self.tableLayout.count)] objectForKey:@"name"];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] objectForKey:@"formId"]];
+        NSArray *filteredArray = [self.forms filteredArrayUsingPredicate:predicate];
+        
+        title = [[filteredArray firstObject] objectForKey:@"name"];
     }
 
     return title;
@@ -344,13 +340,9 @@ static NSInteger const IMPORTANT_SECTION = 4;
     _formFields = [[NSMutableArray alloc] init];
     for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
         
-        // TODO must be a better way through this
-        NSDictionary *eventForm;
-        for (NSDictionary *formCheck in self.forms) {
-            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
-                eventForm = formCheck;
-            }
-        }
+        NSPredicate *formPredicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [form objectForKey:@"formId"]];
+        NSArray *filteredArray = [self.forms filteredArrayUsingPredicate:formPredicate];
+        NSDictionary *eventForm = [filteredArray firstObject];
         
         NSMutableDictionary *propertiesWithValue = [form mutableCopy];
         NSMutableArray *keyWithNoValue = [[propertiesWithValue allKeysForObject:@""] mutableCopy];

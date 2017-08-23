@@ -18,7 +18,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="90" height="120"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Arr-FO-0pD">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Arr-FO-0pD">
                         <rect key="frame" x="0.0" y="100" width="90" height="21"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -44,7 +44,7 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Arr-FO-0pD" secondAttribute="bottom" constant="8" id="Fle-l6-Xdw"/>
+                <constraint firstAttribute="bottom" secondItem="Arr-FO-0pD" secondAttribute="bottom" constant="-1" id="Fle-l6-Xdw"/>
                 <constraint firstAttribute="trailing" secondItem="Arr-FO-0pD" secondAttribute="trailing" id="L6W-JF-7yn"/>
                 <constraint firstItem="Arr-FO-0pD" firstAttribute="leading" secondItem="Jqd-TU-fH3" secondAttribute="leading" id="Y8u-k8-Yts"/>
             </constraints>

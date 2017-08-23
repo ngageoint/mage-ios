@@ -52,7 +52,7 @@
 - (void) start {
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(editCanceled)];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:_delegate action:@selector(propertiesEditComplete)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
     self.editController = [[ObservationEditViewController alloc] initWithDelegate:self andObservation:self.observation andNew:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
@@ -67,7 +67,9 @@
 }
 
 - (void) editComplete {
-    [_delegate propertiesEditComplete];
+    if ([self.editController validate]) {
+        [_delegate propertiesEditComplete];
+    }
 }
 
 - (void) editCanceled {
@@ -122,10 +124,6 @@
     [vc setAttachment:attachment];
     [vc setTitle:@"Attachment"];
     [self.navigationController pushViewController:vc animated:YES];
-    
-    //    AttachmentViewController *vc = [segue destinationViewController];
-    //    [vc setAttachment:attachment];
-    //    [vc setTitle:@"Attachment"];
 }
 
 - (void) fieldEditDone {

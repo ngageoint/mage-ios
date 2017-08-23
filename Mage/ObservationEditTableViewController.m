@@ -50,8 +50,7 @@
     
     [self registerCellTypes];
     
-    _editDataStore = [[ObservationEditViewDataStore alloc] initWithObservation:self.observation andDelegate:self.delegate];
-    _editDataStore.attachmentSelectionDelegate = self;
+    _editDataStore = [[ObservationEditViewDataStore alloc] initWithObservation:self.observation andDelegate:self.delegate andAttachmentSelectionDelegate: self andEditTable: self.tableView];
 
     [self.tableView setDelegate:_editDataStore];
     [self.tableView setDataSource:_editDataStore];

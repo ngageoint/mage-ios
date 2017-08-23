@@ -98,7 +98,9 @@
 }
 
 - (void) start {
-    [self.rootViewController presentViewController:self.navigationController animated:NO completion:^{
+    [self.navigationController setModalPresentationStyle:UIModalPresentationCustom];
+    [self.navigationController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self.rootViewController presentViewController:self.navigationController animated:YES completion:^{
         
     }];
     if (![self.event isUserInEvent:[User fetchCurrentUserInManagedObjectContext:self.managedObjectContext]]) {
@@ -127,6 +129,7 @@
 
 - (void) startFormPicker {
     self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms andLocation: self.location andNewObservation:self.newObservation];
+    
     [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController pushViewController:self.formController animated:NO];
 }
@@ -167,11 +170,17 @@
     [self startEditObservationFields];
 }
 
+- (void) cancelSelection {
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"root view dismissed");
+    }];
+}
+
 #pragma
 
 #pragma mark - ObservationPropertiesEditDelegate methods
 - (void) propertiesEditCanceled {
-    [self.navigationController dismissViewControllerAnimated:NO completion:^{
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"root view dismissed");
     }];
     
@@ -195,7 +204,7 @@
         
         [weakSelf.delegate editComplete:weakSelf.observation];
         
-        [_rootViewController dismissViewControllerAnimated:NO completion:^{
+        [_rootViewController dismissViewControllerAnimated:YES completion:^{
             NSLog(@"root view dismissed");
         }];
     }];
