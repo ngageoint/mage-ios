@@ -11,6 +11,7 @@
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
 #import <NBAsYouTypeFormatter.h>
+#import <ServerAuthentication.h>
 
 @interface SignUpTableViewController ()
     @property (weak, nonatomic) IBOutlet UITextField *displayName;
@@ -25,6 +26,12 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    if ([self.server serverHasLocalAuthenticationStrategy]) {
+        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
+        self.password.placeholder = [NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+        self.passwordConfirm.placeholder = [NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+    }
     
     self.tableView.alwaysBounceVertical = NO;
 }
@@ -43,6 +50,8 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    textField.textColor = [UIColor blackColor];
+
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
         
@@ -64,14 +73,25 @@
 }
 
 - (IBAction) onSignup:(id) sender {
+    NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
     if ([_username.text length] == 0) {
-        [self showDialogForRequiredField:@"Username"];
-    } else if ([self.displayName.text length] == 0) {
-        [self showDialogForRequiredField:@"Display Name"];
-    } else if ([self.password.text length] == 0) {
-        [self showDialogForRequiredField:@"Password"];
-    } else if ([self.passwordConfirm.text length] == 0) {
-        [self showDialogForRequiredField:@"Password Confirm"];
+        [self markFieldError:_username];
+        [requiredFields addObject:@"Username"];
+    }
+    if ([self.displayName.text length] == 0) {
+        [self markFieldError:self.displayName];
+        [requiredFields addObject:@"Display Name"];
+    }
+    if ([self.password.text length] == 0) {
+        [self markFieldError:self.password];
+        [requiredFields addObject:@"Password"];
+    }
+    if ([self.passwordConfirm.text length] == 0) {
+        [self markFieldError:self.passwordConfirm];
+        [requiredFields addObject:@"Password Confirm"];
+    }
+    if ([requiredFields count] != 0) {
+        [self showDialogForRequiredFields:requiredFields];
     } else if (![self.password.text isEqualToString:self.passwordConfirm.text]) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Passwords Do Not Match"
@@ -96,14 +116,38 @@
     }
 }
 
+- (IBAction)showPasswordChanged:(id)sender {
+    [self.password setSecureTextEntry:!self.password.secureTextEntry];
+    self.password.clearsOnBeginEditing = NO;
+    
+    // This is a hack to fix the fact that ios changes the font when you
+    // enable/disable the secure text field
+    self.password.font = nil;
+    self.password.font = [UIFont systemFontOfSize:14];
+    
+    [self.passwordConfirm setSecureTextEntry:!self.passwordConfirm.secureTextEntry];
+    self.passwordConfirm.clearsOnBeginEditing = NO;
+    
+    // This is a hack to fix the fact that ios changes the font when you
+    // enable/disable the secure text field
+    self.passwordConfirm.font = nil;
+    self.passwordConfirm.font = [UIFont systemFontOfSize:14];
+}
+
 - (IBAction) onCancel:(id) sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) showDialogForRequiredField:(NSString *) field {
+- (void) markFieldError: (UITextField *) field {
+    UIColor *red = [UIColor colorWithRed:1.0 green:0 blue:0 alpha:.8];
+    field.attributedPlaceholder = [[NSAttributedString alloc] initWithString:field.placeholder attributes:@{NSForegroundColorAttributeName: red}];
+    field.textColor = red;
+}
+
+- (void) showDialogForRequiredFields:(NSArray *) fields {
     UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:[NSString stringWithFormat:@"%@ Is Required", field]
-                                 message:[NSString stringWithFormat:@"Please fill out the '%@' field.", field]
+                                 alertControllerWithTitle:[NSString stringWithFormat:@"Missing Required Fields"]
+                                 message:[NSString stringWithFormat:@"Please fill out the required fields: '%@'", [fields componentsJoinedByString:@", "]]
                                  preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -131,8 +175,9 @@
             [weakSelf presentViewController:alert animated:YES completion:nil];
         });
     } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
-                                                                       message:operation.error.localizedDescription
+                                                                       message:errResponse
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
