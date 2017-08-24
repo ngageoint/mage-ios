@@ -26,12 +26,13 @@
 
 @implementation SelectEditViewController
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andDelegate:(id<PropertyEditDelegate>) delegate {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate {
     self = [super initWithNibName:@"ObservationEditSelectPickerView" bundle:nil];
     if (self == nil) return nil;
     
     _fieldDefinition = fieldDefinition;
     _delegate = delegate;
+    _value = value;
     
     self.choices = [NSMutableArray array];
     for (id choice in [self.fieldDefinition objectForKey:@"choices"]) {

@@ -52,7 +52,7 @@
 - (void) start {
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(editCanceled)];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
     self.editController = [[ObservationEditViewController alloc] initWithDelegate:self andObservation:self.observation andNew:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
@@ -99,9 +99,12 @@
 
 - (void) fieldSelected:(NSDictionary *)field {
     self.currentEditField = field;
-    
+    NSArray *obsForms = [self.observation.properties objectForKey:@"forms"];
+    NSNumber *formIndex = [field valueForKey:@"formIndex"];
+    id name = [field valueForKey:@"name"];
+    id value = self.currentEditValue = [[obsForms objectAtIndex:[formIndex integerValue]] objectForKey:name];
     if ([[field objectForKey:@"type"] isEqualToString:@"dropdown"]) {
-        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andDelegate: self];
+        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue: value andDelegate: self];
         editSelect.title = [field valueForKey:@"title"];
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
@@ -127,8 +130,6 @@
 }
 
 - (void) fieldEditDone {
-    [self.observation.properties objectForKey:@"forms"];
-    
     NSDictionary *field = self.currentEditField;
     id value = self.currentEditValue;
     
@@ -158,8 +159,6 @@
         
         self.observation.properties = newProperties;
     }
-    
-    
     
     [self.navigationController popViewControllerAnimated:YES];
 }

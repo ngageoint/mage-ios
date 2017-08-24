@@ -11,6 +11,6 @@
 
 @interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andDelegate: (id<PropertyEditDelegate>) delegate;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate: (id<PropertyEditDelegate>) delegate;
 
 @end

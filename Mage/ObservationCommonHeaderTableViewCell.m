@@ -39,6 +39,9 @@
     NSString *primaryText = [[observationForms objectAtIndex:0] objectForKey:primaryField];
     if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryFieldLabel.text = primaryText;
+        self.primaryFieldLabel.hidden = NO;
+    } else {
+        self.primaryFieldLabel.hidden = YES;
     }
     
     NSString *variantText = [[observationForms objectAtIndex:0] objectForKey:variantField];

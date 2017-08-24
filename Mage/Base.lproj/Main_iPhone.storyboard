@@ -14,7 +14,7 @@
         <scene sceneID="3Lb-XA-VxK">
             <objects>
                 <navigationController id="Bsn-Xa-Klb" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="VdX-tK-9ig">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="VdX-tK-9ig">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.065599299967288971" green="0.32899433374404907" blue="0.64471054077148438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1543,7 +1543,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="BEj-Ik-6TY" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Observations" image="observations" id="VMp-ah-9ay"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Wys-E9-8Ks">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Wys-E9-8Ks">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1774,6 +1774,7 @@
                                 <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="attachmentCollection" destination="lLz-DL-avX" id="if0-OL-Y2A"/>
+                                    <outlet property="dotView" destination="bhJ-Vr-ULb" id="e9g-eZ-qHR"/>
                                     <outlet property="errorBadge" destination="9v6-Tt-50T" id="c9S-1y-mbE"/>
                                     <outlet property="favoriteButton" destination="xtk-9Q-00t" id="KTY-wX-f9i"/>
                                     <outlet property="favoriteNumber" destination="iLd-Qm-z4L" id="iJ0-it-jQK"/>
@@ -1848,7 +1849,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="ebu-M3-ht6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="People" image="people" id="l7S-b8-jEg"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="w8s-07-A7p">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="w8s-07-A7p">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2039,7 +2040,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="H0M-W5-7fi" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Me" image="me" id="zNR-S6-oQC"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="dPE-Td-44g">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="dPE-Td-44g">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2415,6 +2416,7 @@
                                 <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="attachmentCollection" destination="P1K-dh-EBB" id="VKG-bI-1Pv"/>
+                                    <outlet property="dotView" destination="rlH-g6-VoO" id="vk7-9D-nVs"/>
                                     <outlet property="errorBadge" destination="IxJ-dR-5gW" id="6cl-Mx-j5Q"/>
                                     <outlet property="favoriteButton" destination="cfO-87-QWM" id="RCi-0v-MuN"/>
                                     <outlet property="favoriteNumber" destination="tpz-f9-zO7" id="Kbx-Nk-daP"/>
@@ -2528,7 +2530,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hSo-PA-Hyh" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="fuG-cD-Tfi">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="fuG-cD-Tfi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

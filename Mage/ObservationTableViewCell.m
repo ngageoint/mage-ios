@@ -24,6 +24,7 @@
 @property (strong, nonatomic) UIColor *favoriteHighlightColor;
 @property (weak, nonatomic) IBOutlet UIImageView *syncBadge;
 @property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
 
 @end
 
@@ -57,7 +58,10 @@
     NSString *primaryText = [[observationForms objectAtIndex:0] objectForKey:primaryField];
     if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryField.text = primaryText;
-        self.primaryField.hidden = NO;
+        self.primaryField.hidden = self.dotView.hidden = NO;
+    } else {
+        self.primaryField.hidden = self.dotView.hidden = YES;
+        
     }
     
     NSString *variantText = [[observationForms objectAtIndex:0] objectForKey:variantField];
