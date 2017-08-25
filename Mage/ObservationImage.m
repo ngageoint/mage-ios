@@ -89,23 +89,10 @@ const CGFloat annotationScaleWidth = 35.0;
     UIImage *image = [self imageForObservation:observation];
 
     if (mapView != nil && image != nil) {
-        float scale = annotationScaleWidth / image.size.width;
-        
-        // Ensure annotation will  fit in map view
-        // Add 5 to give the annotation a little padding
-        if ((image.size.height * scale) > (mapView.frame.size.height / 2)) {
-            scale = (mapView.frame.size.height / 2) / (image.size.height + 5);
-        }
-        
-        float newHeight = image.size.height * scale;
-        float newWidth = image.size.width * scale;
-        
-        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
-        [image drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
-        UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [newImage setAccessibilityIdentifier:[image accessibilityIdentifier]];
-        return newImage;
+        float scale = image.size.width / annotationScaleWidth;
+
+        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
+        return scaledImage;
     }
     
 	return image;
