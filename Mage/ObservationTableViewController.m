@@ -40,6 +40,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     // bug in ios smashes the refresh text into the

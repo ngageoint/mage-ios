@@ -83,6 +83,7 @@
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
+    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
     self.ads.observation = observation;
     self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     

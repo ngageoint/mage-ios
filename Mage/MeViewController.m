@@ -52,6 +52,8 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 160;
     
