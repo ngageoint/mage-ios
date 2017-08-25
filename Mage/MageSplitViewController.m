@@ -66,6 +66,7 @@
 }
 
 - (void)userDetailSelected:(User *) user {
+    [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
     [self.mapViewController userDetailSelected:user];
 }
 

@@ -28,7 +28,7 @@
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -53,6 +53,7 @@
     [self.navigationController setNavigationBarHidden:NO];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    self.observationDataStore.observationSelectionDelegate = self;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 160;
@@ -81,7 +82,7 @@
     [self.observationDataStore startFetchControllerWithObservations:[Observations observationsForUser:self.user]];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:[Observations observationsForUser:self.user]];
-        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+//        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
     }
@@ -379,14 +380,25 @@
         [vc setTitle:@"Avatar"];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+        Observation *observation = (Observation *) sender;
         [destination setObservation:observation];
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }
+}
+
+- (void) selectedObservation:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) observationDetailSelected:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 @end

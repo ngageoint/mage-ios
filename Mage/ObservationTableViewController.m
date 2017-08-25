@@ -41,7 +41,10 @@
     [super viewDidLoad];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
-    
+    // this is different on the ipad on and the iphone so make the check here
+    if (self.observationDataStore.observationSelectionDelegate == nil) {
+        self.observationDataStore.observationSelectionDelegate = self;
+    }
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     // bug in ios smashes the refresh text into the
@@ -150,8 +153,7 @@
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+		Observation *observation = (Observation *) sender;
 		[destination setObservation:observation];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
@@ -159,6 +161,18 @@
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }
+}
+
+- (void) selectedObservation:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) observationDetailSelected:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 - (IBAction)newButtonTapped:(id)sender {

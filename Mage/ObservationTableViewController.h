@@ -9,7 +9,7 @@
 #import "AttachmentSelectionDelegate.h"
 #import "ObservationEditCoordinator.h"
 
-@interface ObservationTableViewController : UITableViewController <ObservationEditDelegate>
+@interface ObservationTableViewController : UITableViewController <ObservationEditDelegate, ObservationSelectionDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;

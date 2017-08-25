@@ -13,7 +13,7 @@
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
 
-@interface LocationTableViewController()
+@interface LocationTableViewController() <UserSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
 
@@ -23,6 +23,12 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
+    // ths is different on the ipad and the iphone so make the check here
+    if (self.locationDataStore.personSelectionDelegate == nil) {
+        self.locationDataStore.personSelectionDelegate = self;
+    }
     
     // bug in ios smashes the refresh text into the
     // spinner.  This is the only work around I have found
@@ -106,12 +112,23 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
+    if ([[segue identifier] isEqualToString:@"ShowUserSegue"]) {
         MeViewController *destination = (MeViewController *)[segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Location *location = [self.locationDataStore locationAtIndexPath:indexPath];
-		[destination setUser:location.user];
+        User *user = (User *) sender;
+		[destination setUser:user];
     }
+}
+
+- (void) userDetailSelected:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (IBAction)refreshPeople:(UIRefreshControl *)sender {
