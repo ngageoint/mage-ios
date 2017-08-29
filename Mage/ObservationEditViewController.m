@@ -34,7 +34,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    self.tableViewController = [[ObservationEditTableViewController alloc] initWithObservation:self.observation andDelegate: self];
+    self.tableViewController = [[ObservationEditTableViewController alloc] initWithObservation:self.observation andIsNew: self.newObservation andDelegate: self];
     [self addChildViewController:self.tableViewController];
     [self.tableContainerView addSubview:self.tableViewController.view];
     [self.tableViewController didMoveToParentViewController:self];
@@ -104,6 +104,10 @@
 
 - (IBAction) addFromGallery:(id)sender {
     [self.delegate addGalleryAttachment];
+}
+
+- (void) deleteObservation {
+    [self.delegate deleteObservation];
 }
 
 -(void) keyboardWillShow: (NSNotification *) notification {

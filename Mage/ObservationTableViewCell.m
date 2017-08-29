@@ -14,6 +14,7 @@
 #import "Event.h"
 #import "NSDate+iso8601.h"
 #import "Attachment+Thumbnail.h"
+#import <MageEnums.h>
 
 @interface ObservationTableViewCell()
 

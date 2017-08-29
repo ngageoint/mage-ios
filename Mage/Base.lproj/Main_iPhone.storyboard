@@ -108,7 +108,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="statusNeedsSync" rowHeight="40" id="UMD-za-5B9">
-                                        <rect key="frame" x="0.0" y="113.5" width="375" height="40"/>
+                                        <rect key="frame" x="0.0" y="114" width="375" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UMD-za-5B9" id="e4X-Om-Pbb">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>

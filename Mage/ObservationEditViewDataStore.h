@@ -14,6 +14,7 @@
 
 - (void) fieldSelected: (NSDictionary *) field;
 - (void) attachmentSelected: (Attachment *) attachment;
+- (void) deleteObservation;
 
 @end
 
@@ -25,7 +26,7 @@
 @property (nonatomic, weak) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @property (nonatomic, strong) NSObject<ObservationAnnotationChangedDelegate> *annotationChangedDelegate;
 
-- (instancetype) initWithObservation: (Observation *)observation andDelegate: (id<ObservationEditFieldDelegate>) delegate andAttachmentSelectionDelegate: (id<AttachmentSelectionDelegate>) attachmentDelegate andEditTable: (UITableView *) tableView;
+- (instancetype) initWithObservation: (Observation *)observation andIsNew: (BOOL) isNew andDelegate: (id<ObservationEditFieldDelegate>) delegate andAttachmentSelectionDelegate: (id<AttachmentSelectionDelegate>) attachmentDelegate andEditTable: (UITableView *) tableView;
 
 - (BOOL) validate;
 

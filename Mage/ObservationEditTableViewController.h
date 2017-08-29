@@ -23,7 +23,7 @@
 
 @property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
 
-- (instancetype) initWithObservation: (Observation *) observation andDelegate: (id<ObservationEditFieldDelegate>) delegate;
+- (instancetype) initWithObservation: (Observation *) observation andIsNew: (BOOL) isNew andDelegate: (id<ObservationEditFieldDelegate>) delegate;
 
 - (BOOL) validate;
 - (void) refreshObservation;

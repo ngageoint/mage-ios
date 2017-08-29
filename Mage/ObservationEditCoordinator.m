@@ -179,11 +179,19 @@
 #pragma
 
 #pragma mark - ObservationPropertiesEditDelegate methods
+
+- (void) deleteObservation {
+    [self.observation deleteObservationWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"Deleted");
+    }];
+    [self propertiesEditCanceled];
+    [self.delegate observationDeleted:self.observation];
+}
+
 - (void) propertiesEditCanceled {
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"root view dismissed");
     }];
-    
 }
 
 - (void) propertiesEditComplete {

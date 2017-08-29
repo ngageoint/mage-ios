@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="deleteObservationCell" rowHeight="40" id="hIc-HL-btX">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hIc-HL-btX" id="XTB-zB-Gbr">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Observation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mxb-xZ-QcQ">
+                        <rect key="frame" x="129.5" y="7" width="116.5" height="25.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0198914904" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trash" translatesAutoresizingMaskIntoConstraints="NO" id="35U-Rg-qcG">
+                        <rect key="frame" x="103.5" y="11" width="18" height="18"/>
+                        <color key="tintColor" red="1" green="0.0" blue="0.0198914904" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="pay-32-9LT"/>
+                            <constraint firstAttribute="width" constant="18" id="rVs-Dc-QsJ"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.99952930212020874" green="0.032017149031162262" blue="0.043448455631732941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="Mxb-xZ-QcQ" secondAttribute="bottom" constant="-1" id="03I-JS-DPS"/>
+                    <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="top" secondItem="XTB-zB-Gbr" secondAttribute="topMargin" constant="-1" id="63R-Yk-lts"/>
+                    <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="centerY" secondItem="XTB-zB-Gbr" secondAttribute="centerY" id="Jp8-o4-Vyr"/>
+                    <constraint firstItem="35U-Rg-qcG" firstAttribute="centerY" secondItem="XTB-zB-Gbr" secondAttribute="centerY" id="LQn-4u-lRj"/>
+                    <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="leading" secondItem="35U-Rg-qcG" secondAttribute="trailing" constant="8" id="UKn-Nm-cqT"/>
+                    <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="centerX" secondItem="XTB-zB-Gbr" secondAttribute="centerX" id="Zo5-kh-Jfn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="trash" width="24" height="24"/>
+    </resources>
+</document>

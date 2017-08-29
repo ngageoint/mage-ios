@@ -30,12 +30,13 @@ static NSInteger const COMMON_SECTION = 1;
 @property (strong, nonatomic) NSMutableArray *formFields;
 @property (nonatomic, strong) NSString *primaryField;
 @property (strong, nonatomic) id<ObservationEditFieldDelegate> delegate;
+@property (nonatomic) BOOL isNew;
 
 @end
 
 @implementation ObservationEditViewDataStore
 
-- (instancetype) initWithObservation: (Observation *)observation andDelegate: (id<ObservationEditFieldDelegate>) delegate andAttachmentSelectionDelegate: (id<AttachmentSelectionDelegate>) attachmentDelegate andEditTable: (UITableView *) tableView {
+- (instancetype) initWithObservation: (Observation *)observation andIsNew: (BOOL) isNew andDelegate: (id<ObservationEditFieldDelegate>) delegate andAttachmentSelectionDelegate: (id<AttachmentSelectionDelegate>) attachmentDelegate andEditTable: (UITableView *) tableView {
     self = [super init];
     if (!self) return nil;
     
@@ -43,6 +44,7 @@ static NSInteger const COMMON_SECTION = 1;
     _delegate = delegate;
     _attachmentSelectionDelegate = attachmentDelegate;
     _editTable = tableView;
+    _isNew = isNew;
     
     return self;
 }
@@ -50,7 +52,7 @@ static NSInteger const COMMON_SECTION = 1;
 - (BOOL) validate {
     self.invalidIndexPaths = [[NSMutableArray alloc] init];
     
-    for (NSInteger section = 1; section < [self.editTable numberOfSections]; section++) {
+    for (NSInteger section = 1; section < [self.editTable numberOfSections] - 1; section++) {
         for (NSInteger i = 0; i < [self.editTable numberOfRowsInSection:section]; ++i) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:section];
             ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.editTable cellForRowAtIndexPath:indexPath];
@@ -112,13 +114,15 @@ static NSInteger const COMMON_SECTION = 1;
         return [self.observation.attachments count] > 0 ? 1 : 0;
     } else if (section == COMMON_SECTION) {
         return 2;
+    } else if (section == [self numberOfSectionsInTableView:tableView] -1 ) {
+        return (!self.isNew && [self.observation isDeletableByCurrentUser]) ? 1 : 0;
     } else {
         return [[self.formFields objectAtIndex:(section - 2)] count];
     }
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2 + [[self.observation.properties objectForKey:@"forms"] count];
+    return 3 + [[self.observation.properties objectForKey:@"forms"] count];
 }
 
 - (NSString *) getCellTypeAtIndexPath:(NSIndexPath *) indexPath {
@@ -141,10 +145,17 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (NSDictionary *) fieldForIndexPath: (NSIndexPath *) indexPath {
     if ([indexPath section] > 1) {
-        NSMutableDictionary *field = [[NSMutableDictionary alloc] initWithDictionary:[[self.formFields objectAtIndex:([indexPath section] - 2)] objectAtIndex:[indexPath row]]];
-        [field setObject:[NSNumber numberWithInteger:([indexPath section]-2)] forKey: @"formIndex"];
-        [field setObject:[NSNumber numberWithInteger:[indexPath row]] forKey:@"fieldRow"];
-        return field;
+        if ([self.formFields count] > (indexPath.section - 2)) {
+            NSMutableDictionary *field = [[NSMutableDictionary alloc] initWithDictionary:[[self.formFields objectAtIndex:([indexPath section] - 2)] objectAtIndex:[indexPath row]]];
+            [field setObject:[NSNumber numberWithInteger:([indexPath section]-2)] forKey: @"formIndex"];
+            [field setObject:[NSNumber numberWithInteger:[indexPath row]] forKey:@"fieldRow"];
+            return field;
+        } else {
+            NSMutableDictionary *field = [[NSMutableDictionary alloc] init];
+            [field setObject:@"delete" forKey:@"name"];
+            [field setObject:@"deleteObservationCell" forKey:@"type"];
+            return field;
+        }
     } else if ([indexPath section] == COMMON_SECTION) {
         NSMutableDictionary *field = [[NSMutableDictionary alloc] init];
         if ([indexPath row] == 0) {
@@ -182,6 +193,9 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (ObservationEditTableViewCell *) cellForFieldAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     NSString *cellType = [self getCellTypeAtIndexPath:indexPath];
+    if ([cellType isEqualToString:@"deleteObservationCell"]) {
+        return [tableView dequeueReusableCellWithIdentifier:cellType];
+    }
     ObservationEditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
     cell.fieldDefinition = [self fieldForIndexPath:indexPath];
     
@@ -196,20 +210,29 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id cell = [self cellForFieldAtIndex:indexPath inTableView:tableView];
-    [cell setDelegate:self];
+    
+    if ([cell respondsToSelector:@selector(setDelegate:)]) {
+        [cell setDelegate:self];
+    }
     
     if ([cell respondsToSelector:@selector(attachmentSelectionDelegate)]) {
         [cell setAttachmentSelectionDelegate:self.attachmentSelectionDelegate];
     }
     
-    id value = [self valueForIndexPath:indexPath];
-    [cell populateCellWithFormField:[self fieldForIndexPath:indexPath] andValue:value];
-    [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+    if ([cell respondsToSelector:@selector(populateCellWithFormField:andValue:)]) {
+        id value = [self valueForIndexPath:indexPath];
+        [cell populateCellWithFormField:[self fieldForIndexPath:indexPath] andValue:value];
+        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+    }
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == [self numberOfSectionsInTableView:tableView]-1) {
+        [self.delegate deleteObservation];
+        return;
+    }
     ObservationEditTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell selectRow];
     [self.delegate fieldSelected:[self fieldForIndexPath:indexPath]];
@@ -271,7 +294,8 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section != ATTACHMENT_SECTION && section != COMMON_SECTION) {
+    
+    if (section != ATTACHMENT_SECTION && section != COMMON_SECTION && section != ([self numberOfSectionsInTableView:tableView]-1)) {
         NSDictionary *form = [[self.observation.properties objectForKey:@"forms"] objectAtIndex:(section - 2)];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [form objectForKey:@"formId"]];

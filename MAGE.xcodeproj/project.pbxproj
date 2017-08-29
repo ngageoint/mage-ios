@@ -183,6 +183,8 @@
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89A1F506627002C78D3 /* ObservationCell.xib */; };
 		F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89C1F506D76002C78D3 /* PersonCell.xib */; };
+		F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */; };
+		F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
@@ -545,6 +547,8 @@
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
 		F7C5C89A1F506627002C78D3 /* ObservationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCell.xib; sourceTree = "<group>"; };
 		F7C5C89C1F506D76002C78D3 /* PersonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonCell.xib; sourceTree = "<group>"; };
+		F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPadHeaderCell.xib; sourceTree = "<group>"; };
+		F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDeleteCell.xib; sourceTree = "<group>"; };
 		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
@@ -661,6 +665,7 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F7C5C89E1F546649002C78D3 /* ViewCells */,
 				F74687381F44B4E5009D7CF4 /* EditCells */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
 				4C3A805D18B6F67B00B1BA12 /* Main_iPhone.storyboard */,
@@ -1002,6 +1007,7 @@
 				F746874C1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib */,
 				F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */,
 				F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */,
+				F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */,
 			);
 			name = EditCells;
 			sourceTree = "<group>";
@@ -1258,6 +1264,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F7C5C89E1F546649002C78D3 /* ViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */,
+			);
+			name = ViewCells;
+			sourceTree = "<group>";
+		};
 		F7DCCC221F46362B00E4C616 /* ExternalDevice */ = {
 			isa = PBXGroup;
 			children = (
@@ -1385,10 +1399,12 @@
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
+				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
 				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
+				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,

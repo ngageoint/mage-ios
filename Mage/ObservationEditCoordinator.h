@@ -14,6 +14,7 @@
 @protocol ObservationEditDelegate
 
 - (void) editComplete: (Observation *) observation;
+- (void) observationDeleted: (Observation *) observation;
 
 @end
 

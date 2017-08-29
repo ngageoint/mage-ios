@@ -169,6 +169,21 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) deleteObservation {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Observation"
+                                                                   message:@"Are you sure you want to delete this observation?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes, Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [_delegate deleteObservation];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self.navigationController.visibleViewController presentViewController:alert animated:YES completion:nil];
+
+}
+
 - (void) addVoiceAttachment {
     __weak typeof(self) weakSelf = self;
     [ExternalDevice checkMicrophonePermissionsForViewController:self.navigationController.visibleViewController withCompletion:^(BOOL granted) {

@@ -53,6 +53,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self setupObservation];
 }
 
+- (void) observationDeleted:(Observation *)observation {
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -399,9 +403,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
         NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
         MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
         MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-        [mapItem setName:[self.observation.properties valueForKey:@"type"]];
+        [mapItem setName:self.navigationItem.title];
+        
+        MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
         NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-        [mapItem openInMapsWithLaunchOptions:options];
+        [MKMapItem openMapsWithItems:@[currentLocation, mapItem] launchOptions:options];
     }
 }
 

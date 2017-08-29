@@ -31,16 +31,18 @@
 @interface ObservationEditTableViewController () <AttachmentSelectionDelegate>
 @property (strong, nonatomic) IBOutlet ObservationEditViewDataStore *editDataStore;
 @property (strong, nonatomic) id<ObservationEditFieldDelegate> delegate;
+@property (nonatomic) BOOL isNew;
 @end
 
 @implementation ObservationEditTableViewController
 
-- (instancetype) initWithObservation: (Observation *) observation andDelegate:(id<ObservationEditFieldDelegate>)delegate {
+- (instancetype) initWithObservation: (Observation *) observation andIsNew: (BOOL) isNew andDelegate:(id<ObservationEditFieldDelegate>)delegate {
     self = [super init];
     if (!self) return nil;
     
     _observation = observation;
     _delegate = delegate;
+    _isNew = isNew;
     
     return self;
 }
@@ -49,9 +51,8 @@
     [super viewDidLoad];
     
     [self registerCellTypes];
+    _editDataStore = [[ObservationEditViewDataStore alloc] initWithObservation:self.observation andIsNew:self.isNew andDelegate:self.delegate andAttachmentSelectionDelegate:self andEditTable:self.tableView];
     
-    _editDataStore = [[ObservationEditViewDataStore alloc] initWithObservation:self.observation andDelegate:self.delegate andAttachmentSelectionDelegate: self andEditTable: self.tableView];
-
     [self.tableView setDelegate:_editDataStore];
     [self.tableView setDataSource:_editDataStore];
     [self.tableView setEstimatedRowHeight:126.0f];
@@ -97,6 +98,7 @@
 //    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDropdownEditCell" bundle:nil] forCellReuseIdentifier:@"multiselectdropdown"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationPasswordEditCell" bundle:nil] forCellReuseIdentifier:@"password"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextfieldEditCell" bundle:nil] forCellReuseIdentifier:@"textfield"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDeleteCell" bundle:nil] forCellReuseIdentifier:@"deleteObservationCell"];
 }
 
 - (void) updateUserDefaults: (NSNotification *) notification {

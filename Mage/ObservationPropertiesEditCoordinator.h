@@ -13,6 +13,7 @@
 
 - (void) propertiesEditCanceled;
 - (void) propertiesEditComplete;
+- (void) deleteObservation;
 
 @end
 
