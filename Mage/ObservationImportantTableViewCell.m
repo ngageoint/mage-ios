@@ -43,7 +43,7 @@
     self.descriptionLabel.hidden = [important.reason length] ? NO : YES;
     self.descriptionLabel.text = important.reason;
     
-    self.importantActions.hidden = ![self canEditImportant];
+    self.importantActions.hidden = ![observation currentUserCanUpdateImportant];
 }
 
 - (IBAction) onRemoveImportantTapped:(id)sender {
@@ -56,10 +56,6 @@
     if (self.observationImportantDelegate) {
         [self.observationImportantDelegate flagObservationImportant];
     }
-}
-
-- (BOOL) canEditImportant {
-    return self.currentUser && [self.currentUser.role.permissions containsObject:@"UPDATE_EVENT"];
 }
 
 @end
