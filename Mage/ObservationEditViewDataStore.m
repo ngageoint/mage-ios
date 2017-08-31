@@ -72,10 +72,10 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (NSArray *) forms {
-    if (_forms != nil) {
+    if (_forms != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _forms;
     }
-    _forms = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].forms;
+    _forms = [Event getEventById:self.observation.eventId inContext:self.observation.managedObjectContext].forms;
     return _forms;
 }
 
@@ -85,27 +85,15 @@ static NSInteger const COMMON_SECTION = 1;
     }
     
     _formFields = [[NSMutableArray alloc] init];
-    self.eventId = [Server currentEventId];
+    self.eventId = self.observation.eventId;
     
+    self.primaryField = [self.observation getPrimaryField];
     
-    for (NSDictionary *form in [self.observation.properties objectForKey:@"forms"]) {
-        // TODO must be a better way through this
-        NSDictionary *eventForm;
-        for (NSDictionary *formCheck in self.forms) {
-            if ([formCheck valueForKey:@"id"] == [form objectForKey:@"formId"]) {
-                eventForm = formCheck;
-            }
-        }
-        
-        if (!self.primaryField) {
-            self.primaryField = [eventForm objectForKey:@"primaryField"];
-        }
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-        NSArray *fields = [[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        [_formFields addObject:fields];
-    }
+    NSDictionary *eventForm = [self.observation getPrimaryForm];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    NSArray *fields = [[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    [_formFields addObject:fields];
     return _formFields;
 }
 

@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <FICImageCache.h>
 #import <UserUtility.h>
+#import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"
 #import "Attachment+Thumbnail.h"
 #import "UIImage+Thumbnail.h"
@@ -37,7 +38,7 @@
 #import "MageOfflineObservationManager.h"
 #import "UIColor+UIColor_Mage.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) UIView *splashView;
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
 @property (nonatomic, strong) NSString *addedCacheOverlay;
@@ -86,10 +87,34 @@
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil]];
+    UNNotificationAction *viewAction = [UNNotificationAction actionWithIdentifier:@"View"
+                                                                              title:@"View" options:UNNotificationActionOptionNone];
+    UNNotificationCategory *observationPulledCategory = [UNNotificationCategory categoryWithIdentifier:@"ObservationPulled"
+                                                                              actions:@[viewAction] intentIdentifiers:@[]
+                                                                              options:UNNotificationCategoryOptionNone];
+    UNNotificationCategory *tokenExpiredCategory = [UNNotificationCategory categoryWithIdentifier:@"TokenExpired"
+                                                                              actions:@[viewAction] intentIdentifiers:@[]
+                                                                              options:UNNotificationCategoryOptionNone];
+    NSSet *categories = [NSSet setWithObjects:observationPulledCategory, tokenExpiredCategory, nil];
+    
+    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge + UIUserNotificationTypeAlert + UNAuthorizationOptionSound categories:categories]];
+    UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+    [center setNotificationCategories:categories];
+    [center setDelegate:self];
+
+    [center requestAuthorizationWithOptions:(UIUserNotificationTypeBadge + UIUserNotificationTypeAlert + UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    }];
     
     [self setupApplicationNavigationBar];
 	return YES;
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    completionHandler(UIUserNotificationTypeAlert + UNAuthorizationOptionSound);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    
 }
 
 - (void) setupApplicationNavigationBar {
@@ -371,6 +396,26 @@
 
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
+    
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    
+    UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+    content.title = @"MAGE Token Expired";
+    content.body = @"Your MAGE token has expired.";
+    content.categoryIdentifier = @"TokenExpired";
+    content.sound = [UNNotificationSound defaultSound];
+    
+    UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger
+                                                  triggerWithTimeInterval:1 repeats:NO];
+    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:@"TokenExpired"
+                                                                          content:content trigger:trigger];
+    
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Something went wrong: %@",error);
+        }
+        NSLog(@"notification");
+    }];
     
     UIViewController *currentController = [self topMostController];
     if (!([currentController isKindOfClass:[MageInitialViewController class]]

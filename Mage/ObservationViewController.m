@@ -97,12 +97,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self setupEditButton];
     [self setupNonPropertySections];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[self.observationForms objectAtIndex:0] objectForKey:@"formId"]];
-    NSArray *filteredArray = [self.forms filteredArrayUsingPredicate:predicate];
-    NSString *primaryField = [[filteredArray firstObject] objectForKey:@"primaryField"];
-    
-    NSString *primaryText = [[self.observationForms objectAtIndex:0] objectForKey:primaryField];
-    if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
+    NSString *primaryText = [self.observation primaryFieldText];
+    if (primaryText != nil && [primaryText length] > 0) {
         self.navigationItem.title = primaryText;
     }
     

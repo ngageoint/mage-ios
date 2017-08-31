@@ -6,7 +6,7 @@
 
 #import "ObservationAnnotation.h"
 #import "NSDate+DateTools.h"
-#import "ObservationImage.h"
+#import <ObservationImage.h>
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
@@ -34,20 +34,8 @@
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
+        [self setTitle:[observation primaryFieldText]];
         
-        if (forms != nil && [forms count] > 0) {
-            NSArray *observationForms = [observation.properties objectForKey:@"forms"];
-            NSDictionary *form;
-            for (NSDictionary *checkForm in forms) {
-                if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
-                    form = checkForm;
-                }
-            }
-            
-            NSString *primaryField = [form objectForKey:@"primaryField"];
-           
-            [self setTitle:[[observationForms objectAtIndex:0] objectForKey:primaryField]];
-        }
         if (self.title == nil) {
             [self setTitle:@"Observation"];
         }

@@ -26,26 +26,18 @@
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     NSArray *observationForms = [observation.properties objectForKey:@"forms"];
-    NSDictionary *form;
-    for (NSDictionary *checkForm in forms) {
-        if ((long)[checkForm objectForKey:@"id"] == (long)[[observationForms objectAtIndex:0] objectForKey:@"formId"]) {
-            form = checkForm;
-        }
-    }
     
-    NSString *primaryField = [form objectForKey:@"primaryField"];
-    NSString *variantField = [form objectForKey:@"secondaryField"];
+    NSString *primaryFieldText = [observation primaryFieldText];
     
-    NSString *primaryText = [[observationForms objectAtIndex:0] objectForKey:primaryField];
-    if (primaryField != nil && primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
-        self.primaryFieldLabel.text = primaryText;
+    if (primaryFieldText != nil && [primaryFieldText length] > 0) {
+        self.primaryFieldLabel.text = primaryFieldText;
         self.primaryFieldLabel.hidden = NO;
     } else {
         self.primaryFieldLabel.hidden = YES;
     }
     
-    NSString *variantText = [[observationForms objectAtIndex:0] objectForKey:variantField];
-    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
+    NSString *variantText = [observation secondaryFieldText];
+    if (variantText != nil && [variantText length] > 0) {
         self.variantFieldLabel.hidden = NO;
         self.variantFieldLabel.text = variantText;
     } else {

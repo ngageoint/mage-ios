@@ -278,6 +278,11 @@
     
 }
 
+- (void) observationDeleted:(Observation *)observation {
+    
+}
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
 		MeViewController *destinationViewController = segue.destinationViewController;

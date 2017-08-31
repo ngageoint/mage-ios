@@ -33,10 +33,6 @@
 
 @implementation ObservationTableViewController
 
-- (void) editComplete: (Observation *) observation {
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
