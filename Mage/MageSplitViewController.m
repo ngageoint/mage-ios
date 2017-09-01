@@ -29,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[Mage singleton] startServices];
+    [[Mage singleton] startServicesAsInitial:YES];
     
     self.delegate = self;
     

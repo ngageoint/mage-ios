@@ -75,6 +75,10 @@ static NSInteger const COMMON_SECTION = 1;
     return self.observation.eventId;
 }
 
+- (NSString *) primaryField {
+    return [self.observation getPrimaryField];
+}
+
 - (NSArray *) forms {
     if (_forms != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _forms;
@@ -89,7 +93,6 @@ static NSInteger const COMMON_SECTION = 1;
     }
     
     _formFields = [[NSMutableArray alloc] init];
-    self.primaryField = [self.observation getPrimaryField];
     
     NSDictionary *eventForm = [self.observation getPrimaryForm];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND hidden = %@ AND type IN %@", nil, nil, [ObservationFields fields]];

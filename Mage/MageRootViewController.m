@@ -16,7 +16,7 @@
 @implementation MageRootViewController
 
 - (void) viewDidLoad {
-    [[Mage singleton] startServices];
+    [[Mage singleton] startServicesAsInitial:YES];
 	
 	[super viewDidLoad];
     
