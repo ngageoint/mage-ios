@@ -47,6 +47,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
@@ -117,6 +119,18 @@
     
 }
 
+- (void) application: (UIApplication *) application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"background fetch");
+    
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
+        completionHandler(UIBackgroundFetchResultNewData);
+    } failure:^(NSError* error) {
+        completionHandler(UIBackgroundFetchResultFailed);
+    }];
+    
+    [[MageSessionManager manager] addTask:observationFetchTask];
+}
+
 - (void) setupApplicationNavigationBar {
     [[UINavigationBar appearance] setBarTintColor:[UIColor mageBlue]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
@@ -125,7 +139,6 @@
                                                            }];
     [[UINavigationBar appearance] setTranslucent:NO];
 }
-
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 

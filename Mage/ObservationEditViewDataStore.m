@@ -71,6 +71,10 @@ static NSInteger const COMMON_SECTION = 1;
     return YES;
 }
 
+- (NSNumber *) eventId {
+    return self.observation.eventId;
+}
+
 - (NSArray *) forms {
     if (_forms != nil && [[Server currentEventId] isEqualToNumber:self.eventId]) {
         return _forms;
@@ -85,8 +89,6 @@ static NSInteger const COMMON_SECTION = 1;
     }
     
     _formFields = [[NSMutableArray alloc] init];
-    self.eventId = self.observation.eventId;
-    
     self.primaryField = [self.observation getPrimaryField];
     
     NSDictionary *eventForm = [self.observation getPrimaryForm];
