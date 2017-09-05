@@ -49,11 +49,11 @@
                         <viewControllerLayoutGuide type="bottom" id="oTV-eA-AAp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Igh-1x-94E">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="SUG-4H-QMK">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                                 <sections/>
@@ -91,7 +91,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SK0-1I-eiC" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <customObject id="6Vg-8o-rtg" customClass="ObservationDataStore"/>
             </objects>
-            <point key="canvasLocation" x="1700" y="-1554.872563718141"/>
+            <point key="canvasLocation" x="1354" y="-1555"/>
         </scene>
         <!--Attachment-->
         <scene sceneID="fyZ-hs-iUR">
@@ -100,30 +100,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGo-8T-3q0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2310" y="-1346"/>
-        </scene>
-        <!--Favorited By-->
-        <scene sceneID="hku-ZK-9Z0">
-            <objects>
-                <tableViewController id="H8A-0T-nME" customClass="UserTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="2kg-oN-jFz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="W5R-Q2-gdk" id="cMg-mU-jgM"/>
-                            <outlet property="delegate" destination="W5R-Q2-gdk" id="Zkq-zy-KkP"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Favorited By" id="nUE-Na-bqp"/>
-                    <connections>
-                        <outlet property="userDataStore" destination="W5R-Q2-gdk" id="YXx-Iq-XC7"/>
-                        <segue destination="HsP-f4-6A2" kind="show" identifier="ShowUserSegue" id="iMd-Rn-mxq"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LcJ-GR-U6z" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="W5R-Q2-gdk" customClass="UserDataStore"/>
-            </objects>
-            <point key="canvasLocation" x="2959" y="-1555"/>
         </scene>
         <!--Attachment-->
         <scene sceneID="9vy-3g-D2j">
@@ -623,7 +599,7 @@
             <objects>
                 <tableViewController id="HsP-f4-6A2" customClass="MeViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ntk-Dg-GHg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
@@ -903,7 +879,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iMd-Rn-mxq"/>
+        <segue reference="kER-Hr-0Bf"/>
         <segue reference="t54-XE-2TN"/>
     </inferredMetricsTieBreakers>
 </document>
