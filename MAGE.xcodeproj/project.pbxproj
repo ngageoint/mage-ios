@@ -184,6 +184,25 @@
 		F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89C1F506D76002C78D3 /* PersonCell.xib */; };
 		F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */; };
 		F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */; };
+		F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */; };
+		F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */; };
+		F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */; };
+		F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */; };
+		F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */; };
+		F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */; };
+		F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */; };
+		F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */; };
+		F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */; };
+		F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */; };
+		F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */; };
+		F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */; };
+		F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */; };
+		F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */; };
+		F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */; };
+		F7C5C8CA1F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */; };
+		F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */; };
+		F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */; };
+		F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
@@ -546,6 +565,25 @@
 		F7C5C89C1F506D76002C78D3 /* PersonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonCell.xib; sourceTree = "<group>"; };
 		F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPadHeaderCell.xib; sourceTree = "<group>"; };
 		F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDeleteCell.xib; sourceTree = "<group>"; };
+		F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPhoneHeaderCell.xib; sourceTree = "<group>"; };
+		F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationMapTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationActionsTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationFavoritesTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationImportantTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAddImportantTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPropertyTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCheckboxViewTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPasswordTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusErrorTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusNeedsSyncTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusSyncingTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusOkTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationSyncTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationSyncingTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAttachmentTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationGeometryTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDateTableViewCell.xib; sourceTree = "<group>"; };
+		F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationMultiSelectTableViewCell.xib; sourceTree = "<group>"; };
 		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
@@ -1263,6 +1301,25 @@
 			isa = PBXGroup;
 			children = (
 				F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */,
+				F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */,
+				F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */,
+				F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */,
+				F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */,
+				F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */,
+				F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */,
+				F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */,
+				F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */,
+				F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */,
+				F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */,
+				F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */,
+				F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */,
+				F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */,
+				F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */,
+				F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */,
+				F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */,
+				F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */,
+				F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */,
+				F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */,
 			);
 			name = ViewCells;
 			sourceTree = "<group>";
@@ -1383,18 +1440,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */,
+				F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */,
 				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
+				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
+				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
 				F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */,
 				2F6557D71DD28958008C7922 /* Attachment.storyboard in Resources */,
+				F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */,
 				F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */,
+				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
 				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
+				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
 				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
@@ -1402,7 +1465,10 @@
 				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
+				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
 				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,
+				F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */,
+				F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F71B34BB1F4398A5001D120A /* ObservationEditTableView.xib in Resources */,
 				F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */,
@@ -1411,19 +1477,28 @@
 				F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */,
 				F7DCCC271F46473800E4C616 /* AttachmentCell.xib in Resources */,
 				2F389C921DCD21D100F05C95 /* MapSettings.storyboard in Resources */,
+				F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */,
+				F7C5C8CA1F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
 				F74687451F44D546009D7CF4 /* ObservationTextAreaEditCell.xib in Resources */,
+				F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
 				F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
+				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
 				F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */,
+				F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */,
 				F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */,
 				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
+				F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */,
 				2F6557D41DD27FF1008C7922 /* ObservationEdit.storyboard in Resources */,
+				F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */,
+				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
 				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
+				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,
 				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
@@ -1431,6 +1506,7 @@
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 				2F389C961DCD26C100F05C95 /* Settings.storyboard in Resources */,
 				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
+				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

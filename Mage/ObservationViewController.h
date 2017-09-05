@@ -20,4 +20,6 @@
 
 @property (strong, nonatomic) Observation *observation;
 
+- (void) registerCellTypes;
+
 @end

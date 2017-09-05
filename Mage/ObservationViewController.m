@@ -60,6 +60,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self registerCellTypes];
+    
     self.childCoordinators = [[NSMutableArray alloc] init];
 
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
@@ -73,6 +75,28 @@ static NSInteger const IMPORTANT_SECTION = 4;
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
 }
+
+- (void) registerCellTypes {
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationActionsTableViewCell" bundle:nil] forCellReuseIdentifier:@"actions"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationFavoritesTablewViewCell" bundle:nil] forCellReuseIdentifier:@"favorites"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"updateImportant"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationAddImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"addImportant"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationMapTableViewCell" bundle:nil] forCellReuseIdentifier:@"map"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationCheckboxViewTableViewCell" bundle:nil] forCellReuseIdentifier:@"checkbox"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationPasswordTableViewCell" bundle:nil] forCellReuseIdentifier:@"password"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationStatusErrorTableViewCell" bundle:nil] forCellReuseIdentifier:@"statusError"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationStatusNeedsSyncTableViewCell" bundle:nil] forCellReuseIdentifier:@"statusNeedsSync"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationStatusSyncingTableViewCell" bundle:nil] forCellReuseIdentifier:@"statusSyncing"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationStatusOkTableViewCell" bundle:nil] forCellReuseIdentifier:@"statusOk"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationSyncTableViewCell" bundle:nil] forCellReuseIdentifier:@"syncObservation"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationSyncingTableViewCell" bundle:nil] forCellReuseIdentifier:@"syncingObservation"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationAttachmentTableViewCell" bundle:nil] forCellReuseIdentifier:@"attachments"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationPropertyTableViewCell" bundle:nil] forCellReuseIdentifier:@"property"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationGeometryTableViewCell" bundle:nil] forCellReuseIdentifier:@"geometry"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationDateTableViewCell" bundle:nil] forCellReuseIdentifier:@"date"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationMultiSelectTableViewCell" bundle:nil] forCellReuseIdentifier:@"multiselectdropdown"];
+}
+
 
 - (void) setupObservation {
     self.observationForms = [self.observation.properties objectForKey:@"forms"];
@@ -194,10 +218,17 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [observationCell populateCellWithKey:title andValue:value];
 }
 
+- (NSString *) cellIdentifierForType: (NSString *) type {
+    if ([type isEqualToString:@"checkbox"] || [type isEqualToString:@"password"] || [type isEqualToString:@"geometry"] || [type isEqualToString:@"date"] || [type isEqualToString:@"multiselectdropdown"]) {
+        return type;
+    }
+    return @"property";
+}
+
 - (ObservationPropertyTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     NSDictionary *field = [[self.formFields objectAtIndex:([indexPath section] - self.tableLayout.count)] objectAtIndex:[indexPath row]];
 
-    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[field objectForKey:@"type"]];
+    ObservationPropertyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellIdentifierForType:[field objectForKey:@"type"]]];
     cell.fieldDefinition = field;
     
     return cell;

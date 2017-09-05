@@ -16,6 +16,7 @@
 @implementation ObservationHeaderAttachmentTableViewCell
 
 - (void) configureCellForObservation:(Observation *)observation withForms:(NSArray *)forms {
+    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;

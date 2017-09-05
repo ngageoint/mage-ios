@@ -58,6 +58,11 @@
     [self updateFavorites];
 }
 
+- (void) registerCellTypes {
+    [super registerCellTypes];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPadHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
+}
+
 - (NSMutableArray *) getHeaderSection {
     NSMutableArray *headerSection = [[NSMutableArray alloc] initWithObjects:@"header", @"actions", nil];
     
