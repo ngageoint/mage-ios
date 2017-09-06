@@ -298,5 +298,12 @@ static NSInteger const COMMON_SECTION = 1;
     return nil;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == ATTACHMENT_SECTION) {
+        return CGFLOAT_MIN;
+    }
+    return UITableViewAutomaticDimension;
+}
+
 
 @end
