@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ServerURLDelegate
+
+- (void) setServerURL: (NSURL *) url;
+- (void) cancelSetServerURL;
+
+@end
+
 @interface ServerURLController : UIViewController
+
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate;
+- (void) showError: (NSString *) error;
 
 @end

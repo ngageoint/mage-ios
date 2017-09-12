@@ -11,6 +11,8 @@
 #import "EventChooserController.h"
 #import "Event.h"
 #import "NSDate+display.h"
+#import "AppDelegate.h"
+#import "EventChooserCoordinator.h"
 
 @interface SettingsTableViewController ()<UITableViewDelegate>
 
@@ -26,6 +28,8 @@
     @property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
     @property (assign, nonatomic) NSInteger versionCellSelectionCount;
     @property (weak, nonatomic) IBOutlet UITableViewCell *timeZoneSelectionCell;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *eventCell;
 
 @end
 
@@ -122,12 +126,19 @@
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
-    if ([tableView cellForRowAtIndexPath:indexPath] == self.versionCell) {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell == self.logoutCell) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate logout];
+    } else if (cell == self.versionCell) {
         self.versionCellSelectionCount++;
         
         if (self.versionCellSelectionCount == 5) {
             [tableView reloadData];
         }
+    } else if (cell == self.eventCell) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate chooseEvent];
     }
 }
 

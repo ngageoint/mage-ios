@@ -12,10 +12,12 @@
 #import <ObservationPushService.h>
 #import <AttachmentPushService.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, FICImageCacheDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 - (NSURL *)applicationDocumentsDirectory;
+- (void) logout;
+- (void) chooseEvent;
 
 @end
