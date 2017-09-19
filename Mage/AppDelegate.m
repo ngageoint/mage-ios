@@ -37,8 +37,8 @@
 #import "MageOfflineObservationManager.h"
 #import "UIColor+UIColor_Mage.h"
 #import <Server.h>
-
 #import "MageAppCoordinator.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) UIView *splashView;
@@ -78,6 +78,18 @@
     [self createRootView];
     
 	return YES;
+}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary *)options {
+    NSLog(@"URL %@", url);
+    if ([[url scheme] hasPrefix:@"com.googleusercontent.apps"]) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    }
+    return false;
 }
 
 - (void) createRootView {

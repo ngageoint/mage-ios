@@ -212,6 +212,9 @@
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
+		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
+		F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */; };
+		F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */; };
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
 		F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
@@ -609,6 +612,11 @@
 		F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPasswordTableViewCell.m; sourceTree = "<group>"; };
 		F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDateTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
+		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
+		F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GoogleSignUpView.xib; sourceTree = "<group>"; };
+		F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSignUpViewController.h; sourceTree = "<group>"; };
+		F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSignUpViewController.m; sourceTree = "<group>"; };
+		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
 		F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeometryEditView.xib; sourceTree = "<group>"; };
 		F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertiesEditCoordinator.h; sourceTree = "<group>"; };
 		F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertiesEditCoordinator.m; sourceTree = "<group>"; };
@@ -752,6 +760,8 @@
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
+				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
+				F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -808,6 +818,9 @@
 				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
+				F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */,
+				F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */,
+				F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1483,6 +1496,7 @@
 				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
 				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
+				F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
 				F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */,
@@ -1528,6 +1542,7 @@
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
+				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
 				F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */,
 				F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */,
 				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
@@ -1699,6 +1714,7 @@
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
+				F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,

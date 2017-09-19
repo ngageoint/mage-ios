@@ -11,8 +11,9 @@
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
-@interface LoginViewController () <UITextFieldDelegate>
+@interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *serverURL;
@@ -32,6 +33,7 @@
 @property (nonatomic) BOOL loginFailure;
 @property (strong, nonatomic) UIFont *passwordFont;
 @property (strong, nonatomic) id<LoginDelegate> delegate;
+@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 
 @end
 
@@ -49,6 +51,8 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
     if (self.server) {
         self.statusView.hidden = YES;
         [self.usernameField setEnabled:YES];
@@ -65,10 +69,16 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
+    tap.delegate = self;
     
     [self.view addGestureRecognizer:tap];
     
     self.passwordFont = self.passwordField.font;
+}
+
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if (touch.view == self.googleSignInButton) return false;
+    return true;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -89,10 +99,10 @@
     [self endLogin];
 }
 
-- (void) authenticationHadFailure {
+- (void) authenticationHadFailure: (NSString *) errorString {
     self.statusView.hidden = NO;
     
-    self.loginStatus.text = @"The username or password you entered is incorrect";
+    self.loginStatus.text = [errorString isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : errorString;
     self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
     
@@ -152,15 +162,19 @@
                                 nil];
     
     __weak __typeof__(self) weakSelf = self;
-    [self.delegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+    [self.delegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
         } else {
-            [weakSelf authenticationHadFailure];
+            [weakSelf authenticationHadFailure:errorString];
         }
     }];
+    
+}
+
+- (IBAction)googleSignInTapped:(id)sender {
     
 }
 
@@ -232,22 +246,17 @@
     return YES;
 }
 
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([[segue identifier] isEqualToString:@"SignUpSegue"]) {
-//        SignUpTableViewController *signUpViewController = [segue destinationViewController];
-//        [signUpViewController setServer:self.server];
-//    } else if ([[segue identifier] isEqualToString:@"OAuthSegue"]) {
-//        OAuthViewController *viewController = [segue destinationViewController];
-//        NSString *url = [NSString stringWithFormat:@"%@/%@", [[MageServer baseURL] absoluteString], @"auth/google/signin"];
-//        [viewController setUrl:url];
-//        [viewController setAuthenticationType:GOOGLE];
-//        [viewController setRequestType:SIGNIN];
-//    }
-//}
+- (IBAction)signupTapped:(id)sender {
+    [self.delegate createAccount];
+}
 
 - (void) setupAuthentication {
     BOOL localAuthentication = [self.server serverHasLocalAuthenticationStrategy];
     BOOL googleAuthentication = [self.server serverHasGoogleAuthenticationStrategy];
+    
+    if (googleAuthentication) {
+        [GIDSignIn sharedInstance].uiDelegate = self;
+    }
     
     self.googleView.hidden = !googleAuthentication;
     self.localView.hidden = !localAuthentication;

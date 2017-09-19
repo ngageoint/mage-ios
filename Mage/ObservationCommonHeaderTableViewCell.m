@@ -25,7 +25,6 @@
 
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
-    NSArray *observationForms = [observation.properties objectForKey:@"forms"];
     
     NSString *primaryFieldText = [observation primaryFieldText];
     

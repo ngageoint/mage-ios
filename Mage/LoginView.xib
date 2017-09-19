@@ -8,15 +8,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Roboto-Medium.ttf">
-            <string>Roboto-Medium</string>
-        </array>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="dividerView" destination="YKQ-HA-sw3" id="Xv3-hK-cld"/>
+                <outlet property="googleSignInButton" destination="7yL-sy-yvo" id="7lC-my-acs"/>
                 <outlet property="googleView" destination="fRG-af-yaE" id="oZX-6J-ZfU"/>
                 <outlet property="localView" destination="2D6-F1-6HE" id="gri-Jm-y7O"/>
                 <outlet property="loginButton" destination="D5b-ap-uHq" id="wkP-Vh-7EP"/>
@@ -67,37 +63,79 @@
                     <rect key="frame" x="0.0" y="93" width="375" height="516"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="418"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRG-af-yaE">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewx-6c-Z2A">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="18"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TIw-YJ-XLP" userLabel="Google">
-                                            <rect key="frame" x="16" y="0.0" width="343" height="46"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PeX-M5-B0r">
+                                            <rect key="frame" x="16" y="8.5" width="66" height="1"/>
+                                            <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="46" id="JAZ-8L-81L"/>
-                                                <constraint firstAttribute="height" constant="46" id="moV-Bw-oih"/>
+                                                <constraint firstAttribute="height" constant="1" id="YN7-XL-URo"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
-                                            <state key="normal" title="Sign in with Google" backgroundImage="google_login_normal">
-                                                <color key="titleColor" red="0.86274509799999999" green="0.30588235289999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <state key="highlighted" backgroundImage="google_login_pressed"/>
-                                        </button>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in to MAGE with Google" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOC-Lo-ic8">
+                                            <rect key="frame" x="90" y="0.0" width="195" height="18"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="18" id="PLK-i4-K64"/>
+                                                <constraint firstAttribute="width" constant="195" id="voe-nV-EKH"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yqg-Gd-oX3">
+                                            <rect key="frame" x="293" y="8.5" width="66" height="1"/>
+                                            <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="1jF-2d-SVh"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstItem="TIw-YJ-XLP" firstAttribute="top" secondItem="fRG-af-yaE" secondAttribute="top" id="5SM-LS-Bte"/>
-                                        <constraint firstAttribute="trailing" secondItem="TIw-YJ-XLP" secondAttribute="trailing" constant="16" id="YwF-ck-l2j"/>
-                                        <constraint firstAttribute="bottom" secondItem="TIw-YJ-XLP" secondAttribute="bottom" id="kNS-s6-r4K"/>
-                                        <constraint firstItem="TIw-YJ-XLP" firstAttribute="leading" secondItem="fRG-af-yaE" secondAttribute="leading" constant="16" id="xxu-oz-Riz"/>
+                                        <constraint firstItem="Yqg-Gd-oX3" firstAttribute="leading" secondItem="fOC-Lo-ic8" secondAttribute="trailing" constant="8" symbolic="YES" id="7Xi-4c-btt"/>
+                                        <constraint firstItem="PeX-M5-B0r" firstAttribute="leading" secondItem="Ewx-6c-Z2A" secondAttribute="leading" constant="16" id="C3O-8G-Vay"/>
+                                        <constraint firstAttribute="bottom" secondItem="fOC-Lo-ic8" secondAttribute="bottom" id="Hbh-dB-eeC"/>
+                                        <constraint firstItem="Yqg-Gd-oX3" firstAttribute="centerY" secondItem="Ewx-6c-Z2A" secondAttribute="centerY" id="MNy-Om-oDV"/>
+                                        <constraint firstAttribute="trailing" secondItem="Yqg-Gd-oX3" secondAttribute="trailing" constant="16" id="P0Q-c4-k4o"/>
+                                        <constraint firstItem="fOC-Lo-ic8" firstAttribute="leading" secondItem="PeX-M5-B0r" secondAttribute="trailing" constant="8" symbolic="YES" id="RxH-1c-Hog"/>
+                                        <constraint firstItem="PeX-M5-B0r" firstAttribute="centerY" secondItem="Ewx-6c-Z2A" secondAttribute="centerY" id="WJW-b0-TUx"/>
+                                        <constraint firstItem="fOC-Lo-ic8" firstAttribute="centerX" secondItem="Ewx-6c-Z2A" secondAttribute="centerX" id="fsX-pD-p3w"/>
+                                        <constraint firstItem="fOC-Lo-ic8" firstAttribute="top" secondItem="Ewx-6c-Z2A" secondAttribute="top" id="rbK-Mp-oMh"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRG-af-yaE">
+                                    <rect key="frame" x="0.0" y="23" width="375" height="42"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7yL-sy-yvo" customClass="GIDSignInButton">
+                                            <rect key="frame" x="20" y="0.0" width="335" height="42"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="42" id="Lwo-iE-uDs"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="7yL-sy-yvo" firstAttribute="top" secondItem="fRG-af-yaE" secondAttribute="top" id="7GA-7V-aXx"/>
+                                        <constraint firstAttribute="trailing" secondItem="7yL-sy-yvo" secondAttribute="trailing" constant="20" symbolic="YES" id="WVx-PF-1SF"/>
+                                        <constraint firstAttribute="bottom" secondItem="7yL-sy-yvo" secondAttribute="bottom" id="Ztq-eR-jJ9"/>
+                                        <constraint firstItem="7yL-sy-yvo" firstAttribute="leading" secondItem="fRG-af-yaE" secondAttribute="leading" constant="20" symbolic="YES" id="h5f-w7-rys"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKQ-HA-sw3">
-                                    <rect key="frame" x="0.0" y="51" width="375" height="18"/>
+                                    <rect key="frame" x="0.0" y="70" width="375" height="18"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZc-bm-1vM">
-                                            <rect key="frame" x="16" y="8.5" width="153.5" height="1"/>
+                                            <rect key="frame" x="16" y="8.5" width="56" height="1"/>
                                             <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="T0v-OU-nbz"/>
@@ -106,18 +144,18 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqp-Td-ARU">
-                                            <rect key="frame" x="177.5" y="0.0" width="20" height="18"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in with your MAGE account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqp-Td-ARU">
+                                            <rect key="frame" x="80" y="0.0" width="215" height="18"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="18" id="TUj-8c-aT2"/>
-                                                <constraint firstAttribute="width" constant="20" id="wJ1-NF-CkW"/>
+                                                <constraint firstAttribute="width" constant="215" id="wJ1-NF-CkW"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0x6-O7-X3Z">
-                                            <rect key="frame" x="205.5" y="8.5" width="153.5" height="1"/>
+                                            <rect key="frame" x="303" y="8.5" width="56" height="1"/>
                                             <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="9MM-kG-gSH"/>
@@ -141,7 +179,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2D6-F1-6HE">
-                                    <rect key="frame" x="0.0" y="74" width="375" height="155"/>
+                                    <rect key="frame" x="0.0" y="93" width="375" height="155"/>
                                     <subviews>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Oo2-LB-iu5">
                                             <rect key="frame" x="20" y="76" width="51" height="31"/>
@@ -234,7 +272,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjh-sF-Apv">
-                                    <rect key="frame" x="0.0" y="234" width="375" height="52"/>
+                                    <rect key="frame" x="0.0" y="253" width="375" height="52"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q7a-it-Eni">
                                             <rect key="frame" x="247" y="16" width="108" height="20"/>
@@ -248,6 +286,9 @@
                                                 <color key="titleColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
+                                            <connections>
+                                                <action selector="signupTapped:" destination="-1" eventType="touchUpInside" id="XXO-PR-cWV"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New to MAGE?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0g8-EC-abc">
                                             <rect key="frame" x="20" y="16" width="120.5" height="20"/>
@@ -269,7 +310,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cSE-Mn-iBQ">
-                                    <rect key="frame" x="0.0" y="291" width="375" height="108"/>
+                                    <rect key="frame" x="0.0" y="310" width="375" height="108"/>
                                     <subviews>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xof-Rp-EAn">
                                             <rect key="frame" x="20" y="0.0" width="24" height="24"/>
@@ -338,8 +379,6 @@
     </objects>
     <resources>
         <image name="error" width="24" height="24"/>
-        <image name="google_login_normal" width="40" height="46"/>
-        <image name="google_login_pressed" width="39" height="46"/>
         <image name="mage_logo" width="331" height="82"/>
     </resources>
 </document>
