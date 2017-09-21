@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="dividerView" destination="YKQ-HA-sw3" id="Xv3-hK-cld"/>
+                <outlet property="googleInstructionView" destination="Ewx-6c-Z2A" id="qCT-gK-9sJ"/>
                 <outlet property="googleSignInButton" destination="7yL-sy-yvo" id="7lC-my-acs"/>
                 <outlet property="googleView" destination="fRG-af-yaE" id="oZX-6J-ZfU"/>
                 <outlet property="localView" destination="2D6-F1-6HE" id="gri-Jm-y7O"/>

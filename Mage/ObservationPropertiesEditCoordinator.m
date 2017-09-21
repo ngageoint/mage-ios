@@ -249,7 +249,7 @@
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];

@@ -41,6 +41,9 @@
     if (self.observationDataStore.observationSelectionDelegate == nil) {
         self.observationDataStore.observationSelectionDelegate = self;
     }
+    
+    self.observationDataStore.viewController = self;
+    
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     // bug in ios smashes the refresh text into the
@@ -181,7 +184,7 @@
     if (location) {
         point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation: nil andLocation:point];
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andObservation: nil andLocation:point];
 
     [self.childCoordinators addObject:edit];
     [edit start];

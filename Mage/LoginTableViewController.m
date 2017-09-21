@@ -199,7 +199,7 @@
     }
     
     __weak __typeof__(self) weakSelf = self;
-    [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+    [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {

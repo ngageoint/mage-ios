@@ -23,6 +23,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="tintColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                         <state key="normal" image="favorite_large"/>
+                        <connections>
+                            <action selector="favoriteButtonTapped:" destination="ffI-tt-rrf" eventType="touchUpInside" id="kAa-L0-SHI"/>
+                        </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTz-jf-Kkk">
                         <rect key="frame" x="64" y="8" width="48" height="24"/>
@@ -30,6 +33,9 @@
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                         <state key="normal" image="directions_large"/>
                         <state key="highlighted" image="directions_highlight"/>
+                        <connections>
+                            <action selector="directionsButtonTapped:" destination="ffI-tt-rrf" eventType="touchUpInside" id="OAl-0N-of7"/>
+                        </connections>
                     </button>
                 </subviews>
             </tableViewCellContentView>

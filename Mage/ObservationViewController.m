@@ -23,6 +23,7 @@
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -78,7 +79,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void) registerCellTypes {
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationActionsTableViewCell" bundle:nil] forCellReuseIdentifier:@"actions"];
-    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationFavoritesTablewViewCell" bundle:nil] forCellReuseIdentifier:@"favorites"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationFavoritesTableViewCell" bundle:nil] forCellReuseIdentifier:@"favorites"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"updateImportant"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationAddImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"addImportant"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationMapTableViewCell" bundle:nil] forCellReuseIdentifier:@"map"];
@@ -250,6 +251,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
         if ([cell respondsToSelector:@selector(setObservationImportantDelegate:)]) {
             [cell setObservationImportantDelegate:self];
         }
+        
+        if ([cell respondsToSelector:@selector(setObservationActionsDelegate:)]) {
+            [cell setObservationActionsDelegate:self];
+        }
 
         return cell;
     } else {
@@ -402,40 +407,85 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.observation toggleFavoriteWithCompletion:nil];
 }
 
+- (void)observationDirectionsTapped:(id)sender {
+    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFieldText]]];
+    NSURL *googleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.com/maps/dir/?api=1&destination=%f,%f", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude]];
+    
+    NSMutableDictionary *urlMap = [[NSMutableDictionary alloc] init];
+    [urlMap setObject:appleMapsUrl forKey:@"Apple Maps"];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:googleMapsUrl]) {
+        [urlMap setObject:googleMapsUrl forKey:@"Google Maps"];
+    }
+    if ([urlMap count] > 0) {
+        [self presentMapsActionSheetForURLs:urlMap];
+    } else {
+        [[UIApplication sharedApplication] openURL:appleMapsUrl options:@{} completionHandler:^(BOOL success) {
+            NSLog(@"opened? %d", success);
+        }];
+    }
+}
+
+- (void) presentMapsActionSheetForURLs: (NSDictionary *) urlMap {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Get Directions With..."
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (NSString *app in urlMap) {
+        [alert addAction:[UIAlertAction actionWithTitle:app style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[urlMap valueForKey:app] options:@{} completionHandler:^(BOOL success) {
+                NSLog(@"opened? %d", success);
+            }];
+        }]];
+    }
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    
+    if (alert.popoverPresentationController) {
+        alert.popoverPresentationController.sourceView = self.view;
+        alert.popoverPresentationController.sourceRect = self.view.frame;
+        alert.popoverPresentationController.permittedArrowDirections = 0;
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)presentActivityController:(UIActivityViewController *)controller {
+    // for iPad: make the presentation a Popover
+    controller.modalPresentationStyle = UIModalPresentationPopover;
+    [self presentViewController:controller animated:YES completion:nil];
+    
+    UIPopoverPresentationController *popController = [controller popoverPresentationController];
+    popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    popController.barButtonItem = self.navigationItem.leftBarButtonItem;
+    
+    // access the completion handler
+    controller.completionWithItemsHandler = ^(NSString *activityType,
+                                              BOOL completed,
+                                              NSArray *returnedItems,
+                                              NSError *error){
+        // react to the completion
+        if (completed) {
+            // user shared an item
+            NSLog(@"We used activity type%@", activityType);
+        } else {
+            // user cancelled
+            NSLog(@"We didn't want to share anything after all.");
+        }
+        
+        if (error) {
+            NSLog(@"An Error occured: %@, %@", error.localizedDescription, error.localizedFailureReason);
+        }
+    };
+}
+
 - (void) updateFavorites {
 
 }
 
 -(IBAction) observationShareTapped:(id)sender {
     [self.observation shareObservationForViewController:self];
-}
-
-- (IBAction) observationDirectionsTapped:(id)sender {
-
-    WKBGeometry *geometry = [self.observation getGeometry];
-    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-
-    NSURL *mapsUrl = [NSURL URLWithString:@"comgooglemaps-x-callback://"];
-    if ([[UIApplication sharedApplication] canOpenURL:mapsUrl]) {
-        NSString *directionsRequest = [NSString stringWithFormat:@"%@://?daddr=%f,%f&x-success=%@&x-source=%s",
-                                       @"comgooglemaps-x-callback",
-                                       coordinate.latitude,
-                                       coordinate.longitude,
-                                       @"mage://?resume=true",
-                                       "MAGE"];
-        NSURL *directionsURL = [NSURL URLWithString:directionsRequest];
-        [[UIApplication sharedApplication] openURL:directionsURL];
-    } else {
-        NSLog(@"Can't use comgooglemaps-x-callback:// on this device.");
-        MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
-        MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-        [mapItem setName:self.navigationItem.title];
-        
-        MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
-        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-        [MKMapItem openMapsWithItems:@[currentLocation, mapItem] launchOptions:options];
-    }
 }
 
 - (void) removeObservationImportant {

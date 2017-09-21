@@ -177,7 +177,7 @@
     [self processOfflineMapArchives];
 }
 
-- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
     // Handle attachments uploaded in the background
     if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
         NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");

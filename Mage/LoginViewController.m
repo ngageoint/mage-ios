@@ -16,6 +16,7 @@
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+@property (weak, nonatomic) IBOutlet UIView *googleInstructionView;
 @property (weak, nonatomic) IBOutlet UIButton *serverURL;
 @property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
@@ -49,23 +50,13 @@
     return self;
 }
 
+- (void) setMageServer: (MageServer *) server {
+    self.server = server;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
-    if (self.server) {
-        self.statusView.hidden = YES;
-        [self.usernameField setEnabled:YES];
-        [self.passwordField setEnabled:YES];
-        self.allowLogin = YES;
-    } else {
-        self.allowLogin = NO;
-        self.statusView.hidden = NO;
-    }
-
-    
-    [self setupAuthentication];
-
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
@@ -83,6 +74,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
+    if (self.server) {
+        self.statusView.hidden = YES;
+        [self.usernameField setEnabled:YES];
+        [self.passwordField setEnabled:YES];
+        self.allowLogin = YES;
+    } else {
+        self.allowLogin = NO;
+        self.statusView.hidden = NO;
+    }
+
+    [self setupAuthentication];
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [self.versionLabel setText:[NSString stringWithFormat:@"v%@", versionString]];
@@ -258,7 +261,7 @@
         [GIDSignIn sharedInstance].uiDelegate = self;
     }
     
-    self.googleView.hidden = !googleAuthentication;
+    self.googleView.hidden = self.googleInstructionView.hidden = !googleAuthentication;
     self.localView.hidden = !localAuthentication;
     self.dividerView.hidden = !(googleAuthentication && localAuthentication);
     self.statusView.hidden = !(!self.allowLogin || self.loginFailure);

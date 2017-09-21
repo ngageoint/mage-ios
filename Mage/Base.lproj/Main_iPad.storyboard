@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="ULt-lH-XLM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="ULt-lH-XLM">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <viewControllerLayoutGuide type="bottom" id="LC1-En-9Tw"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="y8T-l1-f2h">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="956"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="rz7-vu-mdR">
@@ -159,7 +159,7 @@
                                     </barButtonItem>
                                     <barButtonItem id="eeI-UJ-E9H">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6ir-6h-eDL">
-                                            <rect key="frame" x="538" y="7" width="1" height="30"/>
+                                            <rect key="frame" x="472.5" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </button>
@@ -173,7 +173,7 @@
                                     </barButtonItem>
                                     <barButtonItem id="2hL-eu-w5a">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YgZ-w8-GnS">
-                                            <rect key="frame" x="597" y="7" width="1" height="30"/>
+                                            <rect key="frame" x="560" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </button>
@@ -186,7 +186,7 @@
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="dJ6-xB-3uz"/>
                                     <barButtonItem style="plain" id="hMZ-VM-sQp">
                                         <view key="customView" contentMode="scaleToFill" id="Lr0-KE-IlO">
-                                            <rect key="frame" x="667" y="14" width="24" height="16"/>
+                                            <rect key="frame" x="658" y="14" width="24" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="9+" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ao9-LI-Ony">
@@ -213,7 +213,7 @@
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="a0q-XZ-tLX"/>
                                     <barButtonItem id="d9T-KA-kzL">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Vjw-0i-t9G">
-                                            <rect key="frame" x="701" y="7" width="1" height="30"/>
+                                            <rect key="frame" x="682" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60271793600000001" green="0.60269987579999995" blue="0.6027101278" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </button>
@@ -317,7 +317,7 @@
                 <navigationController id="eCr-Py-gK2" sceneMemberID="viewController">
                     <value key="contentSizeForViewInPopover" type="size" width="600" height="450"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="8iJ-Xf-M2G">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="48"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -735,7 +735,6 @@
             <objects>
                 <navigationController navigationBarHidden="YES" id="ULt-lH-XLM" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="N2S-nA-2js">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -769,7 +768,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MageDetailViewController" id="biE-nW-pHC" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="WMu-eP-G37">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="768" height="48"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.97530043125152588" green="0.97527122497558594" blue="0.9752877950668335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.066666666666666666" green="0.32941176470588235" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -900,7 +899,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Gr6-zy-ZrK">
-                                <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                                <rect key="frame" x="0.0" y="68" width="768" height="956"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -994,11 +993,6 @@
         <image name="phone" width="18" height="18"/>
         <image name="portrait" width="100" height="100"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
-    </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="5KS-77-dla"/>
         <segue reference="YzF-MW-CoD"/>
