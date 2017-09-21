@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) ObservationEditTableViewController *tableViewController;
 @property (weak, nonatomic) IBOutlet UIView *tableContainerView;
+@property (nonatomic) BOOL didSetConstraints;
 
 @end
 
@@ -29,6 +30,24 @@
     _newObservation = newObservation;
     
     return self;
+}
+
+- (void) updateViewConstraints {
+    [super updateViewConstraints];
+    [self initConstraints];
+}
+
+- (void)initConstraints {
+    if (!self.didSetConstraints) {
+        self.didSetConstraints = YES;
+        
+        self.tableContainerView.subviews[0].translatesAutoresizingMaskIntoConstraints = NO;
+        
+        NSDictionary *views = @{@"subview" : self.tableContainerView.subviews[0]};
+        
+        [self.tableContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subview]|" options:0 metrics:nil views:views]];
+        [self.tableContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subview]|" options:0 metrics:nil views:views]];
+    }
 }
 
 - (void) viewDidLoad {
