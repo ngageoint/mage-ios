@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EventChooserController">
             <connections>
@@ -24,7 +30,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9U8-H1-4fr">
-                    <rect key="frame" x="16" y="33" width="343" height="626"/>
+                    <rect key="frame" x="16" y="30" width="343" height="629"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -94,17 +100,17 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="DUb-5Z-FfH" secondAttribute="bottom" id="7sC-lz-fbA"/>
                 <constraint firstAttribute="trailing" secondItem="DUb-5Z-FfH" secondAttribute="trailing" id="IQc-3F-TGt"/>
-                <constraint firstAttribute="bottom" secondItem="byS-3P-7WH" secondAttribute="bottom" constant="20" id="JNi-xt-2QH"/>
+                <constraint firstAttribute="bottomMargin" secondItem="byS-3P-7WH" secondAttribute="bottom" constant="20" id="JNi-xt-2QH"/>
                 <constraint firstItem="lba-YF-RHW" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="L1O-PX-4Eu"/>
                 <constraint firstAttribute="trailing" secondItem="lba-YF-RHW" secondAttribute="trailing" constant="16" id="Mcv-IE-wku"/>
-                <constraint firstItem="9U8-H1-4fr" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="33" id="Xx8-W8-JnH"/>
+                <constraint firstItem="9U8-H1-4fr" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="topMargin" constant="10" id="Xx8-W8-JnH"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="-20" id="fWW-ca-dhe"/>
                 <constraint firstAttribute="trailing" secondItem="byS-3P-7WH" secondAttribute="trailing" constant="16" id="hne-4a-v1U"/>
                 <constraint firstItem="byS-3P-7WH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="mul-3X-cGq"/>
                 <constraint firstAttribute="trailing" secondItem="9U8-H1-4fr" secondAttribute="trailing" constant="16" id="q91-wK-nYP"/>
                 <constraint firstItem="lba-YF-RHW" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="4" id="qME-Sx-G4b"/>
                 <constraint firstItem="9U8-H1-4fr" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="sAd-UY-RIy"/>
-                <constraint firstAttribute="bottom" secondItem="9U8-H1-4fr" secondAttribute="bottom" constant="8" id="yTa-US-zFS"/>
+                <constraint firstAttribute="bottomMargin" secondItem="9U8-H1-4fr" secondAttribute="bottom" constant="8" id="yTa-US-zFS"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" id="zx6-Kh-hCl"/>
             </constraints>
         </view>
