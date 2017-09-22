@@ -234,7 +234,7 @@
                                                 <action selector="resignAndLogin:" destination="-1" eventType="editingDidEndOnExit" id="iZM-uR-zYG"/>
                                             </connections>
                                         </textField>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5b-ap-uHq">
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5b-ap-uHq">
                                             <rect key="frame" x="20" y="127" width="335" height="40"/>
                                             <color key="backgroundColor" red="0.1110333651" green="0.25266155600000001" blue="0.40621557829999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <accessibility key="accessibilityConfiguration" label="Log In"/>
@@ -244,6 +244,11 @@
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                             <state key="normal" title="Log In"/>
                                             <state key="disabled" title="Logging In..."/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <action selector="localLoginButtonPress:" destination="-1" eventType="touchUpInside" id="BsV-6j-cZv"/>
                                             </connections>
