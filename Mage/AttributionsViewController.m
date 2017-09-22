@@ -19,6 +19,12 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];
