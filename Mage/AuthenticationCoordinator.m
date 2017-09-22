@@ -194,11 +194,13 @@ BOOL signingIn = YES;
 
 - (void) changeServerURL {
     self.urlController = [[ServerURLController alloc] initWithDelegate:self];
-    [self.navigationController presentViewController:self.urlController animated:YES completion:nil];
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) cancelSetServerURL {
-    [self.urlController dismissViewControllerAnimated:YES completion:nil];
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void) setServerURL:(NSURL *)url {
@@ -206,7 +208,8 @@ BOOL signingIn = YES;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         [MagicalRecord deleteAndSetupMageCoreDataStack];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.urlController dismissViewControllerAnimated:YES completion:nil];
+            [FadeTransitionSegue addFadeTransitionToView:weakSelf.navigationController.view];
+            [weakSelf.navigationController popViewControllerAnimated:NO];
             [weakSelf showLoginViewForServer:mageServer];
         });
     } failure:^(NSError *error) {
