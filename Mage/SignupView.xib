@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,7 +33,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="xWx-f7-2Ui">
-                    <rect key="frame" x="67.5" y="40" width="240" height="45"/>
+                    <rect key="frame" x="67.5" y="60" width="240" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="MUw-8k-NFg"/>
                         <constraint firstAttribute="width" constant="240" id="enb-Xr-JyI"/>
@@ -55,7 +56,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fH-La-tFM">
-                    <rect key="frame" x="0.0" y="93" width="375" height="516"/>
+                    <rect key="frame" x="0.0" y="113" width="375" height="496"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="djZ-oe-5cp">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="408"/>
@@ -351,14 +352,14 @@
             </subviews>
             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="xWx-f7-2Ui" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="top" constant="40" id="B13-M6-bj2"/>
+                <constraint firstItem="xWx-f7-2Ui" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="topMargin" constant="40" id="B13-M6-bj2"/>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="K8Z-Q4-kKA"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="top" secondItem="xWx-f7-2Ui" secondAttribute="bottom" constant="8" id="P5N-nT-TYA"/>
                 <constraint firstAttribute="trailing" secondItem="8fH-La-tFM" secondAttribute="trailing" id="RxY-T6-ToG"/>
                 <constraint firstItem="Jub-3d-HY1" firstAttribute="top" secondItem="iYb-oq-i8M" secondAttribute="bottom" constant="-1" id="Szk-N4-jKN"/>
                 <constraint firstItem="xWx-f7-2Ui" firstAttribute="centerX" secondItem="LIg-r8-Wga" secondAttribute="centerX" id="YzP-Sh-TFl"/>
                 <constraint firstItem="Jub-3d-HY1" firstAttribute="centerX" secondItem="LIg-r8-Wga" secondAttribute="centerX" id="cc7-ew-WjR"/>
-                <constraint firstAttribute="bottom" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6"/>
+                <constraint firstAttribute="bottomMargin" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="p1r-p7-xHf"/>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="top" secondItem="8fH-La-tFM" secondAttribute="bottom" constant="8" id="rwm-oJ-pvD"/>
                 <constraint firstAttribute="trailing" secondItem="iYb-oq-i8M" secondAttribute="trailing" id="v1P-3l-oHz"/>
