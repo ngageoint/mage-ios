@@ -61,6 +61,12 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     [self registerCellTypes];
     
     self.childCoordinators = [[NSMutableArray alloc] init];
@@ -136,6 +142,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self setupObservation];
     [[ObservationPushService singleton] addObservationPushDelegate:self];
 }

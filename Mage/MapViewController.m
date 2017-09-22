@@ -64,6 +64,12 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     self.mapDelegate.cacheOverlayDelegate = self;

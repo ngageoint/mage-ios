@@ -50,7 +50,11 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationController setNavigationBarHidden:NO];
+    if (@available(iOS 11.0, *)) {
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
+    } else {
+        // Fallback on earlier versions
+    }
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
     self.observationDataStore.observationSelectionDelegate = self;
@@ -61,11 +65,10 @@
     if (self.user == nil) {
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         self.currentUserIsMe = YES;
-        self.navigationItem.title = @"Me";
     } else {
         self.currentUserIsMe = NO;
-        self.navigationItem.title = self.user.name;
     }
+    self.navigationItem.title = self.user.name;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
