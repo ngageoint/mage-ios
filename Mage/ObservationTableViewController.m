@@ -21,6 +21,7 @@
 #import "Observations.h"
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ObservationTableViewController()
 
@@ -46,15 +47,15 @@
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh observations" attributes:attrsDictionary]];
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
-    
+    self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
 }
@@ -190,7 +191,7 @@
     [edit start];
 }
 
-- (IBAction)refreshObservations:(UIRefreshControl *)sender {
+- (void)refreshObservations {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{

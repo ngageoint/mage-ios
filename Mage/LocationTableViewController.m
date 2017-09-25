@@ -12,6 +12,7 @@
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface LocationTableViewController() <UserSelectionDelegate>
 
@@ -30,14 +31,16 @@
         self.locationDataStore.personSelectionDelegate = self;
     }
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshPeople) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh people" attributes:attrsDictionary]];
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    self.tableView.refreshControl = self.refreshControl;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 88;
@@ -131,7 +134,7 @@
     [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
-- (IBAction)refreshPeople:(UIRefreshControl *)sender {
+- (void)refreshPeople {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *userFetchTask = [Location operationToPullLocationsWithSuccess:^{

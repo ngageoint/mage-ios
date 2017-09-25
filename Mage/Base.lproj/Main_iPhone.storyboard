@@ -396,21 +396,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="k7V-Fz-vyz">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <attributedString key="attributedTitle">
-                            <fragment content="Pull to Refresh Observations">
-                                <attributes>
-                                    <font key="NSFont" metaFont="smallSystem"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <connections>
-                            <action selector="refreshObservations:" destination="5nd-zV-iKV" eventType="valueChanged" id="FS3-67-wRr"/>
-                        </connections>
-                    </refreshControl>
                     <connections>
                         <outlet property="observationDataStore" destination="A6N-Bc-VqA" id="2pq-om-IDI"/>
                         <segue destination="su7-bG-iWI" kind="show" identifier="viewImageSegue" id="FuD-R0-qsF"/>
@@ -488,21 +473,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="yHd-PV-lVi">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <attributedString key="attributedTitle">
-                            <fragment content="Pull to Refresh People">
-                                <attributes>
-                                    <font key="NSFont" metaFont="smallSystem"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <connections>
-                            <action selector="refreshPeople:" destination="ikG-lE-1ri" eventType="valueChanged" id="Bb3-Hf-LHO"/>
-                        </connections>
-                    </refreshControl>
                     <connections>
                         <outlet property="locationDataStore" destination="RBi-2t-BRK" id="Ytw-Cw-vHj"/>
                         <segue destination="HsP-f4-6A2" kind="show" identifier="ShowUserSegue" id="Swq-v2-c22"/>
@@ -875,7 +845,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kER-Hr-0Bf"/>
-        <segue reference="t54-XE-2TN"/>
+        <segue reference="Swq-v2-c22"/>
+        <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
 </document>

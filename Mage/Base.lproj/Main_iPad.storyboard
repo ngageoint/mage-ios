@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="rz7-vu-mdR">
-                                <rect key="frame" x="0.0" y="44" width="768" height="916"/>
+                                <rect key="frame" x="0.0" y="44" width="768" height="912"/>
                                 <connections>
                                     <outlet property="delegate" destination="MIU-fq-xaT" id="YEn-UT-Vee"/>
                                     <outletCollection property="gestureRecognizers" destination="qkg-84-BHA" appends="YES" id="VDG-eR-SBJ"/>
@@ -131,7 +131,7 @@
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mAe-WQ-FSc">
-                                <rect key="frame" x="0.0" y="938" width="768" height="22"/>
+                                <rect key="frame" x="0.0" y="934" width="768" height="22"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzH-pl-bJt">
                                         <rect key="frame" x="8" y="0.0" width="760" height="22"/>
@@ -159,7 +159,7 @@
                                     </barButtonItem>
                                     <barButtonItem id="eeI-UJ-E9H">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6ir-6h-eDL">
-                                            <rect key="frame" x="472.5" y="7" width="30" height="30"/>
+                                            <rect key="frame" x="496.5" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </button>
@@ -173,7 +173,7 @@
                                     </barButtonItem>
                                     <barButtonItem id="2hL-eu-w5a">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YgZ-w8-GnS">
-                                            <rect key="frame" x="560" y="7" width="30" height="30"/>
+                                            <rect key="frame" x="584" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </button>
@@ -186,7 +186,7 @@
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="dJ6-xB-3uz"/>
                                     <barButtonItem style="plain" id="hMZ-VM-sQp">
                                         <view key="customView" contentMode="scaleToFill" id="Lr0-KE-IlO">
-                                            <rect key="frame" x="658" y="14" width="24" height="16"/>
+                                            <rect key="frame" x="682" y="22" width="0.0" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="9+" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ao9-LI-Ony">
@@ -701,21 +701,6 @@
                             <outlet property="delegate" destination="j1a-ko-7S7" id="q4y-Sv-ANc"/>
                         </connections>
                     </tableView>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="JbN-iI-C1i">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <attributedString key="attributedTitle">
-                            <fragment content="Pull to Refresh People">
-                                <attributes>
-                                    <font key="NSFont" metaFont="smallSystem"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <connections>
-                            <action selector="refreshPeople:" destination="Y4R-vw-5cO" eventType="valueChanged" id="CXr-rY-npC"/>
-                        </connections>
-                    </refreshControl>
                     <connections>
                         <outlet property="locationDataStore" destination="j1a-ko-7S7" id="Vi0-Bm-evp"/>
                     </connections>
@@ -857,21 +842,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="r40-bN-aeW"/>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ELp-e6-op4">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <attributedString key="attributedTitle">
-                            <fragment content="Pull to Refresh Observations">
-                                <attributes>
-                                    <font key="NSFont" metaFont="smallSystem"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <connections>
-                            <action selector="refreshObservations:" destination="4Jg-Up-t0d" eventType="valueChanged" id="fcZ-JM-wcq"/>
-                        </connections>
-                    </refreshControl>
                     <connections>
                         <outlet property="observationDataStore" destination="TBH-TF-XCY" id="DAo-a3-rUY"/>
                     </connections>
