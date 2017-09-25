@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -181,7 +182,6 @@
                         <constraint firstAttribute="trailing" secondItem="mBQ-mB-CtT" secondAttribute="trailing" constant="8" id="kpZ-RT-vBh"/>
                         <constraint firstItem="abG-gz-Fe5" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="nO0-cy-QUW"/>
                         <constraint firstAttribute="trailing" secondItem="l11-wK-EQI" secondAttribute="trailing" constant="8" id="ofU-aV-QKd"/>
-                        <constraint firstAttribute="height" constant="118" id="sxN-si-zEI"/>
                         <constraint firstItem="l11-wK-EQI" firstAttribute="top" secondItem="bus-sy-6Qo" secondAttribute="bottom" constant="-1" id="uaB-if-VBe"/>
                         <constraint firstItem="l11-wK-EQI" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="w1d-Gx-S2g"/>
                     </constraints>
@@ -222,6 +222,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstAttribute="bottomMargin" secondItem="mBQ-mB-CtT" secondAttribute="bottom" constant="8" id="0lV-vm-RgY"/>
                 <constraint firstItem="t0n-5z-kcQ" firstAttribute="top" secondItem="1ug-fA-tut" secondAttribute="top" id="3uG-b1-rKe"/>
                 <constraint firstItem="IUw-Qj-cTB" firstAttribute="top" secondItem="J9e-OG-1sz" secondAttribute="bottom" constant="8" id="6Wl-Fr-Pq0"/>
                 <constraint firstItem="J9e-OG-1sz" firstAttribute="centerX" secondItem="oMU-AT-4g8" secondAttribute="centerX" id="ABU-3x-IgP"/>
