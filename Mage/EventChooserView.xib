@@ -30,7 +30,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9U8-H1-4fr">
-                    <rect key="frame" x="16" y="30" width="343" height="629"/>
+                    <rect key="frame" x="16" y="69" width="343" height="590"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="sectionIndexBackgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -58,7 +58,7 @@
                     </userDefinedRuntimeAttributes>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose An Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lba-YF-RHW">
-                    <rect key="frame" x="16" y="4" width="343" height="21"/>
+                    <rect key="frame" x="16" y="40" width="343" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="wJw-jl-ogb"/>
                     </constraints>
@@ -103,12 +103,12 @@
                 <constraint firstAttribute="bottomMargin" secondItem="byS-3P-7WH" secondAttribute="bottom" constant="20" id="JNi-xt-2QH"/>
                 <constraint firstItem="lba-YF-RHW" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="L1O-PX-4Eu"/>
                 <constraint firstAttribute="trailing" secondItem="lba-YF-RHW" secondAttribute="trailing" constant="16" id="Mcv-IE-wku"/>
-                <constraint firstItem="9U8-H1-4fr" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="topMargin" constant="10" id="Xx8-W8-JnH"/>
+                <constraint firstItem="9U8-H1-4fr" firstAttribute="top" secondItem="lba-YF-RHW" secondAttribute="bottom" constant="8" id="N42-eU-KY3"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="-20" id="fWW-ca-dhe"/>
                 <constraint firstAttribute="trailing" secondItem="byS-3P-7WH" secondAttribute="trailing" constant="16" id="hne-4a-v1U"/>
                 <constraint firstItem="byS-3P-7WH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="mul-3X-cGq"/>
                 <constraint firstAttribute="trailing" secondItem="9U8-H1-4fr" secondAttribute="trailing" constant="16" id="q91-wK-nYP"/>
-                <constraint firstItem="lba-YF-RHW" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="4" id="qME-Sx-G4b"/>
+                <constraint firstItem="lba-YF-RHW" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="topMargin" constant="20" id="qME-Sx-G4b"/>
                 <constraint firstItem="9U8-H1-4fr" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="sAd-UY-RIy"/>
                 <constraint firstAttribute="bottomMargin" secondItem="9U8-H1-4fr" secondAttribute="bottom" constant="8" id="yTa-US-zFS"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" id="zx6-Kh-hCl"/>
