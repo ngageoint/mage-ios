@@ -69,6 +69,12 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     self.map.delegate = _mapDelegate;
     
     // These two lines required to get the prompt to resize the view and not cover the buttons
@@ -768,7 +774,6 @@
         default:
             break;
     }
-    
     [self.navigationItem setPrompt:hint];
 }
 
