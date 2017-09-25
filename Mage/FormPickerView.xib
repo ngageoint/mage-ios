@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,7 +33,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bx3-fo-aWS">
-                    <rect key="frame" x="0.0" y="41" width="375" height="626"/>
+                    <rect key="frame" x="0.0" y="61" width="375" height="606"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="5" id="e2o-7e-MpS">
                         <size key="itemSize" width="90" height="120"/>
@@ -42,7 +43,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructions" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEr-0M-4d2">
-                    <rect key="frame" x="16" y="20" width="343" height="20.5"/>
+                    <rect key="frame" x="16" y="40" width="343" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -67,9 +68,9 @@
                 <constraint firstItem="Bx3-fo-aWS" firstAttribute="top" secondItem="pEr-0M-4d2" secondAttribute="bottom" id="5bP-u2-9j7"/>
                 <constraint firstItem="WaT-Op-65Z" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="C6m-Qt-wJy"/>
                 <constraint firstAttribute="bottom" secondItem="YWy-yP-E2H" secondAttribute="bottom" id="CHF-SB-e5V"/>
-                <constraint firstItem="pEr-0M-4d2" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="top" constant="20" id="Gb7-Wm-rBY"/>
-                <constraint firstAttribute="bottom" secondItem="MZR-DI-XDD" secondAttribute="bottom" constant="20" id="Jgk-R6-nzc"/>
+                <constraint firstItem="pEr-0M-4d2" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="topMargin" constant="20" id="Gb7-Wm-rBY"/>
                 <constraint firstAttribute="trailing" secondItem="WaT-Op-65Z" secondAttribute="trailing" id="MVb-vU-KJD"/>
+                <constraint firstAttribute="bottomMargin" secondItem="MZR-DI-XDD" secondAttribute="bottomMargin" constant="28" id="Pc8-F5-ja4"/>
                 <constraint firstAttribute="bottom" secondItem="Bx3-fo-aWS" secondAttribute="bottom" id="Thv-zE-2V1"/>
                 <constraint firstItem="Bx3-fo-aWS" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="X9z-Pe-5hs"/>
                 <constraint firstAttribute="trailing" secondItem="Bx3-fo-aWS" secondAttribute="trailing" id="bmg-MK-Rqs"/>
