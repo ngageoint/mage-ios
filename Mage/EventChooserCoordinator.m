@@ -54,7 +54,7 @@
     // first ensure the form for that event was pulled or else we will just wait for the form fetched notification
     self.eventToSegueTo = event;
     if ([self.formsFetched containsObject:event.remoteId]) {
-        [self.eventController dismissViewControllerAnimated:YES completion:nil];
+        [self.eventController dismissViewControllerAnimated:NO completion:nil];
         [self.delegate eventChoosen:self.eventToSegueTo];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
@@ -63,7 +63,7 @@
 - (void) formFetched: (NSNotification *) notification {
     Event *event = (Event *)notification.object;
     if (self.eventToSegueTo && [self.eventToSegueTo.remoteId isEqualToNumber:event.remoteId]) {
-        [self.eventController dismissViewControllerAnimated:YES completion:nil];
+        [self.eventController dismissViewControllerAnimated:NO completion:nil];
         [self.delegate eventChoosen:self.eventToSegueTo];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }

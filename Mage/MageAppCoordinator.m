@@ -73,12 +73,12 @@
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         UIStoryboard *ipadStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
         UIViewController *vc = [ipadStoryboard instantiateInitialViewController];
-        vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:YES completion:NULL];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         UIViewController *vc = [iphoneStoryboard instantiateInitialViewController];
-        vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:YES completion:NULL];
     }
 }
