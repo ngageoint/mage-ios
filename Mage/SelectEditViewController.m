@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *selectedLabel;
 @property (weak, nonatomic) IBOutlet UIView *searchBarContainer;
+@property (weak, nonatomic) IBOutlet UIView *selectedChoicesView;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) NSMutableArray *choices;
@@ -21,6 +22,7 @@
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 @property (strong, nonatomic) id value;
 @property (strong, nonatomic) id<PropertyEditDelegate> delegate;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
 
 @end
 
@@ -54,17 +56,24 @@
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 50;
-    
+
     self.selectedLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.selectedLabel.numberOfLines = 0;
     
-    self.definesPresentationContext = YES;
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    [self.searchBarContainer addSubview:self.searchController.searchBar];
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.searchController = self.searchController;
+    } else {
+        self.definesPresentationContext = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.selectedChoicesConstraint.constant = self.navigationController.navigationBar.frame.size.height + 20;
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+    }
 }
 
 - (void) viewWillAppear:(BOOL) animated {
@@ -90,12 +99,6 @@
     }
     
     self.filteredChoices = [NSArray arrayWithArray:self.choices];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.searchController.searchBar sizeToFit];
 }
 
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {

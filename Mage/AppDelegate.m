@@ -135,8 +135,11 @@
                                                            NSForegroundColorAttributeName: [UIColor whiteColor]
                                                            }];
     [[UINavigationBar appearance] setTranslucent:NO];
-    
+
     if (@available(iOS 11.0, *)) {
+        [[UISearchBar appearance] setBarTintColor:[UIColor mageBlue]];
+        [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
         [[UINavigationBar appearance] setPrefersLargeTitles:YES];
         [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
                                                                     NSForegroundColorAttributeName: [UIColor whiteColor]
@@ -144,7 +147,6 @@
     } else {
         // Fallback on earlier versions
     }
-    
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
