@@ -278,15 +278,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) setObservations:(Observations *)observations {
+    
     _observations = observations;
     _observations.delegate = self;
     
     Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
     
     _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
-    _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     
-    [self.mapObservations clear];
+    [self.observationAnnotations clear];
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
@@ -1102,7 +1102,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (MapObservations *) observationAnnotations {
-    if (!_mapObservations && !_mapView) {
+    if (!_mapObservations) {
         _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     }
     
