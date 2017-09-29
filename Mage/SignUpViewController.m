@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
+@property (weak, nonatomic) IBOutlet UIView *googleDividerView;
 @property (strong, nonatomic) MageServer *server;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
@@ -51,6 +52,8 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self setupAuthentication];
     
     self.view.backgroundColor = [UIColor primaryColor];
     self.cancelButton.backgroundColor = [UIColor darkerPrimary];
@@ -202,7 +205,7 @@
     BOOL localAuthentication = [self.server serverHasLocalAuthenticationStrategy];
     BOOL googleAuthentication = [self.server serverHasGoogleAuthenticationStrategy];
     
-    self.googleView.hidden = !googleAuthentication;
+    self.googleView.hidden = self.googleDividerView.hidden = !googleAuthentication;
     self.signupView.hidden = !localAuthentication;
     self.dividerView.hidden = !(googleAuthentication && localAuthentication);
 }

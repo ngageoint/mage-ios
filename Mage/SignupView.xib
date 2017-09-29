@@ -16,6 +16,7 @@
                 <outlet property="displayName" destination="BRG-7p-IkC" id="oJS-Lp-kLE"/>
                 <outlet property="dividerView" destination="m7t-dl-k59" id="vkq-WL-edr"/>
                 <outlet property="email" destination="Ppn-lM-Kd3" id="2Qv-eM-Vs2"/>
+                <outlet property="googleDividerView" destination="qNw-xH-CYf" id="6HI-Ry-22u"/>
                 <outlet property="googleSignInButton" destination="Sbj-co-nAw" id="0hK-Ar-8Pn"/>
                 <outlet property="googleView" destination="Vbq-nL-6Mb" id="h9O-Cb-NGr"/>
                 <outlet property="mageServerURL" destination="iYb-oq-i8M" id="WBw-pj-kyD"/>
