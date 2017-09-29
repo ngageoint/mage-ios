@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +16,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="15U-O3-oeZ" id="wtz-IG-ErG">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdO-42-NsM">
@@ -53,15 +53,16 @@
                     <constraint firstItem="bDj-lh-vte" firstAttribute="leading" secondItem="MdO-42-NsM" secondAttribute="trailing" constant="1" id="Cdr-av-PVs"/>
                     <constraint firstItem="QXi-ly-dtc" firstAttribute="top" secondItem="wtz-IG-ErG" secondAttribute="topMargin" constant="17" id="Z50-me-4cU"/>
                     <constraint firstAttribute="trailing" secondItem="bDj-lh-vte" secondAttribute="trailing" constant="8" id="a9G-qh-eWA"/>
-                    <constraint firstItem="QXi-ly-dtc" firstAttribute="leading" secondItem="wtz-IG-ErG" secondAttribute="leading" constant="8" id="jAN-tP-g3b"/>
+                    <constraint firstItem="QXi-ly-dtc" firstAttribute="leading" secondItem="wtz-IG-ErG" secondAttribute="leadingMargin" id="jAN-tP-g3b"/>
                     <constraint firstAttribute="trailing" secondItem="QXi-ly-dtc" secondAttribute="trailing" constant="8" id="luD-Fi-256"/>
-                    <constraint firstItem="MdO-42-NsM" firstAttribute="leading" secondItem="wtz-IG-ErG" secondAttribute="leading" constant="4" id="mIW-MA-JBa"/>
+                    <constraint firstItem="MdO-42-NsM" firstAttribute="leading" secondItem="wtz-IG-ErG" secondAttribute="leadingMargin" constant="-4" id="mIW-MA-JBa"/>
                     <constraint firstItem="MdO-42-NsM" firstAttribute="top" secondItem="wtz-IG-ErG" secondAttribute="topMargin" constant="-8" id="ukO-0u-reh"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
+                <outlet property="keyLabel" destination="bDj-lh-vte" id="Q96-c7-wKv"/>
                 <outlet property="requiredIndicator" destination="MdO-42-NsM" id="cjT-7J-o84"/>
                 <outlet property="textField" destination="QXi-ly-dtc" id="byB-La-xeS"/>
             </connections>

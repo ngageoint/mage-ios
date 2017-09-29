@@ -90,7 +90,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationGeometryEditCell" bundle:nil] forCellReuseIdentifier:@"geometry"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCheckboxEditCell" bundle:nil] forCellReuseIdentifier:@"checkbox"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationEmailEditCell" bundle:nil] forCellReuseIdentifier:@"email"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationNumberEditCell" bundle:nil] forCellReuseIdentifier:@"number"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationNumberEditCell" bundle:nil] forCellReuseIdentifier:@"numberfield"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextAreaEditCell" bundle:nil] forCellReuseIdentifier:@"textarea"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationAttachmentEditCell" bundle:nil] forCellReuseIdentifier:@"attachment"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDropdownEditCell" bundle:nil] forCellReuseIdentifier:@"dropdown"];
