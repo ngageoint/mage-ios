@@ -12,22 +12,22 @@
 
 + (UIColor *)lighterColorForColor:(UIColor *)c
 {
-    CGFloat r, g, b, a;
-    if ([c getRed:&r green:&g blue:&b alpha:&a])
-        return [UIColor colorWithRed:MIN(r + 0.2, 1.0)
-                               green:MIN(g + 0.2, 1.0)
-                                blue:MIN(b + 0.2, 1.0)
+    CGFloat h, s, b, a;
+    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:MIN(b * 1.3, 1.0)
                                alpha:a];
     return nil;
 }
 
 + (UIColor *)darkerColorForColor:(UIColor *)c
 {
-    CGFloat r, g, b, a;
-    if ([c getRed:&r green:&g blue:&b alpha:&a])
-        return [UIColor colorWithRed:MAX(r - 0.15, 0.0)
-                               green:MAX(g - 0.15, 0.0)
-                                blue:MAX(b - 0.15, 0.0)
+    CGFloat h, s, b, a;
+    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b * 0.75
                                alpha:a];
     return nil;
 }
