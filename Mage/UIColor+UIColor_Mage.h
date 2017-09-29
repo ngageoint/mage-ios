@@ -11,5 +11,11 @@
 @interface UIColor (UIColor_Mage)
 
 + (UIColor *) mageBlue;
++ (UIColor *) primaryColor;
++ (UIColor *) secondaryColor;
++ (void) setPrimaryColor: (UIColor *) primaryColor;
++ (void) setSecondaryColor: (UIColor *) secondaryColor;
++ (UIColor *) darkerPrimary;
++ (UIColor *) lighterPrimary;
 
 @end

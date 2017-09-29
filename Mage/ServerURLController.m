@@ -9,12 +9,14 @@
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ServerURLController ()
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
+@property (weak, nonatomic) IBOutlet UIButton *okButton;
 @property (weak, nonatomic) IBOutlet UITextView *errorStatus;
 @property (strong, nonatomic) id<ServerURLDelegate> delegate;
 @end
@@ -27,6 +29,14 @@
     }
     
     return self;
+}
+
+- (void) viewDidLoad {
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.cancelButton.backgroundColor = [UIColor darkerPrimary];
+    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    self.okButton.backgroundColor = [UIColor darkerPrimary];
+    [self.okButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

@@ -21,6 +21,7 @@
                 <outlet property="cancelButton" destination="n3v-ds-Sff" id="dvZ-N5-Wdb"/>
                 <outlet property="errorButton" destination="VRm-i7-6lH" id="SpZ-Cf-Z2O"/>
                 <outlet property="errorStatus" destination="lkG-8a-rWv" id="y1F-tV-iU9"/>
+                <outlet property="okButton" destination="SwE-a6-n1N" id="JNl-lx-LfP"/>
                 <outlet property="serverURL" destination="jtk-kb-2jR" id="NWn-IQ-N5h"/>
                 <outlet property="view" destination="JDb-zc-CfP" id="fZe-Q5-3Kw"/>
             </connections>

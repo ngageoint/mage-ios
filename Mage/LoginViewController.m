@@ -12,6 +12,7 @@
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "UIColor+UIColor_Mage.h"
 
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
@@ -56,6 +57,9 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.loginButton.backgroundColor = [UIColor darkerPrimary];
+    [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self

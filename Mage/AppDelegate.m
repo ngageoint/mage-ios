@@ -39,6 +39,7 @@
 #import <Server.h>
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "TransitionViewController.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) UIView *splashView;
@@ -70,7 +71,7 @@
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    [self setupApplicationNavigationBar];
+    [self setupApplicationAppearance];
     
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
@@ -96,7 +97,7 @@
     self.rootViewController = [[UINavigationController alloc] init];
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
-    UIViewController *transitionView = [[UIViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [self.rootViewController pushViewController:transitionView animated:NO];
     self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
     [self.appCoordinator start];
@@ -128,21 +129,33 @@
     [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
-- (void) setupApplicationNavigationBar {
-    [[UINavigationBar appearance] setBarTintColor:[UIColor mageBlue]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+- (void) setupApplicationAppearance {
+    [UIColor setPrimaryColor:[UIColor mageBlue]];
+    [UIColor setSecondaryColor:[UIColor whiteColor]];
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor secondaryColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor whiteColor]
+                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
                                                            }];
     [[UINavigationBar appearance] setTranslucent:NO];
-
+    [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTintColor:[UIColor secondaryColor]];
+    
+    // these are inverted from the rest of the app
+    [[UITabBar appearance] setTintColor:[UIColor primaryColor]];
+    [[UITabBar appearance] setBarTintColor:[UIColor secondaryColor]];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
+                                                           }];
+    
     if (@available(iOS 11.0, *)) {
-        [[UISearchBar appearance] setBarTintColor:[UIColor mageBlue]];
-        [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
-        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
+        [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
+        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor secondaryColor]}];
         [[UINavigationBar appearance] setPrefersLargeTitles:YES];
         [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
-                                                                    NSForegroundColorAttributeName: [UIColor whiteColor]
+                                                                    NSForegroundColorAttributeName: [UIColor secondaryColor]
                                                                     }];
     } else {
         // Fallback on earlier versions
@@ -153,7 +166,7 @@
     NSLog(@"applicationDidEnterBackground");
     
     self.splashView = [[UIView alloc]initWithFrame:[self.window frame]];
-    self.splashView.backgroundColor = [UIColor colorWithRed:17.0/255 green:84.0/255 blue:164.0/255 alpha:1];
+    self.splashView.backgroundColor = [UIColor primaryColor];
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 240, 45))];
     imageView.image = [UIImage imageNamed:@"mage_logo"];
     imageView.contentMode = UIViewContentModeScaleAspectFit;

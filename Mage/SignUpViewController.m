@@ -15,6 +15,7 @@
 #import <NBAsYouTypeFormatter.h>
 #import <ServerAuthentication.h>
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "UIColor+UIColor_Mage.h"
 
 @interface SignUpViewController ()
 
@@ -33,6 +34,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (strong, nonatomic) id<SignUpDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 
 @end
 
@@ -48,6 +51,12 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.cancelButton.backgroundColor = [UIColor darkerPrimary];
+    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    self.signupButton.backgroundColor = [UIColor darkerPrimary];
+    [self.signupButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     
     self.googleSignInButton.style = kGIDSignInButtonStyleWide;
 

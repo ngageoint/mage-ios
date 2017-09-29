@@ -13,6 +13,7 @@
 #import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Attachment+Thumbnail.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ObservationCommonHeaderTableViewCell ()
 @property (strong, nonatomic) MapDelegate *mapDelegate;
@@ -25,6 +26,8 @@
 
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
+    [self.primaryFieldLabel setTextColor:[UIColor primaryColor]];
+     [self.variantFieldLabel setTextColor:[UIColor primaryColor]];
     
     NSString *primaryFieldText = [observation primaryFieldText];
     

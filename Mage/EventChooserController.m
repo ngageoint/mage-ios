@@ -10,6 +10,7 @@
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
+#import "UIColor+UIColor_Mage.h"
 
 @implementation EventChooserController
 
@@ -30,6 +31,10 @@ BOOL eventsFetched = NO;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.loadingView.backgroundColor = [UIColor primaryColor];
+    self.actionButton.backgroundColor = [UIColor darkerPrimary];
+    [self.actionButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
