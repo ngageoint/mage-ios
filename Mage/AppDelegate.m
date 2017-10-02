@@ -450,12 +450,8 @@
 //        NSLog(@"notification");
 //    }];
     
-    UIViewController *currentController = [self topMostController];
-    if (!([currentController isKindOfClass:[MageInitialViewController class]]
-        || [currentController isKindOfClass:[LoginViewController class]]
-        || [currentController.restorationIdentifier isEqualToString:@"DisclaimerScreen"])) {
-        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    }
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self createRootView];
 }
 
 - (UIViewController*) topMostController
