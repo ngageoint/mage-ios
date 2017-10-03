@@ -12,32 +12,68 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *selectedLabel;
 @property (weak, nonatomic) IBOutlet UIView *searchBarContainer;
+@property (weak, nonatomic) IBOutlet UIView *selectedChoicesView;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) NSMutableArray *choices;
 @property (strong, nonatomic) NSArray *filteredChoices;
 @property (strong, nonatomic) NSMutableArray *selectedChoices;
 @property (assign, nonatomic) BOOL multiselect;
+@property (strong, nonatomic) NSDictionary *fieldDefinition;
+@property (strong, nonatomic) id value;
+@property (strong, nonatomic) id<PropertyEditDelegate> delegate;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
+
 @end
 
 @implementation SelectEditViewController
 
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate {
+    self = [super initWithNibName:@"ObservationEditSelectPickerView" bundle:nil];
+    if (self == nil) return nil;
+    
+    _fieldDefinition = fieldDefinition;
+    _delegate = delegate;
+    _value = value;
+    
+    self.choices = [NSMutableArray array];
+    for (id choice in [self.fieldDefinition objectForKey:@"choices"]) {
+        NSString *title = [choice objectForKey:@"title"];
+        if (title) {
+            [self.choices addObject:title];
+        }
+    }
+    return self;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"DropdownChoiceCell" bundle:nil] forCellReuseIdentifier:@"DropdownChoiceCell"];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 50;
-    
+
     self.selectedLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.selectedLabel.numberOfLines = 0;
     
-    self.definesPresentationContext = YES;
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    [self.searchBarContainer addSubview:self.searchController.searchBar];
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.searchController = self.searchController;
+    } else {
+        self.definesPresentationContext = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.selectedChoicesConstraint.constant = self.navigationController.navigationBar.frame.size.height + 20;
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+    }
 }
 
 - (void) viewWillAppear:(BOOL) animated {
@@ -57,26 +93,12 @@
     
     self.selectedLabel.text = [self.selectedChoices componentsJoinedByString:@", "];
     
-    self.choices = [NSMutableArray array];
-    for (id choice in [self.fieldDefinition objectForKey:@"choices"]) {
-        NSString *title = [choice objectForKey:@"title"];
-        if (title) {
-            [self.choices addObject:title];
-        }
-    }
-    
     if (![[self.fieldDefinition objectForKey:@"required"] boolValue]) {
         // Remove the empty select option the server adds for non-required fields
         [self.choices removeObject:@""];
     }
     
     self.filteredChoices = [NSArray arrayWithArray:self.choices];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.searchController.searchBar sizeToFit];
 }
 
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
@@ -88,7 +110,7 @@
 }
 
 - (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"choiceCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DropdownChoiceCell"];
     
     NSString *choice = nil;
     if (self.searchController.active && [self.searchController.searchBar.text length]) {
@@ -139,6 +161,7 @@
     }
     
     self.selectedLabel.text = [self.selectedChoices componentsJoinedByString:@", "];
+    [self notifyDelegate];
 }
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
@@ -146,6 +169,19 @@
     self.filteredChoices = [self.choices filteredArrayUsingPredicate:predicate];
     
     [self.tableView reloadData];
+}
+
+- (void) notifyDelegate {
+    id value = nil;
+    if (self.multiselect) {
+        value = self.selectedChoices;
+    } else {
+        if ([self.selectedChoices count]) {
+            value = [self.selectedChoices objectAtIndex:0];
+        }
+    }
+    
+    [self.delegate setValue:value forFieldDefinition:self.fieldDefinition];
 }
 
 - (IBAction) onApplyTapped:(id) sender {
@@ -158,7 +194,7 @@
         }
     }
     
-    [self.propertyEditDelegate setValue:value forFieldDefinition:self.fieldDefinition];
+    [self.delegate setValue:value forFieldDefinition:self.fieldDefinition];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -182,5 +218,6 @@
     
     [self.selectedChoices removeAllObjects];
     self.selectedLabel.text = @"";
+    [self notifyDelegate];
 }
 @end

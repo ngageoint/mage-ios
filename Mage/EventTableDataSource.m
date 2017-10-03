@@ -11,6 +11,7 @@
 #import "EventChooserController.h"
 #import "Observation.h"
 #import "EventTableViewCell.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface EventTableDataSource()
 
@@ -87,7 +88,7 @@
     self.eventIdToOfflineObservationCount = offlineCount;
 
     
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
 }
 
 
@@ -237,7 +238,8 @@
     UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
     [bottomBorder setBackgroundColor:[UIColor lightGrayColor]];
     [view addSubview:bottomBorder];
-    [view setBackgroundColor:[UIColor colorWithRed:65/255.0 green:124/255.0 blue:200/255.0 alpha:1]];
+    
+    [view setBackgroundColor:[UIColor lighterPrimary]];
     return view;
 }
 

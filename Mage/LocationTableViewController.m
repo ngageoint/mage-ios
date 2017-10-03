@@ -12,8 +12,9 @@
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
+#import "UIColor+UIColor_Mage.h"
 
-@interface LocationTableViewController()
+@interface LocationTableViewController() <UserSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
 
@@ -24,14 +25,22 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
+    // ths is different on the ipad and the iphone so make the check here
+    if (self.locationDataStore.personSelectionDelegate == nil) {
+        self.locationDataStore.personSelectionDelegate = self;
+    }
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshPeople) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh people" attributes:attrsDictionary]];
+    
+    self.tableView.refreshControl = self.refreshControl;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 88;
@@ -106,15 +115,26 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
+    if ([[segue identifier] isEqualToString:@"ShowUserSegue"]) {
         MeViewController *destination = (MeViewController *)[segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Location *location = [self.locationDataStore locationAtIndexPath:indexPath];
-		[destination setUser:location.user];
+        User *user = (User *) sender;
+		[destination setUser:user];
     }
 }
 
-- (IBAction)refreshPeople:(UIRefreshControl *)sender {
+- (void) userDetailSelected:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void)refreshPeople {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *userFetchTask = [Location operationToPullLocationsWithSuccess:^{

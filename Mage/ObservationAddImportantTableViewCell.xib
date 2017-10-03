@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addImportant" rowHeight="40" id="DP6-0u-TkD" customClass="ObservationAddImportantTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DP6-0u-TkD" id="iPp-hc-tU8">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag" translatesAutoresizingMaskIntoConstraints="NO" id="1k9-Bd-Om7">
+                        <rect key="frame" x="8" y="8" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="hHa-od-NQi"/>
+                            <constraint firstAttribute="height" constant="24" id="uux-Jf-bid"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.61176470589999998" green="0.1529411765" blue="0.69019607839999997" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOA-EH-vHh">
+                        <rect key="frame" x="40" y="8" width="171" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="K8i-5c-TgT"/>
+                            <constraint firstAttribute="width" constant="171" id="ynR-66-FBt"/>
+                        </constraints>
+                        <state key="normal" title="FLAG AS IMPORTANT">
+                            <color key="titleColor" red="0.61176470589999998" green="0.1529411765" blue="0.69019607839999997" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="onUpdateImportantTapped:" destination="DP6-0u-TkD" eventType="touchUpInside" id="ZC6-Ve-G67"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="oOA-EH-vHh" firstAttribute="leading" secondItem="1k9-Bd-Om7" secondAttribute="trailing" constant="8" id="EDx-07-o37"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="oOA-EH-vHh" secondAttribute="bottom" id="IVv-TP-6dQ"/>
+                    <constraint firstItem="oOA-EH-vHh" firstAttribute="top" secondItem="iPp-hc-tU8" secondAttribute="topMargin" id="Q5h-i3-UTT"/>
+                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="top" secondItem="iPp-hc-tU8" secondAttribute="topMargin" id="V4V-PG-ClU"/>
+                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="leading" secondItem="iPp-hc-tU8" secondAttribute="leadingMargin" id="xRE-6V-lVY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="flag" width="24" height="24"/>
+    </resources>
+</document>

@@ -37,6 +37,12 @@
 {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     [_reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
     

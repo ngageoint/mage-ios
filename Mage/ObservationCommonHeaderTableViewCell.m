@@ -13,6 +13,7 @@
 #import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Attachment+Thumbnail.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ObservationCommonHeaderTableViewCell ()
 @property (strong, nonatomic) MapDelegate *mapDelegate;
@@ -24,20 +25,23 @@
 @implementation ObservationCommonHeaderTableViewCell
 
 
-- (void) configureCellForObservation: (Observation *) observation {
-    NSString *name = [observation.properties valueForKey:@"type"];
-    if (name != nil) {
-        self.primaryFieldLabel.text = name;
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
+    [self.primaryFieldLabel setTextColor:[UIColor primaryColor]];
+     [self.variantFieldLabel setTextColor:[UIColor primaryColor]];
+    
+    NSString *primaryFieldText = [observation primaryFieldText];
+    
+    if (primaryFieldText != nil && [primaryFieldText length] > 0) {
+        self.primaryFieldLabel.text = primaryFieldText;
+        self.primaryFieldLabel.hidden = NO;
     } else {
-        self.primaryFieldLabel.text = @"Observation";
+        self.primaryFieldLabel.hidden = YES;
     }
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSString *variantText = [observation.properties objectForKey:variantField];
-    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && variantText.length > 0) {
+    
+    NSString *variantText = [observation secondaryFieldText];
+    if (variantText != nil && [variantText length] > 0) {
         self.variantFieldLabel.hidden = NO;
-        self.variantFieldLabel.text = [observation.properties objectForKey:variantField];
+        self.variantFieldLabel.text = variantText;
     } else {
         self.variantFieldLabel.hidden = YES;
     }
@@ -87,6 +91,8 @@
         return;
     }
     
+//    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
+
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;

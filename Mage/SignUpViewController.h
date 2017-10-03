@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
+#import "SignUpDelegate.h"
 
 @interface SignUpViewController : UIViewController
-@property (strong, nonatomic) MageServer *server;
+
+- (instancetype) initWithServer: (MageServer *) server andDelegate: (id<SignUpDelegate>) delegate;
+
 @end

@@ -42,7 +42,11 @@
         image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.iconUrl]]];
     }
     NSLog(@"Showing icon from %@", user.iconUrl);
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(37, 10000) interpolationQuality:kCGInterpolationLow];
+    
+    float scale = image.size.width / 37;
+    
+    UIImage *resizedImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
+    
     [resizedImage setAccessibilityIdentifier:user.iconUrl];
     self.image = [self mergeImage:resizedImage withDot:[self circleWithColor:[self colorForUser:user]]];
 }

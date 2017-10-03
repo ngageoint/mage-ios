@@ -19,6 +19,15 @@
 
 @implementation TimeSettingsTableViewController
 
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

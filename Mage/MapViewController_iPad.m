@@ -109,14 +109,7 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
-        WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-
-        [editViewController setLocation:point];
-    } else if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
+    if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
         SettingsViewController *settingsViewController = segue.destinationViewController;
         settingsViewController.dismissable = YES;
     } else {
@@ -131,7 +124,6 @@
         [self observationDetailSelected:(Observation *) calloutItem];
     }
 }
-
 
 - (void)selectedObservation:(Observation *) observation {
     [self.mapDelegate selectedObservation:observation];

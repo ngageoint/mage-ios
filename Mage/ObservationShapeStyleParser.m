@@ -27,7 +27,7 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
     ObservationShapeStyle *style = [[ObservationShapeStyle alloc] init];
     
     Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
+    NSDictionary *form = [event formForObservation:observation];
     
     // Check for a style
     NSDictionary *styleField = [form objectForKey: STYLE_ELEMENT];

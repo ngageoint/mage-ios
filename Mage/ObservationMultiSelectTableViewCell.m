@@ -11,7 +11,7 @@
 @implementation ObservationMultiSelectTableViewCell
 
 - (void) populateCellWithKey:(id)key andValue:(id)value {
-    self.keyLabel.text = [NSString stringWithFormat:@"%@", key];
+    [super populateCellWithKey:key andValue:value];
     self.valueTextView.text = [value componentsJoinedByString:@", "];
 }
 

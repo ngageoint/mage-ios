@@ -41,6 +41,7 @@
 #import "MapUtils.h"
 #import "MapObservationManager.h"
 #import "WKBGeometryUtils.h"
+#import <Event.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -277,10 +278,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) setObservations:(Observations *)observations {
+    
     _observations = observations;
     _observations.delegate = self;
     
-    [self.mapObservations clear];
+    Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
+    
+    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
+    
+    [self.observationAnnotations clear];
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
@@ -335,9 +341,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
-    
-    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:mapView];
-    _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
@@ -972,7 +975,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
     } else if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-        [pinView setPinTintColor:[UIColor greenColor]];
+        [pinView setPinTintColor:[UIColor redColor]];
         return pinView;
     }
     
@@ -1099,7 +1102,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (MapObservations *) observationAnnotations {
-    if (!_mapObservations && !_mapView) {
+    if (!_mapObservations) {
         _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     }
     

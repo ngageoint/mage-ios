@@ -10,7 +10,7 @@
 #import "AttachmentSelectionDelegate.h"
 
 @protocol ValidObservationProperty
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation;
+- (void) populateCellWithFormField: (id) field andValue: (id) value;
 - (void) selectRow;
 - (void) setValid:(BOOL) valid;
 - (BOOL) isValid;
@@ -22,8 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *requiredIndicator;
 
-@property (weak, nonatomic) NSDictionary *fieldDefinition;
+@property (strong, nonatomic) NSDictionary *fieldDefinition;
 @property (nonatomic, weak) id<ObservationEditListener> delegate;
-
 
 @end

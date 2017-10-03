@@ -20,10 +20,15 @@
 #import "Filter.h"
 #import "Observations.h"
 #import "WKBPoint.h"
+#import "ObservationEditCoordinator.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ObservationTableViewController()
 
 @property (nonatomic, strong) NSTimer* updateTimer;
+// this property should exist in this view coordinator when we get to that
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
+
 
 @end
 
@@ -32,15 +37,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    // this is different on the ipad on and the iphone so make the check here
+    if (self.observationDataStore.observationSelectionDelegate == nil) {
+        self.observationDataStore.observationSelectionDelegate = self;
+    }
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    self.observationDataStore.viewController = self;
     
+    self.childCoordinators = [[NSMutableArray alloc] init];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh observations" attributes:attrsDictionary]];
+    
+    self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
 }
@@ -138,44 +153,45 @@
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+		Observation *observation = (Observation *) sender;
 		[destination setObservation:observation];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        CLLocation *location = [[LocationService singleton] location];
-        if (location != nil) {
-            WKBPoint *point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-            [editViewController setLocation:point];
-        }
     }
 }
 
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"You are not part of this event"
-                                         message:@"You cannot create observations for an event you are not part of."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-
-            return false;
-        }
-    }
-    return true;
+- (void) selectedObservation:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
+- (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
 
-- (IBAction)refreshObservations:(UIRefreshControl *)sender {
+- (void) observationDetailSelected:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (IBAction)newButtonTapped:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+
+    ObservationEditCoordinator *edit;
+    
+    WKBPoint *point;
+    
+    if (location) {
+        point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+    }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andObservation: nil andLocation:point];
+
+    [self.childCoordinators addObject:edit];
+    [edit start];
+}
+
+- (void)refreshObservations {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{

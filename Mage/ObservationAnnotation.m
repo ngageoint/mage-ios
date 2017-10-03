@@ -6,7 +6,7 @@
 
 #import "ObservationAnnotation.h"
 #import "NSDate+DateTools.h"
-#import "ObservationImage.h"
+#import <ObservationImage.h>
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
@@ -19,22 +19,23 @@
 
 @implementation ObservationAnnotation
 
--(id) initWithObservation:(Observation *) observation {
-    return [self initWithObservation:observation andGeometry:[observation getGeometry]];
+-(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms {
+    return [self initWithObservation:observation andEventForms: forms andGeometry:[observation getGeometry]];
 }
 
--(id) initWithObservation:(Observation *) observation andGeometry: (WKBGeometry *) geometry {
+-(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry {
     WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;
-    return [self initWithObservation:observation andLocation:location];
+    return [self initWithObservation:observation andEventForms: forms andLocation:location];
 }
 
-- (id)initWithObservation:(Observation *) observation andLocation:(CLLocationCoordinate2D) location{
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andLocation:(CLLocationCoordinate2D) location{
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
-        [self setTitle:[observation.properties objectForKey:@"type"]];
+        [self setTitle:[observation primaryFieldText]];
+        
         if (self.title == nil) {
             [self setTitle:@"Observation"];
         }

@@ -24,14 +24,14 @@
 
 @implementation ObservationEditGeometryTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
+    self.geometry = [value objectForKey:@"geometry"];
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        self.geometry = [observation getGeometry];
+//        self.geometry = [observation getGeometry];
         self.isGeometryField = YES;
     } else {
-        id geometry = [observation.properties objectForKey:[field objectForKey:@"name"]];
+        id geometry = [value objectForKey:@"geometry"];
         if (geometry) {
             self.geometry = (WKBGeometry *) geometry;
         } else {
@@ -44,6 +44,7 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
     
     self.mapDelegate = [[MapDelegate alloc] init];
+
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
     [self.mapView removeAnnotations:self.mapView.annotations];
@@ -52,10 +53,9 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-        
-        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView];
+        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
         if (self.isGeometryField) {
-            self.mapObservation = [self.observationManager addToMapWithObservation:observation];
+            self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
             MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
             [self.mapView setRegion:viewRegion animated:NO];
         }

@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MageServer.h"
+
+@protocol LoginDelegate <NSObject>
+
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
+- (void) changeServerURL;
+- (void) createAccount;
+
+@end
 
 @interface LoginViewController : UIViewController
+
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate;
+- (void) authenticationHadFailure: (NSString *) errorString;
 
 @end

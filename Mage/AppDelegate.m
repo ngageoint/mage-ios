@@ -8,9 +8,9 @@
 #import <Mage.h>
 #import <User.h>
 #import <CoreLocation/CoreLocation.h>
-#import <AVFoundation/AVFoundation.h>
 #import <FICImageCache.h>
 #import <UserUtility.h>
+#import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"
 #import "Attachment+Thumbnail.h"
 #import "UIImage+Thumbnail.h"
@@ -35,16 +35,26 @@
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "MageOfflineObservationManager.h"
+#import "UIColor+UIColor_Mage.h"
+#import <Server.h>
+#import "MageAppCoordinator.h"
+#import <GoogleSignIn/GoogleSignIn.h>
+#import "TransitionViewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) UIView *splashView;
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
 @property (nonatomic, strong) NSString *addedCacheOverlay;
+@property (nonatomic, strong) MageAppCoordinator *appCoordinator;
+@property (nonatomic, strong) UINavigationController *rootViewController;
+@property (nonatomic, strong) UIApplication *application;
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
@@ -58,46 +68,105 @@
     [allPreferences addEntriesFromDictionary:defaultPreferences];
     [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
     
-    FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
-    thumbnailImageFormat.name = AttachmentSmallSquare;
-    thumbnailImageFormat.family = AttachmentFamily;
-    thumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
-    thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
-    thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
-    thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
-    ipadThumbnailImageFormat.name = AttachmentMediumSquare;
-    ipadThumbnailImageFormat.family = AttachmentFamily;
-    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
-    ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
-    ipadThumbnailImageFormat.maximumCount = 250;
-    ipadThumbnailImageFormat.devices = FICImageFormatDevicePad;
-    ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
-    
-    FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
-    sharedImageCache.delegate = self;
-    sharedImageCache.formats = imageFormats;
-    
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil]];
-	 
+    [self setupApplicationAppearance];
+    
+    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    [self.window makeKeyAndVisible];
+
+    [self createRootView];
+    
 	return YES;
 }
 
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary *)options {
+    NSLog(@"URL %@", url);
+    if ([[url scheme] hasPrefix:@"com.googleusercontent.apps"]) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    }
+    return false;
+}
+
+- (void) createRootView {
+    self.rootViewController = [[UINavigationController alloc] init];
+    self.rootViewController.navigationBarHidden = YES;
+    [self.window setRootViewController:self.rootViewController];
+    TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    [self.rootViewController pushViewController:transitionView animated:NO];
+    self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
+    [self.appCoordinator start];
+}
+
+- (void) chooseEvent {
+    [Server removeCurrentEventId];
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self createRootView];
+}
+
+- (void) logout {
+    [[UserUtility singleton] expireToken];
+    [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self createRootView];
+}
+
+- (void) application: (UIApplication *) application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"background fetch");
+    
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
+        completionHandler(UIBackgroundFetchResultNewData);
+    } failure:^(NSError* error) {
+        completionHandler(UIBackgroundFetchResultFailed);
+    }];
+    
+    [[MageSessionManager manager] addTask:observationFetchTask];
+}
+
+- (void) setupApplicationAppearance {
+    [UIColor setPrimaryColor:[UIColor mageBlue]];
+    [UIColor setSecondaryColor:[UIColor whiteColor]];
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor secondaryColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
+                                                           }];
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTintColor:[UIColor secondaryColor]];
+    
+    // these are inverted from the rest of the app
+    [[UITabBar appearance] setTintColor:[UIColor primaryColor]];
+    [[UITabBar appearance] setBarTintColor:[UIColor secondaryColor]];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
+                                                           }];
+    
+    if (@available(iOS 11.0, *)) {
+        [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
+        [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
+        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor secondaryColor]}];
+        [[UINavigationBar appearance] setPrefersLargeTitles:YES];
+        [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
+                                                                    NSForegroundColorAttributeName: [UIColor secondaryColor]
+                                                                    }];
+    } else {
+        // Fallback on earlier versions
+    }
+}
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"applicationDidEnterBackground");
     
     self.splashView = [[UIView alloc]initWithFrame:[self.window frame]];
-    self.splashView.backgroundColor = [UIColor colorWithRed:17.0/255 green:84.0/255 blue:164.0/255 alpha:1];
+    self.splashView.backgroundColor = [UIColor primaryColor];
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 240, 45))];
     imageView.image = [UIImage imageNamed:@"mage_logo"];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -117,7 +186,7 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
-        [[Mage singleton] startServices];
+        [[Mage singleton] startServicesAsInitial:NO];
     }
 }
 
@@ -133,7 +202,7 @@
     [self processOfflineMapArchives];
 }
 
-- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
     // Handle attachments uploaded in the background
     if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
         NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");
@@ -361,12 +430,28 @@
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
     
-    UIViewController *currentController = [self topMostController];
-    if (!([currentController isKindOfClass:[MageInitialViewController class]]
-        || [currentController isKindOfClass:[LoginViewController class]]
-        || [currentController.restorationIdentifier isEqualToString:@"DisclaimerScreen"])) {
-        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    }
+//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+//
+//    UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+//    content.title = @"MAGE Token Expired";
+//    content.body = @"Your MAGE token has expired.";
+//    content.categoryIdentifier = @"TokenExpired";
+//    content.sound = [UNNotificationSound defaultSound];
+//
+//    UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger
+//                                                  triggerWithTimeInterval:1 repeats:NO];
+//    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:@"TokenExpired"
+//                                                                          content:content trigger:trigger];
+//
+//    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+//        if (error != nil) {
+//            NSLog(@"Something went wrong: %@",error);
+//        }
+//        NSLog(@"notification");
+//    }];
+    
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self createRootView];
 }
 
 - (UIViewController*) topMostController
@@ -386,66 +471,6 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
-- (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock {
-    Attachment *attachment = (Attachment *) entity;
-    [attachment.managedObjectContext obtainPermanentIDsForObjects:@[attachment] error:nil];
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:attachment.managedObjectContext];
-    
-    [localContext performBlock:^{
-        Attachment *localAttachment = [(Attachment *) entity MR_inContext:localContext];
-        
-        // Fetch the desired source image by making a network request
-        UIImage *sourceImage = nil;
-        NSLog(@"content type %@", localAttachment.contentType);
-        if ([localAttachment.contentType hasPrefix:@"image"]) {
-            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
-            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        } else if ([localAttachment.contentType hasPrefix:@"video"]) {
-            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
-            AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
-            AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-            generator.appliesPreferredTrackTransform = YES;
-            CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
-            
-            AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
-                if (result != AVAssetImageGeneratorSucceeded) {
-                    NSLog(@"couldn't generate thumbnail, error:%@", error);
-                }
-                
-                CGSize thumbnailSize = [AttachmentSmallSquare isEqualToString:formatName] ? AttachmentSquareImageSize : AttachmentiPadSquareImageSize;
-                UIImage *sourceImage = [UIImage imageWithCGImage:image];
-                UIImage *thumbnail = [sourceImage thumbnailWithSize:thumbnailSize];
-                UIImage *playOverlay = [UIImage imageNamed:@"play_overlay"];
-                
-                UIGraphicsBeginImageContextWithOptions(thumbnail.size, NO, 0.0);
-                [thumbnail drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
-                [playOverlay drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
-                UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock(newImage);
-                });
-            };
-            
-            [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
-        } else if ([localAttachment.contentType hasPrefix:@"audio"]) {
-            sourceImage = [UIImage imageNamed:@"audio_thumbnail"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        } else {
-            sourceImage = [UIImage imageNamed:@"paperclip_thumbnail"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        }
-    }];
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *) url sourceApplication:(NSString *) sourceApplication annotation:(id) annotation {

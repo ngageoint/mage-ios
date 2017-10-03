@@ -8,7 +8,7 @@
 
 @implementation ObservationEditTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
 }
 
 - (void) selectRow {

@@ -11,7 +11,7 @@
 
 @implementation ObservationStatusOkTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     self.statusLabel.text = observation.lastModified ? [NSString stringWithFormat:@"Pushed on %@", [observation.lastModified formattedDisplayDate]] : @"Pushed";
 }
 
