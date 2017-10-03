@@ -23,7 +23,7 @@
 #import "ObservationEditCoordinator.h"
 #import "UIColor+UIColor_Mage.h"
 
-@interface ObservationTableViewController()
+@interface ObservationTableViewController() <ObservationEditDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
 // this property should exist in this view coordinator when we get to that
@@ -224,5 +224,13 @@
     }
 }
 
+
+- (void)editComplete:(Observation *)observation {
+    
+}
+
+- (void)observationDeleted:(Observation *)observation {
+    
+}
 
 @end
