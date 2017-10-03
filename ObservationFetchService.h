@@ -13,7 +13,7 @@ extern NSString * const kObservationFetchFrequencyKey;
 
 + (instancetype) singleton;
 
-- (void) start;
+- (void) startAsInitial: (BOOL) initial;
 - (void) stop;
 
 @end

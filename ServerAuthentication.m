@@ -12,14 +12,29 @@
 #import "UserUtility.h"
 #import "NSDate+Iso8601.h"
 
+@interface ServerAuthentication()
+
+@property (strong, nonatomic) NSDictionary* parameters;
+
+@end
+
 @implementation ServerAuthentication
+
+- (instancetype) initWithParameters:(NSDictionary *)parameters {
+    self = [super init];
+    if (self == nil) return nil;
+    
+    self.parameters = parameters;
+    
+    return self;
+}
 
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:@"loginParameters"];
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     BOOL registered = [defaults boolForKey:@"deviceRegistered"];
@@ -39,7 +54,7 @@
     return YES;
 }
 
-- (void) performLogin: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) performLogin: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     MageSessionManager *manager = [MageSessionManager manager];
@@ -73,14 +88,21 @@
                 NSLog(@"Error logging in: %@", error);
                 // try to register again
                 [defaults setBool:NO forKey:@"deviceRegistered"];
-                [self registerDevice:parameters complete:complete];
+                [self registerDevice:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+                    if (authenticationStatus == AUTHENTICATION_ERROR) {
+                        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                        complete(authenticationStatus, errResponse);
+                    } else {
+                        complete(authenticationStatus, errorString);
+                    }
+                }];
             }
     }];
     
     [manager addTask:task];
 }
 
-- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
 
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSString *token = [response objectForKey:@"token"];
@@ -111,10 +133,10 @@
     [StoredPassword persistPasswordToKeyChain:password];
     [StoredPassword persistTokenToKeyChain:token];
     
-    complete(AUTHENTICATION_SUCCESS);
+    complete(AUTHENTICATION_SUCCESS, nil);
 }
 
-- (void) registerDevice: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) registerDevice: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSLog(@"Registering device");
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     MageSessionManager *manager = [MageSessionManager manager];
@@ -130,10 +152,11 @@
             [self performLogin:parameters complete:complete];
         } else {
             NSLog(@"Registration was successful");
-            complete(REGISTRATION_SUCCESS);
+            complete(REGISTRATION_SUCCESS, nil);
         }
     } failure:^(NSURLSessionTask *operation, NSError *error) {
-        complete(AUTHENTICATION_ERROR);
+        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+        complete(AUTHENTICATION_ERROR, errResponse);
     }];
     
     [manager addTask:task];

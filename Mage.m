@@ -35,7 +35,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) startServices {
+- (void) startServicesAsInitial: (BOOL) initial {
     [[LocationService singleton] start];
 
     NSURLSessionDataTask *rolesPullTask = [Role operationToFetchRolesWithSuccess:nil failure:nil];
@@ -43,7 +43,7 @@
     NSURLSessionDataTask *usersPullTask = [User operationToFetchUsersWithSuccess:^{
         NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
-        [[ObservationFetchService singleton] start];
+        [[ObservationFetchService singleton] startAsInitial:initial];
     } failure:^(NSError *error) {
         NSLog(@"Failed to pull users");
     }];

@@ -10,7 +10,7 @@
 
 + (instancetype) singleton;
 
-- (void) startServices;
+- (void) startServicesAsInitial: (BOOL) initial;
 - (void) stopServices;
 - (void) fetchEvents;
 - (void) fetchFormAndStaticLayerForEvents: (NSArray *) events;

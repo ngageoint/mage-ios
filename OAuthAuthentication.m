@@ -26,7 +26,7 @@
     return YES;
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {    
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     OAuthRequestType requestType = [[parameters valueForKey:@"requestType"] intValue];
     if (requestType == SIGNUP) {
         [self signupWithParameters:[parameters valueForKey:@"result"] complete:complete];
@@ -35,16 +35,16 @@
     }
 }
 
-- (void) signupWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) signupWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSDictionary *user = [parameters objectForKey:@"user"];
     if (user != nil) {
-        complete(AUTHENTICATION_SUCCESS);
+        complete(AUTHENTICATION_SUCCESS, nil);
     } else {
-        complete(AUTHENTICATION_ERROR);
+        complete(AUTHENTICATION_ERROR, nil);
     }
 }
 
-- (void) signinWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) signinWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSString *token = [parameters valueForKey:@"token"];
     if (token != nil) {
         NSDictionary *userJson = [parameters objectForKey:@"user"];
@@ -86,14 +86,14 @@
             
             [StoredPassword persistTokenToKeyChain:token];
             
-            complete(AUTHENTICATION_SUCCESS);
+            complete(AUTHENTICATION_SUCCESS, nil);
         }];
     } else {
         NSDictionary *device = [parameters objectForKey:@"device"];
         if (device != nil && [device objectForKey:@"registered"]) {
-            complete(REGISTRATION_SUCCESS);
+            complete(REGISTRATION_SUCCESS, nil);
         } else {
-            complete(AUTHENTICATION_ERROR);
+            complete(AUTHENTICATION_ERROR, nil);
         }
     }
 }

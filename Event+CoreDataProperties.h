@@ -16,11 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Event (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) NSString *eventDescription;
-@property (nullable, nonatomic, retain) id form;
+@property (nullable, nonatomic, retain) id forms;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSNumber *recentSortOrder;
 @property (nullable, nonatomic, retain) NSNumber *remoteId;
 @property (nullable, nonatomic, retain) NSSet<Team *> *teams;
+@property (nullable, nonatomic, retain) NSDictionary *acl;
 
 @end
 

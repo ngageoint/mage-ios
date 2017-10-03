@@ -14,7 +14,22 @@
 #import "StoredPassword.h"
 #import "UserUtility.h"
 
+@interface LocalAuthentication()
+
+@property (strong, nonatomic) NSDictionary* parameters;
+
+@end
+
 @implementation LocalAuthentication
+
+- (instancetype) initWithParameters:(NSDictionary *)parameters {
+    self = [super init];
+    if (self == nil) return nil;
+    
+    self.parameters = parameters;
+    
+    return self;
+}
 
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
@@ -25,7 +40,7 @@
     return [url isEqualToString:[self.loginParameters objectForKey:@"serverUrl"]];
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus)) complete {
+- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     NSString *username = (NSString *) [parameters objectForKey:@"username"];
     NSString *password = (NSString *) [parameters objectForKey:@"password"];
@@ -46,12 +61,12 @@
             
             [MageSessionManager manager].token = [oldLoginParameters objectForKey:@"token"];
             
-            complete(AUTHENTICATION_SUCCESS);
+            complete(AUTHENTICATION_SUCCESS, nil);
             return;
         }
     }
     
-    complete(AUTHENTICATION_ERROR);
+    complete(AUTHENTICATION_ERROR, @"Error logging in");
 }
 
 @end

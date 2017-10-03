@@ -7,7 +7,7 @@
 #import "Authentication.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
-#import "OAuthAuthentication.h"
+#import "GoogleAuthentication.h"
 
 @interface Authentication ()
 
@@ -24,7 +24,7 @@
             return [[ServerAuthentication alloc] init];
         }
         case GOOGLE: {
-            return [[OAuthAuthentication alloc] init];
+            return [[GoogleAuthentication alloc] init];
         }
 		default: {
 			return nil;

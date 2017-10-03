@@ -72,10 +72,11 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         NSDictionary *authenticationStrategies = [response valueForKeyPath:@"authenticationStrategies"];
         [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
         for (NSString *authenticationType in authenticationStrategies) {
+            NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
             if ([authenticationType isEqualToString:@"google"]) {
-                [authenticationModules setObject:[[OAuthAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
             } else if ([authenticationType isEqualToString:@"local"]) {
-                [authenticationModules setObject:[[ServerAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:SERVER]];
+                [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
             }
         }
         server.authenticationModules = authenticationModules;

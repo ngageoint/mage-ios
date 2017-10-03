@@ -44,9 +44,13 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 	return self;
 }
 
-- (void) start {
+- (void) startAsInitial:(BOOL)initial {
     [self stop];
-    [self pullObservations];    
+    if (initial) {
+        [self pullInitialObservations];
+    } else {
+        [self pullObservations];
+    }
 }
 
 - (void) scheduleTimer {
@@ -59,6 +63,20 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
     if (![[UserUtility singleton] isTokenExpired]) {
         [self pullObservations];
     }
+}
+
+- (void) pullInitialObservations {
+    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullInitialObservationsWithSuccess:^{
+        if (![[UserUtility singleton] isTokenExpired]) {
+            [self scheduleTimer];
+        }
+    } failure:^(NSError* error) {
+        if (![[UserUtility singleton] isTokenExpired]) {
+            [self scheduleTimer];
+        }
+    }];
+    
+    [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
 - (void) pullObservations {
@@ -89,7 +107,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
                          change:(NSDictionary *)change
                         context:(void *)context {
     _interval = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
-    [self start];
+    [self startAsInitial:NO];
 }
 
 @end

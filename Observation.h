@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Observation : NSManagedObject
 
++ (NSURLSessionDataTask *) operationToPullInitialObservationsWithSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPullObservationsWithSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
@@ -43,14 +44,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (Boolean) isDirty;
 - (Boolean) isImportant;
+- (Boolean) isDeletableByCurrentUser;
+- (Boolean) currentUserCanUpdateImportant;
 - (Boolean) hasValidationError;
 - (NSString *) errorMessage;
+
+- (NSDictionary *) getPrimaryForm;
+- (NSString *) getPrimaryField;
+- (NSString *) getSecondaryField;
+- (NSString *) primaryFieldText;
+- (NSString *) secondaryFieldText;
 
 - (void) toggleFavoriteWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 - (NSDictionary *) getFavoritesMap;
 
 - (void) flagImportantWithDescription:(NSString *) description completion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 - (void) removeImportantWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
+- (void) deleteObservationWithCompletion: (nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 
 @end
 
