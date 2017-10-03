@@ -43,10 +43,11 @@
     [super viewWillAppear:animated];
     
     NSURL *url = [MageServer baseURL];
-    self.serverURL.text = [url absoluteString];
     
     if ([url absoluteString].length == 0) {
         [self.cancelButton removeFromSuperview];
+    } else {
+        self.serverURL.text = [url absoluteString];
     }
 }
 
