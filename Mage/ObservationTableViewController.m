@@ -19,21 +19,43 @@
 #import <LocationService.h>
 #import "Filter.h"
 #import "Observations.h"
+#import "WKBPoint.h"
+#import "ObservationEditCoordinator.h"
+#import "UIColor+UIColor_Mage.h"
+
+@interface ObservationTableViewController()
+
+@property (nonatomic, strong) NSTimer* updateTimer;
+// this property should exist in this view coordinator when we get to that
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
+
+
+@end
 
 @implementation ObservationTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    // this is different on the ipad on and the iphone so make the check here
+    if (self.observationDataStore.observationSelectionDelegate == nil) {
+        self.observationDataStore.observationSelectionDelegate = self;
+    }
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    self.observationDataStore.viewController = self;
     
+    self.childCoordinators = [[NSMutableArray alloc] init];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh observations" attributes:attrsDictionary]];
+    
+    self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
 }
@@ -53,7 +75,17 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kObservationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -66,17 +98,51 @@
                forKeyPath:kFavortiesFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    [self startUpdateTimer];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     
     self.observationDataStore.observations.delegate = nil;
+    
+    [self stopUpdateTimer];
+}
+
+- (void) applicationWillResignActive {
+    [self stopUpdateTimer];
+}
+
+- (void) applicationDidBecomeActive {
+    [self startUpdateTimer];
+}
+
+- (void) startUpdateTimer {
+    __weak __typeof__(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) stopUpdateTimer {
+    // Stop the timer for updating the circles
+    if (self.updateTimer != nil) {
+        
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+- (void) onUpdateTimerFire {
+    [self.observationDataStore updatePredicates];
 }
 
 - (void) setNavBarTitle {
@@ -87,44 +153,45 @@
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+		Observation *observation = (Observation *) sender;
 		[destination setObservation:observation];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        CLLocation *location = [[LocationService singleton] location];
-        if (location != nil) {
-            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-            [editViewController setLocation:point];
-        }
     }
 }
 
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"You are not part of this event"
-                                         message:@"You cannot create observations for an event you are not part of."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-
-            return false;
-        }
-    }
-    return true;
+- (void) selectedObservation:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
+- (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
 
-- (IBAction)refreshObservations:(UIRefreshControl *)sender {
+- (void) observationDetailSelected:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (IBAction)newButtonTapped:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+
+    ObservationEditCoordinator *edit;
+    
+    WKBPoint *point;
+    
+    if (location) {
+        point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+    }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andObservation: nil andLocation:point];
+
+    [self.childCoordinators addObject:edit];
+    [edit start];
+}
+
+- (void)refreshObservations {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
@@ -149,7 +216,7 @@
                          change:(NSDictionary *)change
                        context:(void *)context {
     
-    if ([keyPath isEqualToString:kTimeFilterKey]) {
+    if ([keyPath isEqualToString:kObservationTimeFilterKey] || [keyPath isEqualToString:kObservationTimeFilterNumberKey] || [keyPath isEqualToString:kObservationTimeFilterUnitKey]) {
         [self.observationDataStore startFetchController];
         [self setNavBarTitle];
     } else if ([keyPath isEqualToString:kImportantFilterKey] || [keyPath isEqualToString:kFavortiesFilterKey]) {

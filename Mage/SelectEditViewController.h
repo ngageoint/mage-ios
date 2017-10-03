@@ -10,7 +10,7 @@
 #import "ObservationEditTableViewController.h"
 
 @interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
-@property (weak, nonatomic) NSDictionary *fieldDefinition;
-@property (weak, nonatomic) id value;
-@property (weak, nonatomic) id<PropertyEditDelegate> propertyEditDelegate;
+
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate: (id<PropertyEditDelegate>) delegate;
+
 @end

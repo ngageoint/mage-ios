@@ -36,10 +36,9 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     [defaults synchronize];
 }
 
-+ (id) observations {
-    
++ (NSMutableArray *) getPredicatesForObservations {
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-    NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:@"timestamp"];
+    NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp"];
     if (timePredicate) {
         [predicates addObject:timePredicate];
     }
@@ -53,6 +52,11 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
         [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     
+    return predicates;
+}
+
++ (id) observations {
+    NSMutableArray *predicates = [Observations getPredicatesForObservations];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                   managedObjectContext:[NSManagedObjectContext MR_defaultContext]

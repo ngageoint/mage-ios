@@ -5,10 +5,10 @@
 //
 
 #import "LocationAnnotation.h"
-#import "GeoPoint.h"
 #import "User.h"
 #import "NSDate+DateTools.h"
 #import "MKAnnotationView+PersonIcon.h"
+#import "WKBGeometryUtils.h"
 
 @implementation LocationAnnotation
 
@@ -16,29 +16,22 @@
 	if ((self = [super init])) {
 		_location = location;
 		
-        _coordinate = ((GeoPoint *) location.geometry).location.coordinate;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:location.geometry];
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
+        [self setCoordinate:coordinate];
 		_timestamp = location.timestamp;
 		
 		User *user = location.user;
-		_title = user.name;
-		_subtitle = location.timestamp.timeAgoSinceNow;
+        [self setTitle:user.name];
+        [self setSubtitle:location.timestamp.timeAgoSinceNow];
     }
 		
     return self;
 }
 
--(void) setCoordinate:(CLLocationCoordinate2D) coordinate {
-	_coordinate = coordinate;
-}
-
 -(void) setLocation:(Location *)location {
     _location = location;
 }
-
--(void) setSubtitle:(NSString *)subtitle {
-    _subtitle = subtitle;
-}
-
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];

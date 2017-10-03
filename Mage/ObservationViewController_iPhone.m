@@ -19,6 +19,11 @@
     return headerSection;
 }
 
+- (void) registerCellTypes {
+    [super registerCellTypes];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPhoneHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
+}
+
 - (NSMutableArray *) getAttachmentsSection {
     NSMutableArray *attachmentsSection = [[NSMutableArray alloc] init];
     

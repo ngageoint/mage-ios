@@ -9,7 +9,7 @@
 #import "UserTableViewController.h"
 #import "MeViewController.h"
 
-@interface UserTableViewController ()
+@interface UserTableViewController () <UserSelectionDelegate>
 
 @end
 
@@ -17,19 +17,32 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.userDataStore.userSelectionDelegate = self;
     [self.userDataStore startFetchControllerForUserIds:self.userIds];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"ShowUserSegue"]) {
-        id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        
-        User *user = [self.userDataStore.fetchedResultsController objectAtIndexPath:indexPath];
+        id destination = [segue destinationViewController];        
+        User *user = (User *)sender;
         [destination setUser:user];
     }
+}
+
+- (void) userDetailSelected:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 

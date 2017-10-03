@@ -36,6 +36,15 @@
 #pragma mark -
 #pragma mark View Life Cycle
 
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate {
+    self = [super init];
+    if (!self) return nil;
+    
+    _delegate = delegate;
+    
+    return self;
+}
+
 - (NSString * ) createFolderInTempDirectory {
     NSString *uuid = [[NSUUID new] UUIDString];
     NSString *mediaTempFolder = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), uuid];

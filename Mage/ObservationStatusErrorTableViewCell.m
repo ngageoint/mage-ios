@@ -10,7 +10,7 @@
 
 @implementation ObservationStatusErrorTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     self.errorLabel.text = [observation errorMessage];
 }
 

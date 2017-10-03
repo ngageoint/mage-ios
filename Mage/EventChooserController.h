@@ -17,11 +17,16 @@
 
 @interface EventChooserController : UIViewController<EventSelectionDelegate>
 
-@property (strong, nonatomic) IBOutlet EventTableDataSource *eventDataSource;
+@property (strong, nonatomic) EventTableDataSource *eventDataSource;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *loadingLabel;
 @property (nonatomic) BOOL passthrough;
 @property (nonatomic) BOOL forcePick;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (strong, nonatomic) id<EventSelectionDelegate> delegate;
+
+- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate;
+- (void) eventsFetched;
 
 @end

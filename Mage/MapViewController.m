@@ -8,8 +8,6 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
-#import "Geometry.h"
-#import "GeoPoint.h"
 #import "User.h"
 #import "Location.h"
 #import "LocationAnnotation.h"
@@ -24,6 +22,7 @@
 #import "MageRootViewController.h"
 #import "MapDelegate.h"
 #import "ObservationEditViewController.h"
+#import "FormsViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationViewController_iPad.h"
@@ -31,17 +30,20 @@
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"
+#import "WKBPoint.h"
+#import "ObservationEditCoordinator.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
     @property (weak, nonatomic) IBOutlet UILabel *toastText;
 
     @property (strong, nonatomic) Observations *observationResultsController;
-    @property (strong, nonatomic) CLLocation *mapPressLocation;
-    @property (nonatomic, strong) NSTimer* locationColorUpdateTimer;
+    @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+// this property should exist in this view coordinator when we get to that
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
@@ -53,17 +55,36 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-        self.mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
-        [self performSegueWithIdentifier:@"CreateNewObservationAtPointSegue" sender:sender];
+        CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
+        
+        [self startCreateNewObservationAtLocation:mapPressLocation];
     }
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
+    } else {
+        // Fallback on earlier versions
+    }
+    
+    self.childCoordinators = [[NSMutableArray alloc] init];
+    
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
+    
+    UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(singleTapGesture:)];
+    singleTapGesture.numberOfTapsRequired = 1;
+    [self.mapView addGestureRecognizer:singleTapGesture];
+    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(doubleTapGesture:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [self.mapView addGestureRecognizer:doubleTapGesture];
+    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -82,7 +103,17 @@
     [self setNavBarTitle];
     
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kObservationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -114,8 +145,23 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
     // Start the timer for updating the circles
-    [self startColorUpdateTimer];
+    [self startMapAnnotationsUpdateTimer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive)
@@ -131,8 +177,15 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:timeFilterString];
+    if ([[Filter getFilterString] length] != 0 || [[Filter getLocationFilterString] length] != 0) {
+        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
+    } else {
+        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
+    }
+}
+
+- (void) setNavBarTitle: (NSString *) title andSubtitle: (NSString *) subtitle {
+    [self.navigationItem setTitle:title subtitle:subtitle];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -142,42 +195,49 @@
     [defaults removeObserver:self forKeyPath:@"hideObservations"];
     [defaults removeObserver:self forKeyPath:@"hidePeople"];
     [defaults removeObserver:self forKeyPath:kReportLocationKey];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
-    [self stopColorUpdateTimer];
+    [self stopMapAnnotationsUpdateTimer];
 }
 
 - (void) applicationWillResignActive {
-    [self stopColorUpdateTimer];
+    [self stopMapAnnotationsUpdateTimer];
 }
 
 - (void) applicationDidBecomeActive {
-    [self startColorUpdateTimer];
+    [self startMapAnnotationsUpdateTimer];
 }
 
-- (void) startColorUpdateTimer {
+- (void) startMapAnnotationsUpdateTimer {
     __weak __typeof__(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.locationColorUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onColorUpdateTimerFire) userInfo:nil repeats:YES];
+        weakSelf.mapAnnotationsUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onMapAnnotationsUpdateTimerFire) userInfo:nil repeats:YES];
     });
 }
 
-- (void) stopColorUpdateTimer {
+- (void) stopMapAnnotationsUpdateTimer {
     // Stop the timer for updating the circles
-    if (self.locationColorUpdateTimer != nil) {
-        [self.locationColorUpdateTimer invalidate];
-        self.locationColorUpdateTimer = nil;
+    if (self.mapAnnotationsUpdateTimer != nil) {
+        
+        [self.mapAnnotationsUpdateTimer invalidate];
+        self.mapAnnotationsUpdateTimer = nil;
     }
 }
 
-- (void) onColorUpdateTimerFire {
+- (void) onMapAnnotationsUpdateTimerFire {
     NSLog(@"Update the user location icon colors");
-    [self.mapDelegate updateLocations:[self.mapDelegate.locations.fetchedResultsController fetchedObjects]];
+    [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
+    [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -191,14 +251,43 @@
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
-    } else if ([kTimeFilterKey isEqualToString:keyPath]) {
+    } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
+        [self setNavBarTitle];
+    } else if ([kLocationTimeFilterKey isEqualToString:keyPath] || [kLocationTimeFilterUnitKey isEqualToString:keyPath] || [kLocationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.locations = [Locations locationsForAllUsers];
         [self setNavBarTitle];
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observations];
+        [self setNavBarTitle];
     }
 }
+
+- (IBAction)createNewObservation:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+    [self startCreateNewObservationAtLocation:location];
+}
+
+- (void) startCreateNewObservationAtLocation: (CLLocation *) location {
+    ObservationEditCoordinator *edit;
+    WKBPoint *point;
+    
+    if (location) {
+        point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+    }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:nil andLocation:point];
+    [self.childCoordinators addObject:edit];
+    [edit start];
+}
+
+- (void) editComplete:(Observation *)observation {
+    
+}
+
+- (void) observationDeleted:(Observation *)observation {
+    
+}
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
@@ -208,44 +297,12 @@
         // TODO fix me, this only works because both iPad and iPhone class respond to setObservation
 		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        CLLocation *location = [[LocationService singleton] location];
-        if (location) {
-            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-            [editViewController setLocation:point];
-        }
-    } else if ([segue.identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        ObservationEditViewController *editViewController = segue.destinationViewController;
-        
-        GeoPoint *point = [[GeoPoint alloc] initWithLocation:self.mapPressLocation];
-        
-        [editViewController setLocation:point];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         // Get reference to the destination view controller
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }
-}
-
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateNewObservationSegue"] || [identifier isEqualToString:@"CreateNewObservationAtPointSegue"]) {
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        if (![[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"You are not part of this event"
-                                         message:@"You cannot create observations for an event you are not part of."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            return false;
-        }
-    }
-    
-    return true;
 }
 
 - (IBAction) onReportLocationButtonPressed:(id)sender {
@@ -352,6 +409,18 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
+    if(tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
+        CGPoint cgPoint = [tapGestureRecognizer locationInView:self.mapView];
+        [self.mapDelegate mapClickAtPoint:cgPoint];
+    }
+}
+
+-(void) doubleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
+    
 }
 
 @end

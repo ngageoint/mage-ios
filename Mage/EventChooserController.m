@@ -6,56 +6,76 @@
 
 #import "EventChooserController.h"
 #import "Event.h"
+#import "Form.h"
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
+#import "UIColor+UIColor_Mage.h"
 
 @implementation EventChooserController
 
-BOOL unwind = NO;
+BOOL checkForms = NO;
+BOOL eventsFetched = NO;
 
-- (void)  viewWillAppear:(BOOL)animated {
+- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate {
+    self = [super initWithNibName:@"EventChooserView" bundle:nil];
+    if (!self) return nil;
+    
+    self.delegate = delegate;
+    self.eventDataSource = eventDataSource;
+    self.eventDataSource.tableView = self.tableView;
+    self.eventDataSource.eventSelectionDelegate = self;
+    
+    return self;
+}
+
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.loadingView.backgroundColor = [UIColor primaryColor];
+    self.actionButton.backgroundColor = [UIColor darkerPrimary];
+    [self.actionButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    [self.tableView setDataSource:self.eventDataSource];
+    [self.tableView setDelegate:self.eventDataSource];
+    [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    if (eventsFetched == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+        self.loadingView.alpha = 1.0f;
+        self.loadingLabel.text = @"Loading Events";
+        self.actionButton.hidden = YES;
+    }
     
     self.tableView.estimatedRowHeight = 52;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
-    self.actionButton.hidden = YES;
-}
-
-- (void) viewDidAppear:(BOOL) animated {
-    [super viewDidAppear:animated];
-    
-    if (self.passthrough) {
-        self.passthrough = NO;
-        [self segueToApplication];
-    } else if (!unwind) {
-        self.loadingView.alpha = 1.0f;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
-        [[Mage singleton] fetchEvents];
-    } else {
-        [self eventsFetched:nil];
-        unwind = NO;
-    }
-}
-
-- (void) viewDidDisappear:(BOOL) animated {
-    [super viewDidDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 -(void) didSelectEvent:(Event *) event {
-    [self segueToApplication];
+    
+    [self.delegate didSelectEvent:event];
+    
+    // show the loading indicator
+    self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
+    [UIView animateWithDuration:0.75f animations:^{
+        self.loadingView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        self.loadingView.alpha = 1.0;
+    }];
 }
 
-- (void) eventsFetched: (NSNotification *) notification {
+- (void) eventsFetched {
     NSLog(@"Events were fetched");
-    [self.eventDataSource startFetchController];
+    eventsFetched = YES;
+    
+    [UIView animateWithDuration:0.75f animations:^{
+        self.loadingView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        self.loadingView.alpha = 0.0;
+    }];
+    
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
@@ -72,47 +92,12 @@ BOOL unwind = NO;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundView = messageView;
     
-        self.actionButton.hidden = NO;
-        
-        [[UserUtility singleton] expireToken];
-        [self.tableView reloadData];
-    } else if (!self.forcePick &&
-               self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 &&
-               self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 &&
-               [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].remoteId == ( (Event *)[self.eventDataSource.recentFetchedResultsController.fetchedObjects firstObject]).remoteId) {
-        // they only have one event and have already picked it so move on to the map
-        [self segueToApplication];
+        self.actionButton.hidden = NO;        
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
-        [self.tableView reloadData];
-    } else {
-        [self.tableView reloadData];
     }
-    
-    [UIView animateWithDuration:0.75f animations:^{
-        self.loadingView.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        self.loadingView.alpha = 0.0;
-    }];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:@"DisplayRootViewSegue"]) {
-        [Event sendRecentEvent];
-    }
-}
-
-- (IBAction) unwindToEventChooser:(UIStoryboardSegue *) unwindSegue {
-    unwind = YES;
-}
-
-- (void) segueToApplication {
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self performSegueWithIdentifier:@"iPad" sender:self];
-    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        [self performSegueWithIdentifier:@"iPhone" sender:self];
-    }
+    [self.tableView reloadData];
 }
 
 @end

@@ -13,18 +13,50 @@ typedef NS_ENUM(NSUInteger, TimeFilterType) {
     TimeFilterToday,
     TimeFilterLast24Hours,
     TimeFilterLastWeek,
-    TimeFilterLastMonth
+    TimeFilterLastMonth,
+    TimeFilterCustom
+};
+
+typedef NS_ENUM(NSUInteger, TimeUnit) {
+    Hours,
+    Days,
+    Months
 };
 
 @interface TimeFilter : NSObject
 
-extern NSString * const kTimeFilterKey;
+extern NSString * const kObservationTimeFilterKey;
+extern NSString * const kObservationTimeFilterUnitKey;
+extern NSString * const kObservationTimeFilterNumberKey;
 
-+ (TimeFilterType) getTimeFilter;
-+ (void) setTimeFilter:(TimeFilterType) timeFilter;
++ (TimeFilterType) getObservationTimeFilter;
++ (void) setObservationTimeFilter:(TimeFilterType) timeFilter;
 
-+ (NSString *) getTimeFilterString;
++ (TimeUnit) getObservationCustomTimeFilterUnit;
++ (void) setObservationCustomTimeFilterUnit:(TimeUnit) timeUnit;
 
-+ (NSPredicate *) getTimePredicateForField:(NSString *) timeField;
++ (NSInteger) getObservationCustomTimeFilterNumber;
++ (void) setObservationCustomTimeFilterNumber: (NSInteger) timeNumber;
+
++ (NSString *) getObservationTimeFilterString;
+
++ (NSPredicate *) getObservationTimePredicateForField:(NSString *) timeField;
+
+extern NSString * const kLocationTimeFilterKey;
+extern NSString * const kLocationTimeFilterUnitKey;
+extern NSString * const kLocationTimeFilterNumberKey;
+
++ (TimeFilterType) getLocationTimeFilter;
++ (void) setLocationTimeFilter:(TimeFilterType) timeFilter;
+
++ (TimeUnit) getLocationCustomTimeFilterUnit;
++ (void) setLocationCustomTimeFilterUnit:(TimeUnit) timeUnit;
+
++ (NSInteger) getLocationCustomTimeFilterNumber;
++ (void) setLocationCustomTimeFilterNumber: (NSInteger) timeNumber;
+
++ (NSString *) getLocationTimeFilterString;
+
++ (NSPredicate *) getLocationTimePredicateForField:(NSString *) timeField;
 
 @end

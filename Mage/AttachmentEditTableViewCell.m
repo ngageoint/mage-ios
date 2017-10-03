@@ -15,14 +15,15 @@
 
 @implementation AttachmentEditTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
     if (self.ads == nil) {
+        [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
         self.ads = [[AttachmentCollectionDataStore alloc] init];
         self.ads.attachmentFormatName = AttachmentSmallSquare;
         self.ads.attachmentCollection = self.attachmentCollection;
         self.attachmentCollection.delegate = self.ads;
         self.attachmentCollection.dataSource = self.ads;
-        self.ads.observation = observation;
+        self.ads.observation = value;
     } else {
         [self.ads.attachmentCollection reloadData];
     }

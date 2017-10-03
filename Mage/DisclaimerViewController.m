@@ -10,10 +10,19 @@
 @interface DisclaimerViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *consentText;
 @property (weak, nonatomic) IBOutlet UITextView *consentTitle;
-
+@property (strong, nonatomic) id<DisclaimerDelegate> delegate;
 @end
 
 @implementation DisclaimerViewController
+
+- (instancetype) initWithDelegate: (id<DisclaimerDelegate>) delegate {
+    self = [super init];
+    if (!self) return nil;
+    
+    self.delegate = delegate;
+    
+    return self;
+}
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -23,11 +32,12 @@
     [self.consentText setText:[defaults valueForKeyPath:@"disclaimerText"]];
 }
 
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"AcceptConsentSegue"]) {
-        [[UserUtility singleton ] acceptConsent];
-    }
-    return YES;
+- (IBAction)agreeTapped:(id)sender {
+    [self.delegate disclaimerAgree];
+}
+
+- (IBAction)disagreeTapped:(id)sender {
+    [self.delegate disclaimerDisagree];
 }
 
 @end

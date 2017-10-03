@@ -31,7 +31,7 @@
     self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
 }
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     ObservationImportant *important = observation.observationImportant;
     
     User *user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", important.userId]];
@@ -43,7 +43,7 @@
     self.descriptionLabel.hidden = [important.reason length] ? NO : YES;
     self.descriptionLabel.text = important.reason;
     
-    self.importantActions.hidden = ![self canEditImportant];
+    self.importantActions.hidden = ![observation currentUserCanUpdateImportant];
 }
 
 - (IBAction) onRemoveImportantTapped:(id)sender {
@@ -56,10 +56,6 @@
     if (self.observationImportantDelegate) {
         [self.observationImportantDelegate flagObservationImportant];
     }
-}
-
-- (BOOL) canEditImportant {
-    return self.currentUser && [self.currentUser.role.permissions containsObject:@"UPDATE_EVENT"];
 }
 
 @end

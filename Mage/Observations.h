@@ -27,6 +27,8 @@ extern NSString * const kFavortiesFilterKey;
 + (id) observationsForUser:(User *) user;
 + (id) observationsForObservation:(Observation *) observation;
 
++ (NSMutableArray *) getPredicatesForObservations;
+
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 
 @end

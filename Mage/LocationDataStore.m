@@ -52,6 +52,16 @@
     [self.tableView reloadData];
 }
 
+- (void) updatePredicates {
+    [self.locations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]]];
+    NSError *error;
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
+    
+    [self.tableView reloadData];
+}
+
 - (Location *) locationAtIndexPath: (NSIndexPath *)indexPath {
     return [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
 }

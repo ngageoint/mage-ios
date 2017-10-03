@@ -12,7 +12,6 @@
 #import "User.h"
 #import "Location.h"
 #import "UIImage+Resize.h"
-#import <GeoPoint.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
 #import <StaticLayer.h>
@@ -39,6 +38,10 @@
 #import "GPKGProjectionTransform.h"
 #import "GPKGProjectionConstants.h"
 #import "GPKGTileBoundingBoxUtils.h"
+#import "MapUtils.h"
+#import "MapObservationManager.h"
+#import "WKBGeometryUtils.h"
+#import <Event.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -61,6 +64,7 @@
     @property (nonatomic) BOOL canShowGpsLocationCallout;
 
     @property (strong, nonatomic) CLLocationManager *locationManager;
+    @property (strong, nonatomic) MapObservationManager *mapObservationManager;
 @end
 
 @implementation MapDelegate
@@ -145,110 +149,96 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             (CGRectContainsPoint(r, lineStart) && CGRectContainsPoint(r, lineEnd)));
 }
 
+-(void)mapView:(MKMapView *)mv didAddAnnotationViews:(NSArray *)views{
+    [self.mapObservations selectShapeAnnotation];
+}
 
--(void)mapTap:(UIGestureRecognizer*)gesture {
-    UITapGestureRecognizer *tap = (UITapGestureRecognizer *)gesture;
-    if (tap.state == UIGestureRecognizerStateEnded) {
-        CGPoint tapPoint = [tap locationInView:self.mapView];
-        CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
-        MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
-        CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
-        
-        CLLocationCoordinate2D l1 = [self.mapView convertPoint:CGPointMake(0,0) toCoordinateFromView:self.mapView];
-        CLLocation *ll1 = [[CLLocation alloc] initWithLatitude:l1.latitude longitude:l1.longitude];
-        CLLocationCoordinate2D l2 = [self.mapView convertPoint:CGPointMake(0,500) toCoordinateFromView:self.mapView];
-        CLLocation *ll2 = [[CLLocation alloc] initWithLatitude:l2.latitude longitude:l2.longitude];
-        double mpp = [ll1 distanceFromLocation:ll2] / 500.0;
-        
-        double tolerance = mpp * sqrt(2.0) * 20.0;
-        
-        if (_areaAnnotation != nil) {
-            [_mapView deselectAnnotation:_areaAnnotation animated:NO];
-            [_mapView removeAnnotation:_areaAnnotation];
-            _areaAnnotation = nil;
-        }
-        
-        CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
-        
-        for (NSString* layerId in self.staticLayers) {
-            NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
-            for (id feature in layerFeatures) {
-                if ([feature isKindOfClass:[MKPolyline class]]) {
-                    MKPolyline *polyline = (MKPolyline *) feature;
-                    
-                    MKMapPoint *polylinePoints = polyline.points;
-                    
-                    for (int p=0; p < polyline.pointCount-1; p++){
-                        MKMapPoint mp = polylinePoints[p];
-                        MKMapPoint mp2 = polylinePoints[p+1];
-                        if (RectContainsLine(tapRect, CGPointMake(mp.x, mp.y), CGPointMake(mp2.x, mp2.y))) {
-                            NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
-                            _areaAnnotation = [[AreaAnnotation alloc] init];
-                            _areaAnnotation.title = polyline.title;
-                            _areaAnnotation.coordinate = tapCoord;
-                            
-                            [_mapView addAnnotation:_areaAnnotation];
-                            [_mapView selectAnnotation:_areaAnnotation animated:NO];
+-(void)mapTap: (CGPoint) tapPoint {
 
-                        }
-                    }
-                } else if ([feature isKindOfClass:[MKPolygon class]]){
-                    MKPolygon *polygon = (MKPolygon*) feature;
-                    
-                    CGMutablePathRef mpr = CGPathCreateMutable();
-                    
-                    MKMapPoint *polygonPoints = polygon.points;
-                    
-                    for (int p=0; p < polygon.pointCount; p++){
-                        MKMapPoint mp = polygonPoints[p];
-                        if (p == 0)
-                            CGPathMoveToPoint(mpr, NULL, mp.x, mp.y);
-                        else
-                            CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
-                    }
-                    
-                    
-                    
-                    if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
-                        NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
+    CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
+    MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
+    CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
+    
+    double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
+    
+    if (_areaAnnotation != nil) {
+        [_mapView deselectAnnotation:_areaAnnotation animated:NO];
+        [_mapView removeAnnotation:_areaAnnotation];
+        _areaAnnotation = nil;
+    }
+    
+    CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
+    
+    for (NSString* layerId in self.staticLayers) {
+        NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
+        for (id feature in layerFeatures) {
+            if ([feature isKindOfClass:[MKPolyline class]]) {
+                MKPolyline *polyline = (MKPolyline *) feature;
+                
+                MKMapPoint *polylinePoints = polyline.points;
+                
+                for (int p=0; p < polyline.pointCount-1; p++){
+                    MKMapPoint mp = polylinePoints[p];
+                    MKMapPoint mp2 = polylinePoints[p+1];
+                    if (RectContainsLine(tapRect, CGPointMake(mp.x, mp.y), CGPointMake(mp2.x, mp2.y))) {
+                        NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
                         _areaAnnotation = [[AreaAnnotation alloc] init];
-                        _areaAnnotation.title = polygon.title;
+                        _areaAnnotation.title = polyline.title;
                         _areaAnnotation.coordinate = tapCoord;
                         
                         [_mapView addAnnotation:_areaAnnotation];
                         [_mapView selectAnnotation:_areaAnnotation animated:NO];
-                    }
-                    
-                    CGPathRelease(mpr);
-                }
 
+                    }
+                }
+            } else if ([feature isKindOfClass:[MKPolygon class]]){
+                MKPolygon *polygon = (MKPolygon*) feature;
+                
+                CGMutablePathRef mpr = CGPathCreateMutable();
+                
+                MKMapPoint *polygonPoints = polygon.points;
+                
+                for (int p=0; p < polygon.pointCount; p++){
+                    MKMapPoint mp = polygonPoints[p];
+                    if (p == 0)
+                        CGPathMoveToPoint(mpr, NULL, mp.x, mp.y);
+                    else
+                        CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
+                }
+                
+                
+                
+                if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
+                    NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
+                    _areaAnnotation = [[AreaAnnotation alloc] init];
+                    _areaAnnotation.title = polygon.title;
+                    _areaAnnotation.coordinate = tapCoord;
+                    
+                    [_mapView addAnnotation:_areaAnnotation];
+                    [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                }
+                
+                CGPathRelease(mpr);
+            }
+
+        }
+    }
+    
+    if ([self.mapCacheOverlays count] > 0) {
+        NSMutableString * clickMessage = [[NSMutableString alloc] init];
+        for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+            NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
+            if (message != nil){
+                if ([clickMessage length] > 0){
+                    [clickMessage appendString:@"\n\n"];
+                }
+                [clickMessage appendString:message];
             }
         }
         
-        if ([self.mapCacheOverlays count] > 0) {
-            NSMutableString * clickMessage = [[NSMutableString alloc] init];
-            for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-                NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-                if (message != nil){
-                    if ([clickMessage length] > 0){
-                        [clickMessage appendString:@"\n\n"];
-                    }
-                    [clickMessage appendString:message];
-                }
-            }
-            
-            if ([clickMessage length] > 0) {
-                if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
-                    [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
-                }
-                
-//                UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
-//                                                                                message:clickMessage
-//                                                                         preferredStyle:UIAlertControllerStyleAlert];
-//                
-//                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-//                [self presentViewController:alert animated:YES completion:nil];
-
+        if ([clickMessage length] > 0) {
+            if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
+                [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
             }
         }
     }
@@ -288,11 +278,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) setObservations:(Observations *)observations {
+    
     _observations = observations;
     _observations.delegate = self;
     
-    [self.mapView removeAnnotations:[self.observationAnnotations allValues]];
-    [self.observationAnnotations removeAllObjects];
+    Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
+    
+    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
+    
+    [self.observationAnnotations clear];
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
@@ -302,6 +296,47 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 
     [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+}
+
+- (void) updateObservationPredicates: (NSMutableArray *) predicates {
+    [self.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSError *error;
+    if (![self.observations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+    NSArray *observations = [self.observations.fetchedResultsController fetchedObjects];
+    NSMutableArray *observationIds = [[NSMutableArray alloc] initWithCapacity:observations.count];
+    for (Observation *observation in observations) {
+        [observationIds addObject:observation.objectID];
+    }
+    [self.mapObservations removeObservationsNotInArray:observationIds];
+}
+
+- (void) updateLocationPredicates: (NSMutableArray *) predicates {
+    [self.locations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    
+    NSError *error;
+    if (![self.locations.fetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);
+    }
+    
+    NSArray *locations = [self.locations.fetchedResultsController fetchedObjects];
+    NSMutableArray *userRemoteIds = [[NSMutableArray alloc] initWithCapacity:locations.count];
+    for (Location *location in locations) {
+        [userRemoteIds addObject:location.user.remoteId];
+    }
+    
+    NSMutableArray *ids = [NSMutableArray arrayWithArray:[self.locationAnnotations allKeys]];
+    [ids removeObjectsInArray:userRemoteIds];
+    
+    for (NSString *userRemoteId in ids) {
+        [self removeLocationForUser:userRemoteId];
+    }
+    [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
 }
 
 - (void) setMapView:(MKMapView *)mapView {
@@ -314,10 +349,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
-    if (!self.hideStaticLayers) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mapTap:)];
-        [self.mapView addGestureRecognizer:tap];
-    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -344,7 +375,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void) setHideObservations:(BOOL) hideObservations {
     _hideObservations = hideObservations;
-    [self hideAnnotations:[self.observationAnnotations allValues] hide:hideObservations];
+    [self.mapObservations hidden:hideObservations];
 }
 
 - (void) hideAnnotations:(NSArray *) annotations hide:(BOOL) hide {
@@ -933,22 +964,8 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;
-        MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"gpsLocationAnnotation"];
-        
-        if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"gpsLocationAnnotation"];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = self.canShowGpsLocationCallout;
-            
-            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            annotationView.rightCalloutAccessoryView = rightButton;
-            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-        } else {
-            annotationView.annotation = annotation;
-        }
-        
-        [annotationView setImageForUser:gpsAnnotation.user];
-        
+        MKAnnotationView *annotationView = [gpsAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.canShowCallout = self.canShowObservationCallout;
         return annotationView;
     } else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *staticAnnotation = annotation;
@@ -958,7 +975,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
     } else if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-        [pinView setPinTintColor:[UIColor greenColor]];
+        [pinView setPinTintColor:[UIColor redColor]];
         return pinView;
     }
     
@@ -1084,12 +1101,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     return _locationAnnotations;
 }
 
-- (NSMutableDictionary *) observationAnnotations {
-    if (!_observationAnnotations) {
-        _observationAnnotations = [[NSMutableDictionary alloc] init];
+- (MapObservations *) observationAnnotations {
+    if (!_mapObservations) {
+        _mapObservations = [[MapObservations alloc] initWithMapView:_mapView];
     }
     
-    return _observationAnnotations;
+    return _mapObservations;
 }
 
 #pragma mark - NSFetchResultsController
@@ -1151,6 +1168,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
+- (LocationAnnotation *) removeLocationForUser: (NSString *) remoteId {
+    LocationAnnotation *annotation = [self.locationAnnotations objectForKey:remoteId];
+    if (annotation != nil) {
+        [_mapView removeAnnotation:annotation];
+        [self.locationAnnotations removeObjectForKey:remoteId];
+    }
+    return annotation;
+}
+
 - (void) updateLocation:(Location *) location {
     User *user = location.user;
     
@@ -1174,14 +1200,17 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
-        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
-        [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+        WKBGeometry * geometry = location.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        GeoPoint *geoPoint = (GeoPoint *)location.geometry;
-        [annotation setCoordinate:geoPoint.location.coordinate];
+        WKBGeometry * geometry = location.geometry;
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
+        [annotation setCoordinate:coordinate];
         if (shouldCenter) {
-            [self.mapView setCenterCoordinate:geoPoint.location.coordinate];
+            [self.mapView setCenterCoordinate:coordinate];
         }
         
         [annotationView setImageForUser:user];
@@ -1189,26 +1218,18 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 }
 
 - (void) updateObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    if (annotation == nil) {
-        annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [_mapView addAnnotation:annotation];
-        [self.observationAnnotations setObject:annotation forKey:observation.objectID];
-    } else {
-        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        annotationView.image = [ObservationImage imageForObservation:observation inMapView:self.mapView];
-        [annotation setCoordinate:[observation location].coordinate];
-    }
+    [self.mapObservations removeById:observation.objectID];
+    MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation];
+    [self.mapObservations addMapObservation:mapObservation];
 }
 
 - (void) deleteObservation: (Observation *) observation {
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    [_mapView removeAnnotation:annotation];
-    [self.observationAnnotations removeObjectForKey:observation.objectID];
+    [self.mapObservations removeById:observation.objectID];
 }
 
 - (void)selectedUser:(User *) user {
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
     
     [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
@@ -1218,21 +1239,30 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     
     [self.mapView setRegion:region animated:YES];
+    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
 }
 
 - (void)selectedObservation:(Observation *) observation {
     [self.mapView setCenterCoordinate:[observation location].coordinate];
-    
-    ObservationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.objectID];
-    [self.mapView selectAnnotation:annotation animated:YES];
+    [self selectObservation:observation];
 }
 
 - (void)selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region {
-    LocationAnnotation *annotation = [self.observationAnnotations objectForKey:observation.remoteId];
-    
     [self.mapView setRegion:region animated:YES];
-    [self.mapView selectAnnotation:annotation animated:YES];
+    [self selectObservation:observation];
+}
+
+- (void)selectObservation:(Observation *) observation{
+    MapObservation *mapObservation = [self.mapObservations observationOfId:observation.objectID];
+    if (mapObservation != nil) {
+        if([MapObservations isAnnotation: mapObservation]){
+            [self.mapView selectAnnotation:[((MapAnnotationObservation *)mapObservation) annotation] animated:YES];
+        }else{
+            MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:[observation location].coordinate forObservation:observation andHidden:self.hideObservations];
+            [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:(MapShapeObservation *)mapObservation];
+        }
+    }
 }
 
 - (void)observationDetailSelected:(Observation *)observation {
@@ -1249,5 +1279,21 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     }
 }
 
+- (void) mapClickAtPoint: (CGPoint) point{
+    
+    CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
+    
+    [self.mapObservations clearShapeAnnotation];
+    
+    MapShapeObservation *mapShapeObservation = [self.mapObservations clickedShapeAtLocation:location];
+    if (mapShapeObservation != nil) {
+        MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:location forObservation:mapShapeObservation.observation andHidden:self.hideObservations];
+        [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:mapShapeObservation];
+    }
+    
+    if (!self.hideStaticLayers) {
+        [self mapTap:point];
+    }
+}
 
 @end

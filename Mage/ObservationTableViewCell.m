@@ -14,6 +14,7 @@
 #import "Event.h"
 #import "NSDate+iso8601.h"
 #import "Attachment+Thumbnail.h"
+#import <MageEnums.h>
 
 @interface ObservationTableViewCell()
 
@@ -24,6 +25,7 @@
 @property (strong, nonatomic) UIColor *favoriteHighlightColor;
 @property (weak, nonatomic) IBOutlet UIImageView *syncBadge;
 @property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
 
 @end
 
@@ -42,13 +44,17 @@
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
-    Event *event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    NSDictionary *form = event.form;
-    NSString *variantField = [form objectForKey:@"variantField"];
-    NSString *type = [observation.properties objectForKey:@"type"];
-    self.primaryField.text = type;
-    NSString *variantText = [observation.properties objectForKey:variantField];
-    if (variantField != nil && variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
+    NSString *primaryText = [observation primaryFieldText];
+    NSString *variantText = [observation secondaryFieldText];
+    
+    if (primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
+        self.primaryField.text = primaryText;
+        self.primaryField.hidden = self.dotView.hidden = NO;
+    } else {
+        self.primaryField.hidden = self.dotView.hidden = YES;
+    }
+    
+    if (variantText != nil && [variantText isKindOfClass:[NSString class]] && [variantText length] > 0) {
         self.variantField.hidden = NO;
         self.variantField.text = variantText;
     } else {
@@ -66,6 +72,7 @@
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
+    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
     self.ads.observation = observation;
     self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     

@@ -14,4 +14,5 @@
 
 @interface ObservationActionsTableViewCell : ObservationHeaderTableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+@property (strong, nonatomic) id<ObservationActionsDelegate> observationActionsDelegate;
 @end

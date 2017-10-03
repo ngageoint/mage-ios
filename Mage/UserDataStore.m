@@ -86,6 +86,13 @@
     return [[self.fetchedResultsController sections] count];
 }
 
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    User *user = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if (self.userSelectionDelegate != nil) {
+        [self.userSelectionDelegate userDetailSelected:user];
+    }
+}
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
     [self.tableView beginUpdates];

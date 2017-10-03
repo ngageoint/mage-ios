@@ -11,21 +11,26 @@
 
 @implementation Locations
 
-+ (id) locationsForAllUsers {
++ (NSMutableArray *) getPredicatesForLocations {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableArray *predicates = [NSMutableArray arrayWithObjects:
                                   [NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]],
                                   [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
                                   nil];
 
-    NSPredicate *timePredicate = [TimeFilter getTimePredicateForField:@"timestamp"];
+    NSPredicate *timePredicate = [TimeFilter getLocationTimePredicateForField:@"timestamp"];
     if (timePredicate) {
         [predicates addObject:timePredicate];
     }
+    return predicates;
+}
+
++ (id) locationsForAllUsers {
+    
     
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                         ascending:NO
-                    withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]
+                    withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]]
                           groupBy:nil
                          delegate:nil
                         inContext:[NSManagedObjectContext MR_defaultContext]];

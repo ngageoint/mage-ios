@@ -16,7 +16,7 @@
 + (id) locationsForAllUsers;
 + (id) locationsForUser:(User *) user;
 
-
++ (NSMutableArray *) getPredicatesForLocations;
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 
 @end

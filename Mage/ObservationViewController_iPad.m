@@ -5,7 +5,6 @@
 //
 
 #import "ObservationViewController_iPad.h"
-#import "GeoPoint.h"
 #import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
@@ -57,6 +56,11 @@
     [super viewWillAppear:animated];
     
     [self updateFavorites];
+}
+
+- (void) registerCellTypes {
+    [super registerCellTypes];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPadHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
 }
 
 - (NSMutableArray *) getHeaderSection {

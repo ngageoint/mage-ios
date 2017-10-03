@@ -10,4 +10,5 @@
 
 @interface Filter : NSObject
 + (NSString *) getFilterString;
++ (NSString *) getLocationFilterString;
 @end

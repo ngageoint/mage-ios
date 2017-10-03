@@ -49,7 +49,7 @@
                                  @"result": result
                                  };
     __weak typeof(self) weakSelf = self;
-    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             UIAlertController * alert = [UIAlertController
                                          alertControllerWithTitle:@"Account Creation Success"
@@ -84,7 +84,7 @@
                                  };
     
     __weak typeof(self) weakSelf = self;
-    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus) {
+    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {            
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {

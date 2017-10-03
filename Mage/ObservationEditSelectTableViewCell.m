@@ -8,12 +8,12 @@
 
 @implementation ObservationEditSelectTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
     self.valueField.lineBreakMode = NSLineBreakByWordWrapping;
     self.valueField.numberOfLines = 0;
     
     [self.keyLabel setText:[field objectForKey:@"title"]];
-    self.value = [observation.properties objectForKey:(NSString *)[field objectForKey:@"name"]];
+    self.value = value;
     
     if ([@"multiselectdropdown" isEqualToString:[self.fieldDefinition objectForKey:@"type"] ]) {
         self.valueField.text = [self.value componentsJoinedByString:@", "];

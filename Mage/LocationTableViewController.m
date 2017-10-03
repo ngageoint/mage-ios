@@ -12,20 +12,35 @@
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
+#import "UIColor+UIColor_Mage.h"
+
+@interface LocationTableViewController() <UserSelectionDelegate>
+
+@property (nonatomic, strong) NSTimer* updateTimer;
+
+@end
 
 @implementation LocationTableViewController
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    // bug in ios smashes the refresh text into the
-    // spinner.  This is the only work around I have found
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.refreshControl beginRefreshing];
-        [self.refreshControl endRefreshing];
-    });
+    [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
+    // ths is different on the ipad and the iphone so make the check here
+    if (self.locationDataStore.personSelectionDelegate == nil) {
+        self.locationDataStore.personSelectionDelegate = self;
+    }
     
-    self.refreshControl.backgroundColor = [UIColor colorWithWhite:.9 alpha:.5];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor mageBlue];
+
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refreshPeople) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh people" attributes:attrsDictionary]];
+    
+    self.tableView.refreshControl = self.refreshControl;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 88;
@@ -38,33 +53,88 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
-               forKeyPath:kTimeFilterKey
+               forKeyPath:kLocationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [self startUpdateTimer];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:kTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+    [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
+    
+    [self stopUpdateTimer];
+}
+
+- (void) applicationWillResignActive {
+    [self stopUpdateTimer];
+}
+
+- (void) applicationDidBecomeActive {
+    [self startUpdateTimer];
+}
+
+- (void) startUpdateTimer {
+    __weak __typeof__(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.updateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onUpdateTimerFire) userInfo:nil repeats:YES];
+    });
+}
+
+- (void) stopUpdateTimer {
+    // Stop the timer for updating the circles
+    if (self.updateTimer != nil) {
+        
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+- (void) onUpdateTimerFire {
+    [self.locationDataStore updatePredicates];
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [Filter getFilterString];
+    NSString *timeFilterString = [Filter getLocationFilterString];
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"DisplayPersonSegue"]) {
+    if ([[segue identifier] isEqualToString:@"ShowUserSegue"]) {
         MeViewController *destination = (MeViewController *)[segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		Location *location = [self.locationDataStore locationAtIndexPath:indexPath];
-		[destination setUser:location.user];
+        User *user = (User *) sender;
+		[destination setUser:user];
     }
 }
 
-- (IBAction)refreshPeople:(UIRefreshControl *)sender {
+- (void) userDetailSelected:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+}
+
+- (void)refreshPeople {
     [self.refreshControl beginRefreshing];
     
     NSURLSessionDataTask *userFetchTask = [Location operationToPullLocationsWithSuccess:^{
@@ -81,7 +151,7 @@
                          change:(NSDictionary *)change
                         context:(void *)context {
     
-    if ([keyPath isEqualToString:kTimeFilterKey]) {
+    if ([keyPath isEqualToString:kLocationTimeFilterKey] || [keyPath isEqualToString:kLocationTimeFilterNumberKey] || [keyPath isEqualToString:kLocationTimeFilterUnitKey]) {
         [self.locationDataStore startFetchController];
         [self setNavBarTitle];
     }

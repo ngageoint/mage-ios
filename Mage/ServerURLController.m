@@ -9,16 +9,35 @@
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
+#import "UIColor+UIColor_Mage.h"
 
 @interface ServerURLController ()
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
+@property (weak, nonatomic) IBOutlet UIButton *okButton;
 @property (weak, nonatomic) IBOutlet UITextView *errorStatus;
+@property (strong, nonatomic) id<ServerURLDelegate> delegate;
 @end
 
 @implementation ServerURLController
+
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate {
+    if (self = [self initWithNibName:@"ServerURLView" bundle:nil]) {
+        self.delegate = delegate;
+    }
+    
+    return self;
+}
+
+- (void) viewDidLoad {
+    self.view.backgroundColor = [UIColor primaryColor];
+    self.cancelButton.backgroundColor = [UIColor darkerPrimary];
+    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    self.okButton.backgroundColor = [UIColor darkerPrimary];
+    [self.okButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+}
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -35,27 +54,20 @@
     NSURL *url = [NSURL URLWithString:self.serverURL.text];
 
     [self.activityIndicator startAnimating];
-    __weak __typeof__(self) weakSelf = self;
-    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-        [weakSelf.activityIndicator stopAnimating];
-        weakSelf.errorStatus.hidden = YES;
-        weakSelf.errorButton.hidden = YES;
-        
-        [MagicalRecord deleteAndSetupMageCoreDataStack];
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } failure:^(NSError *error) {
-        [weakSelf.activityIndicator stopAnimating];
-        
-        weakSelf.errorStatus.hidden = NO;
-        weakSelf.errorButton.hidden = NO;
-        weakSelf.errorStatus.text = error.localizedDescription;
-        weakSelf.serverURL.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-    }];
+    [self.delegate setServerURL: url];
 }
 
 - (IBAction)onCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.delegate cancelSetServerURL];
+}
+
+- (void) showError: (NSString *) error {
+    [self.activityIndicator stopAnimating];
+    
+    self.errorStatus.hidden = NO;
+    self.errorButton.hidden = NO;
+    self.errorStatus.text = error;
+    self.serverURL.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
 }
 
 @end

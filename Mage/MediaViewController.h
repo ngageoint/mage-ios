@@ -16,4 +16,6 @@
 @property(nonatomic, strong) Recording *recording;
 @property(nonatomic, strong) id<AudioRecordingDelegate> delegate;
 
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate;
+
 @end

@@ -23,12 +23,12 @@
 #import <MageSessionManager.h>
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
-#import <GeoPoint.h>
 #import "AttachmentSelectionDelegate.h"
+#import "WKBGeometryUtils.h"
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -50,7 +50,14 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationController setNavigationBarHidden:NO];
+    if (@available(iOS 11.0, *)) {
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
+    } else {
+        // Fallback on earlier versions
+    }
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    self.observationDataStore.observationSelectionDelegate = self;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 160;
@@ -58,11 +65,10 @@
     if (self.user == nil) {
         self.user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         self.currentUserIsMe = YES;
-        self.navigationItem.title = @"Me";
     } else {
         self.currentUserIsMe = NO;
-        self.navigationItem.title = self.user.name;
     }
+    self.navigationItem.title = self.user.name;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,7 +85,7 @@
     [self.observationDataStore startFetchControllerWithObservations:[Observations observationsForUser:self.user]];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:[Observations observationsForUser:self.user]];
-        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
+//        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
     }
@@ -95,7 +101,8 @@
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            location = ((GeoPoint *) gpsLocation.geometry).location;
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
     }
@@ -103,24 +110,39 @@
     if (!location) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
-            location = ((GeoPoint *) [[locations objectAtIndex:0] geometry]).location;
+            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         }
+        [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
     }
     
     if (location) {
-        // Zoom and center the map
-        CLLocationDistance latitudeMeters = 500;
-        CLLocationDistance longitudeMeters = 500;
-        double accuracy = location.horizontalAccuracy;
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-        
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
-        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-        [self.mapDelegate selectedUser:self.user region:viewRegion];
-    }
+        [self zoomAndCenterMapOnLocation:location];
+     }
     
     [self sizeHeaderToFit];
+}
+
+- (void) zoomAndCenterMapOnLocation: (CLLocation *) location {
+    CLLocationDistance latitudeMeters = 500;
+    CLLocationDistance longitudeMeters = 500;
+    double accuracy = location.horizontalAccuracy;
+    latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
+    longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
+    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+    [self.mapDelegate selectedUser:self.user region:viewRegion];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
+    [self.mapDelegate updateLocations: locations];
+    if ([locations count]) {
+        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
+        [self zoomAndCenterMapOnLocation:location];
+    }
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
@@ -149,42 +171,49 @@
 }
 
 - (IBAction)portraitClick:(id)sender {
+    
+    if (!self.currentUserIsMe) {
+        [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+        
+        return;
+    }
+
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Avatar"
                                                                    message:@"Change or view your avatar"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-
+    
     __weak typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:@"View Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
     }]];
     
-    if (self.currentUserIsMe) {
-        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
-                if (granted) {
-                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                    picker.delegate = weakSelf;
-                    picker.allowsEditing = YES;
-                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-                    
-                    [weakSelf presentViewController:picker animated:YES completion:NULL];                }
-            }];
-        }]];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar From Gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf checkGalleryPermissionsWithCompletion:^(BOOL granted) {
-                if (granted) {
-                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                    picker.delegate = weakSelf;
-                    picker.allowsEditing = YES;
-                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    
-                    [weakSelf presentViewController:picker animated:YES completion:NULL];
-                }
-            }];
-        }]];
-    }
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf checkCameraPermissionsWithCompletion:^(BOOL granted) {
+            if (granted) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = weakSelf;
+                picker.allowsEditing = YES;
+                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+                
+                [weakSelf presentViewController:picker animated:YES completion:NULL];
+            }
+        }];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar From Gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf checkGalleryPermissionsWithCompletion:^(BOOL granted) {
+            if (granted) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = weakSelf;
+                picker.allowsEditing = YES;
+                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                
+                [weakSelf presentViewController:picker animated:YES completion:NULL];
+            }
+        }];
+    }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
@@ -194,7 +223,7 @@
         alert.popoverPresentationController.sourceRect = self.view.frame;
         alert.popoverPresentationController.permittedArrowDirections = 0;
     }
-
+    
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -241,7 +270,7 @@
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -292,7 +321,7 @@
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -354,14 +383,25 @@
         [vc setTitle:@"Avatar"];
     } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Observation *observation = [self.observationDataStore observationAtIndexPath:indexPath];
+        Observation *observation = (Observation *) sender;
         [destination setObservation:observation];
     } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
         AttachmentViewController *vc = [segue destinationViewController];
         [vc setAttachment:sender];
         [vc setTitle:@"Attachment"];
     }
+}
+
+- (void) selectedObservation:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+}
+
+- (void) observationDetailSelected:(Observation *)observation {
+    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 @end

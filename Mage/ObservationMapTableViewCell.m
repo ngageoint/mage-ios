@@ -8,6 +8,7 @@
 #import "Observations.h"
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
+#import <Event.h>
 
 @interface ObservationMapTableViewCell ()
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
@@ -16,31 +17,25 @@
 
 @implementation ObservationMapTableViewCell
 
-- (void) configureCellForObservation: (Observation *) observation {
+- (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     Observations *observations = [Observations observationsForObservation:observation];
     [self.observationDataStore startFetchControllerWithObservations:observations];
-    self.mapDelegate = [[MapDelegate alloc] init];
+    if(self.mapDelegate == nil){
+        self.mapDelegate = [[MapDelegate alloc] init];
+    }
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
-
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    NSDictionary *properties = observation.properties;
-    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-    if (accuracyProperty != nil) {
-        double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-    }
     
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(observation.location.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-    
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
     [self.mapDelegate setObservations:observations];
     self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
     [self.mapDelegate selectedObservation:observation];
     self.mapDelegate.hideStaticLayers = YES;
     
+    MapObservation *mapObservation = [self.mapDelegate.mapObservations observationOfId:observation.objectID];
+    
+    MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:self.mapView];
     [self.mapDelegate selectedObservation:observation region:viewRegion];
 }
 

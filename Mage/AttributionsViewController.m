@@ -19,6 +19,12 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];
@@ -67,7 +73,12 @@
            @"title": @"UIImage-Categories",
            @"copyright": @"Copyright (c) 2013 Marc Charbonneau",
            @"text": [self string:@"This product includes software licensed under the MIT license." withLink:@"https://raw.githubusercontent.com/jimjeffers/UIImage-Categories/master/LICENSE" forText:@"MIT license"]
-         },
+           },
+         @{
+           @"title": @"libPhoneNumber for iOS",
+           @"copyright": @"",
+           @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/iziz/libPhoneNumber-iOS/master/LICENSE" forText:@"Apache License 2.0"]
+           },
          nil];
     }
     

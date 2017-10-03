@@ -9,29 +9,33 @@
 #import "Observation.h"
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
+#import "GeometryUtility.h"
+#import "MapObservationManager.h"
+#import "MapAnnotationObservation.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
 @property (strong, nonatomic) MapDelegate *mapDelegate;
-@property (strong, nonatomic) id<MKAnnotation> annotation;
+@property (strong, nonatomic) MapObservation *mapObservation;
+@property (strong, nonatomic) MapObservationManager *observationManager;
 @property (assign, nonatomic) BOOL isGeometryField;
 
 @end
 
 @implementation ObservationEditGeometryTableViewCell
 
-- (void) populateCellWithFormField: (id) field andObservation: (Observation *) observation {
-    
+- (void) populateCellWithFormField: (id) field andValue: (id) value {
+    self.geometry = [value objectForKey:@"geometry"];
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-        self.geoPoint = (GeoPoint *)[observation geometry];
+//        self.geometry = [observation getGeometry];
         self.isGeometryField = YES;
     } else {
-        id geometry = [observation.properties objectForKey:[field objectForKey:@"name"]];
+        id geometry = [value objectForKey:@"geometry"];
         if (geometry) {
-            self.geoPoint = (GeoPoint *) geometry;
+            self.geometry = (WKBGeometry *) geometry;
         } else {
-            self.geoPoint = nil;
+            self.geometry = nil;
         }
         self.isGeometryField = NO;
     }
@@ -40,28 +44,35 @@
     [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
     
     self.mapDelegate = [[MapDelegate alloc] init];
+
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
     [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
     
     self.mapDelegate.hideStaticLayers = YES;
     
-    if (self.geoPoint) {
-        [self.latitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.latitude]];
-        [self.longitude setText:[NSString stringWithFormat:@"%.6f", self.geoPoint.location.coordinate.longitude]];
-
+    if (self.geometry) {
+        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
         if (self.isGeometryField) {
-            self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        } else {
-            self.annotation = [[MKPointAnnotation alloc] init];
+            self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
+            MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
+            [self.mapView setRegion:viewRegion animated:NO];
         }
         
-        self.annotation.coordinate = self.geoPoint.location.coordinate;
-        [self.mapView addAnnotation:self.annotation];
-        
-        MKCoordinateRegion region = MKCoordinateRegionMake(self.annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
-        MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-        [self.mapView setRegion:viewRegion animated:NO];
+        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
+        [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
+        [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
+
+        if (!self.isGeometryField) {
+            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+            annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
+            [self.mapView addAnnotation:annotation];
+            MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
+            MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
+            [self.mapView setRegion:viewRegion animated:NO];
+        }
+            
     } else {
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
@@ -72,7 +83,7 @@
 }
 
 - (BOOL) isEmpty {
-    return self.geoPoint == nil;
+    return self.geometry == nil;
 }
 
 - (void) setValid:(BOOL) valid {
@@ -89,17 +100,15 @@
 
 - (void) typeChanged:(Observation *) observation {
     if (self.isGeometryField) {
-        [self.mapView removeAnnotation:self.annotation];
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [self.mapView addAnnotation:self.annotation];
+        [self.mapObservation removeFromMapView:self.mapView];
+        self.mapObservation = [self.observationManager addToMapWithObservation:observation];
     }
 }
 
 - (void) variantChanged:(Observation *)observation {
     if (self.isGeometryField) {
-        [self.mapView removeAnnotation:self.annotation];
-        self.annotation = [[ObservationAnnotation alloc] initWithObservation:observation];
-        [self.mapView addAnnotation:self.annotation];
+        [self.mapObservation removeFromMapView:self.mapView];
+        self.mapObservation = [self.observationManager addToMapWithObservation:observation];
     }
 }
 

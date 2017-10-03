@@ -7,20 +7,21 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "Observation.h"
+#import "MapAnnotation.h"
+#import <Event.h>
 
-@interface ObservationAnnotation :  NSObject <MKAnnotation>
+@interface ObservationAnnotation :  MapAnnotation
 
-@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSDate *timestamp;
-
-@property (nonatomic, readonly, copy) NSString *title;
-@property (nonatomic, readonly, copy) NSString *subtitle;
 
 @property (nonatomic) NSString *name;
 
 @property (nonatomic) Observation *observation;
 
-- (id)initWithObservation:(Observation *) observation;
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
+
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry;
+
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andLocation:(CLLocationCoordinate2D) location;
 
 @end
