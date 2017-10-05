@@ -318,7 +318,7 @@ NSNumber *_currentEventId;
 }
 
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    BOOL archived = observation.state != Archive;
+    BOOL archived = [observation.state intValue] ==  Archive;
     NSURLSessionDataTask *task = observation.remoteId ?
     (!archived ? [self operationToUpdateObservation:observation success:success failure:failure] : [self operationToDeleteObservation: observation success: success failure: failure] ):
         [self operationToCreateObservation:observation success:success failure:failure];
