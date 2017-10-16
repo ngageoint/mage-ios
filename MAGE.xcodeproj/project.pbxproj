@@ -440,8 +440,6 @@
 		F714D5EF1A5C832F00B096A7 /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
 		F714D5F31A5C8CAA00B096A7 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
 		F714D5F41A5C8CAA00B096A7 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
-		F71581A71F913DC9006D464A /* StaticCallout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticCallout.h; sourceTree = "<group>"; };
-		F71581A81F913DC9006D464A /* StaticCallout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StaticCallout.m; sourceTree = "<group>"; };
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
@@ -496,8 +494,6 @@
 		F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+UIColor_Mage.m"; sourceTree = "<group>"; };
 		F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F746B52B1F91276900267F16 /* StaticPointCallout.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StaticPointCallout.xib; sourceTree = "<group>"; };
-		F746B52D1F91287700267F16 /* StaticPointCalloutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticPointCalloutViewController.h; sourceTree = "<group>"; };
-		F746B52E1F91287700267F16 /* StaticPointCalloutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StaticPointCalloutViewController.m; sourceTree = "<group>"; };
 		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
 		F750A1661A7164B300C7A4FC /* StaticLayerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayerTableViewController.h; sourceTree = "<group>"; };
 		F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewController.m; sourceTree = "<group>"; };
@@ -981,10 +977,6 @@
 				04F833FE1ED5C3B200B5FE1E /* MapShapePointAnnotationView.h */,
 				04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */,
 				04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */,
-				F746B52D1F91287700267F16 /* StaticPointCalloutViewController.h */,
-				F746B52E1F91287700267F16 /* StaticPointCalloutViewController.m */,
-				F71581A71F913DC9006D464A /* StaticCallout.h */,
-				F71581A81F913DC9006D464A /* StaticCallout.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
