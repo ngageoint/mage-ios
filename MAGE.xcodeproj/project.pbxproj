@@ -493,7 +493,6 @@
 		F746874E1F44DC67009D7CF4 /* UIColor+UIColor_Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+UIColor_Mage.h"; sourceTree = "<group>"; };
 		F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+UIColor_Mage.m"; sourceTree = "<group>"; };
 		F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
-		F746B52B1F91276900267F16 /* StaticPointCallout.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StaticPointCallout.xib; sourceTree = "<group>"; };
 		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
 		F750A1661A7164B300C7A4FC /* StaticLayerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayerTableViewController.h; sourceTree = "<group>"; };
 		F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewController.m; sourceTree = "<group>"; };
@@ -766,7 +765,6 @@
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 				F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */,
-				F746B52B1F91276900267F16 /* StaticPointCallout.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";

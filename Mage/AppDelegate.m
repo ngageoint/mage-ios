@@ -84,13 +84,35 @@
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary *)options {
+    
+    if (!url) {
+        return NO;
+    }
+    
     NSLog(@"URL %@", url);
     if ([[url scheme] hasPrefix:@"com.googleusercontent.apps"]) {
         return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    } else if (url.isFileURL) {
+        NSString * fileUrl = [url path];
+        
+        // Handle GeoPackage files
+        if([GPKGGeoPackageValidate hasGeoPackageExtension:fileUrl]){
+            
+            // Import the GeoPackage file
+            if([self importGeoPackageFile:fileUrl]){
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
+                NSString * name = [[fileUrl lastPathComponent] stringByDeletingPathExtension];
+                [selectedCaches addObject:name];
+                [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
+                [defaults synchronize];
+                self.addedCacheOverlay = name;
+            }
+        }
     }
-    return false;
+    return YES;
 }
 
 - (void) createRootView {
@@ -473,34 +495,6 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-- (BOOL) application:(UIApplication *)application openURL:(NSURL *) url sourceApplication:(NSString *) sourceApplication annotation:(id) annotation {
-    
-    if (!url) {
-        return NO;
-    }
-    
-    if (url.isFileURL) {
-        NSString * fileUrl = [url path];
-        
-        // Handle GeoPackage files
-        if([GPKGGeoPackageValidate hasGeoPackageExtension:fileUrl]){
-        
-            // Import the GeoPackage file
-            if([self importGeoPackageFile:fileUrl]){
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
-                NSString * name = [[fileUrl lastPathComponent] stringByDeletingPathExtension];
-                [selectedCaches addObject:name];
-                [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
-                [defaults synchronize];
-                self.addedCacheOverlay = name;
-            }
-        }
-    }
-    
-    return YES;
-}
-
 -(BOOL) importGeoPackageFile: (NSString *) path{
     // Import the GeoPackage file
     BOOL imported = false;
@@ -514,6 +508,8 @@
     
     if(!imported){
         NSLog(@"Error importing GeoPackage file: %@", path);
+    } else {
+        [self processOfflineMapArchives];
     }
     
     return imported;
