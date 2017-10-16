@@ -10,9 +10,10 @@
 
 @interface StaticPointAnnotation : MapAnnotation
 
-@property (weak, nonatomic) NSDictionary *feature;
-@property (weak, nonatomic) NSString *iconUrl;
+@property (strong, nonatomic) NSDictionary *feature;
+@property (strong, nonatomic) NSString *iconUrl;
 
 - (id)initWithFeature:(NSDictionary *) feature;
+- (UIView *) detailViewForAnnotation;
 
 @end

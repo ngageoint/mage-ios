@@ -220,7 +220,6 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
                 
                 CGPathRelease(mpr);
             }
-
         }
     }
     
@@ -1009,6 +1008,10 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             self.selectedUserCircle = [MKCircle circleWithCenterCoordinate:self.selectedUser.location.location.coordinate radius:accuracy];
             [self.mapView addOverlay:self.selectedUserCircle];
         }
+    } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
+        StaticPointAnnotation *annotation = view.annotation;
+
+        view.detailCalloutAccessoryView = [annotation detailViewForAnnotation];
     }
 }
 
