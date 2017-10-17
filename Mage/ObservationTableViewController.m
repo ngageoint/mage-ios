@@ -181,11 +181,14 @@
     ObservationEditCoordinator *edit;
     
     WKBPoint *point;
-    
+    CLLocationAccuracy accuracy = 0;
+    double delta = 0;
     if (location) {
         point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        accuracy = location.horizontalAccuracy;
+        delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andObservation: nil andLocation:point];
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andLocation:point andAccuracy:accuracy andProvider:@"gps" andDelta:delta];
 
     [self.childCoordinators addObject:edit];
     [edit start];

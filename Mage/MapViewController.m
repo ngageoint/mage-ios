@@ -57,7 +57,7 @@
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
         
-        [self startCreateNewObservationAtLocation:mapPressLocation];
+        [self startCreateNewObservationAtLocation:mapPressLocation andProvider:@"manual"];
     }
 }
 
@@ -265,17 +265,21 @@
 
 - (IBAction)createNewObservation:(id)sender {
     CLLocation *location = [[LocationService singleton] location];
-    [self startCreateNewObservationAtLocation:location];
+    [self startCreateNewObservationAtLocation:location andProvider:@"gps"];
 }
 
-- (void) startCreateNewObservationAtLocation: (CLLocation *) location {
+- (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
     ObservationEditCoordinator *edit;
     WKBPoint *point;
     
+    CLLocationAccuracy accuracy = 0;
+    double delta = 0;
     if (location) {
         point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        accuracy = location.horizontalAccuracy;
+        delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:nil andLocation:point];
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
     [self.childCoordinators addObject:edit];
     [edit start];
 }

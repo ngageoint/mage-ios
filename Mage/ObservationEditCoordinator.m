@@ -28,28 +28,56 @@
 @property (strong, nonatomic) NSDictionary *currentEditField;
 @property (strong, nonatomic) id currentEditValue;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (nonatomic) CLLocationAccuracy accuracy;
+@property (strong, nonatomic) NSString *provider;
+@property (nonatomic) double delta;
 
 @end
 
 @implementation ObservationEditCoordinator
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation andLocation: (WKBGeometry *) location {
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (WKBGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
     self = [super init];
     if (!self) return nil;
     
-    _observation = observation;
-    _location = location;
-    _rootViewController = rootViewController;
-    [self pushViewController:rootViewController];
-    _delegate = delegate;
+    self.newObservation = YES;
+    self.observation = [self createObservationAtLocation:location withAccuracy:accuracy andProvider:provider andDelta:delta];
     
-    _childCoordinators = [[NSMutableArray alloc] init];
-    
-    self.navigationController = [[UINavigationController alloc] init];
-    
-    [self setupObservation];
+    [self setupCoordinatorWithRootViewController:rootViewController andDelegate:delegate];
     
     return self;
+}
+
+- (instancetype) initWithRootViewController:(UIViewController *)rootViewController andDelegate:(id<ObservationEditDelegate>)delegate andObservation:(Observation *)observation {
+    self = [super init];
+    if (!self) return nil;
+    
+    self.observation = [self setupObservation: observation];
+    [self setupCoordinatorWithRootViewController:rootViewController andDelegate:delegate];
+    
+    return self;
+}
+
+- (void) setupCoordinatorWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate {
+    self.rootViewController = rootViewController;
+    [self pushViewController:rootViewController];
+    self.delegate = delegate;
+    self.location = [self.observation getGeometry];
+    self.childCoordinators = [[NSMutableArray alloc] init];
+    self.navigationController = [[UINavigationController alloc] init];
+}
+
+- (Observation *) createObservationAtLocation: (WKBGeometry *) location withAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
+    self.newObservation = YES;
+    Observation *observation = [Observation observationWithGeometry:location andAccuracy: accuracy andProvider: provider andDelta: delta inManagedObjectContext:self.managedObjectContext];
+    observation.dirty = [NSNumber numberWithBool:YES];
+    return observation;
+}
+
+- (Observation *) setupObservation: (Observation *) observation {
+    Observation *observationInContext = [observation MR_inContext:self.managedObjectContext];
+    observationInContext.dirty = [NSNumber numberWithBool:YES];
+    return observationInContext;
 }
 
 - (NSMutableArray *) viewControllers {
@@ -82,19 +110,6 @@
     if (_event) return _event;
     _event = [Event getCurrentEventInContext:self.managedObjectContext];
     return _event;
-}
-
-- (void) setupObservation {
-    // if self.observation is nil create a new one
-    if (self.observation == nil) {
-        self.newObservation = YES;
-        self.observation = [Observation observationWithGeometry:self.location inManagedObjectContext:self.managedObjectContext];
-    } else {
-        self.observation = [self.observation MR_inContext:self.managedObjectContext];
-    }
-    
-    self.observation.dirty = [NSNumber numberWithBool:YES];
-
 }
 
 - (void) start {

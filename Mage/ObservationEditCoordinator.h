@@ -10,6 +10,7 @@
 #import <Observation.h>
 #import "ObservationEditViewController.h"
 #import "FormPickerViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 @protocol ObservationEditDelegate
 
@@ -20,7 +21,8 @@
 
 @interface ObservationEditCoordinator : NSObject <FormPickedDelegate>
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation andLocation: (WKBGeometry *) location;
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (WKBGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta;
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation;
 - (void) start;
 
 @end

@@ -346,7 +346,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (IBAction)editObservationTapped:(id)sender {
-    ObservationEditCoordinator *edit  = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation andLocation:nil];
+    ObservationEditCoordinator *edit  = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation];
 
     [self.childCoordinators addObject:edit];
     [edit start];
