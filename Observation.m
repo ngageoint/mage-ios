@@ -38,14 +38,16 @@ NSMutableArray *_transientAttachments;
 
 NSDictionary *_fieldNameToField;
 NSNumber *_currentEventId;
-
-+ (Observation *) observationWithGeometry:(WKBGeometry *) geometry inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
++ (Observation *) observationWithGeometry:(WKBGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
 
     [observation setTimestamp:[NSDate date]];
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
 
     [properties setObject:[observation.timestamp iso8601String] forKey:@"timestamp"];
+    [properties setObject:provider forKey:@"provider"];
+    [properties setObject:[NSNumber numberWithDouble:accuracy] forKey:@"accuracy"];
+    [properties setObject:[NSNumber numberWithInt:(int)delta] forKey:@"delta"];
     [properties setObject:[[NSMutableArray alloc] init] forKey:@"forms"];
 
     [observation setProperties:properties];
