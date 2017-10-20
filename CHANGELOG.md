@@ -3,13 +3,21 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.3 (TBD)
+## 1.4.4 (TBD)
 
 * TBD
 
 ##### Features
 
 ##### Bug Fixes
+
+## 1.4.3 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.3) (10-20-2017)
+
+##### Features
+
+##### Bug Fixes
+* iPad notifies the user when it could not get a location
+* iPad toolbar separators fix for iOS 11
 
 ## 1.4.2 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.2) (07-28-2017)
 
