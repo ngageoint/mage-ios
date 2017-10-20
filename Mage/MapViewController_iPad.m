@@ -15,6 +15,7 @@
 #import "SettingsViewController.h"
 #import "MeViewController.h"
 #import "MageOfflineObservationManager.h"
+#import "LocationService.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -72,10 +73,11 @@
     if ([[segue identifier] isEqualToString:@"CreateNewObservationSegue"]) {
         ObservationEditViewController *editViewController = segue.destinationViewController;
         
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.mapView centerCoordinate].latitude longitude:[self.mapView centerCoordinate].longitude];
-        GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
-        
-        [editViewController setLocation:point];
+        CLLocation *location = [[LocationService singleton] location];
+        if (location) {
+            GeoPoint *point = [[GeoPoint alloc] initWithLocation:location];
+            [editViewController setLocation:point];
+        }
     } else if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
         SettingsViewController *settingsViewController = segue.destinationViewController;
         settingsViewController.dismissable = YES;
