@@ -87,7 +87,9 @@
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
     [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil]];
-	 
+    
+    [UILabel appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]].textColor = [UIColor whiteColor];
+    
 	return YES;
 }
 
