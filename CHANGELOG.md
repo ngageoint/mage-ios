@@ -3,13 +3,20 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.4 (TBD)
+## 1.4.5 (TBD)
 
 * TBD
 
 ##### Features
 
 ##### Bug Fixes
+
+## 1.4.4 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.4) (10-26-2017)
+
+##### Features
+
+##### Bug Fixes
+* Fix issue with map annotation cache picking wrong icon
 
 ## 1.4.3 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.3) (10-20-2017)
 

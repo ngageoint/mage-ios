@@ -11,6 +11,8 @@
 
 @implementation ObservationAnnotation
 
+NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
+
 -(id) initWithObservation:(Observation *) observation {
 	if ((self = [super init])) {
         _coordinate = ((GeoPoint *) observation.geometry).location.coordinate;
@@ -22,8 +24,7 @@
         }
 		_subtitle = observation.timestamp.timeAgoSinceNow;
     }
-    [self setAccessibilityLabel:@"Observation Annotation"];
-    [self setAccessibilityValue:@"Observation Annotation"];
+    
     return self;
 }
 
@@ -32,23 +33,22 @@
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
-    UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
-    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:[image accessibilityIdentifier]];
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
     
     if (annotationView == nil) {
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:[image accessibilityIdentifier]];
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
         annotationView.rightCalloutAccessoryView = rightButton;
-        annotationView.image = image;
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
     } else {
         annotationView.annotation = self;
     }
-    [annotationView setAccessibilityLabel:@"Observation"];
-    [annotationView setAccessibilityValue:@"Observation"];
+    
+    annotationView.image = [ObservationImage imageForObservation:self.observation inMapView:mapView];;
+    
     return annotationView;
 }
 
