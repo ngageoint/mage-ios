@@ -69,6 +69,8 @@
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>MAGE uses the microphone to record audio while taking a video or capturing a voice recording.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>MAGE saves photos/videos you take to the photo libarary</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>MAGE uses the photo library to save photos/videos as well as attach already captured photos/videos.</string>
 	<key>UIAppFonts</key>
