@@ -5,7 +5,8 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -157,12 +158,12 @@
                                             <action selector="createNewObservation:" destination="UfL-Xp-Rx3" id="VgS-bB-pVt"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem id="eeI-UJ-E9H">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6ir-6h-eDL">
-                                            <rect key="frame" x="496.5" y="7" width="30" height="30"/>
+                                    <barButtonItem style="plain" id="ahM-PM-NK8">
+                                        <view key="customView" contentMode="scaleToFill" id="bkc-Su-aHP">
+                                            <rect key="frame" x="583.5" y="7" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </button>
+                                            <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
                                     </barButtonItem>
                                     <barButtonItem title="Filter" id="jnl-jA-BUu">
                                         <connections>
@@ -171,12 +172,12 @@
                                             </segue>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem id="2hL-eu-w5a">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YgZ-w8-GnS">
-                                            <rect key="frame" x="584" y="7" width="30" height="30"/>
+                                    <barButtonItem style="plain" id="fcx-ek-Bm1">
+                                        <view key="customView" contentMode="scaleToFill" id="v8q-3J-0Xk">
+                                            <rect key="frame" x="642" y="7" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.60271793603897095" green="0.602699875831604" blue="0.60271012783050537" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </button>
+                                            <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
                                     </barButtonItem>
                                     <barButtonItem title="Profile" id="joL-fY-jEC">
                                         <connections>
@@ -186,11 +187,11 @@
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="dJ6-xB-3uz"/>
                                     <barButtonItem style="plain" id="hMZ-VM-sQp">
                                         <view key="customView" contentMode="scaleToFill" id="Lr0-KE-IlO">
-                                            <rect key="frame" x="682" y="22" width="0.0" height="0.0"/>
+                                            <rect key="frame" x="711" y="22" width="0.0" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="9+" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ao9-LI-Ony">
-                                                    <rect key="frame" x="-1" y="-8" width="16" height="16"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" text="9+" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ao9-LI-Ony">
+                                                    <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
                                                     <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -204,19 +205,19 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstItem="Ao9-LI-Ony" firstAttribute="leading" secondItem="Lr0-KE-IlO" secondAttribute="leading" constant="-2" id="W81-c4-3zv"/>
-                                                <constraint firstAttribute="trailing" secondItem="Ao9-LI-Ony" secondAttribute="trailing" constant="-2" id="b98-4v-Es3"/>
-                                                <constraint firstItem="Ao9-LI-Ony" firstAttribute="top" secondItem="Lr0-KE-IlO" secondAttribute="top" constant="-4" id="nrI-d1-FG1"/>
+                                                <constraint firstItem="Ao9-LI-Ony" firstAttribute="leading" secondItem="Lr0-KE-IlO" secondAttribute="leading" id="2HC-aK-3hX"/>
+                                                <constraint firstAttribute="trailing" secondItem="Ao9-LI-Ony" secondAttribute="trailing" id="6xD-QV-Ieu"/>
+                                                <constraint firstItem="Ao9-LI-Ony" firstAttribute="centerY" secondItem="Lr0-KE-IlO" secondAttribute="centerYWithinMargins" constant="8" id="jBq-yV-ZlL"/>
                                             </constraints>
                                         </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="a0q-XZ-tLX"/>
-                                    <barButtonItem id="d9T-KA-kzL">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Vjw-0i-t9G">
-                                            <rect key="frame" x="682" y="7" width="30" height="30"/>
+                                    <barButtonItem style="plain" id="2y0-zg-Mnw">
+                                        <view key="customView" contentMode="scaleToFill" id="yQJ-wt-eFB">
+                                            <rect key="frame" x="711" y="7" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.60271793600000001" green="0.60269987579999995" blue="0.6027101278" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </button>
+                                            <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="KQr-9r-Wi1">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dr2-Yh-vFN">
