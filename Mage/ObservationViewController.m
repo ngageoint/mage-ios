@@ -359,7 +359,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[self.observation.properties valueForKey:@"type"] style: UIBarButtonItemStylePlain target:nil action:nil];
 
     if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
         AttachmentViewController *vc = [segue destinationViewController];
