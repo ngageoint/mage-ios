@@ -5,7 +5,7 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,7 +33,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bx3-fo-aWS">
-                    <rect key="frame" x="0.0" y="61" width="375" height="606"/>
+                    <rect key="frame" x="0.0" y="90.5" width="375" height="576.5"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="5" id="e2o-7e-MpS">
                         <size key="itemSize" width="90" height="120"/>
@@ -42,7 +42,7 @@
                         <inset key="sectionInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructions" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEr-0M-4d2">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructions" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEr-0M-4d2">
                     <rect key="frame" x="16" y="40" width="343" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.065599299969999997" green="0.32899433369999997" blue="0.64471054080000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -65,7 +65,7 @@
                 <constraint firstItem="YWy-yP-E2H" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="24s-Ou-UEC"/>
                 <constraint firstAttribute="trailing" secondItem="pEr-0M-4d2" secondAttribute="trailing" constant="16" id="2da-Es-Pyt"/>
                 <constraint firstAttribute="bottom" secondItem="WaT-Op-65Z" secondAttribute="bottom" id="5TB-kj-OsO"/>
-                <constraint firstItem="Bx3-fo-aWS" firstAttribute="top" secondItem="pEr-0M-4d2" secondAttribute="bottom" id="5bP-u2-9j7"/>
+                <constraint firstItem="Bx3-fo-aWS" firstAttribute="top" secondItem="pEr-0M-4d2" secondAttribute="bottom" constant="30" id="5bP-u2-9j7"/>
                 <constraint firstItem="WaT-Op-65Z" firstAttribute="leading" secondItem="Yf0-EB-QcZ" secondAttribute="leading" id="C6m-Qt-wJy"/>
                 <constraint firstAttribute="bottom" secondItem="YWy-yP-E2H" secondAttribute="bottom" id="CHF-SB-e5V"/>
                 <constraint firstItem="pEr-0M-4d2" firstAttribute="top" secondItem="Yf0-EB-QcZ" secondAttribute="topMargin" constant="20" id="Gb7-Wm-rBY"/>
