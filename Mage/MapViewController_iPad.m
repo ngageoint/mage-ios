@@ -15,6 +15,7 @@
 #import "WKBPoint.h"
 #import "MeViewController.h"
 #import "MageOfflineObservationManager.h"
+#import "AppDelegate.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -161,7 +162,9 @@
     }]];
 
     [alert addAction:[UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate logout];
+//        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
     }]];
 
     alert.popoverPresentationController.barButtonItem = self.moreButton;

@@ -167,10 +167,7 @@
     [[UITabBar appearance] setTintColor:[UIColor primaryColor]];
     [[UITabBar appearance] setBarTintColor:[UIColor secondaryColor]];
     
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
-                                                           }];
-    
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTextColor:[UIColor secondaryColor]];
     if (@available(iOS 11.0, *)) {
         [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
         [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
@@ -182,6 +179,8 @@
     } else {
         // Fallback on earlier versions
     }
+    
+
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

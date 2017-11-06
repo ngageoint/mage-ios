@@ -25,6 +25,8 @@
 #import "ObservationShapeStyle.h"
 #import "Event.h"
 #import "GeometryEditMapDelegate.h"
+#import "UIColor+UIColor_Mage.h"
+#import "UINavigationItem+Subtitle.h"
 
 @interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate>
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -74,6 +76,11 @@
     } else {
         // Fallback on earlier versions
     }
+    
+    self.pointButton.tintColor = [UIColor primaryColor];
+    self.lineButton.tintColor = [UIColor primaryColor];
+    self.polygonButton.tintColor = [UIColor primaryColor];
+    self.rectangleButton.tintColor = [UIColor primaryColor];
     
     self.map.delegate = _mapDelegate;
     
@@ -138,6 +145,11 @@
                                         initWithTarget:self action:@selector(longPressGesture:)]];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
 
+}
+
+- (void) setNavBarSubtitle: (NSString *) subtitle {
+    NSString *title = [[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"] ? @"Location" : [self.fieldDefinition objectForKey:@"name"];
+    [self.navigationItem setTitle:title subtitle:subtitle];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -741,7 +753,7 @@
             if (locationEdit) {
                 hint = @"Manually modify point coordinates";
             } else {
-                hint = @"Long click point to modify location";
+                hint = @"Long press point to modify location";
             }
         }
             break;
@@ -753,9 +765,9 @@
                 } else if (dragging) {
                     hint = @"Drag and release to adjust corner";
                 } else if (![self multipleShapePointPositions]) {
-                    hint = @"Long click map or point to draw rectangle";
+                    hint = @"Long press map or point to draw rectangle";
                 } else {
-                    hint = @"Long click point to adjust corner";
+                    hint = @"Long press point to adjust corner";
                 }
                 break;
             }
@@ -766,15 +778,15 @@
             } else if (dragging) {
                 hint = @"Drag and release to adjust location";
             } else if (self.newDrawing) {
-                hint = @"Long click map to add next point";
+                hint = @"Long press map to add next point";
             } else {
-                hint = @"Long click map to insert point between nearest points";
+                hint = @"Long press map to insert point between nearest points";
             }
             break;
         default:
             break;
     }
-    [self.navigationItem setPrompt:hint];
+    [self setNavBarSubtitle:hint];
 }
 
 /**
