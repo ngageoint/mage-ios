@@ -3,11 +3,19 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.5 (TBD)
+## 1.4.6 (TBD)
 
 * TBD
 
 ##### Features
+
+##### Bug Fixes
+
+## 1.4.5 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.5) (11-06-2017)
+
+##### Features
+
+* Fix issue preventing users from adding collected media to the photos library
 
 ##### Bug Fixes
 
