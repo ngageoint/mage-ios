@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>serverMajorVersion</key>
-	<integer>4</integer>
-	<key>serverMinorVersion</key>
 	<integer>5</integer>
+	<key>serverMinorVersion</key>
+	<integer>0</integer>
 	<key>attachmentPushFrequency</key>
 	<integer>60</integer>
 	<key>baseServerUrl</key>
