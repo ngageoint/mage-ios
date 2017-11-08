@@ -25,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *badgeCount;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBadgeTrailingSpacer;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBadgeLeadingSpacer;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *moreSpacer;
 @property (strong, nonatomic) MageOfflineObservationManager *offlineObservationManager;
 @end
 
@@ -32,9 +33,16 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    if (@available(iOS 11.0, *)) {
+        self.profileBadgeLeadingSpacer.width = 1;
+        self.profileBadgeTrailingSpacer.width = 8;
+    } else {
+        self.profileBadgeLeadingSpacer.width = -8;
+        self.profileBadgeTrailingSpacer.width = -2;
+        self.moreSpacer.width = 0;
+    }
 
-    self.profileBadgeLeadingSpacer.width = -8;
-    self.profileBadgeTrailingSpacer.width = -2;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -42,16 +50,6 @@
 
     [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController.navigationBar setTranslucent:NO];
-
-//    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
-//    lblTitle.backgroundColor = [UIColor clearColor];
-//    lblTitle.textColor = [UIColor whiteColor];
-//    lblTitle.font = [UIFont boldSystemFontOfSize:18];
-//    lblTitle.textAlignment = NSTextAlignmentLeft;
-//    lblTitle.text = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name;
-//    [lblTitle sizeToFit];
-//
-//    [self.eventNameItem setCustomView:lblTitle];
 
     self.offlineObservationManager = [[MageOfflineObservationManager alloc] initWithDelegate:self];
     [self.offlineObservationManager start];
@@ -194,10 +192,16 @@
 
         CGSize textSize = [self.badgeCount.text sizeWithAttributes:@{NSFontAttributeName:[self.badgeCount font]}];
         UIView *view = [self.profileBadge customView];
-        CGRect frame = view.frame;
-        frame.size = CGSizeMake(textSize.width + 8, textSize.height + 10);
-        view.frame = frame;
-
+        
+        if (@available(iOS 11.0, *)) {
+            [[view.widthAnchor constraintEqualToConstant:textSize.width + 10] setActive:YES];
+            [[view.heightAnchor constraintEqualToConstant:textSize.height + 20] setActive:YES];
+        } else {
+            CGRect frame = view.frame;
+            frame.size = CGSizeMake(textSize.width + 10, textSize.height + 20);
+            view.frame = frame;
+        }
+        
         self.badgeCount.center = view.center;
         self.badgeCount.layer.cornerRadius = textSize.height / 2;
     }
