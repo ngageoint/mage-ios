@@ -118,7 +118,7 @@
 
 -(void) calloutTapped:(id) calloutItem {
     if ([calloutItem isKindOfClass:[User class]]) {
-        [self selectedUser:(User *) calloutItem];
+        [self userDetailSelected:(User *) calloutItem];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
         [self observationDetailSelected:(Observation *) calloutItem];
     }

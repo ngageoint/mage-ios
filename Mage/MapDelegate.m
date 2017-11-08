@@ -1001,7 +1001,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
             view.leftCalloutAccessoryView = imageView;
             
-            [imageView setImage:image];// setImageWithURLRequest:[NSURLRequest requestWithURL:url] placeholderImage:nil success:nil failure:nil];
+            [imageView setImage:image];
         }
         
         if (self.selectedUserCircle != nil) {
