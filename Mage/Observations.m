@@ -66,6 +66,16 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
++ (id) hideObservations {
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithValue:NO]];
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                                 sectionNameKeyPath:@"dateSection"
+                                                                                                          cacheName:nil];
+    
+    return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
+}
+
 + (id) observationsForUser:(User *) user {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

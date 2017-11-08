@@ -293,8 +293,12 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);
     }
-
-    [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+    
+    if (self.hideObservations) {
+        [self updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
+    } else {
+        [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+    }
 }
 
 - (void) updateObservationPredicates: (NSMutableArray *) predicates {
@@ -374,7 +378,11 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void) setHideObservations:(BOOL) hideObservations {
     _hideObservations = hideObservations;
-    [self.mapObservations hidden:hideObservations];
+    if (hideObservations) {
+        self.observations = [Observations hideObservations];
+    } else {
+        self.observations = [Observations observations];
+    }
 }
 
 - (void) hideAnnotations:(NSArray *) annotations hide:(BOOL) hide {

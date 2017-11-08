@@ -24,6 +24,7 @@ extern NSString * const kFavortiesFilterKey;
 
 
 + (id) observations;
++ (id) hideObservations;
 + (id) observationsForUser:(User *) user;
 + (id) observationsForObservation:(Observation *) observation;
 
