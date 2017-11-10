@@ -33,6 +33,24 @@
     [defaults synchronize];
 }
 
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    
+    if (section != 0) return;
+    
+    
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView *hfv = (UITableViewHeaderFooterView *) view;
+        [hfv.textLabel setTextColor:[UIColor colorWithRed:144.0f/256.0f green:201.0f/256.0f blue:216.0f/256.0f alpha:1.0f]];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerClicked:)];
+        [hfv addGestureRecognizer:tap];
+    }
+}
+
+- (void) headerClicked: (UIGestureRecognizer *) sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -89,8 +107,9 @@
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
-    if (section == 1) {
-        return .1f;
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
+        return CGFLOAT_MIN;
     }
     
     return UITableViewAutomaticDimension;
