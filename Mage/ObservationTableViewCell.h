@@ -27,5 +27,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 
 - (void) populateCellWithObservation:(Observation *) observation;
+- (void) displayFavoriteForObservation: (Observation *) observation;
 
 @end

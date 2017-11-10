@@ -47,11 +47,6 @@
 
 - (id) init {
     self.event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
-    /*
-     NSArray *forms = event.forms;
-     NSDictionary *form = [forms objectAtIndex:0];
-     self.variantField = [form objectForKey:@"variantField"];
-     */
     return self;
 }
 
@@ -207,7 +202,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     [observation toggleFavoriteWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableViewCell displayFavoriteForObservation:observation];
     }];
 }
 

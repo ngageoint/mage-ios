@@ -84,6 +84,19 @@
     
     self.importantBadge.hidden = ![observation isImportant];
     
+    [self displayFavoriteForObservation:observation];
+    
+    if (observation.error != nil) {
+        BOOL hasValidationError = [observation hasValidationError];
+        self.syncBadge.hidden = hasValidationError;
+        self.errorBadge.hidden = !hasValidationError;
+    } else {
+        self.syncBadge.hidden = YES;
+        self.errorBadge.hidden = YES;
+    }
+}
+
+- (void) displayFavoriteForObservation: (Observation *) observation {
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
@@ -93,22 +106,12 @@
         self.favoriteButton.imageView.tintColor = self.favoriteDefaultColor;
         self.favoriteNumber.textColor = self.favoriteDefaultColor;
     }
-    
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     if ([favorites count]) {
         self.favoriteNumber.hidden = NO;
         self.favoriteNumber.text = [favorites count] <= 99 ? [@([favorites count]) stringValue] : @"99+";
     } else {
         self.favoriteNumber.hidden = YES;
-    }
-    
-    if (observation.error != nil) {
-        BOOL hasValidationError = [observation hasValidationError];
-        self.syncBadge.hidden = hasValidationError;
-        self.errorBadge.hidden = !hasValidationError;
-    } else {
-        self.syncBadge.hidden = YES;
-        self.errorBadge.hidden = YES;
     }
 }
 
