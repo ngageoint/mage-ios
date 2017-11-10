@@ -340,7 +340,8 @@
         <!--Navigation Controller-->
         <scene sceneID="ET0-kX-cMw">
             <objects>
-                <navigationController id="AH1-5F-Bwy" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" id="AH1-5F-Bwy" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Ld4-1R-NT1">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
