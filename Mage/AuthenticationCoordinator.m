@@ -22,6 +22,7 @@
 #import "GoogleAuthentication.h"
 #import <MageSessionManager.h>
 #import "DeviceUUID.h"
+#import "AppDelegate.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate>
 
@@ -289,15 +290,6 @@ BOOL signingIn = YES;
 
 - (void) authenticationHadFailure: (NSString *) errorString {
     [self.loginView authenticationHadFailure:errorString];
-//    self.statusButton.hidden = NO;
-//    self.loginStatus.hidden = NO;
-//    
-//    self.loginStatus.text = @"The username or password you entered is incorrect";
-//    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-//    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-//    
-//    self.loginFailure = YES;
-//    [self endLogin];
 }
 
 - (void) registrationWasSuccessful {
@@ -312,7 +304,8 @@ BOOL signingIn = YES;
 }
 
 - (void) disclaimerDisagree {
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate logout];
 }
 
 - (void) disclaimerAgree {

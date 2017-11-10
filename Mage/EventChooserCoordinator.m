@@ -13,6 +13,7 @@
 #import "EventTableDataSource.h"
 #import <UserUtility.h>
 #import "FadeTransitionSegue.h"
+#import "AppDelegate.h"
 
 @interface EventChooserCoordinator() <EventSelectionDelegate>
 
@@ -58,6 +59,11 @@
         [self.delegate eventChoosen:self.eventToSegueTo];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
+}
+
+- (void) actionButtonTapped {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate logout];
 }
 
 - (void) formFetched: (NSNotification *) notification {

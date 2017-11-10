@@ -87,8 +87,6 @@
     }
     self.eventIdToOfflineObservationCount = offlineCount;
 
-    
-//    [self.tableView reloadData];
 }
 
 

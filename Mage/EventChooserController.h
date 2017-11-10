@@ -12,6 +12,7 @@
 @protocol EventSelectionDelegate <NSObject>
 
 -(void) didSelectEvent:(Event *) event;
+-(void) actionButtonTapped;
 
 @end
 

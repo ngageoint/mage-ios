@@ -66,6 +66,10 @@ BOOL eventsFetched = NO;
     }];
 }
 
+- (IBAction)actionButtonTapped:(id)sender {
+    [self.delegate actionButtonTapped];
+}
+
 - (void) eventsFetched {
     NSLog(@"Events were fetched");
     eventsFetched = YES;
@@ -75,7 +79,7 @@ BOOL eventsFetched = NO;
     } completion:^(BOOL finished) {
         self.loadingView.alpha = 0.0;
     }];
-    
+
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
