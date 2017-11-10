@@ -172,7 +172,7 @@
         [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
         [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
         [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor secondaryColor]}];
-        [[UINavigationBar appearance] setPrefersLargeTitles:YES];
+        [[UINavigationBar appearance] setPrefersLargeTitles:NO];
         [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
                                                                     NSForegroundColorAttributeName: [UIColor secondaryColor]
                                                                     }];
