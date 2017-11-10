@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>serverMajorVersion</key>
-	<integer>4</integer>
-	<key>serverMinorVersion</key>
 	<integer>5</integer>
+	<key>serverMinorVersion</key>
+	<integer>0</integer>
 	<key>attachmentPushFrequency</key>
 	<integer>60</integer>
 	<key>baseServerUrl</key>
@@ -15,9 +15,9 @@
 	<key>gpsDistanceFilter</key>
 	<integer>10</integer>
 	<key>userFetchFrequency</key>
-	<integer>60</integer>
+	<integer>300</integer>
 	<key>observationFetchFrequency</key>
-	<integer>60</integer>
+	<integer>300</integer>
 	<key>observationPushFrequency</key>
 	<integer>45</integer>
 	<key>userReportingFrequency</key>
