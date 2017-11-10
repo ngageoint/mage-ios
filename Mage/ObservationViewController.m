@@ -174,7 +174,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.tableLayout insertObject:[self getHeaderSection] atIndex:HEADER_SECTION];
     [self.tableLayout insertObject:[self getAttachmentsSection] atIndex:ATTACHMENT_SECTION];
     
-    if ([self canEditObservationImportant] && !self.observation.isImportant) {
+    if ([self.observation currentUserCanUpdateImportant] && !self.observation.isImportant) {
         [self.tableLayout insertObject:@[@"addImportant"] atIndex:IMPORTANT_SECTION];
     } else if (self.observation.isImportant) {
         [self.tableLayout insertObject:@[@"updateImportant"] atIndex:IMPORTANT_SECTION];
@@ -405,10 +405,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];
 }
 
-- (BOOL) canEditObservationImportant {
-    return self.currentUser && [self.currentUser.role.permissions containsObject:@"UPDATE_EVENT"];
-}
-
 - (IBAction) observationFavoriteTapped:(id)sender {
     [self.observation toggleFavoriteWithCompletion:nil];
 }
@@ -541,7 +537,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (void) updateImportant {
     BOOL isImportant = [self.observation isImportant];
     NSArray *importantSection = [self.tableLayout objectAtIndex:IMPORTANT_SECTION];
-    if (!isImportant && [self canEditObservationImportant]) {
+    if (!isImportant && [self.observation currentUserCanUpdateImportant]) {
         if (![importantSection containsObject:@"addImportant"]) {
             [self.tableLayout replaceObjectAtIndex:IMPORTANT_SECTION withObject:@[@"addImportant"]];
             [self.propertyTable reloadSections:[NSIndexSet indexSetWithIndex:IMPORTANT_SECTION] withRowAnimation:UITableViewRowAnimationFade];
