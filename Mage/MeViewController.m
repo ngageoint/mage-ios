@@ -351,7 +351,7 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 
     MageSessionManager *manager = [MageSessionManager manager];
-    NSString *url = [NSString stringWithFormat:@"%@/%@/%@", [MageServer baseURL], @"api/users", self.user.remoteId];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
     
     NSMutableURLRequest *request = [[manager httpRequestSerializer] multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpeg" mimeType:@"image/jpeg"];
