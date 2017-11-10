@@ -282,6 +282,12 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
+    
+    NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
+    
     if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
         NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
         NSString *moviePath = [videoUrl path];
@@ -294,9 +300,9 @@
             NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
             if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
                 AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
-                NSString *mp4Path = [[moviePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"mp4"];
-                
-                exportSession.outputURL = [NSURL fileURLWithPath:mp4Path];
+                NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.mp4", [dateFormatter stringFromDate: [NSDate date]]]];
+
+                exportSession.outputURL = [NSURL fileURLWithPath:fileToWriteTo];
                 exportSession.outputFileType = AVFileTypeMPEG4;
                 [exportSession exportAsynchronouslyWithCompletionHandler:^{
                     switch ([exportSession status]) {
@@ -309,8 +315,8 @@
                         case AVAssetExportSessionStatusCompleted: {
                             NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
                             [attachmentJson setValue:@"video/mp4" forKey:@"contentType"];
-                            [attachmentJson setValue:mp4Path forKey:@"localPath"];
-                            [attachmentJson setValue:[mp4Path lastPathComponent] forKey:@"name"];
+                            [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
+                            [attachmentJson setValue:[fileToWriteTo lastPathComponent] forKey:@"name"];
                             [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
                             
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -331,10 +337,6 @@
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
         UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
         
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyymmdd_HHmmss"];
-        
-        NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
         NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL isDirectory;
