@@ -162,7 +162,6 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate logout];
-//        [self performSegueWithIdentifier:@"unwindToInitial" sender:self];
     }]];
 
     alert.popoverPresentationController.barButtonItem = self.moreButton;
