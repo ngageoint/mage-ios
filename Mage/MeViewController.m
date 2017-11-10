@@ -171,14 +171,15 @@
 }
 
 - (IBAction)portraitClick:(id)sender {
-    
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+    NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:self.user.avatarUrl];
     if (!self.currentUserIsMe) {
-        [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
-        
+        if(self.user.avatarUrl && [[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
+            [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+        }
         return;
     }
 
-    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Avatar"
                                                                    message:@"Change or view your avatar"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
