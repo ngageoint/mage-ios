@@ -107,7 +107,7 @@ NSNumber *_currentEventId;
 - (NSString *) getSecondaryField {
     NSDictionary *form = [self getPrimaryForm];
     if (form != nil) {
-        return [form objectForKey:@"secondaryField"];
+        return [form objectForKey:@"variantField"];
     }
     return nil;
 }
@@ -349,10 +349,7 @@ NSNumber *_currentEventId;
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSLog(@"Successfully created location for observation resource");
 
-        // TODO create temp url to PUT to correct place until we upgrade server to 5.0
-//        NSString *observationUrl = [response objectForKey:@"url"];
-        NSString *remoteId = [response objectForKey:@"id"];
-        NSString *observationUrl = [NSString stringWithFormat:@"%@/api/events/%@/observations/id/%@", [MageServer baseURL], observation.eventId, remoteId];
+        NSString *observationUrl = [response objectForKey:@"url"];
 
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             Observation *localObservation = [observation MR_inContext:localContext];
