@@ -90,11 +90,27 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    Locations *locations = [Locations locationsForAllUsers];
-    [self.mapDelegate setLocations:locations];
+    if (self.mapDelegate.locations != nil) {
+        [self.mapDelegate.locations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]]];
+        NSError *error;
+        if (![self.mapDelegate.locations.fetchedResultsController performFetch:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        }
+    } else {
+        Locations *locations = [Locations locationsForAllUsers];
+        [self.mapDelegate setLocations:locations];
+    }
     
-    Observations *observations = [Observations observations];
-    [self.mapDelegate setObservations:observations];
+    if (self.mapDelegate.observations != nil) {
+        [self.mapDelegate.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Observations getPredicatesForObservations]]];
+        NSError *error;
+        if (![self.mapDelegate.observations.fetchedResultsController performFetch:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        }
+    } else {
+        Observations *observations = [Observations observations];
+        [self.mapDelegate setObservations:observations];
+    }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];

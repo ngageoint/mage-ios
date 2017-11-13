@@ -151,6 +151,15 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
 
 -(void)mapView:(MKMapView *)mv didAddAnnotationViews:(NSArray *)views{
     [self.mapObservations selectShapeAnnotation];
+    for (MKAnnotationView *view in views) {
+        if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
+            ObservationAnnotation *oa = (ObservationAnnotation *)view.annotation;
+            view.layer.zPosition = [oa.observation.timestamp timeIntervalSinceReferenceDate];
+        } else if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
+            LocationAnnotation *la = (LocationAnnotation *)view.annotation;
+            view.layer.zPosition = [la.location.timestamp timeIntervalSinceReferenceDate];
+        }
+    }
 }
 
 -(void)mapTap: (CGPoint) tapPoint {
@@ -1194,13 +1203,14 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     if (annotation == nil) {
         annotation = [[LocationAnnotation alloc] initWithLocation:location];
+        annotation.view.layer.zPosition = [location.timestamp timeIntervalSinceReferenceDate];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
     } else {
         [annotation setSubtitle:location.timestamp.timeAgoSinceNow];
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
+        annotationView.layer.zPosition = [location.timestamp timeIntervalSinceReferenceDate];
         [annotation setCoordinate:[location location].coordinate];
-        
         [annotationView setImageForUser:annotation.location.user];
     }
 }
