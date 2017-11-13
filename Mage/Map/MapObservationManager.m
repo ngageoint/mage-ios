@@ -53,6 +53,7 @@
     if(geometry.geometryType == WKB_POINT){
         
         ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andGeometry:geometry];
+        annotation.view.layer.zPosition = [observation.timestamp timeIntervalSinceReferenceDate];
         [_mapView addAnnotation:annotation];
         
         observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];

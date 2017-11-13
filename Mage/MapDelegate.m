@@ -965,6 +965,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
         MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.layer.zPosition = [locationAnnotation.timestamp timeIntervalSinceReferenceDate];
         annotationView.canShowCallout = self.canShowUserCallout;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
@@ -973,6 +974,7 @@ BOOL RectContainsLine(CGRect r, CGPoint lineStart, CGPoint lineEnd)
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView];
+        annotationView.layer.zPosition = [observationAnnotation.observation.timestamp timeIntervalSinceReferenceDate];
         annotationView.canShowCallout = self.canShowObservationCallout;
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
