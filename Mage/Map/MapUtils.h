@@ -22,4 +22,10 @@
  */
 +(double) lineToleranceWithMapView: (MKMapView *) mapView;
 
++ (BOOL) rect: (CGRect) r ContainsLineStart: (CGPoint) lineStart andLineEnd: (CGPoint) lineEnd;
+
++ (StyledPolyline *) generatePolyline:(NSMutableArray *) path;
+
++ (StyledPolygon *) generatePolygon:(NSMutableArray *) coordinates;
+
 @end
