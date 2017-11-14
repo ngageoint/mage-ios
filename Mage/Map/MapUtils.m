@@ -105,7 +105,7 @@
     if (coordinates.count > 1) {
         [interiorPolygonCoordinates addObjectsFromArray:coordinates];
         [interiorPolygonCoordinates removeObjectAtIndex:0];
-        MKPolygon *recursePolygon = [MapDelegate generatePolygon:interiorPolygonCoordinates];
+        MKPolygon *recursePolygon = [MapUtils generatePolygon:interiorPolygonCoordinates];
         [interiorPolygons addObject:recursePolygon];
     }
     

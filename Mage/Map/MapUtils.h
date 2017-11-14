@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "StyledPolygon.h"
+#import "StyledPolyline.h"
 
 /**
  * Map utilities
