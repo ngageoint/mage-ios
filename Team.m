@@ -36,10 +36,6 @@
     }
     
     [self setUsers:users];
-    
-    if ([self.name isEqualToString:@"Team 1"]) {
-        NSLog(@"foo");
-    }
 }
 
 @end

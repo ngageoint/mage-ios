@@ -19,7 +19,10 @@ const CGFloat annotationScaleWidth = 35.0;
     NSString *secondaryField = [observation getSecondaryField];
     NSMutableArray *iconProperties = [[NSMutableArray alloc] init];
     NSArray *observationForms = [observation.properties objectForKey:@"forms"];
-    [iconProperties addObject:[[observationForms objectAtIndex:0] objectForKey:@"formId"]];
+    
+    if ([observationForms count] != 0) {
+        [iconProperties addObject:[[observationForms objectAtIndex:0] objectForKey:@"formId"]];
+    }
     
     NSString *rootIconFolder = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat: @"/events/icons-%@/icons", observation.eventId]];
     

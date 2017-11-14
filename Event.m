@@ -98,7 +98,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 }
 
 - (NSDictionary *) formForObservation: (Observation *) observation {
-    return [((NSArray *) self.forms) objectAtIndex:0];
+    return [observation getPrimaryForm];
 }
 
 - (NSDictionary *) formWithId: (long) formId {
