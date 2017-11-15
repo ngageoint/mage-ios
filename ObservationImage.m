@@ -66,17 +66,31 @@ const CGFloat annotationScaleWidth = 35.0;
 }
 
 + (UIImage *) imageForObservation:(Observation *) observation {
-    NSString *imagePath = [ObservationImage imageNameForObservation:observation];
-    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-    if (image == nil) {
-        image = [UIImage imageNamed:@"defaultMarker"];
-    }
-    
-    [image setAccessibilityIdentifier:imagePath];
-    
-    return image;
-}
+    UIImage *image;
 
+    if ([[observation getGeometry] geometryType] == WKB_POINT) {
+        NSString *imagePath = [ObservationImage imageNameForObservation:observation];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+        if (image == nil) {
+            image = [UIImage imageNamed:@"defaultMarker"];
+        }
+        
+        [image setAccessibilityIdentifier:imagePath];
+        
+        return image;
+    } else if ([[observation getGeometry] geometryType] == WKB_LINESTRING) {
+        image = [UIImage imageNamed:@"line_string_marker"];
+    } else if ([[observation getGeometry] geometryType] == WKB_POLYGON) {
+        image = [UIImage imageNamed:@"polygon_marker"];
+    }
+    if (image == nil) return nil;
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(38, 50), NO, 0.0f);
+    [image drawInRect:CGRectMake(0.0f, 0.0f, 38, 38)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return [newImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
 
 + (UIImage *) imageForObservation:(Observation *) observation inMapView: (MKMapView *) mapView {
     UIImage *image = [self imageForObservation:observation];
