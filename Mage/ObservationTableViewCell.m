@@ -15,6 +15,7 @@
 #import "NSDate+iso8601.h"
 #import "Attachment+Thumbnail.h"
 #import <MageEnums.h>
+#import "ObservationShapeStyleParser.h"
 
 @interface ObservationTableViewCell()
 
@@ -62,6 +63,12 @@
     }
     
     self.icon.image = [ObservationImage imageForObservation:observation];
+    ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation:observation];
+    if (style.strokeColor != nil) {
+        self.icon.tintColor = style.strokeColor;
+    } else {
+        self.icon.tintColor = style.fillColor;
+    }    
     
     self.timeField.text = observation.timestamp.shortTimeAgoSinceNow;
     

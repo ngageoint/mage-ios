@@ -18,8 +18,6 @@
 		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; };
 		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; };
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
-		04D747791EF827E600D7DABF /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D747781EF827E600D7DABF /* ObservationShapeStyle.m */; };
-		04D7477C1EF830AB00D7DABF /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
 		04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED963E1EB7AB8700B6AD8D /* MapObservation.m */; };
@@ -216,6 +214,8 @@
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */; };
 		F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */; };
+		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
+		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
 		F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
@@ -276,10 +276,6 @@
 		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCacheOverlayTableCell.m; sourceTree = "<group>"; };
 		046877F91C6D121400967470 /* CacheOverlayUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayUpdate.h; sourceTree = "<group>"; };
 		046877FA1C6D121400967470 /* CacheOverlayUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayUpdate.m; sourceTree = "<group>"; };
-		04D747771EF827E600D7DABF /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
-		04D747781EF827E600D7DABF /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
-		04D7477A1EF830AB00D7DABF /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
-		04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
@@ -620,6 +616,10 @@
 		F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSignUpViewController.h; sourceTree = "<group>"; };
 		F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSignUpViewController.m; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
+		F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
+		F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
+		F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
+		F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
 		F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeometryEditView.xib; sourceTree = "<group>"; };
 		F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertiesEditCoordinator.h; sourceTree = "<group>"; };
 		F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertiesEditCoordinator.m; sourceTree = "<group>"; };
@@ -1017,6 +1017,10 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */,
+				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */,
+				F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */,
+				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */,
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
 				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
@@ -1039,10 +1043,6 @@
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
-				04D747771EF827E600D7DABF /* ObservationShapeStyle.h */,
-				04D747781EF827E600D7DABF /* ObservationShapeStyle.m */,
-				04D7477A1EF830AB00D7DABF /* ObservationShapeStyleParser.h */,
-				04D7477B1EF830AB00D7DABF /* ObservationShapeStyleParser.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1627,13 +1627,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MAGE-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C7DD8C6A49EADCB550317B3D /* [CP] Embed Pods Frameworks */ = {
@@ -1657,9 +1660,34 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
+				"${PODS_ROOT}/DateTools/DateTools/DateTools.bundle",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"$PODS_CONFIGURATION_BUILD_DIR/geopackage-ios/GeoPackage.bundle",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"$PODS_CONFIGURATION_BUILD_DIR/mage-ios-sdk/MageSDK.bundle",
+				"$PODS_CONFIGURATION_BUILD_DIR/tiff-ios/TIFF.bundle",
+				"${PODS_ROOT}/tuneup_js/assertions.js",
+				"${PODS_ROOT}/tuneup_js/image_assertion.js",
+				"${PODS_ROOT}/tuneup_js/lang-ext.js",
+				"${PODS_ROOT}/tuneup_js/screen.js",
+				"${PODS_ROOT}/tuneup_js/test.js",
+				"${PODS_ROOT}/tuneup_js/tuneup.js",
+				"${PODS_ROOT}/tuneup_js/uiautomation-ext.js",
+				"${PODS_ROOT}/tuneup_js/image_asserter",
+				"${PODS_ROOT}/tuneup_js/image_assertion.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/abbreviated_console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/colored_console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/preprocessor.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/run",
+				"${PODS_ROOT}/tuneup_js/test_runner/xunit_output.rb",
+				"$PODS_CONFIGURATION_BUILD_DIR/wkb-ios/WKB.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1741,7 +1769,6 @@
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
-				04D7477C1EF830AB00D7DABF /* ObservationShapeStyleParser.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
@@ -1754,7 +1781,6 @@
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
 				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
-				04D747791EF827E600D7DABF /* ObservationShapeStyle.m in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
@@ -1786,6 +1812,7 @@
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */,
+				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
@@ -1856,6 +1883,7 @@
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
 				F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */,
+				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
 				F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */,
