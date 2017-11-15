@@ -66,7 +66,7 @@ BOOL eventsFetched = NO;
     }];
 }
 
-- (IBAction)actionButtonTapped:(id)sender {
+- (void)actionButtonTapped {
     [self.delegate actionButtonTapped];
 }
 
@@ -79,7 +79,7 @@ BOOL eventsFetched = NO;
     } completion:^(BOOL finished) {
         self.loadingView.alpha = 0.0;
     }];
-
+    
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
@@ -95,8 +95,8 @@ BOOL eventsFetched = NO;
         
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundView = messageView;
-    
-        self.actionButton.hidden = NO;        
+        
+        self.actionButton.hidden = NO;
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];

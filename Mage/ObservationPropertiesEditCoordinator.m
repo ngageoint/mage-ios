@@ -93,6 +93,9 @@
     self.currentEditValue = value;
 }
 
+- (void) invalidValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {
+}
+
 #pragma
 
 #pragma mark - ObservationEditViewControllerDelegate methods

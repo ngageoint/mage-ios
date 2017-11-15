@@ -7,6 +7,7 @@
 //
 
 #import "MapUtils.h"
+#import "GPKGMapShapePoints.h"
 
 @implementation MapUtils
 
@@ -23,39 +24,68 @@
     return tolerance;
 }
 
-+ (BOOL) rect: (CGRect) r ContainsLineStart: (CGPoint) lineStart andLineEnd: (CGPoint) lineEnd
-{
-    BOOL (^LineIntersectsLine)(CGPoint, CGPoint, CGPoint, CGPoint) = ^BOOL(CGPoint line1Start, CGPoint line1End, CGPoint line2Start, CGPoint line2End)
-    {
-        CGFloat q =
-        //Distance between the lines' starting rows times line2's horizontal length
-        (line1Start.y - line2Start.y) * (line2End.x - line2Start.x)
-        //Distance between the lines' starting columns times line2's vertical length
-        - (line1Start.x - line2Start.x) * (line2End.y - line2Start.y);
-        CGFloat d =
-        //Line 1's horizontal length times line 2's vertical length
-        (line1End.x - line1Start.x) * (line2End.y - line2Start.y)
-        //Line 1's vertical length times line 2's horizontal length
-        - (line1End.y - line1Start.y) * (line2End.x - line2Start.x);
-        
-        if( d == 0 )
-            return NO;
-        
-        CGFloat r = q / d;
-        
-        q =
-        //Distance between the lines' starting rows times line 1's horizontal length
-        (line1Start.y - line2Start.y) * (line1End.x - line1Start.x)
-        //Distance between the lines' starting columns times line 1's vertical length
-        - (line1Start.x - line2Start.x) * (line1End.y - line1Start.y);
-        
-        CGFloat s = q / d;
-        if( r < 0 || r > 1 || s < 0 || s > 1 )
-            return NO;
-        
-        return YES;
-    };
++ (BOOL) polygonHasKinks: (GPKGMapShapePoints *) mapShapePoints {
+    NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
+    NSArray *points = [shapePoints getPoints];
+    if ([points count] < 3) return NO;
+    GPKGMapPoint *lastPoint = [points lastObject];
     
+    for (int i = 0; i < [points count] - 1; i++) {
+        GPKGMapPoint *point1 = [points objectAtIndex:i];
+        GPKGMapPoint *nextPoint1 = [points objectAtIndex:i+1];
+
+        for (int k = 0; k < [points count] - 1; k++) {
+            GPKGMapPoint *point2 = [points objectAtIndex:k];
+            GPKGMapPoint *nextPoint2 = [points objectAtIndex:k+1];
+            if (abs(i-k) == 1) {
+                continue;
+            }
+            if (
+                i == 0 &&
+                k == [points count] - 2 &&
+                point1.coordinate.longitude == lastPoint.coordinate.longitude &&
+                point1.coordinate.latitude == lastPoint.coordinate.latitude
+                ) {
+                continue;
+            }
+            BOOL intersects = [MapUtils line1Start:CGPointMake(point1.coordinate.longitude, point1.coordinate.latitude) andEnd:CGPointMake(nextPoint1.coordinate.longitude, nextPoint1.coordinate.latitude) intersectsLine2Start:CGPointMake(point2.coordinate.longitude, point2.coordinate.latitude) andEnd:CGPointMake(nextPoint2.coordinate.longitude, nextPoint2.coordinate.latitude)];
+            if (intersects) return YES;
+        }
+    }
+    return NO;
+}
+
++ (BOOL) line1Start: (CGPoint) line1Start andEnd: (CGPoint) line1End intersectsLine2Start: (CGPoint) line2Start andEnd: (CGPoint) line2End {
+    CGFloat q =
+    //Distance between the lines' starting rows times line2's horizontal length
+    (line1Start.y - line2Start.y) * (line2End.x - line2Start.x)
+    //Distance between the lines' starting columns times line2's vertical length
+    - (line1Start.x - line2Start.x) * (line2End.y - line2Start.y);
+    CGFloat d =
+    //Line 1's horizontal length times line 2's vertical length
+    (line1End.x - line1Start.x) * (line2End.y - line2Start.y)
+    //Line 1's vertical length times line 2's horizontal length
+    - (line1End.y - line1Start.y) * (line2End.x - line2Start.x);
+    
+    if( d == 0 )
+        return NO;
+    
+    CGFloat r = q / d;
+    
+    q =
+    //Distance between the lines' starting rows times line 1's horizontal length
+    (line1Start.y - line2Start.y) * (line1End.x - line1Start.x)
+    //Distance between the lines' starting columns times line 1's vertical length
+    - (line1Start.x - line2Start.x) * (line1End.y - line1Start.y);
+    
+    CGFloat s = q / d;
+    if( r < 0 || r > 1 || s < 0 || s > 1 )
+        return NO;
+    
+    return YES;
+}
+
++ (BOOL) rect: (CGRect) r ContainsLineStart: (CGPoint) lineStart andLineEnd: (CGPoint) lineEnd {
     /*Test whether the line intersects any of:
      *- the bottom edge of the rectangle
      *- the right edge of the rectangle
@@ -63,12 +93,11 @@
      *- the left edge of the rectangle
      *- the interior of the rectangle (both points inside)
      */
-    
-    return (LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x, r.origin.y), CGPointMake(r.origin.x + r.size.width, r.origin.y)) ||
-            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x + r.size.width, r.origin.y), CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height)) ||
-            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height), CGPointMake(r.origin.x, r.origin.y + r.size.height)) ||
-            LineIntersectsLine(lineStart, lineEnd, CGPointMake(r.origin.x, r.origin.y + r.size.height), CGPointMake(r.origin.x, r.origin.y)) ||
-            (CGRectContainsPoint(r, lineStart) && CGRectContainsPoint(r, lineEnd)));
+    return [MapUtils line1Start:lineStart andEnd:lineEnd intersectsLine2Start:CGPointMake(r.origin.x, r.origin.y) andEnd:CGPointMake(r.origin.x + r.size.width, r.origin.y)] ||
+    [MapUtils line1Start:lineStart andEnd:lineEnd intersectsLine2Start:CGPointMake(r.origin.x + r.size.width, r.origin.y) andEnd:CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height)] ||
+    [MapUtils line1Start:lineStart andEnd:lineEnd intersectsLine2Start:CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height) andEnd:CGPointMake(r.origin.x, r.origin.y + r.size.height)] ||
+    [MapUtils line1Start:lineStart andEnd:lineEnd intersectsLine2Start:CGPointMake(r.origin.x, r.origin.y + r.size.height) andEnd:CGPointMake(r.origin.x, r.origin.y)] ||
+    (CGRectContainsPoint(r, lineStart) && CGRectContainsPoint(r, lineEnd));
 }
 
 + (StyledPolyline *) generatePolyline:(NSMutableArray *) path {

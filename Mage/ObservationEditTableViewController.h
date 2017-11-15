@@ -14,6 +14,7 @@
 
 @protocol PropertyEditDelegate <NSObject>
 - (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+- (void) invalidValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
 @end
 
 @interface ObservationEditTableViewController : UITableViewController<PropertyEditDelegate>

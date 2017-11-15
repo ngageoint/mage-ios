@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
+#import "GPKGMapShapePoints.h"
 
 /**
  * Map utilities
@@ -29,5 +30,9 @@
 + (StyledPolyline *) generatePolyline:(NSMutableArray *) path;
 
 + (StyledPolygon *) generatePolygon:(NSMutableArray *) coordinates;
+
++ (BOOL) line1Start: (CGPoint) line1Start andEnd: (CGPoint) line1End intersectsLine2Start: (CGPoint) line2Start andEnd: (CGPoint) line2End;
+
++ (BOOL) polygonHasKinks: (GPKGMapShapePoints *) mapShapePoints;
 
 @end
