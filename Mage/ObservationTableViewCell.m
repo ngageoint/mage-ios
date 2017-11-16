@@ -62,16 +62,28 @@
         self.variantField.hidden = YES;
     }
     
-    self.icon.image = [ObservationImage imageForObservation:observation];
-    ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation:observation];
-    if (style.strokeColor != nil) {
-        self.icon.tintColor = style.strokeColor;
+    if ([observation getGeometry].geometryType == WKB_POINT) {
+        [self.observationShapeImage setImage:[UIImage imageNamed:@"marker"]];
+        [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFit];
+        self.observationShapeImage.tintColor = [UIColor grayColor];
     } else {
-        self.icon.tintColor = style.fillColor;
-    }    
+        if ([observation getGeometry].geometryType == WKB_LINESTRING) {
+            [self.observationShapeImage setImage:[UIImage imageNamed:@"line_string"]];
+            [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFill];
+        } else if ([observation getGeometry].geometryType == WKB_POLYGON) {
+            [self.observationShapeImage setImage:[UIImage imageNamed:@"polygon"]];
+            [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFill];
+        }
+        ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation:observation];
+        if (style.strokeColor != nil) {
+            self.observationShapeImage.tintColor = style.strokeColor;
+        } else {
+            self.observationShapeImage.tintColor = style.fillColor;
+        }
+    }
     
+    self.icon.image = [ObservationImage imageForObservation:observation];
     self.timeField.text = observation.timestamp.shortTimeAgoSinceNow;
-    
     self.userField.text = observation.user.name;
     
     self.ads = [[AttachmentCollectionDataStore alloc] init];

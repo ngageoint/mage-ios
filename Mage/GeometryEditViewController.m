@@ -447,11 +447,21 @@
     [self setShapeTypeSelection];
 }
 
--(void) setShapeTypeSelection{
-    self.pointButton.selected = self.shapeType == WKB_POINT;
-    self.lineButton.selected = self.shapeType == WKB_LINESTRING;
-    self.rectangleButton.selected = self.shapeType == WKB_POLYGON && self.isRectangle;
-    self.polygonButton.selected = self.shapeType == WKB_POLYGON && !self.isRectangle;
+-(void) setShapeTypeSelection {
+    [self updateButton:self.pointButton toSelected:self.shapeType == WKB_POINT];
+    [self updateButton:self.lineButton toSelected:self.shapeType == WKB_LINESTRING];
+    [self updateButton:self.rectangleButton toSelected:self.shapeType == WKB_POLYGON && self.isRectangle];
+    [self updateButton:self.polygonButton toSelected:self.shapeType == WKB_POLYGON && !self.isRectangle];
+}
+
+- (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
+    if (selected) {
+        [button setTintColor:[UIColor whiteColor]];
+        [button setBackgroundColor:[UIColor mageBlue]];
+    } else {
+        [button setTintColor:[UIColor mageBlue]];
+        [button setBackgroundColor:[UIColor whiteColor]];
+    }
 }
 
 - (IBAction)pointButtonClick:(UIButton *)sender {

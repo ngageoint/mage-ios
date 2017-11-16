@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,7 +31,7 @@
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="t0n-5z-kcQ">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </mapView>
-                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibt-jy-fWg" userLabel="Point Button">
+                <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibt-jy-fWg" userLabel="Point Button">
                     <rect key="frame" x="16" y="16" width="35" height="35"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Point"/>
@@ -72,7 +72,7 @@
                         <constraint firstAttribute="width" constant="35" id="8Ic-SC-etn"/>
                         <constraint firstAttribute="height" constant="35" id="TjT-qv-iKT"/>
                     </constraints>
-                    <state key="normal" image="ray_start_end"/>
+                    <state key="normal" image="line_string"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                             <integer key="value" value="3"/>
@@ -105,7 +105,7 @@
                         <constraint firstAttribute="height" constant="35" id="8ah-Rx-53r"/>
                         <constraint firstAttribute="width" constant="35" id="g2e-eT-bhs"/>
                     </constraints>
-                    <state key="normal" image="square_outline"/>
+                    <state key="normal" image="rectangle"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                             <integer key="value" value="3"/>
@@ -194,7 +194,7 @@
                         <constraint firstAttribute="height" constant="35" id="JTO-99-sRn"/>
                         <constraint firstAttribute="width" constant="35" id="zuf-3S-gnf"/>
                     </constraints>
-                    <state key="normal" image="pentagon_outline"/>
+                    <state key="normal" image="polygon"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                             <integer key="value" value="3"/>
@@ -242,9 +242,9 @@
         </view>
     </objects>
     <resources>
+        <image name="line_string" width="36" height="36"/>
         <image name="observations" width="24" height="24"/>
-        <image name="pentagon_outline" width="24" height="24"/>
-        <image name="ray_start_end" width="24" height="24"/>
-        <image name="square_outline" width="24" height="24"/>
+        <image name="polygon" width="36" height="36"/>
+        <image name="rectangle" width="36" height="36"/>
     </resources>
 </document>
