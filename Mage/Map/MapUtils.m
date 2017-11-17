@@ -28,24 +28,16 @@
     NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
     NSArray *points = [shapePoints getPoints];
     if ([points count] < 3) return NO;
-    GPKGMapPoint *lastPoint = [points lastObject];
-    
-    for (int i = 0; i < [points count] - 1; i++) {
+    for (int i = 0; i < [points count]; i++) {
         GPKGMapPoint *point1 = [points objectAtIndex:i];
-        GPKGMapPoint *nextPoint1 = [points objectAtIndex:i+1];
-
-        for (int k = 0; k < [points count] - 1; k++) {
+        GPKGMapPoint *nextPoint1 = [points objectAtIndex:(i+1)%[points count]];
+        for (int k = i; k < [points count]; k++) {
             GPKGMapPoint *point2 = [points objectAtIndex:k];
-            GPKGMapPoint *nextPoint2 = [points objectAtIndex:k+1];
+            GPKGMapPoint *nextPoint2 = [points objectAtIndex:(k+1)%[points count]];
             if (abs(i-k) == 1) {
                 continue;
             }
-            if (
-                i == 0 &&
-                k == [points count] - 2 &&
-                point1.coordinate.longitude == lastPoint.coordinate.longitude &&
-                point1.coordinate.latitude == lastPoint.coordinate.latitude
-                ) {
+            if (i == 0 && k == [points count] - 1) {
                 continue;
             }
             BOOL intersects = [MapUtils line1Start:CGPointMake(point1.coordinate.longitude, point1.coordinate.latitude) andEnd:CGPointMake(nextPoint1.coordinate.longitude, nextPoint1.coordinate.latitude) intersectsLine2Start:CGPointMake(point2.coordinate.longitude, point2.coordinate.latitude) andEnd:CGPointMake(nextPoint2.coordinate.longitude, nextPoint2.coordinate.latitude)];
