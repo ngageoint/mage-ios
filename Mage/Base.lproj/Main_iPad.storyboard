@@ -292,7 +292,6 @@
                         <segue destination="Lx3-sm-j1G" kind="push" identifier="DisplayObservationSegue" id="5KS-77-dla"/>
                         <segue destination="COK-go-gb5" kind="unwind" identifier="unwindToInitial" unwindAction="unwindToInitial:" id="Kb8-la-60D"/>
                         <segue destination="ajs-hT-ZjQ" kind="modal" identifier="SettingsSegue" modalTransitionStyle="flipHorizontal" id="Sro-Oz-gKM"/>
-                        <segue destination="98b-mT-76z" kind="push" identifier="viewImageSegue" id="fM6-sL-xxp"/>
                         <segue destination="NQp-Sm-cVJ" kind="push" identifier="DisplayPersonSegue" id="SAm-kj-9un"/>
                     </connections>
                 </viewController>
@@ -336,16 +335,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wu4-as-90U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6276" y="3011"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="w8Y-RA-BwK">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="98b-mT-76z" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="bvO-ha-EtI"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Z6W-0K-bq0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6829" y="2386"/>
         </scene>
         <!--Filter-->
         <scene sceneID="MYe-eV-2Vo">
