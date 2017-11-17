@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
-#import "GPKGMapShapePoints.h"
+#import <WKBPolygon.h>
 
 /**
  * Map utilities
@@ -33,6 +33,6 @@
 
 + (BOOL) line1Start: (CGPoint) line1Start andEnd: (CGPoint) line1End intersectsLine2Start: (CGPoint) line2Start andEnd: (CGPoint) line2End;
 
-+ (BOOL) polygonHasKinks: (GPKGMapShapePoints *) mapShapePoints;
++ (BOOL) polygonHasIntersections: (WKBPolygon *) wkbPolygon;
 
 @end

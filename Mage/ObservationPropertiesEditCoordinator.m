@@ -20,6 +20,7 @@
 #import "GeometryEditViewController.h"
 #import "ExternalDevice.h"
 #import "AttachmentViewController.h"
+#import "MapUtils.h"
 
 @interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate>
 
@@ -135,6 +136,24 @@
 - (void) fieldEditDone {
     NSDictionary *field = self.currentEditField;
     id value = self.currentEditValue;
+    
+    // validate the geometry for no self intersections
+    if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
+        WKBGeometry *geom = (WKBGeometry *)value;
+        if (geom.geometryType == WKB_POLYGON) {
+            BOOL hasIntersections = [MapUtils polygonHasIntersections:(WKBPolygon *)geom];
+            if (hasIntersections) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
+                                                                               message:@"Polygon geometries cannot have self intersections.  Please update the polygon to remove all intersections."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                
+                [self.navigationController.visibleViewController presentViewController:alert animated:YES completion:nil];
+                return;
+            }
+        }
+    }
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.observation.geometry = value;

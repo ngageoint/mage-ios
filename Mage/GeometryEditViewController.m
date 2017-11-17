@@ -782,10 +782,6 @@
                 }
                 break;
             }
-            if (self.hasKinks) {
-                hint = @"Polygons cannot have self intersections";
-                break;
-            }
         }
         case WKB_LINESTRING:
             if (locationEdit) {
@@ -1091,14 +1087,6 @@
     } else if ([self isShape]) {
         acceptEnabled = [self shapePointsValid];
     }
-    if (!acceptEnabled) {
-        if (self.hasKinks) {
-            [self setNavBarSubtitle:@"Polygons cannot have self intersections"];
-        }
-        [self.navigationItem.rightBarButtonItem setEnabled:NO];
-    } else {
-        [self.navigationItem.rightBarButtonItem setEnabled:YES];
-    }
     acceptEnabled = acceptEnabled && self.validLocation;
     if (acceptEnabled) {
         [self updateGeometry];
@@ -1111,14 +1099,7 @@
  * @return true if valid
  */
 -(BOOL) shapePointsValid{
-    if (self.shapeType == WKB_POLYGON) {
-        self.hasKinks = [MapUtils polygonHasKinks:[self mapShapePoints]];
-        if (self.hasKinks) {
-            return NO;
-        }
-    } else {
-        self.hasKinks = NO;
-    }
+    
     return [self multipleShapePointPositions] && [[self mapShapePoints] isValid];
 }
 

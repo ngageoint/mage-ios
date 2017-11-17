@@ -8,6 +8,7 @@
 
 #import "MapUtils.h"
 #import "GPKGMapShapePoints.h"
+#import "WKBLineString.h"
 
 @implementation MapUtils
 
@@ -24,24 +25,27 @@
     return tolerance;
 }
 
-+ (BOOL) polygonHasKinks: (GPKGMapShapePoints *) mapShapePoints {
-    NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
-    NSArray *points = [shapePoints getPoints];
-    if ([points count] < 3) return NO;
-    for (int i = 0; i < [points count]; i++) {
-        GPKGMapPoint *point1 = [points objectAtIndex:i];
-        GPKGMapPoint *nextPoint1 = [points objectAtIndex:(i+1)%[points count]];
-        for (int k = i; k < [points count]; k++) {
-            GPKGMapPoint *point2 = [points objectAtIndex:k];
-            GPKGMapPoint *nextPoint2 = [points objectAtIndex:(k+1)%[points count]];
-            if (abs(i-k) == 1) {
-                continue;
++ (BOOL) polygonHasIntersections: (WKBPolygon *) wkbPolygon {
+    for (WKBLineString *line1 in wkbPolygon.rings) {
+        WKBPoint *lastPoint = [line1.points objectAtIndex:[[line1 numPoints] intValue] - 1];
+        for (WKBLineString *line2 in wkbPolygon.rings) {
+            for (int i = 0; i < [[line1 numPoints] intValue] - 1; i++) {
+                WKBPoint *point1 = [line1.points objectAtIndex:i];
+                WKBPoint *nextPoint1 = [line1.points objectAtIndex:i+1];
+                for (int k = i; k < [[line2 numPoints] intValue] - 1; k++) {
+                    WKBPoint *point2 = [line2.points objectAtIndex:k];
+                    WKBPoint *nextPoint2 = [line2.points objectAtIndex:k+1];
+                    if (line1 != line2) continue;
+                    if (abs(i-k) == 1) {
+                        continue;
+                    }
+                    if (i == 0 && k == [[line1 numPoints] intValue] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) {
+                        continue;
+                    }
+                    BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue]) andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue]) intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue]) andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];
+                    if (intersects) return YES;
+                }
             }
-            if (i == 0 && k == [points count] - 1) {
-                continue;
-            }
-            BOOL intersects = [MapUtils line1Start:CGPointMake(point1.coordinate.longitude, point1.coordinate.latitude) andEnd:CGPointMake(nextPoint1.coordinate.longitude, nextPoint1.coordinate.latitude) intersectsLine2Start:CGPointMake(point2.coordinate.longitude, point2.coordinate.latitude) andEnd:CGPointMake(nextPoint2.coordinate.longitude, nextPoint2.coordinate.latitude)];
-            if (intersects) return YES;
         }
     }
     return NO;
