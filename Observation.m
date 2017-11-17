@@ -866,13 +866,19 @@ NSNumber *_currentEventId;
 
 - (void) deleteObservationWithCompletion: (nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
     if ([self isDeletableByCurrentUser]) {
-        [self setState:[NSNumber numberWithInt:(int) Archive]];
-        [self setDirty:[NSNumber numberWithBool:YES]];
-        [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
-            if (completion) {
-                completion(contextDidSave, error);
-            }
-        }];
+        if (self.remoteId != nil) {
+            [self setState:[NSNumber numberWithInt:(int) Archive]];
+            [self setDirty:[NSNumber numberWithBool:YES]];
+            [self.managedObjectContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+                if (completion) {
+                    completion(contextDidSave, error);
+                }
+            }];
+        } else {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                [self MR_deleteEntityInContext:localContext];
+            }];
+        }
     }
 }
 

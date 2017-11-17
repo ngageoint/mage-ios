@@ -80,6 +80,8 @@
         [manager addTask:eventTask];
     } failure:^(NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+        NSArray *events = [Event MR_findAll];
+        [self fetchFormAndStaticLayerForEvents: events];
     }];
     [manager addTask:myselfTask];
 }
