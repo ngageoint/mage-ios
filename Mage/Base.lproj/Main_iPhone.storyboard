@@ -85,6 +85,7 @@
                         <outlet property="editButton" destination="vIS-70-lZB" id="Prd-Dx-PCR"/>
                         <outlet property="observationDataStore" destination="6Vg-8o-rtg" id="P87-0E-G9B"/>
                         <outlet property="propertyTable" destination="SUG-4H-QMK" id="Ntf-aP-O24"/>
+                        <segue destination="kr3-Yy-vVK" kind="show" identifier="FavoriteUsersSegue" id="OUv-MD-gef"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SK0-1I-eiC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -534,7 +535,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="GCl-vQ-1KG">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="282"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -592,11 +593,11 @@
                                     <nil key="highlightedColor"/>
                                     <size key="shadowOffset" width="0.0" height="0.0"/>
                                 </label>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
-                                    <rect key="frame" x="8" y="227" width="359" height="55"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
+                                    <rect key="frame" x="8" y="227" width="359" height="100"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="24"/>
+                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="50"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="Xod-hF-7lU">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
@@ -629,10 +630,10 @@
                                                 <constraint firstItem="FAA-xU-WJK" firstAttribute="top" secondItem="vbx-kA-G61" secondAttribute="top" id="gbH-Z8-5EK"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
-                                            <rect key="frame" x="0.0" y="24" width="359" height="31"/>
+                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
+                                            <rect key="frame" x="0.0" y="50" width="359" height="50"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
+                                                <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -640,7 +641,7 @@
                                                         <constraint firstAttribute="height" constant="14" id="b9a-G0-4r6"/>
                                                     </constraints>
                                                 </imageView>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
                                                     <rect key="frame" x="20" y="0.0" width="339" height="24"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -795,6 +796,31 @@
             </objects>
             <point key="canvasLocation" x="-150" y="192"/>
         </scene>
+        <!--Favorited By-->
+        <scene sceneID="fdp-FV-eQT">
+            <objects>
+                <tableViewController id="kr3-Yy-vVK" customClass="UserTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MBs-ZZ-5hS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="dLi-Jc-Qfj" id="ngE-5j-Yxo"/>
+                            <outlet property="delegate" destination="dLi-Jc-Qfj" id="DFm-OZ-aXD"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Favorited By" id="6eQ-4m-p2I"/>
+                    <connections>
+                        <outlet property="userDataStore" destination="dLi-Jc-Qfj" id="Y0X-Qt-YLC"/>
+                        <segue destination="HsP-f4-6A2" kind="show" identifier="ShowUserSegue" id="N7T-Lt-5X2"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hnm-zm-Qjj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="dLi-Jc-Qfj" customClass="UserDataStore"/>
+                <navigationItem title="Favorited By" id="3tp-Fy-yr7"/>
+            </objects>
+            <point key="canvasLocation" x="2212" y="-1555"/>
+        </scene>
     </scenes>
     <resources>
         <image name="email" width="18" height="18"/>
@@ -809,7 +835,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="77U-TW-S4M"/>
+        <segue reference="N7T-Lt-5X2"/>
         <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
 </document>

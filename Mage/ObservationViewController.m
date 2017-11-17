@@ -291,6 +291,9 @@ static NSInteger const IMPORTANT_SECTION = 4;
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationNone];
 
         [[ObservationPushService singleton] pushObservations:@[self.observation]];
+    } else if (indexPath.section == HEADER_SECTION && indexPath.row == [[self.tableLayout objectAtIndex:HEADER_SECTION] indexOfObject:@"favorites"]) {
+        NSLog(@"Favorites");
+        [self performSegueWithIdentifier:@"FavoriteUsersSegue" sender:self];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

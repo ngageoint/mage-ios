@@ -872,6 +872,7 @@
                         <outlet property="mapDelegate" destination="qB5-5k-8bL" id="lGx-vm-2U4"/>
                         <outlet property="observationDataStore" destination="8He-aG-ubI" id="8ba-Vi-G0O"/>
                         <outlet property="propertyTable" destination="Gr6-zy-ZrK" id="fMN-bb-pqY"/>
+                        <segue destination="MvO-wk-bOV" kind="push" identifier="FavoriteUsersSegue" id="7xQ-N1-h2G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7R-eo-YeW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -925,6 +926,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="5KS-77-dla"/>
-        <segue reference="YzF-MW-CoD"/>
+        <segue reference="p8L-AB-HpY"/>
     </inferredMetricsTieBreakers>
 </document>
