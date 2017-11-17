@@ -167,7 +167,9 @@
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+    [attachmentVC setTitle:@"Attachment"];
+    [self.navigationController pushViewController:attachmentVC animated:YES];
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -175,7 +177,12 @@
     NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:self.user.avatarUrl];
     if (!self.currentUserIsMe) {
         if(self.user.avatarUrl && [[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {
-            [self performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+            
+            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+            NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
+
+            AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
+            [self.navigationController pushViewController:attachmentVC animated:YES];
         }
         return;
     }
@@ -186,7 +193,11 @@
     
     __weak typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:@"View Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf performSegueWithIdentifier:@"viewAvatarSegue" sender:self];
+        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
+        NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
+        
+        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
+        [self.navigationController pushViewController:attachmentVC animated:YES];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -374,22 +385,10 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"viewAvatarSegue"]) {
-        AttachmentViewController *vc = [segue destinationViewController];
-        
-        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-        NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
-        [vc setMediaUrl: avatarUrl];
-        [vc setContentType:@"image"];
-        [vc setTitle:@"Avatar"];
-    } else if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
+    if ([[segue identifier] isEqualToString:@"DisplayObservationSegue"]) {
         id destination = [segue destinationViewController];
         Observation *observation = (Observation *) sender;
         [destination setObservation:observation];
-    } else if ([[segue identifier] isEqualToString:@"viewImageSegue"]) {
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
     }
 }
 

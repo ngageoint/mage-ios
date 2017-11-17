@@ -30,6 +30,24 @@
 
 @implementation AttachmentViewController
 
+- (instancetype) initWithMediaURL: (NSURL *) mediaURL andContentType: (NSString *) contentType andTitle: (NSString *) title {
+    self = [super initWithNibName:@"AttachmentView" bundle:nil];
+    if (self != nil) {
+        self.mediaUrl = mediaURL;
+        self.contentType = contentType;
+        self.title = title;
+    }
+    return self;
+}
+
+- (instancetype) initWithAttachment: (Attachment *) attachment {
+    self = [super initWithNibName:@"AttachmentView" bundle:nil];
+    if (self != nil) {
+        self.attachment = attachment;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

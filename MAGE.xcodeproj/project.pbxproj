@@ -50,7 +50,6 @@
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2F6557D41DD27FF1008C7922 /* ObservationEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F6557D21DD27FF1008C7922 /* ObservationEdit.storyboard */; };
-		2F6557D71DD28958008C7922 /* Attachment.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F6557D51DD28958008C7922 /* Attachment.storyboard */; };
 		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
@@ -340,7 +339,6 @@
 		2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedDelegate_iPhone.h; sourceTree = "<group>"; };
 		2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedDelegate_iPhone.m; sourceTree = "<group>"; };
 		2F6557D31DD27FF1008C7922 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ObservationEdit.storyboard; sourceTree = "<group>"; };
-		2F6557D61DD28958008C7922 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Attachment.storyboard; sourceTree = "<group>"; };
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
@@ -746,7 +744,6 @@
 				2F389C901DCD21D100F05C95 /* MapSettings.storyboard */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				2F6557D21DD27FF1008C7922 /* ObservationEdit.storyboard */,
-				2F6557D51DD28958008C7922 /* Attachment.storyboard */,
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
 				F7FC59211F3CE2280010351A /* FormPickerView.xib */,
 				F7FC59261F3CED5A0010351A /* FormCell.xib */,
@@ -1505,7 +1502,6 @@
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
 				F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */,
-				2F6557D71DD28958008C7922 /* Attachment.storyboard in Resources */,
 				F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */,
 				F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */,
 				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
@@ -1915,14 +1911,6 @@
 				2F6557D31DD27FF1008C7922 /* Base */,
 			);
 			name = ObservationEdit.storyboard;
-			sourceTree = "<group>";
-		};
-		2F6557D51DD28958008C7922 /* Attachment.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2F6557D61DD28958008C7922 /* Base */,
-			);
-			name = Attachment.storyboard;
 			sourceTree = "<group>";
 		};
 		2FB3B12F1DD3C52000C46ADC /* Login.storyboard */ = {

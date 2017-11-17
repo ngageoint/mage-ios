@@ -373,16 +373,6 @@
             </objects>
             <point key="canvasLocation" x="6479" y="2386"/>
         </scene>
-        <!--Attachment-->
-        <scene sceneID="eRZ-K1-4L2">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="gVC-Cb-jEG" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="Pct-qu-mik"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Lqf-5a-PeA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="8613" y="1116"/>
-        </scene>
         <!--Attachment Selection Delegate-->
         <scene sceneID="8tc-Wq-Cd7">
             <objects>
@@ -552,8 +542,6 @@
                         <outlet property="observationDataStore" destination="5dp-0o-Cyg" id="rrW-bO-hfm"/>
                         <outlet property="phoneNumber" destination="Ykw-Tt-GAI" id="c5K-g2-cvP"/>
                         <outlet property="phoneView" destination="DRl-YA-9QE" id="pZ6-vV-46i"/>
-                        <segue destination="gVC-Cb-jEG" kind="push" identifier="viewAvatarSegue" id="gNr-Ja-G5z"/>
-                        <segue destination="9EM-7E-pAQ" kind="push" identifier="viewImageSegue" id="VLr-xA-40r"/>
                         <segue destination="Lx3-sm-j1G" kind="push" identifier="DisplayObservationSegue" id="6cz-zN-CeZ"/>
                     </connections>
                 </tableViewController>
@@ -577,16 +565,6 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="7997" y="1170"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="Pwq-tv-xhg">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="9EM-7E-pAQ" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="1Fq-QD-owG"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KJI-Hj-wGS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="8613" y="1255"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ZPH-hE-rNE">
@@ -905,7 +883,6 @@
                         <outlet property="mapDelegate" destination="qB5-5k-8bL" id="lGx-vm-2U4"/>
                         <outlet property="observationDataStore" destination="8He-aG-ubI" id="8ba-Vi-G0O"/>
                         <outlet property="propertyTable" destination="Gr6-zy-ZrK" id="fMN-bb-pqY"/>
-                        <segue destination="tON-A9-PZM" kind="push" identifier="viewImageSegue" id="2ha-VR-r2A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7R-eo-YeW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -943,16 +920,6 @@
                 <navigationItem title="Favorited By" id="okV-Oo-vNB"/>
             </objects>
             <point key="canvasLocation" x="9671" y="-52"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="vnW-MY-GBT">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="tON-A9-PZM" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="x7Y-r7-P02"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gZ5-Bf-8IH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="10430" y="-1178"/>
         </scene>
     </scenes>
     <resources>

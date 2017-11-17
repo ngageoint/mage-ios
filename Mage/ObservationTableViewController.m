@@ -155,11 +155,6 @@
         id destination = [segue destinationViewController];
 		Observation *observation = (Observation *) sender;
 		[destination setObservation:observation];
-    } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
     }
 }
 
@@ -210,7 +205,9 @@
     if (self.attachmentDelegate != nil) {
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {
-        [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+        [attachmentVC setTitle:@"Attachment"];
+        [self.navigationController pushViewController:attachmentVC animated:YES];
     }
 }
 

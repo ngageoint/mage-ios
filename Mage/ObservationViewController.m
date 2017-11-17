@@ -354,17 +354,14 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
-    NSLog(@"clicked attachment %@", attachment.url);
-    [self performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+    [attachmentVC setTitle:@"Attachment"];
+    [self.navigationController pushViewController:attachmentVC animated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
-    } else if ([segue.identifier isEqualToString:@"FavoriteUsersSegue"]) {
+    if ([segue.identifier isEqualToString:@"FavoriteUsersSegue"]) {
         NSMutableArray *userIds = [[NSMutableArray alloc] init];
         [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {
             [userIds addObject:favorite.userId];

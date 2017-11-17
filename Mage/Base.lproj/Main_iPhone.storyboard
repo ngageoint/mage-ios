@@ -85,37 +85,12 @@
                         <outlet property="editButton" destination="vIS-70-lZB" id="Prd-Dx-PCR"/>
                         <outlet property="observationDataStore" destination="6Vg-8o-rtg" id="P87-0E-G9B"/>
                         <outlet property="propertyTable" destination="SUG-4H-QMK" id="Ntf-aP-O24"/>
-                        <segue destination="trW-81-b3C" kind="show" identifier="viewImageSegue" id="elk-QR-xOj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SK0-1I-eiC" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <customObject id="6Vg-8o-rtg" customClass="ObservationDataStore"/>
             </objects>
             <point key="canvasLocation" x="1354" y="-1555"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="fyZ-hs-iUR">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="trW-81-b3C" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="uGo-8T-3q0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2310" y="-1346"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="9vy-3g-D2j">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="P2e-Ca-ysP" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fFJ-xJ-6ye" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="926" y="-458"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="1Tb-kb-V0x">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="vmU-S2-z7L" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kkC-Ve-Z2L" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="926" y="-594"/>
         </scene>
         <!--Filter-->
         <scene sceneID="lIG-Nh-O9l">
@@ -398,7 +373,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="observationDataStore" destination="A6N-Bc-VqA" id="2pq-om-IDI"/>
-                        <segue destination="su7-bG-iWI" kind="show" identifier="viewImageSegue" id="FuD-R0-qsF"/>
                         <segue destination="GFL-3x-sht" kind="show" identifier="DisplayObservationSegue" id="bfz-Rz-QoD"/>
                     </connections>
                 </tableViewController>
@@ -411,14 +385,6 @@
                 </customObject>
             </objects>
             <point key="canvasLocation" x="-1180" y="-2309"/>
-        </scene>
-        <!--Attachment-->
-        <scene sceneID="wV8-XW-X6q">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Attachment" id="su7-bG-iWI" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Th-on-IqM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-486" y="-2265"/>
         </scene>
         <!--People-->
         <scene sceneID="Zwl-BP-sWR">
@@ -729,8 +695,6 @@
                         <outlet property="observationDataStore" destination="IDt-pC-yxO" id="osE-fq-oTa"/>
                         <outlet property="phoneNumber" destination="FAA-xU-WJK" id="QL6-9W-K22"/>
                         <outlet property="phoneView" destination="vbx-kA-G61" id="WvP-ib-0Dd"/>
-                        <segue destination="vmU-S2-z7L" kind="show" identifier="viewImageSegue" id="LIK-gb-4Dj"/>
-                        <segue destination="P2e-Ca-ysP" kind="show" identifier="viewAvatarSegue" id="sQ8-Cl-9QE"/>
                         <segue destination="GFL-3x-sht" kind="show" identifier="DisplayObservationSegue" id="t54-XE-2TN"/>
                     </connections>
                 </tableViewController>
@@ -846,6 +810,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="77U-TW-S4M"/>
-        <segue reference="2y0-bF-fmy"/>
+        <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
 </document>

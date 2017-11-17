@@ -133,7 +133,9 @@
         // ImageViewer already preset lets just update its content
         [((AttachmentViewController *) visibleViewController) setContent:attachment];
     } else {
-        [self.mapViewController performSegueWithIdentifier:@"viewImageSegue" sender:attachment];
+        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+        [attachmentVC setTitle:@"Attachment"];
+        [self.mapViewController.navigationController pushViewController:attachmentVC animated:YES];
     }
 }
 

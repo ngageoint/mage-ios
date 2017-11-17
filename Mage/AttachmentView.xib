@@ -73,7 +73,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i6U-Fb-fpC">
-                                    <rect key="frame" x="35" y="326.5" width="305" height="2"/>
+                                    <rect key="frame" x="35" y="327" width="305" height="2"/>
                                 </progressView>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

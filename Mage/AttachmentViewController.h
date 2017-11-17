@@ -13,6 +13,9 @@
 @property (strong, nonatomic) NSURL *mediaUrl;
 @property (strong, nonatomic) NSString *contentType;
 
+- (instancetype) initWithAttachment: (Attachment *) attachment;
+- (instancetype) initWithMediaURL: (NSURL *) mediaURL andContentType: (NSString *) contentType andTitle: (NSString *) title;
+
 - (void) setContent:(Attachment *) attachment;
 
 @end
