@@ -42,9 +42,9 @@
     self.eventDataSource = [[EventTableDataSource alloc] init];
     self.eventController = [[EventChooserController alloc] initWithDataSource:self.eventDataSource andDelegate:self];
     [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
-    [self.viewController presentViewController:self.eventController animated:NO completion:nil];
-    [[Mage singleton] fetchEvents];
-
+    [self.viewController presentViewController:self.eventController animated:NO completion:^{
+        [[Mage singleton] fetchEvents];
+    }];
 }
 
 - (void) didSelectEvent:(Event *)event {
