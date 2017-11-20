@@ -305,5 +305,4 @@ static NSInteger const COMMON_SECTION = 1;
     return UITableViewAutomaticDimension;
 }
 
-
 @end

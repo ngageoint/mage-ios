@@ -352,6 +352,10 @@
     [self displayToast];
 }
 
+- (IBAction)onARButtonPressed:(id)sender {
+    
+}
+
 - (void) displayToast {
     [self.toastView setHidden:NO];
     self.toastView.alpha = 0.0f;
