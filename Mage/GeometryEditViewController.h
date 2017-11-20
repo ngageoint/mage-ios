@@ -18,7 +18,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *lineButton;
 @property (weak, nonatomic) IBOutlet UIButton *rectangleButton;
 @property (weak, nonatomic) IBOutlet UIButton *polygonButton;
+@property (nonatomic) BOOL allowsPolygonIntersections;
 
 - (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andObservation: (Observation *) observation andDelegate:(id<PropertyEditDelegate>)delegate;
+- (NSString *) validate;
 
 @end

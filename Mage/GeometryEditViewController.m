@@ -51,7 +51,6 @@
 @property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
-@property (nonatomic) BOOL hasKinks;
 
 @end
 
@@ -61,6 +60,7 @@
     self = [super init];
     if (self == nil) return nil;
     
+    _allowsPolygonIntersections = NO;
     _fieldDefinition = fieldDefinition;
     _delegate = delegate;
     _observation = observation;
@@ -268,7 +268,6 @@
     }
 }
 
-
 - (void) updateGeometry {    
     WKBGeometry *geometry = nil;
     if(self.shapeType == WKB_POINT){
@@ -280,7 +279,6 @@
     }
 
     [self.delegate setValue:geometry forFieldDefinition:self.fieldDefinition];
-    
 }
 
 - (void)selectAnnotation:(id)annotation{
@@ -1062,7 +1060,7 @@
  *
  * @param selectedCoordinate selected coordinate
  */
--(void) updateShape: (CLLocationCoordinate2D) selectedCoordinate{
+-(void) updateShape: (CLLocationCoordinate2D) selectedCoordinate {
     [self updateRectangleCorners:selectedCoordinate];
     if ([self isShape]) {
         GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
@@ -1072,6 +1070,29 @@
         }
     }
     [self updateAcceptState];
+}
+
+- (NSString *) validate {
+    NSString *validateMessage = nil;
+    
+    if (self.shapeType == WKB_LINESTRING) {
+        if ([[self shapePoints] count] < 2) {
+            validateMessage = @"Lines must contain at least 2 points.";
+        }
+    } else if (self.shapeType == WKB_POLYGON) {
+        if ([[self shapePoints] count] < 3 || ![self shapePointsValid]) {
+            validateMessage = @"Polygons must contain at least 3 points.";
+        } else if (!self.allowsPolygonIntersections) {
+            WKBPolygon *geometry = (WKBPolygon *)[self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+            
+            BOOL hasIntersections = [MapUtils polygonHasIntersections:geometry];
+            if (hasIntersections) {
+                validateMessage = @"Polygon geometries cannot have self intersections.  Please update the polygon to remove all intersections.";
+            }
+        }
+        
+    }
+    return validateMessage;
 }
 
 /**

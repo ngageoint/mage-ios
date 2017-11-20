@@ -21,6 +21,7 @@
 #import "ExternalDevice.h"
 #import "AttachmentViewController.h"
 #import "MapUtils.h"
+#import <WKBLineString.h>
 
 @interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate>
 
@@ -139,19 +140,18 @@
     
     // validate the geometry for no self intersections
     if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-        WKBGeometry *geom = (WKBGeometry *)value;
-        if (geom.geometryType == WKB_POLYGON) {
-            BOOL hasIntersections = [MapUtils polygonHasIntersections:(WKBPolygon *)geom];
-            if (hasIntersections) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
-                                                                               message:@"Polygon geometries cannot have self intersections.  Please update the polygon to remove all intersections."
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-                
-                [self.navigationController.visibleViewController presentViewController:alert animated:YES completion:nil];
-                return;
-            }
+        GeometryEditViewController *gevc = (GeometryEditViewController *)self.navigationController.topViewController;
+        NSString *message = [gevc validate];
+        
+        if (message != nil) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+
+            [self.navigationController.visibleViewController presentViewController:alert animated:YES completion:nil];
+            return;
         }
     }
     
