@@ -37,7 +37,7 @@
 @implementation ObservationEditTableViewController
 
 - (instancetype) initWithObservation: (Observation *) observation andIsNew: (BOOL) isNew andDelegate:(id<ObservationEditFieldDelegate>)delegate {
-    self = [super init];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (!self) return nil;
     
     _observation = observation;
@@ -57,6 +57,10 @@
     [self.tableView setDataSource:_editDataStore];
     [self.tableView setEstimatedRowHeight:126.0f];
     [self.tableView setRowHeight:UITableViewAutomaticDimension];
+    [self.tableView setEstimatedSectionHeaderHeight:20.0f];
+    [self.tableView setSectionHeaderHeight:UITableViewAutomaticDimension];
+    [self.tableView setEstimatedSectionFooterHeight:CGFLOAT_MIN];
+    [self.tableView setSectionFooterHeight:UITableViewAutomaticDimension];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -94,8 +98,6 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextAreaEditCell" bundle:nil] forCellReuseIdentifier:@"textarea"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationAttachmentEditCell" bundle:nil] forCellReuseIdentifier:@"attachment"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDropdownEditCell" bundle:nil] forCellReuseIdentifier:@"dropdown"];
-//    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDropdownEditCell" bundle:nil] forCellReuseIdentifier:@"radio"];
-//    [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDropdownEditCell" bundle:nil] forCellReuseIdentifier:@"multiselectdropdown"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationPasswordEditCell" bundle:nil] forCellReuseIdentifier:@"password"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextfieldEditCell" bundle:nil] forCellReuseIdentifier:@"textfield"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDeleteCell" bundle:nil] forCellReuseIdentifier:@"deleteObservationCell"];
@@ -109,9 +111,13 @@
     [self.editDataStore observationField:fieldDefinition valueChangedTo:value reloadCell:YES];
 }
 
+- (void)invalidValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {
+    
+}
+
 - (BOOL) validate {
     [self.tableView endEditing:YES];
-
+    
     return [self.editDataStore validate];
 }
 

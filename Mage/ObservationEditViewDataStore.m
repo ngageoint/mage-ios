@@ -282,8 +282,8 @@ static NSInteger const COMMON_SECTION = 1;
     
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] init];
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return CGFLOAT_MIN;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -299,7 +299,7 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == ATTACHMENT_SECTION) {
+    if (section == ATTACHMENT_SECTION || section == COMMON_SECTION) {
         return CGFLOAT_MIN;
     }
     return UITableViewAutomaticDimension;

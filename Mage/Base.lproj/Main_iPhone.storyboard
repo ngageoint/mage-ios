@@ -535,7 +535,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="GCl-vQ-1KG">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="282"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -593,11 +593,11 @@
                                     <nil key="highlightedColor"/>
                                     <size key="shadowOffset" width="0.0" height="0.0"/>
                                 </label>
-                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
-                                    <rect key="frame" x="8" y="227" width="359" height="100"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
+                                    <rect key="frame" x="8" y="227" width="359" height="55"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="50"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="24"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="Xod-hF-7lU">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
@@ -630,10 +630,10 @@
                                                 <constraint firstItem="FAA-xU-WJK" firstAttribute="top" secondItem="vbx-kA-G61" secondAttribute="top" id="gbH-Z8-5EK"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
-                                            <rect key="frame" x="0.0" y="50" width="359" height="50"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
+                                            <rect key="frame" x="0.0" y="24" width="359" height="31"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
+                                                <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -641,7 +641,7 @@
                                                         <constraint firstAttribute="height" constant="14" id="b9a-G0-4r6"/>
                                                     </constraints>
                                                 </imageView>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
                                                     <rect key="frame" x="20" y="0.0" width="339" height="24"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
