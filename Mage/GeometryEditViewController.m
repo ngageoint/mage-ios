@@ -130,6 +130,7 @@
     
     [self setShapeTypeFromGeometry:geometry];
     [self addMapShape:geometry];
+    [self updateGeometry];
     
     MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.map];
     [self.map setRegion:viewRegion];
