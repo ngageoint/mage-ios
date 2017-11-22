@@ -19,6 +19,8 @@
 
 @implementation ObservationAnnotation
 
+NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
+
 -(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms {
     return [self initWithObservation:observation andEventForms: forms andGeometry:[observation getGeometry]];
 }
@@ -52,26 +54,27 @@
 
 -(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
     UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
-    NSString *accessibilityIdentifier = self.point ? [image accessibilityIdentifier] : NSStringFromClass([MapShapeObservation class]);
-    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:accessibilityIdentifier];
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
     
     if (annotationView == nil) {
-        annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:self reuseIdentifier:accessibilityIdentifier andMapView:mapView andDragCallback:dragCallback];
+        annotationView = [[ObservationAnnotationView alloc] initWithAnnotation:self reuseIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID andMapView:mapView andDragCallback:dragCallback];
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
         annotationView.rightCalloutAccessoryView = rightButton;
-        if(self.point){
-            annotationView.image = image;
-            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
-        }else{
-            annotationView.image = nil;
-            annotationView.centerOffset = CGPointMake(0, 0);
-        }
     } else {
         annotationView.annotation = self;
     }
+    
+    if (self.point) {
+        annotationView.image = image;
+        annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
+    } else {
+        annotationView.image = nil;
+        annotationView.centerOffset = CGPointMake(0, 0);
+    }
+    
     [annotationView setAccessibilityLabel:@"Observation"];
     [annotationView setAccessibilityValue:@"Observation"];
     return annotationView;

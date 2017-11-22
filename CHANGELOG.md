@@ -18,18 +18,35 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Multiple forms per event support
 * Users can delete observations
 * Observation local notification support
+* Hook up new mage-ios-sdk background upload service for attachments.
 * iOS 11 support
 
 ##### Bug Fixes
+* Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
+* Don't save (duplicate) media picked from the gallery.
+
+## 1.4.5 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.5) (11-06-2017)
+
+##### Features
+
+* Fix issue preventing users from adding collected media to the photos library
+
+##### Bug Fixes
+
+## 1.4.4 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.4) (10-26-2017)
+
+##### Features
+
+##### Bug Fixes
+* Fix issue with map annotation cache picking wrong icon
 
 ## 1.4.3 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.3) (10-21-2017)
 
 ##### Features
-* Hook up new mage-ios-sdk background upload service for attachments.
 
 ##### Bug Fixes
-* Don't save (duplicate) media picked from the gallery.
-* Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
+* iPad notifies the user when it could not get a location
+* iPad toolbar separators fix for iOS 11
 
 ## 1.4.2 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.2) (07-28-2017)
 
