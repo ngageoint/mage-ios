@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,11 +16,11 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IQf-8M-FcO" id="bIw-Yw-TUE">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkbox Key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-3U-lxE">
-                        <rect key="frame" x="12" y="1" width="355" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Checkbox Key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-3U-lxE">
+                        <rect key="frame" x="16" y="4" width="343" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="4gp-i9-g7g"/>
                         </constraints>
@@ -29,23 +29,24 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fSn-aZ-ZH2">
-                        <rect key="frame" x="8" y="25" width="106" height="31"/>
+                        <rect key="frame" x="16" y="28" width="90" height="25.5"/>
                     </switch>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gML-Wj-tvF">
-                        <rect key="frame" x="4" y="0.0" width="7" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gML-Wj-tvF">
+                        <rect key="frame" x="8" y="0.0" width="7" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="gML-Wj-tvF" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leadingMargin" constant="-8" id="3y7-W7-vx5"/>
                     <constraint firstItem="fSn-aZ-ZH2" firstAttribute="top" secondItem="bIw-Yw-TUE" secondAttribute="topMargin" constant="17" id="4FC-hj-3cN"/>
+                    <constraint firstItem="gML-Wj-tvF" firstAttribute="top" secondItem="bIw-Yw-TUE" secondAttribute="top" id="6fq-3n-5uv"/>
                     <constraint firstItem="XDv-3U-lxE" firstAttribute="top" secondItem="bIw-Yw-TUE" secondAttribute="topMargin" constant="-7" id="6jx-Gz-gn6"/>
                     <constraint firstAttribute="bottomMargin" secondItem="fSn-aZ-ZH2" secondAttribute="bottom" constant="-0.5" id="7yn-tU-KQc"/>
-                    <constraint firstItem="XDv-3U-lxE" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leadingMargin" constant="4" id="H35-L5-Y5p"/>
                     <constraint firstItem="fSn-aZ-ZH2" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leadingMargin" id="IKv-uQ-5it"/>
                     <constraint firstAttribute="trailingMargin" secondItem="fSn-aZ-ZH2" secondAttribute="trailing" constant="255" id="M2Y-hl-GRr"/>
+                    <constraint firstItem="XDv-3U-lxE" firstAttribute="leading" secondItem="gML-Wj-tvF" secondAttribute="trailing" constant="1" id="RJq-nv-Wk9"/>
                     <constraint firstItem="XDv-3U-lxE" firstAttribute="trailing" secondItem="bIw-Yw-TUE" secondAttribute="trailingMargin" id="tLX-qS-phH"/>
                 </constraints>
             </tableViewCellContentView>
@@ -56,6 +57,7 @@
                 <outlet property="keyLabel" destination="XDv-3U-lxE" id="dng-cn-4MX"/>
                 <outlet property="requiredIndicator" destination="gML-Wj-tvF" id="bf7-HU-Sie"/>
             </connections>
+            <point key="canvasLocation" x="33.5" y="54"/>
         </tableViewCell>
     </objects>
 </document>

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,7 +20,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxY-D7-9jD">
-                        <rect key="frame" x="20" y="1" width="52.5" height="21"/>
+                        <rect key="frame" x="16" y="1" width="52.5" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Y24-IZ-jLi"/>
                         </constraints>
@@ -28,7 +29,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ChC-G2-U2R">
-                        <rect key="frame" x="16" y="25" width="339" height="30"/>
+                        <rect key="frame" x="16" y="25" width="343" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="1Nl-m4-fdN"/>
                         </constraints>
@@ -36,7 +37,7 @@
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtf-4T-FhV">
-                        <rect key="frame" x="12" y="0.0" width="7" height="21"/>
+                        <rect key="frame" x="8" y="0.0" width="7" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="U03-eJ-c7k"/>
                             <constraint firstAttribute="width" constant="7" id="iuN-xF-sHL"/>
@@ -48,13 +49,13 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="xxY-D7-9jD" firstAttribute="top" secondItem="AyA-ot-2MN" secondAttribute="top" constant="1" id="GxL-nx-K4g"/>
-                    <constraint firstItem="ChC-G2-U2R" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leading" constant="16" id="S6C-0N-sSy"/>
+                    <constraint firstItem="ChC-G2-U2R" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leadingMargin" id="S6C-0N-sSy"/>
                     <constraint firstItem="wtf-4T-FhV" firstAttribute="top" secondItem="AyA-ot-2MN" secondAttribute="top" id="e1x-fZ-9sH"/>
                     <constraint firstAttribute="bottom" secondItem="ChC-G2-U2R" secondAttribute="bottom" constant="9.5" id="idB-8f-brO"/>
                     <constraint firstItem="xxY-D7-9jD" firstAttribute="leading" secondItem="wtf-4T-FhV" secondAttribute="trailing" constant="1" id="j5M-hI-5Py"/>
                     <constraint firstItem="ChC-G2-U2R" firstAttribute="top" secondItem="xxY-D7-9jD" secondAttribute="bottom" constant="3" id="tkb-Yf-ICT"/>
-                    <constraint firstItem="wtf-4T-FhV" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leading" constant="12" id="yyU-hL-gcq"/>
-                    <constraint firstAttribute="trailing" secondItem="ChC-G2-U2R" secondAttribute="trailing" constant="20" symbolic="YES" id="zE1-td-YXt"/>
+                    <constraint firstItem="wtf-4T-FhV" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leadingMargin" constant="-8" id="yyU-hL-gcq"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ChC-G2-U2R" secondAttribute="trailing" id="zE1-td-YXt"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
