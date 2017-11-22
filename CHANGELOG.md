@@ -3,13 +3,29 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 1.4.3 (TBD)
+## 2.0.1 (TBD)
 
 * TBD
 
 ##### Features
-* Hook up new mage-ios-sdk background upload service for attachments.
+
+##### Bug Fixes
+
+## 2.0 (https://github.com/ngageoint/mage-ios/releases/tag/2.0) (11-21-2017)
+
+##### Features
 * Observation geometry support for lines and polygons
+* Multiple forms per event support
+* Users can delete observations
+* Observation local notification support
+* iOS 11 support
+
+##### Bug Fixes
+
+## 1.4.3 (https://github.com/ngageoint/mage-ios/releases/tag/1.4.3) (10-21-2017)
+
+##### Features
+* Hook up new mage-ios-sdk background upload service for attachments.
 
 ##### Bug Fixes
 * Don't save (duplicate) media picked from the gallery.
