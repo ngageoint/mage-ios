@@ -160,14 +160,80 @@
     return mapShapeObservation;
 }
 
--(NSArray *) annotations {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", [MapAnnotationObservation class]];
-    return [self.observationIds.allValues filteredArrayUsingPredicate:predicate];
+-(MapAnnotationObservationEnumerator *) annotations{
+    return [[MapAnnotationObservationEnumerator alloc] initWithObservations:_observationIds.allValues];
 }
 
--(NSArray *) shapes {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self isKindOfClass: %@", [MapShapeObservation class]];
-    return [self.observationIds.allValues filteredArrayUsingPredicate:predicate];
+
+-(MapShapeObservationEnumerator *) shapes{
+    return [[MapShapeObservationEnumerator alloc] initWithObservations:_observationIds.allValues];
+}
+
+@end
+
+@implementation MapAnnotationObservationEnumerator
+
+-(instancetype) initWithObservations: (NSArray<MapObservation *> *) observations{
+    self = [super initWithType:[MapAnnotationObservation class] andObservations:observations];
+    return self;
+}
+
+@end
+
+@implementation MapShapeObservationEnumerator
+
+-(instancetype) initWithObservations: (NSArray<MapObservation *> *) observations{
+    self = [super initWithType:[MapShapeObservation class] andObservations:observations];
+    return self;
+}
+
+@end
+
+@interface MapObservationsEnumerator ()
+
+@property (nonatomic, strong) Class type;
+@property (nonatomic, strong) NSEnumerator<MapObservation *> *observations;
+@property (nonatomic, strong) MapObservation *observation;
+
+@end
+
+@implementation MapObservationsEnumerator
+
+-(instancetype) initWithType: (Class) type andObservations: (NSArray<MapObservation *> *) observations{
+    self = [super init];
+    if(self != nil){
+        _type = type;
+        _observations = [observations objectEnumerator];
+    }
+    return self;
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
+    
+    // First call
+    if(state->state == 0) {
+        state->mutationsPtr = &state->extra[0];
+        state->state = 1;
+    }
+    
+    state->itemsPtr = stackbuf;
+
+    NSUInteger count = 0;
+    while (count < len) {
+        MapObservation *observation = [self.observations nextObject];
+        if (!observation) {
+            break;
+        }
+        
+        if (![observation isKindOfClass:self.type]) {
+            continue;
+        }
+        
+        stackbuf[count] = observation;
+        count += 1;
+    }
+    
+    return count;
 }
 
 @end
