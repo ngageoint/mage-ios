@@ -21,9 +21,9 @@
 
 @implementation MapObservations
 
--(instancetype) initWithMapView: (MKMapView *) mapView{
+-(instancetype) initWithMapView: (MKMapView *) mapView {
     self = [super init];
-    if(self){
+    if (self) {
         _mapView = mapView;
         _observationIds = [[NSMutableDictionary alloc] init];
         _annotationIds = [[NSMutableDictionary alloc] init];
@@ -31,24 +31,24 @@
     return self;
 }
 
--(void) addMapObservation: (MapObservation *) mapObservation{
+-(void) addMapObservation: (MapObservation *) mapObservation {
     NSManagedObjectID *id = [mapObservation observation].objectID;
     [_observationIds setObject:mapObservation forKey:id];
-    if([MapObservations isAnnotation: mapObservation]){
+    if ([MapObservations isAnnotation: mapObservation]){
         MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *) mapObservation;
         [_annotationIds setObject:mapAnnotationObservation forKey:[mapAnnotationObservation.annotation getIdAsNumber]];
     }
 }
 
--(MapObservation *) observationOfId: (NSManagedObjectID *) observationId{
+-(MapObservation *) observationOfId: (NSManagedObjectID *) observationId {
     return [_observationIds objectForKey:observationId];
 }
 
--(Observation *) observationOfAnnotationId: (NSUInteger) annotationId{
+-(Observation *) observationOfAnnotationId: (NSUInteger) annotationId {
     return [self observationOfAnnotationIdNumber:[NSNumber numberWithUnsignedInteger:annotationId]];
 }
 
--(Observation *) observationOfAnnotationIdNumber: (NSNumber *) annotationId{
+-(Observation *) observationOfAnnotationIdNumber: (NSNumber *) annotationId {
     Observation *observation = nil;
     MapAnnotationObservation *mapAnnotationObservation = [_annotationIds objectForKey:annotationId];
     if (mapAnnotationObservation != nil) {
@@ -59,11 +59,11 @@
     return observation;
 }
 
-+(BOOL) isAnnotation: (MapObservation *) mapObservation{
++(BOOL) isAnnotation: (MapObservation *) mapObservation {
     return [mapObservation class] == [MapAnnotationObservation class];
 }
 
-+(BOOL) isShape: (MapObservation *) mapObservation{
++(BOOL) isShape: (MapObservation *) mapObservation {
     return [mapObservation class] == [MapShapeObservation class];
 }
 
@@ -75,7 +75,7 @@
     }
 }
 
--(MapObservation *) removeById: (NSManagedObjectID *) observationId{
+-(MapObservation *) removeById: (NSManagedObjectID *) observationId {
     MapObservation *mapObservation = [_observationIds objectForKey:observationId];
     if (mapObservation != nil) {
         [_observationIds removeObjectForKey:observationId];
@@ -95,19 +95,19 @@
     }
 }
 
--(void) setShapeAnnotation: (MapAnnotation *) shapeAnnotation withShapeObservation: (MapShapeObservation *) shapeObservation{
+-(void) setShapeAnnotation: (MapAnnotation *) shapeAnnotation withShapeObservation: (MapShapeObservation *) shapeObservation {
     [self clearShapeAnnotation];
     _shapeAnnotation = shapeAnnotation;
     _shapeObservation = shapeObservation;
 }
 
--(void) selectShapeAnnotation{
+-(void) selectShapeAnnotation {
     if (_shapeAnnotation != nil) {
         [_mapView selectAnnotation:_shapeAnnotation animated:YES];
     }
 }
 
--(void) clearShapeAnnotation{
+-(void) clearShapeAnnotation {
     if (_shapeAnnotation != nil) {
         [_mapView removeAnnotation:_shapeAnnotation];
         _shapeAnnotation = nil;
@@ -130,14 +130,14 @@
     CGPoint point = [self.mapView convertCoordinate:location toPointToView:self.mapView];
     for (MapAnnotationObservation *observationAnnotation in [self annotations]) {
         MKAnnotationView* view = [self.mapView viewForAnnotation:[observationAnnotation annotation]];
-        if(CGRectContainsPoint(view.frame, point)) {
+        if (CGRectContainsPoint(view.frame, point)) {
             checkShapes = NO;
             break;
         }
     }
     
     MapShapeObservation *mapShapeObservation = nil;
-    if(checkShapes){
+    if (checkShapes) {
 
         // Screen click map width tolerance
         float screenPercentage = [[NSUserDefaults standardUserDefaults] floatForKey:@"shape_screen_click_percentage"];
@@ -211,32 +211,29 @@
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
     
     // First call
-    if(state->state == 0)
-    {
+    if(state->state == 0) {
         state->mutationsPtr = &state->extra[0];
         state->state = 1;
     }
     
-    // Verify there are more observations to return
-    _observation = [_observations nextObject];
-    while(_observation != nil){
-        // Check if the desired type
-        if([_observation isKindOfClass:_type]){
+    state->itemsPtr = stackbuf;
+
+    NSUInteger count = 0;
+    while (count < len) {
+        MapObservation *observation = [self.observations nextObject];
+        if (!observation) {
             break;
         }
-        _observation = [_observations nextObject];
+        
+        if (![observation isKindOfClass:self.type]) {
+            continue;
+        }
+        
+        stackbuf[count] = observation;
+        count += 1;
     }
     
-    // No more observations
-    if(_observation == nil){
-        return 0;
-    }
-    
-    // Set the observation
-    __unsafe_unretained MapObservation *tempObservation = _observation;
-    state->itemsPtr = &tempObservation;
-    
-    return 1;
+    return count;
 }
 
 @end

@@ -65,6 +65,7 @@
         
     if (valid) {
         self.textField.layer.borderColor = nil;
+        self.textField.layer.borderWidth = 0.0f;
     } else {
         self.textField.layer.cornerRadius = 4.0f;
         self.textField.layer.masksToBounds = YES;

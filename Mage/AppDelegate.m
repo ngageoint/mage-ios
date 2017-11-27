@@ -450,27 +450,6 @@
 
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
-    
-//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-//
-//    UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-//    content.title = @"MAGE Token Expired";
-//    content.body = @"Your MAGE token has expired.";
-//    content.categoryIdentifier = @"TokenExpired";
-//    content.sound = [UNNotificationSound defaultSound];
-//
-//    UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger
-//                                                  triggerWithTimeInterval:1 repeats:NO];
-//    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:@"TokenExpired"
-//                                                                          content:content trigger:trigger];
-//
-//    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-//        if (error != nil) {
-//            NSLog(@"Something went wrong: %@",error);
-//        }
-//        NSLog(@"notification");
-//    }];
-    
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     [self createRootView];
 }
