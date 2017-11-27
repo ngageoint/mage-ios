@@ -179,7 +179,12 @@
     CLLocationAccuracy accuracy = 0;
     double delta = 0;
     if (location) {
-        point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        if (location.altitude != 0) {
+            point = [[WKBPoint alloc] initWithHasZ:YES andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble: location.coordinate.longitude] andY:[[NSDecimalNumber alloc] initWithDouble:location.coordinate.latitude]];
+            [point setZValue:location.altitude];
+        } else {
+            point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        }
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
