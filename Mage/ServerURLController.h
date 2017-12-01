@@ -18,6 +18,7 @@
 @interface ServerURLController : UIViewController
 
 - (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate;
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError: (NSString *) error;
 - (void) showError: (NSString *) error;
 
 @end

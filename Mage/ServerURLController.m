@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *okButton;
 @property (weak, nonatomic) IBOutlet UITextView *errorStatus;
 @property (strong, nonatomic) id<ServerURLDelegate> delegate;
+@property (strong, nonatomic) NSString *error;
 @end
 
 @implementation ServerURLController
@@ -26,6 +27,14 @@
 - (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate {
     if (self = [self initWithNibName:@"ServerURLView" bundle:nil]) {
         self.delegate = delegate;
+    }
+    
+    return self;
+}
+
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError:(NSString *)error {
+    if (self = [self initWithDelegate:delegate]) {
+        self.error = error;
     }
     
     return self;
@@ -41,8 +50,13 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     NSURL *url = [MageServer baseURL];
+
+    if (self.error != nil) {
+        [self showError:self.error];
+        [self.cancelButton removeFromSuperview];
+        self.serverURL.text = [url absoluteString];
+    }
     
     if ([url absoluteString].length == 0) {
         [self.cancelButton removeFromSuperview];
