@@ -53,6 +53,7 @@
                     <constraint firstItem="bJv-fQ-3Pm" firstAttribute="leading" secondItem="thJ-jD-bdd" secondAttribute="trailing" constant="1" id="c8x-WY-Run"/>
                     <constraint firstItem="thJ-jD-bdd" firstAttribute="top" secondItem="6az-3Z-Ebq" secondAttribute="top" id="dIy-QU-X9G"/>
                     <constraint firstItem="xoo-6s-g4Q" firstAttribute="leading" secondItem="6az-3Z-Ebq" secondAttribute="leadingMargin" id="gqk-9P-woD"/>
+                    <constraint firstItem="bJv-fQ-3Pm" firstAttribute="top" secondItem="6az-3Z-Ebq" secondAttribute="top" constant="1" id="qZ4-xK-fD4"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
