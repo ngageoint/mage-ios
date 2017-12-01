@@ -160,18 +160,16 @@ BOOL signingIn = YES;
         [self changeServerURL];
         return;
     } else {
-        NSURL *url = [MageServer baseURL];
         __weak __typeof__(self) weakSelf = self;
         [MageServer serverWithURL:url success:^(MageServer *mageServer) {
             if (mageServer.serverHasGoogleAuthenticationStrategy) {
                 [self setupGoogleSignIn];
             }
             [weakSelf showLoginViewForServer:mageServer];
-         } failure:^(NSError *error) {
-             [weakSelf.urlController showError:error.localizedDescription];
-         }];
+        } failure:^(NSError *error) {
+            [weakSelf changeServerURLWithError: error.localizedDescription];
+        }];
     }
-    
 }
 
 - (void) showSignupView {
@@ -191,6 +189,12 @@ BOOL signingIn = YES;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self];
     [self.navigationController pushViewController:self.loginView animated:NO];
+}
+
+- (void) changeServerURLWithError: (NSString *) error {
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error];
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) changeServerURL {
