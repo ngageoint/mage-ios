@@ -454,17 +454,6 @@
     [self createRootView];
 }
 
-- (UIViewController*) topMostController
-{
-    UIViewController *topController = self.window.rootViewController;
-    
-    while (topController.presentedViewController) {
-        topController = topController.presentedViewController;
-    }
-    
-    return topController;
-}
-
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
