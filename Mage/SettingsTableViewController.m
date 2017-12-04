@@ -13,6 +13,7 @@
 #import "NSDate+display.h"
 #import "AppDelegate.h"
 #import "EventChooserCoordinator.h"
+#import "ChangePasswordViewController.h"
 
 @interface SettingsTableViewController ()<UITableViewDelegate>
 
@@ -30,8 +31,11 @@
     @property (weak, nonatomic) IBOutlet UITableViewCell *timeZoneSelectionCell;
     @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
     @property (weak, nonatomic) IBOutlet UITableViewCell *eventCell;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *changePasswordCell;
 
 @end
+
+static NSInteger legalSection = 5;
 
 @implementation SettingsTableViewController
 
@@ -145,11 +149,15 @@
     } else if (cell == self.eventCell) {
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate chooseEvent];
+    } else if (cell == self.changePasswordCell) {
+        ChangePasswordViewController *vc = [[ChangePasswordViewController alloc] initWithLoggedIn:YES];
+        [self.navigationController presentViewController:vc animated:YES completion:nil];
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3 && [indexPath row] == 0) {
+    if ([indexPath section] == legalSection && [indexPath row] == 0) {
         cell.hidden = !self.showDisclaimer;
     } else if (cell == self.versionCell) {
         NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -164,7 +172,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3 && [indexPath row] == 0 && !self.showDisclaimer) {
+    if ([indexPath section] == legalSection && [indexPath row] == 0 && !self.showDisclaimer) {
         return 0;
     }
                                      

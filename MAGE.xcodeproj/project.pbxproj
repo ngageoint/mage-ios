@@ -131,6 +131,8 @@
 		F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746874C1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib */; };
 		F74687501F44DC67009D7CF4 /* UIColor+UIColor_Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */; };
 		F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */; };
+		F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */; };
+		F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */; };
 		F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
@@ -481,6 +483,9 @@
 		F746874E1F44DC67009D7CF4 /* UIColor+UIColor_Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+UIColor_Mage.h"; sourceTree = "<group>"; };
 		F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+UIColor_Mage.m"; sourceTree = "<group>"; };
 		F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
+		F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangePasswordView.xib; sourceTree = "<group>"; };
+		F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
 		F750A1661A7164B300C7A4FC /* StaticLayerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayerTableViewController.h; sourceTree = "<group>"; };
 		F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewController.m; sourceTree = "<group>"; };
@@ -808,6 +813,8 @@
 				F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */,
 				F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */,
 				F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */,
+				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
+				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1226,6 +1233,7 @@
 				F7E4575F1F619CAB0082F527 /* DisclaimerView.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 				F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */,
+				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1499,6 +1507,7 @@
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
+				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
 				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
 				F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */,
 				F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */,
@@ -1581,7 +1590,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		9234FE93B973ED1E145F6F5B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1788,6 +1797,7 @@
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
+				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
