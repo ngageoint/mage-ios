@@ -461,15 +461,15 @@ NSNumber *_currentEventId;
     return task;
 }
 
-+ (NSURLSessionDataTask *) operationToPullInitialObservationsWithSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPullInitialObservationsWithSuccess:(void (^) (void)) success failure: (void(^)(NSError *)) failure {
     return [Observation operationToPullObservationsAsInitial:YES withSuccess:success failure:failure];
 }
 
-+ (NSURLSessionDataTask *) operationToPullObservationsWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
++ (NSURLSessionDataTask *) operationToPullObservationsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *))failure {
     return [Observation operationToPullObservationsAsInitial:NO withSuccess:success failure:failure];
 }
 
-+ (NSURLSessionDataTask *) operationToPullObservationsAsInitial: (BOOL) initialPull withSuccess:(void (^) ()) success failure: (void(^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPullObservationsAsInitial: (BOOL) initialPull withSuccess:(void (^) (void)) success failure: (void(^)(NSError *)) failure {
 
     __block NSNumber *eventId = [Server currentEventId];
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
