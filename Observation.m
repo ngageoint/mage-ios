@@ -334,8 +334,22 @@ NSNumber *_currentEventId;
         NSLog(@"progress");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"success");
+        // if the delete worked, remove the observation from the database on the phone
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            [observation MR_deleteEntityInContext:localContext];
+        }];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"failure");
+        NSString *errorString = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+        NSLog(@"Error deleting observation %@", errorString);
+        if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+            if (response.statusCode == 404) {
+                // Observation does not exist on the server, delete it
+                [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                    [observation MR_deleteEntityInContext:localContext];
+                }];
+            }
+        }
     }];
     
     return task;
