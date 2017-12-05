@@ -42,7 +42,7 @@
         UITextField *timeNumberField = (UITextField *) [cell viewWithTag:200];
         
         timeUnitControl.selectedSegmentIndex = self.customTimeUnit;
-        timeNumberField.text = [NSString stringWithFormat:@"%ld", self.customTimeNumber];
+        timeNumberField.text = [NSString stringWithFormat:@"%ld", (long)self.customTimeNumber];
     }
     
     return cell;
