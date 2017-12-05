@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 + (NSArray *) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context;
 + (NSArray *) fetchLastXGPSLocations: (NSUInteger) x;
-+ (NSURLSessionDataTask *) operationToPushGPSLocations: (NSArray *) locations success: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (NSURLSessionDataTask *) operationToPushGPSLocations: (NSArray *) locations success: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
 
 @end
 

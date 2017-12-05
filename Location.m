@@ -59,7 +59,7 @@
 }
 
 
-+ (NSURLSessionDataTask *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPullLocationsWithSuccess: (void (^)(void)) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations/users", [MageServer baseURL], [Server currentEventId]];
     NSLog(@"Trying to fetch locations from server %@", url);
     

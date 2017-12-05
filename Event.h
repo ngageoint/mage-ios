@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Event : NSManagedObject
 
 extern NSString * const MAGEEventsFetched;
-+ (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
 + (void) sendRecentEvent;
 + (Event *) getCurrentEventInContext:(NSManagedObjectContext *) context;
 + (Event *) getEventById: (id) eventId inContext: (NSManagedObjectContext *) context;

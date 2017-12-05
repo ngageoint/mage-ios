@@ -10,7 +10,7 @@ extern NSString * const kAttachmentBackgroundSessionIdentifier;
 
 @interface AttachmentPushService : AFHTTPSessionManager
 
-@property (copy) void (^backgroundSessionCompletionHandler)();
+@property (copy) void (^backgroundSessionCompletionHandler)(void);
 
 + (instancetype) singleton;
 

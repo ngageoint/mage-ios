@@ -617,7 +617,7 @@ NSNumber *_currentEventId;
                     NSLog(@"Observation with id: %@ is dirty", remoteId);
                 }
             }
-            NSLog(@"Recieved %lu new observations and send bulk is %d", count, sendBulkNotification);
+            NSLog(@"Recieved %lu new observations and send bulk is %d", (unsigned long)count, sendBulkNotification);
             if (sendBulkNotification && count > 0) {
                 [NotificationRequester sendBulkNotificationCount: count inEvent: event];
             }
@@ -692,7 +692,7 @@ NSNumber *_currentEventId;
 
     __block Boolean cancelled = NO;
     if ([requests count]) {
-        [alert setMessage:[NSString stringWithFormat:@"1 of %lu\n\n", [requests count]]];
+        [alert setMessage:[NSString stringWithFormat:@"1 of %lu\n\n", (unsigned long)[requests count]]];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             cancelled = YES;

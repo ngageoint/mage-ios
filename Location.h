@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(CLLocation *) location;
 - (NSString *) sectionName;
 - (void) populateLocationFromJson:(NSArray *) locations;
-+ (NSURLSessionDataTask *) operationToPullLocationsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure;
++ (NSURLSessionDataTask *) operationToPullLocationsWithSuccess: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
 
 @end
 

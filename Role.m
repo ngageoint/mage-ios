@@ -24,7 +24,7 @@
     [self setPermissions:[json objectForKey:@"permissions"]];
 }
 
-+ (NSURLSessionDataTask *) operationToFetchRolesWithSuccess:(void (^ _Nullable)()) success
++ (NSURLSessionDataTask *) operationToFetchRolesWithSuccess:(void (^ _Nullable)(void)) success
                                            failure:(void (^ _Nullable)(NSError *error)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/roles"];
     

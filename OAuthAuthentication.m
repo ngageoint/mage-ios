@@ -15,7 +15,22 @@
 #import "MagicalRecord+MAGE.h"
 #import "StoredPassword.h"
 
+@interface OAuthAuthentication()
+
+@property (strong, nonatomic) NSDictionary* parameters;
+
+@end
+
 @implementation OAuthAuthentication
+
+- (instancetype) initWithParameters:(NSDictionary *)parameters {
+    self = [super init];
+    if (self == nil) return nil;
+    
+    self.parameters = parameters;
+    
+    return self;
+}
 
 - (NSDictionary *) loginParameters {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];

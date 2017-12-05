@@ -128,7 +128,7 @@ static User *currentUser = nil;
     [manager addTask:task];
 }
 
-+ (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void (^)())success
++ (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void (^)(void))success
                                            failure:(void (^)(NSError *error))failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"];
     
@@ -217,7 +217,7 @@ static User *currentUser = nil;
     return task;
 }
 
-+ (NSURLSessionDataTask *) operationToFetchMyselfWithSuccess: (void (^)())success
++ (NSURLSessionDataTask *) operationToFetchMyselfWithSuccess: (void (^)(void))success
                                             failure:(void (^)(NSError *error))failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
     

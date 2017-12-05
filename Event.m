@@ -110,7 +110,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return nil;
 }
 
-+ (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)(void)) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/events"];
     
     NSLog(@"Pulling events from the server %@", url);

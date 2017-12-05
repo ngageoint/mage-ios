@@ -46,7 +46,7 @@
     return [GPSLocation MR_executeFetchRequest:fetchRequest];
 }
 
-+ (NSURLSessionDataTask *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)()) success failure: (void (^)(NSError *)) failure {
++ (NSURLSessionDataTask *) operationToPushGPSLocations:(NSArray *) locations success:(void (^)(void)) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/locations", [MageServer baseURL], [Server currentEventId]];
     NSLog(@"Pushing locations to server %@", url);
     

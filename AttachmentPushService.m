@@ -162,7 +162,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     [self setTaskDidSendBodyDataBlock:^(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         double progress = (double) totalBytesSent / (double) totalBytesExpectedToSend;
         NSUInteger percent = (NSUInteger) (100.0 * progress);
-        NSLog(@"ATTACHMENT - Upload %@ progress: %lu%%", task, percent);
+        NSLog(@"ATTACHMENT - Upload %@ progress: %lu%%", task, (unsigned long)percent);
     }];
 }
 
@@ -251,7 +251,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     [self setDidFinishEventsForBackgroundURLSessionBlock:^(NSURLSession * _Nonnull session) {
         if (weakSelf.backgroundSessionCompletionHandler) {
             NSLog(@"ATTACHMENT - MageBackgroundSessionManager calling backgroundSessionCompletionHandler");
-            void (^completionHandler)() = weakSelf.backgroundSessionCompletionHandler;
+            void (^completionHandler)(void) = weakSelf.backgroundSessionCompletionHandler;
             weakSelf.backgroundSessionCompletionHandler = nil;
             completionHandler();
         }

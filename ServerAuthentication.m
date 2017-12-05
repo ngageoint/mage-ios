@@ -80,23 +80,23 @@
         // if the error was a network error try to login with the local auth module
         if ([error.domain isEqualToString:NSURLErrorDomain]
             && (error.code == NSURLErrorCannotConnectToHost
-                || error.code == NSURLErrorNetworkConnectionLost
-                || error.code == NSURLErrorNotConnectedToInternet)) {
+            || error.code == NSURLErrorNetworkConnectionLost
+            || error.code == NSURLErrorNotConnectedToInternet)) {
                 id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
                 [local loginWithParameters:parameters complete:complete];
-            } else {
-                NSLog(@"Error logging in: %@", error);
-                // try to register again
-                [defaults setBool:NO forKey:@"deviceRegistered"];
-                [self registerDevice:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-                    if (authenticationStatus == AUTHENTICATION_ERROR) {
-                        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-                        complete(authenticationStatus, errResponse);
-                    } else {
-                        complete(authenticationStatus, errorString);
-                    }
-                }];
-            }
+        } else {
+            NSLog(@"Error logging in: %@", error);
+            // try to register again
+            [defaults setBool:NO forKey:@"deviceRegistered"];
+            [self registerDevice:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+                if (authenticationStatus == AUTHENTICATION_ERROR) {
+                    NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                    complete(authenticationStatus, errResponse);
+                } else {
+                    complete(authenticationStatus, errorString);
+                }
+            }];
+        }
     }];
     
     [manager addTask:task];
