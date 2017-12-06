@@ -12,7 +12,6 @@
 @interface MapObservations ()
 
 @property (nonatomic, strong) MKMapView *mapView;
-@property (nonatomic, strong) NSMutableDictionary<NSManagedObjectID *, MapObservation *> *observationIds;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MapAnnotationObservation *>  *annotationIds;
 @property (nonatomic, strong) MapAnnotation *shapeAnnotation;
 @property (nonatomic, strong) MapShapeObservation *shapeObservation;

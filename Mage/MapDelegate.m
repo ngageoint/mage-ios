@@ -103,14 +103,11 @@
 
 -(void)mapView:(MKMapView *)mv didAddAnnotationViews:(NSArray *)views{
     [self.mapObservations selectShapeAnnotation];
-    for (MKAnnotationView *view in views) {
-        if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
-            ObservationAnnotation *oa = (ObservationAnnotation *)view.annotation;
-            view.layer.zPosition = [oa.observation.timestamp timeIntervalSinceReferenceDate];
-        } else if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
-            LocationAnnotation *la = (LocationAnnotation *)view.annotation;
-            view.layer.zPosition = [la.location.timestamp timeIntervalSinceReferenceDate];
-        }
+    for (MKAnnotationView *annView in views) {
+        CGRect endFrame = annView.frame;
+        annView.frame = CGRectOffset(endFrame, 0, -1000);
+        [UIView animateWithDuration:0.6
+                         animations:^{ annView.frame = endFrame; }];
     }
 }
 
@@ -256,11 +253,30 @@
         exit(-1);
     }
     
-    if (self.hideObservations) {
-        [self updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
-    } else {
-        [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
-    }
+    __weak typeof(self) weakSelf = self;
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+        
+        NSError *error;
+        if (![weakSelf.observations.fetchedResultsController performFetch:&error]) {
+                // Update to handle the error appropriately.
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                exit(-1);
+            }
+
+        if (weakSelf.hideObservations) {
+            [weakSelf updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
+        } else {
+            [weakSelf updateObservations:[weakSelf.observations.fetchedResultsController fetchedObjects]];
+        }
+    });
+
+    
+//    if (self.hideObservations) {
+//        [self updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
+//    } else {
+//        [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
+//    }
 }
 
 - (void) updateObservationPredicates: (NSMutableArray *) predicates {
@@ -272,11 +288,27 @@
         exit(-1);
     }
     NSArray *observations = [self.observations.fetchedResultsController fetchedObjects];
+    NSMutableArray *newObservations = [[NSMutableArray alloc] init];
+    NSArray *currentObservationIds = [self.mapObservations.observationIds allKeys];
     NSMutableArray *observationIds = [[NSMutableArray alloc] initWithCapacity:observations.count];
     for (Observation *observation in observations) {
+        if (![currentObservationIds containsObject:observation.objectID]) {
+            [newObservations addObject:observation];
+        }
         [observationIds addObject:observation.objectID];
     }
     [self.mapObservations removeObservationsNotInArray:observationIds];
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        [self updateObservations:newObservations];
+    });
+//    NSMutableArray *observationIds = [[NSMutableArray alloc] initWithCapacity:observations.count];
+//    for (Observation *observation in observations) {
+//        [observationIds addObject:observation.objectID];
+//    }
+//    [self.mapObservations removeObservationsNotInArray:observationIds];
 }
 
 - (void) updateLocationPredicates: (NSMutableArray *) predicates {
@@ -339,11 +371,13 @@
 }
 
 -(void) setHideObservations:(BOOL) hideObservations {
-    _hideObservations = hideObservations;
-    if (hideObservations) {
-        self.observations = [Observations hideObservations];
-    } else {
-        self.observations = [Observations observations];
+    if (_hideObservations != hideObservations) {
+        _hideObservations = hideObservations;
+        if (hideObservations) {
+            self.observations = [Observations hideObservations];
+        } else {
+            self.observations = [Observations observations];
+        }
     }
 }
 
@@ -1057,6 +1091,11 @@
             case NSFetchedResultsChangeUpdate:
                 [self updateObservation:object];
                 break;
+                
+            case NSFetchedResultsChangeMove:
+                [self updateObservation:object];
+                break;
+                
             default:
                 break;
         }
@@ -1075,6 +1114,11 @@
             case NSFetchedResultsChangeUpdate:
                 [self updateLocation:object];
                 break;
+                
+            case NSFetchedResultsChangeMove:
+                [self updateLocation:object];
+                break;
+                
             default:
                 break;
         }
@@ -1088,8 +1132,12 @@
 }
 
 - (void) updateObservations:(NSArray *)observations {
+    __weak typeof(self) weakSelf = self;
+
     for (Observation *observation in observations) {
-        [self updateObservation:observation];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [weakSelf updateObservation: observation];
+        });
     }
 }
 

@@ -32,6 +32,8 @@
 
 @interface MapObservations : NSObject
 
+@property (nonatomic, strong) NSMutableDictionary<NSManagedObjectID *, MapObservation *> *observationIds;
+
 /**
  *  Initializer
  *

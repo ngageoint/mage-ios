@@ -102,7 +102,8 @@
     }
     
     if (self.mapDelegate.observations != nil) {
-        [self.mapDelegate.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Observations getPredicatesForObservations]]];
+        [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
+//        [self.mapDelegate.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Observations getPredicatesForObservations]]];
         NSError *error;
         if (![self.mapDelegate.observations.fetchedResultsController performFetch:&error]) {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -253,7 +254,7 @@
 - (void) onMapAnnotationsUpdateTimerFire {
     NSLog(@"Update the user location icon colors");
     [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
-    [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
+//    [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
