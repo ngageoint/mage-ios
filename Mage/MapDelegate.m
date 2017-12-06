@@ -101,13 +101,48 @@
     return self;
 }
 
--(void)mapView:(MKMapView *)mv didAddAnnotationViews:(NSArray *)views{
-    [self.mapObservations selectShapeAnnotation];
-    for (MKAnnotationView *annView in views) {
-        CGRect endFrame = annView.frame;
-        annView.frame = CGRectOffset(endFrame, 0, -1000);
-        [UIView animateWithDuration:0.6
-                         animations:^{ annView.frame = endFrame; }];
+// map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
+- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
+    MKAnnotationView *aV;
+    
+    for (aV in views) {
+        
+        // Don't pin drop if annotation is user location
+        if ([aV.annotation isKindOfClass:[MKUserLocation class]]) {
+            continue;
+        }
+        
+        // Check if current annotation is inside visible map rect, else go to next one
+        MKMapPoint point =  MKMapPointForCoordinate(aV.annotation.coordinate);
+        if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
+            continue;
+        }
+        
+        CGRect endFrame = aV.frame;
+        
+        // Move annotation out of view
+        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - mapView.frame.size.height, aV.frame.size.width, aV.frame.size.height);
+        
+        // Animate drop
+        [UIView animateWithDuration:0.5 delay:0.04*[views indexOfObject:aV] options: UIViewAnimationOptionCurveLinear animations:^{
+            
+            aV.frame = endFrame;
+            
+            // Animate squash
+        }completion:^(BOOL finished){
+            if (finished) {
+                [UIView animateWithDuration:0.05 animations:^{
+                    aV.transform = CGAffineTransformMakeScale(1.0, 0.8);
+                    
+                }completion:^(BOOL finished){
+                    if (finished) {
+                        [UIView animateWithDuration:0.1 animations:^{
+                            aV.transform = CGAffineTransformIdentity;
+                        }];
+                    }
+                }];
+            }
+        }];
     }
 }
 
@@ -270,13 +305,6 @@
             [weakSelf updateObservations:[weakSelf.observations.fetchedResultsController fetchedObjects]];
         }
     });
-
-    
-//    if (self.hideObservations) {
-//        [self updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
-//    } else {
-//        [self updateObservations:[self.observations.fetchedResultsController fetchedObjects]];
-//    }
 }
 
 - (void) updateObservationPredicates: (NSMutableArray *) predicates {
@@ -302,13 +330,8 @@
     __weak typeof(self) weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        [self updateObservations:newObservations];
+        [weakSelf updateObservations:newObservations];
     });
-//    NSMutableArray *observationIds = [[NSMutableArray alloc] initWithCapacity:observations.count];
-//    for (Observation *observation in observations) {
-//        [observationIds addObject:observation.objectID];
-//    }
-//    [self.mapObservations removeObservationsNotInArray:observationIds];
 }
 
 - (void) updateLocationPredicates: (NSMutableArray *) predicates {
