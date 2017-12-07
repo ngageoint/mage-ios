@@ -113,11 +113,6 @@
 }
 
 - (void) start {
-    [self.navigationController setModalPresentationStyle:UIModalPresentationCustom];
-    [self.navigationController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self.rootViewController presentViewController:self.navigationController animated:YES completion:^{
-        
-    }];
     if (![self.event isUserInEvent:[User fetchCurrentUserInManagedObjectContext:self.managedObjectContext]]) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"You are not part of this event"
@@ -127,18 +122,22 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self.rootViewController presentViewController:alert animated:YES completion:nil];
     } else {
-        if (self.newObservation) {
-            if ([self.event.forms count] > 1) {
-                [self startFormPicker];
-            } else if ([self.event.forms count] == 1) {
-                [self addFormToObservation:[self.event.forms objectAtIndex:0]];
-                [self startEditObservationFields];
+        [self.navigationController setModalPresentationStyle:UIModalPresentationCustom];
+        [self.navigationController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+        [self.rootViewController presentViewController:self.navigationController animated:YES completion:^{
+            if (self.newObservation) {
+                if ([self.event.forms count] > 1) {
+                    [self startFormPicker];
+                } else if ([self.event.forms count] == 1) {
+                    [self addFormToObservation:[self.event.forms objectAtIndex:0]];
+                    [self startEditObservationFields];
+                } else {
+                    [self startEditObservationFields];
+                }
             } else {
                 [self startEditObservationFields];
             }
-        } else {
-            [self startEditObservationFields];
-        }
+        }];
     }
 }
 

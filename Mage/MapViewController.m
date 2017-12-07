@@ -51,8 +51,7 @@
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded && [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
