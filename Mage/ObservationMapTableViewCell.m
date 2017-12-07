@@ -28,15 +28,16 @@
     
     [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView removeOverlays:self.mapView.overlays];
-    [self.mapDelegate setObservations:observations];
     self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
-    [self.mapDelegate selectedObservation:observation];
     self.mapDelegate.hideStaticLayers = YES;
     
-    MapObservation *mapObservation = [self.mapDelegate.mapObservations observationOfId:observation.objectID];
-    
-    MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:self.mapView];
-    [self.mapDelegate selectedObservation:observation region:viewRegion];
+    __weak __typeof__(self) weakSelf = self;
+    [self.mapDelegate setObservations:observations withCompletion:^{
+        MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
+        MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
+        
+        [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
+    }];
 }
 
 @end

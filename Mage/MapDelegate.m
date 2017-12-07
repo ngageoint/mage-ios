@@ -270,8 +270,7 @@
     [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
 }
 
-- (void) setObservations:(Observations *)observations {
-    
+- (void) setObservations:(Observations *)observations withCompletion: (void (^)(void)) complete {
     _observations = observations;
     _observations.delegate = self;
     
@@ -289,22 +288,29 @@
     }
     
     __weak typeof(self) weakSelf = self;
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-        dispatch_async(queue, ^{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
         
         NSError *error;
         if (![weakSelf.observations.fetchedResultsController performFetch:&error]) {
-                // Update to handle the error appropriately.
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                exit(-1);
-            }
-
+            // Update to handle the error appropriately.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            exit(-1);
+        }
+        
         if (weakSelf.hideObservations) {
             [weakSelf updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
         } else {
             [weakSelf updateObservations:[weakSelf.observations.fetchedResultsController fetchedObjects]];
         }
+        complete();
     });
+}
+
+- (void) setObservations:(Observations *)observations {
+    [self setObservations:observations withCompletion:^{
+        
+    }];
 }
 
 - (void) updateObservationPredicates: (NSMutableArray *) predicates {

@@ -64,26 +64,16 @@
     self.mapView.delegate = self.mapDelegate;
     
     Observations *observations = [Observations observationsForObservation:observation];
-    [self.mapDelegate setObservations:observations];
-    
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    NSDictionary *properties = observation.properties;
-    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-    if (accuracyProperty != nil) {
-        double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
-    }
-    
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(observation.location.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-    
-    [self.mapDelegate setObservations:observations];
-    [self.mapDelegate selectedObservation:observation];
     self.mapDelegate.hideStaticLayers = YES;
     
-    [self.mapDelegate selectedObservation:observation region:viewRegion];
+    __weak __typeof__(self) weakSelf = self;
+    [self.mapDelegate setObservations:observations withCompletion:^{
+        MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
+        MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
+
+        [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
+    }];
+
  }
 
 - (void) setupAttachmentsForObservation:(Observation *) observation {
