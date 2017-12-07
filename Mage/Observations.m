@@ -56,12 +56,16 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
 }
 
 + (id) observations {
+    return [Observations observationsAscending:NO];
+}
+
++ (id) observationsAscending: (BOOL) ascending {
     NSMutableArray *predicates = [Observations getPredicatesForObservations];
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:ascending withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                  managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                    sectionNameKeyPath:@"dateSection"
-                             cacheName:nil];
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                                 sectionNameKeyPath:@"dateSection"
+                                                                                                          cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }

@@ -399,7 +399,7 @@
         if (hideObservations) {
             self.observations = [Observations hideObservations];
         } else {
-            self.observations = [Observations observations];
+            self.observations = [Observations observationsAscending: YES];
         }
     }
 }
