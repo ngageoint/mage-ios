@@ -108,7 +108,7 @@
     NSNumber *formIndex = [field valueForKey:@"formIndex"];
     id name = [field valueForKey:@"name"];
     id value = self.currentEditValue = [[obsForms objectAtIndex:[formIndex integerValue]] objectForKey:name];
-    if ([[field objectForKey:@"type"] isEqualToString:@"dropdown"]) {
+    if ([[field objectForKey:@"type"] isEqualToString:@"dropdown"] || [[field objectForKey:@"type"] isEqualToString:@"multiselectdropdown"]) {
         SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue: value andDelegate: self];
         editSelect.title = [field valueForKey:@"title"];
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
