@@ -396,11 +396,7 @@
 -(void) setHideObservations:(BOOL) hideObservations {
     if (_hideObservations != hideObservations) {
         _hideObservations = hideObservations;
-        if (hideObservations) {
-            self.observations = [Observations hideObservations];
-        } else {
-            self.observations = [Observations observationsAscending: YES];
-        }
+        [self updateObservationPredicates:[Observations getPredicatesForObservationsForMap]];
     }
 }
 

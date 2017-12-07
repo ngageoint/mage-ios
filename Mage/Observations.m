@@ -36,6 +36,12 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     [defaults synchronize];
 }
 
++ (NSMutableArray *) getPredicatesForObservationsForMap {
+    NSMutableArray *predicates = [Observations getPredicatesForObservations];
+    [predicates addObject:[NSPredicate predicateWithValue:![[NSUserDefaults standardUserDefaults] boolForKey:@"hideObservations"]]];
+    return predicates;
+}
+
 + (NSMutableArray *) getPredicatesForObservations {
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp"];
@@ -56,12 +62,19 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
 }
 
 + (id) observations {
-    return [Observations observationsAscending:NO];
+    NSMutableArray *predicates = [Observations getPredicatesForObservations];
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                                 sectionNameKeyPath:@"dateSection"
+                                                                                                          cacheName:nil];
+    
+    return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) observationsAscending: (BOOL) ascending {
-    NSMutableArray *predicates = [Observations getPredicatesForObservations];
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:ascending withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
++ (id) observationsForMap {
+    NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap];
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:YES withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dateSection"

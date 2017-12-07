@@ -101,13 +101,13 @@
     }
     
     if (self.mapDelegate.observations != nil) {
-        [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
+        [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservationsForMap]];
         NSError *error;
         if (![self.mapDelegate.observations.fetchedResultsController performFetch:&error]) {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         }
     } else {
-        Observations *observations = [Observations observationsAscending:YES];
+        Observations *observations = [Observations observationsForMap];
         [self.mapDelegate setObservations:observations];
     }
     
@@ -252,7 +252,6 @@
 - (void) onMapAnnotationsUpdateTimerFire {
     NSLog(@"Update the user location icon colors");
     [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
-//    [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservations]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -267,13 +266,13 @@
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
     } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
-        self.mapDelegate.observations = [Observations observationsAscending:YES];
+        self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
     } else if ([kLocationTimeFilterKey isEqualToString:keyPath] || [kLocationTimeFilterUnitKey isEqualToString:keyPath] || [kLocationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.locations = [Locations locationsForAllUsers];
         [self setNavBarTitle];
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
-        self.mapDelegate.observations = [Observations observationsAscending:YES];
+        self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
     }
 }
