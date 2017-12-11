@@ -125,19 +125,20 @@
         [self.navigationController setModalPresentationStyle:UIModalPresentationCustom];
         [self.navigationController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
         [self.rootViewController presentViewController:self.navigationController animated:YES completion:^{
-            if (self.newObservation) {
-                if ([self.event.forms count] > 1) {
-                    [self startFormPicker];
-                } else if ([self.event.forms count] == 1) {
-                    [self addFormToObservation:[self.event.forms objectAtIndex:0]];
-                    [self startEditObservationFields];
-                } else {
-                    [self startEditObservationFields];
-                }
+
+        }];
+        if (self.newObservation) {
+            if ([self.event.forms count] > 1) {
+                [self startFormPicker];
+            } else if ([self.event.forms count] == 1) {
+                [self addFormToObservation:[self.event.forms objectAtIndex:0]];
+                [self startEditObservationFields];
             } else {
                 [self startEditObservationFields];
             }
-        }];
+        } else {
+            [self startEditObservationFields];
+        }
     }
 }
 
