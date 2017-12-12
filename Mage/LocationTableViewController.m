@@ -14,9 +14,10 @@
 #import "UINavigationItem+Subtitle.h"
 #import "UIColor+UIColor_Mage.h"
 
-@interface LocationTableViewController() <UserSelectionDelegate>
+@interface LocationTableViewController() <UserSelectionDelegate, UIViewControllerPreviewingDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
+@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -44,6 +45,10 @@
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 88;
+    
+    if ([self isForceTouchAvailable]) {
+        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -79,6 +84,50 @@
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     
     [self stopUpdateTimer];
+}
+
+- (BOOL)isForceTouchAvailable {
+    BOOL isForceTouchAvailable = NO;
+    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
+    }
+    return isForceTouchAvailable;
+}
+
+- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
+    if ([self.presentedViewController isKindOfClass:[MeViewController class]]) {
+        return nil;
+    }
+    
+    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
+    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
+    
+    if (path) {
+        PersonTableViewCell *tableCell = (PersonTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
+        
+        MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
+        previewController.user = tableCell.user;
+        return previewController;
+    }
+    return nil;
+}
+
+- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
+    [self.navigationController showViewController:viewControllerToCommit sender:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self isForceTouchAvailable]) {
+        if (!self.previewingContext) {
+            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+        }
+    } else {
+        if (self.previewingContext) {
+            [self unregisterForPreviewingWithContext:self.previewingContext];
+            self.previewingContext = nil;
+        }
+    }
 }
 
 - (void) applicationWillResignActive {

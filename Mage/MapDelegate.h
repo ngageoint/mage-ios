@@ -43,6 +43,7 @@
 @property (nonatomic, weak) id<CacheOverlayDelegate> cacheOverlayDelegate;
 
 @property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
+@property (nonatomic, strong) UIViewController<UIViewControllerPreviewingDelegate> *previewDelegate;
 @property (nonatomic, strong) Locations *locations;
 @property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;

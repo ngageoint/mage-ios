@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="ULt-lH-XLM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="ULt-lH-XLM">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -30,107 +30,178 @@
                                     <outletCollection property="gestureRecognizers" destination="qkg-84-BHA" appends="YES" id="VDG-eR-SBJ"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdu-qy-wn8">
-                                <rect key="frame" x="20" y="147" width="35" height="35"/>
-                                <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <accessibility key="accessibilityConfiguration" label="Report Location"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="jnk-sM-5pz"/>
-                                    <constraint firstAttribute="height" constant="35" id="ylV-DV-0LA"/>
-                                </constraints>
-                                <state key="normal" image="location_tracking_off"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
-                                        <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
-                                        <size key="value" width="0.0" height="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onReportLocationButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="Vvk-3B-3zU"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kcw-0V-caB">
-                                <rect key="frame" x="20" y="61" width="35" height="35"/>
-                                <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="1tm-Pf-51B"/>
-                                    <constraint firstAttribute="height" constant="35" id="fB7-bt-C0z"/>
-                                </constraints>
-                                <color key="tintColor" red="0.063945792615413666" green="0.24690860509872437" blue="0.57574045658111572" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="layers"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
-                                        <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
-                                        <size key="value" width="0.0" height="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="eCr-Py-gK2" kind="popover" identifier="MapSettingsSegue" popoverAnchorView="y8T-l1-f2h" id="HTT-Lb-5Lf">
-                                        <popoverArrowDirection key="popoverArrowDirection"/>
-                                    </segue>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fv8-SP-kpL">
-                                <rect key="frame" x="20" y="104" width="35" height="35"/>
-                                <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="F5M-LE-Dfl"/>
-                                    <constraint firstAttribute="width" constant="35" id="lgs-59-uzb"/>
-                                </constraints>
-                                <color key="tintColor" red="0.063945792615413666" green="0.24690860509872437" blue="0.57574045658111572" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="location_arrow_off"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
-                                        <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
-                                        <size key="value" width="0.0" height="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onTrackingButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="WGr-m7-hnk"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BQw-1n-QoD">
+                                <rect key="frame" x="20" y="61" width="35" height="215"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kcw-0V-caB">
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                        <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="1tm-Pf-51B"/>
+                                            <constraint firstAttribute="height" constant="35" id="fB7-bt-C0z"/>
+                                        </constraints>
+                                        <color key="tintColor" red="0.063945792615413666" green="0.24690860509872437" blue="0.57574045658111572" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="layers"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
+                                                <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                                <size key="value" width="0.0" height="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="eCr-Py-gK2" kind="popover" identifier="MapSettingsSegue" popoverAnchorView="y8T-l1-f2h" id="HTT-Lb-5Lf">
+                                                <popoverArrowDirection key="popoverArrowDirection"/>
+                                            </segue>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fv8-SP-kpL">
+                                        <rect key="frame" x="0.0" y="45" width="35" height="35"/>
+                                        <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="F5M-LE-Dfl"/>
+                                            <constraint firstAttribute="width" constant="35" id="lgs-59-uzb"/>
+                                        </constraints>
+                                        <color key="tintColor" red="0.063945792615413666" green="0.24690860509872437" blue="0.57574045658111572" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="location_arrow_off"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
+                                                <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                                <size key="value" width="0.0" height="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onTrackingButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="WGr-m7-hnk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdu-qy-wn8">
+                                        <rect key="frame" x="0.0" y="90" width="35" height="35"/>
+                                        <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" label="Report Location"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="jnk-sM-5pz"/>
+                                            <constraint firstAttribute="height" constant="35" id="ylV-DV-0LA"/>
+                                        </constraints>
+                                        <state key="normal" image="location_tracking_off"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
+                                                <color key="value" red="0.26379796862602234" green="0.2637900710105896" blue="0.26379451155662537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                                <size key="value" width="0.0" height="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onReportLocationButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="Vvk-3B-3zU"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FhY-BG-Mnp">
+                                        <rect key="frame" x="0.0" y="135" width="35" height="35"/>
+                                        <color key="backgroundColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" label="Report Location"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="Goh-bK-qBL"/>
+                                            <constraint firstAttribute="height" constant="35" id="krn-D3-2Hd"/>
+                                        </constraints>
+                                        <state key="normal" image="observations"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
+                                                <color key="value" red="0.26379796859999999" green="0.26379007100000001" blue="0.2637945116" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                                <size key="value" width="0.0" height="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onShowObservationsButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="lnj-mE-Yax"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cae-Bw-Fmt">
+                                        <rect key="frame" x="0.0" y="180" width="35" height="35"/>
+                                        <color key="backgroundColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" label="Report Location"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="Fw9-IG-XRU"/>
+                                            <constraint firstAttribute="height" constant="35" id="LzZ-9L-l6h"/>
+                                        </constraints>
+                                        <state key="normal" image="people"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowUIColor">
+                                                <color key="value" red="0.26379796859999999" green="0.26379007100000001" blue="0.2637945116" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                                <size key="value" width="0.0" height="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onShowPeopleButtonPressed:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="6Gy-FS-pDr"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mAe-WQ-FSc">
                                 <rect key="frame" x="0.0" y="938" width="768" height="22"/>
                                 <subviews>
@@ -251,20 +322,16 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="mAe-WQ-FSc" secondAttribute="trailing" constant="-20" id="2my-ZV-2I8"/>
                             <constraint firstItem="rz7-vu-mdR" firstAttribute="leading" secondItem="y8T-l1-f2h" secondAttribute="leading" id="7qD-ne-NzS"/>
-                            <constraint firstItem="wdu-qy-wn8" firstAttribute="top" secondItem="fv8-SP-kpL" secondAttribute="bottom" constant="8" id="BBm-7X-oq0"/>
                             <constraint firstItem="LC1-En-9Tw" firstAttribute="top" secondItem="rz7-vu-mdR" secondAttribute="bottom" id="Fac-eO-1Va"/>
                             <constraint firstItem="pRC-Uq-Qxn" firstAttribute="top" secondItem="gai-NH-MPY" secondAttribute="bottom" id="Kbu-lm-9r9"/>
-                            <constraint firstItem="Kcw-0V-caB" firstAttribute="leading" secondItem="y8T-l1-f2h" secondAttribute="leadingMargin" id="Vy4-0B-hmF"/>
                             <constraint firstItem="pRC-Uq-Qxn" firstAttribute="leading" secondItem="y8T-l1-f2h" secondAttribute="leading" id="YIv-Ow-MCW"/>
                             <constraint firstItem="rz7-vu-mdR" firstAttribute="top" secondItem="pRC-Uq-Qxn" secondAttribute="bottom" id="c2b-0M-knc"/>
                             <constraint firstAttribute="trailing" secondItem="rz7-vu-mdR" secondAttribute="trailing" id="cG1-xZ-S9e"/>
                             <constraint firstItem="LC1-En-9Tw" firstAttribute="top" secondItem="mAe-WQ-FSc" secondAttribute="bottom" id="eaW-zP-C0i"/>
-                            <constraint firstItem="fv8-SP-kpL" firstAttribute="top" secondItem="Kcw-0V-caB" secondAttribute="bottom" constant="8" symbolic="YES" id="gc1-5c-KtY"/>
                             <constraint firstAttribute="trailing" secondItem="pRC-Uq-Qxn" secondAttribute="trailing" id="i9s-Xy-kz3"/>
-                            <constraint firstItem="fv8-SP-kpL" firstAttribute="leading" secondItem="Kcw-0V-caB" secondAttribute="leading" id="mav-Rh-Rgd"/>
                             <constraint firstItem="mAe-WQ-FSc" firstAttribute="leading" secondItem="y8T-l1-f2h" secondAttribute="leadingMargin" constant="-20" id="nb8-LN-Hrj"/>
-                            <constraint firstItem="wdu-qy-wn8" firstAttribute="leading" secondItem="fv8-SP-kpL" secondAttribute="leading" id="oQ8-fE-khE"/>
-                            <constraint firstItem="Kcw-0V-caB" firstAttribute="top" secondItem="pRC-Uq-Qxn" secondAttribute="bottom" constant="17" id="qJD-cp-4Gj"/>
+                            <constraint firstItem="BQw-1n-QoD" firstAttribute="top" secondItem="gai-NH-MPY" secondAttribute="bottom" constant="61" id="rQf-Z4-Fbv"/>
+                            <constraint firstItem="BQw-1n-QoD" firstAttribute="leading" secondItem="y8T-l1-f2h" secondAttribute="leading" constant="20" id="teI-JD-2os"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
@@ -285,6 +352,8 @@
                         <outlet property="profileBadgeTrailingSpacer" destination="a0q-XZ-tLX" id="ioC-26-a5y"/>
                         <outlet property="profileButton" destination="joL-fY-jEC" id="MKg-3r-F1k"/>
                         <outlet property="reportLocationButton" destination="wdu-qy-wn8" id="H4c-4P-z35"/>
+                        <outlet property="showObservationsButton" destination="FhY-BG-Mnp" id="nag-yJ-C3i"/>
+                        <outlet property="showPeopleButton" destination="Cae-Bw-Fmt" id="hbb-jE-BHk"/>
                         <outlet property="toastText" destination="zzH-pl-bJt" id="E2U-DU-zFS"/>
                         <outlet property="toastView" destination="mAe-WQ-FSc" id="g3g-qh-BTc"/>
                         <outlet property="toolbar" destination="pRC-Uq-Qxn" id="2eK-gd-j5e"/>
@@ -365,7 +434,7 @@
         <!--Attachment Selection Delegate-->
         <scene sceneID="8tc-Wq-Cd7">
             <objects>
-                <tableViewController id="NQp-Sm-cVJ" customClass="MeViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="NQp-Sm-cVJ" customClass="MeViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qc9-d1-b4V">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -926,6 +995,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="5KS-77-dla"/>
-        <segue reference="p8L-AB-HpY"/>
+        <segue reference="SAm-kj-9un"/>
     </inferredMetricsTieBreakers>
 </document>

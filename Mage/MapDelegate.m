@@ -932,6 +932,9 @@
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
         annotationView.enabled = !self.hideLocations;
+        if (self.previewDelegate) {
+            [self.previewDelegate registerForPreviewingWithDelegate:self.previewDelegate sourceView:annotationView];
+        }
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -941,6 +944,9 @@
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
+        if (self.previewDelegate) {
+            [self.previewDelegate registerForPreviewingWithDelegate:self.previewDelegate sourceView:annotationView];
+        }
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;

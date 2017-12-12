@@ -32,18 +32,23 @@
 #import "Filter.h"
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
+#import "ObservationAnnotationView.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
     @property (weak, nonatomic) IBOutlet UILabel *toastText;
+    @property (weak, nonatomic) IBOutlet UIButton *showPeopleButton;
+    @property (weak, nonatomic) IBOutlet UIButton *showObservationsButton;
+    @property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -55,7 +60,7 @@
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
-        
+
         [self startCreateNewObservationAtLocation:mapPressLocation andProvider:@"manual"];
     }
 }
@@ -74,6 +79,9 @@
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
+    if ([self isForceTouchAvailable]) {
+        self.mapDelegate.previewDelegate = self;
+    }
     
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
                                                  initWithTarget:self action:@selector(singleTapGesture:)];
@@ -84,6 +92,9 @@
     doubleTapGesture.numberOfTapsRequired = 2;
     [self.mapView addGestureRecognizer:doubleTapGesture];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
+    
+    self.showPeopleButton.hidden = YES;
+    self.showObservationsButton.hidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -144,6 +155,8 @@
     
     Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    [self setupShowObservationButtonWithState:![[defaults objectForKey:@"hideObservations"] boolValue]];
+    [self setupShowPeopleButtonWithState:![[defaults objectForKey:@"hidePeople"] boolValue]];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"
@@ -189,6 +202,39 @@
                                                object:nil];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
+}
+
+- (BOOL)isForceTouchAvailable {
+    BOOL isForceTouchAvailable = NO;
+    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
+    }
+    return isForceTouchAvailable;
+}
+
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>) previewingContext viewControllerForLocation:(CGPoint)location {
+    MKAnnotationView *annotationView = (MKAnnotationView *)previewingContext.sourceView;
+    if (self.presentedViewController) {
+        return nil;
+    }
+    id<MKAnnotation> annotation = annotationView.annotation;
+    
+    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
+        ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotation;
+        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
+        previewController.observation = observationAnnotation.observation;
+        return previewController;
+    } else if ([annotation isKindOfClass:[LocationAnnotation class]]) {
+        LocationAnnotation *locationAnnotation = (LocationAnnotation *) annotation;
+        MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
+        previewController.user = locationAnnotation.location.user;
+        return previewController;
+    }
+    return nil;
+}
+
+- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
+    [self.navigationController showViewController:viewControllerToCommit sender:nil];
 }
 
 - (void) setNavBarTitle {
@@ -260,8 +306,10 @@
                        context:(void *)context {
     if ([@"hideObservations" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideObservations = [object boolForKey:keyPath];
+        [self setupShowObservationButtonWithState:![object boolForKey:keyPath]];
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
+        [self setupShowPeopleButtonWithState:![object boolForKey:keyPath]];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
@@ -355,8 +403,20 @@
     [self displayToast];
 }
 
-- (IBAction)onARButtonPressed:(id)sender {
-    
+- (IBAction)onShowPeopleButtonPressed:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL newState =![[defaults objectForKey:@"hidePeople"] boolValue];
+    [self setupShowPeopleButtonWithState:!newState];
+    [defaults setBool:newState forKey:@"hidePeople"];
+    [defaults synchronize];
+}
+
+- (IBAction)onShowObservationsButtonPressed:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL newState =![[defaults objectForKey:@"hideObservations"] boolValue];
+    [self setupShowObservationButtonWithState:!newState];
+    [defaults setBool:newState forKey:@"hideObservations"];
+    [defaults synchronize];
 }
 
 - (void) displayToast {
@@ -381,6 +441,22 @@
     } else {
         [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
         [self.reportLocationButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
+    }
+}
+
+- (void) setupShowObservationButtonWithState: (BOOL) showObservations {
+    if (showObservations) {
+        [self.showObservationsButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
+    } else {
+        [self.showObservationsButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
+    }
+}
+
+- (void) setupShowPeopleButtonWithState: (BOOL) showPeople {
+    if (showPeople) {
+        [self.showPeopleButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
+    } else {
+        [self.showPeopleButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
     }
 }
 

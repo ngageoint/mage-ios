@@ -22,9 +22,12 @@
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
 #import "UIColor+UIColor_Mage.h"
+#import "ObservationViewController.h"
+#import "ObservationTableViewCell.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate>
 
+@property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
@@ -58,6 +61,10 @@
     self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
+    
+    if ([self isForceTouchAvailable]) {
+        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -115,6 +122,50 @@
     self.observationDataStore.observations.delegate = nil;
     
     [self stopUpdateTimer];
+}
+
+- (BOOL)isForceTouchAvailable {
+    BOOL isForceTouchAvailable = NO;
+    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
+    }
+    return isForceTouchAvailable;
+}
+
+- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
+    if ([self.presentedViewController isKindOfClass:[ObservationViewController class]]) {
+        return nil;
+    }
+    
+    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
+    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
+    
+    if (path) {
+        ObservationTableViewCell *tableCell = (ObservationTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
+
+        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
+        previewController.observation = tableCell.observation;
+        return previewController;
+    }
+    return nil;
+}
+
+- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
+    [self.navigationController showViewController:viewControllerToCommit sender:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self isForceTouchAvailable]) {
+        if (!self.previewingContext) {
+            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+        }
+    } else {
+        if (self.previewingContext) {
+            [self unregisterForPreviewingWithContext:self.previewingContext];
+            self.previewingContext = nil;
+        }
+    }
 }
 
 - (void) applicationWillResignActive {

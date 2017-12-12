@@ -13,7 +13,7 @@
 @implementation PersonTableViewCell
 
 - (id) populateCellWithUser:(User *) user {
-    
+    self.user = user;
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
     NSString* avatarFile = [documentsDirectory stringByAppendingPathComponent:user.avatarUrl];
     if(user.avatarUrl && [[NSFileManager defaultManager] fileExistsAtPath:avatarFile]) {

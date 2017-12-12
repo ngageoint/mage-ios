@@ -25,10 +25,11 @@
 #import "GPSLocation.h"
 #import "AttachmentSelectionDelegate.h"
 #import "WKBGeometryUtils.h"
+#import "ObservationViewController.h"
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -41,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *email;
 
 @property (assign, nonatomic) BOOL currentUserIsMe;
+@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -69,6 +71,10 @@
         self.currentUserIsMe = NO;
     }
     self.navigationItem.title = self.user.name;
+    
+    if ([self isForceTouchAvailable]) {
+        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -85,7 +91,6 @@
     [self.observationDataStore startFetchControllerWithObservations:[Observations observationsForUser:self.user]];
     if (self.mapDelegate != nil) {
         [self.mapDelegate setObservations:[Observations observationsForUser:self.user]];
-//        self.observationDataStore.observationSelectionDelegate = self.mapDelegate;
         Locations *locations = [Locations locationsForUser:self.user];
         [self.mapDelegate setLocations:locations];
     }
@@ -122,6 +127,51 @@
     
     [self sizeHeaderToFit];
 }
+
+- (BOOL)isForceTouchAvailable {
+    BOOL isForceTouchAvailable = NO;
+    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
+    }
+    return isForceTouchAvailable;
+}
+
+- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
+    if ([self.presentedViewController isKindOfClass:[ObservationViewController class]]) {
+        return nil;
+    }
+    
+    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
+    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
+    
+    if (path) {
+        ObservationTableViewCell *tableCell = (ObservationTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
+        
+        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
+        previewController.observation = tableCell.observation;
+        return previewController;
+    }
+    return nil;
+}
+
+- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
+    [self.navigationController showViewController:viewControllerToCommit sender:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self isForceTouchAvailable]) {
+        if (!self.previewingContext) {
+            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+        }
+    } else {
+        if (self.previewingContext) {
+            [self unregisterForPreviewingWithContext:self.previewingContext];
+            self.previewingContext = nil;
+        }
+    }
+}
+
 
 - (void) zoomAndCenterMapOnLocation: (CLLocation *) location {
     CLLocationDistance latitudeMeters = 500;

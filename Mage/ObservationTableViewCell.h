@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 @property (weak, nonatomic) IBOutlet UIImageView *observationShapeImage;
+@property (strong, nonatomic) Observation *observation;
+
 
 - (void) populateCellWithObservation:(Observation *) observation;
 - (void) displayFavoriteForObservation: (Observation *) observation;

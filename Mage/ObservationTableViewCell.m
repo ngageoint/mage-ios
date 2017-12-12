@@ -45,6 +45,7 @@
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
+    self.observation = observation;
     NSString *primaryText = [observation primaryFieldText];
     NSString *variantText = [observation secondaryFieldText];
     

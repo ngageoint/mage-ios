@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;
 @property (weak, nonatomic) IBOutlet UILabel *myself;
 @property (weak, nonatomic) IBOutlet NSObject<UserActionsDelegate> *userActionsDelegate;
-
+@property (strong, nonatomic) User *user;
 
 - (id) populateCellWithUser:(User *) user;
 
