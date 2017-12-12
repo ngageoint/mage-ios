@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,8 +35,8 @@
                 </subviews>
                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="mFr-Ch-f5w" secondAttribute="bottom" constant="-3.5" id="9d5-iR-zfq"/>
-                    <constraint firstItem="mFr-Ch-f5w" firstAttribute="top" secondItem="ETq-bh-nIw" secondAttribute="topMargin" constant="-3" id="Eph-3r-HAe"/>
+                    <constraint firstAttribute="bottom" secondItem="mFr-Ch-f5w" secondAttribute="bottom" constant="4.5" id="3K8-Ee-DtM"/>
+                    <constraint firstItem="mFr-Ch-f5w" firstAttribute="top" secondItem="ETq-bh-nIw" secondAttribute="top" constant="5" id="Hnz-WE-Bna"/>
                     <constraint firstAttribute="trailing" secondItem="mFr-Ch-f5w" secondAttribute="trailing" constant="5" id="Kz6-07-zCJ"/>
                     <constraint firstItem="mFr-Ch-f5w" firstAttribute="leading" secondItem="ETq-bh-nIw" secondAttribute="leading" constant="5" id="evP-Jy-nCc"/>
                 </constraints>
