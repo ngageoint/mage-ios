@@ -670,7 +670,7 @@
                                     <size key="shadowOffset" width="0.0" height="0.0"/>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
-                                    <rect key="frame" x="8" y="227" width="359" height="55"/>
+                                    <rect key="frame" x="8" y="228" width="359" height="54"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
                                             <rect key="frame" x="0.0" y="0.0" width="359" height="24"/>
@@ -707,7 +707,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
-                                            <rect key="frame" x="0.0" y="24" width="359" height="31"/>
+                                            <rect key="frame" x="0.0" y="24" width="359" height="30"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
@@ -718,11 +718,8 @@
                                                     </constraints>
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
-                                                    <rect key="frame" x="20" y="0.0" width="339" height="24"/>
+                                                    <rect key="frame" x="20" y="0.0" width="339" height="30"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="24" id="Wss-Aq-bgV"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
@@ -732,7 +729,7 @@
                                                 <constraint firstItem="eTd-rR-bXT" firstAttribute="top" secondItem="Dre-HY-Lpw" secondAttribute="top" constant="9" id="3Cu-Gq-tZ3"/>
                                                 <constraint firstAttribute="trailing" secondItem="0fb-1Y-2Qv" secondAttribute="trailing" id="C6N-Yv-IJS"/>
                                                 <constraint firstItem="eTd-rR-bXT" firstAttribute="leading" secondItem="Dre-HY-Lpw" secondAttribute="leading" id="aih-B4-DvN"/>
-                                                <constraint firstAttribute="bottom" secondItem="0fb-1Y-2Qv" secondAttribute="bottom" constant="7" id="g5F-U2-dbO"/>
+                                                <constraint firstAttribute="bottom" secondItem="0fb-1Y-2Qv" secondAttribute="bottom" id="g5F-U2-dbO"/>
                                                 <constraint firstItem="0fb-1Y-2Qv" firstAttribute="top" secondItem="Dre-HY-Lpw" secondAttribute="top" id="jDl-ke-LFG"/>
                                                 <constraint firstItem="0fb-1Y-2Qv" firstAttribute="leading" secondItem="eTd-rR-bXT" secondAttribute="trailing" constant="6" id="wKi-le-aRC"/>
                                             </constraints>
@@ -747,7 +744,7 @@
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="tdu-jV-iDi" secondAttribute="trailing" constant="8" id="3AA-3T-wrx"/>
                                 <constraint firstItem="tdu-jV-iDi" firstAttribute="leading" secondItem="GCl-vQ-1KG" secondAttribute="leading" constant="8" id="4Xw-9r-Pfm"/>
-                                <constraint firstItem="hBS-kY-235" firstAttribute="top" secondItem="tdu-jV-iDi" secondAttribute="bottom" constant="-1" id="8lg-cb-Foe"/>
+                                <constraint firstItem="hBS-kY-235" firstAttribute="top" secondItem="tdu-jV-iDi" secondAttribute="bottom" id="8lg-cb-Foe"/>
                                 <constraint firstAttribute="bottom" secondItem="hBS-kY-235" secondAttribute="bottom" id="CA1-EB-ier"/>
                                 <constraint firstItem="hBS-kY-235" firstAttribute="leading" secondItem="GCl-vQ-1KG" secondAttribute="leading" constant="8" id="DwI-1j-iZK"/>
                                 <constraint firstAttribute="trailing" secondItem="LYS-e7-rTd" secondAttribute="trailing" id="GXp-TK-t9H"/>
@@ -915,6 +912,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="77U-TW-S4M"/>
-        <segue reference="2y0-bF-fmy"/>
+        <segue reference="t54-XE-2TN"/>
     </inferredMetricsTieBreakers>
 </document>
