@@ -80,7 +80,8 @@
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
     if ([self isForceTouchAvailable]) {
-        self.mapDelegate.previewDelegate = self;
+        // don't do this for now.  The previewing context is choosing the annotation that is pressed even if it is below a callout bubble
+        //self.mapDelegate.previewDelegate = self;
     }
     
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
@@ -217,6 +218,11 @@
     if (self.presentedViewController) {
         return nil;
     }
+    
+    // this will preview whatever annotation was clicked even if the callout bubble for a different annotation is shown
+    // maybe only preview for the annotation which is selected.  Need to figure out how to determine if the annotation callout
+    // bubble was pressed
+    
     id<MKAnnotation> annotation = annotationView.annotation;
     
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
