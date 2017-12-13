@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -56,7 +56,7 @@
                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                 </textField>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3v-ds-Sff">
-                    <rect key="frame" x="20" y="219" width="165.5" height="40"/>
+                    <rect key="frame" x="20" y="219" width="159" height="40"/>
                     <color key="backgroundColor" red="0.1110333651" green="0.25266155600000001" blue="0.40621557829999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -75,7 +75,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SwE-a6-n1N">
-                    <rect key="frame" x="189.5" y="219" width="165.5" height="40"/>
+                    <rect key="frame" x="196" y="219" width="159" height="40"/>
                     <color key="backgroundColor" red="0.1110333651" green="0.25266155600000001" blue="0.40621557829999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -129,7 +129,7 @@
                 <constraint firstAttribute="trailing" secondItem="jtk-kb-2jR" secondAttribute="trailing" constant="20" id="1r5-fY-GYi"/>
                 <constraint firstAttribute="trailing" secondItem="7n5-Vb-8eB" secondAttribute="trailing" constant="40" id="2et-ak-75P"/>
                 <constraint firstItem="lkG-8a-rWv" firstAttribute="leading" secondItem="VRm-i7-6lH" secondAttribute="trailing" constant="-4" id="2yD-Cy-RIs"/>
-                <constraint firstItem="SwE-a6-n1N" firstAttribute="leading" secondItem="n3v-ds-Sff" secondAttribute="trailing" constant="4" id="4BC-Q8-mTk"/>
+                <constraint firstItem="SwE-a6-n1N" firstAttribute="leading" secondItem="n3v-ds-Sff" secondAttribute="trailing" constant="17" id="4BC-Q8-mTk"/>
                 <constraint firstAttribute="trailing" secondItem="SwE-a6-n1N" secondAttribute="trailing" constant="20" id="8Ox-fs-Lqi"/>
                 <constraint firstItem="jtk-kb-2jR" firstAttribute="leading" secondItem="JDb-zc-CfP" secondAttribute="leading" constant="20" id="CH2-UP-dm5"/>
                 <constraint firstItem="lkG-8a-rWv" firstAttribute="top" secondItem="SwE-a6-n1N" secondAttribute="bottom" constant="8" id="FYb-Nt-Tw0"/>
