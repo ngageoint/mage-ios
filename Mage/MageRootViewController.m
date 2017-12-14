@@ -19,7 +19,11 @@
     [[Mage singleton] startServicesAsInitial:YES];
 	
 	[super viewDidLoad];
-    
+    for (UIViewController *viewController in self.viewControllers) {
+        if (viewController.tabBarItem.tag == 3) {
+            self.profileTabBarItem = viewController.tabBarItem;
+        }
+    }
     self.profileTabBarItem = [[self.tabBar items] objectAtIndex:3];
 }
 

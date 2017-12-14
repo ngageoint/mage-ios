@@ -583,7 +583,7 @@
         <scene sceneID="q57-A1-fj3">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="H0M-W5-7fi" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="me" id="zNR-S6-oQC"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="Profile" image="me" id="zNR-S6-oQC"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="dPE-Td-44g">
                         <autoresizingMask key="autoresizingMask"/>
@@ -911,7 +911,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="77U-TW-S4M"/>
+        <segue reference="kER-Hr-0Bf"/>
         <segue reference="t54-XE-2TN"/>
     </inferredMetricsTieBreakers>
 </document>
