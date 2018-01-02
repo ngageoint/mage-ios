@@ -42,7 +42,7 @@
 #import "TransitionViewController.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
-@property (nonatomic, strong) UIView *splashView;
+@property (nonatomic, strong) TransitionViewController *splashView;
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
 @property (nonatomic, strong) NSString *addedCacheOverlay;
 @property (nonatomic, strong) MageAppCoordinator *appCoordinator;
@@ -185,16 +185,10 @@
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
     NSLog(@"applicationDidEnterBackground");
-    
-    self.splashView = [[UIView alloc]initWithFrame:[self.window frame]];
-    self.splashView.backgroundColor = [UIColor primaryColor];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 240, 45))];
-    imageView.image = [UIImage imageNamed:@"mage_logo"];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [imageView setCenter:CGPointMake(self.splashView.bounds.size.width/2, self.splashView.bounds.size.height/2)];
-    
-    [self.splashView addSubview:imageView];
-    [self.window addSubview:self.splashView];
+
+    self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    self.splashView.view.frame = [self.window frame];
+    [self.window addSubview:self.splashView.view];
     
     [[Mage singleton] stopServices];
 }
@@ -216,7 +210,7 @@
     NSLog(@"applicationDidBecomeActive");
     
     if(self.splashView != nil) {
-        [self.splashView removeFromSuperview];
+        [self.splashView.view removeFromSuperview];
         self.splashView = nil;
     }
     

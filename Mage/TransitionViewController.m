@@ -11,13 +11,20 @@
 
 @interface TransitionViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+
 @end
 
 @implementation TransitionViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor primaryColor];
+    self.mageLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.text = @"\U0000f0d0";
+    
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 @end

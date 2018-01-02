@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
+@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL allowLogin;
 @property (nonatomic) BOOL loginFailure;
@@ -57,8 +59,9 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor primaryColor];
-    self.loginButton.backgroundColor = [UIColor darkerPrimary];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.loginButton.backgroundColor = [UIColor primaryColor];
+    
     [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -67,6 +70,17 @@
     tap.delegate = self;
     
     [self.view addGestureRecognizer:tap];
+    self.mageLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.text = @"\U0000f0d0";
+    
+    self.usernameField.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.usernameField.layer.borderWidth = 1.0f;
+    self.usernameField.layer.cornerRadius = 5.0f;
+    
+    self.passwordField.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.passwordField.layer.borderWidth = 1.0f;
+    self.passwordField.layer.cornerRadius = 5.0f;
     
     self.passwordFont = self.passwordField.font;
 }

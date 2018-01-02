@@ -31,9 +31,9 @@ BOOL eventsFetched = NO;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor primaryColor];
-    self.loadingView.backgroundColor = [UIColor primaryColor];
-    self.actionButton.backgroundColor = [UIColor darkerPrimary];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.loadingView.backgroundColor = [UIColor whiteColor];
+    self.actionButton.backgroundColor = [UIColor primaryColor];
     [self.actionButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
@@ -84,7 +84,7 @@ BOOL eventsFetched = NO;
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
         messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
-        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.textColor = [UIColor primaryColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];

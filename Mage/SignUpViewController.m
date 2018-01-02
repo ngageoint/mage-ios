@@ -41,6 +41,8 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
+@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 
 @end
 
@@ -61,11 +63,22 @@
     
     self.zxcvbn = [[DBZxcvbn alloc] init];
     
-    self.view.backgroundColor = [UIColor primaryColor];
-    self.cancelButton.backgroundColor = [UIColor darkerPrimary];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.cancelButton.backgroundColor = [UIColor primaryColor];
     [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.signupButton.backgroundColor = [UIColor darkerPrimary];
+    self.signupButton.backgroundColor = [UIColor primaryColor];
     [self.signupButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    
+    self.mageLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.text = @"\U0000f0d0";
+    
+    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.password.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.username.layer.borderWidth = self.password.layer.borderWidth = self.displayName.layer.borderWidth = self.passwordConfirm.layer.borderWidth = self.password.layer.borderWidth = self.email.layer.borderWidth = self.phone.layer.borderWidth = 1.0f;
+    self.username.layer.cornerRadius = self.password.layer.cornerRadius = self.displayName.layer.cornerRadius = self.passwordConfirm.layer.cornerRadius = self.password.layer.cornerRadius = self.email.layer.cornerRadius = self.phone.layer.cornerRadius  = 5.0f;
+    
+    self.mageVersion.textColor = [UIColor primaryColor];
+    self.mageServerURL.titleLabel.textColor = [UIColor primaryColor];
     
     self.password.delegate = self;
     
@@ -119,34 +132,33 @@
         switch (passwordStrength.score) {
             case 0:
                 // weak
-                
                 self.passwordStrengthLabel.text = @"Weak";
-                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1 green:.36 blue:.36 alpha:1];
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(244.0/255.0) green:(67.0/255.0) blue:(54.0/255.0) alpha:1];
                 break;
             case 1:
                 // fair
                 self.passwordStrengthLabel.text = @"Fair";
-                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor orangeColor];
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
                 
                 break;
             case 2:
                 // good
                 self.passwordStrengthLabel.text = @"Good";
-                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor yellowColor];
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
                 
                 break;
                 
             case 3:
                 // strong
                 self.passwordStrengthLabel.text = @"Strong";
-                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(84.0/255.0) green:(199.0/255.0) blue:(252.0/255.0) alpha:1.0];
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
                 
                 break;
                 
             case 4:
                 // excell
                 self.passwordStrengthLabel.text = @"Excellent";
-                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor greenColor];
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
                 
                 break;
         }

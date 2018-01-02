@@ -202,7 +202,7 @@
             messageLabel.text = @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         }
         
-        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.textColor = [UIColor primaryColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:14];
@@ -234,10 +234,10 @@
     [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
     [view addSubview:label];
     UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
-    [bottomBorder setBackgroundColor:[UIColor lightGrayColor]];
+    [bottomBorder setBackgroundColor:[UIColor primaryColor]];
     [view addSubview:bottomBorder];
     
-    [view setBackgroundColor:[UIColor lighterPrimary]];
+    [view setBackgroundColor:[UIColor primaryColor]];
     return view;
 }
 
