@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *errorStatus;
 @property (strong, nonatomic) id<ServerURLDelegate> delegate;
 @property (strong, nonatomic) NSString *error;
+@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @end
 
 @implementation ServerURLController
@@ -41,11 +43,19 @@
 }
 
 - (void) viewDidLoad {
-    self.view.backgroundColor = [UIColor primaryColor];
-    self.cancelButton.backgroundColor = [UIColor darkerPrimary];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.cancelButton.backgroundColor = [UIColor primaryColor];
     [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.okButton.backgroundColor = [UIColor darkerPrimary];
+    self.okButton.backgroundColor = [UIColor primaryColor];
     [self.okButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    
+    self.mageLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.text = @"\U0000f0d0";
+    
+    self.serverURL.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.serverURL.layer.borderWidth = 1.0f;
+    self.serverURL.layer.cornerRadius = 5.0f;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
