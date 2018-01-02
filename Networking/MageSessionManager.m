@@ -107,7 +107,7 @@ static MageSessionManager *managerSingleton = nil;
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
         // token expired
-        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] safeContainsString:@"login"] && ![[request.URL path] safeContainsString:@"devices"]) ) {
+        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] safeContainsString:@"login"] && ![[request.URL path] safeContainsString:@"devices"] && ![[request.URL path] safeContainsString:@"password"]) ) {
             [[UserUtility singleton] expireToken];
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
         }
