@@ -16,8 +16,9 @@
 #import <ServerAuthentication.h>
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "UIColor+UIColor_Mage.h"
+#import <DBZxcvbn.h>
 
-@interface SignUpViewController ()
+@interface SignUpViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *displayName;
 @property (weak, nonatomic) IBOutlet UITextField *username;
@@ -37,6 +38,9 @@
 @property (strong, nonatomic) id<SignUpDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
+@property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
+@property (strong, nonatomic) DBZxcvbn *zxcvbn;
 
 @end
 
@@ -55,11 +59,15 @@
     
     [self setupAuthentication];
     
+    self.zxcvbn = [[DBZxcvbn alloc] init];
+    
     self.view.backgroundColor = [UIColor primaryColor];
     self.cancelButton.backgroundColor = [UIColor darkerPrimary];
     [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     self.signupButton.backgroundColor = [UIColor darkerPrimary];
     [self.signupButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    
+    self.password.delegate = self;
     
     self.googleSignInButton.style = kGIDSignInButtonStyleWide;
 
@@ -103,6 +111,45 @@
         }
         
         return NO;
+    } else if (textField == _password) {
+        NSString *password = [self.password.text stringByReplacingCharactersInRange:range withString:string];
+        NSArray *userInputs = @[];
+        DBResult *passwordStrength = [self.zxcvbn passwordStrength:password userInputs:userInputs];
+        [self.passwordStrengthBar setProgress:(1+passwordStrength.score)/5.0];
+        switch (passwordStrength.score) {
+            case 0:
+                // weak
+                
+                self.passwordStrengthLabel.text = @"Weak";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1 green:.36 blue:.36 alpha:1];
+                break;
+            case 1:
+                // fair
+                self.passwordStrengthLabel.text = @"Fair";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor orangeColor];
+                
+                break;
+            case 2:
+                // good
+                self.passwordStrengthLabel.text = @"Good";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor yellowColor];
+                
+                break;
+                
+            case 3:
+                // strong
+                self.passwordStrengthLabel.text = @"Strong";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(84.0/255.0) green:(199.0/255.0) blue:(252.0/255.0) alpha:1.0];
+                
+                break;
+                
+            case 4:
+                // excell
+                self.passwordStrengthLabel.text = @"Excellent";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor greenColor];
+                
+                break;
+        }
     }
     return YES;
 }

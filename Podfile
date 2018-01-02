@@ -14,4 +14,5 @@ target 'MAGE' do
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
     pod 'KTCenterFlowLayout'
+    pod 'zxcvbn-ios'
 end

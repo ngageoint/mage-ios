@@ -1590,7 +1590,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		9234FE93B973ED1E145F6F5B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1685,6 +1685,8 @@
 				"${PODS_ROOT}/tuneup_js/test_runner/run",
 				"${PODS_ROOT}/tuneup_js/test_runner/xunit_output.rb",
 				"$PODS_CONFIGURATION_BUILD_DIR/wkb-ios/WKB.bundle",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

@@ -13,8 +13,10 @@
 #import <ServerAuthentication.h>
 #import <MageSessionManager.h>
 #import "AppDelegate.h"
+#import <User.h>
+#import <DBZxcvbn.h>
 
-@interface ChangePasswordViewController () <ChangePasswordDelegate>
+@interface ChangePasswordViewController () <ChangePasswordDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *currentPasswordView;
 @property (weak, nonatomic) IBOutlet UINextField *usernameField;
@@ -31,10 +33,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *changeButton;
 @property (weak, nonatomic) IBOutlet UIView *informationView;
 @property (weak, nonatomic) IBOutlet UILabel *informationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
+@property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loggedIn;
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
+@property (strong, nonatomic) DBZxcvbn *zxcvbn;
 
 @end
 
@@ -51,14 +56,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    self.zxcvbn = [[DBZxcvbn alloc] init];
+
     self.view.backgroundColor = [UIColor primaryColor];
     self.cancelButton.backgroundColor = [UIColor darkerPrimary];
     [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     self.changeButton.backgroundColor = [UIColor darkerPrimary];
     [self.changeButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     
-    self.currentPasswordView.hidden = self.loggedIn;
+    self.passwordField.delegate = self;
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
@@ -77,7 +84,48 @@
     }
     
     return YES;
-    
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *password = [self.passwordField.text stringByReplacingCharactersInRange:range withString:string];
+    NSArray *userInputs = @[self.usernameField.text, self.currentPasswordField.text];
+    DBResult *passwordStrength = [self.zxcvbn passwordStrength:password userInputs:userInputs];
+    [self.passwordStrengthBar setProgress:(1+passwordStrength.score)/5.0];
+    switch (passwordStrength.score) {
+        case 0:
+            // weak
+            
+            self.passwordStrengthLabel.text = @"Weak";
+            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1 green:.36 blue:.36 alpha:1];
+            break;
+        case 1:
+            // fair
+            self.passwordStrengthLabel.text = @"Fair";
+            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor orangeColor];
+
+            break;
+        case 2:
+            // good
+            self.passwordStrengthLabel.text = @"Good";
+            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor yellowColor];
+
+            break;
+            
+        case 3:
+            // strong
+            self.passwordStrengthLabel.text = @"Strong";
+            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(84.0/255.0) green:(199.0/255.0) blue:(252.0/255.0) alpha:1.0];
+
+            break;
+            
+        case 4:
+            // excell
+            self.passwordStrengthLabel.text = @"Excellent";
+            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor greenColor];
+
+            break;
+    }
+    return YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -86,7 +134,6 @@
     [self.mageServerURL setTitle:[url absoluteString] forState:UIControlStateNormal];
     
     self.changePasswordView.hidden = YES;
-    self.currentPasswordView.hidden = YES;
     self.informationView.hidden = NO;
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -94,9 +141,11 @@
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL: url
     success:^(MageServer *mageServer) {
-        self.currentPasswordView.hidden = weakSelf.loggedIn;
-        self.changePasswordView.hidden = NO;
-        self.informationView.hidden = YES;
+        weakSelf.usernameField.enabled = !weakSelf.loggedIn;
+        User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        weakSelf.usernameField.text = user.username;
+        weakSelf.changePasswordView.hidden = NO;
+        weakSelf.informationView.hidden = YES;
     } failure:^(NSError *error) {
         NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to contact the MAGE server"
@@ -164,15 +213,13 @@
 
 - (IBAction)changeButtonTapped:(id)sender {
     NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
-    if (!self.loggedIn) {
-        if ([self.usernameField.text length] == 0) {
-            [self markFieldError:self.usernameField];
-            [requiredFields addObject:@"Username"];
-        }
-        if ([self.currentPasswordField.text length] == 0) {
-            [self markFieldError:self.currentPasswordField];
-            [requiredFields addObject:@"Current Password"];
-        }
+    if ([self.usernameField.text length] == 0) {
+        [self markFieldError:self.usernameField];
+        [requiredFields addObject:@"Username"];
+    }
+    if ([self.currentPasswordField.text length] == 0) {
+        [self markFieldError:self.currentPasswordField];
+        [requiredFields addObject:@"Current Password"];
     }
     if ([self.passwordField.text length] == 0) {
         [self markFieldError:self.passwordField];
@@ -192,17 +239,27 @@
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
+    }  else if (![self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Password cannot be the same as the current password"
+                                     message:@"Please choose a new password."
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
     } else {
         // delegate signup
         
         // All fields validated
         
         NSDictionary *parameters = @{
-                                     @"password": [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
-                                     @"passwordconfirm": [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                     @"username": [self.usernameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+                                     @"password": [self.currentPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+                                     @"newPassword": [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+                                     @"newPasswordConfirm": [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
                                      };
         
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself/password"]];
         [self.delegate changePasswordWithParameters:parameters atURL:url];
     }
 }
