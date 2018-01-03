@@ -233,7 +233,7 @@
 		F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */; };
 		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
-		F7ED5CF51FFC0742007BD768 /* Gondola_SD.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF41FFC06E4007BD768 /* Gondola_SD.ttf */; };
+		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
@@ -650,7 +650,7 @@
 		F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
 		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
-		F7ED5CF41FFC06E4007BD768 /* Gondola_SD.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Gondola_SD.ttf; sourceTree = "<group>"; };
+		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -826,7 +826,7 @@
 		2FD853771BE1564F00602CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F7ED5CF41FFC06E4007BD768 /* Gondola_SD.ttf */,
+				F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */,
 				F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */,
 				2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */,
 			);
@@ -1505,7 +1505,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7ED5CF51FFC0742007BD768 /* Gondola_SD.ttf in Resources */,
+				F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */,
 				F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */,
 				F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */,
 				F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */,

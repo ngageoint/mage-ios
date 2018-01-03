@@ -7,7 +7,7 @@
 //
 
 #import "GoogleSignUpViewController.h"
-
+#import "UIColor+UIColor_Mage.h"
 
 @interface GoogleSignUpViewController ()
 
@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
 @property (strong, nonatomic) id<SignUpDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 
 @end
 
@@ -44,6 +46,14 @@
     self.profileImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[self.googleUser.profile imageURLWithDimension:42]]];
     self.displayNameField.text = self.googleUser.profile.name;
     self.emailField.text = self.googleUser.profile.email;
+    
+    self.mageLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.textColor = [UIColor primaryColor];
+    self.wandLabel.text = @"\U0000f0d0";
+    
+    self.displayNameField.layer.borderColor = self.emailField.layer.borderColor = self.phoneField.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.displayNameField.layer.borderWidth = self.emailField.layer.borderWidth = self.phoneField.layer.borderWidth = 1.0f;
+    self.displayNameField.layer.cornerRadius = self.emailField.layer.cornerRadius = self.phoneField.layer.cornerRadius = 5.0f;
     
     [super viewWillAppear:animated];
     NSURL *url = [MageServer baseURL];
