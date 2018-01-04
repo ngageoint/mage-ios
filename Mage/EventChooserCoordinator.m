@@ -39,6 +39,16 @@
 }
 
 - (void) start {
+    
+    if ([Server currentEventId] != nil) {
+        Event *event = [Event getEventById:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.eventToSegueTo = event;
+        [self.eventController dismissViewControllerAnimated:NO completion:nil];
+        [self.delegate eventChoosen:self.eventToSegueTo];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        return;
+    }
+    
     self.eventDataSource = [[EventTableDataSource alloc] init];
     self.eventController = [[EventChooserController alloc] initWithDataSource:self.eventDataSource andDelegate:self];
     [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
@@ -48,10 +58,6 @@
 }
 
 - (void) didSelectEvent:(Event *)event {
-//    if (!checkForms) {
-//        [self.delegate didSelectEvent:eventToSegueTo];
-//    }
-    
     // first ensure the form for that event was pulled or else we will just wait for the form fetched notification
     self.eventToSegueTo = event;
     if ([self.formsFetched containsObject:event.remoteId]) {
