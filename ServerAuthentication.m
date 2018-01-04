@@ -62,6 +62,12 @@
     
     NSURL *URL = [NSURL URLWithString:url];
     NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+        NSDictionary *api = [response objectForKey:@"api"];
+        BOOL serverCompatible = [MageServer checkServerCompatibility:api];
+        if (!serverCompatible) {
+            NSError *error = [MageServer generateServerCompatibilityError:api];
+            return complete(AUTHENTICATION_ERROR, error.localizedDescription);
+        }
         NSDictionary *userJson = [response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         

@@ -36,6 +36,24 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     return [strategies objectForKey:@"google"] != nil;
 }
 
++ (BOOL) checkServerCompatibility: (NSDictionary *) api {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
+    NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
+    
+    NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
+    NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
+    
+    [defaults synchronize];
+    
+    return (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion);
+}
+
++ (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
+    return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
+}
+
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
     
     if (!url || !url.scheme || !url.host) {
@@ -58,15 +76,10 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     NSURLSessionDataTask *task = [manager GET_TASK:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
-        NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
-        NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
-        
-        NSNumber *serverMajorVersion = [response valueForKeyPath:@"version.major"];
-        NSNumber *serverMinorVersion = [response valueForKeyPath:@"version.minor"];
-        
         [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+        [defaults setObject:[response valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
         
         NSMutableDictionary *authenticationModules = [NSMutableDictionary dictionaryWithObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:LOCAL]];
         NSDictionary *authenticationStrategies = [response valueForKeyPath:@"authenticationStrategies"];
@@ -83,13 +96,13 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         
         [defaults synchronize];
         
-        if (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion) {
+        if ([MageServer checkServerCompatibility:response]) {
             [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
             [defaults synchronize];
             success(server);
             return;
         } else {
-            failure([[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [response valueForKeyPath:@"version.major"], [response valueForKeyPath:@"version.minor"], [response valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]]);
+            failure([MageServer generateServerCompatibilityError:response]);
             return;
         }
     } failure:^(NSURLSessionTask *operation, NSError *error) {
