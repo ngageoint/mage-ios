@@ -110,6 +110,8 @@
         // Don't pin drop if annotation is user location
         if ([aV.annotation isKindOfClass:[MKUserLocation class]]) {
             continue;
+        } else if ([aV.annotation isKindOfClass:[AreaAnnotation class]]) {
+            continue;
         }
         
         // Check if current annotation is inside visible map rect, else go to next one
