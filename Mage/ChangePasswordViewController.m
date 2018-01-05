@@ -248,7 +248,7 @@
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
-    }  else if (![self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
+    }  else if ([self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Password cannot be the same as the current password"
                                      message:@"Please choose a new password."
