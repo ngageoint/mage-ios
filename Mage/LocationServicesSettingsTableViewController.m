@@ -133,6 +133,15 @@
     return nil;
 }
 
+-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    }
+    
+    return nil;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

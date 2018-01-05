@@ -373,7 +373,7 @@
         <!--Location Services-->
         <scene sceneID="Y4e-uo-DxQ">
             <objects>
-                <tableViewController storyboardIdentifier="locationServicesSettings" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xb7-5U-btP" customClass="LocationServicesSettingsTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="locationServicesSettings" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xb7-5U-btP" customClass="LocationServicesSettingsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Xy0-dy-oe9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1224,6 +1224,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="GiJ-c7-e1p"/>
-        <segue reference="bXu-jj-LCW"/>
+        <segue reference="kwf-Ok-wOb"/>
     </inferredMetricsTieBreakers>
 </document>
