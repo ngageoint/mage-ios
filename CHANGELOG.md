@@ -20,6 +20,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Observation local notification support
 * Hook up new mage-ios-sdk background upload service for attachments.
 * iOS 11 support
+* Users can change their password from the app
 
 ##### Bug Fixes
 * Save videos to local MAGE app directory.  This will prevent deletion from gallery from dissociating the attachment from the observation.
