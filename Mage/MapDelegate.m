@@ -104,47 +104,59 @@
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
     MKAnnotationView *aV;
-    
+
     for (aV in views) {
-        
+
         // Don't pin drop if annotation is user location
         if ([aV.annotation isKindOfClass:[MKUserLocation class]]) {
             continue;
         } else if ([aV.annotation isKindOfClass:[AreaAnnotation class]]) {
             continue;
         }
-        
+
         // Check if current annotation is inside visible map rect, else go to next one
         MKMapPoint point =  MKMapPointForCoordinate(aV.annotation.coordinate);
         if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
             continue;
         }
-        
-        CGRect endFrame = aV.frame;
-        
-        // Move annotation out of view
-        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - mapView.frame.size.height, aV.frame.size.width, aV.frame.size.height);
-        
-        // Animate drop
-        [UIView animateWithDuration:0.5 delay:0.04*[views indexOfObject:aV] options: UIViewAnimationOptionCurveLinear animations:^{
-            
-            aV.frame = endFrame;
-            
-            // Animate squash
-        }completion:^(BOOL finished){
-            if (finished) {
-                [UIView animateWithDuration:0.05 animations:^{
-                    aV.transform = CGAffineTransformMakeScale(1.0, 0.8);
+
+        if ([aV.annotation isKindOfClass:[ObservationAnnotation class]]) {
+            ObservationAnnotation *obsAnn = (ObservationAnnotation *)aV.annotation;
+
+            if (obsAnn.selected) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [mapView selectAnnotation:obsAnn animated:NO];
+                });
+            } else {
+                CGRect endFrame = aV.frame;
+                
+                // Move annotation out of view
+                aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - mapView.frame.size.height, aV.frame.size.width, aV.frame.size.height);
+                
+                // Animate drop
+                [UIView animateWithDuration:0.5 delay:0.04*[views indexOfObject:aV] options: UIViewAnimationOptionCurveLinear animations:^{
                     
+                    aV.frame = endFrame;
+                    
+                    // Animate squash
                 }completion:^(BOOL finished){
                     if (finished) {
-                        [UIView animateWithDuration:0.1 animations:^{
-                            aV.transform = CGAffineTransformIdentity;
+                        [UIView animateWithDuration:0.05 animations:^{
+                            aV.transform = CGAffineTransformMakeScale(1.0, 0.8);
+                            
+                        }completion:^(BOOL finished){
+                            if (finished) {
+                                [UIView animateWithDuration:0.1 animations:^{
+                                    aV.transform = CGAffineTransformIdentity;
+                                    
+                                }];
+                            }
                         }];
                     }
                 }];
             }
-        }];
+            return;
+        }
     }
 }
 
@@ -941,14 +953,10 @@
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView];
-        annotationView.layer.zPosition = [observationAnnotation.observation.timestamp timeIntervalSinceReferenceDate];
         annotationView.canShowCallout = self.canShowObservationCallout;
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
-        if (self.previewDelegate) {
-            [self.previewDelegate registerForPreviewingWithDelegate:self.previewDelegate sourceView:annotationView];
-        }
         return annotationView;
     } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
         GPSLocationAnnotation *gpsAnnotation = annotation;
@@ -966,7 +974,6 @@
         [pinView setPinTintColor:[UIColor redColor]];
         return pinView;
     }
-    
     
     return nil;
 }

@@ -96,6 +96,10 @@
 
 -(void) setShapeAnnotation: (MapAnnotation *) shapeAnnotation withShapeObservation: (MapShapeObservation *) shapeObservation {
     [self clearShapeAnnotation];
+    if ([shapeAnnotation isKindOfClass:[ObservationAnnotation class]]) {
+        ObservationAnnotation *annotation = (ObservationAnnotation *) shapeAnnotation;
+        annotation.selected = YES;
+    }
     _shapeAnnotation = shapeAnnotation;
     _shapeObservation = shapeObservation;
 }

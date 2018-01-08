@@ -18,6 +18,8 @@
 
 @property (nonatomic) Observation *observation;
 
+@property (nonatomic) BOOL selected;
+
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
 
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry;
