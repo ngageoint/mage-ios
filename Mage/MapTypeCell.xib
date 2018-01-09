@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MapTypeCell" id="6bp-2Y-SRd" customClass="MapTypeTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6bp-2Y-SRd" id="TrC-3X-2nb">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="eBk-bU-92b">
+                        <rect key="frame" x="16" y="10" width="343" height="24"/>
+                        <segments>
+                            <segment title="Standard"/>
+                            <segment title="Satellite"/>
+                            <segment title="Hybrid"/>
+                        </segments>
+                        <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <connections>
+                            <action selector="onMapTypeChanged:" destination="6bp-2Y-SRd" eventType="valueChanged" id="fKv-y5-HkQ"/>
+                        </connections>
+                    </segmentedControl>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="eBk-bU-92b" firstAttribute="leading" secondItem="TrC-3X-2nb" secondAttribute="leadingMargin" id="AcG-Nt-usY"/>
+                    <constraint firstItem="eBk-bU-92b" firstAttribute="bottom" secondItem="TrC-3X-2nb" secondAttribute="bottomMargin" id="FXc-5T-AxF"/>
+                    <constraint firstItem="eBk-bU-92b" firstAttribute="top" secondItem="TrC-3X-2nb" secondAttribute="topMargin" constant="-1" id="WrU-yF-8Qm"/>
+                    <constraint firstItem="eBk-bU-92b" firstAttribute="trailing" secondItem="TrC-3X-2nb" secondAttribute="trailingMargin" id="jb2-d8-UoD"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="mapTypeSegmentedControl" destination="eBk-bU-92b" id="5hV-uI-fqE"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

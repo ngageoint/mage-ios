@@ -25,6 +25,11 @@
 
 @implementation OfflineMapTableViewController
 
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    return self;
+}
+
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -95,13 +100,15 @@
     UITableViewCell *cell = nil;
     
     if (self.processingCaches.count > 0 && [indexPath section] == 0) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"processingOfflineMapCell" forIndexPath:indexPath];
-        UILabel *textLabel = (UILabel *)[cell viewWithTag:100];
-        textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
-        
-        UIActivityIndicatorView *activityIndicator = (UIActivityIndicatorView *) [cell viewWithTag:200];
-        activityIndicator.hidden = NO;
+        cell = [tableView dequeueReusableCellWithIdentifier:@"processingOfflineMapCell"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"processingOfflineMapCell"];
+        }
+        cell.textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [activityIndicator setFrame:CGRectZero];
         [activityIndicator startAnimating];
+        cell.accessoryView = activityIndicator;
     } else {
         CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
         
@@ -112,35 +119,39 @@
         }
         
         if([cacheOverlay isChild]){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"childCacheOverlayCell" forIndexPath:indexPath];
-            ChildCacheOverlayTableCell * childCacheOverlayCell = (ChildCacheOverlayTableCell *) cell;
-            
-            [childCacheOverlayCell.name setText:[cacheOverlay getName]];
-            childCacheOverlayCell.active.on = cacheOverlay.enabled;
-            [childCacheOverlayCell.info setText:[cacheOverlay getInfo]];
-            
-            if(cellImage != nil){
-                [childCacheOverlayCell.tableType setImage:cellImage];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"childCacheOverlayCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"childCacheOverlayCell"];
+            }
+            cell.textLabel.text = [cacheOverlay getName];
+            cell.detailTextLabel.text = [cacheOverlay getInfo];
+            if (cellImage != nil) {
+                [cell.imageView setImage:cellImage];
             }
             
-            [childCacheOverlayCell.active setOverlay:cacheOverlay];
-            
-        }else{
-            cell = [tableView dequeueReusableCellWithIdentifier:@"cacheOverlayCell" forIndexPath:indexPath];
-            CacheOverlayTableCell * cacheOverlayCell = (CacheOverlayTableCell *) cell;
-            
-            [cacheOverlayCell.name setText:[cacheOverlay getName]];
-            cacheOverlayCell.active.on = cacheOverlay.enabled;
-            
-            if(cellImage != nil){
-                [cacheOverlayCell.tableType setImage:cellImage];
+            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
+            cacheSwitch.on = cacheOverlay.enabled;
+            cacheSwitch.overlay = cacheOverlay;
+            [cacheSwitch addTarget:self action:@selector(childActiveChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = cacheSwitch;
+        } else {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"cacheOverlayCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
+            }
+            cell.textLabel.text = [cacheOverlay getName];
+            if (cellImage != nil) {
+                [cell.imageView setImage:cellImage];
             }
             
-            [cacheOverlayCell.active setOverlay:cacheOverlay];
+            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
+            cacheSwitch.on = cacheOverlay.enabled;
+            cacheSwitch.overlay = cacheOverlay;
+            [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = cacheSwitch;
         }
-        
     }
-    cell.layoutMargins = UIEdgeInsetsZero;
+//    cell.layoutMargins = UIEdgeInsetsZero;
     
     return cell;
 }
