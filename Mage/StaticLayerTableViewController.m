@@ -20,6 +20,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
     
@@ -70,15 +71,25 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    StaticLayerTableViewCell *cell = (StaticLayerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"staticLayerCell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"staticLayerCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"staticLayerCell"];
+    }
+    
     StaticLayer *layer = [self layerForRow:indexPath.row];
     
-    cell.layerNameLabel.text = layer.name;
-    cell.loadingIndicator.hidden = [layer.loaded boolValue];
-    cell.featureCountLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[layer.data objectForKey:@"features"] count]];
-    cell.selected = [self.selectedStaticLayers containsObject:layer.remoteId];
-    cell.accessoryType = [self.selectedStaticLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.textLabel.text = layer.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[layer.data objectForKey:@"features"] count]];
     
+    if (![layer.loaded boolValue]) {
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [activityIndicator setFrame:CGRectZero];
+        [activityIndicator startAnimating];
+        cell.accessoryView = activityIndicator;
+    } else {
+        cell.accessoryView = nil;
+        cell.accessoryType = [self.selectedStaticLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    }
     return cell;
 }
 
@@ -102,6 +113,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedStaticLayers allObjects]} forKey:@"selectedStaticLayers"];
     [defaults synchronize];
+    
+    [tableView reloadData];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

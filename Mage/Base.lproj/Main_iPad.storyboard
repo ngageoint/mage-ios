@@ -63,6 +63,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="mapSettingsTapped:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="587-dB-o4b"/>
                                             <segue destination="eCr-Py-gK2" kind="popover" identifier="MapSettingsSegue" popoverAnchorView="y8T-l1-f2h" id="HTT-Lb-5Lf">
                                                 <popoverArrowDirection key="popoverArrowDirection"/>
                                             </segue>

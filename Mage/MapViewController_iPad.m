@@ -16,6 +16,7 @@
 #import "MeViewController.h"
 #import "MageOfflineObservationManager.h"
 #import "AppDelegate.h"
+#import "MapSettingsCoordinator.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -114,6 +115,12 @@
     } else {
         [super prepareForSegue:segue sender:sender];
     }
+}
+
+- (IBAction) mapSettingsTapped:(id)sender {
+    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender];
+    [self.childCoordinators addObject:settingsCoordinator];
+    [settingsCoordinator start];
 }
 
 -(void) calloutTapped:(id) calloutItem {

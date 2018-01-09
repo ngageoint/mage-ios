@@ -172,7 +172,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="gx9-Hp-muj" kind="show" id="18h-3W-wYE"/>
+                                            <action selector="mapSettingsButtonTapped:" destination="FWQ-JY-o6g" eventType="touchUpInside" id="fKe-3a-I5s"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y7c-LE-Qmn">
@@ -911,7 +911,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kER-Hr-0Bf"/>
-        <segue reference="t54-XE-2TN"/>
+        <segue reference="77U-TW-S4M"/>
+        <segue reference="2y0-bF-fmy"/>
     </inferredMetricsTieBreakers>
 </document>
