@@ -31,6 +31,7 @@
 		04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96561EBB60AC00B6AD8D /* MapUtils.m */; };
 		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */; };
+		1142195726FC2F9F621DDACB /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F226B5AE77A2F7393F18D7BE /* libPods-MAGETests.a */; };
 		17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */; };
 		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
@@ -89,6 +90,8 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
 		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
+		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
+		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -234,6 +237,7 @@
 		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
+		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
@@ -251,6 +255,16 @@
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F7ED5D2920052161007BD768 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F7A94D6518AD9CB000CB9EE0;
+			remoteInfo = MAGE;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		043FF11E1C22F643000CA07F /* CacheOverlays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlays.h; sourceTree = "<group>"; };
@@ -303,6 +317,7 @@
 		04F833FE1ED5C3B200B5FE1E /* MapShapePointAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapShapePointAnnotationView.h; path = Map/MapShapePointAnnotationView.h; sourceTree = "<group>"; };
 		04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointAnnotationView.m; path = Map/MapShapePointAnnotationView.m; sourceTree = "<group>"; };
 		04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnnotationDragCallback.h; path = Map/AnnotationDragCallback.h; sourceTree = "<group>"; };
+		08D04A253122A8C975A9380A /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate.h; sourceTree = "<group>"; };
 		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
@@ -402,6 +417,7 @@
 		2FFDDB0819D5D7530012C6A7 /* MageTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageTabBarController.m; sourceTree = "<group>"; };
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
+		4205A7C538DF0A06EC11850F /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C2A38E719744FBC00E7470A /* LocationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationTableViewController.h; sourceTree = "<group>"; };
 		4C2A38E819744FBC00E7470A /* LocationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewController.m; sourceTree = "<group>"; };
 		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
@@ -418,6 +434,8 @@
 		5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A5393FD867E50564035F8C /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
+		F226B5AE77A2F7393F18D7BE /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
 		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
@@ -499,6 +517,7 @@
 		F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
+		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
 		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
@@ -651,6 +670,9 @@
 		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
+		F7ED5D2420052161007BD768 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -694,6 +716,14 @@
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				17C802571AA2B6246C476741 /* libPods-MAGE.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7ED5D2120052161007BD768 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1142195726FC2F9F621DDACB /* libPods-MAGETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,6 +1037,8 @@
 				2C4F3697CB3D72D34C9086F1 /* Pods-MAGE.release.xcconfig */,
 				5C2D08A281AE7290CAB318DE /* Pods-MAGE.debug.xcconfig */,
 				F1A5393FD867E50564035F8C /* Pods-MAGE.debug.xcconfig */,
+				08D04A253122A8C975A9380A /* Pods-MAGETests.debug.xcconfig */,
+				4205A7C538DF0A06EC11850F /* Pods-MAGETests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1206,6 +1238,15 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		F7614DA820068FF300676366 /* responses */ = {
+			isa = PBXGroup;
+			children = (
+				F7614DA92006902000676366 /* apiSuccess.json */,
+				F70039452006CB0700E6E660 /* apiFail.json */,
+			);
+			path = responses;
+			sourceTree = SOURCE_ROOT;
+		};
 		F76949131AA6434A00CB680B /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -1249,6 +1290,7 @@
 			children = (
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				2FD853771BE1564F00602CEA /* Resources */,
+				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
 				2FDBB3021C65940E000C6C2F /* Scripts */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
@@ -1260,6 +1302,7 @@
 			isa = PBXGroup;
 			children = (
 				F7A94D6618AD9CB000CB9EE0 /* MAGE.app */,
+				F7ED5D2420052161007BD768 /* MAGETests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1279,6 +1322,7 @@
 				F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */,
 				F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */,
 				94C119055BEA3ECB1088EC07 /* libPods-MAGE.a */,
+				F226B5AE77A2F7393F18D7BE /* libPods-MAGETests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1303,7 +1347,6 @@
 				4C546FE9195A27D1000CF230 /* Map */,
 				2F389C931DCD24E200F05C95 /* Views */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
-				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
 				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
 				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
@@ -1346,6 +1389,9 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F7ED5D2820052161007BD768 /* Info.plist */,
+				F7614DA820068FF300676366 /* responses */,
+				F7ED5D2E20052248007BD768 /* AuthenticationTests.m */,
 				F7FAD7901A65887A00E7F224 /* viewTests */,
 				F7A94D9418AD9CB000CB9EE0 /* MageTests.m */,
 				F7A94D8F18AD9CB000CB9EE0 /* Supporting Files */,
@@ -1454,6 +1500,27 @@
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F7ED5D2320052161007BD768 /* MAGETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7ED5D2D20052161007BD768 /* Build configuration list for PBXNativeTarget "MAGETests" */;
+			buildPhases = (
+				2909D08886D0AE2C28CCC61B /* [CP] Check Pods Manifest.lock */,
+				F7ED5D2020052161007BD768 /* Sources */,
+				F7ED5D2120052161007BD768 /* Frameworks */,
+				F7ED5D2220052161007BD768 /* Resources */,
+				22DC4212A7592F27AE0A75F7 /* [CP] Embed Pods Frameworks */,
+				20254404BC5F1CFAA44373A1 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F7ED5D2A20052161007BD768 /* PBXTargetDependency */,
+			);
+			name = MAGETests;
+			productName = MAGETests;
+			productReference = F7ED5D2420052161007BD768 /* MAGETests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1480,6 +1547,12 @@
 							};
 						};
 					};
+					F7ED5D2320052161007BD768 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = ZL8G5D9G2H;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F7A94D6518AD9CB000CB9EE0;
+					};
 				};
 			};
 			buildConfigurationList = F7A94D6118AD9CAF00CB9EE0 /* Build configuration list for PBXProject "MAGE" */;
@@ -1496,6 +1569,7 @@
 			projectRoot = "";
 			targets = (
 				F7A94D6518AD9CB000CB9EE0 /* MAGE */,
+				F7ED5D2320052161007BD768 /* MAGETests */,
 			);
 		};
 /* End PBXProject section */
@@ -1583,9 +1657,66 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F7ED5D2220052161007BD768 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
+				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		20254404BC5F1CFAA44373A1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		22DC4212A7592F27AE0A75F7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2909D08886D0AE2C28CCC61B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MAGETests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2F7AB0BF1D12EEF7006F99FC /* Set Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -1674,7 +1805,7 @@
 				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/geopackage-ios/GeoPackage.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"$PODS_CONFIGURATION_BUILD_DIR/mage-ios-sdk/MageSDK.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/tiff-ios/TIFF.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
@@ -1902,7 +2033,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F7ED5D2020052161007BD768 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F7ED5D2A20052161007BD768 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+			targetProxy = F7ED5D2920052161007BD768 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2F389C901DCD21D100F05C95 /* MapSettings.storyboard */ = {
@@ -2099,6 +2246,73 @@
 			};
 			name = Release;
 		};
+		F7ED5D2B20052161007BD768 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08D04A253122A8C975A9380A /* Pods-MAGETests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MAGETests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+			};
+			name = Debug;
+		};
+		F7ED5D2C20052161007BD768 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4205A7C538DF0A06EC11850F /* Pods-MAGETests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MAGETests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2116,6 +2330,15 @@
 			buildConfigurations = (
 				F7A94D9918AD9CB000CB9EE0 /* Debug */,
 				F7A94D9A18AD9CB000CB9EE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F7ED5D2D20052161007BD768 /* Build configuration list for PBXNativeTarget "MAGETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7ED5D2B20052161007BD768 /* Debug */,
+				F7ED5D2C20052161007BD768 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
