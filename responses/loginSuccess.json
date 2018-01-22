@@ -1,0 +1,54 @@
+{
+    "token":"TOKEN",
+    "expirationDate":"2018-01-16T04:00:16.059Z",
+    "user":{
+        "username":"test",
+        "active":true,
+        "userAgent":"USER_AGENT",
+        "displayName":"Test Test",
+        "createdAt":"2014-09-18T14:40:46.000Z",
+        "lastUpdated":"2018-01-12T17:33:39.349Z",
+        "email":"test@test.com",
+        "authentication":{
+            "type":"local"
+        },
+        "recentEventIds":[1],
+        "icon":{
+            "size":1749,
+            "contentType":"image/png",
+            "color":"#7300ff",
+            "text":"TE",
+            "type":"create"
+        },
+        "phones":[{
+                  "type":"Main",
+                  "number":"303-111-2222"
+                  }],
+        "id":"USERID",
+        "role":{
+            "name":"USER_ROLE",
+            "description":"User Role",
+            "permissions":["PERMISSION1"],
+            "id":"541aeee922e0bf9c2239735d"
+        },
+        "avatarUrl":"https://mage.geointservices.io/api/users/USERID/avatar",
+        "iconUrl":"https://mage.geointservices.io/api/users/USERID/icon"
+    },
+    "api":{
+        "name":"MAGE",
+        "description":"Geospatial situation awareness application",
+        "version":{
+            "major":5,
+            "minor":0,
+            "micro":0
+        },
+        "authenticationStrategies":{
+            "local":{
+                "passwordMinLength":14
+            }
+        },
+        "provision":{
+            "strategy":"uid"
+        }
+    }
+}

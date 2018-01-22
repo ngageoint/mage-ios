@@ -1,0 +1,18 @@
+language: objective-c
+osx_image: xcode9.2
+xcode_workspace: MAGE.xcworkspace
+xcode_scheme: MAGE
+xcode_sdk: iphonesimulator
+env:
+  global:
+    - "IOS11=\"platform=iOS Simulator,name=iPhone X,OS=11.2\""
+    - "IOS10=\"platform=iOS Simulator,name=iPhone 7,OS=10.3.1\""
+  matrix:
+    - DESTINATION="$IOS11"
+    - DESTINATION="$IOS10"
+before_install:
+  - gem install xcpretty
+script:
+  - set -o pipefail
+  - echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION"
+  - xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION" | xcpretty
