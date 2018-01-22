@@ -92,6 +92,8 @@
 		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
+		F7003948200D3FFA00E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
+		F7003949200D425400E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -436,6 +438,7 @@
 		F1A5393FD867E50564035F8C /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		F226B5AE77A2F7393F18D7BE /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
+		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
 		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
@@ -1243,6 +1246,7 @@
 			children = (
 				F7614DA92006902000676366 /* apiSuccess.json */,
 				F70039452006CB0700E6E660 /* apiFail.json */,
+				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1598,6 +1602,7 @@
 				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
+				F7003948200D3FFA00E6E660 /* loginSuccess.json in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
 				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
@@ -1661,6 +1666,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
 			);

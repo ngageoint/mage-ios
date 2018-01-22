@@ -13,6 +13,7 @@
 #import "AuthenticationCoordinator.h"
 #import "ServerURLController.h"
 #import "LoginViewController.h"
+#import "DisclaimerViewController.h"
 
 @interface ServerURLController ()
 @property (strong, nonatomic) NSString *error;
@@ -22,7 +23,22 @@
 @property (strong, nonatomic) NSString *urlController;
 @end
 
-@interface AuthenticationTests : XCTestCase <AuthenticationDelegate>
+@interface AuthenticationTests : XCTestCase
+
+@end
+
+@interface AuthenticationTestDelegate : NSObject
+
+@end
+
+@interface AuthenticationTestDelegate() <AuthenticationDelegate>
+
+@end
+
+@implementation AuthenticationTestDelegate
+
+-(void) authenticationSuccessful {
+}
 
 @end
 
@@ -39,10 +55,159 @@
     [OHHTTPStubs removeAllStubs];
 }
 
+- (void) testLoginWithRegisteredDevice {
+    NSString *baseUrlKey = @"baseServerUrl";
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    id delegatePartialMock = OCMPartialMock(delegate);
+    OCMExpect([delegatePartialMock authenticationSuccessful]);
+
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+
+    [coordinator start];
+
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        // response came back from the server and we went to the login screen
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        id<DisclaimerDelegate> disclaimerDelegate = (id<DisclaimerDelegate>)coordinator;
+
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"test", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
+            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                    statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+        }];
+
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+
+        OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+            [loginResponseArrived fulfill];
+            [disclaimerDelegate disclaimerAgree];
+            OCMVerifyAll(delegatePartialMock);
+        });
+
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            // login complete
+            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+        }];
+
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+
+            OCMVerifyAll(navControllerPartialMock);
+        }];
+
+    }];
+}
+
+- (void) testLoginFailWithRegisteredDevice {
+    NSString *baseUrlKey = @"baseServerUrl";
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    id delegatePartialMock = OCMPartialMock(delegate);
+    OCMExpect([delegatePartialMock authenticationSuccessful]);
+    
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+    
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+    
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [coordinator start];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"test", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+        
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+            response.statusCode = 401;
+            
+            return response;
+        }];
+        
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+        
+        OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
+        
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            // login complete
+            XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
+            [loginResponseArrived fulfill];
+        }];
+        
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+            
+            OCMVerifyAll(navControllerPartialMock);
+        }];
+        
+    }];
+}
 
 - (void)testSetURLSuccess {
     UINavigationController *navigationController = [[UINavigationController alloc]init];
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self];
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
@@ -70,8 +235,9 @@
     
     __block id serverUrlControllerMock;
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
-    
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self];
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -113,8 +279,9 @@
     
     __block id serverUrlControllerMock;
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
-    
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self];
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
         
@@ -142,10 +309,6 @@
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         OCMVerifyAll(navControllerPartialMock);
     }];
-}
-
-- (void)authenticationSuccessful {
-    
 }
 
 @end
