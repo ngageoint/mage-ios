@@ -40,24 +40,6 @@
     self.showPeopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
 }
 
-- (IBAction)onMapTypeChanged:(UISegmentedControl *) segmentedControl {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:segmentedControl.selectedSegmentIndex forKey:@"mapType"];
-    [defaults synchronize];
-}
-
-- (IBAction)onShowObservationsChanged:(UISwitch *) sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hideObservations"];
-    [defaults synchronize];
-}
-
-- (IBAction)onShowPeopleChanged:(UISwitch *) sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hidePeople"];
-    [defaults synchronize];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
@@ -141,7 +123,16 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 3) {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (indexPath.section == 1) {
+        UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
+        accessorySwitch.on = !accessorySwitch.on;
+        [self observationSwitchChanged:accessorySwitch];
+    } else if (indexPath.section == 2) {
+        UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
+        accessorySwitch.on = !accessorySwitch.on;
+        [self peopleSwitchChanged:accessorySwitch];
+    } else if (indexPath.section == 3) {
         [self.delegate staticLayersCellTapped];
     } else if (indexPath.section == 4) {
         [self.delegate offlineMapsCellTapped];
