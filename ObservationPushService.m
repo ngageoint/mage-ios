@@ -213,7 +213,17 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         } failure:^(NSError* error) {
             NSLog(@"Error submitting observation");
             // TODO check for 400
-
+            if (error == nil) {
+                NSLog(@"Error submitting observation, no error returned");
+                
+                [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+                
+                for (id<ObservationPushDelegate> delegate in self.delegates) {
+                    [delegate didPushObservation:observation success:NO error:error];
+                }
+                
+                return;
+            }
                         
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Observation *localObservation = [observation MR_inContext:localContext];
