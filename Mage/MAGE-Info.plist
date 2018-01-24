@@ -61,7 +61,7 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>MAGE uses the camera to take pictures and videos as observation attachments.</string>
@@ -69,10 +69,10 @@
 	<string>MAGE users your location to make observations where you are and to record your location history</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>MAGE uses the microphone to record audio while taking a video or capturing a voice recording.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MAGE uses the photo library to save photos/videos as well as attach already captured photos/videos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save photos/videos you take to the photo libarary so you can access them outside of MAGE.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MAGE uses the photo library to save photos/videos as well as attach already captured photos/videos.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Medium.ttf</string>

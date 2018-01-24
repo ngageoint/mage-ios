@@ -59,7 +59,7 @@
     [self.tableView setRowHeight:UITableViewAutomaticDimension];
     [self.tableView setEstimatedSectionHeaderHeight:20.0f];
     [self.tableView setSectionHeaderHeight:UITableViewAutomaticDimension];
-    [self.tableView setEstimatedSectionFooterHeight:CGFLOAT_MIN];
+    [self.tableView setEstimatedSectionFooterHeight:1.0];
     [self.tableView setSectionFooterHeight:UITableViewAutomaticDimension];
 }
 

@@ -3,13 +3,19 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.1 (TBD)
+
+## 2.0.2 (TBD)
 
 * TBD
 
 ##### Features
 
 ##### Bug Fixes
+
+## 2.0.1 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (01-24-2018)
+
+##### Bug Fixes
+* Fix for table layout in iOS 10
 
 ## 2.0 (https://github.com/ngageoint/mage-ios/releases/tag/2.0) (11-21-2017)
 

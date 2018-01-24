@@ -115,7 +115,8 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3 + [[self.observation.properties objectForKey:@"forms"] count];
+    NSUInteger formCount = [[self.observation.properties objectForKey:@"forms"] count];
+    return 3 + formCount;
 }
 
 - (NSString *) getCellTypeAtIndexPath:(NSIndexPath *) indexPath {

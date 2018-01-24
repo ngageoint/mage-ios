@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DELETE OBSERVATION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mxb-xZ-QcQ">
-                        <rect key="frame" x="108.5" y="10" width="159.5" height="20"/>
+                        <rect key="frame" x="108.5" y="11" width="159.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="1" green="0.0" blue="0.0198914904" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -40,8 +39,6 @@
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="Mxb-xZ-QcQ" secondAttribute="bottom" constant="-1" id="03I-JS-DPS"/>
-                    <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="top" secondItem="XTB-zB-Gbr" secondAttribute="topMargin" constant="-1" id="63R-Yk-lts"/>
                     <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="centerY" secondItem="XTB-zB-Gbr" secondAttribute="centerY" id="Jp8-o4-Vyr"/>
                     <constraint firstItem="35U-Rg-qcG" firstAttribute="centerY" secondItem="XTB-zB-Gbr" secondAttribute="centerY" id="LQn-4u-lRj"/>
                     <constraint firstItem="Mxb-xZ-QcQ" firstAttribute="leading" secondItem="35U-Rg-qcG" secondAttribute="trailing" constant="8" id="UKn-Nm-cqT"/>

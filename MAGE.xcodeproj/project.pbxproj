@@ -1674,7 +1674,7 @@
 				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/geopackage-ios/GeoPackage.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"$PODS_CONFIGURATION_BUILD_DIR/mage-ios-sdk/MageSDK.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/tiff-ios/TIFF.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
