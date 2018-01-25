@@ -25,13 +25,14 @@
 @implementation ObservationEditGeometryTableViewCell
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
-    self.geometry = [value objectForKey:@"geometry"];
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
 //        self.geometry = [observation getGeometry];
+        self.geometry = [value objectForKey:@"geometry"];
         self.isGeometryField = YES;
     } else {
-        id geometry = [value objectForKey:@"geometry"];
+        id geometry = value;
+//        id geometry = [value objectForKey:@"geometry"];
         if (geometry) {
             self.geometry = (WKBGeometry *) geometry;
         } else {
@@ -53,8 +54,8 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
         if (self.isGeometryField) {
+            self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
             self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
             MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
             [self.mapView setRegion:viewRegion animated:NO];
