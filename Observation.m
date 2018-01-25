@@ -153,12 +153,12 @@ Event *_event;
         for (id field in [form objectForKey:@"fields"]) {
             [fieldNameToFieldMap setObject:field forKey:[field objectForKey:@"name"]];
         }
-        [formFieldMap setObject:fieldNameToFieldMap forKey:[form objectForKey:@"id"]];
+        [formFieldMap setObject:fieldNameToFieldMap forKey:[NSString stringWithFormat:@"%@",[form objectForKey:@"id"]]];
     }
     
     _fieldNameToField = formFieldMap;
 
-    return _fieldNameToField;
+    return [_fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
 }
 
 - (NSDictionary *) createJsonToSubmitForEvent:(Event *) event {
@@ -199,14 +199,23 @@ Event *_event;
 
     NSMutableDictionary *jsonProperties = [[NSMutableDictionary alloc] initWithDictionary:self.properties];
 
-    for (id key in self.properties) {
-        id value = [self.properties objectForKey:key];
-        id field = [[self fieldNameToFieldForEvent:event andFormId:0] objectForKey:key];
-        if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            WKBGeometry *fieldGeometry = value;
-            [jsonProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
+    NSArray *forms = [jsonProperties objectForKey:@"forms"];
+    NSMutableArray *formArray = [[NSMutableArray alloc] init];
+    if (forms) {
+        for (NSDictionary *form in forms) {
+            NSMutableDictionary *formProperties = [[NSMutableDictionary alloc] initWithDictionary:form];
+            for (id key in form) {
+                id value = [form objectForKey:key];
+                id field = [[self fieldNameToFieldForEvent:event andFormId:[form objectForKey:@"formId"]] objectForKey:key];
+                if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
+                    WKBGeometry *fieldGeometry = value;
+                    [formProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
+                }
+            }
+            [formArray addObject:formProperties];
         }
     }
+    [jsonProperties setObject:formArray forKey:@"forms"];
 
     [observationJson setObject:jsonProperties forKey:@"properties"];
     return observationJson;
