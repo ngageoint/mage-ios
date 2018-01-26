@@ -195,6 +195,7 @@ static NSInteger const COMMON_SECTION = 1;
     if ([cell isKindOfClass:[ObservationEditGeometryTableViewCell class]]) {
         ObservationEditGeometryTableViewCell *gcell = (ObservationEditGeometryTableViewCell *) cell;
         self.annotationChangedDelegate = gcell;
+        gcell.observation = self.observation;
         gcell.forms = self.forms;
     }
     

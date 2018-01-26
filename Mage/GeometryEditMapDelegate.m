@@ -61,12 +61,23 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             
             view = mapPointImageView;
         } else {
-            MKPinAnnotationView *mapPointPinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointPinReuseIdentifier];
-            if(mapPointPinView == nil){
-                mapPointPinView = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:mapPointPinReuseIdentifier];
+            
+            MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
+            if (!pinView) {
+                pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
+                [pinView setPinTintColor:[UIColor greenColor]];
+            } else {
+                pinView.annotation = annotation;
             }
-            mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
-            view = mapPointPinView;
+            view = pinView;
+            
+            
+//            MKPinAnnotationView *mapPointPinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointPinReuseIdentifier];
+//            if(mapPointPinView == nil){
+//                mapPointPinView = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:mapPointPinReuseIdentifier];
+//            }
+//            mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
+//            view = mapPointPinView;
         }
         [mapPoint setView:view];
     } else {

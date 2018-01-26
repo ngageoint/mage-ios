@@ -51,6 +51,8 @@
 @property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
+@property (nonatomic) BOOL isObservationGeometry;
+@property (strong, nonatomic) WKBGeometry *geometry;
 
 @end
 
@@ -107,7 +109,7 @@
     
     WKBGeometry *geometry = nil;
     if ([[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"]) {
-
+        self.isObservationGeometry = YES;
         geometry = [self.observation getGeometry];
         if (!geometry) {
             // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
@@ -115,13 +117,15 @@
         }
         
     } else {
+        self.isObservationGeometry = NO;
+        NSDictionary *form = [[self.observation.properties objectForKey:@"forms"] objectAtIndex:[[_fieldDefinition valueForKey:@"formIndex"] integerValue]];
         
-        geometry = [self.observation.properties objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
-        if(!geometry){
+        geometry = [form objectForKey:(NSString *)[self.fieldDefinition objectForKey:@"name"]];
+        if (!geometry) {
             CLLocation *location = [[LocationService singleton] location];
-            if(location){
+            if (location) {
                 geometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-            }else{
+            } else {
                 // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
                 geometry = [[WKBPoint alloc] initWithXValue:1.0 andYValue:1.0];
             }
@@ -270,16 +274,16 @@
 }
 
 - (void) updateGeometry {    
-    WKBGeometry *geometry = nil;
-    if(self.shapeType == WKB_POINT){
-        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
-    }else{
-        geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
-    }
+//    WKBGeometry *geometry = nil;
+//    if(self.shapeType == WKB_POINT){
+//        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+//        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
+//        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+//    }else{
+//        geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+//    }
 
-    [self.delegate setValue:geometry forFieldDefinition:self.fieldDefinition];
+    [self.delegate setValue:self.geometry forFieldDefinition:self.fieldDefinition];
 }
 
 - (void)selectAnnotation:(id)annotation{
@@ -703,7 +707,7 @@
 }
 
 -(void) addMapShape: (WKBGeometry *) geometry{
-    
+    self.geometry = geometry;
     CLLocationCoordinate2D previousSelectedPointLocation = kCLLocationCoordinate2DInvalid;
     if(self.selectedMapPoint != nil){
         previousSelectedPointLocation = self.selectedMapPoint.coordinate;
@@ -715,10 +719,20 @@
         self.mapObservation = nil;
     }
     if(geometry.geometryType == WKB_POINT){
-        self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
-        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-        [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
-        [self selectAnnotation:mapAnnotationObservation.annotation];
+        if (self.isObservationGeometry) {
+            self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
+            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+            [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
+            [self selectAnnotation:mapAnnotationObservation.annotation];
+            
+        } else {
+            GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
+            GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
+            self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
+            WKBPoint *point = (WKBPoint *)geometry;
+            [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
+        }
+        
     }else{
         GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
         GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:nil andPolylinePointOptions:[self editPointOptions] andPolygonPointOptions:[self editPointOptions] andPolygonPointHoleOptions:nil];

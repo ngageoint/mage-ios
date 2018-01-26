@@ -12,6 +12,9 @@
 #import "GeometryUtility.h"
 #import "MapObservationManager.h"
 #import "MapAnnotationObservation.h"
+#import "GPKGMapShapeConverter.h"
+#import "GPKGMapShapePoints.h"
+#import "MapShapePointsObservation.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -25,13 +28,12 @@
 @implementation ObservationEditGeometryTableViewCell
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
-    self.geometry = [value objectForKey:@"geometry"];
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-//        self.geometry = [observation getGeometry];
+        self.geometry = [value objectForKey:@"geometry"];
         self.isGeometryField = YES;
     } else {
-        id geometry = [value objectForKey:@"geometry"];
+        id geometry = value;
         if (geometry) {
             self.geometry = (WKBGeometry *) geometry;
         } else {
@@ -53,8 +55,8 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     if (self.geometry) {
-        self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
         if (self.isGeometryField) {
+            self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
             self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
             MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
             [self.mapView setRegion:viewRegion animated:NO];
@@ -65,10 +67,15 @@
         [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
 
         if (!self.isGeometryField) {
-            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-            annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-            [self.mapView addAnnotation:annotation];
-            MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
+            GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
+            if (self.geometry.geometryType == WKB_POINT) {
+                GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
+            } else {
+                self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:self.geometry];
+            }
+            
+            MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
             MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
             [self.mapView setRegion:viewRegion animated:NO];
         }
