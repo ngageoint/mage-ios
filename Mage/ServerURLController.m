@@ -11,7 +11,7 @@
 #import "MagicalRecord+MAGE.h"
 #import "UIColor+UIColor_Mage.h"
 
-@interface ServerURLController ()
+@interface ServerURLController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -93,6 +93,11 @@
     self.errorButton.hidden = NO;
     self.errorStatus.text = error;
     self.serverURL.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    [self onOk:textField];
+    return YES;
 }
 
 @end

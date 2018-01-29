@@ -264,6 +264,9 @@
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
+    if (textField == self.passwordField) {
+        [self localLoginButtonPress:textField];
+    }
     return YES;
 }
 
