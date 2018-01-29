@@ -80,7 +80,9 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) start {
-    [self.locationManager startUpdatingLocation];
+    if (_reportLocation) {
+        [self.locationManager startUpdatingLocation];
+    }
     [self pushLocations];
 }
 
