@@ -64,9 +64,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="mapSettingsTapped:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="587-dB-o4b"/>
-                                            <segue destination="eCr-Py-gK2" kind="popover" identifier="MapSettingsSegue" popoverAnchorView="y8T-l1-f2h" id="HTT-Lb-5Lf">
-                                                <popoverArrowDirection key="popoverArrowDirection"/>
-                                            </segue>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fv8-SP-kpL">
@@ -384,45 +381,13 @@
             </objects>
             <point key="canvasLocation" x="6661" y="1170"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="GaT-Pb-wjo">
-            <objects>
-                <navigationController id="eCr-Py-gK2" sceneMemberID="viewController">
-                    <value key="contentSizeForViewInPopover" type="size" width="600" height="450"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="8iJ-Xf-M2G">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="mRN-X6-j95" kind="relationship" relationship="rootViewController" id="HtQ-u2-Tew"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Wu4-as-90U" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6276" y="3011"/>
-        </scene>
         <!--Filter-->
         <scene sceneID="MYe-eV-2Vo">
             <objects>
                 <viewControllerPlaceholder storyboardName="Filter" id="UKE-aK-Use" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FBN-tj-7qK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6066" y="2386"/>
-        </scene>
-        <!--MapSettings-->
-        <scene sceneID="kvN-W3-tlf">
-            <objects>
-                <viewControllerPlaceholder storyboardName="MapSettings" id="mRN-X6-j95" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="sMz-7b-vwX"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H0P-SW-bOw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6277" y="3722"/>
+            <point key="canvasLocation" x="6686" y="1860"/>
         </scene>
         <!--Settings-->
         <scene sceneID="TYv-1J-1V7">
@@ -430,7 +395,7 @@
                 <viewControllerPlaceholder storyboardName="Settings" id="ajs-hT-ZjQ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hzq-Nm-lbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6479" y="2386"/>
+            <point key="canvasLocation" x="6636" y="1943"/>
         </scene>
         <!--Attachment Selection Delegate-->
         <scene sceneID="8tc-Wq-Cd7">

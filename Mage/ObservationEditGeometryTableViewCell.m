@@ -72,7 +72,10 @@
                 GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
                 [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
             } else {
-                self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:self.geometry];
+                GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
+                GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
+                options.image = [[UIImage alloc] init];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:options andPolylinePointOptions:options andPolygonPointOptions:options andPolygonPointHoleOptions:options];
             }
             
             MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));

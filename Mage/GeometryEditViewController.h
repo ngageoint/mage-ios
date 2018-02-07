@@ -7,9 +7,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import "Observation.h"
-#import "ObservationEditTableViewController.h"
 #import "AnnotationDragCallback.h"
+#import "GeometryEditCoordinator.h"
 
 @interface GeometryEditViewController : UIViewController <AnnotationDragCallback>
 
@@ -20,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *polygonButton;
 @property (nonatomic) BOOL allowsPolygonIntersections;
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andObservation: (Observation *) observation andDelegate:(id<PropertyEditDelegate>)delegate;
+- (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator;
 - (NSString *) validate;
 
 @end

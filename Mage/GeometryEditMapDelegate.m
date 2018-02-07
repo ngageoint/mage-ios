@@ -7,7 +7,6 @@
 //
 
 #import "GeometryEditMapDelegate.h"
-#import "ObservationAnnotation.h"
 #import <GPKGMapPoint.h>
 #import "MapShapePointAnnotationView.h"
 #import "ObservationShapeStyle.h"
@@ -19,7 +18,6 @@
 @property (strong, nonatomic) id<EditableMapAnnotationDelegate> editDelegate;
 
 @end
-
 
 @implementation GeometryEditMapDelegate
 
@@ -39,59 +37,30 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     return self;
 }
 
+- (void) mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
+    for (MKAnnotationView *view in views) {
+        view.draggable = YES;
+    }
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>) annotation {
     
     MKAnnotationView *view = nil;
     
-    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-        ObservationAnnotation *observationAnnotation = annotation;
-        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:mapView withDragCallback:_dragCallback];
-        view = annotationView;
-        [observationAnnotation setView:view];
-    } else if ([annotation isKindOfClass:[GPKGMapPoint class]]){
+    if ([annotation isKindOfClass:[GPKGMapPoint class]]) {
         GPKGMapPoint * mapPoint = (GPKGMapPoint *) annotation;
         if(mapPoint.options.image != nil){
             MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointImageReuseIdentifier];
-            if (mapPointImageView == nil)
-            {
+            if (mapPointImageView == nil) {
                 mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapPointImageReuseIdentifier andMapView:mapView andDragCallback:_dragCallback];
             }
             mapPointImageView.image = mapPoint.options.image;
             mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;
             
             view = mapPointImageView;
-        } else {
-            
-            MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
-            if (!pinView) {
-                pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-                [pinView setPinTintColor:[UIColor greenColor]];
-            } else {
-                pinView.annotation = annotation;
-            }
-            view = pinView;
-            
-            
-//            MKPinAnnotationView *mapPointPinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:mapPointPinReuseIdentifier];
-//            if(mapPointPinView == nil){
-//                mapPointPinView = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:mapPointPinReuseIdentifier];
-//            }
-//            mapPointPinView.pinTintColor = mapPoint.options.pinTintColor;
-//            view = mapPointPinView;
         }
-        [mapPoint setView:view];
-    } else {
-        MKPinAnnotationView *pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
-        if (!pinView) {
-            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
-            [pinView setPinTintColor:[UIColor greenColor]];
-        } else {
-            pinView.annotation = annotation;
-        }
-        view = pinView;
     }
     
-    view.draggable = YES;
     return view;
 }
 
