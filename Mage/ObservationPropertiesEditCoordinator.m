@@ -22,8 +22,10 @@
 #import "AttachmentViewController.h"
 #import "MapUtils.h"
 #import <WKBLineString.h>
+#import "GeometryEditCoordinator.h"
+#import <ObservationImage.h>
 
-@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate>
+@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate>
 
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (strong, nonatomic) Observation *observation;
@@ -117,14 +119,25 @@
         [editSelect.navigationItem setRightBarButtonItem:doneButton];
         [self.navigationController pushViewController:editSelect animated:YES];
     } else if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-        GeometryEditViewController *editGeometry = [[GeometryEditViewController alloc] initWithFieldDefinition: field andObservation: self.observation andDelegate: self];
-        editGeometry.title = [field valueForKey:@"title"];
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
-        [editGeometry.navigationItem setLeftBarButtonItem:backButton];
-        [editGeometry.navigationItem setRightBarButtonItem:doneButton];
-        [self.navigationController pushViewController:editGeometry animated:YES];
+        if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
+            WKBGeometry *geometry = [self.observation getGeometry];
+            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage scaledImageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController];
+            [self.childCoordinators addObject:editCoordinator];
+            [editCoordinator start];
+        } else {
+            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: value andPinImage:nil andDelegate:self andNavigationController:self.navigationController];
+            [self.childCoordinators addObject:editCoordinator];
+            [editCoordinator start];
+        }
+        
     }
+}
+
+- (void) geometryUpdated: (WKBGeometry *) geometry {
+    NSLog(@"Geometry updated");
+    self.currentEditValue = geometry;
+    [self fieldEditDone];
+    [self.childCoordinators removeLastObject];
 }
 
 - (void) attachmentSelected:(Attachment *)attachment {

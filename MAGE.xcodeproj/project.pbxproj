@@ -210,6 +210,7 @@
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
+		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
@@ -238,10 +239,10 @@
 		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
-		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D141FFD95B5007BD768 /* MapSettingsCoordinator.m */; };
 		F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */; };
 		F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */; };
+		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
@@ -627,6 +628,8 @@
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
 		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
+		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
 		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
@@ -674,14 +677,14 @@
 		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
-		F7ED5D2420052161007BD768 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
 		F7ED5D131FFD95B5007BD768 /* MapSettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSettingsCoordinator.h; sourceTree = "<group>"; };
 		F7ED5D141FFD95B5007BD768 /* MapSettingsCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapSettingsCoordinator.m; sourceTree = "<group>"; };
 		F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapTypeCell.xib; sourceTree = "<group>"; };
 		F7ED5D181FFE99DF007BD768 /* MapTypeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapTypeTableViewCell.h; sourceTree = "<group>"; };
 		F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapTypeTableViewCell.m; sourceTree = "<group>"; };
+		F7ED5D2420052161007BD768 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -1133,6 +1136,7 @@
 		F7481F0219A663B100E9C56D /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				F7CFC09A201FD40C003250A3 /* Geometry */,
 				F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */,
 				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
 				F75DD30C1A97AA3B0007FA3F /* Cells */,
@@ -1142,16 +1146,12 @@
 				F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */,
 				F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */,
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
-				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
-				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
 				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
 				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
 				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */,
 				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */,
 				F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */,
 				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
-				F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */,
-				F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -1443,6 +1443,19 @@
 				F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */,
 			);
 			name = ViewCells;
+			sourceTree = "<group>";
+		};
+		F7CFC09A201FD40C003250A3 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */,
+				F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */,
+				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
+				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
+				F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */,
+				F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */,
+			);
+			name = Geometry;
 			sourceTree = "<group>";
 		};
 		F7DCCC221F46362B00E4C616 /* ExternalDevice */ = {
@@ -1837,7 +1850,7 @@
 				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/geopackage-ios/GeoPackage.bundle",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"$PODS_CONFIGURATION_BUILD_DIR/mage-ios-sdk/MageSDK.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/tiff-ios/TIFF.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
@@ -2011,6 +2024,7 @@
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F74687501F44DC67009D7CF4 /* UIColor+UIColor_Mage.m in Sources */,
+				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
