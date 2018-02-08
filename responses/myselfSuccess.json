@@ -1,0 +1,33 @@
+{
+    "username":"username",
+    "active":true,
+    "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36",
+    "displayName":"DisplayName",
+    "createdAt":"2014-09-18T14:40:46.000Z",
+    "lastUpdated":"2018-02-05T14:27:42.259Z",
+    "email":"email",
+    "authentication":{
+        "type":"local"
+    },
+    "recentEventIds":[1,64,12,15,54],
+    "icon":{
+        "size":1749,
+        "contentType":"image/png",
+        "color":"#7300ff",
+        "text":"DB",
+        "type":"create"
+    },
+    "phones":[{
+              "type":"Main",
+              "number":"303-111-2222"
+              }],
+    "id":"USERID",
+    "role":{
+        "name":"ROLE",
+        "description":"",
+        "permissions":[],
+        "id":"ROLEID"
+    },
+    "avatarUrl":"https://mage.geointservices.io/api/users/USERID/avatar",
+    "iconUrl":"https://mage.geointservices.io/api/users/USERID/icon"
+}

@@ -1,6 +1,6 @@
 {
     "token":"TOKEN",
-    "expirationDate":"2018-01-16T04:00:16.059Z",
+    "expirationDate":"2050-01-16T04:00:16.059Z",
     "user":{
         "username":"test",
         "active":true,
