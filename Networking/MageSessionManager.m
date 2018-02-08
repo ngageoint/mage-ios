@@ -80,6 +80,10 @@ static MageSessionManager *managerSingleton = nil;
     [self setTokenInRequestSerializer:self.requestSerializer];
 }
 
+-(NSString *) getToken {
+    return _token;
+}
+
 -(void) clearToken{
     [self setToken:nil];
 }

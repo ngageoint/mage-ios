@@ -34,6 +34,12 @@ extern NSInteger const MAGE_MaxConcurrentEvents;
 -(void) setToken: (NSString *) token;
 
 /**
+ * Get the MAGE token for request authentication
+ *
+ */
+-(NSString *) getToken;
+
+/**
  * Clear the MAGE token
  */
 -(void) clearToken;
