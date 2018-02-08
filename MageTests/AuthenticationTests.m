@@ -8,12 +8,16 @@
 
 #import <XCTest/XCTest.h>
 #import <OHHTTPStubs.h>
+#import <OHHTTPStubsResponse+JSON.h>
 #import <OHPathHelpers.h>
 #import <OCMock.h>
 #import "AuthenticationCoordinator.h"
 #import "ServerURLController.h"
 #import "LoginViewController.h"
 #import "DisclaimerViewController.h"
+#import <MageSessionManager.h>
+#import <StoredPassword.h>
+#import <Observation.h>
 
 @interface ServerURLController ()
 @property (strong, nonatomic) NSString *error;
@@ -53,6 +57,121 @@
 - (void)tearDown {
     [super tearDown];
     [OHHTTPStubs removeAllStubs];
+}
+
+- (void) testLoginWithRegisteredDeviceAndRandomToken {
+    NSString *baseUrlKey = @"baseServerUrl";
+    
+    [[MageSessionManager manager] setToken:@"oldtoken"];
+    [StoredPassword persistTokenToKeyChain:@"oldtoken"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    id delegatePartialMock = OCMPartialMock(delegate);
+    OCMExpect([delegatePartialMock authenticationSuccessful]);
+    
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+    
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+    
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+    
+    id apiStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"URL is %@", request.URL.absoluteString);
+        NSLog(@"does it match /api? %@", request.URL.path);
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    id apiLoginStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"does it match /api/login? %@", request.URL.path);
+
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+
+    id myselfStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"does it match /api/users/myself? %@", request.URL.path);
+        NSString *authorizationHeader = [request.allHTTPHeaderFields valueForKey:@"Authorization"];
+        NSLog(@"Authorization Header is %@", authorizationHeader);
+        if ([request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/users/myself"]) {
+            XCTAssertTrue([authorizationHeader isEqualToString:@"Bearer TOKEN"]);
+        }
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/users/myself"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"myselfSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [coordinator start];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        // response came back from the server and we went to the login screen
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        id<DisclaimerDelegate> disclaimerDelegate = (id<DisclaimerDelegate>)coordinator;
+
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"test", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+
+        OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+            [loginResponseArrived fulfill];
+            [disclaimerDelegate disclaimerAgree];
+            OCMVerifyAll(delegatePartialMock);
+        });
+
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            // login complete
+            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+            NSString *token = [StoredPassword retrieveStoredToken];
+            NSString *mageSessionToken = [[MageSessionManager manager] getToken];
+            XCTAssertTrue([token isEqualToString:@"TOKEN"]);
+            XCTAssertTrue([token isEqualToString:mageSessionToken]);
+
+        }];
+
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+            XCTestExpectation* myselfResponseArrived = [self expectationWithDescription:@"response of /api/users/myself complete"];
+            
+            NSURLSessionDataTask *task = [User operationToFetchMyselfWithSuccess:^{
+                NSLog(@"user");
+                [myselfResponseArrived fulfill];
+            } failure:^(NSError * _Nonnull error) {
+                NSLog(@"error %@", error);
+                [myselfResponseArrived fulfill];
+            }];
+            
+            [[MageSessionManager manager] addTask:task];
+
+            [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+                OCMVerifyAll(navControllerPartialMock);
+            }];
+        }];
+        
+    }];
 }
 
 - (void) testLoginWithRegisteredDevice {
