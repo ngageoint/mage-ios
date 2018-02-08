@@ -90,4 +90,17 @@ const CGFloat annotationScaleWidth = 35.0;
     return image;
 }
 
++ (UIImage *) scaledImageForObservation: (Observation *) observation {
+    UIImage *image = [self imageForObservation:observation];
+    
+    if (image != nil) {
+        float scale = image.size.width / annotationScaleWidth;
+        
+        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
+        return scaledImage;
+    }
+    
+    return image;
+}
+
 @end
