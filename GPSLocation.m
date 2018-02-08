@@ -14,10 +14,37 @@
 #import "Server.h"
 #import "WKBPoint.h"
 #import "WKBGeometryUtils.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation GPSLocation
 
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+    UIDevice *device = [UIDevice currentDevice];
+    device.batteryMonitoringEnabled = YES;
+    NSString *batteryState = @"";
+    switch (device.batteryState) {
+        case UIDeviceBatteryStateFull:
+            batteryState = @"Full";
+            break;
+        case UIDeviceBatteryStateUnknown:
+            batteryState = @"Unknown";
+            break;
+        case UIDeviceBatteryStateCharging:
+            batteryState = @"Charging";
+            break;
+        case UIDeviceBatteryStateUnplugged:
+            batteryState = @"Unplugged";
+            break;
+    }
+    
+    CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    [manager startMonitoring];
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = [infoDict objectForKey: @"CFBundleShortVersionString"];
+    NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+    
     GPSLocation *gpsLocation = [GPSLocation MR_createEntityInContext:managedObjectContext];
     
     gpsLocation.geometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
@@ -29,7 +56,18 @@
                                @"verticalAccuracy": [NSNumber numberWithDouble:location.verticalAccuracy],
                                @"bearing": [NSNumber numberWithDouble:location.course],
                                @"speed": [NSNumber numberWithDouble:location.speed],
-                               @"timestamp": [location.timestamp iso8601String]
+                               @"millis":[NSNumber numberWithDouble: location.timestamp.timeIntervalSince1970],
+                               @"timestamp": [location.timestamp iso8601String],
+                               @"battery_level": [NSNumber numberWithDouble:device.batteryLevel*100],
+                               @"battery_state": batteryState,
+                               @"telephone_network": telephonyInfo.currentRadioAccessTechnology,
+                               @"network": manager.localizedNetworkReachabilityStatusString,
+                               @"mage_version": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber],
+                               @"provider": @"gps",
+                               @"system_version": [device systemVersion],
+                               @"system_name": [device systemName],
+                               @"device_name": [device name],
+                               @"device_model": [device model]
                                };
     
     return gpsLocation;
