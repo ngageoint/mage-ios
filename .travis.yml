@@ -5,14 +5,20 @@ xcode_scheme: MAGE
 xcode_sdk: iphonesimulator
 env:
   global:
-    - "IOS11=\"platform=iOS Simulator,name=iPhone X,OS=11.2\""
-    - "IOS10=\"platform=iOS Simulator,name=iPhone 7,OS=10.3.1\""
+  - IOS11="platform=iOS Simulator,name=iPhone X,OS=11.2"
+  - IOS10="platform=iOS Simulator,name=iPhone 7,OS=10.3.1"
   matrix:
-    - DESTINATION="$IOS11"
-    - DESTINATION="$IOS10"
+  - DESTINATION="$IOS11"
+  - DESTINATION="$IOS10"
 before_install:
-  - gem install xcpretty
+- gem install xcpretty
 script:
-  - set -o pipefail
-  - echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION"
-  - xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION" | xcpretty
+- set -o pipefail
+- echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME"
+  -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION"
+- xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME"
+  -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION" | xcpretty
+notifications:
+  slack:
+    rooms:
+      secure: QEGbjb4XFZyuWqWmdCIssC9Ag2CJObNoyju9X9gF2wkfyLqAGdz0/MPweXGbU8FcYuGMNDt3e8Qo5FH8sR2xI9SzQW4rTGtVEB/mifMU91DXqbb7SDoqBs8gq/7aPSswnwE4N6AcYuD2wuE9N2AodAN4RQotalYpbRbpGrG8cHloNGL/j5ZfDpGGdFXW2U2nrS7pZ/gCYDehR+tudEOBRnN2E6UhqUF4oJ3WBZrOiIvu6QdSs8Q/k8xM7B5FeVlRwtXGyVk+Ww+Uak/KEsaf9x1cv4mLBDTHdLvxdtY+8CwkWajL3lqw6X7F21a0VBo7mqdvCa28Rh/ixIoi+KpPZBTufU+Es5cznqpdHqTtlFL9AF8JriZ62r6FPABZa7xzal9Ioeu0RI19g8Vylb0R3Ro4NrLfjHPmZj8olOwWNJugplva+ZawSvRggRQaOAXRCXH6lit4saf999dV+Q6MC8Kdfu1N3gC7RBkkNJywDXS0+XgSwH3RaVcAA6EhSevWCcGg/2OjIRmrUqC1eHQ0HziIXuMNpz2UsYhPt1bw/den5RixcBSx6jOO/kwQ0s+BU86Hs4E6szGZ0nIkRBMFFlISj8lTYS1JcgrGOrYzGcSyls8lnHnHSi/JFZg/uYuhz2X1erEh91U1miWuIYZ35NmkFH/nateet9ZS/FJs43Y=
