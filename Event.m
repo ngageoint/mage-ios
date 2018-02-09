@@ -110,6 +110,16 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return nil;
 }
 
+- (NSArray *) nonArchivedForms {
+    NSMutableArray *nonArchivedForms = [[NSMutableArray alloc] init];
+    for (NSDictionary *form in self.forms) {
+        if (((NSNumber *)[form objectForKey:@"archived"]).boolValue == NO) {
+            [nonArchivedForms addObject:form];
+        }
+    }
+    return nonArchivedForms;
+}
+
 + (NSURLSessionDataTask *) operationToFetchEventsWithSuccess: (void (^)(void)) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/events"];
     

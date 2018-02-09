@@ -25,6 +25,7 @@ extern NSString * const MAGEEventsFetched;
 - (BOOL) isUserInEvent: (User *) user;
 - (NSDictionary *) formForObservation: (Observation *) observation;
 - (NSDictionary *) formWithId: (long) id;
+- (NSArray *) nonArchivedForms;
 
 @end
 
