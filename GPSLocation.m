@@ -60,7 +60,7 @@
                                @"timestamp": [location.timestamp iso8601String],
                                @"battery_level": [NSNumber numberWithDouble:device.batteryLevel*100],
                                @"battery_state": batteryState,
-                               @"telephone_network": telephonyInfo.currentRadioAccessTechnology,
+                               @"telephone_network": telephonyInfo.currentRadioAccessTechnology != nil ? telephonyInfo.currentRadioAccessTechnology : @"Unknown",
                                @"network": manager.localizedNetworkReachabilityStatusString,
                                @"mage_version": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber],
                                @"provider": @"gps",
