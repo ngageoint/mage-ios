@@ -117,9 +117,7 @@
         }
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/users/myself"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        NSString* fixture = OHPathForFile(@"myselfSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
-                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+        return [OHHTTPStubsResponse responseWithJSONObject:[[NSDictionary alloc] init] statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
     [coordinator start];
