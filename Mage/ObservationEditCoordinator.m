@@ -128,10 +128,10 @@
 
         }];
         if (self.newObservation) {
-            if ([self.event.forms count] > 1) {
+            if ([self.event.nonArchivedForms count] > 1) {
                 [self startFormPicker];
-            } else if ([self.event.forms count] == 1) {
-                [self addFormToObservation:[self.event.forms objectAtIndex:0]];
+            } else if ([self.event.nonArchivedForms count] == 1) {
+                [self addFormToObservation:[self.event.nonArchivedForms objectAtIndex:0]];
                 [self startEditObservationFields];
             } else {
                 [self startEditObservationFields];
@@ -143,7 +143,7 @@
 }
 
 - (void) startFormPicker {
-    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.forms andLocation: self.location andNewObservation:self.newObservation];
+    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.nonArchivedForms andLocation: self.location andNewObservation:self.newObservation];
     
     [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController pushViewController:self.formController animated:NO];
