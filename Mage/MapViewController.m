@@ -33,6 +33,7 @@
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
 #import "ObservationAnnotationView.h"
+#import "MapSettingsCoordinator.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -46,8 +47,6 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-// this property should exist in this view coordinator when we get to that
-@property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (nonatomic, strong) id previewingContext;
 
 @end
@@ -334,6 +333,12 @@
 - (IBAction)createNewObservation:(id)sender {
     CLLocation *location = [[LocationService singleton] location];
     [self startCreateNewObservationAtLocation:location andProvider:@"gps"];
+}
+
+- (IBAction)mapSettingsButtonTapped:(id)sender {
+    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController];
+    [self.childCoordinators addObject:settingsCoordinator];
+    [settingsCoordinator start];
 }
 
 - (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {

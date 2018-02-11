@@ -19,5 +19,6 @@
 @property (strong, nonatomic) WKBGeometry *geometry;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) NSArray *forms;
+@property (weak, nonatomic) Observation *observation;
 
 @end

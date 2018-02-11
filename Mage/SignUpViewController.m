@@ -101,6 +101,10 @@
         [[(UINextField *)textField nextField] becomeFirstResponder];
     }
     
+    if (textField == self.passwordConfirm) {
+        [self onSignup:textField];
+    }
+    
     return YES;
     
 }

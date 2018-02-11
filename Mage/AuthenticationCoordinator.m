@@ -222,7 +222,6 @@ BOOL signingIn = YES;
     }];
 }
 
-
 - (BOOL) didUserChange: (NSString *) username {
     User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);

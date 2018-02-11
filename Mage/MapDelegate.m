@@ -41,6 +41,7 @@
 #import "MapUtils.h"
 #import "MapObservationManager.h"
 #import "WKBGeometryUtils.h"
+#import "MapShapePointAnnotationView.h"
 #import <Event.h>
 
 @interface MapDelegate ()
@@ -973,6 +974,20 @@
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
         [pinView setPinTintColor:[UIColor redColor]];
         return pinView;
+    } else if ([annotation isKindOfClass:[GPKGMapPoint class]]) {
+        GPKGMapPoint *point = annotation;
+        GPKGMapPointOptions *options = point.options;
+        UIImage *image = options.image;
+        if(options.image != nil){
+            MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"pinImageAnnotation"];
+            if (mapPointImageView == nil) {
+                mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinImageAnnotation" andMapView:mapView andDragCallback:nil];
+            }
+            mapPointImageView.image = options.image;
+            mapPointImageView.centerOffset = options.imageCenterOffset;
+            
+            return mapPointImageView;
+        }
     }
     
     return nil;

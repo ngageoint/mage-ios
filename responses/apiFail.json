@@ -1,0 +1,22 @@
+{
+    "provision": {
+        "strategy":"uid"
+    },
+    "authenticationStrategies":{
+        "local":{
+            "passwordMinLength":14
+        }
+    },
+    "version":{
+        "major":4,
+        "minor":0,
+        "micro":0
+    },
+    "description":"Geospatial situation awareness application",
+    "name":"MAGE",
+    "disclaimer":{
+        "text":"Disclaimer text",
+        "title":"Consent to Monitoring",
+        "show":true
+    }
+}

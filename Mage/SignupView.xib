@@ -86,8 +86,11 @@
                         <constraint firstItem="cRc-G2-cIA" firstAttribute="centerY" secondItem="sso-gG-3z7" secondAttribute="centerY" id="xdx-bk-DKb"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
                     <rect key="frame" x="0.0" y="617" width="375" height="30"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" notEnabled="YES"/>
+                    </accessibility>
                     <state key="normal" title="&lt;mage server url&gt;">
                         <color key="titleColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
@@ -234,6 +237,10 @@
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="h91-tj-MRf"/>
+                                                <outlet property="nextField" destination="BRG-7p-IkC" id="cyA-wf-mD7"/>
+                                            </connections>
                                         </textField>
                                         <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Display Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BRG-7p-IkC" customClass="UINextField">
                                             <rect key="frame" x="20" y="42" width="335" height="30"/>
@@ -245,6 +252,10 @@
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="Gl6-Gc-bFB"/>
+                                                <outlet property="nextField" destination="Ppn-lM-Kd3" id="grj-nI-03C"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppn-lM-Kd3" userLabel="email" customClass="UINextField">
                                             <rect key="frame" x="20" y="84" width="335" height="30"/>
@@ -254,7 +265,11 @@
                                                 <constraint firstAttribute="height" constant="30" id="Wbw-m2-5nE"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="GnZ-zA-yhV"/>
+                                                <outlet property="nextField" destination="QbZ-cp-HSy" id="h9H-kK-0Kb"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QbZ-cp-HSy" customClass="UINextField">
                                             <rect key="frame" x="20" y="126" width="335" height="30"/>
@@ -264,7 +279,11 @@
                                             </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="next"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="HKP-Ts-zg1"/>
+                                                <outlet property="nextField" destination="sfe-cM-xS2" id="iEe-8a-fQR"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sfe-cM-xS2" userLabel="password" customClass="UINextField">
                                             <rect key="frame" x="20" y="168" width="335" height="30"/>
@@ -276,10 +295,11 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                             <connections>
+                                                <outlet property="delegate" destination="-1" id="bgV-lK-NcJ"/>
                                                 <outlet property="nextField" destination="XX4-h8-cXB" id="qV5-O3-KHc"/>
                                             </connections>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm" customClass="UINextField">
+                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm">
                                             <rect key="frame" x="20" y="210" width="335" height="30"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Password"/>
@@ -288,6 +308,9 @@
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="yuB-gB-Gkv"/>
+                                            </connections>
                                         </textField>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fum-f9-TSY">
                                             <rect key="frame" x="77" y="257" width="278" height="21"/>
@@ -330,7 +353,7 @@
                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gCm-GX-f4X">
                                             <rect key="frame" x="196" y="335" width="159" height="40"/>
                                             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                            <accessibility key="accessibilityConfiguration" label="Sign Up"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="cBw-NS-W5o"/>
                                             </constraints>
@@ -441,7 +464,7 @@
                 <constraint firstItem="8fH-La-tFM" firstAttribute="top" secondItem="sso-gG-3z7" secondAttribute="bottom" constant="8" id="dSJ-hK-eVT"/>
                 <constraint firstAttribute="trailing" secondItem="sso-gG-3z7" secondAttribute="trailing" constant="16" id="f7c-IX-N6b"/>
                 <constraint firstItem="sso-gG-3z7" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" constant="16" id="nrE-hy-w4R"/>
-                <constraint firstAttribute="bottomMargin" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6"/>
+                <constraint firstAttribute="bottomMargin" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6" customClass="KeyboardConstraint"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="p1r-p7-xHf"/>
                 <constraint firstItem="sso-gG-3z7" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="topMargin" constant="40" id="rZe-cm-1Jv"/>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="top" secondItem="8fH-La-tFM" secondAttribute="bottom" constant="8" id="rwm-oJ-pvD"/>

@@ -176,10 +176,16 @@
     NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
     NSString *uidString = deviceUUID.UUIDString;
     NSLog(@"uid: %@", uidString);
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = [infoDict objectForKey: @"CFBundleShortVersionString"];
+    NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+    
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 self.usernameField.text, @"username",
                                 self.passwordField.text, @"password",
                                 uidString, @"uid",
+                                [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber], @"appVersion",
                                 nil];
     
     __weak __typeof__(self) weakSelf = self;
@@ -264,6 +270,9 @@
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
+    if (textField == self.passwordField) {
+        [self localLoginButtonPress:textField];
+    }
     return YES;
 }
 

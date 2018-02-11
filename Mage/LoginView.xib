@@ -212,6 +212,8 @@
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                             <connections>
                                                 <action selector="resignAndLogin:" destination="-1" eventType="editingDidEndOnExit" id="xpQ-8o-OJi"/>
+                                                <outlet property="delegate" destination="-1" id="5Vn-GB-r4e"/>
+                                                <outlet property="nextField" destination="a3C-Ps-EaE" id="cLo-O5-BMz"/>
                                             </connections>
                                         </textField>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XSM-6Q-JP0">
@@ -234,6 +236,7 @@
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                             <connections>
                                                 <action selector="resignAndLogin:" destination="-1" eventType="editingDidEndOnExit" id="iZM-uR-zYG"/>
+                                                <outlet property="delegate" destination="-1" id="f4X-ol-D5l"/>
                                             </connections>
                                         </textField>
                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5b-ap-uHq">

@@ -12,6 +12,9 @@
 #import "GeometryUtility.h"
 #import "MapObservationManager.h"
 #import "MapAnnotationObservation.h"
+#import "GPKGMapShapeConverter.h"
+#import "GPKGMapShapePoints.h"
+#import "MapShapePointsObservation.h"
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -27,12 +30,10 @@
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-//        self.geometry = [observation getGeometry];
         self.geometry = [value objectForKey:@"geometry"];
         self.isGeometryField = YES;
     } else {
         id geometry = value;
-//        id geometry = [value objectForKey:@"geometry"];
         if (geometry) {
             self.geometry = (WKBGeometry *) geometry;
         } else {
@@ -66,10 +67,18 @@
         [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
 
         if (!self.isGeometryField) {
-            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-            annotation.coordinate = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
-            [self.mapView addAnnotation:annotation];
-            MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, MKCoordinateSpanMake(.03125, .03125));
+            GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
+            if (self.geometry.geometryType == WKB_POINT) {
+                GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
+            } else {
+                GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
+                GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
+                options.image = [[UIImage alloc] init];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:options andPolylinePointOptions:options andPolygonPointOptions:options andPolygonPointHoleOptions:options];
+            }
+            
+            MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
             MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
             [self.mapView setRegion:viewRegion animated:NO];
         }

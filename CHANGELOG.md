@@ -3,19 +3,26 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-
-## 2.0.2 (TBD)
+## 2.0.3 (TBD)
 
 * TBD
 
+##### Feature
+
+##### Bug Fixes
+
+## 2.0.2 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (02-11-2018)
+
 ##### Features
 
+* Geometry cells in observations now match the look and feel of observation location cells
+* Map settings now use the coordinator pattern
+
 ##### Bug Fixes
 
-## 2.0.1 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (01-24-2018)
-
-##### Bug Fixes
-* Fix for table layout in iOS 10
+* Geometries are sent properly for location fields in observations
+* Constraints are updated for the login screen when the keyboard is shown
+* Local login is not used unless the network error is cannot connect to host
 
 ## 2.0 (https://github.com/ngageoint/mage-ios/releases/tag/2.0) (11-21-2017)
 
