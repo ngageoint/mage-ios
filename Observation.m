@@ -386,8 +386,9 @@ Event *_event;
             localObservation.url = observationUrl;
         } completion:^(BOOL dbSuccess, NSError *error) {
             if (!dbSuccess) {
-                failure(error);
-                return;
+                NSLog(@"Failed to save observation to DB after getting an ID");
+//                failure(error);
+//                return;
             }
             Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
             NSURLSessionDataTask *putTask = [manager PUT_TASK:observationUrl parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {

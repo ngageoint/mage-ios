@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
     AUTHENTICATION_SUCCESS,
     AUTHENTICATION_ERROR,
+    UNABLE_TO_AUTHENTICATE,
     REGISTRATION_SUCCESS
 };
 

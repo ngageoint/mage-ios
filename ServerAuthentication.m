@@ -86,8 +86,12 @@
         // if the error was a network error try to login with the local auth module
         if ([error.domain isEqualToString:NSURLErrorDomain]
             && (error.code == NSURLErrorCannotConnectToHost
-            || error.code == NSURLErrorNetworkConnectionLost
-            || error.code == NSURLErrorNotConnectedToInternet)) {
+//            || error.code == NSURLErrorNetworkConnectionLost
+//            || error.code == NSURLErrorNotConnectedToInternet
+                )) {
+                NSLog(@"Unable to authenticate, probably due to no connection.  Error: %@", error);
+                // at this point, we might not have a connection to the server.
+//                complete(UNABLE_TO_AUTHENTICATE, error.localizedDescription);
                 id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
                 [local loginWithParameters:parameters complete:complete];
         } else {
