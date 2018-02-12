@@ -51,6 +51,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void) editComplete: (Observation *) observation {
     self.observation = [observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
+    _formFields = nil;
     [self setupObservation];
 }
 

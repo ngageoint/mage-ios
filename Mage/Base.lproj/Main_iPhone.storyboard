@@ -796,16 +796,6 @@
             </objects>
             <point key="canvasLocation" x="289" y="-542"/>
         </scene>
-        <!--MapSettings-->
-        <scene sceneID="YaO-BD-AXP">
-            <objects>
-                <viewControllerPlaceholder storyboardName="MapSettings" id="gx9-Hp-muj" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="4th-Ck-gEF"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Pga-BV-sOd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1238" y="-979"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="dtr-6Q-SWZ">
             <objects>
@@ -912,6 +902,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="77U-TW-S4M"/>
-        <segue reference="2y0-bF-fmy"/>
+        <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
 </document>
