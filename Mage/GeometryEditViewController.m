@@ -400,13 +400,14 @@ static float paddingPercentage = .1;
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         if(self.selectedMapPoint != nil && self.selectedMapPoint.id == mapPoint.id){
             MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
-            view.image= [UIImage imageNamed:@"shape_edit"];
+            if (self.shapeType != WKB_POINT) {
+                view.image = [UIImage imageNamed:@"shape_edit"];
+            }
             self.selectedMapPoint = nil;
         }
         self.validLocation = YES;
         [self updateAcceptState];
     }
-
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
@@ -1072,7 +1073,9 @@ static float paddingPercentage = .1;
     self.selectedMapPoint = point;
     [self updateLocationTextWithCoordinate:point.coordinate];
     MKAnnotationView *view = [self.map viewForAnnotation:point];
-    view.image= [UIImage imageNamed:@"shape_edit_selected"];
+    if (self.shapeType != WKB_POINT) {
+        view.image= [UIImage imageNamed:@"shape_edit_selected"];
+    }
     [self findRectangleCorners:point];
 }
 
