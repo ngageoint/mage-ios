@@ -23,6 +23,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Geometries are sent properly for location fields in observations
 * Constraints are updated for the login screen when the keyboard is shown
 * Local login is not used unless the network error is cannot connect to host
+* Observation View updates when the observation is edited
 
 ## 2.0 (https://github.com/ngageoint/mage-ios/releases/tag/2.0) (11-21-2017)
 
