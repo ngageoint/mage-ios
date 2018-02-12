@@ -70,8 +70,9 @@
     [self.mapDelegate setObservations:observations withCompletion:^{
         MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
         MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
-
-        [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
+        });
     }];
 
  }
