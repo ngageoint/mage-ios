@@ -17,6 +17,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * Geometry cells in observations now match the look and feel of observation location cells
 * Map settings now use the coordinator pattern
+* Geometry Edit uses the same map type as the main map
 
 ##### Bug Fixes
 
