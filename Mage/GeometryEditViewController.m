@@ -87,6 +87,9 @@ static float paddingPercentage = .1;
     
     self.map.delegate = _mapDelegate;
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.map.mapType = [defaults integerForKey:@"mapType"];
+    
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
     
