@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -177,6 +176,7 @@
                         <constraint firstItem="mBQ-mB-CtT" firstAttribute="top" secondItem="abG-gz-Fe5" secondAttribute="bottom" constant="-1" id="5KR-e5-uZe"/>
                         <constraint firstItem="bus-sy-6Qo" firstAttribute="top" secondItem="HDS-JB-Gt9" secondAttribute="top" constant="8" id="95c-0G-olS"/>
                         <constraint firstItem="bus-sy-6Qo" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="DdP-OO-G7d"/>
+                        <constraint firstAttribute="bottom" secondItem="mBQ-mB-CtT" secondAttribute="bottom" constant="8" id="HkP-CN-dhk"/>
                         <constraint firstItem="abG-gz-Fe5" firstAttribute="top" secondItem="bus-sy-6Qo" secondAttribute="bottom" constant="31" id="P2i-kP-HRt"/>
                         <constraint firstItem="mBQ-mB-CtT" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="aPB-rL-6EQ"/>
                         <constraint firstAttribute="trailing" secondItem="mBQ-mB-CtT" secondAttribute="trailing" constant="8" id="kpZ-RT-vBh"/>
@@ -222,7 +222,6 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottomMargin" secondItem="mBQ-mB-CtT" secondAttribute="bottom" constant="8" id="0lV-vm-RgY"/>
                 <constraint firstItem="t0n-5z-kcQ" firstAttribute="top" secondItem="1ug-fA-tut" secondAttribute="top" id="3uG-b1-rKe"/>
                 <constraint firstItem="IUw-Qj-cTB" firstAttribute="top" secondItem="J9e-OG-1sz" secondAttribute="bottom" constant="8" id="6Wl-Fr-Pq0"/>
                 <constraint firstItem="J9e-OG-1sz" firstAttribute="centerX" secondItem="oMU-AT-4g8" secondAttribute="centerX" id="ABU-3x-IgP"/>
