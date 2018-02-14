@@ -29,25 +29,27 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSDictionary *authenticationStrategies = [defaults valueForKeyPath:@"authenticationStrategies"];
         
-        NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
-        [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
-        for (NSString *authenticationType in authenticationStrategies) {
-            NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
-            if ([authenticationType isEqualToString:@"google"]) {
-                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
-            } else if ([authenticationType isEqualToString:@"local"]) {
-                [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
+        if (authenticationStrategies) {
+            NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
+            [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
+            for (NSString *authenticationType in authenticationStrategies) {
+                NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
+                if ([authenticationType isEqualToString:@"google"]) {
+                    [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                } else if ([authenticationType isEqualToString:@"local"]) {
+                    [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
+                }
             }
-        }
-        NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
-        if (oldLoginParameters != nil) {
-            NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
-            if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
-                [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+            NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
+            if (oldLoginParameters != nil) {
+                NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
+                if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
+                    [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+                }
             }
+            
+            self.authenticationModules = authenticationModules;
         }
-        
-        self.authenticationModules = authenticationModules;
     }
     
     return self;
