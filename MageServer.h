@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 
+- (instancetype) initWithURL: (NSURL *) url;
 + (NSURL *) baseURL;
 - (BOOL) serverHasLocalAuthenticationStrategy;
 - (BOOL) serverHasGoogleAuthenticationStrategy;

@@ -68,6 +68,13 @@
             NSError *error = [MageServer generateServerCompatibilityError:api];
             return complete(AUTHENTICATION_ERROR, error.localizedDescription);
         }
+        if ([api valueForKey:@"disclaimer"]) {
+            [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
+            [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
+            [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+        }
+        [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
+        
         NSDictionary *userJson = [response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         
@@ -91,9 +98,9 @@
                 )) {
                 NSLog(@"Unable to authenticate, probably due to no connection.  Error: %@", error);
                 // at this point, we might not have a connection to the server.
-//                complete(UNABLE_TO_AUTHENTICATE, error.localizedDescription);
                 id<Authentication> local = [Authentication authenticationModuleForType:LOCAL];
                 [local loginWithParameters:parameters complete:complete];
+//                complete(UNABLE_TO_AUTHENTICATE, error.localizedDescription);
         } else {
             NSLog(@"Error logging in: %@", error);
             // try to register again

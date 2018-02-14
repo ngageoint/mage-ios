@@ -9,6 +9,7 @@
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
 #import "OAuthAuthentication.h"
+#import "StoredPassword.h"
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
@@ -17,6 +18,40 @@ NSString * const kServerAuthenticationStrategiesKey = @"serverAuthenticationStra
 NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
 @implementation MageServer
+
+- (instancetype) initWithURL: (NSURL *) url {
+    if (self = [super init]) {
+        
+        if (![url.absoluteString isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:kBaseServerUrlKey]]) {
+            return self;
+        }
+    
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *authenticationStrategies = [defaults valueForKeyPath:@"authenticationStrategies"];
+        
+        NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
+        [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
+        for (NSString *authenticationType in authenticationStrategies) {
+            NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
+            if ([authenticationType isEqualToString:@"google"]) {
+                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+            } else if ([authenticationType isEqualToString:@"local"]) {
+                [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
+            }
+        }
+        NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
+        if (oldLoginParameters != nil) {
+            NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
+            if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
+                [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+            }
+        }
+        
+        self.authenticationModules = authenticationModules;
+    }
+    
+    return self;
+}
 
 + (NSURL *) baseURL {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -61,7 +96,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         return;
     }
     
-    MageServer *server = [[MageServer alloc] init];
+    MageServer *server = [[MageServer alloc] initWithURL: url];
     
     server.reachabilityManager = [AFNetworkReachabilityManager managerForDomain:url.host];
     [server.reachabilityManager startMonitoring];
@@ -92,6 +127,14 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
             }
         }
+        NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
+        if (oldLoginParameters != nil) {
+            NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
+            if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
+                [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+            }
+        }
+        
         server.authenticationModules = authenticationModules;
         
         [defaults synchronize];
@@ -112,7 +155,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             && (error.code == NSURLErrorCannotConnectToHost
                 || error.code == NSURLErrorNetworkConnectionLost
                 || error.code == NSURLErrorNotConnectedToInternet
-                || error.code == NSURLErrorTimedOut)) {
+                || error.code == NSURLErrorTimedOut
+                )) {
                 id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
                     server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
