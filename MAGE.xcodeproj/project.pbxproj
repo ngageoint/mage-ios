@@ -118,6 +118,8 @@
 		F727516E19C888DB006C63CB /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* Locations.m */; };
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F727517719C895CA006C63CB /* LocationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* LocationDataStore.m */; };
+		F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D82034CC3700C2600D /* TestingAppDelegate.h */; };
+		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129F919F5BE320063DB6A /* MeViewController.m */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
 		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
@@ -487,6 +489,8 @@
 		F727517019C88CAE006C63CB /* Observations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observations.m; sourceTree = "<group>"; };
 		F727517519C895CA006C63CB /* LocationDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataStore.h; sourceTree = "<group>"; };
 		F727517619C895CA006C63CB /* LocationDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataStore.m; sourceTree = "<group>"; };
+		F729E9D82034CC3700C2600D /* TestingAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestingAppDelegate.h; sourceTree = "<group>"; };
+		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F73129F819F5BE320063DB6A /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		F73129F919F5BE320063DB6A /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
@@ -1398,6 +1402,8 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F729E9D82034CC3700C2600D /* TestingAppDelegate.h */,
+				F729E9D92034CC3700C2600D /* TestingAppDelegate.m */,
 				F7ED5D2820052161007BD768 /* Info.plist */,
 				F7614DA820068FF300676366 /* responses */,
 				F7ED5D2E20052248007BD768 /* AuthenticationTests.m */,
@@ -2085,6 +2091,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
+				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
