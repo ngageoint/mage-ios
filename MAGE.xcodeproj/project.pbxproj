@@ -144,6 +144,7 @@
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
+		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
@@ -526,6 +527,7 @@
 		F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
+		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
@@ -1402,6 +1404,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F75FEE612035E76F00577DA4 /* MageServerTests.m */,
 				F729E9D82034CC3700C2600D /* TestingAppDelegate.h */,
 				F729E9D92034CC3700C2600D /* TestingAppDelegate.m */,
 				F7ED5D2820052161007BD768 /* Info.plist */,
@@ -1780,7 +1783,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		9234FE93B973ED1E145F6F5B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1856,7 +1859,7 @@
 				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/geopackage-ios/GeoPackage.bundle",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"$PODS_CONFIGURATION_BUILD_DIR/mage-ios-sdk/MageSDK.bundle",
 				"$PODS_CONFIGURATION_BUILD_DIR/tiff-ios/TIFF.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
@@ -2091,6 +2094,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
