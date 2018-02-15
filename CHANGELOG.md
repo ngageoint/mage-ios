@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.3 (TBD)
+## 2.0.2 (TBD)
 
 * TBD
 
@@ -11,7 +11,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 
-## 2.0.2 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (02-11-2018)
+## [2.0.1](https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (02-15-2018)
 
 ##### Features
 
@@ -24,7 +24,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Geometries are sent properly for location fields in observations
 * Constraints are updated for the login screen when the keyboard is shown
 * Local login is not used unless the network error is cannot connect to host
-* Observation View updates when the observation is edited
+* Observation View updates when a new form is added to an observation
+* Constraints are updated when the keyboard shows on the geometry edit view
+* Fix for table layout in iOS 10
+* Fix for events containing no forms
+* Fix for forms with a geometry field
 
 ## 2.0 (https://github.com/ngageoint/mage-ios/releases/tag/2.0) (11-21-2017)
 
