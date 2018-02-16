@@ -150,7 +150,7 @@
     [defaults setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"https://mage.geointservices.io", @"serverUrl", nil] forKey:@"loginParameters"];
     
     id storedPasswordMock = [OCMockObject mockForClass:[StoredPassword class]];
-    [[[storedPasswordMock expect] andReturn:@"mockpassword"] retrieveStoredPassword];
+    [[[storedPasswordMock stub] andReturn:@"mockpassword"] retrieveStoredPassword];
     
     NSDictionary *authStrategies = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:14], @"passwordMinLength", nil], @"local", nil];
     [defaults setObject:authStrategies forKey:@"authenticationStrategies"];
@@ -183,7 +183,7 @@
     }];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
-        
+       
     }];
 }
 
@@ -229,7 +229,7 @@
     [defaults setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"https://mage.geointservices.io", @"serverUrl", nil] forKey:@"loginParameters"];
     
     id storedPasswordMock = [OCMockObject mockForClass:[StoredPassword class]];
-    [[[storedPasswordMock expect] andReturn:@"mockpassword"] retrieveStoredPassword];
+    [[[storedPasswordMock stub] andReturn:@"mockpassword"] retrieveStoredPassword];
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     

@@ -229,7 +229,7 @@ BOOL signingIn = YES;
 
 - (void) loginWithParameters:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     
-    if (self.server.reachabilityManager.reachable && [self didUserChange:[parameters objectForKey:@"username"]]) {
+    if ([self didUserChange:[parameters objectForKey:@"username"]]) {
         if ([MageOfflineObservationManager offlineObservationCount] > 0) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
                                                                            message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
@@ -267,11 +267,62 @@ BOOL signingIn = YES;
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate: parameters complete:complete];
+            return;
         } else {
             [weakSelf authenticationHadFailure:errorString];
         }
         complete(authenticationStatus, errorString);
     }];
+}
+
+- (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    __weak typeof(self) weakSelf = self;
+
+    // If there is a stored password do this
+    id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+    if (localAuthenticationModel) {
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Disconnected Login"
+                                     message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
+                                     preferredStyle:UIAlertControllerStyleAlert];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf workOffline: parameters complete:complete];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Try Login Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf tryLoginAgain];
+        }]];
+
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    } else {
+    
+    }
+}
+
+- (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    __weak typeof(self) weakSelf = self;
+
+    NSLog(@"work offline");
+    id<Authentication> localAuthenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+    [localAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+            [weakSelf authenticationWasSuccessful];
+        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
+            [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate: parameters complete:complete];
+            return;
+        } else {
+            [weakSelf authenticationHadFailure:errorString];
+        }
+        complete(authenticationStatus, errorString);
+    }];
+}
+
+- (void) tryLoginAgain {
+    
 }
 
 - (void) authenticationWasSuccessful {

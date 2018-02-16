@@ -59,7 +59,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor secondaryColor];
     self.loginButton.backgroundColor = [UIColor primaryColor];
     
     [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
@@ -136,6 +136,10 @@
     [self endLogin];
 }
 
+- (void) unableToAuthenticate {
+    [self endLogin];
+}
+
 - (void) resetLogin: (BOOL) clear {
     
     self.loginFailure = NO;
@@ -194,11 +198,12 @@
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate];
         } else {
             [weakSelf authenticationHadFailure:errorString];
         }
     }];
-    
 }
 
 - (IBAction)googleSignInTapped:(id)sender {
