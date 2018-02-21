@@ -386,17 +386,21 @@
         id coordinatorMock = OCMPartialMock(coordinator);
         OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
             [loginResponseArrived fulfill];
+        }).andForwardToRealObject();
+        
+        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
+            __unsafe_unretained UIAlertController *alert;
+            [invocation getArgument:&alert atIndex:2];
+            XCTAssertTrue([alert.title isEqualToString:@"Disconnected Login"]);
             [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
                 NSLog(@"Auth Success");
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             }];
-            //            OCMVerifyAll(delegatePartialMock);
         });
         
         OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
             [disclaimerDelegate disclaimerAgree];
         });
-        
         
         [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             NSLog(@"Unable to authenticate");
@@ -404,12 +408,10 @@
         }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
-            
             OCMVerifyAll(navControllerPartialMock);
+            OCMVerifyAll(coordinatorMock);
             [storedPasswordMock stopMocking];
-
         }];
-        
     }];
 }
 
@@ -429,8 +431,6 @@
     XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
 
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
-//    id delegatePartialMock = OCMPartialMock(delegate);
-//    OCMExpect([delegatePartialMock unableToAuthenticate]);
 
     __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
 
@@ -478,7 +478,6 @@
                 NSLog(@"Auth error");
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
             }];
-            //            OCMVerifyAll(delegatePartialMock);
         });
         
         OCMStub([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
@@ -580,7 +579,7 @@
     AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
-        
+    
     NSURL *url = [MageServer baseURL];
     XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
     
