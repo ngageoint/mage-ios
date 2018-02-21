@@ -283,7 +283,7 @@ BOOL signingIn = YES;
     // If there is a stored password do this
     id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     if (localAuthenticationModel) {
-        UIAlertController * alert = [UIAlertController
+        UIAlertController *alert = [UIAlertController
                                      alertControllerWithTitle:@"Disconnected Login"
                                      message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
                                      preferredStyle:UIAlertControllerStyleAlert];
@@ -291,13 +291,19 @@ BOOL signingIn = YES;
         [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf workOffline: parameters complete:complete];
         }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Try Login Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf tryLoginAgain];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Return to Login" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf returnToLogin];
         }]];
 
         [self.navigationController presentViewController:alert animated:YES completion:nil];
     } else {
-    
+        // there is no stored password for this server
+        UIAlertController *alert = [UIAlertController
+                                    alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf returnToLogin];
+        }]];
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -321,8 +327,8 @@ BOOL signingIn = YES;
     }];
 }
 
-- (void) tryLoginAgain {
-    
+- (void) returnToLogin {
+    [self authenticationHadFailure:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."];
 }
 
 - (void) authenticationWasSuccessful {

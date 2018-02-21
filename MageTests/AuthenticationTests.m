@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSString *urlController;
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 - (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
+- (void) returnToLogin;
 @end
 
 @interface AuthenticationTests : XCTestCase
