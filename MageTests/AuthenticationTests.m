@@ -27,7 +27,7 @@
 @property (strong, nonatomic) NSString *urlController;
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 - (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-- (void) returnToLogin;
+- (void) returnToLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 @end
 
 @interface AuthenticationTests : XCTestCase
@@ -474,6 +474,12 @@
         id coordinatorMock = OCMPartialMock(coordinator);
         OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
             [loginResponseArrived fulfill];
+        }).andForwardToRealObject();
+        
+        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
+            __unsafe_unretained UIAlertController *alert;
+            [invocation getArgument:&alert atIndex:2];
+            XCTAssertTrue([alert.title isEqualToString:@"Disconnected Login"]);
             [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
                 NSLog(@"Auth error");
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
@@ -491,11 +497,96 @@
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             OCMVerifyAll(navControllerPartialMock);
+            OCMVerifyAll(coordinatorMock);
             [storedPasswordMock stopMocking];
         }];
         
     }];
     
+}
+
+- (void) testUnableToWorkOfflineDueToNoSavedPassword {
+    NSString *baseUrlKey = @"baseServerUrl";
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"https://mage.geointservices.io", @"serverUrl", @"test", @"username", nil] forKey:@"loginParameters"];
+    
+    id storedPasswordMock = [OCMockObject mockForClass:[StoredPassword class]];
+    [[[storedPasswordMock stub] andReturn:nil] retrieveStoredPassword];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+    
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+    
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [coordinator start];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        // response came back from the server and we went to the login screen
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"goodpassword", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+        
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
+            return [OHHTTPStubsResponse responseWithError:notConnectedError];
+        }];
+        
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+        id coordinatorMock = OCMPartialMock(coordinator);
+        OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
+            [loginResponseArrived fulfill];
+        }).andForwardToRealObject();
+        
+        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
+            __unsafe_unretained UIAlertController *alert;
+            [invocation getArgument:&alert atIndex:2];
+            XCTAssertTrue([alert.title isEqualToString:@"Unable to Login"]);
+            [coordinator returnToLogin: ^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+                NSLog(@"Auth error");
+                XCTAssertTrue([@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." isEqualToString:errorString]);
+                XCTAssertTrue(authenticationStatus == UNABLE_TO_AUTHENTICATE);
+            }];
+        });
+        
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            NSLog(@"Unable to authenticate");
+            XCTFail(@"Should not be in here");
+        }];
+        
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+            OCMVerifyAll(navControllerPartialMock);
+            OCMVerifyAll(coordinatorMock);
+            [storedPasswordMock stopMocking];
+        }];
+    }];
 }
 
 - (void)testSetURLSuccess {

@@ -292,7 +292,7 @@ BOOL signingIn = YES;
             [weakSelf workOffline: parameters complete:complete];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Return to Login" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf returnToLogin];
+            [weakSelf returnToLogin: complete];
         }]];
 
         [self.navigationController presentViewController:alert animated:YES completion:nil];
@@ -301,7 +301,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController
                                     alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf returnToLogin];
+            [weakSelf returnToLogin: complete];
         }]];
         [self.navigationController presentViewController:alert animated:YES completion:nil];
     }
@@ -327,7 +327,8 @@ BOOL signingIn = YES;
     }];
 }
 
-- (void) returnToLogin {
+- (void) returnToLogin: (void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    complete(UNABLE_TO_AUTHENTICATE, @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored.");
     [self authenticationHadFailure:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."];
 }
 
