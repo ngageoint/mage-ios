@@ -18,6 +18,7 @@
 #import <MageSessionManager.h>
 #import <StoredPassword.h>
 #import <Observation.h>
+#import <Authentication.h>
 
 @interface ServerURLController ()
 @property (strong, nonatomic) NSString *error;
@@ -243,7 +244,7 @@
         [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue([@"server" isEqualToString:[defaults valueForKey:@"loginType"]]);
+            XCTAssertTrue(SERVER == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
         }];
 
@@ -397,7 +398,7 @@
             [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
                 NSLog(@"Auth Success");
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                XCTAssertTrue([@"disconnected" isEqualToString:[defaults valueForKey:@"loginType"]]);
+                XCTAssertTrue(LOCAL == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             }];
         });
