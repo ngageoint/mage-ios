@@ -242,6 +242,8 @@
 
         [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            XCTAssertTrue([@"server" isEqualToString:[defaults valueForKey:@"loginType"]]);
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
         }];
 
@@ -394,6 +396,8 @@
             XCTAssertTrue([alert.title isEqualToString:@"Disconnected Login"]);
             [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
                 NSLog(@"Auth Success");
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                XCTAssertTrue([@"disconnected" isEqualToString:[defaults valueForKey:@"loginType"]]);
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             }];
         });
