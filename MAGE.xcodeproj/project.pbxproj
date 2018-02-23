@@ -178,7 +178,6 @@
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
-		F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
@@ -593,8 +592,6 @@
 		F7A94D9418AD9CB000CB9EE0 /* MageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTests.m; sourceTree = "<group>"; };
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		F7A94DAE18B54B2000CB9EE0 /* LoginTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTableViewController.h; sourceTree = "<group>"; };
-		F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTableViewController.m; sourceTree = "<group>"; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerViewController.h; sourceTree = "<group>"; };
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
@@ -850,8 +847,6 @@
 			children = (
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
-				F7A94DAE18B54B2000CB9EE0 /* LoginTableViewController.h */,
-				F7A94DAF18B54B2000CB9EE0 /* LoginTableViewController.m */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
 				4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */,
@@ -2078,7 +2073,6 @@
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
-				F7A94DB018B54B2000CB9EE0 /* LoginTableViewController.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
