@@ -13,6 +13,8 @@ env:
 before_install:
 - gem install xcpretty
 - gem install slather
+before_install: rvm use $RVM_RUBY_VERSION
+install: bundle install --without=documentation --path ../travis_bundle_dir
 after_success: bundle exec slather
 script:
 - set -o pipefail
