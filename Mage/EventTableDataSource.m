@@ -33,22 +33,11 @@
     
     User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
-    
-    self.otherFetchedResultsController = [Event MR_fetchAllSortedBy:@"name"
-                                                      ascending:YES
-                                                  withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]
-                                                        groupBy:nil
-                                                       delegate:self
-                                                      inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
     self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     
-    self.recentFetchedResultsController = [Event MR_fetchAllSortedBy:@"recentSortOrder"
-                                                       ascending:YES
-                                                   withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]
-                                                         groupBy:nil
-                                                        delegate:self
-                                                       inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.recentFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
     self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
 
