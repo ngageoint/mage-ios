@@ -1,4 +1,5 @@
 coverage_service: coveralls
 xcodeproj: MAGE.xcodeproj
 scheme: MAGE
+workspace: MAGE.xcworkspace
 source_directory: Mage
