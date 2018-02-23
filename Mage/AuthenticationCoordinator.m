@@ -143,7 +143,7 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessful];
+            [weakSelf authenticationWasSuccessfulWithModule:authentication];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
             [[GIDSignIn sharedInstance] signOut];
@@ -228,34 +228,6 @@ BOOL signingIn = YES;
 }
 
 - (void) loginWithParameters:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    
-    if ([self didUserChange:[parameters objectForKey:@"username"]]) {
-        if ([MageOfflineObservationManager offlineObservationCount] > 0) {
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
-                                                                           message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            __weak __typeof__(self) weakSelf = self;
-            [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [MagicalRecord deleteAndSetupMageCoreDataStack];
-                [weakSelf doLogin:parameters complete:complete];
-                
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self.navigationController presentViewController:alert animated:NO completion:nil];
-        } else {
-            [MagicalRecord deleteAndSetupMageCoreDataStack];
-            [self doLogin:parameters complete:complete];
-        }
-        
-    } else {
-        [self doLogin:parameters complete:complete];
-    }
-}
-
-- (void) doLogin:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:SERVER]];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
@@ -264,7 +236,29 @@ BOOL signingIn = YES;
     __weak __typeof__(self) weakSelf = self;
     [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessful];
+            if ([self didUserChange:[parameters objectForKey:@"username"]]) {
+                if ([MageOfflineObservationManager offlineObservationCount] > 0) {
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
+                                                                                   message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+//                    __weak __typeof__(self) weakSelf = self;
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        [MagicalRecord deleteAndSetupMageCoreDataStack];
+                        [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+                    }]];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                    
+                    [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
+                } else {
+                    [MagicalRecord deleteAndSetupMageCoreDataStack];
+                    [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+                }
+                
+            } else {
+                [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+            }
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
@@ -275,6 +269,10 @@ BOOL signingIn = YES;
         }
         complete(authenticationStatus, errorString);
     }];
+}
+
+- (void) doLogin:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -314,7 +312,7 @@ BOOL signingIn = YES;
     id<Authentication> localAuthenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     [localAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessful];
+            [weakSelf authenticationWasSuccessfulWithModule:localAuthenticationModule];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
@@ -332,21 +330,25 @@ BOOL signingIn = YES;
     [self authenticationHadFailure:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."];
 }
 
-- (void) authenticationWasSuccessful {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+- (void) authenticationWasSuccessfulWithModule: (id<Authentication>) module {
     
-    if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
-        [self disclaimerAgree];
-        NSLog(@"Skip the disclaimer screen");
-    } else {
-        NSLog(@"Segue to the disclaimer screen");
-        DisclaimerViewController *disclaimer = [[DisclaimerViewController alloc] initWithDelegate:self];
-        [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [self.navigationController pushViewController:disclaimer animated:NO];
-    }
-
+    [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            
+            if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
+                [self disclaimerAgree];
+                NSLog(@"Skip the disclaimer screen");
+            } else {
+                NSLog(@"Segue to the disclaimer screen");
+                DisclaimerViewController *disclaimer = [[DisclaimerViewController alloc] initWithDelegate:self];
+                [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+                
+                [self.navigationController popToRootViewControllerAnimated:NO];
+                [self.navigationController pushViewController:disclaimer animated:NO];
+            }
+        }
+    }];
 }
 
 - (void) authenticationHadFailure: (NSString *) errorString {

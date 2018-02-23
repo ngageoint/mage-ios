@@ -19,6 +19,8 @@
 #import <StoredPassword.h>
 #import <Observation.h>
 #import <Authentication.h>
+#import "MageOfflineObservationManager.h"
+#import "MagicalRecord+MAGE.h"
 
 @interface ServerURLController ()
 @property (strong, nonatomic) NSString *error;
@@ -56,6 +58,7 @@
     [super setUp];
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+    [MagicalRecord setupCoreDataStackWithInMemoryStore];
 }
 
 - (void)tearDown {
@@ -63,6 +66,7 @@
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
     [OHHTTPStubs removeAllStubs];
+//    [MagicalRecord cleanUp];
 }
 
 - (void) testLoginWithRegisteredDeviceAndRandomToken {
@@ -253,6 +257,178 @@
             OCMVerifyAll(navControllerPartialMock);
         }];
 
+    }];
+}
+
+- (void) testLoginWithRegisteredDeviceChangingUserWithOfflineObservations {
+    User *u = [User MR_createEntity];
+    u.username = @"old";
+
+    NSString *baseUrlKey = @"baseServerUrl";
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    
+    id offlineManagerMock = OCMClassMock([MageOfflineObservationManager class]);
+    OCMStub(ClassMethod([offlineManagerMock offlineObservationCount]))._andReturn([NSNumber numberWithInt:1]);
+    
+    id userMock = [OCMockObject mockForClass:[User class]];
+    [[[userMock stub] andReturn:u] fetchCurrentUserInManagedObjectContext:[OCMArg any]];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    id delegatePartialMock = OCMPartialMock(delegate);
+    OCMExpect([delegatePartialMock authenticationSuccessful]);
+    
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+    
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+    
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [coordinator start];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        // response came back from the server and we went to the login screen
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"test", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+        
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
+            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                    statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+        }];
+        
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+        
+        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
+            __unsafe_unretained UIAlertController *alert;
+            [invocation getArgument:&alert atIndex:2];
+            XCTAssertTrue([alert.title isEqualToString:@"Loss of Unsaved Data"]);
+            [loginResponseArrived fulfill];
+        });
+        
+        OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
+        
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            // login complete
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            XCTAssertTrue(SERVER == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
+            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+        }];
+        
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+            
+            OCMVerifyAll(navControllerPartialMock);
+        }];
+        
+    }];
+}
+
+- (void) testLoginWithRegisteredDeviceChangingUserWithoutOfflineObservations {
+    User *u = [User MR_createEntity];
+    u.username = @"old";
+    
+    NSString *baseUrlKey = @"baseServerUrl";
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    
+    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
+    
+    AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
+    id delegatePartialMock = OCMPartialMock(delegate);
+    OCMExpect([delegatePartialMock authenticationSuccessful]);
+    
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    
+    id navControllerPartialMock = OCMPartialMock(navigationController);
+    
+    NSURL *url = [MageServer baseURL];
+    XCTAssertTrue([[url absoluteString] isEqualToString:@"https://mage.geointservices.io"]);
+    
+    OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[LoginViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+        [apiResponseArrived fulfill];
+    });
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [coordinator start];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        // response came back from the server and we went to the login screen
+        id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
+        id<DisclaimerDelegate> disclaimerDelegate = (id<DisclaimerDelegate>)coordinator;
+        
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"test", @"username",
+                                    @"test", @"password",
+                                    @"uuid", @"uid",
+                                    nil];
+        
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
+            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                    statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+        }];
+        
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+        
+        OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+            [loginResponseArrived fulfill];
+            [disclaimerDelegate disclaimerAgree];
+            OCMVerifyAll(delegatePartialMock);
+        });
+        
+        OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
+        
+        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+            // login complete
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            XCTAssertTrue(SERVER == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
+            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+        }];
+        
+        [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+            
+            OCMVerifyAll(navControllerPartialMock);
+        }];
+        
     }];
 }
 

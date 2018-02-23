@@ -12,6 +12,8 @@ env:
   - DESTINATION="$IOS10"
 before_install:
 - gem install xcpretty
+- gem install slather
+after_success: bundle exec slather
 script:
 - set -o pipefail
 - echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME"
