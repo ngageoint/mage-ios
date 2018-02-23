@@ -10,9 +10,9 @@ env:
   matrix:
   - DESTINATION="$IOS11"
   - DESTINATION="$IOS10"
-before_install: rvm use $RVM_RUBY_VERSION
-install: bundle install --without=documentation --path ../travis_bundle_dir
 after_success: bundle exec slather
+before_script:
+- bundle exec pod install --project-directory=.
 script:
 - set -o pipefail
 - echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME"
