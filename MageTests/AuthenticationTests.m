@@ -67,7 +67,6 @@
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
     [OHHTTPStubs removeAllStubs];
-//    [MagicalRecord cleanUp];
 }
 
 - (void) testLoginWithRegisteredDeviceAndRandomToken {
@@ -597,7 +596,7 @@
     [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
     [defaults setBool:YES forKey:@"deviceRegistered"];
     [defaults setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"https://mage.geointservices.io", @"serverUrl", @"test", @"username", nil] forKey:@"loginParameters"];
-    
+    [defaults setObject:[NSNumber numberWithDouble:2880] forKey:@"tokenExpirationLength"];
     id storedPasswordMock = [OCMockObject mockForClass:[StoredPassword class]];
     [[[storedPasswordMock stub] andReturn:@"goodpassword"] retrieveStoredPassword];
     
@@ -650,7 +649,6 @@
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
         id coordinatorMock = OCMPartialMock(coordinator);
         OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
-            [loginResponseArrived fulfill];
         }).andForwardToRealObject();
         
         OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
@@ -662,6 +660,7 @@
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 XCTAssertTrue(LOCAL == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+                [loginResponseArrived fulfill];
             }];
         });
         
@@ -676,7 +675,7 @@
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             OCMVerifyAll(navControllerPartialMock);
-            OCMVerifyAll(coordinatorMock);
+            OCMVerifyAll(coordinatorMock);            
             [storedPasswordMock stopMocking];
         }];
     }];

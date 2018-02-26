@@ -95,6 +95,7 @@
 		F7003949200D425400E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
 		F7059AB420446B1D00A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
 		F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
+		F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -446,6 +447,7 @@
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F7059AB320446B1D00A6B7CC /* registrationSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = registrationSuccess.json; sourceTree = "<group>"; };
+		F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisconnectedLogin.m; sourceTree = "<group>"; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
 		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
@@ -1413,6 +1415,7 @@
 				F7A94D9418AD9CB000CB9EE0 /* MageTests.m */,
 				F7A94D8F18AD9CB000CB9EE0 /* Supporting Files */,
 				F73C3BF51A608EBD007A734E /* mageTest.js */,
+				F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -2095,6 +2098,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
+				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,

@@ -221,6 +221,37 @@
     }];
 }
 
+- (void)testSetURL503 {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"https://mage.geointservices.io" forKey:@"baseServerUrl"];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    
+    XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+        response.statusCode = 503;
+        
+        return response;
+    }];
+    
+    [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
+        // success
+        NSLog(@"Success");
+        XCTFail(@"Should not have a success");
+    } failure:^(NSError *error) {
+        // failure
+        [responseArrived fulfill];
+        NSLog(@"Failure");
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        
+    }];
+}
+
 - (void)testSetURLHitAPIWithStoredPassword {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:@"https://mage.geointservices.io" forKey:@"baseServerUrl"];
