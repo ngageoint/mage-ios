@@ -67,7 +67,11 @@ BOOL signingIn = YES;
 }
 
 - (void) createAccount {
-    [self showSignupView];
+    [[GIDSignIn sharedInstance] signOut];
+    signingIn = NO;
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
+    [self.navigationController pushViewController:signupView animated:NO];
 }
 
 - (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error {
@@ -172,14 +176,6 @@ BOOL signingIn = YES;
     }
 }
 
-- (void) showSignupView {
-    [[GIDSignIn sharedInstance] signOut];
-    signingIn = NO;
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
-    [self.navigationController pushViewController:signupView animated:NO];
-}
-
 - (void) showLoginViewForServer: (MageServer *) mageServer {
     signingIn = YES;
     self.server = mageServer;
@@ -269,10 +265,6 @@ BOOL signingIn = YES;
         }
         complete(authenticationStatus, errorString);
     }];
-}
-
-- (void) doLogin:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
