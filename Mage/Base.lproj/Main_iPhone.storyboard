@@ -611,7 +611,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="GCl-vQ-1KG">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="282"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -670,7 +670,7 @@
                                     <size key="shadowOffset" width="0.0" height="0.0"/>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-kY-235">
-                                    <rect key="frame" x="8" y="228" width="359" height="54"/>
+                                    <rect key="frame" x="8" y="228" width="359" height="74"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vbx-kA-G61">
                                             <rect key="frame" x="0.0" y="0.0" width="359" height="24"/>
@@ -707,7 +707,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dre-HY-Lpw">
-                                            <rect key="frame" x="0.0" y="24" width="359" height="30"/>
+                                            <rect key="frame" x="0.0" y="24" width="359" height="50"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" alpha="0.54000002145767212" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eTd-rR-bXT">
                                                     <rect key="frame" x="0.0" y="9" width="14" height="14"/>
@@ -718,7 +718,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
-                                                    <rect key="frame" x="20" y="0.0" width="339" height="30"/>
+                                                    <rect key="frame" x="20" y="0.0" width="339" height="50"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -823,7 +823,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="XLz-PK-mAw"/>
+                    <tabBarItem key="tabBarItem" tag="4" systemItem="more" id="XLz-PK-mAw"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fZI-Xr-TW6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -901,7 +901,7 @@
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="77U-TW-S4M"/>
+        <segue reference="kER-Hr-0Bf"/>
         <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
 </document>

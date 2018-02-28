@@ -115,7 +115,7 @@
             [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
                 NSLog(@"Auth Success");
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                XCTAssertTrue(LOCAL == ((NSNumber *)[defaults valueForKey:@"loginType"]).integerValue);
+                XCTAssertTrue([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]);
                 XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             }];
         });

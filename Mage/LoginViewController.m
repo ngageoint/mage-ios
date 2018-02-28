@@ -32,12 +32,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL allowLogin;
 @property (nonatomic) BOOL loginFailure;
 @property (strong, nonatomic) UIFont *passwordFont;
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
+@property (strong, nonatomic) User *user;
 
 @end
 
@@ -50,6 +52,13 @@
     self.delegate = delegate;
     self.server = server;
     
+    return self;
+}
+
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate {
+    if (self = [self initWithMageServer:server andDelegate:delegate]) {
+        self.user = user;
+    }
     return self;
 }
 
@@ -113,6 +122,14 @@
     
     [self resetLogin:YES];
     [self.passwordField setDelegate:self];
+    
+    if (self.user) {
+        self.usernameField.enabled = NO;
+        self.usernameField.backgroundColor = [UIColor lightGrayColor];
+        self.usernameField.text = self.user.username;
+        self.serverURL.enabled = NO;
+        self.signupContainerView.hidden = YES;
+    }
 }
 
 - (void) authenticationWasSuccessful {

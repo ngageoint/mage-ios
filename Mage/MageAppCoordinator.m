@@ -46,6 +46,9 @@
 - (void) start {
     // check for a valid token
     if ([[UserUtility singleton] isTokenExpired]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObjectForKey:@"loginType"];
+        [defaults synchronize];
         // start the authentication coordinator
         AuthenticationCoordinator *authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self];
         [_childCoordinators addObject:authCoordinator];

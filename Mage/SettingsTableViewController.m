@@ -14,8 +14,9 @@
 #import "AppDelegate.h"
 #import "EventChooserCoordinator.h"
 #import "ChangePasswordViewController.h"
+#import "AuthenticationCoordinator.h"
 
-@interface SettingsTableViewController ()<UITableViewDelegate>
+@interface SettingsTableViewController ()<UITableViewDelegate, AuthenticationDelegate>
 
     @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
     @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
@@ -32,15 +33,19 @@
     @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
     @property (weak, nonatomic) IBOutlet UITableViewCell *eventCell;
     @property (weak, nonatomic) IBOutlet UITableViewCell *changePasswordCell;
+    @property (weak, nonatomic) IBOutlet UITableViewCell *goOnlineCell;
+    @property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
-static NSInteger legalSection = 5;
+static NSInteger legalSection = 6;
 
 @implementation SettingsTableViewController
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationController.navigationBar setPrefersLargeTitles:NO];
@@ -63,6 +68,8 @@ static NSInteger legalSection = 5;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
     
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     self.user.text = user.name;
@@ -152,8 +159,22 @@ static NSInteger legalSection = 5;
     } else if (cell == self.changePasswordCell) {
         ChangePasswordViewController *vc = [[ChangePasswordViewController alloc] initWithLoggedIn:YES];
         [self.navigationController presentViewController:vc animated:YES completion:nil];
+    } else if (cell == self.goOnlineCell) {
+        UINavigationController *nav = [[UINavigationController alloc] init];
+        nav.modalPresentationStyle = UIModalPresentationFormSheet;
+        nav.modalTransitionStyle = UIModalPresentationFormSheet;
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+        AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:nav andDelegate:self];
+        [self.childCoordinators addObject:coord];
+        [coord startLoginOnly];
+        nav.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLogin:)];
+
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+- (void) cancelLogin:(id) sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -175,8 +196,93 @@ static NSInteger legalSection = 5;
     if ([indexPath section] == legalSection && [indexPath row] == 0 && !self.showDisclaimer) {
         return 0;
     }
-                                     
     return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+        if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            return UITableViewAutomaticDimension;
+        }
+        return 0.001;
+    }
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+        if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            return UITableViewAutomaticDimension;
+        }
+        return 0.001;
+    }
+    return UITableViewAutomaticDimension;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            return nil;
+        }
+        return [[UIView alloc] init];
+    }
+    return nil;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            return nil;
+        }
+        return [[UIView alloc] init];
+    }
+    return nil;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+    switch (section) {
+        case 0: {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+                return 1;
+            }
+            return 0;
+        }
+        case 1:
+            return 2;
+        case 2:
+            return 1;
+        case 3:
+            return 1;
+        case 4:
+            return 2;
+        case 5:
+            return 3;
+        case 6:
+            return 2;
+        default:
+            break;
+    }
+    return 0;
+}
+
+- (void)authenticationSuccessful {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
+}
+
+- (void)couldNotAuthenticate {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
 }
 
 @end

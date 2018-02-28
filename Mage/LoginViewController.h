@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
+#import <User.h>
 
 @protocol LoginDelegate <NSObject>
 
@@ -20,6 +21,7 @@
 @interface LoginViewController : UIViewController
 
 - (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate;
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate;
 - (void) authenticationHadFailure: (NSString *) errorString;
 
 @end

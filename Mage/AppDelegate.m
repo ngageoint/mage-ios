@@ -135,6 +135,9 @@
     [[UserUtility singleton] expireToken];
     [[Mage singleton] stopServices];
     [[LocationService singleton] stop];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"loginType"];
+    [defaults synchronize];
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     [self createRootView];
 }

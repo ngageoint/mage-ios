@@ -23,6 +23,7 @@
 #import <MageSessionManager.h>
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
+#import <Authentication.h>
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate>
 
@@ -158,6 +159,19 @@ BOOL signingIn = YES;
     }];
 }
 
+- (void) startLoginOnly {
+    NSURL *url = [MageServer baseURL];
+    __weak __typeof__(self) weakSelf = self;
+    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+        if (mageServer.serverHasGoogleAuthenticationStrategy) {
+            [self setupGoogleSignIn];
+        }
+        [weakSelf showLoginViewForCurrentUserForServer:mageServer];
+    } failure:^(NSError *error) {
+        NSLog(@"failed to contact server");
+    }];
+}
+
 - (void) start {
     NSURL *url = [MageServer baseURL];
     if ([url absoluteString].length == 0) {
@@ -176,12 +190,23 @@ BOOL signingIn = YES;
     }
 }
 
+- (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
+    self.server = mageServer;
+    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self];
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    [self.navigationController pushViewController:self.loginView animated:NO];
+}
+
 - (void) showLoginViewForServer: (MageServer *) mageServer {
     signingIn = YES;
     self.server = mageServer;
     [[GIDSignIn sharedInstance] signOut];
     // If the user is logging in, force them to pick the event again
     [Server removeCurrentEventId];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"loginType"];
+    [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self];
     [self.navigationController pushViewController:self.loginView animated:NO];
@@ -269,7 +294,24 @@ BOOL signingIn = YES;
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     __weak typeof(self) weakSelf = self;
-
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    // if the user has already logged in offline just tell them
+    if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+        UIAlertController *alert = [UIAlertController
+                                    alertControllerWithTitle:@"Disconnected Login"
+                                    message:@"We are still unable to connect to the server to log you in. You will continue to work offline."
+                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.delegate couldNotAuthenticate];
+            complete(AUTHENTICATION_SUCCESS, nil);
+        }]];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
     // If there is a stored password do this
     id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     if (localAuthenticationModel) {
