@@ -40,6 +40,7 @@
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
+#import "MageTheme.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -155,35 +156,7 @@
 }
 
 - (void) setupApplicationAppearance {
-    [UIColor setPrimaryColor:[UIColor mageBlue]];
-    [UIColor setSecondaryColor:[UIColor whiteColor]];
-    
-    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryColor]];
-    [[UINavigationBar appearance] setTintColor:[UIColor secondaryColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
-                                                           }];
-    [[UINavigationBar appearance] setTranslucent:NO];
-    [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTintColor:[UIColor secondaryColor]];
-    
-    // these are inverted from the rest of the app
-    [[UITabBar appearance] setTintColor:[UIColor primaryColor]];
-    [[UITabBar appearance] setBarTintColor:[UIColor secondaryColor]];
-    
-    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTextColor:[UIColor secondaryColor]];
-    if (@available(iOS 11.0, *)) {
-        [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
-        [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
-        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor secondaryColor]}];
-        [[UINavigationBar appearance] setPrefersLargeTitles:NO];
-        [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
-                                                                    NSForegroundColorAttributeName: [UIColor secondaryColor]
-                                                                    }];
-    } else {
-        // Fallback on earlier versions
-    }
-    
-
+    [MageTheme setupAppearance];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

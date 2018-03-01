@@ -146,6 +146,8 @@
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */; };
+		F75A10E2204856E4002F9906 /* MageTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E1204856E4002F9906 /* MageTheme.m */; };
+		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
@@ -529,6 +531,9 @@
 		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
 		F7531EFE1910131C00CA084C /* ObservationViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPad.h; sourceTree = "<group>"; };
 		F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
+		F75A10E0204856E4002F9906 /* MageTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MageTheme.h; sourceTree = "<group>"; };
+		F75A10E1204856E4002F9906 /* MageTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTheme.m; sourceTree = "<group>"; };
+		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
@@ -1162,6 +1167,15 @@
 			name = Edit;
 			sourceTree = "<group>";
 		};
+		F75A10DF204856C7002F9906 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				F75A10E0204856E4002F9906 /* MageTheme.h */,
+				F75A10E1204856E4002F9906 /* MageTheme.m */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		F75DD30B1A97A9B50007FA3F /* Segues */ = {
 			isa = PBXGroup;
 			children = (
@@ -1346,6 +1360,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F75A10DF204856C7002F9906 /* Theme */,
 				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
 				F7FC59281F3CEDEB0010351A /* Form */,
@@ -1416,6 +1431,7 @@
 				F7A94D8F18AD9CB000CB9EE0 /* Supporting Files */,
 				F73C3BF51A608EBD007A734E /* mageTest.js */,
 				F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */,
+				F75A10E320486489002F9906 /* StoredPasswordTests.m */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -2078,6 +2094,7 @@
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
+				F75A10E2204856E4002F9906 /* MageTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
@@ -2102,6 +2119,7 @@
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
+				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
