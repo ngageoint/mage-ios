@@ -100,9 +100,6 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     
     MageServer *server = [[MageServer alloc] initWithURL: url];
     
-    server.reachabilityManager = [AFNetworkReachabilityManager managerForDomain:url.host];
-    [server.reachabilityManager startMonitoring];
-    
     if ([url.absoluteString isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
         success(server);
         return;
@@ -118,7 +115,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
         [defaults setObject:[response valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
         
-        NSMutableDictionary *authenticationModules = [NSMutableDictionary dictionaryWithObject:[[LocalAuthentication alloc] init] forKey:[Authentication authenticationTypeToString:LOCAL]];
+        NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
         NSDictionary *authenticationStrategies = [response valueForKeyPath:@"authenticationStrategies"];
         [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
         for (NSString *authenticationType in authenticationStrategies) {
@@ -162,10 +159,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
                     server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
-                    success(server);
-                } else {
-                    failure(error);
                 }
+                success(server);
             } else {
                 failure(error);
             }

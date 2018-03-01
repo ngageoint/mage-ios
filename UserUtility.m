@@ -7,6 +7,7 @@
 #import "UserUtility.h"
 #import <NSDate+DateTools.h>
 #import "MageSessionManager.h"
+#import <StoredPassword.h>
 
 @interface UserUtility()
 
@@ -68,6 +69,7 @@
 }
 
 - (void) expireToken {
+    [StoredPassword clearToken];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *loginParameters = [[defaults objectForKey:@"loginParameters"] mutableCopy];
     
@@ -77,6 +79,8 @@
     [[MageSessionManager manager] clearToken];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
+    
+    [defaults removeObjectForKey:@"loginType"];
     
     [defaults synchronize];
     self.expired = YES;

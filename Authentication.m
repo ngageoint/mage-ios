@@ -69,5 +69,33 @@
     return dictionary;
 }
 
+//- (void) setupLoggedInUserResponse: (NSDictionary *) response complete:(void (^) (void)) complete {
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSDictionary *api = [response objectForKey:@"api"];
+//
+//    if ([api valueForKey:@"disclaimer"]) {
+//        [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
+//        [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
+//        [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+//    }
+//    [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
+//
+//    NSDictionary *userJson = [response objectForKey:@"user"];
+//    NSString *userId = [userJson objectForKey:@"id"];
+//    
+//    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+//        User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
+//        if (!user) {
+//            [User insertUserForJson:userJson inManagedObjectContext:localContext];
+//        } else {
+//            [user updateUserForJson:userJson];
+//        }
+//
+//    } completion:^(BOOL contextDidSave, NSError *error) {
+//
+//        [self finishLoginForParameters: parameters withResponse:response complete:complete];
+//    }];
+//}
+
 
 @end

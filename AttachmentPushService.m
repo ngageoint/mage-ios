@@ -114,6 +114,8 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 }
 
 - (void) pushAttachments:(NSArray *) attachments {
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [StoredPassword retrieveStoredToken]] forHTTPHeaderField:@"Authorization"];
+
     for (Attachment *attachment in attachments) {
         if ([self.pushTasks containsObject:attachment.taskIdentifier]) {
             // already pushing this attachment

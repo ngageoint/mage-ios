@@ -18,6 +18,7 @@
 @interface OAuthAuthentication()
 
 @property (strong, nonatomic) NSDictionary* parameters;
+@property (strong, nonatomic) NSDictionary* loginParameters;
 
 @end
 
@@ -41,12 +42,13 @@
     return YES;
 }
 
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    OAuthRequestType requestType = [[parameters valueForKey:@"requestType"] intValue];
+- (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    OAuthRequestType requestType = [[loginParameters valueForKey:@"requestType"] intValue];
     if (requestType == SIGNUP) {
-        [self signupWithParameters:[parameters valueForKey:@"result"] complete:complete];
+        [self signupWithParameters:[loginParameters valueForKey:@"result"] complete:complete];
     } else {
-        [self signinWithParameters:[parameters valueForKey:@"result"] complete:complete];
+        self.loginParameters = loginParameters;
+        [self signinWithParameters:[loginParameters valueForKey:@"result"] complete:complete];
     }
 }
 
@@ -59,10 +61,10 @@
     }
 }
 
-- (void) signinWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    NSString *token = [parameters valueForKey:@"token"];
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSString *token = [self.loginParameters valueForKey:@"token"];
     if (token != nil) {
-        NSDictionary *userJson = [parameters objectForKey:@"user"];
+        NSDictionary *userJson = [self.loginParameters objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         
         User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
@@ -82,9 +84,9 @@
             NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
             
             // Always use this locale when parsing fixed format date strings
-            NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[parameters objectForKey:@"expirationDate"]];
+            NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.loginParameters objectForKey:@"expirationDate"]];
             [MageSessionManager manager].token = token;
-
+            
             [[UserUtility singleton] resetExpiration];
             
             NSDictionary *loginParameters = @{
@@ -97,6 +99,7 @@
             
             NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
             [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
+            [defaults setValue:[Authentication authenticationTypeToString:GOOGLE] forKey:@"loginType"];
             [defaults synchronize];
             
             [StoredPassword persistTokenToKeyChain:token];
@@ -104,7 +107,16 @@
             complete(AUTHENTICATION_SUCCESS, nil);
         }];
     } else {
-        NSDictionary *device = [parameters objectForKey:@"device"];
+        complete(AUTHENTICATION_ERROR, nil);
+    }
+}
+
+- (void) signinWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSString *token = [loginParameters valueForKey:@"token"];
+    if (token != nil) {
+        complete(AUTHENTICATION_SUCCESS, nil);
+    } else {
+        NSDictionary *device = [loginParameters objectForKey:@"device"];
         if (device != nil && [device objectForKey:@"registered"]) {
             complete(REGISTRATION_SUCCESS, nil);
         } else {
