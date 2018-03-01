@@ -11,6 +11,7 @@
 @protocol AuthenticationDelegate
 
 - (void) authenticationSuccessful;
+- (void) couldNotAuthenticate;
 
 @end
 
@@ -18,5 +19,6 @@
 
 - (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate;
 - (void) start;
+- (void) startLoginOnly;
 
 @end

@@ -32,12 +32,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL allowLogin;
 @property (nonatomic) BOOL loginFailure;
 @property (strong, nonatomic) UIFont *passwordFont;
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
+@property (strong, nonatomic) User *user;
 
 @end
 
@@ -53,13 +55,20 @@
     return self;
 }
 
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate {
+    if (self = [self initWithMageServer:server andDelegate:delegate]) {
+        self.user = user;
+    }
+    return self;
+}
+
 - (void) setMageServer: (MageServer *) server {
     self.server = server;
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor secondaryColor];
     self.loginButton.backgroundColor = [UIColor primaryColor];
     
     [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
@@ -113,6 +122,14 @@
     
     [self resetLogin:YES];
     [self.passwordField setDelegate:self];
+    
+    if (self.user) {
+        self.usernameField.enabled = NO;
+        self.usernameField.backgroundColor = [UIColor lightGrayColor];
+        self.usernameField.text = self.user.username;
+        self.serverURL.enabled = NO;
+        self.signupContainerView.hidden = YES;
+    }
 }
 
 - (void) authenticationWasSuccessful {
@@ -133,6 +150,10 @@
 
 - (void) registrationWasSuccessful {
     [self resetLogin:NO];
+    [self endLogin];
+}
+
+- (void) unableToAuthenticate {
     [self endLogin];
 }
 
@@ -194,11 +215,12 @@
             [weakSelf authenticationWasSuccessful];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate];
         } else {
             [weakSelf authenticationHadFailure:errorString];
         }
     }];
-    
 }
 
 - (IBAction)googleSignInTapped:(id)sender {

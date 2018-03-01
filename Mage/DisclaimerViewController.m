@@ -30,6 +30,9 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    if (self.navigationController) {
+        self.navigationController.navigationBarHidden = YES;
+    }
     self.mageLabel.textColor = [UIColor primaryColor];
     self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
