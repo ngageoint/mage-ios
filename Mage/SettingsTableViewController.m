@@ -189,6 +189,27 @@ static NSInteger legalSection = 6;
         } else {
             cell.detailTextLabel.text = versionString;
         }
+    } else if (cell == self.goOnlineCell) {
+        UILabel *offlineLabel = [[UILabel alloc] init];
+        offlineLabel.font = [UIFont systemFontOfSize:14];
+        offlineLabel.textAlignment = NSTextAlignmentCenter;
+        offlineLabel.textColor = [UIColor whiteColor];
+        offlineLabel.backgroundColor = [UIColor orangeColor];
+        offlineLabel.text = @"!";
+        [offlineLabel sizeToFit];
+        // Adjust frame to be square for single digits or elliptical for numbers > 9
+        CGRect frame = offlineLabel.frame;
+        frame.size.height += (int)(0.4*14);
+        frame.size.width = frame.size.height;
+        offlineLabel.frame = frame;
+        
+        // Set radius and clip to bounds
+        offlineLabel.layer.cornerRadius = frame.size.height/2.0;
+        offlineLabel.clipsToBounds = true;
+        
+        // Show label in accessory view and remove disclosure
+        cell.accessoryView = offlineLabel;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
 }
 
