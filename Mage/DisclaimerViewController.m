@@ -6,7 +6,7 @@
 
 #import "DisclaimerViewController.h"
 #import <UserUtility.h>
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface DisclaimerViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *consentText;
@@ -14,6 +14,8 @@
 @property (strong, nonatomic) id<DisclaimerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *disagreeButton;
+@property (weak, nonatomic) IBOutlet UIButton *agreeButton;
 @end
 
 @implementation DisclaimerViewController
@@ -27,8 +29,20 @@
     return self;
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.consentText.textColor = [UIColor secondaryText];
+    self.consentTitle.textColor = [UIColor primaryText];
+    self.wandLabel.textColor = [UIColor brand];
+    self.mageLabel.textColor = [UIColor brand];
+    self.disagreeButton.backgroundColor = [UIColor themedButton];
+    self.agreeButton.backgroundColor = [UIColor themedButton];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self registerForThemeChanges];
     
     if (self.navigationController) {
         self.navigationController.navigationBarHidden = YES;

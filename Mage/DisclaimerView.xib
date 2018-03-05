@@ -24,8 +24,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisclaimerViewController">
             <connections>
+                <outlet property="agreeButton" destination="8B4-dU-p7i" id="cGf-ky-NXU"/>
                 <outlet property="consentText" destination="tRL-lw-Syp" id="2q5-9V-g9O"/>
                 <outlet property="consentTitle" destination="9p1-TA-FSC" id="pev-8U-fj8"/>
+                <outlet property="disagreeButton" destination="6Fd-IC-Rgp" id="FHz-NX-Ycq"/>
                 <outlet property="mageLabel" destination="0e8-50-JZx" id="tu3-xJ-ayH"/>
                 <outlet property="view" destination="Xl0-lr-m6g" id="A0Y-hM-hGw"/>
                 <outlet property="wandLabel" destination="cB3-Ub-Mkv" id="cDo-rx-OlM"/>
@@ -42,7 +44,7 @@
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Fd-IC-Rgp" customClass="ThemedButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Fd-IC-Rgp">
                     <rect key="frame" x="16" y="607" width="163.5" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Agree"/>
@@ -63,7 +65,7 @@
                         <action selector="disagreeTapped:" destination="-1" eventType="touchUpInside" id="xRh-BK-zp8"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8B4-dU-p7i" customClass="ThemedButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8B4-dU-p7i">
                     <rect key="frame" x="195.5" y="607" width="163.5" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Agree"/>
