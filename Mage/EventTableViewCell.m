@@ -7,7 +7,7 @@
 //
 
 #import "EventTableViewCell.h"
-
+#import "Theme+UIResponder.h"
 
 @interface EventTableViewCell()
 @property (weak, nonatomic) IBOutlet UILabel *eventName;
@@ -20,7 +20,14 @@
 
 @implementation EventTableViewCell
 
+- (void) registerForThemeChanges {
+    self.eventName.textColor = [UIColor primaryText];
+    self.eventDescription.textColor = [UIColor secondaryText];
+}
+
 - (void) populateCellWithEvent:(Event *) event offlineObservationCount:(NSUInteger) count {
+    [self registerForThemeChanges];
+    
     self.eventName.text = event.name;
     self.eventDescription.text = event.eventDescription;
     

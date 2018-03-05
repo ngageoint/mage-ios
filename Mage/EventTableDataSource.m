@@ -11,7 +11,7 @@
 #import "EventChooserController.h"
 #import "Observation.h"
 #import "EventTableViewCell.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface EventTableDataSource()
 
@@ -116,6 +116,19 @@
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Event *event = nil;
+    if (indexPath.section == 1) {
+        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 2) {
+        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    }
+    if (event.eventDescription) {
+        return 72.0f;
+    }
+    return 48.0f;
+}
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
     
     UITableView *tableView = self.tableView;
@@ -194,7 +207,7 @@
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:14];
-//        messageLabel.textColor = [UIColor primaryLightText];
+        messageLabel.textColor = [UIColor secondaryText];
         [view addSubview:messageLabel];
         return view;
     }
@@ -219,23 +232,15 @@
     
     NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
     
-    UITableViewHeaderFooterView *tableSectionHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"TableSectionHeader"];
-    tableSectionHeader.textLabel.text = name;
-    
-    return tableSectionHeader;
-    
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
-//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
-//    [label setFont:[UIFont boldSystemFontOfSize:18]];
-//    [label setTextColor:[UIColor whiteColor]];
-//    [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
-//    [view addSubview:label];
-//    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
-//    [bottomBorder setBackgroundColor:[UIColor primaryColor]];
-//    [view addSubview:bottomBorder];
-//
-//    [view setBackgroundColor:[UIColor primaryColor]];
-//    return view;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 48)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, tableView.frame.size.width, 48)];
+    [label setFont:[UIFont systemFontOfSize:14]];
+    [label setTextColor:[UIColor flatButton]];
+    [label setText: name];
+    [view addSubview:label];
+
+    [view setBackgroundColor:[UIColor background]];
+    return view;
 }
 
 @end
