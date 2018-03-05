@@ -10,7 +10,14 @@
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
+
+@interface EventChooserController()
+
+@property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@end
 
 @implementation EventChooserController
 
@@ -29,8 +36,20 @@ BOOL eventsFetched = NO;
     return self;
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.loadingView.backgroundColor = [UIColor background];
+    self.chooseEventTitle.textColor = [UIColor brand];
+    self.actionButton.backgroundColor = [UIColor themedButton];
+    self.loadingLabel.textColor = [UIColor brand];
+    self.activityIndicator.color = [UIColor brand];
+    
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    [self registerForThemeChanges];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
@@ -83,6 +102,7 @@ BOOL eventsFetched = NO;
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];
+        messageLabel.textColor = [UIColor secondaryText];
         [messageLabel sizeToFit];
         
         UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];

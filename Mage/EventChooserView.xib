@@ -17,7 +17,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EventChooserController">
             <connections>
-                <outlet property="actionButton" destination="byS-3P-7WH" id="dzd-bb-Ifb"/>
+                <outlet property="actionButton" destination="byS-3P-7WH" id="ItI-RT-KGK"/>
+                <outlet property="activityIndicator" destination="vPz-kQ-EX9" id="egC-0D-Cez"/>
+                <outlet property="chooseEventTitle" destination="lba-YF-RHW" id="Ddz-WR-cYh"/>
                 <outlet property="loadingLabel" destination="M9H-W8-t0D" id="4M6-SD-KP8"/>
                 <outlet property="loadingView" destination="DUb-5Z-FfH" id="v5o-d2-S4B"/>
                 <outlet property="tableView" destination="9U8-H1-4fr" id="lHq-u9-wz9"/>
@@ -36,7 +38,7 @@
                     <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <sections/>
                 </tableView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="byS-3P-7WH" customClass="ThemedButton">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="byS-3P-7WH">
                     <rect key="frame" x="16" y="607" width="343" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Go"/>
