@@ -12,7 +12,7 @@
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
 #import <GoogleSignIn/GoogleSignIn.h>
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
@@ -40,6 +40,9 @@
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (strong, nonatomic) User *user;
+@property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
+@property (weak, nonatomic) IBOutlet UILabel *signupDescription;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 
 @end
 
@@ -66,12 +69,37 @@
     self.server = server;
 }
 
+#pragma mark - Theme Changes
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.usernameField.layer.borderColor = [[UIColor primaryText] CGColor];
+    self.usernameField.backgroundColor = [UIColor background];
+    self.usernameField.textColor = [UIColor primaryText];
+    self.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.passwordField.layer.borderColor = [[UIColor primaryText] CGColor];
+    self.passwordField.backgroundColor = [UIColor background];
+    self.passwordField.textColor = [UIColor primaryText];
+    self.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"password" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    self.loginButton.backgroundColor = [UIColor themedButton];
+    self.showPasswordLabel.textColor = [UIColor secondaryText];
+    self.signupDescription.textColor = [UIColor secondaryText];
+    self.loginStatus.textColor = [UIColor secondaryText];
+    [self.serverURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.versionLabel.textColor = [UIColor secondaryText];
+    [self.signupButton setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.showPassword.onTintColor = [UIColor themedButton];
+}
+
+#pragma mark -
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor secondaryColor];
-    self.loginButton.backgroundColor = [UIColor primaryColor];
     
-    [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    [self registerForThemeChanges];
+    
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -79,15 +107,11 @@
     tap.delegate = self;
     
     [self.view addGestureRecognizer:tap];
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
     
-    self.usernameField.layer.borderColor = [[UIColor primaryColor] CGColor];
     self.usernameField.layer.borderWidth = 1.0f;
     self.usernameField.layer.cornerRadius = 5.0f;
     
-    self.passwordField.layer.borderColor = [[UIColor primaryColor] CGColor];
     self.passwordField.layer.borderWidth = 1.0f;
     self.passwordField.layer.cornerRadius = 5.0f;
     
@@ -287,6 +311,8 @@
     } else {
         textField.text = updatedString;
     }
+    
+    self.usernameField.textColor = self.passwordField.textColor = [UIColor primaryText];
     
     return NO;
 }

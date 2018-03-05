@@ -40,7 +40,8 @@
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
-#import "MageTheme.h"
+#import "DayTheme.h"
+#import "DarkTheme.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -156,7 +157,8 @@
 }
 
 - (void) setupApplicationAppearance {
-    [MageTheme setupAppearance];
+//    [MageTheme setupAppearance];
+//    [DarkTheme setupAppearance];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

@@ -33,8 +33,6 @@
     if (self.navigationController) {
         self.navigationController.navigationBarHidden = YES;
     }
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

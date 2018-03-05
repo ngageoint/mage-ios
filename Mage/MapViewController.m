@@ -35,6 +35,10 @@
 #import "ObservationAnnotationView.h"
 #import "MapSettingsCoordinator.h"
 
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
+
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
@@ -202,6 +206,8 @@
                                                object:nil];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
+    
+    [self.mapView _setShowsNightMode:YES];
 }
 
 - (BOOL)isForceTouchAvailable {

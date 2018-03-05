@@ -22,7 +22,7 @@
                         <viewControllerLayoutGuide type="top" id="SUB-sU-DjE"/>
                         <viewControllerLayoutGuide type="bottom" id="QoM-bH-aiy"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="pED-ce-0mi">
+                    <view key="view" contentMode="scaleToFill" id="pED-ce-0mi" customClass="BackgroundView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -32,7 +32,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahR-0N-jCl">
                                         <rect key="frame" x="91.5" y="0.0" width="161" height="55"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f0x-P2-oYV">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f0x-P2-oYV" customClass="BrandLabel">
                                                 <rect key="frame" x="0.0" y="0.0" width="161" height="100"/>
                                                 <fontDescription key="fontDescription" name="GondolaMageRegular" family="GondolaMage" pointSize="52"/>
                                                 <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

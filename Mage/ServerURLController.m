@@ -9,9 +9,10 @@
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface ServerURLController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -42,18 +43,31 @@
     return self;
 }
 
-- (void) viewDidLoad {
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.cancelButton.backgroundColor = [UIColor primaryColor];
-    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.okButton.backgroundColor = [UIColor primaryColor];
-    [self.okButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+#pragma mark - Theme Changes
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.okButton.backgroundColor = [UIColor themedButton];
+    self.errorStatus.textColor = [UIColor secondaryText];
+    self.setServerUrlText.textColor = [UIColor primaryText];
     
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
+    self.serverURL.layer.borderColor = [[UIColor primaryText] CGColor];
+    self.serverURL.backgroundColor = [UIColor background];
+    self.serverURL.textColor = [UIColor primaryText];
+    self.serverURL.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+}
+
+#pragma mark -
+
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    [self registerForThemeChanges];
+    
     self.wandLabel.text = @"\U0000f0d0";
     
-    self.serverURL.layer.borderColor = [[UIColor primaryColor] CGColor];
     self.serverURL.layer.borderWidth = 1.0f;
     self.serverURL.layer.cornerRadius = 5.0f;
 }

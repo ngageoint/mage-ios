@@ -146,8 +146,13 @@
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */; };
-		F75A10E2204856E4002F9906 /* MageTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E1204856E4002F9906 /* MageTheme.m */; };
+		F75A10E2204856E4002F9906 /* DayTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E1204856E4002F9906 /* DayTheme.m */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
+		F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E6204881F6002F9906 /* DarkTheme.m */; };
+		F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F75A10F12048B037002F9906 /* TableSectionHeader.xib */; };
+		F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10FD2049D628002F9906 /* UIColor+Mage.m */; };
+		F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11002049D6A3002F9906 /* ThemeManager.m */; };
+		F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11072049E61A002F9906 /* Theme+UIResponder.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
@@ -531,9 +536,18 @@
 		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
 		F7531EFE1910131C00CA084C /* ObservationViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPad.h; sourceTree = "<group>"; };
 		F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
-		F75A10E0204856E4002F9906 /* MageTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MageTheme.h; sourceTree = "<group>"; };
-		F75A10E1204856E4002F9906 /* MageTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTheme.m; sourceTree = "<group>"; };
+		F75A10E0204856E4002F9906 /* DayTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DayTheme.h; sourceTree = "<group>"; };
+		F75A10E1204856E4002F9906 /* DayTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DayTheme.m; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
+		F75A10E5204881F6002F9906 /* DarkTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DarkTheme.h; sourceTree = "<group>"; };
+		F75A10E6204881F6002F9906 /* DarkTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DarkTheme.m; sourceTree = "<group>"; };
+		F75A10F12048B037002F9906 /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
+		F75A10FC2049D628002F9906 /* UIColor+Mage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Mage.h"; sourceTree = "<group>"; };
+		F75A10FD2049D628002F9906 /* UIColor+Mage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Mage.m"; sourceTree = "<group>"; };
+		F75A10FF2049D6A3002F9906 /* ThemeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemeManager.h; sourceTree = "<group>"; };
+		F75A11002049D6A3002F9906 /* ThemeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
+		F75A11062049E61A002F9906 /* Theme+UIResponder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Theme+UIResponder.h"; sourceTree = "<group>"; };
+		F75A11072049E61A002F9906 /* Theme+UIResponder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Theme+UIResponder.m"; sourceTree = "<group>"; };
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
@@ -813,6 +827,7 @@
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
+				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -929,8 +944,6 @@
 				2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */,
 				2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */,
 				2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */,
-				F746874E1F44DC67009D7CF4 /* UIColor+UIColor_Mage.h */,
-				F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1170,8 +1183,18 @@
 		F75A10DF204856C7002F9906 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				F75A10E0204856E4002F9906 /* MageTheme.h */,
-				F75A10E1204856E4002F9906 /* MageTheme.m */,
+				F746874E1F44DC67009D7CF4 /* UIColor+UIColor_Mage.h */,
+				F746874F1F44DC67009D7CF4 /* UIColor+UIColor_Mage.m */,
+				F75A10E0204856E4002F9906 /* DayTheme.h */,
+				F75A10E1204856E4002F9906 /* DayTheme.m */,
+				F75A10E5204881F6002F9906 /* DarkTheme.h */,
+				F75A10E6204881F6002F9906 /* DarkTheme.m */,
+				F75A10FC2049D628002F9906 /* UIColor+Mage.h */,
+				F75A10FD2049D628002F9906 /* UIColor+Mage.m */,
+				F75A10FF2049D6A3002F9906 /* ThemeManager.h */,
+				F75A11002049D6A3002F9906 /* ThemeManager.m */,
+				F75A11062049E61A002F9906 /* Theme+UIResponder.h */,
+				F75A11072049E61A002F9906 /* Theme+UIResponder.m */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -1700,6 +1723,7 @@
 				F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */,
 				F7E457641F61C14F0082F527 /* EventCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
+				F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */,
 				F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
@@ -1803,7 +1827,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		9234FE93B973ED1E145F6F5B /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1974,6 +1998,7 @@
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */,
 				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
+				F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */,
@@ -1986,6 +2011,7 @@
 				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
+				F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
@@ -2000,6 +2026,7 @@
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
+				F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
@@ -2056,6 +2083,7 @@
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
+				F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */,
@@ -2094,7 +2122,7 @@
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
-				F75A10E2204856E4002F9906 /* MageTheme.m in Sources */,
+				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,

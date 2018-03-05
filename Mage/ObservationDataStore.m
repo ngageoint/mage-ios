@@ -90,6 +90,10 @@
     return CGFLOAT_MIN;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 48.0f;
+}
+
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath {
     return [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
 }
@@ -118,17 +122,21 @@
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> theSection = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-    return [theSection name];
-}
+//- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
+//    NSString *name = [sectionInfo name];
+//    
+//    UITableViewHeaderFooterView *tableSectionHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"TableSectionHeader"];
+//    tableSectionHeader.textLabel.text = name;
+//    
+//    return tableSectionHeader;
+//}
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     ObservationTableViewCell *cell = (ObservationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"obsCell"];
     cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     return cell;
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
 	
