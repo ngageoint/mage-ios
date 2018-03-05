@@ -191,10 +191,10 @@
             messageLabel.text = @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         }
         
-        messageLabel.textColor = [UIColor primaryColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:14];
+//        messageLabel.textColor = [UIColor primaryLightText];
         [view addSubview:messageLabel];
         return view;
     }
@@ -216,18 +216,26 @@
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
-    [label setFont:[UIFont boldSystemFontOfSize:18]];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
-    [view addSubview:label];
-    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
-    [bottomBorder setBackgroundColor:[UIColor primaryColor]];
-    [view addSubview:bottomBorder];
     
-    [view setBackgroundColor:[UIColor primaryColor]];
-    return view;
+    NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
+    
+    UITableViewHeaderFooterView *tableSectionHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"TableSectionHeader"];
+    tableSectionHeader.textLabel.text = name;
+    
+    return tableSectionHeader;
+    
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
+//    [label setFont:[UIFont boldSystemFontOfSize:18]];
+//    [label setTextColor:[UIColor whiteColor]];
+//    [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
+//    [view addSubview:label];
+//    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
+//    [bottomBorder setBackgroundColor:[UIColor primaryColor]];
+//    [view addSubview:bottomBorder];
+//
+//    [view setBackgroundColor:[UIColor primaryColor]];
+//    return view;
 }
 
 @end

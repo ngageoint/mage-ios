@@ -41,6 +41,7 @@
     [super viewDidLoad];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TableSectionHeader" bundle:nil] forHeaderFooterViewReuseIdentifier:@"TableSectionHeader"];
     // this is different on the ipad on and the iphone so make the check here
     if (self.observationDataStore.observationSelectionDelegate == nil) {
         self.observationDataStore.observationSelectionDelegate = self;

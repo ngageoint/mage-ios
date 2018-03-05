@@ -15,7 +15,7 @@
 #import <NBAsYouTypeFormatter.h>
 #import <ServerAuthentication.h>
 #import <GoogleSignIn/GoogleSignIn.h>
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 #import <DBZxcvbn.h>
 
 @interface SignUpViewController () <UITextFieldDelegate>
@@ -43,6 +43,9 @@
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+@property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
+@property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
 
 @end
 
@@ -56,29 +59,52 @@
     return self;
 }
 
+#pragma mark - Theme Changes
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.mageVersion.textColor = [UIColor secondaryText];
+    self.signupButton.backgroundColor = [UIColor themedButton];
+    self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.showPassword.onTintColor = [UIColor themedButton];
+    self.passwordStrengthText.textColor = [UIColor secondaryText];
+    self.showPasswordText.textColor = [UIColor secondaryText];
+    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primary] CGColor];
+    
+    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primaryText] CGColor];
+    self.username.backgroundColor = self.password.backgroundColor = self.displayName.backgroundColor = self.passwordConfirm.backgroundColor = self.email.backgroundColor = self.phone.backgroundColor = [UIColor background];
+    self.username.textColor = self.password.textColor = self.displayName.textColor = self.passwordConfirm.textColor = self.email.textColor = self.phone.textColor = [UIColor primaryText];
+    self.username.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.displayName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Display Name" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.phone.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Phone" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+                                                  
+    
+    if ([self.server serverHasLocalAuthenticationStrategy]) {
+        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    }
+}
+
+#pragma mark -
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    [self registerForThemeChanges];
+        
     [self setupAuthentication];
     
     self.zxcvbn = [[DBZxcvbn alloc] init];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.cancelButton.backgroundColor = [UIColor primaryColor];
-    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.signupButton.backgroundColor = [UIColor primaryColor];
-    [self.signupButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
+
     self.wandLabel.text = @"\U0000f0d0";
     
-    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.password.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primaryColor] CGColor];
     self.username.layer.borderWidth = self.password.layer.borderWidth = self.displayName.layer.borderWidth = self.passwordConfirm.layer.borderWidth = self.password.layer.borderWidth = self.email.layer.borderWidth = self.phone.layer.borderWidth = 1.0f;
     self.username.layer.cornerRadius = self.password.layer.cornerRadius = self.displayName.layer.cornerRadius = self.passwordConfirm.layer.cornerRadius = self.password.layer.cornerRadius = self.email.layer.cornerRadius = self.phone.layer.cornerRadius  = 5.0f;
-    
-    self.mageVersion.textColor = [UIColor primaryColor];
-    self.mageServerURL.titleLabel.textColor = [UIColor primaryColor];
     
     self.password.delegate = self;
     
@@ -86,8 +112,8 @@
 
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.password.placeholder = [NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-        self.passwordConfirm.placeholder = [NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
     
 }
@@ -167,6 +193,11 @@
                 break;
         }
     }
+    
+    // when typing with a different color than black, the color is not saved
+    // this code fixes that bug
+    self.username.textColor = self.password.textColor = self.displayName.textColor = self.passwordConfirm.textColor = self.email.textColor = self.phone.textColor = [UIColor primaryText];
+    
     return YES;
 }
 

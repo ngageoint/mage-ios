@@ -8,7 +8,6 @@
 #import <Mage.h>
 #import "MageOfflineObservationManager.h"
 #import <Authentication.h>
-#import "UIColor+UIColor_Mage.h"
 
 @interface MageRootViewController()<OfflineObservationDelegate>
 @property (weak, nonatomic) UITabBarItem *profileTabBarItem;

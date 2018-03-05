@@ -35,7 +35,10 @@
                 <outlet property="passwordField" destination="a3C-Ps-EaE" id="5rp-UO-ebH"/>
                 <outlet property="serverURL" destination="6wE-Es-XY5" id="V2h-fy-Dgp"/>
                 <outlet property="showPassword" destination="Oo2-LB-iu5" id="ucj-bi-TaO"/>
+                <outlet property="showPasswordLabel" destination="XSM-6Q-JP0" id="kWY-gX-5Dm"/>
+                <outlet property="signupButton" destination="q7a-it-Eni" id="Cfy-4F-JjW"/>
                 <outlet property="signupContainerView" destination="Tjh-sF-Apv" id="Rw1-gN-5LJ"/>
+                <outlet property="signupDescription" destination="0g8-EC-abc" id="D6E-vI-10a"/>
                 <outlet property="statusButton" destination="xof-Rp-EAn" id="MY7-UU-95C"/>
                 <outlet property="statusView" destination="cSE-Mn-iBQ" id="Big-4d-5YO"/>
                 <outlet property="usernameField" destination="G9b-17-Zse" id="BT1-pf-5R7"/>
@@ -58,7 +61,7 @@
                         <action selector="serverURLTapped:" destination="-1" eventType="touchUpInside" id="EZ0-eJ-irc"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-Ia-VcZ">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-Ia-VcZ" customClass="SecondaryLabel">
                     <rect key="frame" x="27.5" y="646" width="320" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="320" id="bog-wI-bna"/>
@@ -240,7 +243,7 @@
                                                 <outlet property="delegate" destination="-1" id="f4X-ol-D5l"/>
                                             </connections>
                                         </textField>
-                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5b-ap-uHq">
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5b-ap-uHq" customClass="ThemedButton">
                                             <rect key="frame" x="20" y="127" width="335" height="40"/>
                                             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <accessibility key="accessibilityConfiguration" label="Log In"/>
@@ -382,20 +385,20 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yw6-zq-kyk">
                             <rect key="frame" x="64" y="0.0" width="216.5" height="55"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AjL-hK-ohz">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AjL-hK-ohz" customClass="BrandLabel">
                                     <rect key="frame" x="55.5" y="0.0" width="161" height="100"/>
                                     <fontDescription key="fontDescription" name="GondolaMageRegular" family="GondolaMage" pointSize="52"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBZ-Db-LW7">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBZ-Db-LW7" customClass="BrandLabel">
                                     <rect key="frame" x="0.0" y="0.0" width="47.5" height="55"/>
                                     <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="50"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="yBZ-Db-LW7" secondAttribute="bottom" id="1ow-w4-9Dc"/>
                                 <constraint firstItem="yBZ-Db-LW7" firstAttribute="top" secondItem="Yw6-zq-kyk" secondAttribute="top" id="54Q-q4-HjH"/>

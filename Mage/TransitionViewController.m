@@ -20,11 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 @end
