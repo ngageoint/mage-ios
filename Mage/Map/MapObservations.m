@@ -88,7 +88,7 @@
     return mapObservation;
 }
 
--(void) hidden: (BOOL) hidden{
+-(void) hidden: (BOOL) hidden {
     for (MapObservation *mapObservation in _observationIds.allValues) {
         [mapObservation hidden:hidden fromMapView:_mapView];
     }
