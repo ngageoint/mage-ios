@@ -20,6 +20,8 @@
 
 @property (nonatomic) BOOL selected;
 
+@property (nonatomic) BOOL animateDrop;
+
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
 
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry;
