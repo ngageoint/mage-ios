@@ -18,5 +18,9 @@
 + (UIColor *) brand;
 + (UIColor *) themedButton;
 + (UIColor *) flatButton;
++ (UIColor *) inactiveIcon;
++ (UIColor *) inactiveIconWithColor: (UIColor *) color;
++ (UIColor *) activeIcon;
++ (UIColor *) activeIconWithColor: (UIColor *) color;
 
 @end

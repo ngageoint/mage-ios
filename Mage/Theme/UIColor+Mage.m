@@ -69,4 +69,32 @@
     return [DayTheme flatButton];
 }
 
++ (UIColor *) inactiveIcon {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme inactiveIcon];
+    }
+    return [DayTheme inactiveIcon];
+}
+
++ (UIColor *) inactiveIconWithColor:(UIColor *)color {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme inactiveIconWithColor: color];
+    }
+    return [DayTheme inactiveIconWithColor: color];
+}
+
++ (UIColor *) activeIcon {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme activeIcon];
+    }
+    return [DayTheme activeIcon];
+}
+
++ (UIColor *) activeIconWithColor:(UIColor *)color {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme activeIconWithColor: color];
+    }
+    return [DayTheme activeIconWithColor: color];
+}
+
 @end

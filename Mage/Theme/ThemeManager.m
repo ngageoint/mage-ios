@@ -88,7 +88,7 @@ NSString *const kThemeChangedKey = @"themeChanged";
 - (MageTheme) calculateCurrentTheme {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(brightnessDidChange:) object:nil];
-    [self performSelector:@selector(brightnessDidChange:) withObject:nil afterDelay:10];
+    [self performSelector:@selector(brightnessDidChange:) withObject:nil afterDelay:5];
     return (MageTheme)ABS(1 - self.currentTheme);
     
 //    if (self.forcedTheme != nil) {

@@ -177,6 +177,7 @@
 		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
 		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
 		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
+		F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */; };
 		F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
@@ -596,6 +597,8 @@
 		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
+		F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationTableHeaderView.h; sourceTree = "<group>"; };
+		F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationTableHeaderView.m; sourceTree = "<group>"; };
 		F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+Section.h"; sourceTree = "<group>"; };
 		F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Observation+Section.m"; sourceTree = "<group>"; };
 		F7A94D6618AD9CB000CB9EE0 /* MAGE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MAGE.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1107,6 +1110,8 @@
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
+				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
+				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -2125,6 +2130,7 @@
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
+				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,

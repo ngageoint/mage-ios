@@ -45,7 +45,7 @@
                                             <constraint firstAttribute="width" constant="17" id="TXh-wr-lye"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11h" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fg-We-DRH" customClass="SecondaryLabel">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11h" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fg-We-DRH">
                                         <rect key="frame" x="122.5" y="0.0" width="18.5" height="12.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
@@ -59,7 +59,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="raX-iv-cNL" customClass="SecondaryLabel">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="raX-iv-cNL">
                                 <rect key="frame" x="0.0" y="29" width="27" height="12.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
@@ -170,6 +170,7 @@
                         </constraints>
                     </stackView>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="D9h-ZP-Zdl" secondAttribute="bottom" id="2ke-vp-iZ8"/>
                     <constraint firstAttribute="trailingMargin" secondItem="D9h-ZP-Zdl" secondAttribute="trailing" id="3OI-th-Xg1"/>
@@ -183,10 +184,11 @@
                     <constraint firstItem="fNL-IH-iDw" firstAttribute="top" secondItem="Nzm-dC-liP" secondAttribute="topMargin" constant="8" id="fcw-vi-NZt"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="attachmentCollection" destination="cul-EL-hEp" id="FjU-Iu-46h"/>
+                <outlet property="directionsButton" destination="SOj-Rr-a9r" id="fUN-fo-8s4"/>
                 <outlet property="errorBadge" destination="AYC-b8-6WX" id="aje-GY-j0P"/>
                 <outlet property="favoriteButton" destination="Cld-Jp-Qav" id="sLL-L5-Tdg"/>
                 <outlet property="favoriteNumber" destination="G0g-Yu-Jjk" id="8sh-GC-qhN"/>

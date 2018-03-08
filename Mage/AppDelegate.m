@@ -42,6 +42,7 @@
 #import "TransitionViewController.h"
 #import "DayTheme.h"
 #import "DarkTheme.h"
+#import "ThemeManager.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -157,8 +158,7 @@
 }
 
 - (void) setupApplicationAppearance {
-//    [MageTheme setupAppearance];
-//    [DarkTheme setupAppearance];
+    [[ThemeManager sharedManager] setForcedTheme:[NSNumber numberWithLong: Day]];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

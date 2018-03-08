@@ -56,7 +56,7 @@
     
     __weak typeof(self) weakSelf = self;
     self.themeChangedNotifier = [[ThemeNotifier alloc] initWithName:kThemeChangedKey object:nil block:^(NSNotification *notification) {
-        
+        NSLog(@"Current theme: %ld", (long)TheCurrentTheme);
         [weakSelf themeDidChange:TheCurrentTheme];
     }];
     

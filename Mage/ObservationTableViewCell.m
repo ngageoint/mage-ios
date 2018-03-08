@@ -16,6 +16,8 @@
 #import "Attachment+Thumbnail.h"
 #import <MageEnums.h>
 #import "ObservationShapeStyleParser.h"
+#import "Theme+UIResponder.h"
+#import <HexColor.h>
 
 @interface ObservationTableViewCell()
 
@@ -27,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *syncBadge;
 @property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
+@property (weak, nonatomic) IBOutlet UIButton *directionsButton;
 
 @end
 
@@ -37,11 +40,24 @@
     
     if (self) {
         self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:.38];
-        self.favoriteHighlightColor = [UIColor colorWithRed:126/255.0 green:211/255.0 blue:33/255.0 alpha:1.0];
+        [self registerForThemeChanges];
     }
     
     return self;
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.primaryField.textColor = [UIColor primaryText];
+    self.backgroundColor = [UIColor background];
+    self.variantField.textColor = [UIColor primaryText];
+    self.timeField.textColor = [UIColor secondaryText];
+    self.userField.textColor = [UIColor secondaryText];
+    self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:1];
+    self.favoriteHighlightColor = [UIColor colorWithHexString:@"00C853" alpha:1.0];
+    self.directionsButton.tintColor = [UIColor inactiveIcon];
+    if (self.observation) {
+        [self displayFavoriteForObservation:self.observation];
+    }
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
@@ -120,11 +136,11 @@
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
-        self.favoriteButton.imageView.tintColor = self.favoriteHighlightColor;
-        self.favoriteNumber.textColor = self.favoriteHighlightColor;
+        self.favoriteButton.imageView.tintColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
+        self.favoriteNumber.textColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
     } else {
-        self.favoriteButton.imageView.tintColor = self.favoriteDefaultColor;
-        self.favoriteNumber.textColor = self.favoriteDefaultColor;
+        self.favoriteButton.imageView.tintColor = [UIColor inactiveIcon];
+        self.favoriteNumber.textColor = [UIColor inactiveIcon];
     }
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     if ([favorites count]) {

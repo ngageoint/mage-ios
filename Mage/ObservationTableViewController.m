@@ -21,7 +21,7 @@
 #import "Observations.h"
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
 
@@ -32,13 +32,21 @@
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 
-
 @end
 
 @implementation ObservationTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.refreshControl.backgroundColor = [UIColor background];
+    self.refreshControl.tintColor = [UIColor brand];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"TableSectionHeader" bundle:nil] forHeaderFooterViewReuseIdentifier:@"TableSectionHeader"];
@@ -50,10 +58,8 @@
     self.observationDataStore.viewController = self;
     
     self.childCoordinators = [[NSMutableArray alloc] init];
-    
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor mageBlue];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    
     [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
     NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
                                                                 forKey:NSForegroundColorAttributeName];
@@ -66,6 +72,7 @@
     if ([self isForceTouchAvailable]) {
         self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
     }
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -108,6 +115,9 @@
                   context:NULL];
     
     [self startUpdateTimer];
+    
+    [self registerForThemeChanges];
+
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

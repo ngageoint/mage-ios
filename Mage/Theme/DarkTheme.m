@@ -45,6 +45,33 @@
     return [DarkTheme primaryText];
 }
 
++ (UIColor *) inactiveIcon {
+    return [UIColor colorWithWhite:1.0 alpha:.50];
+}
+
++ (UIColor *) inactiveIconWithColor: (UIColor *) color {
+    CGFloat h, s, b, a;
+    if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b
+                               alpha:.5];
+    return nil;
+}
+
++ (UIColor *) activeIcon {
+    return [UIColor colorWithWhite:1.0 alpha:1.0];
+}
+
++ (UIColor *) activeIconWithColor: (UIColor *) color {
+    CGFloat h, s, b, a;
+    if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b
+                               alpha:1];
+    return nil;
+}
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor colorWithHexString:@"455A64"]];
 //    [UIColor setSecondaryColor:[UIColor colorWithHexString:@"263238"]];

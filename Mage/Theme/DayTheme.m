@@ -43,6 +43,34 @@
     return [UIColor mageBlue];
 }
 
++ (UIColor *) inactiveIcon {
+    return [UIColor colorWithWhite:0.0 alpha:.38];
+}
+
++ (UIColor *) inactiveIconWithColor: (UIColor *) color {
+    CGFloat h, s, b, a;
+    if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b
+                               alpha:.38];
+    return nil;
+}
+
++ (UIColor *) activeIcon {
+    return [UIColor colorWithWhite:0.0 alpha:.56];
+}
+
++ (UIColor *) activeIconWithColor: (UIColor *) color {
+    CGFloat h, s, b, a;
+    if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b
+                               alpha:.54];
+    return nil;
+}
+
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor mageBlue]];
 //    [UIColor setSecondaryColor:[UIColor whiteColor]];

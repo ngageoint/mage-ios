@@ -13,6 +13,8 @@
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
 #import "GeometryUtility.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ObservationDataStore ()
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
@@ -120,6 +122,24 @@
 	[self configureCell:cell atIndexPath:indexPath];
 	
     return cell;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
+    NSString *name = [sectionInfo name];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
+    
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 48)];
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, tableView.frame.size.width, 48)];
+//    [label setFont:[UIFont systemFontOfSize:14]];
+//    [label setTextColor:[UIColor flatButton]];
+//    [label setText: name];
+//    [view addSubview:label];
+//
+//    [view setBackgroundColor:[UIColor background]];
+//    return view;
 }
 
 //- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
