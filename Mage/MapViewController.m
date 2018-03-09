@@ -71,6 +71,11 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    if (theme == Day) {
+        [self.mapView _setShowsNightMode:NO];
+    } else {
+        [self.mapView _setShowsNightMode:YES];
+    }
 }
 
 - (void) viewDidLoad {
@@ -214,7 +219,6 @@
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
     
-    [self.mapView _setShowsNightMode:YES];
 }
 
 - (BOOL)isForceTouchAvailable {
