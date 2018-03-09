@@ -34,6 +34,7 @@
 #import "ObservationEditCoordinator.h"
 #import "ObservationAnnotationView.h"
 #import "MapSettingsCoordinator.h"
+#import "Theme+UIResponder.h"
 
 @interface MKMapView ()
 -(void) _setShowsNightMode:(BOOL)yesOrNo;
@@ -68,8 +69,14 @@
     }
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];

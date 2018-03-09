@@ -72,6 +72,11 @@
                                alpha:1];
     return nil;
 }
+
++ (UIColor *) activeTabIcon {
+    return [DarkTheme activeIcon];
+}
+
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor colorWithHexString:@"455A64"]];
 //    [UIColor setSecondaryColor:[UIColor colorWithHexString:@"263238"]];

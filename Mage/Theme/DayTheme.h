@@ -22,5 +22,6 @@
 + (UIColor *) inactiveIconWithColor: (UIColor *) color;
 + (UIColor *) activeIcon;
 + (UIColor *) activeIconWithColor: (UIColor *) color;
++ (UIColor *) activeTabIcon;
 
 @end

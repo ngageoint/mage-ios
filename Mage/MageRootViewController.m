@@ -8,6 +8,7 @@
 #import <Mage.h>
 #import "MageOfflineObservationManager.h"
 #import <Authentication.h>
+#import "Theme+UIResponder.h"
 
 @interface MageRootViewController()<OfflineObservationDelegate>
 @property (weak, nonatomic) UITabBarItem *profileTabBarItem;
@@ -21,6 +22,8 @@
     [[Mage singleton] startServicesAsInitial:YES];
 	
 	[super viewDidLoad];
+    
+    [self registerForThemeChanges];
     for (UIViewController *viewController in self.viewControllers) {
         if (viewController.tabBarItem.tag == 3) {
             self.profileTabBarItem = viewController.tabBarItem;
@@ -28,6 +31,12 @@
             self.moreTabBarItem = viewController.tabBarItem;
         }
     }
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tabBar.barTintColor = [UIColor background];
+    self.tabBar.tintColor = [UIColor activeTabIcon];
+    self.tabBar.unselectedItemTintColor = [UIColor inactiveIcon];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

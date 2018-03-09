@@ -71,6 +71,10 @@
     return nil;
 }
 
++ (UIColor *) activeTabIcon {
+    return [UIColor mageBlue];
+}
+
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor mageBlue]];
 //    [UIColor setSecondaryColor:[UIColor whiteColor]];

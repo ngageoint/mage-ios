@@ -13,6 +13,10 @@
 
 @implementation UIColor (Mage)
 
++ (UIColor *) mageBlue {
+    return [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
+}
+
 + (UIColor *) primaryText {
     if (TheCurrentTheme == Night) {
         return [DarkTheme primaryText];
@@ -95,6 +99,13 @@
         return [DarkTheme activeIconWithColor: color];
     }
     return [DayTheme activeIconWithColor: color];
+}
+
++ (UIColor *) activeTabIcon {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme activeTabIcon];
+    }
+    return [DayTheme activeTabIcon];
 }
 
 @end

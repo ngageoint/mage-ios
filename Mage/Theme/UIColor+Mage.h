@@ -10,6 +10,7 @@
 
 @interface UIColor (Mage)
 
++ (UIColor *) mageBlue;
 + (UIColor *) primaryText;
 + (UIColor *) secondaryText;
 + (UIColor *) background;
@@ -22,5 +23,6 @@
 + (UIColor *) inactiveIconWithColor: (UIColor *) color;
 + (UIColor *) activeIcon;
 + (UIColor *) activeIconWithColor: (UIColor *) color;
++ (UIColor *) activeTabIcon;
 
 @end
