@@ -77,6 +77,13 @@
     return [DarkTheme activeIcon];
 }
 
++ (UIColor *) inactiveTabIcon {
+    return [DarkTheme inactiveIcon];
+}
+
++ (UIColor *) tabBarTint {
+    return [DarkTheme primary];
+}
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor colorWithHexString:@"455A64"]];
 //    [UIColor setSecondaryColor:[UIColor colorWithHexString:@"263238"]];

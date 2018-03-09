@@ -75,6 +75,14 @@
     return [UIColor mageBlue];
 }
 
++ (UIColor *) inactiveTabIcon {
+    return [DayTheme inactiveIcon];
+}
+
++ (UIColor *) tabBarTint {
+    return [UIColor whiteColor];
+}
+
 //+ (void) setupAppearance {
 //    [UIColor setPrimaryColor:[UIColor mageBlue]];
 //    [UIColor setSecondaryColor:[UIColor whiteColor]];

@@ -108,4 +108,18 @@
     return [DayTheme activeTabIcon];
 }
 
++ (UIColor *) inactiveTabIcon {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme inactiveTabIcon];
+    }
+    return [DayTheme inactiveTabIcon];
+}
+
++ (UIColor *) tabBarTint {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme tabBarTint];
+    }
+    return [DayTheme tabBarTint];
+}
+
 @end

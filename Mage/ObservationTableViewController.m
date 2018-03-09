@@ -41,6 +41,7 @@
     self.tableView.backgroundColor = [UIColor background];
     self.refreshControl.backgroundColor = [UIColor background];
     self.refreshControl.tintColor = [UIColor brand];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
 }
 
 - (void)viewDidLoad {

@@ -34,9 +34,9 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.tabBar.barTintColor = [UIColor background];
+    self.tabBar.barTintColor = [UIColor tabBarTint];
     self.tabBar.tintColor = [UIColor activeTabIcon];
-    self.tabBar.unselectedItemTintColor = [UIColor inactiveIcon];
+    self.tabBar.unselectedItemTintColor = [UIColor inactiveTabIcon];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

@@ -24,5 +24,7 @@
 + (UIColor *) activeIcon;
 + (UIColor *) activeIconWithColor: (UIColor *) color;
 + (UIColor *) activeTabIcon;
++ (UIColor *) inactiveTabIcon;
++ (UIColor *) tabBarTint;
 
 @end
