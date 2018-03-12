@@ -36,11 +36,8 @@
 @implementation ObservationTableViewCell
 
 -(id)initWithCoder:(NSCoder *) aDecoder {
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        [self registerForThemeChanges];
     }
     
     return self;
@@ -130,6 +127,8 @@
         self.syncBadge.hidden = YES;
         self.errorBadge.hidden = YES;
     }
+    
+    [self registerForThemeChanges];
 }
 
 - (void) displayFavoriteForObservation: (Observation *) observation {

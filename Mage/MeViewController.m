@@ -26,8 +26,13 @@
 #import "AttachmentSelectionDelegate.h"
 #import "WKBGeometryUtils.h"
 #import "ObservationViewController.h"
+#import "Theme+UIResponder.h"
 
 @import PhotosUI;
+
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
 
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate>
 
@@ -40,6 +45,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *phoneNumber;
 @property (weak, nonatomic) IBOutlet UIView *emailView;
 @property (weak, nonatomic) IBOutlet UITextView *email;
+@property (weak, nonatomic) IBOutlet UIImageView *emailIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *phoneIcon;
+@property (weak, nonatomic) IBOutlet UIView *avatarBorder;
 
 @property (assign, nonatomic) BOOL currentUserIsMe;
 @property (nonatomic, strong) id previewingContext;
@@ -48,6 +56,23 @@
 
 @implementation MeViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.name.textColor = [UIColor primaryText];
+    self.emailIcon.tintColor = [UIColor activeIcon];
+    self.phoneIcon.tintColor = [UIColor activeIcon];
+    self.avatar.tintColor = [UIColor inactiveIcon];
+    self.avatarBorder.backgroundColor = [UIColor background];
+    self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
+    self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
+    if (theme == Day) {
+        [self.map _setShowsNightMode:NO];
+    } else {
+        [self.map _setShowsNightMode:YES];
+    }
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -75,6 +100,8 @@
     if ([self isForceTouchAvailable]) {
         self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
     }
+    
+    [self registerForThemeChanges];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

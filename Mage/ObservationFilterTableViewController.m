@@ -9,6 +9,7 @@
 #import "ObservationFilterTableViewController.h"
 #import "TimeFilter.h"
 #import "Observations.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -22,8 +23,16 @@
 
 @implementation ObservationFilterTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -42,6 +51,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor background];
     
     if ([indexPath section] == 0) {
         UISwitch *switchControl = (UISwitch *) [cell viewWithTag:100];

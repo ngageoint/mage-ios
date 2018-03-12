@@ -641,7 +641,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                     </subviews>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <gestureRecognizers/>
                                     <constraints>
                                         <constraint firstItem="GKT-iR-Vcg" firstAttribute="top" secondItem="yz5-e0-oto" secondAttribute="top" constant="5" id="OYW-OL-Tuj"/>
@@ -685,7 +685,7 @@
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="303-333-4444" translatesAutoresizingMaskIntoConstraints="NO" id="FAA-xU-WJK">
                                                     <rect key="frame" x="20" y="0.0" width="339" height="24"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" link="YES"/>
                                                     </accessibility>
@@ -720,7 +720,7 @@
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="test@gmail.com" translatesAutoresizingMaskIntoConstraints="NO" id="0fb-1Y-2Qv">
                                                     <rect key="frame" x="20" y="0.0" width="339" height="30"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
@@ -767,12 +767,15 @@
                     <navigationItem key="navigationItem" title="Profile" id="3rE-7r-v4R"/>
                     <connections>
                         <outlet property="avatar" destination="GKT-iR-Vcg" id="bw3-Un-Eqt"/>
+                        <outlet property="avatarBorder" destination="yz5-e0-oto" id="uQa-rX-1oE"/>
                         <outlet property="email" destination="0fb-1Y-2Qv" id="3Et-1y-00r"/>
+                        <outlet property="emailIcon" destination="eTd-rR-bXT" id="t1e-i4-8rT"/>
                         <outlet property="emailView" destination="Dre-HY-Lpw" id="5PF-9g-Jwa"/>
                         <outlet property="map" destination="LYS-e7-rTd" id="bRr-ne-L4b"/>
                         <outlet property="mapDelegate" destination="6J0-NC-zc4" id="yL8-pe-jjA"/>
                         <outlet property="name" destination="tdu-jV-iDi" id="faG-rp-gV9"/>
                         <outlet property="observationDataStore" destination="IDt-pC-yxO" id="osE-fq-oTa"/>
+                        <outlet property="phoneIcon" destination="Xod-hF-7lU" id="2MT-2G-F2h"/>
                         <outlet property="phoneNumber" destination="FAA-xU-WJK" id="QL6-9W-K22"/>
                         <outlet property="phoneView" destination="vbx-kA-G61" id="WvP-ib-0Dd"/>
                         <segue destination="GFL-3x-sht" kind="show" identifier="DisplayObservationSegue" id="t54-XE-2TN"/>

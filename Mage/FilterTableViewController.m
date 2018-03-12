@@ -8,6 +8,7 @@
 
 #import "FilterTableViewController.h"
 #import "Filter.h"
+#import "Theme+UIResponder.h"
 
 @interface FilterTableViewController ()
 @property (assign, nonatomic) BOOL isPopover;
@@ -15,9 +16,17 @@
 
 @implementation FilterTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     [self setPreferredContentSize:CGSizeMake(340.0f, 550.0f)];
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -46,6 +55,10 @@
     }
     
     cell.detailTextLabel.text = filterString;
+    
+    cell.backgroundColor = [UIColor background];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.textLabel.textColor = [UIColor primaryText];
     
     return cell;
 }
