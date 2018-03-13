@@ -24,6 +24,7 @@
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "Theme+UIResponder.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -59,6 +60,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.propertyTable.backgroundColor = [UIColor tableBackground];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -82,6 +87,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
                                              selector:@selector(updateUserDefaults:)
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
+    
+    [self registerForThemeChanges];
 }
 
 - (void) registerCellTypes {

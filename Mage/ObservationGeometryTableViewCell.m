@@ -9,6 +9,11 @@
 #import "WKBGeometryUtils.h"
 #import "MapDelegate.h"
 #import <GPKGMapShapeConverter.h>
+#import "Theme+UIResponder.h"
+
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
 
 @interface ObservationGeometryTableViewCell ()
 
@@ -17,6 +22,17 @@
 @end
 
 @implementation ObservationGeometryTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.valueTextView.textColor = [UIColor primaryText];
+    self.keyLabel.textColor = [UIColor secondaryText];
+    if (theme == Day) {
+        [self.map _setShowsNightMode:NO];
+    } else {
+        [self.map _setShowsNightMode:YES];
+    }
+}
 
 - (void) populateCellWithKey:(id) key andValue:(id) value {
     
@@ -58,7 +74,7 @@
         self.valueTextView.text = [NSString stringWithFormat:@"%@", geoString];
     }
     self.keyLabel.text = [NSString stringWithFormat:@"%@", key];
-
+    [self registerForThemeChanges];
 }
 
 @end

@@ -24,6 +24,14 @@
     return [UIColor colorWithHexString:@"303030"];
 }
 
++ (UIColor *) tableBackground {
+    return [DarkTheme background];
+}
+
++ (UIColor *) dialog {
+    return [UIColor colorWithHexString:@"424242"];
+}
+
 + (UIColor *) primary {
     return [UIColor colorWithHexString:@"455A64"];
 }
@@ -38,7 +46,6 @@
 
 + (UIColor *) themedButton {
     return [UIColor mageBlue];
-//    return [UIColor colorWithHexString:@"2196F3"];
 }
 
 + (UIColor *) flatButton {
@@ -69,7 +76,7 @@
         return [UIColor colorWithHue:h
                           saturation:s
                           brightness:b
-                               alpha:1];
+                               alpha:1.0];
     return nil;
 }
 

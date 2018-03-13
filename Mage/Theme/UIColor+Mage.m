@@ -45,6 +45,20 @@
     return [DayTheme background];
 }
 
++ (UIColor *) tableBackground {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme tableBackground];
+    }
+    return [DayTheme tableBackground];
+}
+
++ (UIColor *) dialog {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme dialog];
+    }
+    return [DayTheme dialog];
+}
+
 + (UIColor *) primary {
     if (TheCurrentTheme == Night) {
         return [DarkTheme primary];

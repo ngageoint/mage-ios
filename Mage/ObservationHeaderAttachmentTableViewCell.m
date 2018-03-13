@@ -7,6 +7,7 @@
 #import "ObservationHeaderAttachmentTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Attachment+Thumbnail.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationHeaderAttachmentTableViewCell()
 @property (strong, nonatomic) AttachmentCollectionDataStore *ads;
@@ -14,6 +15,10 @@
 @end
 
 @implementation ObservationHeaderAttachmentTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+}
 
 - (void) configureCellForObservation:(Observation *)observation withForms:(NSArray *)forms {
     [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
@@ -23,6 +28,7 @@
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
     self.ads.observation = observation;
+    [self registerForThemeChanges];
 }
 
 - (void) setAttachmentSelectionDelegate:(NSObject<AttachmentSelectionDelegate> *)attachmentSelectionDelegate {

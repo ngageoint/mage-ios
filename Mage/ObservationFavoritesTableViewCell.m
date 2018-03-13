@@ -7,8 +7,15 @@
 //
 
 #import "ObservationFavoritesTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @implementation ObservationFavoritesTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.favoriteTextLabel.textColor = [UIColor primaryText];
+    self.favoriteCountLabel.textColor = [UIColor primaryText];
+}
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
@@ -18,6 +25,7 @@
     } else {
         self.favoriteTextLabel.text = @"FAVORITE";
     }
+    [self registerForThemeChanges];
 }
 
 @end

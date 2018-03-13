@@ -9,6 +9,11 @@
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
 #import <Event.h>
+#import "Theme+UIResponder.h"
+
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
 
 @interface ObservationMapTableViewCell ()
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
@@ -16,6 +21,14 @@
 @end
 
 @implementation ObservationMapTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    if (theme == Day) {
+        [self.mapView _setShowsNightMode:NO];
+    } else {
+        [self.mapView _setShowsNightMode:YES];
+    }
+}
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     Observations *observations = [Observations observationsForObservation:observation];
@@ -39,6 +52,8 @@
             [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
         });
     }];
+    
+    [self registerForThemeChanges];
 }
 
 @end

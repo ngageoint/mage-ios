@@ -7,6 +7,7 @@
 //
 
 #import "DayTheme.h"
+#import <HexColor.h>
 #import "UIColor+UIColor_Mage.h"
 
 @implementation DayTheme
@@ -20,6 +21,14 @@
 }
 
 + (UIColor *) background {
+    return [UIColor whiteColor];
+}
+
++ (UIColor *) tableBackground {
+    return [UIColor colorWithRed:.92 green:.92 blue:.95 alpha:1.0];
+}
+
++ (UIColor *) dialog {
     return [UIColor whiteColor];
 }
 
