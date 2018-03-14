@@ -26,8 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIView *localView;
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextField *usernameField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextField *passwordField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
@@ -83,7 +83,9 @@
     self.usernameField.lineColor = [UIColor secondaryText];
     self.usernameField.titleColor = [UIColor secondaryText];
     self.usernameField.errorColor = [UIColor redColor];
-    self.usernameField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.usernameField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.87];
+    self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.usernameField.iconText = @"\U0000f007";
     
     self.passwordField.textColor = [UIColor primaryText];
     self.passwordField.selectedLineColor = [UIColor brand];
@@ -92,7 +94,9 @@
     self.passwordField.lineColor = [UIColor secondaryText];
     self.passwordField.titleColor = [UIColor secondaryText];
     self.passwordField.errorColor = [UIColor redColor];
-    self.passwordField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.passwordField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.87f];
+    self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.passwordField.iconText = @"\U0000f084";
 
     self.mageLabel.textColor = [UIColor brand];
     self.wandLabel.textColor = [UIColor brand];
