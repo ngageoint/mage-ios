@@ -6,11 +6,12 @@
 //  Copyright © 2016 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import HexColors;
+
 #import "ObservationActionsTableViewCell.h"
 #import "User.h"
 #import "ObservationFavorite.h"
 #import "Theme+UIResponder.h"
-#import <HexColor.h>
 
 @interface ObservationActionsTableViewCell()
 @property (nonatomic) BOOL isFavorite;

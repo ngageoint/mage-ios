@@ -7,7 +7,7 @@
 #import "LocationTableViewController.h"
 #import "Location.h"
 #import "MeViewController.h"
-#import <Event.h>
+#import "Event.h"
 #import "MageSessionManager.h"
 #import "TimeFilter.h"
 #import "Filter.h"

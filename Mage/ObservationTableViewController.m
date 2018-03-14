@@ -8,7 +8,7 @@
 #import "UINavigationItem+Subtitle.h"
 #import "TimeFilter.h"
 #import "ObservationTableViewCell.h"
-#import <Observation.h>
+#import "Observation.h"
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "AttachmentViewController.h"
@@ -16,7 +16,7 @@
 #import "User.h"
 #import "ObservationEditViewController.h"
 #import "MageSessionManager.h"
-#import <LocationService.h>
+#import "LocationService.h"
 #import "Filter.h"
 #import "Observations.h"
 #import "WKBPoint.h"

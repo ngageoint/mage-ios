@@ -8,7 +8,7 @@
 #import "Observations.h"
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
-#import <Event.h>
+#import "Event.h"
 #import "Theme+UIResponder.h"
 
 @interface MKMapView ()

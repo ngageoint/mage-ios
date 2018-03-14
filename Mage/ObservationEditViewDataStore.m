@@ -10,8 +10,8 @@
 #import "ObservationEditGeometryTableViewCell.h"
 #import "ObservationFields.h"
 
-#import <Server.h>
-#import <Event.h>
+#import "Server.h"
+#import "Event.h"
 
 static NSInteger const ATTACHMENT_SECTION = 0;
 static NSInteger const COMMON_SECTION = 1;

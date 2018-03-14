@@ -8,8 +8,8 @@
 
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
-#import <LocationService.h>
-#import <WKBPoint.h>
+#import "LocationService.h"
+#import "WKBPoint.h"
 
 @interface GeometryEditCoordinator()
 

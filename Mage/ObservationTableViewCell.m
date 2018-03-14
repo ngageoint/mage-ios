@@ -4,20 +4,20 @@
 //
 //
 
+@import DateTools;
+@import HexColors;
+
 #import "ObservationTableViewCell.h"
 #import "ObservationImage.h"
 #import "ObservationFavorite.h"
-#import <NSDate+DateTools.h>
 #import "User.h"
 #import "Server.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Event.h"
-#import "NSDate+iso8601.h"
 #import "Attachment+Thumbnail.h"
-#import <MageEnums.h>
+#import "MageEnums.h"
 #import "ObservationShapeStyleParser.h"
 #import "Theme+UIResponder.h"
-#import <HexColor.h>
 
 @interface ObservationTableViewCell()
 

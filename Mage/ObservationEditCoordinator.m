@@ -7,9 +7,9 @@
 //
 
 #import "ObservationEditCoordinator.h"
-#import <Event.h>
-#import <User.h>
-#import <Attachment.h>
+#import "Event.h"
+#import "User.h"
+#import "Attachment.h"
 #import "ObservationEditTableViewController.h"
 #import "ObservationPropertiesEditCoordinator.h"
 

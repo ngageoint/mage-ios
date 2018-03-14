@@ -3,7 +3,8 @@
 //  MAGE
 //
 //
-
+@import HexColors;
+@import DateTools;
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
@@ -14,14 +15,12 @@
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
-#import <StaticLayer.h>
+#import "StaticLayer.h"
 #import "StaticPointAnnotation.h"
-#import <HexColor.h>
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
-#import <NSDate+DateTools.h>
 #import "Server.h"
 #import "CacheOverlays.h"
 #import "XYZDirectoryCacheOverlay.h"
@@ -42,8 +41,8 @@
 #import "MapObservationManager.h"
 #import "WKBGeometryUtils.h"
 #import "MapShapePointAnnotationView.h"
-#import <Event.h>
-#import <Observation.h>
+#import "Event.h"
+#import "Observation.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;

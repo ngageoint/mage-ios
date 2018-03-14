@@ -5,9 +5,9 @@
 //
 
 #import "MageRootViewController.h"
-#import <Mage.h>
+#import "Mage.h"
 #import "MageOfflineObservationManager.h"
-#import <Authentication.h>
+#import "Authentication.h"
 #import "Theme+UIResponder.h"
 
 @interface MageRootViewController()<OfflineObservationDelegate>

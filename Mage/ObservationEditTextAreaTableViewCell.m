@@ -5,6 +5,7 @@
 //
 
 #import "ObservationEditTextAreaTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationEditTextAreaTableViewCell ()
 @property (strong, nonatomic) NSString *value;
@@ -22,6 +23,10 @@
     toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, barButton, nil];
     self.textArea.inputAccessoryView = toolbar;
     [self.textArea setDelegate: self];
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
@@ -54,15 +59,32 @@
     }
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.keyLabel.textColor = [UIColor primaryText];
+    self.textArea.textColor = [UIColor primaryText];
+    self.textArea.backgroundColor = [UIColor dialog];
+    
+    CALayer *border = [CALayer layer];
+    CGFloat borderWidth = 1.0;
+    border.frame = CGRectMake(0, self.textArea.frame.size.height - borderWidth, self.textArea.frame.size.width, 1);
+    border.borderWidth = borderWidth;
+    [self.textArea.layer addSublayer:border];
+    self.textArea.layer.masksToBounds = YES;
+    
+    if (self.fieldValueValid) {
+        border.borderColor = [UIColor brand].CGColor;
+        self.requiredIndicator.textColor = [UIColor primaryText];
+    } else {
+        border.borderColor = [UIColor redColor].CGColor;
+        self.requiredIndicator.textColor = [UIColor redColor];
+    }
+}
+
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
     
-    if (valid) {
-        self.textArea.layer.borderWidth = 0.5f;
-        self.textArea.layer.borderColor = [[UIColor colorWithRed:(186/255.0) green:(186/255.0) blue:(186/255.0) alpha:1] CGColor];
-    } else {
-        self.textArea.layer.borderColor = [[UIColor redColor] CGColor];
-    }
+    [self themeDidChange:TheCurrentTheme];
 }
 
 - (BOOL) isEmpty {

@@ -15,6 +15,11 @@
 #import "GPKGMapShapeConverter.h"
 #import "GPKGMapShapePoints.h"
 #import "MapShapePointsObservation.h"
+#import "Theme+UIResponder.h"
+
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
 
 @interface ObservationEditGeometryTableViewCell()
 
@@ -94,6 +99,32 @@
 
 - (BOOL) isEmpty {
     return self.geometry == nil;
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    if (theme == Night) {
+        [self.mapView _setShowsNightMode:YES];
+    } else {
+        [self.mapView _setShowsNightMode:NO];
+    }
+    self.backgroundColor = [UIColor dialog];
+    self.keyLabel.textColor = [UIColor primaryText];
+    self.latitudeLabel.textColor = [UIColor primaryText];
+    self.longitudeLabel.textColor = [UIColor primaryText];
+    self.mapView.layer.borderColor = [[UIColor tableBackground] CGColor];
+    if (self.fieldValueValid) {
+        self.latitude.textColor = [UIColor primaryText];
+        self.longitude.textColor = [UIColor primaryText];
+        self.requiredIndicator.textColor = [UIColor primaryText];
+    } else {
+        self.latitude.textColor = [UIColor redColor];
+        self.longitude.textColor = [UIColor redColor];
+        self.requiredIndicator.textColor = [UIColor redColor];
+    }
 }
 
 - (void) setValid:(BOOL) valid {

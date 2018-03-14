@@ -12,11 +12,11 @@
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
-#import <NBAsYouTypeFormatter.h>
-#import <ServerAuthentication.h>
+#import "NBAsYouTypeFormatter.h"
+#import "ServerAuthentication.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "Theme+UIResponder.h"
-#import <DBZxcvbn.h>
+#import "DBZxcvbn.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
 

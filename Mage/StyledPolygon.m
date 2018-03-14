@@ -7,8 +7,9 @@
 //
 //
 
+@import HexColors;
+
 #import "StyledPolygon.h"
-#import <HexColor.h>
 
 @implementation StyledPolygon
 

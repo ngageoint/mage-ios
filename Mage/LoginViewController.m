@@ -6,8 +6,10 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+
 #import "LoginViewController.h"
-#import <UserUtility.h>
+#import "UserUtility.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
@@ -24,8 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIView *localView;
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-@property (weak, nonatomic) IBOutlet UITextField *usernameField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextField *usernameField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextField *passwordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
@@ -73,14 +75,25 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.usernameField.layer.borderColor = [[UIColor primaryText] CGColor];
-    self.usernameField.backgroundColor = [UIColor background];
+    
     self.usernameField.textColor = [UIColor primaryText];
-    self.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    self.passwordField.layer.borderColor = [[UIColor primaryText] CGColor];
-    self.passwordField.backgroundColor = [UIColor background];
+    self.usernameField.selectedLineColor = [UIColor brand];
+    self.usernameField.selectedTitleColor = [UIColor brand];
+    self.usernameField.placeholderColor = [UIColor secondaryText];
+    self.usernameField.lineColor = [UIColor secondaryText];
+    self.usernameField.titleColor = [UIColor secondaryText];
+    self.usernameField.errorColor = [UIColor redColor];
+    self.usernameField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    
     self.passwordField.textColor = [UIColor primaryText];
-    self.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"password" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.passwordField.selectedLineColor = [UIColor brand];
+    self.passwordField.selectedTitleColor = [UIColor brand];
+    self.passwordField.placeholderColor = [UIColor secondaryText];
+    self.passwordField.lineColor = [UIColor secondaryText];
+    self.passwordField.titleColor = [UIColor secondaryText];
+    self.passwordField.errorColor = [UIColor redColor];
+    self.passwordField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+
     self.mageLabel.textColor = [UIColor brand];
     self.wandLabel.textColor = [UIColor brand];
     self.loginButton.backgroundColor = [UIColor themedButton];
@@ -108,12 +121,6 @@
     
     [self.view addGestureRecognizer:tap];
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.usernameField.layer.borderWidth = 1.0f;
-    self.usernameField.layer.cornerRadius = 5.0f;
-    
-    self.passwordField.layer.borderWidth = 1.0f;
-    self.passwordField.layer.cornerRadius = 5.0f;
     
     self.passwordFont = self.passwordField.font;
 }
@@ -165,8 +172,8 @@
     self.statusView.hidden = NO;
     
     self.loginStatus.text = [errorString isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : errorString;
-    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.usernameField.errorMessage = @"Username";
+    self.passwordField.errorMessage = @"Password";
     
     self.loginFailure = YES;
     [self endLogin];
@@ -182,11 +189,11 @@
 }
 
 - (void) resetLogin: (BOOL) clear {
+    self.usernameField.errorMessage = nil;
+    self.passwordField.errorMessage = nil;
     
     self.loginFailure = NO;
     self.statusView.hidden = YES;
-    self.usernameField.textColor = [UIColor blackColor];
-    self.passwordField.textColor = [UIColor blackColor];
     
     if (clear) {
         [self.usernameField setText:@""];
@@ -198,9 +205,7 @@
     [self.loginButton setEnabled:YES];
     [self.loginIndicator stopAnimating];
     [self.usernameField setEnabled:YES];
-    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setEnabled:YES];
-    [self.passwordField setBackgroundColor:[UIColor whiteColor]];
     [self.showPassword setEnabled:YES];
 }
 
@@ -208,9 +213,7 @@
     [self.loginButton setEnabled:NO];
     [self.loginIndicator startAnimating];
     [self.usernameField setEnabled:NO];
-    [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
     [self.passwordField setEnabled:NO];
-    [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
     [self.showPassword setEnabled:NO];
 }
 

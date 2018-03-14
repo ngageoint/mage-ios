@@ -10,8 +10,8 @@
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
-#import <NBAsYouTypeFormatter.h>
-#import <ServerAuthentication.h>
+#import "NBAsYouTypeFormatter.h"
+#import "ServerAuthentication.h"
 
 @interface SignUpTableViewController ()
     @property (weak, nonatomic) IBOutlet UITextField *displayName;

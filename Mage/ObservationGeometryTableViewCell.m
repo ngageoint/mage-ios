@@ -8,7 +8,7 @@
 #import "WKBGeometry.h"
 #import "WKBGeometryUtils.h"
 #import "MapDelegate.h"
-#import <GPKGMapShapeConverter.h>
+#import "GPKGMapShapeConverter.h"
 #import "Theme+UIResponder.h"
 
 @interface MKMapView ()

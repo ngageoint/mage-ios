@@ -4,6 +4,8 @@
 //
 //
 
+@import HexColors;
+
 #import "GeometryEditViewController.h"
 #import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
@@ -15,7 +17,6 @@
 #import "MapObservation.h"
 #import "MapObservationManager.h"
 #import "GPKGMapShapeConverter.h"
-#import <HexColor.h>
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"

@@ -8,8 +8,8 @@
 #import "ObservationEditViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import <Location.h>
-#import <Event.h>
+#import "Location.h"
+#import "Event.h"
 #import "TimeFilter.h"
 #import "SettingsViewController.h"
 #import "WKBPoint.h"

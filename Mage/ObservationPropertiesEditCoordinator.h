@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Observation.h>
+#import "Observation.h"
 
 @protocol ObservationPropertiesEditDelegate <NSObject>
 

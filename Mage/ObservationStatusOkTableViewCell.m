@@ -6,8 +6,9 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import HexColors;
+
 #import "ObservationStatusOkTableViewCell.h"
-#import <HexColor.h>
 #import "NSDate+display.h"
 #import "Theme+UIResponder.h"
 

@@ -6,7 +6,7 @@
 
 #import "ObservationAnnotation.h"
 #import "NSDate+DateTools.h"
-#import <ObservationImage.h>
+#import "ObservationImage.h"
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"

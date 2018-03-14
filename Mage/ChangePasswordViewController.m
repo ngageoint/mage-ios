@@ -9,12 +9,12 @@
 #import "ChangePasswordViewController.h"
 #import "UINextField.h"
 #import "UIColor+UIColor_Mage.h"
-#import <MageServer.h>
-#import <ServerAuthentication.h>
-#import <MageSessionManager.h>
+#import "MageServer.h"
+#import "ServerAuthentication.h"
+#import "MageSessionManager.h"
 #import "AppDelegate.h"
-#import <User.h>
-#import <DBZxcvbn.h>
+#import "User.h"
+#import "DBZxcvbn.h"
 
 @interface ChangePasswordViewController () <ChangePasswordDelegate, UITextFieldDelegate>
 

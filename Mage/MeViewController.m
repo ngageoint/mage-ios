@@ -4,6 +4,8 @@
 //
 //
 
+@import AFNetworking;
+
 #import "MeViewController.h"
 #import "UIImage+Resize.h"
 #import "ManagedObjectContextHolder.h"
@@ -17,10 +19,8 @@
 #import "Location.h"
 #import "ObservationDataStore.h"
 #import "AttachmentViewController.h"
-#import <AFNetworking.h>
-#import <AFNetworking/UIImageView+AFNetworking.h>
-#import <MageServer.h>
-#import <MageSessionManager.h>
+#import "MageServer.h"
+#import "MageSessionManager.h"
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
 #import "AttachmentSelectionDelegate.h"

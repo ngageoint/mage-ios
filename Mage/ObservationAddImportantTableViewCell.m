@@ -5,11 +5,11 @@
 //  Created by William Newman on 10/27/16.
 //  Copyright © 2016 National Geospatial Intelligence Agency. All rights reserved.
 //
+@import HexColors;
 
 #import "ObservationAddImportantTableViewCell.h"
 #import "User.h"
 #import "Theme+UIResponder.h"
-#import <HexColor.h>
 
 @interface ObservationAddImportantTableViewCell ()
 

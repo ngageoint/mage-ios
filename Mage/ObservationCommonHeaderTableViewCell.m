@@ -5,9 +5,9 @@
 //
 
 #import "ObservationCommonHeaderTableViewCell.h"
-#import <Server.h>
-#import <User.h>
-#import <Event.h>
+#import "Server.h"
+#import "User.h"
+#import "Event.h"
 #import "NSDate+display.h"
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"

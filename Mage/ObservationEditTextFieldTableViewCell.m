@@ -5,13 +5,40 @@
 //
 
 #import "ObservationEditTextFieldTableViewCell.h"
-#import <QuartzCore/QuartzCore.h>
+#import "Theme+UIResponder.h"
+#import <SkyFloatingLabelTextField/SkyFloatingLabelTextField-Swift.h>
 
 @interface ObservationEditTextFieldTableViewCell ()
 @property (strong, nonatomic) NSString *value;
 @end
 
 @implementation ObservationEditTextFieldTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.keyLabel.textColor = [UIColor primaryText];
+    self.textField.textColor = [UIColor primaryText];
+    self.textField.backgroundColor = [UIColor dialog];
+    
+//    CALayer *border = [CALayer layer];
+//    CGFloat borderWidth = 1.0;
+//    border.frame = CGRectMake(0, self.textField.frame.size.height - borderWidth, self.textField.frame.size.width, self.textField.frame.size.height);
+//    border.borderWidth = borderWidth;
+//    [self.textField.layer addSublayer:border];
+//    self.textField.layer.masksToBounds = YES;
+    
+    if (self.fieldValueValid) {
+//        border.borderColor = [UIColor brand].CGColor;
+        self.requiredIndicator.textColor = [UIColor primaryText];
+    } else {
+//        border.borderColor = [UIColor redColor].CGColor;
+        self.requiredIndicator.textColor = [UIColor redColor];
+    }
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
 
 - (void) awakeFromNib {
     [super awakeFromNib];
@@ -62,16 +89,7 @@
 
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
-        
-    if (valid) {
-        self.textField.layer.borderColor = nil;
-        self.textField.layer.borderWidth = 0.0f;
-    } else {
-        self.textField.layer.cornerRadius = 4.0f;
-        self.textField.layer.masksToBounds = YES;
-        self.textField.layer.borderColor = [[UIColor redColor] CGColor];
-        self.textField.layer.borderWidth = 1.0f;
-    }
+    [self themeDidChange:TheCurrentTheme];
 };
 
 

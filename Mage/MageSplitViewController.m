@@ -15,7 +15,7 @@
 #import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "AttachmentViewController.h"
-#import <Mage.h>
+#import "Mage.h"
 
 @interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <WKBGeometry.h>
+#import "WKBGeometry.h"
 
 @protocol GeometryEditDelegate
 

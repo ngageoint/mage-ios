@@ -6,9 +6,10 @@
 //  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import HexColors;
+
 #import "DarkTheme.h"
 #import "UIColor+UIColor_Mage.h"
-#import <HexColor.h>
 
 @implementation DarkTheme
 

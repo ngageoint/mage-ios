@@ -6,6 +6,10 @@
 
 #import "ObservationEditTableViewCell.h"
 
+@interface ObservationEditTableViewCell()
+
+@end
+
 @implementation ObservationEditTableViewCell
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
@@ -15,11 +19,7 @@
 }
 
 - (void) setValid:(BOOL) valid {
-    if (valid) {
-        self.requiredIndicator.textColor = [UIColor darkGrayColor];
-    } else {
-        self.requiredIndicator.textColor = [UIColor redColor];
-    }
+    self.fieldValueValid = valid;
 }
 
 - (BOOL) isValid {

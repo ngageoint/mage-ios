@@ -5,9 +5,8 @@
 //  Created by Dan Barela on 8/10/17.
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
-
+@import HexColors;
 #import "FormCollectionViewCell.h"
-#import <HexColor.h>
 
 @implementation FormCollectionViewCell
 

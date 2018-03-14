@@ -4,11 +4,12 @@
 //
 //
 
+@import DateTools;
+
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
 #import "Observation.h"
 #import "Observations.h"
-#import <NSDate+DateTools.h>
 #import "Server.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"

@@ -8,6 +8,7 @@
 #import "ObservationEditTableViewController.h"
 #import "Observation.h"
 #import "NSDate+Iso8601.h"
+#import "Theme+UIResponder.h"
 
 @import PhotosUI;
 
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) ObservationEditTableViewController *tableViewController;
 @property (weak, nonatomic) IBOutlet UIView *tableContainerView;
 @property (nonatomic) BOOL didSetConstraints;
+@property (weak, nonatomic) IBOutlet UIToolbar *attachmentToolbar;
 
 @end
 
@@ -30,6 +32,15 @@
     _newObservation = newObservation;
     
     return self;
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.attachmentToolbar.backgroundColor = [UIColor tabBarTint];
+    self.attachmentToolbar.tintColor = [UIColor activeTabIcon];
 }
 
 - (void) updateViewConstraints {
@@ -67,6 +78,8 @@
     }
     
     self.tableViewController.observation = self.observation;
+    
+    [self registerForThemeChanges];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
