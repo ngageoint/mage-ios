@@ -4,9 +4,10 @@
 //
 //
 
+@import DateTools;
+
 #import "LocationAnnotation.h"
 #import "User.h"
-#import "NSDate+DateTools.h"
 #import "MKAnnotationView+PersonIcon.h"
 #import "WKBGeometryUtils.h"
 

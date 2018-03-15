@@ -87,7 +87,6 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
 		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
-		5BF11C15AC37CB01AB4C10CA /* Pods_MAGETests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE778253022F0646EF1D1D52 /* Pods_MAGETests.framework */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
 		F7003948200D3FFA00E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
@@ -154,6 +153,7 @@
 		F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11002049D6A3002F9906 /* ThemeManager.m */; };
 		F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11072049E61A002F9906 /* Theme+UIResponder.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
+		F75E30E9205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
@@ -275,7 +275,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F7ED5D2920052161007BD768 /* PBXContainerItemProxy */ = {
+		F763326B2059CD4F00C5529C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
 			proxyType = 1;
@@ -447,6 +447,9 @@
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpTableViewController.h; sourceTree = "<group>"; };
 		4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpTableViewController.m; sourceTree = "<group>"; };
+		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
+		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
+		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
@@ -551,6 +554,7 @@
 		F75A11072049E61A002F9906 /* Theme+UIResponder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Theme+UIResponder.m"; sourceTree = "<group>"; };
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
+		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
@@ -765,7 +769,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BF11C15AC37CB01AB4C10CA /* Pods_MAGETests.framework in Frameworks */,
+				F75E30E9205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -812,6 +816,8 @@
 				AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */,
 				AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */,
 				3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */,
+				4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */,
+				85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1367,6 +1373,7 @@
 		F7A94D6818AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */,
 				F73E29DC20597737001B9307 /* Pods_MAGE.framework */,
 				2FF74A4C1BEBFAD900416090 /* WebKit.framework */,
 				F76FAE851A5C797400BD8443 /* CoreAudio.framework */,
@@ -1381,6 +1388,7 @@
 				F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */,
 				0BD6F42A705BBE383C185A99 /* Pods_MAGE.framework */,
 				CE778253022F0646EF1D1D52 /* Pods_MAGETests.framework */,
+				9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1608,7 +1616,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				F7ED5D2A20052161007BD768 /* PBXTargetDependency */,
+				F763326C2059CD4F00C5529C /* PBXTargetDependency */,
 			);
 			name = MAGETests;
 			productName = MAGETests;
@@ -1788,7 +1796,6 @@
 				"${BUILT_PRODUCTS_DIR}/UIImage-Categories/UIImage_Categories.framework",
 				"${BUILT_PRODUCTS_DIR}/geopackage-ios/geopackage_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework",
 				"${BUILT_PRODUCTS_DIR}/objective-zip/objective_zip.framework",
 				"${BUILT_PRODUCTS_DIR}/proj4-ios/proj4_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/tiff-ios/tiff_ios.framework",
@@ -1810,7 +1817,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImage_Categories.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/geopackage_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/mage_ios_sdk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/objective_zip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/proj4_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/tiff_ios.framework",
@@ -1852,7 +1858,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1865,7 +1871,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MAGETests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MAGE-MAGETests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1880,6 +1886,8 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
 				"${PODS_ROOT}/tuneup_js/lang-ext.js",
@@ -1899,6 +1907,8 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assertions.js",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.js",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lang-ext.js",
@@ -1926,18 +1936,54 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
+				"${BUILT_PRODUCTS_DIR}/FastImageCache/FastImageCache.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/HexColors/HexColors.framework",
+				"${BUILT_PRODUCTS_DIR}/KTCenterFlowLayout/KTCenterFlowLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/MagicalRecord/MagicalRecord.framework",
+				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/UIImage-Categories/UIImage_Categories.framework",
+				"${BUILT_PRODUCTS_DIR}/geopackage-ios/geopackage_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
+				"${BUILT_PRODUCTS_DIR}/objective-zip/objective_zip.framework",
+				"${BUILT_PRODUCTS_DIR}/proj4-ios/proj4_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/tiff-ios/tiff_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/wkb-ios/wkb_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/zxcvbn-ios/zxcvbn_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
 				"${BUILT_PRODUCTS_DIR}/OHHTTPStubs/OHHTTPStubs.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTools.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FastImageCache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HexColors.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KTCenterFlowLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MagicalRecord.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImage_Categories.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/geopackage_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/objective_zip.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/proj4_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/tiff_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/wkb_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/zxcvbn_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMock.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OHHTTPStubs.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F597BFE585567E18FEA5C89E /* [CP] Copy Pods Resources */ = {
@@ -1946,13 +1992,50 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
+				"${PODS_ROOT}/tuneup_js/assertions.js",
+				"${PODS_ROOT}/tuneup_js/image_assertion.js",
+				"${PODS_ROOT}/tuneup_js/lang-ext.js",
+				"${PODS_ROOT}/tuneup_js/screen.js",
+				"${PODS_ROOT}/tuneup_js/test.js",
+				"${PODS_ROOT}/tuneup_js/tuneup.js",
+				"${PODS_ROOT}/tuneup_js/uiautomation-ext.js",
+				"${PODS_ROOT}/tuneup_js/image_asserter",
+				"${PODS_ROOT}/tuneup_js/image_assertion.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/abbreviated_console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/colored_console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/console_output.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/preprocessor.rb",
+				"${PODS_ROOT}/tuneup_js/test_runner/run",
+				"${PODS_ROOT}/tuneup_js/test_runner/xunit_output.rb",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assertions.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lang-ext.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/screen.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/test.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tuneup.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uiautomation-ext.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_asserter",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.rb",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/abbreviated_console_output.rb",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/colored_console_output.rb",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/console_output.rb",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/preprocessor.rb",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/run",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/xunit_output.rb",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2146,10 +2229,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F7ED5D2A20052161007BD768 /* PBXTargetDependency */ = {
+		F763326C2059CD4F00C5529C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
-			targetProxy = F7ED5D2920052161007BD768 /* PBXContainerItemProxy */;
+			targetProxy = F763326B2059CD4F00C5529C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2348,9 +2431,10 @@
 		};
 		F7ED5D2B20052161007BD768 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */;
+			baseConfigurationReference = 4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2375,15 +2459,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
 		};
 		F7ED5D2C20052161007BD768 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */;
+			baseConfigurationReference = 85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2409,7 +2494,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
 		};

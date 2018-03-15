@@ -12,15 +12,16 @@ target 'MAGE' do
     pod 'HexColors', '~> 2.2.1'
     pod 'GoogleSignIn'
     #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '2.0.1'
-    pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'dark-theme'
-    #pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
+    #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'dark-theme'
+    pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
     pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
     pod 'SkyFloatingLabelTextField', '~> 3.0'
+    pod 'DateTools', '~> 2.0.0'
     target 'MAGETests' do
-        inherit! :search_paths
+        inherit! :complete
         pod 'OCMock'
         pod 'OHHTTPStubs'
     end

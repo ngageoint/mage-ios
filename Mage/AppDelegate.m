@@ -74,6 +74,9 @@
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
+    NSUInteger count = [MageOfflineObservationManager offlineObservationCount];
+    NSLog(@"Offline count %lu", (unsigned long)count);
+    
     [self setupApplicationAppearance];
     
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
