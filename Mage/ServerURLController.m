@@ -6,6 +6,9 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
@@ -14,7 +17,7 @@
 @interface ServerURLController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UITextField *serverURL;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
 @property (weak, nonatomic) IBOutlet UIButton *okButton;
@@ -54,10 +57,15 @@
     self.errorStatus.textColor = [UIColor secondaryText];
     self.setServerUrlText.textColor = [UIColor primaryText];
     
-    self.serverURL.layer.borderColor = [[UIColor primaryText] CGColor];
-    self.serverURL.backgroundColor = [UIColor background];
     self.serverURL.textColor = [UIColor primaryText];
-    self.serverURL.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.serverURL.selectedLineColor = [UIColor brand];
+    self.serverURL.selectedTitleColor = [UIColor brand];
+    self.serverURL.placeholderColor = [UIColor secondaryText];
+    self.serverURL.lineColor = [UIColor secondaryText];
+    self.serverURL.titleColor = [UIColor secondaryText];
+    self.serverURL.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.serverURL.iconText = @"\U0000f0ac";
 }
 
 #pragma mark -
@@ -67,9 +75,6 @@
     [self registerForThemeChanges];
     
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.serverURL.layer.borderWidth = 1.0f;
-    self.serverURL.layer.cornerRadius = 5.0f;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -106,7 +111,7 @@
     self.errorStatus.hidden = NO;
     self.errorButton.hidden = NO;
     self.errorStatus.text = error;
-    self.serverURL.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    [self.serverURL setErrorMessage:@"Server URL"];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

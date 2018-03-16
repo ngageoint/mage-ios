@@ -6,6 +6,9 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 #import "SignUpViewController.h"
 #import "UINextField.h"
 #import "MageSessionManager.h"
@@ -20,12 +23,12 @@
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *displayName;
-@property (weak, nonatomic) IBOutlet UITextField *username;
-@property (weak, nonatomic) IBOutlet UITextField *password;
-@property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet UITextField *email;
-@property (weak, nonatomic) IBOutlet UITextField *phone;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *displayName;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *username;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *password;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
 @property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
@@ -61,6 +64,17 @@
 
 #pragma mark - Theme Changes
 
+- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.textColor = [UIColor primaryText];
+    field.selectedLineColor = [UIColor brand];
+    field.selectedTitleColor = [UIColor brand];
+    field.placeholderColor = [UIColor secondaryText];
+    field.lineColor = [UIColor secondaryText];
+    field.titleColor = [UIColor secondaryText];
+    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+}
+
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
     self.mageLabel.textColor = [UIColor brand];
@@ -72,21 +86,25 @@
     self.showPassword.onTintColor = [UIColor themedButton];
     self.passwordStrengthText.textColor = [UIColor secondaryText];
     self.showPasswordText.textColor = [UIColor secondaryText];
-    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primary] CGColor];
     
-    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primaryText] CGColor];
-    self.username.backgroundColor = self.password.backgroundColor = self.displayName.backgroundColor = self.passwordConfirm.backgroundColor = self.email.backgroundColor = self.phone.backgroundColor = [UIColor background];
-    self.username.textColor = self.password.textColor = self.displayName.textColor = self.passwordConfirm.textColor = self.email.textColor = self.phone.textColor = [UIColor primaryText];
-    self.username.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    self.displayName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Display Name" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    self.phone.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Phone" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    self.email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-                                                  
+    [self themeTextField:self.username];
+    [self themeTextField:self.displayName];
+    [self themeTextField:self.password];
+    [self themeTextField:self.passwordConfirm];
+    [self themeTextField:self.email];
+    [self themeTextField:self.phone];
+    
+    self.username.iconText = @"\U0000f007";
+    self.password.iconText = @"\U0000f084";
+    self.passwordConfirm.iconText = @"\U0000f084";
+    self.email.iconText = @"\U0000f0e0";
+    self.phone.iconText = @"\U0000f095";
+    self.displayName.iconText = @"\U0000f2bc";
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
 }
 
@@ -103,17 +121,14 @@
 
     self.wandLabel.text = @"\U0000f0d0";
     
-    self.username.layer.borderWidth = self.password.layer.borderWidth = self.displayName.layer.borderWidth = self.passwordConfirm.layer.borderWidth = self.password.layer.borderWidth = self.email.layer.borderWidth = self.phone.layer.borderWidth = 1.0f;
-    self.username.layer.cornerRadius = self.password.layer.cornerRadius = self.displayName.layer.cornerRadius = self.passwordConfirm.layer.cornerRadius = self.password.layer.cornerRadius = self.email.layer.cornerRadius = self.phone.layer.cornerRadius  = 5.0f;
-    
     self.password.delegate = self;
     
     self.googleSignInButton.style = kGIDSignInButtonStyleWide;
 
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
     
 }
@@ -136,7 +151,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    textField.textColor = [UIColor blackColor];
     
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
@@ -193,10 +207,6 @@
                 break;
         }
     }
-    
-    // when typing with a different color than black, the color is not saved
-    // this code fixes that bug
-    self.username.textColor = self.password.textColor = self.displayName.textColor = self.passwordConfirm.textColor = self.email.textColor = self.phone.textColor = [UIColor primaryText];
     
     return YES;
 }
@@ -279,10 +289,8 @@
     [self.delegate signUpCanceled];
 }
 
-- (void) markFieldError: (UITextField *) field {
-    UIColor *red = [UIColor colorWithRed:1.0 green:0 blue:0 alpha:.8];
-    field.attributedPlaceholder = [[NSAttributedString alloc] initWithString:field.placeholder attributes:@{NSForegroundColorAttributeName: red}];
-    field.textColor = red;
+- (void) markFieldError: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.errorMessage = field.placeholder;
 }
 
 - (void) showDialogForRequiredFields:(NSArray *) fields {

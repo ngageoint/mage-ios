@@ -7,6 +7,7 @@
 //
 
 @import SkyFloatingLabelTextField;
+@import HexColors;
 
 #import "LoginViewController.h"
 #import "UserUtility.h"
@@ -82,8 +83,7 @@
     self.usernameField.placeholderColor = [UIColor secondaryText];
     self.usernameField.lineColor = [UIColor secondaryText];
     self.usernameField.titleColor = [UIColor secondaryText];
-    self.usernameField.errorColor = [UIColor redColor];
-    self.usernameField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.87];
+    self.usernameField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
     self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.usernameField.iconText = @"\U0000f007";
     
@@ -93,8 +93,7 @@
     self.passwordField.placeholderColor = [UIColor secondaryText];
     self.passwordField.lineColor = [UIColor secondaryText];
     self.passwordField.titleColor = [UIColor secondaryText];
-    self.passwordField.errorColor = [UIColor redColor];
-    self.passwordField.errorColor = [[UIColor redColor] colorWithAlphaComponent:.87f];
+    self.passwordField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
     self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.passwordField.iconText = @"\U0000f084";
 

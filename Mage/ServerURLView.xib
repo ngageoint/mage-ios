@@ -85,10 +85,10 @@
                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://" borderStyle="roundedRect" placeholder="Server URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtk-kb-2jR">
-                    <rect key="frame" x="20" y="176" width="335" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://" placeholder="Server URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtk-kb-2jR" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                    <rect key="frame" x="20" y="176" width="335" height="45"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="tLy-Pa-VWd"/>
+                        <constraint firstAttribute="height" constant="45" id="tLy-Pa-VWd"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
@@ -97,7 +97,7 @@
                     </connections>
                 </textField>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3v-ds-Sff">
-                    <rect key="frame" x="20" y="226" width="159" height="40"/>
+                    <rect key="frame" x="20" y="241" width="159" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -116,7 +116,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SwE-a6-n1N">
-                    <rect key="frame" x="196" y="226" width="159" height="40"/>
+                    <rect key="frame" x="196" y="241" width="159" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -135,14 +135,14 @@
                     </connections>
                 </button>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Y76-wt-WvA">
-                    <rect key="frame" x="327" y="236" width="20" height="20"/>
+                    <rect key="frame" x="327" y="251" width="20" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="9zz-D9-XKa"/>
                         <constraint firstAttribute="height" constant="20" id="ZSa-Xw-RIZ"/>
                     </constraints>
                 </activityIndicatorView>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRm-i7-6lH">
-                    <rect key="frame" x="20" y="286" width="24" height="24"/>
+                    <rect key="frame" x="20" y="301" width="24" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="24" id="hPO-sS-haU"/>
                         <constraint firstAttribute="height" constant="24" id="qe5-E7-Ip7"/>
@@ -152,7 +152,7 @@
                     </state>
                 </button>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkG-8a-rWv">
-                    <rect key="frame" x="40" y="286" width="310" height="108"/>
+                    <rect key="frame" x="40" y="301" width="310" height="108"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Login Status"/>
                     <constraints>
