@@ -154,7 +154,6 @@
 		F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11002049D6A3002F9906 /* ThemeManager.m */; };
 		F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11072049E61A002F9906 /* Theme+UIResponder.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
-		F75E30E9205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
@@ -770,7 +769,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F75E30E9205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework in Frameworks */,
 				95042B4740351FC09E2E45E9 /* Pods_MAGETests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1860,7 +1858,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
