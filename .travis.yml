@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode9.2
+osx_image: xcode9.3beta
 xcode_workspace: MAGE.xcworkspace
 xcode_scheme: MAGE
 xcode_sdk: iphonesimulator

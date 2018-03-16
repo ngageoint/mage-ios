@@ -1,8 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 
-osx_image: xcode9.3beta
-
 workspace 'MAGE'
 project 'MAGE.xcodeproj'
 
