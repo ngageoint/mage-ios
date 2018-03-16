@@ -138,9 +138,9 @@
     BOOL didResign = [textField resignFirstResponder];
     if (!didResign) return NO;
     
-//    if ([textField isKindOfClass:[UINextField class]]) {
-//        [[(UINextField *)textField nextField] becomeFirstResponder];
-//    }
+    if ([textField respondsToSelector:@selector(nextField)] && [textField nextField]) {
+        [[textField nextField] becomeFirstResponder];
+    }
     
     if (textField == self.passwordConfirm) {
         [self onSignup:textField];
