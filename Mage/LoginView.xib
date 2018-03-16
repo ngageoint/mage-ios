@@ -388,7 +388,7 @@
                     <rect key="frame" x="16" y="60" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yw6-zq-kyk">
-                            <rect key="frame" x="64" y="0.0" width="216.5" height="55"/>
+                            <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AjL-hK-ohz">
                                     <rect key="frame" x="55.5" y="0.0" width="161" height="100"/>
