@@ -7,6 +7,9 @@
 //
 
 #import "ObservationEditNumberFieldTableViewCell.h"
+#import "Theme+UIResponder.h"
+
+@import HexColors;
 
 @interface ObservationEditNumberFieldTableViewCell ()
 @property (strong, nonatomic) NSNumber *value;
@@ -20,6 +23,25 @@
 
 
 @implementation ObservationEditNumberFieldTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    
+    self.textField.textColor = [UIColor primaryText];
+    self.textField.selectedLineColor = [UIColor brand];
+    self.textField.selectedTitleColor = [UIColor brand];
+    self.textField.placeholderColor = [UIColor secondaryText];
+    self.textField.lineColor = [UIColor secondaryText];
+    self.textField.titleColor = [UIColor secondaryText];
+    self.textField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.textField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.textField.iconText = @"\U0000f292";
+    self.textField.iconColor = [UIColor secondaryText];
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
 
 - (void) awakeFromNib {
     [super awakeFromNib];
@@ -76,8 +98,7 @@
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     self.value = [formatter numberFromString:self.textField.text];
     [self setValid:[self isValid]];
-    [self.keyLabel setText:[field objectForKey:@"title"]];
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
+    self.textField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
 }
 
 - (void) selectRow {
@@ -111,7 +132,7 @@
 }
 
 - (BOOL) isValid {
-    return [self isValid:self.value];
+    return [super isValid] && [self isValid:self.value];
 }
 
 - (BOOL) isValid: (NSNumber *) number {
@@ -135,15 +156,9 @@
     [super setValid:valid];
     
     if (valid) {
-        self.textField.layer.borderColor = nil;
-        self.textField.layer.borderWidth = 0.0f;
-        self.title.textColor = [UIColor blackColor];
+        self.textField.errorMessage = nil;
     } else {
-        self.title.textColor = [UIColor redColor];
-        self.textField.layer.cornerRadius = 4.0f;
-        self.textField.layer.masksToBounds = YES;
-        self.textField.layer.borderColor = [[UIColor redColor] CGColor];
-        self.textField.layer.borderWidth = 1.0f;
+        self.textField.errorMessage = self.textField.placeholder;
     }
 }
 

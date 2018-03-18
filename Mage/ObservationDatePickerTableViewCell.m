@@ -4,8 +4,10 @@
 //
 //
 
+@import DateTools;
+@import HexColors;
+
 #import "ObservationDatePickerTableViewCell.h"
-#import "NSDate+iso8601.h"
 #import "NSDate+display.h"
 #import "Theme+UIResponder.h"
 
@@ -20,24 +22,16 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.backgroundColor = [UIColor dialog];
-    self.keyLabel.textColor = [UIColor primaryText];
     self.textField.textColor = [UIColor primaryText];
-    self.textField.backgroundColor = [UIColor dialog];
-   
-    CALayer *border = [CALayer layer];
-    CGFloat borderWidth = 1.0;
-    border.frame = CGRectMake(0, self.textField.frame.size.height - borderWidth, self.textField.frame.size.width, self.textField.frame.size.height);
-    border.borderWidth = borderWidth;
-    [self.textField.layer addSublayer:border];
-    self.textField.layer.masksToBounds = YES;
-    
-    if (self.fieldValueValid) {
-        border.borderColor = [UIColor brand].CGColor;
-        self.requiredIndicator.textColor = [UIColor primaryText];
-    } else {
-        border.borderColor = [UIColor redColor].CGColor;
-        self.requiredIndicator.textColor = [UIColor redColor];
-    }
+    self.textField.selectedLineColor = [UIColor brand];
+    self.textField.selectedTitleColor = [UIColor brand];
+    self.textField.placeholderColor = [UIColor secondaryText];
+    self.textField.lineColor = [UIColor secondaryText];
+    self.textField.titleColor = [UIColor secondaryText];
+    self.textField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.textField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.textField.iconText = @"\U0000f073";
+    self.textField.iconColor = [UIColor secondaryText];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
@@ -52,7 +46,13 @@
     }
     
     if ([value length] > 0) {
-        self.value = [NSDate dateFromIso8601String: (NSString *)value];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+        // Always use this locale when parsing fixed format date strings
+        NSLocale *posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        [formatter setLocale:posix];
+        self.value = [formatter dateFromString:(NSString *) value];
         self.datePicker.date = self.value;
     } else {
         self.value = nil;
@@ -61,7 +61,8 @@
     [self setTextFieldValue];
     
     [self.datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.keyLabel setText:[field objectForKey:@"title"]];
+    
+    self.textField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
     
     UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
@@ -77,8 +78,6 @@
     self.textField.inputAccessoryView = toolbar;
     [self.textField setDelegate:self];
 
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
-    
     [self registerForThemeChanges];
 }
 
@@ -134,7 +133,14 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (![self.value isEqualToDate:self.date]) {
-        id value = self.date ? [self.date iso8601String] : nil;
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+        // Always use this locale when parsing fixed format date strings
+        NSLocale *posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        [formatter setLocale:posix];
+        
+        id value = self.date ? [formatter stringFromDate:self.date] : nil;
 
         if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
             [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
@@ -147,8 +153,12 @@
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
     
-    [self themeDidChange:TheCurrentTheme];
-};
+    if (valid) {
+        self.textField.errorMessage = nil;
+    } else {
+        self.textField.errorMessage = self.textField.placeholder;
+    }
+}
 
 
 
