@@ -28,7 +28,10 @@
     self.valueField.titleColor = [UIColor secondaryText];
     self.valueField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
     self.valueField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.valueField.iconText = @"\U0000f044";
+    self.valueField.iconText = @"\U0000f0d7";
+    if (self.fieldDefinition && [@"radio" isEqualToString:[self.fieldDefinition objectForKey:@"type"] ]) {
+        self.valueField.iconText = @"\U0000f192";
+    }
     self.valueField.iconColor = [UIColor secondaryText];
 }
 
