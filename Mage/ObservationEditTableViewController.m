@@ -107,6 +107,8 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationPasswordEditCell" bundle:nil] forCellReuseIdentifier:@"password"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextfieldEditCell" bundle:nil] forCellReuseIdentifier:@"textfield"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDeleteCell" bundle:nil] forCellReuseIdentifier:@"deleteObservationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"TableSectionHeader" bundle:nil] forHeaderFooterViewReuseIdentifier:@"TableSectionHeader"];
 }
 
 - (void) updateUserDefaults: (NSNotification *) notification {

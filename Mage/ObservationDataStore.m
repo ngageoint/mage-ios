@@ -131,27 +131,7 @@
     NSString *name = [sectionInfo name];
     
     return [[ObservationTableHeaderView alloc] initWithName:name];
-    
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 48)];
-//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, tableView.frame.size.width, 48)];
-//    [label setFont:[UIFont systemFontOfSize:14]];
-//    [label setTextColor:[UIColor flatButton]];
-//    [label setText: name];
-//    [view addSubview:label];
-//
-//    [view setBackgroundColor:[UIColor background]];
-//    return view;
 }
-
-//- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-//    NSString *name = [sectionInfo name];
-//    
-//    UITableViewHeaderFooterView *tableSectionHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"TableSectionHeader"];
-//    tableSectionHeader.textLabel.text = name;
-//    
-//    return tableSectionHeader;
-//}
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
     ObservationTableViewCell *cell = (ObservationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"obsCell"];

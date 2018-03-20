@@ -37,7 +37,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    [self setBackgroundColor:[UIColor background]];
+    [self setBackgroundColor:[UIColor tableBackground]];
     [self.label setTextColor:[UIColor flatButton]];
 }
 

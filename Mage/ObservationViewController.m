@@ -25,6 +25,7 @@
 #import "ObservationEditCoordinator.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -335,16 +336,22 @@ static NSInteger const IMPORTANT_SECTION = 4;
     return title;
 }
 
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == STATUS_SECTION) {
         return CGFLOAT_MIN;
     }
-
-    if (section < [self.tableLayout count] && ![[self.tableLayout objectAtIndex:section] count]) {
-        return CGFLOAT_MIN;
+    
+    if (section >= self.tableLayout.count) {
+        return 48.0f;
     }
 
-    return UITableViewAutomaticDimension;
+    return 15.0f;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

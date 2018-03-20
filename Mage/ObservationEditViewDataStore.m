@@ -9,6 +9,7 @@
 #import "AttachmentEditTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "ObservationFields.h"
+#import "ObservationTableHeaderView.h"
 
 #import "Server.h"
 #import "Event.h"
@@ -306,9 +307,15 @@ static NSInteger const COMMON_SECTION = 1;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == ATTACHMENT_SECTION || section == COMMON_SECTION) {
-        return CGFLOAT_MIN;
+        return 15.0f;
     }
-    return UITableViewAutomaticDimension;
+    return 48.0f;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 @end
