@@ -5,8 +5,19 @@
 //
 
 #import "ObservationCheckboxTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @implementation ObservationCheckboxTableViewCell
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    
+    self.keyLabel.textColor = [UIColor secondaryText];
+}
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     
@@ -17,8 +28,7 @@
         [self.checkboxSwitch setOn:NO];
     }
     
-    [self.keyLabel setText:[field objectForKey:@"title"]];
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
+    self.keyLabel.text = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
     
     [self.checkboxSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
