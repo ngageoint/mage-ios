@@ -1175,6 +1175,7 @@
 				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
 				F75DD30C1A97AA3B0007FA3F /* Cells */,
 				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
+				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */,
 				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
 				F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */,
 				F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */,
@@ -1183,7 +1184,6 @@
 				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
 				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
 				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */,
-				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */,
 				F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */,
 				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
 			);

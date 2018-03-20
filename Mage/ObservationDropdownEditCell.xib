@@ -20,7 +20,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="o7O-l2-VFm" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                        <rect key="frame" x="16" y="9" width="343" height="51"/>
+                        <rect key="frame" x="16" y="9" width="343" height="46.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="oJ8-gK-rd3"/>
@@ -35,7 +35,8 @@
                         </connections>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hVx-yi-rKa">
-                        <rect key="frame" x="38" y="26" width="321" height="28"/>
+                        <rect key="frame" x="38" y="26" width="321" height="23.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -48,7 +49,7 @@
                     <constraint firstItem="o7O-l2-VFm" firstAttribute="leading" secondItem="DSX-FG-KA4" secondAttribute="leadingMargin" id="Lcc-La-3pn"/>
                     <constraint firstItem="hVx-yi-rKa" firstAttribute="trailing" secondItem="o7O-l2-VFm" secondAttribute="trailing" id="QII-MY-F2p"/>
                     <constraint firstItem="hVx-yi-rKa" firstAttribute="leading" secondItem="o7O-l2-VFm" secondAttribute="leading" constant="22" id="bYk-xN-OYf"/>
-                    <constraint firstAttribute="bottom" secondItem="hVx-yi-rKa" secondAttribute="bottom" constant="10.5" id="lKn-pD-ySc"/>
+                    <constraint firstAttribute="bottom" secondItem="hVx-yi-rKa" secondAttribute="bottom" constant="15" id="lKn-pD-ySc"/>
                     <constraint firstItem="hVx-yi-rKa" firstAttribute="top" secondItem="o7O-l2-VFm" secondAttribute="top" constant="17" id="uxs-9h-Vo2"/>
                 </constraints>
             </tableViewCellContentView>

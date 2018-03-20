@@ -7,11 +7,45 @@
 #import "ObservationEditTextAreaTableViewCell.h"
 #import "Theme+UIResponder.h"
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 @interface ObservationEditTextAreaTableViewCell ()
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *valueField;
 @property (strong, nonatomic) NSString *value;
+@property (nonatomic) BOOL valueBeingEdited;
 @end
 
 @implementation ObservationEditTextAreaTableViewCell
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    
+    self.textArea.textColor = [UIColor primaryText];
+    
+    self.valueField.textColor = [UIColor primaryText];
+    if (!self.valueBeingEdited) {
+        self.valueField.selectedLineColor = [UIColor brand];
+        self.valueField.selectedTitleColor = [UIColor brand];
+        self.valueField.lineColor = [UIColor secondaryText];
+        self.valueField.titleColor = [UIColor secondaryText];
+    } else {
+        self.valueField.lineColor = [UIColor brand];
+        self.valueField.titleColor = [UIColor brand];
+        self.valueField.selectedLineColor = [UIColor secondaryText];
+        self.valueField.selectedTitleColor = [UIColor secondaryText];
+    }
+    
+    self.valueField.placeholderColor = [UIColor secondaryText];
+    self.valueField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.valueField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.valueField.iconText = @"\U0000f044";
+    self.valueField.iconColor = [UIColor secondaryText];
+}
 
 - (void) awakeFromNib {
     [super awakeFromNib];
@@ -25,16 +59,18 @@
     [self.textArea setDelegate: self];
 }
 
-- (void) didMoveToSuperview {
-    [self registerForThemeChanges];
-}
-
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
+    self.valueBeingEdited = NO;
     [self.textArea setText:value];    
     self.value = self.textArea.text;
     
-    [self.keyLabel setText:[field objectForKey:@"title"]];
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
+    if (!self.value || [self.value isEqualToString:@""]) {
+        self.valueField.text = nil;
+    } else {
+        self.valueField.text = @" ";
+    }
+    
+    self.valueField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
 }
 
 - (void) selectRow {
@@ -50,7 +86,37 @@
     [self.textArea resignFirstResponder];
 }
 
+- (void) textViewDidChange:(UITextView *)textView {
+    
+    if ([textView.text isEqualToString:@""]) {
+        self.valueField.text = nil;
+    } else {
+        self.valueField.text = @" ";
+    }
+    
+    id view = [self superview];
+    
+    while (view && [view isKindOfClass:[UITableView class]] == NO) {
+        view = [view superview];
+    }
+    
+    UITableView *tableView = (UITableView *)view;
+    CGPoint offset = tableView.contentOffset;
+    [UIView setAnimationsEnabled:NO];
+    [tableView beginUpdates];
+    [tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+    [tableView setContentOffset:offset];
+}
+
+- (void) textViewDidBeginEditing:(UITextView *)textView {
+    self.valueBeingEdited = YES;
+    [self themeDidChange:TheCurrentTheme];
+}
+
 - (void)textViewDidEndEditing:(UITextView *)textView {
+    self.valueBeingEdited = NO;
+    [self themeDidChange:TheCurrentTheme];
     if (![self.value isEqualToString:self.textArea.text]) {
         self.value = self.textArea.text;
         if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
@@ -59,32 +125,8 @@
     }
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
-    self.keyLabel.textColor = [UIColor primaryText];
-    self.textArea.textColor = [UIColor primaryText];
-    self.textArea.backgroundColor = [UIColor dialog];
-    
-    CALayer *border = [CALayer layer];
-    CGFloat borderWidth = 1.0;
-    border.frame = CGRectMake(0, self.textArea.frame.size.height - borderWidth, self.textArea.frame.size.width, 1);
-    border.borderWidth = borderWidth;
-    [self.textArea.layer addSublayer:border];
-    self.textArea.layer.masksToBounds = YES;
-    
-    if (self.fieldValueValid) {
-        border.borderColor = [UIColor brand].CGColor;
-        self.requiredIndicator.textColor = [UIColor primaryText];
-    } else {
-        border.borderColor = [UIColor redColor].CGColor;
-        self.requiredIndicator.textColor = [UIColor redColor];
-    }
-}
-
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
-    
-    [self themeDidChange:TheCurrentTheme];
 }
 
 - (BOOL) isEmpty {
