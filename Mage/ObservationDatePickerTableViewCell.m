@@ -141,13 +141,26 @@
         [formatter setLocale:posix];
         
         id value = self.date ? [formatter stringFromDate:self.date] : nil;
+        self.value = self.date;
 
         if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
             [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
         }
     }
     self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
-    self.value = self.date;
+}
+
+- (BOOL) isValid {
+    return [super isValid] && [self isValid: self.value];
+}
+
+- (BOOL) isValid: (NSDate *) date {
+    
+    if (date == nil && [[self.fieldDefinition objectForKey: @"required"] boolValue]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void) setValid:(BOOL) valid {

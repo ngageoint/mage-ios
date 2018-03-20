@@ -57,6 +57,7 @@
         self.labelField.text = self.value;
     }
     
+    self.valueField.errorMessage = nil;
     self.valueField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
 }
 
@@ -66,6 +67,12 @@
 
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
+    
+    if (valid) {
+        self.valueField.errorMessage = nil;
+    } else {
+        self.valueField.errorMessage = self.valueField.placeholder;
+    }
 };
 
 @end

@@ -7,6 +7,7 @@
 #import "AttachmentEditTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Attachment+Thumbnail.h"
+#import "Theme+UIResponder.h"
 
 @interface AttachmentEditTableViewCell ()
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
@@ -14,6 +15,14 @@
 @end
 
 @implementation AttachmentEditTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     if (self.ads == nil) {

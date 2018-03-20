@@ -217,7 +217,11 @@ static NSInteger const COMMON_SECTION = 1;
     if ([cell respondsToSelector:@selector(populateCellWithFormField:andValue:)]) {
         id value = [self valueForIndexPath:indexPath];
         [cell populateCellWithFormField:[self fieldForIndexPath:indexPath] andValue:value];
-        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+        // recheck
+        if ([self.invalidIndexPaths containsObject:indexPath]) {
+            [cell setValid:[cell isValid]];
+        }
+//        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
     return cell;
@@ -279,7 +283,7 @@ static NSInteger const COMMON_SECTION = 1;
         
         id cell = [self.editTable cellForRowAtIndexPath:indexPath];
         [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
-        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+        [cell setValid:[cell isValid]];
     }
     
 }

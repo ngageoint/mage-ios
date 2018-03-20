@@ -7,6 +7,8 @@
 #import "ObservationCheckboxTableViewCell.h"
 #import "Theme+UIResponder.h"
 
+@import HexColors;
+
 @implementation ObservationCheckboxTableViewCell
 
 - (void) didMoveToSuperview {
@@ -15,7 +17,11 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.backgroundColor = [UIColor dialog];
-    
+    if (self.fieldValueValid) {
+        self.keyLabel.textColor = [UIColor secondaryText];
+    } else {
+        self.keyLabel.textColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    }
     self.keyLabel.textColor = [UIColor secondaryText];
 }
 
@@ -43,6 +49,12 @@
 
 - (void) selectRow {
     [self.checkboxSwitch setOn:!self.checkboxSwitch.isOn];
+}
+
+- (void) setValid:(BOOL) valid {
+    [super setValid:valid];
+
+    [self themeDidChange:TheCurrentTheme];
 }
 
 @end

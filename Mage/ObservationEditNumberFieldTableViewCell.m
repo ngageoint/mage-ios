@@ -97,7 +97,6 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     self.value = [formatter numberFromString:self.textField.text];
-    [self setValid:[self isValid]];
     self.textField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
 }
 
@@ -132,10 +131,14 @@
 }
 
 - (BOOL) isValid {
-    return [super isValid] && [self isValid:self.value];
+    return [super isValid] && [self isValid: self.value];
 }
 
 - (BOOL) isValid: (NSNumber *) number {
+    
+    if (number == nil && [[self.fieldDefinition objectForKey: @"required"] boolValue]) {
+        return NO;
+    }
     
     if (number != nil) {
         if ((self.min && self.max && ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue])) ||
@@ -161,7 +164,6 @@
         self.textField.errorMessage = self.textField.placeholder;
     }
 }
-
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     

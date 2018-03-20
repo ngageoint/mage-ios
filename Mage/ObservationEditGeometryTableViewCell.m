@@ -17,12 +17,16 @@
 #import "MapShapePointsObservation.h"
 #import "Theme+UIResponder.h"
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 @interface MKMapView ()
 -(void) _setShowsNightMode:(BOOL)yesOrNo;
 @end
 
 @interface ObservationEditGeometryTableViewCell()
 
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *locationField;
 @property (strong, nonatomic) MapDelegate *mapDelegate;
 @property (strong, nonatomic) MapObservation *mapObservation;
 @property (strong, nonatomic) MapObservationManager *observationManager;
@@ -31,6 +35,31 @@
 @end
 
 @implementation ObservationEditGeometryTableViewCell
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    if (theme == Night) {
+        [self.mapView _setShowsNightMode:YES];
+    } else {
+        [self.mapView _setShowsNightMode:NO];
+    }
+    self.backgroundColor = [UIColor dialog];
+    
+    self.locationField.textColor = [UIColor primaryText];
+    self.locationField.selectedLineColor = [UIColor brand];
+    self.locationField.selectedTitleColor = [UIColor brand];
+    self.locationField.placeholderColor = [UIColor secondaryText];
+    self.locationField.lineColor = [UIColor secondaryText];
+    self.locationField.titleColor = [UIColor secondaryText];
+    self.locationField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.locationField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.locationField.iconText = @"\U0000f0ac";
+    self.locationField.iconColor = [UIColor secondaryText];
+    
+}
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     // special case if it is the actual observation geometry and not a field
@@ -46,9 +75,9 @@
         }
         self.isGeometryField = NO;
     }
-
-    [self.keyLabel setText:[field objectForKey:@"title"]];
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
+    
+    self.locationField.errorMessage = nil;
+    self.locationField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [NSString stringWithFormat:@"%@ (Lat, Long)", [field objectForKey:@"title"]] : [NSString stringWithFormat:@"%@ (Lat, Long) %@", [field objectForKey:@"title"], @"*"];
     
     self.mapDelegate = [[MapDelegate alloc] init];
 
@@ -68,8 +97,7 @@
         }
         
         WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
-        [self.latitude setText:[NSString stringWithFormat:@"%.6f", [point.y doubleValue]]];
-        [self.longitude setText:[NSString stringWithFormat:@"%.6f", [point.x doubleValue]]];
+        self.locationField.text = [NSString stringWithFormat:@"%.6f, %.6f", [point.y doubleValue], [point.x doubleValue]];
 
         if (!self.isGeometryField) {
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
@@ -91,9 +119,6 @@
     } else {
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
-        
-        [self.latitude setText:@""];
-        [self.longitude setText:@""];
     }
 }
 
@@ -101,41 +126,13 @@
     return self.geometry == nil;
 }
 
-- (void) didMoveToSuperview {
-    [self registerForThemeChanges];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    if (theme == Night) {
-        [self.mapView _setShowsNightMode:YES];
-    } else {
-        [self.mapView _setShowsNightMode:NO];
-    }
-    self.backgroundColor = [UIColor dialog];
-    self.keyLabel.textColor = [UIColor primaryText];
-    self.latitudeLabel.textColor = [UIColor primaryText];
-    self.longitudeLabel.textColor = [UIColor primaryText];
-    self.mapView.layer.borderColor = [[UIColor tableBackground] CGColor];
-    if (self.fieldValueValid) {
-        self.latitude.textColor = [UIColor primaryText];
-        self.longitude.textColor = [UIColor primaryText];
-        self.requiredIndicator.textColor = [UIColor primaryText];
-    } else {
-        self.latitude.textColor = [UIColor redColor];
-        self.longitude.textColor = [UIColor redColor];
-        self.requiredIndicator.textColor = [UIColor redColor];
-    }
-}
-
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
     
     if (valid) {
-        self.latitudeLabel.textColor = nil;
-        self.longitudeLabel.textColor = nil;
+        self.locationField.errorMessage = nil;
     } else {
-        self.latitudeLabel.textColor = [UIColor redColor];
-        self.longitudeLabel.textColor = [UIColor redColor];
+        self.locationField.errorMessage = self.locationField.placeholder;
     }
 }
 

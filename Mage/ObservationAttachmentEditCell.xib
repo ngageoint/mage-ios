@@ -34,6 +34,7 @@
                         <cells/>
                     </collectionView>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="bAI-NQ-p0d" firstAttribute="trailing" secondItem="yLD-hd-NyR" secondAttribute="trailingMargin" priority="999" id="HlY-Qc-gxu"/>
                     <constraint firstItem="bAI-NQ-p0d" firstAttribute="leading" secondItem="yLD-hd-NyR" secondAttribute="leadingMargin" id="MgD-QW-t0z"/>
@@ -41,6 +42,7 @@
                     <constraint firstAttribute="bottom" secondItem="bAI-NQ-p0d" secondAttribute="bottom" constant="8" id="nba-LD-Xdp"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="attachmentCollection" destination="bAI-NQ-p0d" id="06e-F3-EY5"/>
