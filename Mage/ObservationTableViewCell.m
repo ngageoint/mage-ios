@@ -55,6 +55,17 @@
     if (self.observation) {
         [self displayFavoriteForObservation:self.observation];
     }
+    self.importantBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.importantBadge.layer.borderWidth = 2.5;
+    self.importantBadge.layer.cornerRadius = self.importantBadge.frame.size.width / 2.0f;
+    
+    self.syncBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.syncBadge.layer.borderWidth = 2.5;
+    self.syncBadge.layer.cornerRadius = self.syncBadge.frame.size.width / 2.0f;
+    
+    self.errorBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.errorBadge.layer.borderWidth = 2.5;
+    self.errorBadge.layer.cornerRadius = self.errorBadge.frame.size.width / 2.0f;
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {

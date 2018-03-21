@@ -7,8 +7,17 @@
 //
 
 #import "ObservationStatusErrorTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @implementation ObservationStatusErrorTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     self.errorLabel.text = [observation errorMessage];

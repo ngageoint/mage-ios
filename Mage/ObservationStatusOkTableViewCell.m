@@ -19,9 +19,12 @@
     self.statusLabel.textColor = [UIColor colorWithHexString:@"00C853" alpha:1.0];
 }
 
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     self.statusLabel.text = observation.lastModified ? [NSString stringWithFormat:@"Pushed on %@", [observation.lastModified formattedDisplayDate]] : @"Pushed";
-    [self registerForThemeChanges];
 }
 
 @end

@@ -11,6 +11,10 @@
 
 @implementation ObservationFavoritesTableViewCell
 
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
+
 - (void) themeDidChange:(MageTheme)theme {
     self.backgroundColor = [UIColor dialog];
     self.favoriteTextLabel.textColor = [UIColor primaryText];
@@ -25,7 +29,6 @@
     } else {
         self.favoriteTextLabel.text = @"FAVORITE";
     }
-    [self registerForThemeChanges];
 }
 
 @end

@@ -5,6 +5,7 @@
 //
 
 #import "ObservationEditTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationEditTableViewCell()
 

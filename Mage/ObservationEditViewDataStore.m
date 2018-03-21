@@ -222,7 +222,6 @@ static NSInteger const COMMON_SECTION = 1;
         if ([self.invalidIndexPaths containsObject:indexPath]) {
             [cell setValid:[cell isValid]];
         }
-//        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
     }
     
     return cell;
@@ -306,10 +305,10 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == ATTACHMENT_SECTION || section == COMMON_SECTION) {
-        return 15.0f;
+    if ([self.formFields count] > (section - 2)) {
+        return 48.0f;
     }
-    return 48.0f;
+    return 15.0f;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

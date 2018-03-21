@@ -258,6 +258,7 @@
 		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
+		F7F3AAC22062AE2E00344842 /* ThemedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F3AAC12062AE2D00344842 /* ThemedTableViewCell.m */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
 		F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7931A65887A00E7F224 /* loginTest.js */; };
 		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
@@ -723,6 +724,8 @@
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFilterTableViewController.m; sourceTree = "<group>"; };
+		F7F3AAC02062AE2D00344842 /* ThemedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemedTableViewCell.h; sourceTree = "<group>"; };
+		F7F3AAC12062AE2D00344842 /* ThemedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemedTableViewCell.m; sourceTree = "<group>"; };
 		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
 		F7FAD7931A65887A00E7F224 /* loginTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginTest.js; sourceTree = "<group>"; };
 		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
@@ -1241,6 +1244,8 @@
 				F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */,
 				2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */,
 				2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */,
+				F7F3AAC02062AE2D00344842 /* ThemedTableViewCell.h */,
+				F7F3AAC12062AE2D00344842 /* ThemedTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2019,6 +2024,7 @@
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
+				F7F3AAC22062AE2E00344842 /* ThemedTableViewCell.m in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
