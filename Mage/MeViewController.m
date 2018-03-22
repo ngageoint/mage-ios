@@ -58,6 +58,7 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
     self.tableView.tableHeaderView.backgroundColor = [UIColor background];
     self.tableView.backgroundColor = [UIColor background];
     self.name.textColor = [UIColor primaryText];

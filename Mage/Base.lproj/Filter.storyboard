@@ -260,6 +260,7 @@
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="X" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="g33-eV-ukq">
                                                     <rect key="frame" x="57" y="50" width="88" height="30"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -315,6 +316,19 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="customDescription" destination="KXF-1X-b8J" id="uxc-At-dXy"/>
+                        <outlet property="customLabel" destination="ANR-g7-rcI" id="o4I-rx-RzK"/>
+                        <outlet property="favoriteSwitch" destination="G8B-55-jkY" id="B2f-MD-NRQ"/>
+                        <outlet property="favoritesDescription" destination="ln1-5y-Lqh" id="lPD-AL-boZ"/>
+                        <outlet property="favoritesLabel" destination="imq-te-Uex" id="vXg-K9-JBw"/>
+                        <outlet property="importantDescription" destination="g6W-ts-VrT" id="Cd8-ry-fnB"/>
+                        <outlet property="importantLabel" destination="gjv-fl-wIF" id="Xbh-Gd-f1I"/>
+                        <outlet property="importantSwitch" destination="Pmc-k7-KIZ" id="DFZ-Of-dsk"/>
+                        <outlet property="lastLabel" destination="nj4-qb-T1j" id="a7M-Do-EHx"/>
+                        <outlet property="periodSegmentedControl" destination="hog-1W-zCw" id="UEc-Sn-IKg"/>
+                        <outlet property="timeNumberTextField" destination="g33-eV-ukq" id="C62-dN-3Sp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nG0-jt-f7q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -465,6 +479,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="ykU-xb-prr" detailTextLabel="bGT-mf-inL" style="IBUITableViewCellStyleSubtitle" id="TNa-JU-ehV">
                                         <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
@@ -489,6 +504,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="Q1p-YY-V7b" detailTextLabel="gO2-XU-jWF" style="IBUITableViewCellStyleSubtitle" id="7ch-UB-qhv">
                                         <rect key="frame" x="0.0" y="143.5" width="375" height="44"/>
@@ -513,6 +529,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="mEX-eU-zQQ" detailTextLabel="F98-IV-d7c" style="IBUITableViewCellStyleSubtitle" id="OKX-on-f0w">
                                         <rect key="frame" x="0.0" y="187.5" width="375" height="44"/>
@@ -537,6 +554,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="89K-Kl-smi" detailTextLabel="8AD-vW-Nm6" style="IBUITableViewCellStyleSubtitle" id="qXk-Gb-ryg">
                                         <rect key="frame" x="0.0" y="231.5" width="375" height="44"/>
@@ -561,6 +579,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" rowHeight="88" id="ib3-5p-zuq">
                                         <rect key="frame" x="0.0" y="275.5" width="375" height="88"/>
@@ -592,6 +611,7 @@
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="X" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dOE-bW-07p">
                                                     <rect key="frame" x="57" y="50" width="88" height="30"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -629,6 +649,7 @@
                                                 <constraint firstItem="ORM-H6-4K3" firstAttribute="top" secondItem="DFw-Ih-hjO" secondAttribute="bottom" constant="9" id="xET-5N-Bkm"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -646,6 +667,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="customDescription" destination="DFw-Ih-hjO" id="BAV-49-ARe"/>
+                        <outlet property="customLabel" destination="FZD-i2-ORW" id="IbM-So-sNe"/>
+                        <outlet property="lastLabel" destination="x4q-y7-si1" id="th3-he-xOP"/>
+                        <outlet property="periodSegmentedControl" destination="ORM-H6-4K3" id="Igc-H8-lr9"/>
+                        <outlet property="timeNumberTextField" destination="dOE-bW-07p" id="rWM-hu-oKc"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zqn-ms-kj9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

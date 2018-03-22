@@ -136,4 +136,18 @@
     return [DayTheme tabBarTint];
 }
 
++ (UIColor *) navBarPrimaryText {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme navBarPrimaryText];
+    }
+    return [DayTheme navBarPrimaryText];
+}
+
++ (UIColor *) navBarSecondaryText {
+    if (TheCurrentTheme == Night) {
+        return [DarkTheme navBarSecondaryText];
+    }
+    return [DayTheme navBarSecondaryText];
+}
+
 @end

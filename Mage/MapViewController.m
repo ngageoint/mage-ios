@@ -71,6 +71,9 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    [self setNavBarTitle];
+
     if (theme == Day) {
         [self.mapView _setShowsNightMode:NO];
     } else {

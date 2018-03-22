@@ -8,6 +8,7 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @implementation UINavigationItem (Subtitle)
 
@@ -20,14 +21,14 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor secondaryColor];
+    titleLabel.textColor = [UIColor navBarPrimaryText];
     titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     titleLabel.text = title;
     [titleLabel sizeToFit];
     
     UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
     subtitleLabel.backgroundColor = [UIColor clearColor];
-    subtitleLabel.textColor = [UIColor secondaryColor];
+    subtitleLabel.textColor = [UIColor navBarSecondaryText];
     
     subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
     subtitleLabel.text = subtitle;

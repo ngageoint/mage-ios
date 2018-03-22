@@ -42,6 +42,8 @@
     self.refreshControl.backgroundColor = [UIColor background];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    [self setNavBarTitle];
 }
 
 - (void)viewDidLoad {

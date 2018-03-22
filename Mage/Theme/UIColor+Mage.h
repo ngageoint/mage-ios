@@ -28,5 +28,7 @@
 + (UIColor *) activeTabIcon;
 + (UIColor *) inactiveTabIcon;
 + (UIColor *) tabBarTint;
++ (UIColor *) navBarPrimaryText;
++ (UIColor *) navBarSecondaryText;
 
 @end

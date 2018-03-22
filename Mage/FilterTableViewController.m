@@ -18,7 +18,7 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     [self.tableView reloadData];
 }
@@ -63,6 +63,8 @@
     return cell;
 }
 
-
+- (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
 
 @end
