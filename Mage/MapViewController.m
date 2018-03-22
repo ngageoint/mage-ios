@@ -72,6 +72,11 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.trackingButton.backgroundColor = [UIColor dialog];
+    self.trackingButton.tintColor = [UIColor activeTabIcon];
+    self.reportLocationButton.backgroundColor = [UIColor dialog];
+    self.mapSettingsButton.backgroundColor = [UIColor dialog];
+    self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
     [self setNavBarTitle];
 
     if (theme == Day) {
