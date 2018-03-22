@@ -9,6 +9,7 @@
 #import "LocationFilterTableViewController.h"
 #import "TimeFilter.h"
 #import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface LocationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -85,6 +86,16 @@
     [self applyFilter];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 48.0f;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
