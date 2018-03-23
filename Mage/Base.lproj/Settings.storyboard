@@ -358,9 +358,11 @@
                         <outlet property="baseServerUrlLabel" destination="YG8-dD-9c6" id="uNw-nd-p6d"/>
                         <outlet property="changePasswordCell" destination="kaN-by-d40" id="mUB-B4-lE3"/>
                         <outlet property="dataFetchStatus" destination="dE3-Y4-EMZ" id="0Ms-xc-qoY"/>
+                        <outlet property="dataFetchStatusLabel" destination="n3D-rd-1nH" id="9ZI-uh-9L7"/>
                         <outlet property="eventCell" destination="5Hf-gw-uC5" id="30G-JI-J4W"/>
                         <outlet property="eventNameLabel" destination="I9i-yj-nhH" id="8bV-I1-kGd"/>
                         <outlet property="goOnlineCell" destination="ykA-zg-3aG" id="M4o-kl-jFW"/>
+                        <outlet property="locationServicesLabel" destination="pEl-Li-mGL" id="xhi-ha-47c"/>
                         <outlet property="locationServicesStatus" destination="vby-wN-O8B" id="q9h-3c-ePj"/>
                         <outlet property="logoutCell" destination="f4d-Mh-oON" id="iEU-Tg-sHQ"/>
                         <outlet property="timeZoneSelectionCell" destination="Mqh-ES-bew" id="vdn-If-cml"/>
@@ -453,6 +455,7 @@
                                                 <constraint firstItem="Fwe-ey-gpX" firstAttribute="leading" secondItem="DbD-L7-aRD" secondAttribute="leadingMargin" id="vVK-Ub-112"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -504,6 +507,7 @@
                                                 <constraint firstItem="Bpo-ji-sBI" firstAttribute="top" secondItem="5Sk-5X-ZFV" secondAttribute="topMargin" constant="35" id="xgR-aa-bAL"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="mNK-4o-Y4C" kind="show" identifier="value_userReporting" id="zfZ-aY-xQc"/>
                                         </connections>
@@ -553,6 +557,7 @@
                                                 <constraint firstItem="rij-B2-K7c" firstAttribute="top" secondItem="dHg-pX-6BS" secondAttribute="topMargin" constant="35" id="vAl-xM-3UX"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="mNK-4o-Y4C" kind="show" identifier="value_gpsSensitivities" id="kwf-Ok-wOb"/>
                                         </connections>
@@ -570,8 +575,14 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="oJr-ze-dB5"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="gpsDistanceDescription" destination="HAp-H0-fIZ" id="D9s-Sa-Pu8"/>
+                        <outlet property="gpsDistanceLabel" destination="ADA-UD-jWz" id="Vzh-II-Ih6"/>
                         <outlet property="gpsSensitivityLabel" destination="rij-B2-K7c" id="r9W-uu-5uW"/>
+                        <outlet property="reportLocationDescription" destination="Fwe-ey-gpX" id="q7v-QL-9FN"/>
                         <outlet property="reportLocationSwitch" destination="Mvv-KP-AHL" id="r9Z-mK-FWJ"/>
+                        <outlet property="reportLocationlabel" destination="BxJ-vL-I8D" id="Pjj-64-ez5"/>
+                        <outlet property="timeIntervalDescription" destination="Mto-II-FRu" id="Rtm-gb-3M5"/>
+                        <outlet property="timeIntervalLabel" destination="Ae8-uU-yaA" id="1SC-zy-qVr"/>
                         <outlet property="userReportingFrequencyLabel" destination="Bpo-ji-sBI" id="gwy-iW-rLK"/>
                     </connections>
                 </tableViewController>
@@ -620,6 +631,7 @@
                                                 <constraint firstItem="wTh-k1-KG6" firstAttribute="leading" secondItem="wNQ-p5-TCz" secondAttribute="trailing" constant="7" id="zgU-gt-A1s"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -671,6 +683,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="1ch-j9-vHz" secondAttribute="trailing" constant="20" symbolic="YES" id="uFi-GX-Zvd"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="mNK-4o-Y4C" kind="show" identifier="value_userFetch" id="bXu-jj-LCW"/>
                                         </connections>
@@ -710,6 +723,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="Sc6-9s-ObF" firstAttribute="top" secondItem="w0F-dn-6Eb" secondAttribute="bottom" constant="-2" id="Nq6-Dn-U7h"/>
                                                 <constraint firstItem="w0F-dn-6Eb" firstAttribute="top" secondItem="I8V-Dz-0Ln" secondAttribute="topMargin" id="Nxs-Tc-Is9"/>
@@ -721,6 +735,7 @@
                                                 <constraint firstItem="Sc6-9s-ObF" firstAttribute="leading" secondItem="I8V-Dz-0Ln" secondAttribute="leadingMargin" id="luh-lI-h6q"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="mNK-4o-Y4C" kind="show" identifier="value_observationFetch" id="dSE-b9-U0H"/>
                                         </connections>
@@ -739,8 +754,13 @@
                     </navigationItem>
                     <connections>
                         <outlet property="dataFetchSwitch" destination="wTh-k1-KG6" id="62l-oq-XfN"/>
+                        <outlet property="dataFetchingLabel" destination="wNQ-p5-TCz" id="TjJ-ei-hh0"/>
                         <outlet property="observationFetchFrequencyLabel" destination="Igv-et-mkQ" id="jcw-xF-VEN"/>
+                        <outlet property="observationsDescription" destination="Sc6-9s-ObF" id="hfB-jh-eOm"/>
+                        <outlet property="observationsLabel" destination="w0F-dn-6Eb" id="Npq-g1-hbt"/>
                         <outlet property="userFetchFrequencyLabel" destination="8EJ-4Y-aKe" id="2LT-od-v7d"/>
+                        <outlet property="usersDescription" destination="NCX-oG-LRO" id="sgI-LW-lpK"/>
+                        <outlet property="usersLabel" destination="1ch-j9-vHz" id="Erz-jb-5tx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eY8-Uk-gIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -978,13 +998,13 @@
         <scene sceneID="5Wq-cB-yEu">
             <objects>
                 <tableViewController storyboardIdentifier="timeSettings" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mNK-4o-Y4C" customClass="ValuePickerTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OPS-kg-1Vn">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="OPS-kg-1Vn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="valueTableCell" id="Chg-Io-cNZ" customClass="ValueTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="55.333333333333336" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Chg-Io-cNZ" id="coL-8Q-AIC">
                                     <rect key="frame" x="0.0" y="0.0" width="370" height="43.666666666666664"/>
@@ -1250,6 +1270,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="LHy-TD-kjO"/>
-        <segue reference="kwf-Ok-wOb"/>
+        <segue reference="bXu-jj-LCW"/>
     </inferredMetricsTieBreakers>
 </document>

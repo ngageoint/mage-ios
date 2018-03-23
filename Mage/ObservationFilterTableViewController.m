@@ -129,10 +129,6 @@
     return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 48.0f;
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 1 && indexPath.row == 5 && self.timeFilter == TimeFilterCustom) {

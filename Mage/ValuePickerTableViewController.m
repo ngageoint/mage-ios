@@ -6,12 +6,18 @@
 
 #import "ValuePickerTableViewController.h"
 #import "ValueTableViewCell.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ValuePickerTableViewController ()
 
 @end
 
 @implementation ValuePickerTableViewController
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,7 +32,8 @@
 {
     [super viewDidLoad];
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    _selected = [defaults objectForKey:_preferenceKey];    
+    _selected = [defaults objectForKey:_preferenceKey];
+    [self registerForThemeChanges];
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,9 +54,12 @@
     return _values.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _section;
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[ObservationTableHeaderView alloc] initWithName:self.section];
 }
 
 

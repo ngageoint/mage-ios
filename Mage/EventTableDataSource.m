@@ -12,6 +12,7 @@
 #import "Observation.h"
 #import "EventTableViewCell.h"
 #import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface EventTableDataSource()
 
@@ -221,8 +222,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    UIView *viewForSection = [tableView.delegate tableView:tableView viewForHeaderInSection:section];
-    return viewForSection.frame.size.height;
+    return 48.0f;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -231,16 +231,7 @@
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     
     NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 48)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, tableView.frame.size.width, 48)];
-    [label setFont:[UIFont systemFontOfSize:14]];
-    [label setTextColor:[UIColor flatButton]];
-    [label setText: name];
-    [view addSubview:label];
-
-    [view setBackgroundColor:[UIColor background]];
-    return view;
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 @end

@@ -15,12 +15,16 @@
 #import "EventChooserCoordinator.h"
 #import "ChangePasswordViewController.h"
 #import "AuthenticationCoordinator.h"
+#import "ObservationTableHeaderView.h"
+#import "Theme+UIResponder.h"
 
 @interface SettingsTableViewController ()<UITableViewDelegate, AuthenticationDelegate>
 
     @property (weak, nonatomic) IBOutlet UILabel *locationServicesStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
-    @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationServicesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
+@property (weak, nonatomic) IBOutlet UILabel *dataFetchStatusLabel;
+@property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
     @property (weak, nonatomic) IBOutlet UILabel *user;
     @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
     @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
@@ -42,8 +46,22 @@ static NSInteger legalSection = 6;
 
 @implementation SettingsTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.locationServicesStatus.textColor = [UIColor secondaryText];
+    self.dataFetchStatus.textColor = [UIColor secondaryText];
+    self.dataFetchStatusLabel.textColor = [UIColor primaryText];
+    self.locationServicesLabel.textColor = [UIColor primaryText];
+    
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     
@@ -178,6 +196,10 @@ static NSInteger legalSection = 6;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = [UIColor background];
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    
     if ([indexPath section] == legalSection && [indexPath row] == 0) {
         cell.hidden = !self.showDisclaimer;
     } else if (cell == self.versionCell) {
@@ -193,7 +215,7 @@ static NSInteger legalSection = 6;
         UILabel *offlineLabel = [[UILabel alloc] init];
         offlineLabel.font = [UIFont systemFontOfSize:14];
         offlineLabel.textAlignment = NSTextAlignmentCenter;
-        offlineLabel.textColor = [UIColor whiteColor];
+        offlineLabel.textColor = [UIColor primaryText];
         offlineLabel.backgroundColor = [UIColor orangeColor];
         offlineLabel.text = @"!";
         [offlineLabel sizeToFit];
@@ -241,13 +263,13 @@ static NSInteger legalSection = 6;
         }
         return 0.001;
     }
-    return UITableViewAutomaticDimension;
+    return 45.0f;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 0) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        
+
         if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
             return nil;
         }
@@ -265,7 +287,10 @@ static NSInteger legalSection = 6;
         }
         return [[UIView alloc] init];
     }
-    return nil;
+    
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

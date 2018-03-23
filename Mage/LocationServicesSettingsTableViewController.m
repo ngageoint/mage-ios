@@ -6,6 +6,8 @@
 
 #import "LocationServicesSettingsTableViewController.h"
 #import "LocationService.h"
+#import "ObservationTableHeaderView.h"
+#import "Theme+UIResponder.h"
 
 @interface LocationServicesSettingsTableViewController ()
 
@@ -13,10 +15,31 @@
 @property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gpsSensitivityLabel;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UILabel *reportLocationlabel;
+@property (weak, nonatomic) IBOutlet UILabel *reportLocationDescription;
+@property (weak, nonatomic) IBOutlet UILabel *timeIntervalLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeIntervalDescription;
+@property (weak, nonatomic) IBOutlet UILabel *gpsDistanceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 
 @end
 
 @implementation LocationServicesSettingsTableViewController
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.reportLocationSwitch.onTintColor = [UIColor themedButton];
+    self.gpsSensitivityLabel.textColor = [UIColor primaryText];
+    self.userReportingFrequencyLabel.textColor = [UIColor primaryText];
+    self.reportLocationlabel.textColor = [UIColor primaryText];
+    self.reportLocationDescription.textColor = [UIColor secondaryText];
+    self.gpsDistanceLabel.textColor = [UIColor primaryText];
+    self.gpsDistanceDescription.textColor = [UIColor secondaryText];
+    self.timeIntervalLabel.textColor = [UIColor primaryText];
+    self.timeIntervalDescription.textColor = [UIColor secondaryText];
+    
+    [self.tableView reloadData];
+}
 
 - (IBAction) reportLocationChanged:(id)sender {
     BOOL isOn = [sender isOn];
@@ -74,6 +97,8 @@
 
     [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
     [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
+    
+    [self registerForThemeChanges];
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
@@ -95,6 +120,10 @@
     
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = [UIColor background];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -112,7 +141,7 @@
         return CGFLOAT_MIN;
     }
     
-    return UITableViewAutomaticDimension;
+    return 45.0;
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
@@ -139,7 +168,7 @@
         return [[UIView alloc] initWithFrame:CGRectZero];
     }
     
-    return nil;
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
