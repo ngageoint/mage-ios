@@ -8,6 +8,7 @@
 
 #import "AttributionsViewController.h"
 #import "AttributionTableViewCell.h"
+#import "Theme+UIResponder.h"
 
 @interface AttributionsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -16,8 +17,15 @@
 
 @implementation AttributionsViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    [self.tableView reloadData];
+}
+
 -(void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationController.navigationBar setPrefersLargeTitles:NO];
@@ -95,9 +103,15 @@
     
     NSDictionary *attribution = [self.attributions objectAtIndex:[indexPath row]];
     
+    cell.backgroundColor = [UIColor background];
+    
     cell.attribution.text = [attribution objectForKey:@"title"];
     cell.copyright.text = [attribution objectForKey:@"copyright"];
     cell.text.attributedText = [attribution objectForKey:@"text"];
+    
+    cell.attribution.textColor = [UIColor primaryText];
+    cell.copyright.textColor = [UIColor secondaryText];
+    cell.text.textColor = [UIColor secondaryText];
     
     return cell;
 }
