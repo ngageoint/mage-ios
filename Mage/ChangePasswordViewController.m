@@ -15,15 +15,21 @@
 #import "AppDelegate.h"
 #import "User.h"
 #import "DBZxcvbn.h"
+#import "Theme+UIResponder.h"
+
+@import SkyFloatingLabelTextField;
+@import HexColors;
 
 @interface ChangePasswordViewController () <ChangePasswordDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *currentPasswordView;
-@property (weak, nonatomic) IBOutlet UITextField *usernameField;
-@property (weak, nonatomic) IBOutlet UITextField *currentPasswordField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *currentPasswordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showCurrentPasswordSwitch;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-@property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+@property (weak, nonatomic) IBOutlet UILabel *showCurrentPasswordLabel;
+@property (weak, nonatomic) IBOutlet UILabel *showNewPasswordLabel;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *confirmPasswordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
@@ -37,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UILabel *passwordStrengthNameLabel;
 
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loggedIn;
@@ -46,6 +53,47 @@
 @end
 
 @implementation ChangePasswordViewController
+
+#pragma mark - Theme Changes
+
+- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.textColor = [UIColor primaryText];
+    field.selectedLineColor = [UIColor brand];
+    field.selectedTitleColor = [UIColor brand];
+    field.placeholderColor = [UIColor secondaryText];
+    field.lineColor = [UIColor secondaryText];
+    field.titleColor = [UIColor secondaryText];
+    field.disabledColor = [UIColor secondaryText];
+    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    
+    [self themeTextField:self.usernameField];
+    [self themeTextField:self.currentPasswordField];
+    [self themeTextField:self.passwordField];
+    [self themeTextField:self.confirmPasswordField];
+    
+    self.usernameField.iconText = @"\U0000f007";
+    self.currentPasswordField.iconText = @"\U0000f084";
+    self.passwordField.iconText = @"\U0000f084";
+    self.confirmPasswordField.iconText = @"\U0000f084";
+
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.showCurrentPasswordLabel.textColor = [UIColor secondaryText];
+    self.showNewPasswordLabel.textColor = [UIColor secondaryText];
+    self.passwordStrengthNameLabel.textColor = [UIColor secondaryText];
+    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.mageVersion.textColor = [UIColor secondaryText];
+    self.showPasswordSwitch.onTintColor = [UIColor themedButton];
+    self.showCurrentPasswordSwitch.onTintColor = [UIColor themedButton];
+}
+
+#pragma mark -
 
 - (instancetype) initWithLoggedIn: (BOOL) loggedIn {
     if (self = [super initWithNibName:@"ChangePasswordView" bundle:nil]) {
@@ -58,22 +106,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
-
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.cancelButton.backgroundColor = [UIColor primaryColor];
-    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.changeButton.backgroundColor = [UIColor primaryColor];
-    [self.changeButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
     
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.usernameField.layer.borderColor = self.currentPasswordField.layer.borderColor = self.passwordField.layer.borderColor = self.confirmPasswordField.layer.borderColor = [[UIColor primaryColor] CGColor];
-    self.usernameField.layer.borderWidth = self.currentPasswordField.layer.borderWidth = self.passwordField.layer.borderWidth = self.confirmPasswordField.layer.borderWidth = 1.0f;
-    self.usernameField.layer.cornerRadius = self.currentPasswordField.layer.cornerRadius = self.confirmPasswordField.layer.cornerRadius = 5.0f;
     
     self.passwordField.delegate = self;
     
@@ -89,9 +127,9 @@
     BOOL didResign = [textField resignFirstResponder];
     if (!didResign) return NO;
     
-//    if ([textField isKindOfClass:[UINextField class]]) {
-//        [[(UINextField *)textField nextField] becomeFirstResponder];
-//    }
+    if ([textField respondsToSelector:@selector(nextField)] && [textField nextField]) {
+        [[textField nextField] becomeFirstResponder];
+    }
     
     return YES;
 }
