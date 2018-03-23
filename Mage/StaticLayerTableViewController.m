@@ -9,6 +9,7 @@
 #import "StaticLayer.h"
 #import "Layer.h"
 #import "Server.h"
+#import "Theme+UIResponder.h"
 
 @interface StaticLayerTableViewController ()
     @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
@@ -18,8 +19,14 @@
 
 @implementation StaticLayerTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    [self.tableView reloadData];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self registerForThemeChanges];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
@@ -81,11 +88,16 @@
     cell.textLabel.text = layer.name;
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[layer.data objectForKey:@"features"] count]];
     
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor background];
+    
     if (![layer.loaded boolValue]) {
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [activityIndicator setFrame:CGRectZero];
         [activityIndicator startAnimating];
         cell.accessoryView = activityIndicator;
+        activityIndicator.color = [UIColor secondaryText];
     } else {
         cell.accessoryView = nil;
         cell.accessoryType = [self.selectedStaticLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;

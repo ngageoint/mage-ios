@@ -32,6 +32,7 @@
                         </connections>
                     </segmentedControl>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="eBk-bU-92b" firstAttribute="leading" secondItem="TrC-3X-2nb" secondAttribute="leadingMargin" id="AcG-Nt-usY"/>
                     <constraint firstItem="eBk-bU-92b" firstAttribute="bottom" secondItem="TrC-3X-2nb" secondAttribute="bottomMargin" id="FXc-5T-AxF"/>
@@ -39,6 +40,7 @@
                     <constraint firstItem="eBk-bU-92b" firstAttribute="trailing" secondItem="TrC-3X-2nb" secondAttribute="trailingMargin" id="jb2-d8-UoD"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="mapTypeSegmentedControl" destination="eBk-bU-92b" id="5hV-uI-fqE"/>
             </connections>
