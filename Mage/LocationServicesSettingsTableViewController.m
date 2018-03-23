@@ -60,14 +60,9 @@
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     
     if (section != 0) return;
-    
-    
-    if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
-        UITableViewHeaderFooterView *hfv = (UITableViewHeaderFooterView *) view;
-        [hfv.textLabel setTextColor:[UIColor colorWithRed:144.0f/256.0f green:201.0f/256.0f blue:216.0f/256.0f alpha:1.0f]];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerClicked:)];
-        [hfv addGestureRecognizer:tap];
-    }
+
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerClicked:)];
+    [view addGestureRecognizer:tap];
 }
 
 - (void) headerClicked: (UIGestureRecognizer *) sender {
@@ -160,6 +155,13 @@
     }
     
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
+        tableViewHeaderFooterView.textLabel.textColor  = [UIColor brand];
+    }
 }
 
 -(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {

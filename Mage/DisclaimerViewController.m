@@ -44,7 +44,7 @@
     
     [self registerForThemeChanges];
     
-    if (self.navigationController) {
+    if (self.navigationController && self.agreeButton) {
         self.navigationController.navigationBarHidden = YES;
     }
     self.wandLabel.text = @"\U0000f0d0";

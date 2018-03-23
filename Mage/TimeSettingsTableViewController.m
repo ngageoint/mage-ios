@@ -9,6 +9,8 @@
 #import "TimeSettingsTableViewController.h"
 #import "SettingsTableViewController.h"
 #import "NSDate+display.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface TimeSettingsTableViewController ()
 
@@ -19,8 +21,14 @@
 
 @implementation TimeSettingsTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    [self registerForThemeChanges];
     if (@available(iOS 11.0, *)) {
         [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     } else {
@@ -55,6 +63,12 @@
     return 0;
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = [UIColor background];
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     long row = [indexPath row];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -70,5 +84,28 @@
     [defaults synchronize];
     [tableView reloadData];
 }
+
+-(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
+    if (section == 0) {
+        return 0.0001;
+    }
+    return 45.0;
+}
+
+-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    }
+    
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
+        tableViewHeaderFooterView.textLabel.textColor  = [UIColor brand];
+    }
+}
+
 
 @end
