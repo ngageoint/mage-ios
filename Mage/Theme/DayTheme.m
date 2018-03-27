@@ -101,4 +101,8 @@
     return [[UIColor whiteColor] colorWithAlphaComponent:87];
 }
 
++ (BOOL) darkMap {
+    return NO;
+}
+
 @end

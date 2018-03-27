@@ -11,10 +11,21 @@
 #import "DayTheme.h"
 #import "DarkTheme.h"
 
+@interface MKMapView ()
+-(void) _setShowsNightMode:(BOOL)yesOrNo;
+@end
+
 @implementation UIColor (Mage)
 
 + (UIColor *) mageBlue {
     return [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
+}
+
++ (void) themeMap: (MKMapView *) map {
+    if (TheCurrentTheme == Night) {
+        return [map _setShowsNightMode:[DarkTheme darkMap]];
+    }
+    return [map _setShowsNightMode:[DayTheme darkMap]];
 }
 
 + (UIColor *) primaryText {

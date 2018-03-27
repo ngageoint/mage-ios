@@ -29,5 +29,6 @@
 + (UIColor *) tabBarTint;
 + (UIColor *) navBarPrimaryText;
 + (UIColor *) navBarSecondaryText;
++ (BOOL) darkMap;
 
 @end

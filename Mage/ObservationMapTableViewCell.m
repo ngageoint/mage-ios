@@ -11,10 +11,6 @@
 #import "Event.h"
 #import "Theme+UIResponder.h"
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface ObservationMapTableViewCell ()
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
 @property (strong, nonatomic) MapDelegate *mapDelegate;
@@ -23,11 +19,7 @@
 @implementation ObservationMapTableViewCell
 
 - (void) themeDidChange:(MageTheme)theme {
-    if (theme == Day) {
-        [self.mapView _setShowsNightMode:NO];
-    } else {
-        [self.mapView _setShowsNightMode:YES];
-    }
+    [UIColor themeMap:self.mapView];
 }
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {

@@ -15,10 +15,6 @@
 #import "Attachment+Thumbnail.h"
 #import "Theme+UIResponder.h"
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface ObservationCommonHeaderTableViewCell ()
 @property (strong, nonatomic) MapDelegate *mapDelegate;
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
@@ -35,11 +31,7 @@
     self.userLabel.textColor = [UIColor secondaryText];
     self.dateLabel.textColor = [UIColor secondaryText];
     self.locationLabel.textColor = [UIColor secondaryText];
-    if (theme == Day) {
-        [self.mapView _setShowsNightMode:NO];
-    } else {
-        [self.mapView _setShowsNightMode:YES];
-    }
+    [UIColor themeMap:self.mapView];
 }
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {

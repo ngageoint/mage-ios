@@ -11,10 +11,6 @@
 #import "GPKGMapShapeConverter.h"
 #import "Theme+UIResponder.h"
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface ObservationGeometryTableViewCell ()
 
 @property (strong, nonatomic) MapDelegate *mapDelegate;
@@ -27,11 +23,7 @@
     self.backgroundColor = [UIColor dialog];
     self.valueTextView.textColor = [UIColor primaryText];
     self.keyLabel.textColor = [UIColor secondaryText];
-    if (theme == Day) {
-        [self.map _setShowsNightMode:NO];
-    } else {
-        [self.map _setShowsNightMode:YES];
-    }
+    [UIColor themeMap:self.map];
 }
 
 - (void) populateCellWithKey:(id) key andValue:(id) value {

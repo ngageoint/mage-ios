@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
 @interface UIColor (Mage)
 
@@ -30,5 +31,6 @@
 + (UIColor *) tabBarTint;
 + (UIColor *) navBarPrimaryText;
 + (UIColor *) navBarSecondaryText;
++ (void) themeMap: (MKMapView *) map;
 
 @end

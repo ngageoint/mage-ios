@@ -20,10 +20,6 @@
 @import SkyFloatingLabelTextField;
 @import HexColors;
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface ObservationEditGeometryTableViewCell()
 
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *locationField;
@@ -41,11 +37,6 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    if (theme == Night) {
-        [self.mapView _setShowsNightMode:YES];
-    } else {
-        [self.mapView _setShowsNightMode:NO];
-    }
     self.backgroundColor = [UIColor dialog];
     
     self.locationField.textColor = [UIColor primaryText];
@@ -59,6 +50,7 @@
     self.locationField.iconText = @"\U0000f0ac";
     self.locationField.iconColor = [UIColor secondaryText];
     
+    [UIColor themeMap:self.mapView];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {

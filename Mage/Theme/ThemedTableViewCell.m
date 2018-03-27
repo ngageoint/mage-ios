@@ -2,7 +2,7 @@
 //  ThemedTableViewCell.m
 //  MAGE
 //
-//  Created by Dan Barela on 3/21/18.
+//  Created by Dan Barela on 3/27/18.
 //  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 //
 

@@ -36,10 +36,6 @@
 #import "MapSettingsCoordinator.h"
 #import "Theme+UIResponder.h"
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
@@ -77,13 +73,8 @@
     self.reportLocationButton.backgroundColor = [UIColor dialog];
     self.mapSettingsButton.backgroundColor = [UIColor dialog];
     self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
+    [UIColor themeMap:self.mapView];
     [self setNavBarTitle];
-
-    if (theme == Day) {
-        [self.mapView _setShowsNightMode:NO];
-    } else {
-        [self.mapView _setShowsNightMode:YES];
-    }
 }
 
 - (void) viewDidLoad {

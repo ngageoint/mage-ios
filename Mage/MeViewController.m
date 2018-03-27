@@ -30,10 +30,6 @@
 
 @import PhotosUI;
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
-
 @interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
@@ -68,11 +64,7 @@
     self.avatarBorder.backgroundColor = [UIColor background];
     self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
-    if (theme == Day) {
-        [self.map _setShowsNightMode:NO];
-    } else {
-        [self.map _setShowsNightMode:YES];
-    }
+    [UIColor themeMap:self.map];
 }
 
 - (void) viewDidLoad {
