@@ -7,6 +7,9 @@
 //
 
 #import "ThemeManager.h"
+#import "DarkTheme.h"
+#import "DayTheme.h"
+#import "Theme.h"
 
 #define BRIGHTNESS_DARK_THRESHOLD 0.30
 #define BRIGHTNESS_LIGHT_THRESHOLD 0.40
@@ -70,6 +73,16 @@ NSString *const kThemeChangedKey = @"themeChanged";
                          }
                          completion:nil];
     }
+}
+
+- (id<Theme>) curentThemeDefinition {
+    switch(TheCurrentTheme) {
+        case Night:
+            return [DarkTheme sharedInstance];
+        case Day:
+            return [DayTheme sharedInstance];
+    }
+    return nil;
 }
 
 - (void)setForcedTheme:(NSNumber *)forcedTheme {

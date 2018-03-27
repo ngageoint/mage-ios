@@ -7,28 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Theme.h"
 
-@interface DayTheme : NSObject
-
-+ (UIColor *) primaryText;
-+ (UIColor *) secondaryText;
-+ (UIColor *) background;
-+ (UIColor *) tableBackground;
-+ (UIColor *) dialog;
-+ (UIColor *) primary;
-+ (UIColor *) secondary;
-+ (UIColor *) brand;
-+ (UIColor *) themedButton;
-+ (UIColor *) flatButton;
-+ (UIColor *) inactiveIcon;
-+ (UIColor *) inactiveIconWithColor: (UIColor *) color;
-+ (UIColor *) activeIcon;
-+ (UIColor *) activeIconWithColor: (UIColor *) color;
-+ (UIColor *) activeTabIcon;
-+ (UIColor *) inactiveTabIcon;
-+ (UIColor *) tabBarTint;
-+ (UIColor *) navBarPrimaryText;
-+ (UIColor *) navBarSecondaryText;
-+ (BOOL) darkMap;
+@interface DayTheme : NSObject <Theme>
 
 @end

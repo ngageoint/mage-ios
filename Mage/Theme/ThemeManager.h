@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Theme.h"
 
 extern NSString *const kThemeChangedKey;
 
@@ -23,5 +24,7 @@ typedef NS_ENUM(NSInteger, MageTheme) {
 
 @property (nonatomic, strong) NSNumber *forcedTheme;
 @property (nonatomic, readonly) MageTheme currentTheme;
+
+- (id<Theme>) curentThemeDefinition;
 
 @end

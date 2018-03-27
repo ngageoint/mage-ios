@@ -22,143 +22,83 @@
 }
 
 + (void) themeMap: (MKMapView *) map {
-    if (TheCurrentTheme == Night) {
-        return [map _setShowsNightMode:[DarkTheme darkMap]];
-    }
-    return [map _setShowsNightMode:[DayTheme darkMap]];
+    [map _setShowsNightMode:[[[ThemeManager sharedManager] curentThemeDefinition] darkMap]];
 }
 
 + (UIColor *) primaryText {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme primaryText];
-    }
-    return [DayTheme primaryText];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] primaryText];
 }
 
 + (UIColor *) secondaryText {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme secondaryText];
-    }
-    return [DayTheme secondaryText];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] secondaryText];
 }
 
 + (UIColor *) brand {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme brand];
-    }
-    return [DayTheme brand];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] brand];
 }
 
 + (UIColor *) background {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme background];
-    }
-    return [DayTheme background];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] background];
 }
 
 + (UIColor *) tableBackground {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme tableBackground];
-    }
-    return [DayTheme tableBackground];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] tableBackground];
 }
 
 + (UIColor *) dialog {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme dialog];
-    }
-    return [DayTheme dialog];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] dialog];
 }
 
 + (UIColor *) primary {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme primary];
-    }
-    return [DayTheme primary];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] primary];
 }
 
 + (UIColor *) secondary {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme secondary];
-    }
-    return [DayTheme secondary];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] secondary];
 }
 
 + (UIColor *) themedButton {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme themedButton];
-    }
-    return [DayTheme themedButton];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] themedButton];
 }
 
 + (UIColor *) flatButton {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme flatButton];
-    }
-    return [DayTheme flatButton];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] flatButton];
 }
 
 + (UIColor *) inactiveIcon {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme inactiveIcon];
-    }
-    return [DayTheme inactiveIcon];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] inactiveIcon];
 }
 
 + (UIColor *) inactiveIconWithColor:(UIColor *)color {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme inactiveIconWithColor: color];
-    }
-    return [DayTheme inactiveIconWithColor: color];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] inactiveIconWithColor: color];
 }
 
 + (UIColor *) activeIcon {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme activeIcon];
-    }
-    return [DayTheme activeIcon];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] activeIcon];
 }
 
 + (UIColor *) activeIconWithColor:(UIColor *)color {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme activeIconWithColor: color];
-    }
-    return [DayTheme activeIconWithColor: color];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] activeIconWithColor: color];
 }
 
 + (UIColor *) activeTabIcon {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme activeTabIcon];
-    }
-    return [DayTheme activeTabIcon];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] activeTabIcon];
 }
 
 + (UIColor *) inactiveTabIcon {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme inactiveTabIcon];
-    }
-    return [DayTheme inactiveTabIcon];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] inactiveTabIcon];
 }
 
 + (UIColor *) tabBarTint {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme tabBarTint];
-    }
-    return [DayTheme tabBarTint];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] tabBarTint];
 }
 
 + (UIColor *) navBarPrimaryText {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme navBarPrimaryText];
-    }
-    return [DayTheme navBarPrimaryText];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] navBarPrimaryText];
 }
 
 + (UIColor *) navBarSecondaryText {
-    if (TheCurrentTheme == Night) {
-        return [DarkTheme navBarSecondaryText];
-    }
-    return [DayTheme navBarSecondaryText];
+    return [[[ThemeManager sharedManager] curentThemeDefinition] navBarSecondaryText];
 }
 
 @end

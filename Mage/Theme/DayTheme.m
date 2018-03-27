@@ -13,51 +13,60 @@
 
 @implementation DayTheme
 
-+ (UIColor *) primaryText {
++ (instancetype) sharedInstance {
+    static DayTheme *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
+    });
+    return instance;
+}
+
+- (UIColor *) primaryText {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:.87];
 }
 
-+ (UIColor *) secondaryText {
+- (UIColor *) secondaryText {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
 }
 
-+ (UIColor *) background {
+- (UIColor *) background {
     return [UIColor whiteColor];
 }
 
-+ (UIColor *) tableBackground {
+- (UIColor *) tableBackground {
     return [UIColor colorWithRed:.92 green:.92 blue:.95 alpha:1.0];
 }
 
-+ (UIColor *) dialog {
+- (UIColor *) dialog {
     return [UIColor whiteColor];
 }
 
-+ (UIColor *) primary {
+- (UIColor *) primary {
     return [UIColor mageBlue];
 }
 
-+ (UIColor *) secondary {
+- (UIColor *) secondary {
     return [UIColor whiteColor];
 }
 
-+ (UIColor *) brand {
+- (UIColor *) brand {
     return [UIColor mageBlue];
 }
 
-+ (UIColor *) themedButton {
+- (UIColor *) themedButton {
     return [UIColor mageBlue];
 }
 
-+ (UIColor *) flatButton {
+- (UIColor *) flatButton {
     return [UIColor mageBlue];
 }
 
-+ (UIColor *) inactiveIcon {
+- (UIColor *) inactiveIcon {
     return [UIColor colorWithWhite:0.0 alpha:.38];
 }
 
-+ (UIColor *) inactiveIconWithColor: (UIColor *) color {
+- (UIColor *) inactiveIconWithColor: (UIColor *) color {
     CGFloat h, s, b, a;
     if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -67,11 +76,11 @@
     return nil;
 }
 
-+ (UIColor *) activeIcon {
+- (UIColor *) activeIcon {
     return [UIColor colorWithWhite:0.0 alpha:.56];
 }
 
-+ (UIColor *) activeIconWithColor: (UIColor *) color {
+- (UIColor *) activeIconWithColor: (UIColor *) color {
     CGFloat h, s, b, a;
     if ([color getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -81,27 +90,27 @@
     return nil;
 }
 
-+ (UIColor *) activeTabIcon {
+- (UIColor *) activeTabIcon {
     return [UIColor mageBlue];
 }
 
-+ (UIColor *) inactiveTabIcon {
-    return [DayTheme inactiveIcon];
+- (UIColor *) inactiveTabIcon {
+    return [self inactiveIcon];
 }
 
-+ (UIColor *) tabBarTint {
+- (UIColor *) tabBarTint {
     return [UIColor whiteColor];
 }
 
-+ (UIColor *) navBarPrimaryText {
+- (UIColor *) navBarPrimaryText {
     return [UIColor whiteColor];
 }
 
-+ (UIColor *) navBarSecondaryText {
+- (UIColor *) navBarSecondaryText {
     return [[UIColor whiteColor] colorWithAlphaComponent:87];
 }
 
-+ (BOOL) darkMap {
+- (BOOL) darkMap {
     return NO;
 }
 
