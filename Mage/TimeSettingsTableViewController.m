@@ -67,6 +67,7 @@
     cell.backgroundColor = [UIColor background];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.tintColor = [UIColor flatButton];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

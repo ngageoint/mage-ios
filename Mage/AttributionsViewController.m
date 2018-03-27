@@ -87,6 +87,12 @@
            @"copyright": @"",
            @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/iziz/libPhoneNumber-iOS/master/LICENSE" forText:@"Apache License 2.0"]
            },
+         @{
+           @"title": @"SkyFloatingLabelTextField",
+           @"copyright": @"2016 Skyscanner Ltd",
+           @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/Skyscanner/SkyFloatingLabelTextField/master/LICENSE" forText:@"Apache License 2.0"]
+           },
+                         
          nil];
     }
     

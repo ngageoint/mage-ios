@@ -12,6 +12,7 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.valueLabel.textColor = [UIColor primaryText];
     self.backgroundColor = [UIColor background];
+    self.tintColor = [UIColor flatButton];
 }
 
 - (void) didMoveToSuperview {
