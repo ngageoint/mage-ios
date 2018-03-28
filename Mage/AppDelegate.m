@@ -35,14 +35,11 @@
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "MageOfflineObservationManager.h"
-#import "UIColor+UIColor_Mage.h"
 #import "Server.h"
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
-#import "DayTheme.h"
-#import "DarkTheme.h"
-#import "ThemeManager.h"
+#import "Theme+UIResponder.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -77,10 +74,9 @@
     NSUInteger count = [MageOfflineObservationManager offlineObservationCount];
     NSLog(@"Offline count %lu", (unsigned long)count);
     
-    [self setupApplicationAppearance];
-    
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
+    self.window.backgroundColor = [UIColor background];
 
     [self createRootView];
     
@@ -158,10 +154,6 @@
     }];
     
     [[MageSessionManager manager] addTask:observationFetchTask];
-}
-
-- (void) setupApplicationAppearance {
-    [[ThemeManager sharedManager] setForcedTheme:[NSNumber numberWithLong: Day]];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

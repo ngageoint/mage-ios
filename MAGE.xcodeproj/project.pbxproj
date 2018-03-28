@@ -169,6 +169,8 @@
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */; };
+		F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */; };
+		F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
@@ -586,6 +588,10 @@
 		F785973A206A9F5400C68A23 /* ThemedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemedTableViewCell.h; sourceTree = "<group>"; };
 		F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemedTableViewCell.m; sourceTree = "<group>"; };
 		F785973D206AC5CA00C68A23 /* Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
+		F785973E206AEBFB00C68A23 /* ThemeSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemeSettingsTableViewController.h; sourceTree = "<group>"; };
+		F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemeSettingsTableViewController.m; sourceTree = "<group>"; };
+		F7859741206BD50800C68A23 /* AutoSunriseSunsetTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoSunriseSunsetTheme.h; sourceTree = "<group>"; };
+		F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutoSunriseSunsetTheme.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
@@ -1086,6 +1092,8 @@
 				F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */,
 				F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */,
 				F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */,
+				F785973E206AEBFB00C68A23 /* ThemeSettingsTableViewController.h */,
+				F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1212,6 +1220,8 @@
 				F785973A206A9F5400C68A23 /* ThemedTableViewCell.h */,
 				F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */,
 				F785973D206AC5CA00C68A23 /* Theme.h */,
+				F7859741206BD50800C68A23 /* AutoSunriseSunsetTheme.h */,
+				F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -1792,6 +1802,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
+				"${BUILT_PRODUCTS_DIR}/EDSunriseSet/EDSunriseSet.framework",
 				"${BUILT_PRODUCTS_DIR}/FastImageCache/FastImageCache.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
@@ -1813,6 +1824,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTools.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EDSunriseSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FastImageCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
@@ -2018,6 +2030,7 @@
 			files = (
 				2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
+				F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
@@ -2032,6 +2045,7 @@
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
+				F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */,
 				F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,

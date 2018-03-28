@@ -29,6 +29,9 @@
 #import "UIColor+UIColor_Mage.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
+#import "Theme+UIResponder.h"
+
+@import SkyFloatingLabelTextField;
 
 static float paddingPercentage = .1;
 
@@ -38,11 +41,6 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
 @property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 @property (strong, nonatomic) WKBGeometry *geometry;
-
-
-
-
-
 
 @property (strong, nonatomic) MapObservation *mapObservation;
 @property (strong, nonatomic) MapObservationManager *observationManager;
@@ -54,8 +52,8 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
 @property (nonatomic) BOOL validLocation;
-@property (weak, nonatomic) IBOutlet UITextField *latitudeField;
-@property (weak, nonatomic) IBOutlet UITextField *longitudeField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *latitudeField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *longitudeField;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
@@ -65,10 +63,49 @@ static float paddingPercentage = .1;
 //@property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
+@property (weak, nonatomic) IBOutlet UIView *fieldEntryBackground;
 
 @end
 
 @implementation GeometryEditViewController
+
+- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.textColor = [UIColor primaryText];
+    field.selectedLineColor = [UIColor brand];
+    field.selectedTitleColor = [UIColor brand];
+    field.placeholderColor = [UIColor secondaryText];
+    field.lineColor = [UIColor secondaryText];
+    field.titleColor = [UIColor secondaryText];
+    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.iconText = @"\U0000f0ac";
+    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor backgroundColor];
+    self.fieldEntryBackground.backgroundColor = [UIColor dialog];
+    [UIColor themeMap:self.map];
+    [self setShapeTypeSelection];
+    [self themeTextField:self.latitudeField];
+    [self themeTextField:self.longitudeField];
+}
+
+-(void) setShapeTypeSelection {
+    [self updateButton:self.pointButton toSelected:self.shapeType == WKB_POINT];
+    [self updateButton:self.lineButton toSelected:self.shapeType == WKB_LINESTRING];
+    [self updateButton:self.rectangleButton toSelected:self.shapeType == WKB_POLYGON && self.isRectangle];
+    [self updateButton:self.polygonButton toSelected:self.shapeType == WKB_POLYGON && !self.isRectangle];
+}
+
+- (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
+    if (selected) {
+        [button setTintColor:[UIColor activeTabIcon]];
+        [button setBackgroundColor:[UIColor dialog]];
+    } else {
+        [button setTintColor:[UIColor inactiveTabIcon]];
+        [button setBackgroundColor:[UIColor dialog]];
+    }
+}
 
 - (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator {
     if (self = [super init]) {
@@ -81,10 +118,7 @@ static float paddingPercentage = .1;
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    self.pointButton.tintColor = [UIColor primaryColor];
-    self.lineButton.tintColor = [UIColor primaryColor];
-    self.polygonButton.tintColor = [UIColor primaryColor];
-    self.rectangleButton.tintColor = [UIColor primaryColor];
+
     
     self.map.delegate = _mapDelegate;
     
@@ -130,7 +164,8 @@ static float paddingPercentage = .1;
     [self.map addGestureRecognizer:[[UILongPressGestureRecognizer alloc]
                                     initWithTarget:self action:@selector(longPressGesture:)]];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
-
+    
+    [self registerForThemeChanges];
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (WKBGeometry *) geometry {
@@ -544,23 +579,6 @@ static float paddingPercentage = .1;
 
 -(void) revertShapeType{
     [self setShapeTypeSelection];
-}
-
--(void) setShapeTypeSelection {
-    [self updateButton:self.pointButton toSelected:self.shapeType == WKB_POINT];
-    [self updateButton:self.lineButton toSelected:self.shapeType == WKB_LINESTRING];
-    [self updateButton:self.rectangleButton toSelected:self.shapeType == WKB_POLYGON && self.isRectangle];
-    [self updateButton:self.polygonButton toSelected:self.shapeType == WKB_POLYGON && !self.isRectangle];
-}
-
-- (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
-    if (selected) {
-        [button setTintColor:[UIColor whiteColor]];
-        [button setBackgroundColor:[UIColor mageBlue]];
-    } else {
-        [button setTintColor:[UIColor mageBlue]];
-        [button setBackgroundColor:[UIColor whiteColor]];
-    }
 }
 
 - (IBAction)pointButtonClick:(UIButton *)sender {

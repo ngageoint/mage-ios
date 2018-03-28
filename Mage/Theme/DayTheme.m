@@ -22,6 +22,10 @@
     return instance;
 }
 
+- (NSString *) displayName {
+    return @"Day";
+}
+
 - (UIColor *) primaryText {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:.87];
 }
@@ -112,6 +116,10 @@
 
 - (BOOL) darkMap {
     return NO;
+}
+
+- (UIKeyboardAppearance) keyboardAppearance {
+    return UIKeyboardAppearanceLight;
 }
 
 @end

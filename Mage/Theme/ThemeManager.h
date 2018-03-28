@@ -13,8 +13,11 @@ extern NSString *const kThemeChangedKey;
 
 typedef NS_ENUM(NSInteger, MageTheme) {
     Day,
-    Night
+    Night,
+    AutoSunriseSunset
 };
+
+extern NSInteger const NUM_THEMES;
 
 #define TheCurrentTheme [[ThemeManager sharedManager] currentTheme]
 
@@ -22,9 +25,10 @@ typedef NS_ENUM(NSInteger, MageTheme) {
 
 + (instancetype) sharedManager;
 
-@property (nonatomic, strong) NSNumber *forcedTheme;
+@property (nonatomic, strong) NSNumber *theme;
 @property (nonatomic, readonly) MageTheme currentTheme;
 
 - (id<Theme>) curentThemeDefinition;
+- (id<Theme>) themeDefinitionForTheme: (MageTheme) theme;
 
 @end

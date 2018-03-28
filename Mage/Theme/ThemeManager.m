@@ -9,13 +9,12 @@
 #import "ThemeManager.h"
 #import "DarkTheme.h"
 #import "DayTheme.h"
+#import "AutoSunriseSunsetTheme.h"
 #import "Theme.h"
 
-#define BRIGHTNESS_DARK_THRESHOLD 0.30
-#define BRIGHTNESS_LIGHT_THRESHOLD 0.40
-
-static NSString *const kForcedThemeKey = @"forcedTheme";
+static NSString *const kThemeKey = @"theme";
 NSString *const kThemeChangedKey = @"themeChanged";
+NSInteger const NUM_THEMES = 3;
 
 @interface ThemeManager ()
 
@@ -41,12 +40,7 @@ NSString *const kThemeChangedKey = @"themeChanged";
                                                  selector:@selector(appDidBecomeActive)
                                                      name:UIApplicationDidBecomeActiveNotification
                                                    object:nil];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(brightnessDidChange:)
-                                                     name:UIScreenBrightnessDidChangeNotification
-                                                   object:nil];
-
+        
     }
     return self;
 }
@@ -62,6 +56,9 @@ NSString *const kThemeChangedKey = @"themeChanged";
 - (void) setCurrentTheme:(MageTheme)currentTheme animated: (BOOL) animated {
     if (_currentTheme != currentTheme) {
         _currentTheme = currentTheme;
+        id<Theme> themeDefintion = [[ThemeManager sharedManager] themeDefinitionForTheme:currentTheme];
+        [UITextField appearance].keyboardAppearance = themeDefintion.keyboardAppearance;
+//        [UITextView appearance].keyboardAppearance = themeDefintion.keyboardAppearance;
         [UIView animateWithDuration:animated ? 0.5 : 0.0
                               delay:0
              usingSpringWithDamping:1
@@ -76,59 +73,37 @@ NSString *const kThemeChangedKey = @"themeChanged";
 }
 
 - (id<Theme>) curentThemeDefinition {
-    switch(TheCurrentTheme) {
+    return [self themeDefinitionForTheme:TheCurrentTheme];
+}
+
+- (id<Theme>) themeDefinitionForTheme:(MageTheme)theme {
+    switch(theme) {
         case Night:
             return [DarkTheme sharedInstance];
         case Day:
             return [DayTheme sharedInstance];
+        case AutoSunriseSunset:
+            return [AutoSunriseSunsetTheme sharedInstance];
     }
-    return nil;
+    return [DayTheme sharedInstance];
 }
 
-- (void)setForcedTheme:(NSNumber *)forcedTheme {
-    [[NSUserDefaults standardUserDefaults] setObject:forcedTheme forKey:kForcedThemeKey];
+- (void)setTheme:(NSNumber *)theme {
+    [[NSUserDefaults standardUserDefaults] setObject:theme forKey:kThemeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.currentTheme = [self calculateCurrentTheme];
 }
 
-- (NSNumber *)forcedTheme {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kForcedThemeKey];
+- (NSNumber *)theme {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kThemeKey];
 }
 
 #pragma mark - Calculations
 
 - (MageTheme) calculateCurrentTheme {
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(brightnessDidChange:) object:nil];
-    [self performSelector:@selector(brightnessDidChange:) withObject:nil afterDelay:5];
-    return (MageTheme)ABS(1 - self.currentTheme);
-    
-//    if (self.forcedTheme != nil) {
-//        return [self.forcedTheme integerValue];
-//    }
-//
-//    CGFloat brightness = [[UIScreen mainScreen] brightness];
-//
-//    if (self.currentTheme == Day) {
-//        if (brightness <= BRIGHTNESS_DARK_THRESHOLD) {
-//            return Night;
-//        }
-//        return Day;
-//    } else {
-//        if (brightness >= BRIGHTNESS_LIGHT_THRESHOLD) {
-//            return Day;
-//        }
-//        return Night;
-//    }
-}
-
-- (void)brightnessDidChange:(NSNotification *)notification {
-    UIApplicationState state = [[UIApplication sharedApplication] applicationState];
-    if (state != UIApplicationStateActive && state != UIApplicationStateInactive) {
-        return;
-    }
-    self.currentTheme = [self calculateCurrentTheme];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [[defaults objectForKey:kThemeKey] integerValue];
 }
 
 - (void)appDidBecomeActive {

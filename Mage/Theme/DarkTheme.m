@@ -22,6 +22,10 @@
     return instance;
 }
 
+- (NSString *) displayName {
+    return @"Night";
+}
+
 - (UIColor *) primaryText {
     return [UIColor whiteColor];
 }
@@ -112,6 +116,10 @@
 
 - (BOOL) darkMap {
     return YES;
+}
+
+- (UIKeyboardAppearance) keyboardAppearance {
+    return UIKeyboardAppearanceDark;
 }
 
 @end

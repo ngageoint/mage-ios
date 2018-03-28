@@ -25,20 +25,21 @@
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatus;
 @property (weak, nonatomic) IBOutlet UILabel *dataFetchStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *imageUploadSizeLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *user;
-    @property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
-    @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-    @property (strong, nonatomic) CLLocationManager *locationManager;
-    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-    @property (nonatomic, assign) BOOL showDisclaimer;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
-    @property (assign, nonatomic) NSInteger versionCellSelectionCount;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *timeZoneSelectionCell;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *eventCell;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *changePasswordCell;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *goOnlineCell;
-    @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (weak, nonatomic) IBOutlet UILabel *user;
+@property (weak, nonatomic) IBOutlet UILabel *baseServerUrlLabel;
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+@property (nonatomic, assign) BOOL showDisclaimer;
+@property (weak, nonatomic) IBOutlet UITableViewCell *versionCell;
+@property (assign, nonatomic) NSInteger versionCellSelectionCount;
+@property (weak, nonatomic) IBOutlet UITableViewCell *timeZoneSelectionCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *eventCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *changePasswordCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *goOnlineCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *themeCell;
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
@@ -122,6 +123,8 @@ static NSInteger legalSection = 6;
         self.timeZoneSelectionCell.textLabel.text = @"GMT Time";
         self.timeZoneSelectionCell.detailTextLabel.text = @"";
     }
+    
+    self.themeCell.detailTextLabel.text = [[[ThemeManager sharedManager] curentThemeDefinition] displayName];
 }
 
 - (void) setLocationServicesLabel {
@@ -310,7 +313,7 @@ static NSInteger legalSection = 6;
         case 3:
             return 1;
         case 4:
-            return 2;
+            return 3;
         case 5:
             return 3;
         case 6:

@@ -20,6 +20,7 @@ target 'MAGE' do
     pod 'zxcvbn-ios'
     pod 'SkyFloatingLabelTextField', '~> 3.0'
     pod 'DateTools', '~> 2.0.0'
+    pod 'EDSunriseSet', '~> 1.0'
     target 'MAGETests' do
         inherit! :search_paths
         pod 'OCMock'

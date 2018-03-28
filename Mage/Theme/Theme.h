@@ -12,6 +12,7 @@
 
 @required
 + (instancetype) sharedInstance;
+- (NSString *) displayName;
 - (UIColor *) primaryText;
 - (UIColor *) secondaryText;
 - (UIColor *) background;
@@ -32,5 +33,6 @@
 - (UIColor *) navBarPrimaryText;
 - (UIColor *) navBarSecondaryText;
 - (BOOL) darkMap;
+- (UIKeyboardAppearance) keyboardAppearance;
 
 @end

@@ -22,7 +22,9 @@
 }
 
 + (void) themeMap: (MKMapView *) map {
-    [map _setShowsNightMode:[[[ThemeManager sharedManager] curentThemeDefinition] darkMap]];
+    if ([map respondsToSelector:@selector(_setShowsNightMode:)]) {
+        [map _setShowsNightMode:[[[ThemeManager sharedManager] curentThemeDefinition] darkMap]];
+    }
 }
 
 + (UIColor *) primaryText {

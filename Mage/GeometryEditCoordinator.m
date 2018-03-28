@@ -58,7 +58,6 @@
 
 - (void) fieldEditDone {
     [self.delegate geometryUpdated:self.currentGeometry];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) updateGeometry: (WKBGeometry *) geometry {
