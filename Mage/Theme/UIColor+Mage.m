@@ -67,6 +67,14 @@
     return [[[ThemeManager sharedManager] curentThemeDefinition] flatButton];
 }
 
++ (UIColor *) themedWhite {
+    return [[[ThemeManager sharedManager] curentThemeDefinition] themedWhite];
+}
+
++ (UIColor *) brightButton {
+    return [[[ThemeManager sharedManager] curentThemeDefinition] brightButton];
+}
+
 + (UIColor *) inactiveIcon {
     return [[[ThemeManager sharedManager] curentThemeDefinition] inactiveIcon];
 }

@@ -66,6 +66,14 @@
     return [UIColor mageBlue];
 }
 
+- (UIColor *) themedWhite {
+    return [UIColor colorWithWhite:.75 alpha:1.0];
+}
+
+- (UIColor *) brightButton {
+    return [[UIColor whiteColor] colorWithAlphaComponent:.87];
+}
+
 - (UIColor *) inactiveIcon {
     return [UIColor colorWithWhite:0.0 alpha:.38];
 }

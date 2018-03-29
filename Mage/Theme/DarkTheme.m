@@ -66,6 +66,14 @@
     return [self primaryText];
 }
 
+- (UIColor *) themedWhite {
+    return [UIColor colorWithWhite:.9 alpha:1.0];
+}
+
+- (UIColor *) brightButton {
+    return [[UIColor whiteColor] colorWithAlphaComponent:.87];
+}
+
 - (UIColor *) inactiveIcon {
     return [UIColor colorWithWhite:1.0 alpha:.50];
 }

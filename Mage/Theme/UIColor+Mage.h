@@ -21,7 +21,9 @@
 + (UIColor *) primary;
 + (UIColor *) secondary;
 + (UIColor *) themedButton;
++ (UIColor *) themedWhite;
 + (UIColor *) flatButton;
++ (UIColor *) brightButton;
 + (UIColor *) inactiveIcon;
 + (UIColor *) inactiveIconWithColor: (UIColor *) color;
 + (UIColor *) activeIcon;
