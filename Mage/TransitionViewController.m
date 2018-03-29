@@ -19,14 +19,17 @@
 @implementation TransitionViewController
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.wandLabel.textColor = [UIColor brand];
-    self.mageLabel.textColor = [UIColor brand];
+//    self.view.backgroundColor = [UIColor background];
+//    self.wandLabel.textColor = [UIColor brand];
+//    self.mageLabel.textColor = [UIColor brand];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.wandLabel.text = @"\U0000f0d0";
+    self.view.backgroundColor = [UIColor background];
+    self.wandLabel.textColor = [UIColor brand];
+    self.mageLabel.textColor = [UIColor brand];
     [self registerForThemeChanges];
 }
 

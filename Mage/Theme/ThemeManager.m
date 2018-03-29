@@ -12,7 +12,7 @@
 #import "AutoSunriseSunsetTheme.h"
 #import "Theme.h"
 
-static NSString *const kThemeKey = @"theme";
+NSString *const kThemeKey = @"theme";
 NSString *const kThemeChangedKey = @"themeChanged";
 NSInteger const NUM_THEMES = 3;
 
@@ -72,7 +72,7 @@ NSInteger const NUM_THEMES = 3;
 }
 
 - (id<Theme>) curentThemeDefinition {
-    return [self themeDefinitionForTheme:TheCurrentTheme];
+    return [self themeDefinitionForTheme:[[self theme] integerValue]];
 }
 
 - (id<Theme>) themeDefinitionForTheme:(MageTheme)theme {
