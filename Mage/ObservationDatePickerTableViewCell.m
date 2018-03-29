@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSDate *date;
 @property (assign, nonatomic) BOOL canceled;
 @property (strong, nonatomic) NSDate *value;
+@property (strong, nonatomic) UILabel *timeZoneLabel;
 @end
 
 @implementation ObservationDatePickerTableViewCell
@@ -32,6 +33,13 @@
     self.textField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.textField.iconText = @"\U0000f073";
     self.textField.iconColor = [UIColor secondaryText];
+    self.datePicker.backgroundColor = [UIColor dialog];
+    [self.datePicker setValue:[UIColor primaryText] forKey:@"textColor"];
+    self.textField.keyboardAppearance = UIKeyboardAppearanceDefault;
+    UIToolbar *toolbar = (UIToolbar *)self.textField.inputAccessoryView;
+    toolbar.tintColor = [UIColor flatButton];
+    toolbar.barTintColor = [UIColor dialog];
+    self.timeZoneLabel.textColor = [UIColor primaryText];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
@@ -67,11 +75,11 @@
     UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UILabel *timeZoneLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    timeZoneLabel.text = [self.datePicker.timeZone name];
-    [timeZoneLabel sizeToFit];
+    self.timeZoneLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.timeZoneLabel.text = [self.datePicker.timeZone name];
+    [self.timeZoneLabel sizeToFit];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, [[UIBarButtonItem alloc] initWithCustomView:timeZoneLabel], flexSpace, doneBarButton, nil];
+    toolbar.items = [NSArray arrayWithObjects:cancelBarButton, flexSpace, [[UIBarButtonItem alloc] initWithCustomView:self.timeZoneLabel], flexSpace, doneBarButton, nil];
     
     self.textField.inputView = self.datePicker;
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;

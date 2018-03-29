@@ -37,6 +37,10 @@
     self.textField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.textField.iconText = @"\U0000f292";
     self.textField.iconColor = [UIColor secondaryText];
+    UIToolbar *toolbar = (UIToolbar *)self.textField.inputAccessoryView;
+    toolbar.tintColor = [UIColor flatButton];
+    toolbar.barTintColor = [UIColor dialog];
+    self.title.textColor = [UIColor primaryText];
 }
 
 - (void) didMoveToSuperview {

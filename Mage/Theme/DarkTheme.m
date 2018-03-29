@@ -89,7 +89,7 @@
 }
 
 - (UIColor *) activeIcon {
-    return [UIColor colorWithWhite:1.0 alpha:1.0];
+    return [UIColor colorWithWhite:1.0 alpha:.8];
 }
 
 - (UIColor *) activeIconWithColor: (UIColor *) color {

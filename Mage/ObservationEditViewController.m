@@ -41,6 +41,11 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.attachmentToolbar.backgroundColor = [UIColor tabBarTint];
     self.attachmentToolbar.tintColor = [UIColor activeTabIcon];
+    self.attachmentToolbar.barTintColor = [UIColor tabBarTint];
+    
+    for (UIBarButtonItem *item in [self.attachmentToolbar items]) {
+        item.tintColor = [UIColor activeIcon];
+    }
 }
 
 - (void) updateViewConstraints {

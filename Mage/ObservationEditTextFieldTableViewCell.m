@@ -32,6 +32,9 @@
         self.textField.iconText = @"\U0000f0e0";
     }
     self.textField.iconColor = [UIColor secondaryText];
+    UIToolbar *toolbar = (UIToolbar *)self.textField.inputAccessoryView;
+    toolbar.tintColor = [UIColor flatButton];
+    toolbar.barTintColor = [UIColor dialog];
 }
 
 - (void) didMoveToSuperview {

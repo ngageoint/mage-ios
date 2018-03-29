@@ -111,4 +111,8 @@
     return [[[ThemeManager sharedManager] curentThemeDefinition] navBarSecondaryText];
 }
 
++ (UIKeyboardAppearance) keyboardAppearance {
+    return [[[ThemeManager sharedManager] curentThemeDefinition] keyboardAppearance];
+}
+
 @end

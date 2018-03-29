@@ -58,7 +58,6 @@ NSInteger const NUM_THEMES = 3;
         _currentTheme = currentTheme;
         id<Theme> themeDefintion = [[ThemeManager sharedManager] themeDefinitionForTheme:currentTheme];
         [UITextField appearance].keyboardAppearance = themeDefintion.keyboardAppearance;
-//        [UITextView appearance].keyboardAppearance = themeDefintion.keyboardAppearance;
         [UIView animateWithDuration:animated ? 0.5 : 0.0
                               delay:0
              usingSpringWithDamping:1

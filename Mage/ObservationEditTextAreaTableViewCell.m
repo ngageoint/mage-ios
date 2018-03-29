@@ -26,6 +26,10 @@
     self.backgroundColor = [UIColor dialog];
     
     self.textArea.textColor = [UIColor primaryText];
+    self.textArea.keyboardAppearance = [UIColor keyboardAppearance];
+    UIToolbar *toolbar = (UIToolbar *)self.textArea.inputAccessoryView;
+    toolbar.tintColor = [UIColor flatButton];
+    toolbar.barTintColor = [UIColor dialog];
     
     self.valueField.textColor = [UIColor primaryText];
     if (!self.valueBeingEdited) {
