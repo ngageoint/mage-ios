@@ -6,13 +6,12 @@
 //  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import OHHTTPStubs;
+
 #import <XCTest/XCTest.h>
-#import <OHHTTPStubs.h>
-#import <OHHTTPStubsResponse+JSON.h>
-#import <OHPathHelpers.h>
-#import <OCMock.h>
-#import <MageServer.h>
-#import <StoredPassword.h>
+#import <OCMock/OCMock.h>
+#import "MageServer.h"
+#import "StoredPassword.h"
 
 @interface MageServerTests : XCTestCase
 

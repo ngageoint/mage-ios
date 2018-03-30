@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <StoredPassword.h>
+#import "StoredPassword.h"
 
 @interface StoredPasswordTests : XCTestCase
 

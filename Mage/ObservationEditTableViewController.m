@@ -11,7 +11,7 @@
 #import "GeometryEditViewController.h"
 #import "SelectEditViewController.h"
 #import "Observation.h"
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Attachment.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -25,6 +25,7 @@
 #import <ImageIO/ImageIO.h>
 #import "ObservationEditTextFieldTableViewCell.h"
 #import "NSDate+Iso8601.h"
+#import "Theme+UIResponder.h"
 
 @import PhotosUI;
 
@@ -61,11 +62,16 @@
     [self.tableView setSectionHeaderHeight:UITableViewAutomaticDimension];
     [self.tableView setEstimatedSectionFooterHeight:1.0];
     [self.tableView setSectionFooterHeight:UITableViewAutomaticDimension];
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -101,6 +107,8 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationPasswordEditCell" bundle:nil] forCellReuseIdentifier:@"password"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextfieldEditCell" bundle:nil] forCellReuseIdentifier:@"textfield"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDeleteCell" bundle:nil] forCellReuseIdentifier:@"deleteObservationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"TableSectionHeader" bundle:nil] forHeaderFooterViewReuseIdentifier:@"TableSectionHeader"];
 }
 
 - (void) updateUserDefaults: (NSNotification *) notification {

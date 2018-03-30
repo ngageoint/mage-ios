@@ -5,16 +5,36 @@
 //
 
 #import "DataFetchSettingsTableViewController.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface DataFetchSettingsTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UISwitch *dataFetchSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *userFetchFrequencyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *observationFetchFrequencyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dataFetchingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *usersLabel;
+@property (weak, nonatomic) IBOutlet UILabel *usersDescription;
+@property (weak, nonatomic) IBOutlet UILabel *observationsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *observationsDescription;
 
 @end
 
 @implementation DataFetchSettingsTableViewController
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.dataFetchSwitch.onTintColor = [UIColor themedButton];
+    self.userFetchFrequencyLabel.textColor = [UIColor primaryText];
+    self.observationFetchFrequencyLabel.textColor = [UIColor primaryText];
+    self.dataFetchingLabel.textColor = [UIColor primaryText];
+    self.usersLabel.textColor = [UIColor primaryText];
+    self.usersDescription.textColor = [UIColor secondaryText];
+    self.observationsLabel.textColor = [UIColor primaryText];
+    self.observationsDescription.textColor = [UIColor secondaryText];
+    [self.tableView reloadData];
+}
 
 - (IBAction)dataFetchSwitched:(id)sender {
     if (!_dataFetchSwitch.on) {
@@ -41,6 +61,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationController.navigationBar setPrefersLargeTitles:NO];
@@ -123,6 +145,18 @@
         vc.values = [timeDictionary valueForKey:@"values"];
         vc.preferenceKey = [timeDictionary valueForKey:@"preferenceKey"];
     }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = [UIColor background];
 }
 
 @end

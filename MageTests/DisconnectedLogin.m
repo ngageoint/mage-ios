@@ -8,19 +8,18 @@
 //[[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
 //
 
+@import OHHTTPStubs;
+
 #import <XCTest/XCTest.h>
-#import <OHHTTPStubs.h>
-#import <OHHTTPStubsResponse+JSON.h>
-#import <OHPathHelpers.h>
-#import <OCMock.h>
+#import <OCMock/OCMock.h>
 #import "AuthenticationCoordinator.h"
 #import "LoginViewController.h"
 #import "DisclaimerViewController.h"
-#import <MageSessionManager.h>
-#import <StoredPassword.h>
-#import <Event.h>
-#import <Authentication.h>
-#import <UserUtility.h>
+#import "MageSessionManager.h"
+#import "StoredPassword.h"
+#import "Event.h"
+#import "Authentication.h"
+#import "UserUtility.h"
 
 @interface AuthenticationCoordinator ()
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;

@@ -5,8 +5,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Observation.h>
-#import <User.h>
+#import "Observation.h"
+#import "User.h"
 
 @protocol MAGEMasterSelectionDelegate <NSObject>
 

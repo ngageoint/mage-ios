@@ -6,26 +6,29 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 #import "SignUpViewController.h"
 #import "UINextField.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "OAuthViewController.h"
 #import "OAuthAuthentication.h"
-#import <NBAsYouTypeFormatter.h>
-#import <ServerAuthentication.h>
+#import "NBAsYouTypeFormatter.h"
+#import "ServerAuthentication.h"
 #import <GoogleSignIn/GoogleSignIn.h>
-#import "UIColor+UIColor_Mage.h"
-#import <DBZxcvbn.h>
+#import "Theme+UIResponder.h"
+#import "DBZxcvbn.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *displayName;
-@property (weak, nonatomic) IBOutlet UITextField *username;
-@property (weak, nonatomic) IBOutlet UITextField *password;
-@property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet UITextField *email;
-@property (weak, nonatomic) IBOutlet UITextField *phone;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *displayName;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *username;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *password;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
 @property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
@@ -43,6 +46,9 @@
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+@property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
+@property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
 
 @end
 
@@ -56,29 +62,64 @@
     return self;
 }
 
+#pragma mark - Theme Changes
+
+- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.textColor = [UIColor primaryText];
+    field.selectedLineColor = [UIColor brand];
+    field.selectedTitleColor = [UIColor brand];
+    field.placeholderColor = [UIColor secondaryText];
+    field.lineColor = [UIColor secondaryText];
+    field.titleColor = [UIColor secondaryText];
+    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.mageVersion.textColor = [UIColor secondaryText];
+    self.signupButton.backgroundColor = [UIColor themedButton];
+    self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.showPassword.onTintColor = [UIColor themedButton];
+    self.passwordStrengthText.textColor = [UIColor secondaryText];
+    self.showPasswordText.textColor = [UIColor secondaryText];
+    
+    [self themeTextField:self.username];
+    [self themeTextField:self.displayName];
+    [self themeTextField:self.password];
+    [self themeTextField:self.passwordConfirm];
+    [self themeTextField:self.email];
+    [self themeTextField:self.phone];
+    
+    self.username.iconText = @"\U0000f007";
+    self.password.iconText = @"\U0000f084";
+    self.passwordConfirm.iconText = @"\U0000f084";
+    self.email.iconText = @"\U0000f0e0";
+    self.phone.iconText = @"\U0000f095";
+    self.displayName.iconText = @"\U0000f2bc";
+    
+    if ([self.server serverHasLocalAuthenticationStrategy]) {
+        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    }
+}
+
+#pragma mark -
+
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    [self registerForThemeChanges];
+        
     [self setupAuthentication];
     
     self.zxcvbn = [[DBZxcvbn alloc] init];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.cancelButton.backgroundColor = [UIColor primaryColor];
-    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.signupButton.backgroundColor = [UIColor primaryColor];
-    [self.signupButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
+
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.username.layer.borderColor = self.password.layer.borderColor = self.displayName.layer.borderColor = self.passwordConfirm.layer.borderColor = self.password.layer.borderColor = self.email.layer.borderColor = self.phone.layer.borderColor = [[UIColor primaryColor] CGColor];
-    self.username.layer.borderWidth = self.password.layer.borderWidth = self.displayName.layer.borderWidth = self.passwordConfirm.layer.borderWidth = self.password.layer.borderWidth = self.email.layer.borderWidth = self.phone.layer.borderWidth = 1.0f;
-    self.username.layer.cornerRadius = self.password.layer.cornerRadius = self.displayName.layer.cornerRadius = self.passwordConfirm.layer.cornerRadius = self.password.layer.cornerRadius = self.email.layer.cornerRadius = self.phone.layer.cornerRadius  = 5.0f;
-    
-    self.mageVersion.textColor = [UIColor primaryColor];
-    self.mageServerURL.titleLabel.textColor = [UIColor primaryColor];
     
     self.password.delegate = self;
     
@@ -86,8 +127,8 @@
 
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.password.placeholder = [NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-        self.passwordConfirm.placeholder = [NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
     
 }
@@ -97,8 +138,8 @@
     BOOL didResign = [textField resignFirstResponder];
     if (!didResign) return NO;
     
-    if ([textField isKindOfClass:[UINextField class]]) {
-        [[(UINextField *)textField nextField] becomeFirstResponder];
+    if ([textField respondsToSelector:@selector(nextField)] && [textField nextField]) {
+        [[textField nextField] becomeFirstResponder];
     }
     
     if (textField == self.passwordConfirm) {
@@ -110,7 +151,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    textField.textColor = [UIColor blackColor];
     
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
@@ -167,6 +207,7 @@
                 break;
         }
     }
+    
     return YES;
 }
 
@@ -248,10 +289,8 @@
     [self.delegate signUpCanceled];
 }
 
-- (void) markFieldError: (UITextField *) field {
-    UIColor *red = [UIColor colorWithRed:1.0 green:0 blue:0 alpha:.8];
-    field.attributedPlaceholder = [[NSAttributedString alloc] initWithString:field.placeholder attributes:@{NSForegroundColorAttributeName: red}];
-    field.textColor = red;
+- (void) markFieldError: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.errorMessage = field.placeholder;
 }
 
 - (void) showDialogForRequiredFields:(NSArray *) fields {

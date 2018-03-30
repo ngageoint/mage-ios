@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
-#import <WKBPolygon.h>
+#import "WKBPolygon.h"
 
 /**
  * Map utilities

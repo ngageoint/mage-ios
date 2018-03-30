@@ -4,6 +4,8 @@ platform :ios, '10.0'
 workspace 'MAGE'
 project 'MAGE.xcodeproj'
 
+use_frameworks!
+
 target 'MAGE' do
     pod 'FastImageCache', '~> 1.3'
     pod 'UIImage-Categories', '~> 0.0.1'
@@ -16,6 +18,9 @@ target 'MAGE' do
     pod 'tuneup_js'
     pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
+    pod 'SkyFloatingLabelTextField', '~> 3.0'
+    pod 'DateTools', '~> 2.0.0'
+    pod 'EDSunriseSet', '~> 1.0'
     target 'MAGETests' do
         inherit! :search_paths
         pod 'OCMock'
@@ -32,6 +37,11 @@ post_install do |installer_representation|
     else
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ENABLE_CODE_COVERAGE'] = 'NO'
+      end
+    end
+    if target.name == 'SkyFloatingLabelTextField'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '3.2'
       end
     end
   end

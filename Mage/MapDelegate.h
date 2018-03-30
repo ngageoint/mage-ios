@@ -11,7 +11,7 @@
 #import "MapCalloutTappedSegueDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
-#import <GPSLocation.h>
+#import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 

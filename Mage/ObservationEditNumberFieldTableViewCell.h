@@ -8,6 +8,8 @@
 
 #import "ObservationEditTableViewCell.h"
 
+@import SkyFloatingLabelTextField;
+
 @interface ObservationEditNumberFieldTableViewCell : ObservationEditTableViewCell
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *textField;
 @end

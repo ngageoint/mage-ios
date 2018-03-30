@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,11 +14,11 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addImportant" rowHeight="40" id="DP6-0u-TkD" customClass="ObservationAddImportantTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="DP6-0u-TkD" id="iPp-hc-tU8">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DP6-0u-TkD" id="iPp-hc-tU8">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="39.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="flag" translatesAutoresizingMaskIntoConstraints="NO" id="1k9-Bd-Om7">
+                    <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag" translatesAutoresizingMaskIntoConstraints="NO" id="1k9-Bd-Om7">
                         <rect key="frame" x="16" y="8" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="hHa-od-NQi"/>
@@ -31,7 +30,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOA-EH-vHh">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOA-EH-vHh">
                         <rect key="frame" x="48" y="8" width="171" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="K8i-5c-TgT"/>
@@ -46,16 +45,19 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="oOA-EH-vHh" firstAttribute="leading" secondItem="1k9-Bd-Om7" secondAttribute="trailing" constant="8" id="EDx-07-o37"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="oOA-EH-vHh" secondAttribute="bottom" id="IVv-TP-6dQ"/>
-                    <constraint firstItem="oOA-EH-vHh" firstAttribute="top" secondItem="iPp-hc-tU8" secondAttribute="topMargin" id="Q5h-i3-UTT"/>
-                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="top" secondItem="iPp-hc-tU8" secondAttribute="topMargin" id="V4V-PG-ClU"/>
-                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="leading" secondItem="iPp-hc-tU8" secondAttribute="leadingMargin" id="xRE-6V-lVY"/>
+                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="centerY" secondItem="iPp-hc-tU8" secondAttribute="centerY" id="Dyo-qJ-nBK"/>
+                    <constraint firstItem="oOA-EH-vHh" firstAttribute="leading" secondItem="1k9-Bd-Om7" secondAttribute="trailing" constant="8" id="Ebr-Do-8BZ"/>
+                    <constraint firstItem="oOA-EH-vHh" firstAttribute="centerY" secondItem="iPp-hc-tU8" secondAttribute="centerY" id="KLH-MG-oeP"/>
+                    <constraint firstItem="1k9-Bd-Om7" firstAttribute="leading" secondItem="iPp-hc-tU8" secondAttribute="leading" constant="16" id="Rxh-vn-pge"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="flagButton" destination="oOA-EH-vHh" id="vYJ-y0-e0t"/>
+                <outlet property="flagIcon" destination="1k9-Bd-Om7" id="ZP1-Ht-C8Y"/>
+            </connections>
         </tableViewCell>
     </objects>
     <resources>

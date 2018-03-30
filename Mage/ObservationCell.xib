@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,26 +27,26 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="sBd-Wh-tx8">
-                        <rect key="frame" x="63" y="19" width="130.5" height="41.5"/>
+                        <rect key="frame" x="63" y="19" width="141" height="41.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="idN-RK-z3b">
-                                <rect key="frame" x="0.0" y="0.0" width="130.5" height="12.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="141" height="12.5"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Primary Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0PK-E0-z34">
-                                        <rect key="frame" x="0.0" y="0.0" width="87" height="12.5"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="97.5" height="12.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EdJ-xs-6C4">
-                                        <rect key="frame" x="91" y="0.5" width="17" height="12"/>
+                                        <rect key="frame" x="101.5" y="0.5" width="17" height="12"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="12" id="6zN-w8-9UI"/>
                                             <constraint firstAttribute="width" constant="17" id="TXh-wr-lye"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11h" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fg-We-DRH">
-                                        <rect key="frame" x="112" y="0.0" width="18.5" height="12.5"/>
+                                        <rect key="frame" x="122.5" y="0.0" width="18.5" height="12.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -54,8 +54,8 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Variant Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSG-A8-1hX">
-                                <rect key="frame" x="0.0" y="14.5" width="80.5" height="12.5"/>
-                                <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                                <rect key="frame" x="0.0" y="14.5" width="80" height="12.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -170,6 +170,7 @@
                         </constraints>
                     </stackView>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="D9h-ZP-Zdl" secondAttribute="bottom" id="2ke-vp-iZ8"/>
                     <constraint firstAttribute="trailingMargin" secondItem="D9h-ZP-Zdl" secondAttribute="trailing" id="3OI-th-Xg1"/>
@@ -183,10 +184,11 @@
                     <constraint firstItem="fNL-IH-iDw" firstAttribute="top" secondItem="Nzm-dC-liP" secondAttribute="topMargin" constant="8" id="fcw-vi-NZt"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <color key="tintColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="attachmentCollection" destination="cul-EL-hEp" id="FjU-Iu-46h"/>
+                <outlet property="directionsButton" destination="SOj-Rr-a9r" id="fUN-fo-8s4"/>
                 <outlet property="errorBadge" destination="AYC-b8-6WX" id="aje-GY-j0P"/>
                 <outlet property="favoriteButton" destination="Cld-Jp-Qav" id="sLL-L5-Tdg"/>
                 <outlet property="favoriteNumber" destination="G0g-Yu-Jjk" id="8sh-GC-qhN"/>

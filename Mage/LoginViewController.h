@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
-#import <User.h>
+#import "User.h"
 
 @protocol LoginDelegate <NSObject>
 

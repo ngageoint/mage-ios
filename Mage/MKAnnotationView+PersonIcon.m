@@ -3,11 +3,10 @@
 //  MAGE
 //
 //
-
+@import DateTools;
 #import "MKAnnotationView+PersonIcon.h"
 #import "UIImage+Resize.h"
-#import <Location.h>
-#import <NSDate+DateTools.h>
+#import "Location.h"
 #import "StoredPassword.h"
 
 @implementation MKAnnotationView (PersonIcon)

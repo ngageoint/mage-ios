@@ -9,6 +9,8 @@
 #import "ObservationFilterTableViewController.h"
 #import "TimeFilter.h"
 #import "Observations.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ObservationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -17,13 +19,46 @@
 @property (assign, nonatomic) TimeUnit customTimeUnit;
 @property (assign, nonatomic) NSInteger customTimeNumber;
 @property (assign, nonatomic) BOOL isPopover;
+@property (weak, nonatomic) IBOutlet UILabel *favoritesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favoritesDescription;
+@property (weak, nonatomic) IBOutlet UISwitch *favoriteSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *importantLabel;
+@property (weak, nonatomic) IBOutlet UILabel *importantDescription;
+@property (weak, nonatomic) IBOutlet UISwitch *importantSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *customLabel;
+@property (weak, nonatomic) IBOutlet UILabel *customDescription;
+@property (weak, nonatomic) IBOutlet UILabel *lastLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *periodSegmentedControl;
+@property (weak, nonatomic) IBOutlet UITextField *timeNumberTextField;
 
 @end
 
 @implementation ObservationFilterTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.favoritesLabel.textColor = [UIColor primaryText];
+    self.importantLabel.textColor = [UIColor primaryText];
+    self.favoritesDescription.textColor = [UIColor secondaryText];
+    self.importantDescription.textColor = [UIColor secondaryText];
+    self.customLabel.textColor = [UIColor primaryText];
+    self.customDescription.textColor = [UIColor secondaryText];
+    self.lastLabel.textColor = [UIColor primaryText];
+    self.timeNumberTextField.textColor = [UIColor primaryText];
+    self.timeNumberTextField.layer.borderWidth = .5f;
+    self.timeNumberTextField.layer.borderColor = [[UIColor secondaryText] CGColor];
+    self.periodSegmentedControl.tintColor = [UIColor brand];
+    self.favoriteSwitch.onTintColor = [UIColor themedButton];
+    self.importantSwitch.onTintColor = [UIColor themedButton];
+    
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -42,6 +77,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor background];
     
     if ([indexPath section] == 0) {
         UISwitch *switchControl = (UISwitch *) [cell viewWithTag:100];
@@ -83,6 +121,12 @@
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

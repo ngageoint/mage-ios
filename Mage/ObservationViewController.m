@@ -24,6 +24,8 @@
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -59,6 +61,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.propertyTable.backgroundColor = [UIColor tableBackground];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -82,6 +88,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
                                              selector:@selector(updateUserDefaults:)
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
+    
+    [self registerForThemeChanges];
 }
 
 - (void) registerCellTypes {
@@ -328,16 +336,22 @@ static NSInteger const IMPORTANT_SECTION = 4;
     return title;
 }
 
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == STATUS_SECTION) {
         return CGFLOAT_MIN;
     }
-
-    if (section < [self.tableLayout count] && ![[self.tableLayout objectAtIndex:section] count]) {
-        return CGFLOAT_MIN;
+    
+    if (section >= self.tableLayout.count) {
+        return 48.0f;
     }
 
-    return UITableViewAutomaticDimension;
+    return 15.0f;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -396,11 +410,12 @@ static NSInteger const IMPORTANT_SECTION = 4;
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived = %@ AND (SELF.name IN %@) AND type IN %@", nil, [propertiesWithValue allKeys], [ObservationFields fields]];
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
         
-        [_formFields addObject:[[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]]];
+        if (eventForm) {
+            [_formFields addObject:[[[eventForm objectForKey:@"fields"] filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sortDescriptor]]];
+        }
     }
     return _formFields;
 }
-
 
 - (BOOL) userHasEditPermissions:(User *) user {
     return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];

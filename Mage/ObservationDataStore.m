@@ -4,15 +4,18 @@
 //
 //
 
+@import DateTools;
+
 #import "ObservationDataStore.h"
 #import "ObservationTableViewCell.h"
 #import "Observation.h"
 #import "Observations.h"
-#import <NSDate+DateTools.h>
 #import "Server.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
 #import "GeometryUtility.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface ObservationDataStore ()
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
@@ -90,6 +93,10 @@
     return CGFLOAT_MIN;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 48.0f;
+}
+
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath {
     return [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
 }
@@ -118,9 +125,12 @@
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> theSection = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
-    return [theSection name];
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
+    NSString *name = [sectionInfo name];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {
@@ -128,7 +138,6 @@
     cell.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     return cell;
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
 	

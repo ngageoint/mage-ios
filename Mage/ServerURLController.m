@@ -6,14 +6,18 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface ServerURLController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UITextField *serverURL;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
 @property (weak, nonatomic) IBOutlet UIButton *okButton;
@@ -42,20 +46,35 @@
     return self;
 }
 
+#pragma mark - Theme Changes
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.okButton.backgroundColor = [UIColor themedButton];
+    self.errorStatus.textColor = [UIColor secondaryText];
+    self.setServerUrlText.textColor = [UIColor primaryText];
+    
+    self.serverURL.textColor = [UIColor primaryText];
+    self.serverURL.selectedLineColor = [UIColor brand];
+    self.serverURL.selectedTitleColor = [UIColor brand];
+    self.serverURL.placeholderColor = [UIColor secondaryText];
+    self.serverURL.lineColor = [UIColor secondaryText];
+    self.serverURL.titleColor = [UIColor secondaryText];
+    self.serverURL.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.serverURL.iconText = @"\U0000f0ac";
+}
+
+#pragma mark -
+
 - (void) viewDidLoad {
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.cancelButton.backgroundColor = [UIColor primaryColor];
-    [self.cancelButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
-    self.okButton.backgroundColor = [UIColor primaryColor];
-    [self.okButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    [super viewDidLoad];
+    [self registerForThemeChanges];
     
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.serverURL.layer.borderColor = [[UIColor primaryColor] CGColor];
-    self.serverURL.layer.borderWidth = 1.0f;
-    self.serverURL.layer.cornerRadius = 5.0f;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -92,7 +111,7 @@
     self.errorStatus.hidden = NO;
     self.errorButton.hidden = NO;
     self.errorStatus.text = error;
-    self.serverURL.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    [self.serverURL setErrorMessage:@"Server URL"];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

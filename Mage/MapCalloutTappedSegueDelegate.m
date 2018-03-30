@@ -6,7 +6,7 @@
 
 #import "MapCalloutTappedSegueDelegate.h"
 #import "User.h"
-#import "observation.h"
+#import "Observation.h"
 
 @implementation MapCalloutTappedSegueDelegate
 

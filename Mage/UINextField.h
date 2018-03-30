@@ -6,7 +6,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UINextField : UITextField
+@interface UITextField (UINextField)
 
 @property (nonatomic, assign) IBOutlet UITextField *nextField;
 

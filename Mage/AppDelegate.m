@@ -5,11 +5,11 @@
 //
 
 #import "AppDelegate.h"
-#import <Mage.h>
-#import <User.h>
+#import "Mage.h"
+#import "User.h"
 #import <CoreLocation/CoreLocation.h>
-#import <FICImageCache.h>
-#import <UserUtility.h>
+#import "FICImageCache.h"
+#import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"
 #import "Attachment+Thumbnail.h"
@@ -20,7 +20,7 @@
 
 #import "OZZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 
 #import "MagicalRecord+MAGE.h"
 #import "GPKGGeoPackageFactory.h"
@@ -35,12 +35,11 @@
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "MageOfflineObservationManager.h"
-#import "UIColor+UIColor_Mage.h"
-#import <Server.h>
+#import "Server.h"
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
-#import "MageTheme.h"
+#import "Theme+UIResponder.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -72,10 +71,12 @@
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    [self setupApplicationAppearance];
+    NSUInteger count = [MageOfflineObservationManager offlineObservationCount];
+    NSLog(@"Offline count %lu", (unsigned long)count);
     
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
+    self.window.backgroundColor = [UIColor background];
 
     [self createRootView];
     
@@ -153,10 +154,6 @@
     }];
     
     [[MageSessionManager manager] addTask:observationFetchTask];
-}
-
-- (void) setupApplicationAppearance {
-    [MageTheme setupAppearance];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

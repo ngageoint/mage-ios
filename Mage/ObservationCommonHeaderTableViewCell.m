@@ -5,15 +5,15 @@
 //
 
 #import "ObservationCommonHeaderTableViewCell.h"
-#import <Server.h>
-#import <User.h>
-#import <Event.h>
+#import "Server.h"
+#import "User.h"
+#import "Event.h"
 #import "NSDate+display.h"
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Attachment+Thumbnail.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationCommonHeaderTableViewCell ()
 @property (strong, nonatomic) MapDelegate *mapDelegate;
@@ -24,10 +24,17 @@
 
 @implementation ObservationCommonHeaderTableViewCell
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.primaryFieldLabel.textColor = [UIColor brand];
+    self.variantFieldLabel.textColor = [UIColor brand];
+    self.userLabel.textColor = [UIColor secondaryText];
+    self.dateLabel.textColor = [UIColor secondaryText];
+    self.locationLabel.textColor = [UIColor secondaryText];
+    [UIColor themeMap:self.mapView];
+}
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
-    [self.primaryFieldLabel setTextColor:[UIColor primaryColor]];
-     [self.variantFieldLabel setTextColor:[UIColor primaryColor]];
     
     NSString *primaryFieldText = [observation primaryFieldText];
     
@@ -52,6 +59,8 @@
     
     [self setupMapForObservation:observation];
     [self setupAttachmentsForObservation:observation];
+    
+    [self registerForThemeChanges];
 }
          
 - (void) setupMapForObservation:(Observation *) observation {

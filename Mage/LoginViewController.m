@@ -6,13 +6,16 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import SkyFloatingLabelTextField;
+@import HexColors;
+
 #import "LoginViewController.h"
-#import <UserUtility.h>
+#import "UserUtility.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
 #import <GoogleSignIn/GoogleSignIn.h>
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
@@ -24,8 +27,8 @@
 @property (weak, nonatomic) IBOutlet UIView *localView;
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loginIndicator;
-@property (weak, nonatomic) IBOutlet UITextField *usernameField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
@@ -40,6 +43,9 @@
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (strong, nonatomic) User *user;
+@property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
+@property (weak, nonatomic) IBOutlet UILabel *signupDescription;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 
 @end
 
@@ -66,12 +72,50 @@
     self.server = server;
 }
 
+#pragma mark - Theme Changes
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    
+    self.usernameField.textColor = [UIColor primaryText];
+    self.usernameField.selectedLineColor = [UIColor brand];
+    self.usernameField.selectedTitleColor = [UIColor brand];
+    self.usernameField.placeholderColor = [UIColor secondaryText];
+    self.usernameField.lineColor = [UIColor secondaryText];
+    self.usernameField.titleColor = [UIColor secondaryText];
+    self.usernameField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.usernameField.iconText = @"\U0000f007";
+    
+    self.passwordField.textColor = [UIColor primaryText];
+    self.passwordField.selectedLineColor = [UIColor brand];
+    self.passwordField.selectedTitleColor = [UIColor brand];
+    self.passwordField.placeholderColor = [UIColor secondaryText];
+    self.passwordField.lineColor = [UIColor secondaryText];
+    self.passwordField.titleColor = [UIColor secondaryText];
+    self.passwordField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.passwordField.iconText = @"\U0000f084";
+
+    self.mageLabel.textColor = [UIColor brand];
+    self.wandLabel.textColor = [UIColor brand];
+    self.loginButton.backgroundColor = [UIColor themedButton];
+    self.showPasswordLabel.textColor = [UIColor secondaryText];
+    self.signupDescription.textColor = [UIColor secondaryText];
+    self.loginStatus.textColor = [UIColor secondaryText];
+    [self.serverURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.versionLabel.textColor = [UIColor secondaryText];
+    [self.signupButton setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    self.showPassword.onTintColor = [UIColor themedButton];
+}
+
+#pragma mark -
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor secondaryColor];
-    self.loginButton.backgroundColor = [UIColor primaryColor];
     
-    [self.loginButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    [self registerForThemeChanges];
+    
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -79,17 +123,7 @@
     tap.delegate = self;
     
     [self.view addGestureRecognizer:tap];
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
     self.wandLabel.text = @"\U0000f0d0";
-    
-    self.usernameField.layer.borderColor = [[UIColor primaryColor] CGColor];
-    self.usernameField.layer.borderWidth = 1.0f;
-    self.usernameField.layer.cornerRadius = 5.0f;
-    
-    self.passwordField.layer.borderColor = [[UIColor primaryColor] CGColor];
-    self.passwordField.layer.borderWidth = 1.0f;
-    self.passwordField.layer.cornerRadius = 5.0f;
     
     self.passwordFont = self.passwordField.font;
 }
@@ -141,8 +175,8 @@
     self.statusView.hidden = NO;
     
     self.loginStatus.text = [errorString isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : errorString;
-    self.usernameField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
-    self.passwordField.textColor = [[UIColor redColor] colorWithAlphaComponent:.65f];
+    self.usernameField.errorMessage = @"Username";
+    self.passwordField.errorMessage = @"Password";
     
     self.loginFailure = YES;
     [self endLogin];
@@ -158,11 +192,11 @@
 }
 
 - (void) resetLogin: (BOOL) clear {
+    self.usernameField.errorMessage = nil;
+    self.passwordField.errorMessage = nil;
     
     self.loginFailure = NO;
     self.statusView.hidden = YES;
-    self.usernameField.textColor = [UIColor blackColor];
-    self.passwordField.textColor = [UIColor blackColor];
     
     if (clear) {
         [self.usernameField setText:@""];
@@ -174,9 +208,7 @@
     [self.loginButton setEnabled:YES];
     [self.loginIndicator stopAnimating];
     [self.usernameField setEnabled:YES];
-    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setEnabled:YES];
-    [self.passwordField setBackgroundColor:[UIColor whiteColor]];
     [self.showPassword setEnabled:YES];
 }
 
@@ -184,9 +216,7 @@
     [self.loginButton setEnabled:NO];
     [self.loginIndicator startAnimating];
     [self.usernameField setEnabled:NO];
-    [self.usernameField setBackgroundColor:[UIColor lightGrayColor]];
     [self.passwordField setEnabled:NO];
-    [self.passwordField setBackgroundColor:[UIColor lightGrayColor]];
     [self.showPassword setEnabled:NO];
 }
 
@@ -287,6 +317,8 @@
     } else {
         textField.text = updatedString;
     }
+    
+    self.usernameField.textColor = self.passwordField.textColor = [UIColor primaryText];
     
     return NO;
 }

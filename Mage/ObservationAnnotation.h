@@ -4,11 +4,10 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "MapAnnotation.h"
-#import <Event.h>
+#import "Event.h"
 
 @interface ObservationAnnotation :  MapAnnotation
 

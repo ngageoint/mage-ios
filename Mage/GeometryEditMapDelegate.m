@@ -7,7 +7,7 @@
 //
 
 #import "GeometryEditMapDelegate.h"
-#import <GPKGMapPoint.h>
+#import "GPKGMapPoint.h"
 #import "MapShapePointAnnotationView.h"
 #import "ObservationShapeStyle.h"
 

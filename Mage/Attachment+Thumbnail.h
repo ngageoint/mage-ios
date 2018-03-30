@@ -5,7 +5,7 @@
 //
 
 #import "Attachment.h"
-#import <FICEntity.h>
+#import "FICEntity.h"
 
 extern NSString *const AttachmentFamily;
 

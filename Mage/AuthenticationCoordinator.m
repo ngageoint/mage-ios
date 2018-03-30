@@ -11,19 +11,19 @@
 #import "SignUpViewController.h"
 #import "GoogleSignUpViewController.h"
 #import "DisclaimerViewController.h"
-#import <MageServer.h>
+#import "MageServer.h"
 #import "Server.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
-#import <UserUtility.h>
+#import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "ServerURLController.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "GoogleAuthentication.h"
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
-#import <Authentication.h>
+#import "Authentication.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate>
 

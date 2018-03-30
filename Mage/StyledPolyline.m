@@ -4,8 +4,9 @@
 //
 //
 
+@import HexColors;
+
 #import "StyledPolyline.h"
-#import <HexColor.h>
 
 @implementation StyledPolyline
 

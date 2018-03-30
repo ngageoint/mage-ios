@@ -5,13 +5,41 @@
 //
 
 #import "ObservationEditTextFieldTableViewCell.h"
-#import <QuartzCore/QuartzCore.h>
+#import "Theme+UIResponder.h"
+@import HexColors;
 
 @interface ObservationEditTextFieldTableViewCell ()
 @property (strong, nonatomic) NSString *value;
 @end
 
 @implementation ObservationEditTextFieldTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    
+    self.textField.textColor = [UIColor primaryText];
+    self.textField.selectedLineColor = [UIColor brand];
+    self.textField.selectedTitleColor = [UIColor brand];
+    self.textField.placeholderColor = [UIColor secondaryText];
+    self.textField.lineColor = [UIColor secondaryText];
+    self.textField.titleColor = [UIColor secondaryText];
+    self.textField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.textField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.textField.iconText = @"\U0000f044";
+    if (self.fieldDefinition && [[self.fieldDefinition objectForKey:@"type"] isEqualToString:@"password"] ) {
+        self.textField.iconText = @"\U0000f084";
+    } else if (self.fieldDefinition && [[self.fieldDefinition objectForKey:@"type"] isEqualToString:@"email"] ) {
+        self.textField.iconText = @"\U0000f0e0";
+    }
+    self.textField.iconColor = [UIColor secondaryText];
+    UIToolbar *toolbar = (UIToolbar *)self.textField.inputAccessoryView;
+    toolbar.tintColor = [UIColor flatButton];
+    toolbar.barTintColor = [UIColor dialog];
+}
+
+- (void) didMoveToSuperview {
+    [self registerForThemeChanges];
+}
 
 - (void) awakeFromNib {
     [super awakeFromNib];
@@ -30,8 +58,7 @@
     [self.textField setText:value];    
     self.value = self.textField.text;
     
-    [self.keyLabel setText:[field objectForKey:@"title"]];
-    [self.requiredIndicator setHidden: ![[field objectForKey: @"required"] boolValue]];
+    self.textField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
 }
 
 - (void) selectRow {
@@ -62,15 +89,10 @@
 
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
-        
     if (valid) {
-        self.textField.layer.borderColor = nil;
-        self.textField.layer.borderWidth = 0.0f;
+        self.textField.errorMessage = nil;
     } else {
-        self.textField.layer.cornerRadius = 4.0f;
-        self.textField.layer.masksToBounds = YES;
-        self.textField.layer.borderColor = [[UIColor redColor] CGColor];
-        self.textField.layer.borderWidth = 1.0f;
+        self.textField.errorMessage = self.textField.placeholder;
     }
 };
 

@@ -6,8 +6,9 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import HexColors;
+
 #import "ObservationShapeStyle.h"
-#import <HexColor.h>
 
 @implementation ObservationShapeStyle
 

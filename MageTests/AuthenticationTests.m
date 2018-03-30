@@ -6,19 +6,18 @@
 //  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+@import OHHTTPStubs;
+
 #import <XCTest/XCTest.h>
-#import <OHHTTPStubs.h>
-#import <OHHTTPStubsResponse+JSON.h>
-#import <OHPathHelpers.h>
-#import <OCMock.h>
+#import <OCMock/OCMock.h>
 #import "AuthenticationCoordinator.h"
 #import "ServerURLController.h"
 #import "LoginViewController.h"
 #import "DisclaimerViewController.h"
-#import <MageSessionManager.h>
-#import <StoredPassword.h>
-#import <Observation.h>
-#import <Authentication.h>
+#import "MageSessionManager.h"
+#import "StoredPassword.h"
+#import "Observation.h"
+#import "Authentication.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
 
@@ -296,6 +295,7 @@
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSLog(@"api request recieved and handled");
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
         return [OHHTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];

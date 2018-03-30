@@ -8,7 +8,7 @@
 #import "UINavigationItem+Subtitle.h"
 #import "TimeFilter.h"
 #import "ObservationTableViewCell.h"
-#import <Observation.h>
+#import "Observation.h"
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "AttachmentViewController.h"
@@ -16,12 +16,12 @@
 #import "User.h"
 #import "ObservationEditViewController.h"
 #import "MageSessionManager.h"
-#import <LocationService.h>
+#import "LocationService.h"
 #import "Filter.h"
 #import "Observations.h"
 #import "WKBPoint.h"
 #import "ObservationEditCoordinator.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
 
@@ -32,15 +32,27 @@
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 
-
 @end
 
 @implementation ObservationTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.refreshControl.backgroundColor = [UIColor background];
+    self.refreshControl.tintColor = [UIColor brand];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    [self setNavBarTitle];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView.backgroundView = nil;
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationCell" bundle:nil] forCellReuseIdentifier:@"obsCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TableSectionHeader" bundle:nil] forHeaderFooterViewReuseIdentifier:@"TableSectionHeader"];
     // this is different on the ipad on and the iphone so make the check here
     if (self.observationDataStore.observationSelectionDelegate == nil) {
         self.observationDataStore.observationSelectionDelegate = self;
@@ -49,10 +61,8 @@
     self.observationDataStore.viewController = self;
     
     self.childCoordinators = [[NSMutableArray alloc] init];
-    
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor mageBlue];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    
     [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
     NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
                                                                 forKey:NSForegroundColorAttributeName];
@@ -65,6 +75,7 @@
     if ([self isForceTouchAvailable]) {
         self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
     }
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -107,6 +118,9 @@
                   context:NULL];
     
     [self startUpdateTimer];
+    
+    [self registerForThemeChanges];
+
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

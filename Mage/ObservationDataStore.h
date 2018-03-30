@@ -8,7 +8,7 @@
 #import "ObservationTableViewCell.h"
 #import "Observations.h"
 #import "ObservationSelectionDelegate.h"
-#import <Event.h>
+#import "Event.h"
 
 @interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, ObservationActionsDelegate>
 

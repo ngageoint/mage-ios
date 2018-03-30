@@ -8,7 +8,8 @@
 #import "WKBGeometry.h"
 #import "WKBGeometryUtils.h"
 #import "MapDelegate.h"
-#import <GPKGMapShapeConverter.h>
+#import "GPKGMapShapeConverter.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationGeometryTableViewCell ()
 
@@ -17,6 +18,13 @@
 @end
 
 @implementation ObservationGeometryTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.valueTextView.textColor = [UIColor primaryText];
+    self.keyLabel.textColor = [UIColor secondaryText];
+    [UIColor themeMap:self.map];
+}
 
 - (void) populateCellWithKey:(id) key andValue:(id) value {
     
@@ -58,7 +66,7 @@
         self.valueTextView.text = [NSString stringWithFormat:@"%@", geoString];
     }
     self.keyLabel.text = [NSString stringWithFormat:@"%@", key];
-
+    [self registerForThemeChanges];
 }
 
 @end

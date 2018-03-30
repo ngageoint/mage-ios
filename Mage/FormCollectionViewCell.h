@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *formNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *markerView;
 @property (weak, nonatomic) IBOutlet UIView *circleView;
+@property (strong, nonatomic) NSDictionary *form;
 
 - (void) configureCellForForm: (NSDictionary *) form;
 

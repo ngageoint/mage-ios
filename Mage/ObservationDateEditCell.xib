@@ -19,47 +19,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxY-D7-9jD">
-                        <rect key="frame" x="16" y="1" width="52.5" height="21"/>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ChC-G2-U2R" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                        <rect key="frame" x="16" y="11" width="343" height="45"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="Y24-IZ-jLi"/>
+                            <constraint firstAttribute="height" constant="45" id="PxC-tw-Nad"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ChC-G2-U2R">
-                        <rect key="frame" x="16" y="25" width="343" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtf-4T-FhV">
-                        <rect key="frame" x="8" y="0.0" width="7" height="21"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="U03-eJ-c7k"/>
-                            <constraint firstAttribute="width" constant="7" id="iuN-xF-sHL"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="xxY-D7-9jD" firstAttribute="top" secondItem="AyA-ot-2MN" secondAttribute="top" constant="1" id="GxL-nx-K4g"/>
+                    <constraint firstAttribute="bottom" secondItem="ChC-G2-U2R" secondAttribute="bottom" constant="8.5" id="8io-bT-tkx"/>
                     <constraint firstItem="ChC-G2-U2R" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leadingMargin" id="S6C-0N-sSy"/>
-                    <constraint firstItem="wtf-4T-FhV" firstAttribute="top" secondItem="AyA-ot-2MN" secondAttribute="top" id="e1x-fZ-9sH"/>
-                    <constraint firstAttribute="bottom" secondItem="ChC-G2-U2R" secondAttribute="bottom" constant="9.5" id="idB-8f-brO"/>
-                    <constraint firstItem="xxY-D7-9jD" firstAttribute="leading" secondItem="wtf-4T-FhV" secondAttribute="trailing" constant="1" id="j5M-hI-5Py"/>
-                    <constraint firstItem="ChC-G2-U2R" firstAttribute="top" secondItem="xxY-D7-9jD" secondAttribute="bottom" constant="3" id="tkb-Yf-ICT"/>
-                    <constraint firstItem="wtf-4T-FhV" firstAttribute="leading" secondItem="AyA-ot-2MN" secondAttribute="leadingMargin" constant="-8" id="yyU-hL-gcq"/>
+                    <constraint firstItem="ChC-G2-U2R" firstAttribute="top" secondItem="AyA-ot-2MN" secondAttribute="top" constant="11" id="WTN-Z6-O0h"/>
                     <constraint firstAttribute="trailingMargin" secondItem="ChC-G2-U2R" secondAttribute="trailing" id="zE1-td-YXt"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
-                <outlet property="keyLabel" destination="xxY-D7-9jD" id="RqM-dD-ws7"/>
-                <outlet property="requiredIndicator" destination="wtf-4T-FhV" id="HIA-zr-xj6"/>
                 <outlet property="textField" destination="ChC-G2-U2R" id="iG6-SI-akT"/>
             </connections>
         </tableViewCell>

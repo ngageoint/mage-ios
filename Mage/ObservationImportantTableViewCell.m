@@ -11,6 +11,7 @@
 #import "Role.h"
 #import "ObservationImportant.h"
 #import "NSDate+display.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationImportantTableViewCell()
 
@@ -20,10 +21,20 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *importantActions;
+@property (weak, nonatomic) IBOutlet UIButton *updateButton;
+@property (weak, nonatomic) IBOutlet UIButton *removeButton;
 
 @end
 
 @implementation ObservationImportantTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.backgroundColor = [UIColor dialog];
+    self.userLabel.textColor = [UIColor primaryText];
+    self.descriptionLabel.textColor = [UIColor primaryText];
+    self.dateLabel.textColor = [UIColor secondaryText];
+    [self.updateButton setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -44,6 +55,8 @@
     self.descriptionLabel.text = important.reason;
     
     self.importantActions.hidden = ![observation currentUserCanUpdateImportant];
+    
+    [self registerForThemeChanges];
 }
 
 - (IBAction) onRemoveImportantTapped:(id)sender {

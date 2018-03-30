@@ -6,12 +6,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GeometryEditViewController">
             <connections>
                 <outlet property="bottomConstraint" destination="cJV-Zy-Tab" id="Ioh-if-Gdw"/>
+                <outlet property="fieldEntryBackground" destination="HDS-JB-Gt9" id="VEj-Eh-moK"/>
                 <outlet property="latitudeField" destination="l11-wK-EQI" id="033-YE-GEb"/>
                 <outlet property="lineButton" destination="oMU-AT-4g8" id="PsI-LD-1Sb"/>
                 <outlet property="longitudeField" destination="mBQ-mB-CtT" id="rng-BI-EhC"/>
@@ -129,60 +131,42 @@
                         <action selector="rectangleButtonClick:" destination="-1" eventType="touchUpInside" id="TA0-ck-pcM"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HDS-JB-Gt9">
-                    <rect key="frame" x="0.0" y="549" width="375" height="118"/>
+                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HDS-JB-Gt9">
+                    <rect key="frame" x="0.0" y="546" width="375" height="121"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bus-sy-6Qo">
-                            <rect key="frame" x="8" y="8" width="73" height="21"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l11-wK-EQI" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                            <rect key="frame" x="8" y="8" width="359" height="45"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="21" id="E5A-DX-8M9"/>
-                                <constraint firstAttribute="width" constant="73" id="bsS-EC-6kP"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l11-wK-EQI">
-                            <rect key="frame" x="8" y="28" width="359" height="30"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="18i-3G-RMv"/>
+                                <constraint firstAttribute="height" constant="45" id="18i-3G-RMv"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Latitude"/>
+                            </userDefinedRuntimeAttributes>
                         </textField>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abG-gz-Fe5">
-                            <rect key="frame" x="8" y="60" width="73" height="21"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mBQ-mB-CtT" userLabel="Longitude Field" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                            <rect key="frame" x="8" y="60" width="359" height="45"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="21" id="VPJ-Ze-hdt"/>
-                                <constraint firstAttribute="width" constant="73" id="h2Q-Al-oky"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mBQ-mB-CtT" userLabel="Longitude Field">
-                            <rect key="frame" x="8" y="80" width="359" height="30"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="EVM-kN-h9f"/>
+                                <constraint firstAttribute="height" constant="45" id="EVM-kN-h9f"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Longitude"/>
+                            </userDefinedRuntimeAttributes>
                         </textField>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="mBQ-mB-CtT" firstAttribute="top" secondItem="abG-gz-Fe5" secondAttribute="bottom" constant="-1" id="5KR-e5-uZe"/>
-                        <constraint firstItem="bus-sy-6Qo" firstAttribute="top" secondItem="HDS-JB-Gt9" secondAttribute="top" constant="8" id="95c-0G-olS"/>
-                        <constraint firstItem="bus-sy-6Qo" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="DdP-OO-G7d"/>
-                        <constraint firstAttribute="bottom" secondItem="mBQ-mB-CtT" secondAttribute="bottom" constant="8" id="HkP-CN-dhk"/>
-                        <constraint firstItem="abG-gz-Fe5" firstAttribute="top" secondItem="bus-sy-6Qo" secondAttribute="bottom" constant="31" id="P2i-kP-HRt"/>
+                        <constraint firstItem="mBQ-mB-CtT" firstAttribute="top" secondItem="l11-wK-EQI" secondAttribute="bottom" constant="7" id="7Oj-4G-Vqm"/>
+                        <constraint firstAttribute="bottomMargin" secondItem="mBQ-mB-CtT" secondAttribute="bottom" constant="8" id="HkP-CN-dhk"/>
                         <constraint firstItem="mBQ-mB-CtT" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="aPB-rL-6EQ"/>
                         <constraint firstAttribute="trailing" secondItem="mBQ-mB-CtT" secondAttribute="trailing" constant="8" id="kpZ-RT-vBh"/>
-                        <constraint firstItem="abG-gz-Fe5" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="nO0-cy-QUW"/>
                         <constraint firstAttribute="trailing" secondItem="l11-wK-EQI" secondAttribute="trailing" constant="8" id="ofU-aV-QKd"/>
-                        <constraint firstItem="l11-wK-EQI" firstAttribute="top" secondItem="bus-sy-6Qo" secondAttribute="bottom" constant="-1" id="uaB-if-VBe"/>
+                        <constraint firstItem="l11-wK-EQI" firstAttribute="top" secondItem="HDS-JB-Gt9" secondAttribute="top" constant="8" id="pns-nc-GcX"/>
                         <constraint firstItem="l11-wK-EQI" firstAttribute="leading" secondItem="HDS-JB-Gt9" secondAttribute="leading" constant="8" id="w1d-Gx-S2g"/>
                     </constraints>
                 </view>

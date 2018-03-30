@@ -10,7 +10,14 @@
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
+
+@interface EventChooserController()
+
+@property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@end
 
 @implementation EventChooserController
 
@@ -29,12 +36,20 @@ BOOL eventsFetched = NO;
     return self;
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.loadingView.backgroundColor = [UIColor background];
+    self.chooseEventTitle.textColor = [UIColor brand];
+    self.actionButton.backgroundColor = [UIColor themedButton];
+    self.loadingLabel.textColor = [UIColor brand];
+    self.activityIndicator.color = [UIColor brand];
+    
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.loadingView.backgroundColor = [UIColor whiteColor];
-    self.actionButton.backgroundColor = [UIColor primaryColor];
-    [self.actionButton setTitleColor:[UIColor secondaryColor] forState:UIControlStateNormal];
+    [self registerForThemeChanges];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
@@ -84,10 +99,10 @@ BOOL eventsFetched = NO;
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
         messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
-        messageLabel.textColor = [UIColor primaryColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];
+        messageLabel.textColor = [UIColor secondaryText];
         [messageLabel sizeToFit];
         
         UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];

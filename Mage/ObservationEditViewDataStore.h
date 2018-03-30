@@ -4,8 +4,7 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#import <Observation.h>
+#import "Observation.h"
 #import "ObservationEditListener.h"
 #import "AttachmentSelectionDelegate.h"
 #import "ObservationAnnotationChangedDelegate.h"
