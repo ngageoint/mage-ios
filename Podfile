@@ -12,7 +12,7 @@ target 'MAGE' do
     pod 'HexColors', '~> 2.2.1'
     pod 'GoogleSignIn'
     #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '2.0.1'
-    pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'dark-theme'
+    pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'develop'
     #pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
