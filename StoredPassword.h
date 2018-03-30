@@ -12,6 +12,7 @@
 + (NSString *) persistTokenToKeyChain: (NSString *) token;
 
 + (void) clearToken;
++ (void) clearPassword;
 
 + (NSString *) retrieveStoredPassword;
 + (NSString *) persistPasswordToKeyChain: (NSString *) password;

@@ -4,7 +4,7 @@
 //
 //
 
-#import <AFNetworking.h>
+@import AFNetworking;
 
 extern NSString * const kAttachmentBackgroundSessionIdentifier;
 

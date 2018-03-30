@@ -26,6 +26,10 @@ static NSString * const kKeyChainToken = @"mil.nga.mage.token";
     [StoredPassword deleteItemWithService:kKeyChainToken];
 }
 
++ (void) clearPassword {
+    [StoredPassword deleteItemWithService:kKeyChainPassword];
+}
+
 + (NSString *) retrieveStoredPassword {
     return [StoredPassword retrieveStoredItemWithService:kKeyChainPassword];
 }

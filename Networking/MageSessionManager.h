@@ -4,8 +4,9 @@
 //
 //
 
+@import AFNetworking;
+
 #import <Foundation/Foundation.h>
-#import <AFNetworking.h>
 #import "TaskSessionManager.h"
 #import "SessionTask.h"
 

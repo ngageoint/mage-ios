@@ -35,14 +35,14 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
 
 @implementation MageSessionManager
 
-static MageSessionManager *managerSingleton = nil;
-
-+ (MageSessionManager *) manager {
++(MageSessionManager *)manager
+{
+    static MageSessionManager *managerSingleton = nil;
+    static dispatch_once_t pred;
+    dispatch_once(&pred, ^{
+        managerSingleton = ([[MageSessionManager alloc] init]);
+    });
     
-    if (managerSingleton == nil) {
-        managerSingleton = [[self alloc] init];
-    }
-
     return managerSingleton;
 }
 

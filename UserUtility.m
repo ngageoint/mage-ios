@@ -4,8 +4,9 @@
 //
 //
 
+@import DateTools;
+
 #import "UserUtility.h"
-#import <NSDate+DateTools.h>
 #import "MageSessionManager.h"
 #import <StoredPassword.h>
 
