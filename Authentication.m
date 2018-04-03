@@ -8,6 +8,7 @@
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
 #import "GoogleAuthentication.h"
+#import "OAuthAuthentication.h"
 
 @interface Authentication ()
 
@@ -25,6 +26,9 @@
         }
         case GOOGLE: {
             return [[GoogleAuthentication alloc] init];
+        }
+        case OAUTH2: {
+            return [[OAuthAuthentication alloc] init];
         }
 		default: {
 			return nil;
@@ -49,6 +53,7 @@
                       [NSNumber numberWithInteger:LOCAL], @"local",
                       [NSNumber numberWithInteger:SERVER], @"server",
                       [NSNumber numberWithInteger:GOOGLE], @"google",
+                      [NSNumber numberWithInteger:OAUTH2], @"oauth2",
                       nil];
     });
     
@@ -63,6 +68,7 @@
                       @"local", [NSNumber numberWithInteger:LOCAL],
                       @"server", [NSNumber numberWithInteger:SERVER],
                       @"google", [NSNumber numberWithInteger:GOOGLE],
+                      @"oauth2", [NSNumber numberWithInteger:OAUTH2],
                       nil];
     });
     

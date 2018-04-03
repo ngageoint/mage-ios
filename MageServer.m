@@ -73,6 +73,18 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     return [strategies objectForKey:@"google"] != nil;
 }
 
+- (NSArray *) getOauthStrategies {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
+    NSMutableArray *oauthStrategies = [[NSMutableArray alloc] init];
+    [strategies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([[obj objectForKey:@"type"] isEqualToString:@"oauth2"]) {
+            [oauthStrategies addObject:@{@"identifier": key, @"strategy": obj}];
+        }
+    }];
+    return oauthStrategies;
+}
+
 + (BOOL) checkServerCompatibility: (NSDictionary *) api {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     

@@ -16,6 +16,7 @@
 + (NSURL *) baseURL;
 - (BOOL) serverHasLocalAuthenticationStrategy;
 - (BOOL) serverHasGoogleAuthenticationStrategy;
+- (NSArray *) getOauthStrategies;
 
 + (BOOL) checkServerCompatibility: (NSDictionary *) api;
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api;

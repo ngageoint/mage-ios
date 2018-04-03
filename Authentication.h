@@ -9,7 +9,8 @@
 typedef NS_ENUM(NSInteger, AuthenticationType) {
 	LOCAL,
     SERVER,
-    GOOGLE
+    GOOGLE,
+    OAUTH2
 };
 
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
