@@ -10,6 +10,8 @@
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "GoogleSignUpViewController.h"
+#import "OAuthLoginView.h"
+#import "OAuthViewController.h"
 #import "DisclaimerViewController.h"
 #import "MageServer.h"
 #import "Server.h"
@@ -25,7 +27,7 @@
 #import "AppDelegate.h"
 #import "Authentication.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate, OAuthButtonDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
@@ -159,6 +161,12 @@ BOOL signingIn = YES;
     }];
 }
 
+- (void) signinForStrategy:(NSDictionary *)strategy {
+    NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
+    OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN];
+    [self.navigationController pushViewController:ovc animated:YES];
+}
+
 - (void) startLoginOnly {
     NSURL *url = [MageServer baseURL];
     __weak __typeof__(self) weakSelf = self;
@@ -231,6 +239,7 @@ BOOL signingIn = YES;
 
 - (void) setServerURL:(NSURL *)url {
     __weak __typeof__(self) weakSelf = self;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         [MagicalRecord deleteAndSetupMageCoreDataStack];
         dispatch_async(dispatch_get_main_queue(), ^{

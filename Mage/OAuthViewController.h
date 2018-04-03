@@ -12,8 +12,11 @@
 
 @interface OAuthViewController : UIViewController
 
-@property (weak, nonatomic) NSString *url;
-@property (weak, nonatomic) MageServer *server;
+@property (strong, nonatomic) NSString *url;
+@property (strong, nonatomic) MageServer *server;
 @property (assign, nonatomic) AuthenticationType authenticationType;
 @property (assign, nonatomic) OAuthRequestType requestType;
+
+- (instancetype) initWithUrl: (NSString *) url andAuthenticationType: (AuthenticationType) authenticationType andRequestType: (OAuthRequestType) requestType;
+
 @end

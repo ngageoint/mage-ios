@@ -17,6 +17,15 @@
 
 @implementation OAuthViewController
 
+- (instancetype) initWithUrl: (NSString *) url andAuthenticationType: (AuthenticationType) authenticationType andRequestType: (OAuthRequestType) requestType {
+    if (self = [super init]) {
+        self.url = url;
+        self.authenticationType = authenticationType;
+        self.requestType = requestType;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

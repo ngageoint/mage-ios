@@ -16,11 +16,11 @@
 #import "DeviceUUID.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "Theme+UIResponder.h"
+#import "OAuthLoginView.h"
 
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-@property (weak, nonatomic) IBOutlet UIView *googleInstructionView;
 @property (weak, nonatomic) IBOutlet UIButton *serverURL;
 @property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
@@ -40,18 +40,19 @@
 @property (nonatomic) BOOL allowLogin;
 @property (nonatomic) BOOL loginFailure;
 @property (strong, nonatomic) UIFont *passwordFont;
-@property (strong, nonatomic) id<LoginDelegate> delegate;
+@property (strong, nonatomic) id<LoginDelegate, OAuthButtonDelegate> delegate;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *signupDescription;
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 
 @end
 
 @implementation LoginViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate>) delegate {
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, OAuthButtonDelegate>) delegate {
     self = [super initWithNibName:@"LoginView" bundle:nil];
     if (!self) return nil;
     
@@ -342,9 +343,17 @@
         [GIDSignIn sharedInstance].uiDelegate = self;
     }
     
-    self.googleView.hidden = self.googleInstructionView.hidden = !googleAuthentication;
-    self.localView.hidden = !localAuthentication;
-    self.dividerView.hidden = !(googleAuthentication && localAuthentication);
+    NSArray *oauthStrategies = [self.server getOauthStrategies];
+    
+    for (NSDictionary *oauthStrategy in oauthStrategies) {
+        OAuthLoginView *view = [[OAuthLoginView alloc] init];
+        view.strategy = oauthStrategy;
+        view.delegate = self.delegate;
+        [self.loginsStackView insertArrangedSubview:view atIndex:0];
+    }
+    
+    self.googleView.hidden = !googleAuthentication;
+    self.localView.hidden = self.dividerView.hidden = !localAuthentication;
     self.statusView.hidden = !(!self.allowLogin || self.loginFailure);
 }
 
