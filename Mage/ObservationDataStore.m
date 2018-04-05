@@ -225,7 +225,10 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     
-    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?ll=%f,%f&q=%@", observation.location.coordinate.latitude, observation.location.coordinate.longitude, [observation primaryFieldText]]];
+    SString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", observation.location.coordinate.latitude, observation.location.coordinate.longitude, [observation primaryFieldText]];
+    NSString *appleMapsQueryStringEncoded = [appleMapsQueryString stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?%@", appleMapsQueryStringEncoded]];
+    
     NSURL *googleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.com/maps/dir/?api=1&destination=%f,%f", observation.location.coordinate.latitude, observation.location.coordinate.longitude]];
     
     NSMutableDictionary *urlMap = [[NSMutableDictionary alloc] init];

@@ -426,7 +426,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void)observationDirectionsTapped:(id)sender {
-    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFieldText]]];
+    
+    NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFieldText]];
+    NSString *appleMapsQueryStringEncoded = [appleMapsQueryString stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?%@", appleMapsQueryStringEncoded]];
     NSURL *googleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.com/maps/dir/?api=1&destination=%f,%f", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude]];
     
     NSMutableDictionary *urlMap = [[NSMutableDictionary alloc] init];
