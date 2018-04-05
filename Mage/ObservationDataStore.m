@@ -225,7 +225,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tableViewCell];
     Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
     
-    SString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", observation.location.coordinate.latitude, observation.location.coordinate.longitude, [observation primaryFieldText]];
+    NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", observation.location.coordinate.latitude, observation.location.coordinate.longitude, [observation primaryFieldText]];
     NSString *appleMapsQueryStringEncoded = [appleMapsQueryString stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?%@", appleMapsQueryStringEncoded]];
     
