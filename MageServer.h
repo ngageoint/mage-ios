@@ -17,6 +17,7 @@
 - (BOOL) serverHasLocalAuthenticationStrategy;
 - (BOOL) serverHasGoogleAuthenticationStrategy;
 - (NSArray *) getOauthStrategies;
+- (NSArray *) getStrategies;
 
 + (BOOL) checkServerCompatibility: (NSDictionary *) api;
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api;

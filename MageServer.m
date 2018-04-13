@@ -38,6 +38,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                     [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
                 } else if ([authenticationType isEqualToString:@"local"]) {
                     [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
+                } else if ([authenticationType isEqualToString:@"login-gov"]) {
+                    [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
                 }
             }
             NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
@@ -71,6 +73,20 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
     return [strategies objectForKey:@"google"] != nil;
+}
+
+- (NSArray *) getStrategies {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *defaultStrategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
+    NSMutableArray *strategies = [[NSMutableArray alloc] init];
+    [defaultStrategies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([key isEqualToString:@"local"]) {
+            [strategies addObject:@{@"identifier": key, @"strategy": obj}];
+        } else {
+            [strategies insertObject:@{@"identifier": key, @"strategy": obj} atIndex:0];
+        }
+    }];
+    return strategies;
 }
 
 - (NSArray *) getOauthStrategies {
@@ -136,6 +152,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
             } else if ([authenticationType isEqualToString:@"local"]) {
                 [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
+            } else if ([authenticationType isEqualToString:@"login-gov"]) {
+                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
             }
         }
         NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];

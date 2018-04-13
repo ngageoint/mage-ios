@@ -82,7 +82,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *api = [self.response objectForKey:@"api"];
     
-    if ([api valueForKey:@"disclaimer"]) {
+    if ([api objectForKey:@"disclaimer"] != NULL && [api valueForKey:@"disclaimer"]) {
         [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
