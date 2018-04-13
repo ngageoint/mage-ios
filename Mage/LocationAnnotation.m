@@ -4,11 +4,13 @@
 //
 //
 
+@import DateTools;
+
 #import "LocationAnnotation.h"
 #import "User.h"
-#import "NSDate+DateTools.h"
 #import "MKAnnotationView+PersonIcon.h"
 #import "WKBGeometryUtils.h"
+#import "Theme+UIResponder.h"
 
 @implementation LocationAnnotation
 
@@ -40,7 +42,7 @@
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
+        rightButton.tintColor = [UIColor flatButton];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {
         annotationView.annotation = self;

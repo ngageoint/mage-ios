@@ -21,9 +21,9 @@
 #import "ExternalDevice.h"
 #import "AttachmentViewController.h"
 #import "MapUtils.h"
-#import <WKBLineString.h>
+#import "WKBLineString.h"
 #import "GeometryEditCoordinator.h"
-#import <ObservationImage.h>
+#import "ObservationImage.h"
 
 @interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate>
 

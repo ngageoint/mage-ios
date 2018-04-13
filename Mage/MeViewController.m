@@ -4,6 +4,8 @@
 //
 //
 
+@import AFNetworking;
+
 #import "MeViewController.h"
 #import "UIImage+Resize.h"
 #import "ManagedObjectContextHolder.h"
@@ -17,15 +19,14 @@
 #import "Location.h"
 #import "ObservationDataStore.h"
 #import "AttachmentViewController.h"
-#import <AFNetworking.h>
-#import <AFNetworking/UIImageView+AFNetworking.h>
-#import <MageServer.h>
-#import <MageSessionManager.h>
+#import "MageServer.h"
+#import "MageSessionManager.h"
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
 #import "AttachmentSelectionDelegate.h"
 #import "WKBGeometryUtils.h"
 #import "ObservationViewController.h"
+#import "Theme+UIResponder.h"
 
 @import PhotosUI;
 
@@ -40,6 +41,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *phoneNumber;
 @property (weak, nonatomic) IBOutlet UIView *emailView;
 @property (weak, nonatomic) IBOutlet UITextView *email;
+@property (weak, nonatomic) IBOutlet UIImageView *emailIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *phoneIcon;
+@property (weak, nonatomic) IBOutlet UIView *avatarBorder;
 
 @property (assign, nonatomic) BOOL currentUserIsMe;
 @property (nonatomic, strong) id previewingContext;
@@ -48,6 +52,20 @@
 
 @implementation MeViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor background];
+    self.name.textColor = [UIColor primaryText];
+    self.emailIcon.tintColor = [UIColor activeIcon];
+    self.phoneIcon.tintColor = [UIColor activeIcon];
+    self.avatar.tintColor = [UIColor inactiveIcon];
+    self.avatarBorder.backgroundColor = [UIColor background];
+    self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
+    self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
+    [UIColor themeMap:self.map];
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -75,6 +93,8 @@
     if ([self isForceTouchAvailable]) {
         self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
     }
+    
+    [self registerForThemeChanges];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

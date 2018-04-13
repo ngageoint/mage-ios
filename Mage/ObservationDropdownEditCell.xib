@@ -1,69 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="50" id="EuB-7a-3rg" customClass="ObservationEditSelectTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dropdown" rowHeight="65" id="ise-ZG-BEv" customClass="ObservationEditSelectTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EuB-7a-3rg" id="6az-3Z-Ebq">
-                <rect key="frame" x="0.0" y="0.0" width="341" height="49.5"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ise-ZG-BEv" id="DSX-FG-KA4">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Dropdown key" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJv-fQ-3Pm">
-                        <rect key="frame" x="16" y="1" width="317" height="21"/>
+                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="o7O-l2-VFm" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                        <rect key="frame" x="16" y="9" width="343" height="46.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="65d-wM-NMw"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="oJ8-gK-rd3"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thJ-jD-bdd">
-                        <rect key="frame" x="8" y="0.0" width="7" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoo-6s-g4Q">
-                        <rect key="frame" x="16" y="20" width="317" height="21"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="Ui6-zZ-USt"/>
-                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Select"/>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="delegate" destination="ise-ZG-BEv" id="snM-5F-GGl"/>
+                        </connections>
+                    </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hVx-yi-rKa">
+                        <rect key="frame" x="38" y="26" width="321" height="23.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="xoo-6s-g4Q" secondAttribute="trailing" id="0al-Bf-CeS"/>
-                    <constraint firstItem="thJ-jD-bdd" firstAttribute="leading" secondItem="6az-3Z-Ebq" secondAttribute="leadingMargin" constant="-8" id="3Sc-EK-1NQ"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="bJv-fQ-3Pm" secondAttribute="trailing" id="653-KX-Ous"/>
-                    <constraint firstAttribute="bottom" secondItem="xoo-6s-g4Q" secondAttribute="bottom" constant="8.5" id="FJR-Wt-JEm"/>
-                    <constraint firstItem="xoo-6s-g4Q" firstAttribute="top" secondItem="bJv-fQ-3Pm" secondAttribute="bottom" constant="-2" id="Psf-Tu-Hnb"/>
-                    <constraint firstItem="bJv-fQ-3Pm" firstAttribute="leading" secondItem="thJ-jD-bdd" secondAttribute="trailing" constant="1" id="c8x-WY-Run"/>
-                    <constraint firstItem="thJ-jD-bdd" firstAttribute="top" secondItem="6az-3Z-Ebq" secondAttribute="top" id="dIy-QU-X9G"/>
-                    <constraint firstItem="xoo-6s-g4Q" firstAttribute="leading" secondItem="6az-3Z-Ebq" secondAttribute="leadingMargin" id="gqk-9P-woD"/>
-                    <constraint firstItem="bJv-fQ-3Pm" firstAttribute="top" secondItem="6az-3Z-Ebq" secondAttribute="top" constant="1" id="qZ4-xK-fD4"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="o7O-l2-VFm" secondAttribute="trailing" id="5Wp-7d-eA6"/>
+                    <constraint firstItem="o7O-l2-VFm" firstAttribute="top" secondItem="DSX-FG-KA4" secondAttribute="top" constant="9" id="DLG-HW-gtW"/>
+                    <constraint firstItem="o7O-l2-VFm" firstAttribute="bottom" secondItem="hVx-yi-rKa" secondAttribute="bottom" constant="6" id="DR7-C2-uMB"/>
+                    <constraint firstItem="o7O-l2-VFm" firstAttribute="leading" secondItem="DSX-FG-KA4" secondAttribute="leadingMargin" id="Lcc-La-3pn"/>
+                    <constraint firstItem="hVx-yi-rKa" firstAttribute="trailing" secondItem="o7O-l2-VFm" secondAttribute="trailing" id="QII-MY-F2p"/>
+                    <constraint firstItem="hVx-yi-rKa" firstAttribute="leading" secondItem="o7O-l2-VFm" secondAttribute="leading" constant="22" id="bYk-xN-OYf"/>
+                    <constraint firstAttribute="bottom" secondItem="hVx-yi-rKa" secondAttribute="bottom" constant="15" id="lKn-pD-ySc"/>
+                    <constraint firstItem="hVx-yi-rKa" firstAttribute="top" secondItem="o7O-l2-VFm" secondAttribute="top" constant="17" id="uxs-9h-Vo2"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
-                <outlet property="keyLabel" destination="bJv-fQ-3Pm" id="NRK-TQ-3LN"/>
-                <outlet property="requiredIndicator" destination="thJ-jD-bdd" id="cSI-Ja-7G5"/>
-                <outlet property="valueField" destination="xoo-6s-g4Q" id="F4i-mV-Fx1"/>
+                <outlet property="labelField" destination="hVx-yi-rKa" id="o4S-r8-8kB"/>
+                <outlet property="valueField" destination="o7O-l2-VFm" id="AeB-Qq-uvt"/>
             </connections>
-            <point key="canvasLocation" x="33.5" y="54"/>
+            <point key="canvasLocation" x="93" y="79"/>
         </tableViewCell>
     </objects>
 </document>

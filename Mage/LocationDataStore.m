@@ -4,11 +4,12 @@
 //
 //
 
+@import DateTools;
+
 #import "LocationDataStore.h"
 #import "PersonTableViewCell.h"
 #import "Location.h"
 #import "Locations.h"
-#import "NSDate+DateTools.h"
 
 @interface LocationDataStore ()
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;

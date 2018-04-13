@@ -6,8 +6,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import <GPSLocation.h>
-#import <User.h>
+#import "GPSLocation.h"
+#import "User.h"
 #import "MapAnnotation.h"
 
 @interface GPSLocationAnnotation : MapAnnotation

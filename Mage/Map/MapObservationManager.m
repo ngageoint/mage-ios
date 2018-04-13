@@ -38,15 +38,19 @@
     return [self addToMapWithObservation:observation andHidden:NO];
 }
 
--(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden{
-    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:hidden];
+-(MapObservation *) addToMapWithObservation:(Observation *)observation andAnimateDrop: (BOOL) animateDrop {
+    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:NO andAnimateDrop:animateDrop];
 }
 
--(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry{
-    return [self addToMapWithObservation:observation withGeometry:geometry andHidden:NO];
+-(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden {
+    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:hidden andAnimateDrop:YES];
 }
 
--(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden{
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry {
+    return [self addToMapWithObservation:observation withGeometry:geometry andHidden:NO andAnimateDrop:YES];
+}
+
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden andAnimateDrop: (BOOL) animateDrop {
     
     MapObservation *observationShape = nil;
     
@@ -54,6 +58,7 @@
         
         ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andGeometry:geometry];
         annotation.view.layer.zPosition = [observation.timestamp timeIntervalSinceReferenceDate];
+        annotation.animateDrop = animateDrop;
         [_mapView addAnnotation:annotation];
         
         observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];

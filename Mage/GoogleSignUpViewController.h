@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <GoogleSignIn/GoogleSignIn.h>
-#import <MageServer.h>
+#import "MageServer.h"
 #import "SignUpDelegate.h"
 
 @interface GoogleSignUpViewController : UIViewController

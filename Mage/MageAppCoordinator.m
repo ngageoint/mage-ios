@@ -11,15 +11,15 @@
 #import "UIImage+Thumbnail.h"
 #import "AuthenticationCoordinator.h"
 #import "EventChooserCoordinator.h"
-#import <Event.h>
+#import "Event.h"
 
 #import <UserNotifications/UserNotifications.h>
-#import <FICImageCache.h>
+#import "FICImageCache.h"
 #import <AVFoundation/AVFoundation.h>
-#import <UserUtility.h>
-#import <MageSessionManager.h>
-#import <StoredPassword.h>
-#import <MageServer.h>
+#import "UserUtility.h"
+#import "MageSessionManager.h"
+#import "StoredPassword.h"
+#import "MageServer.h"
 
 @interface MageAppCoordinator() <UNUserNotificationCenterDelegate, FICImageCacheDelegate, AuthenticationDelegate, EventChooserDelegate>
 
@@ -46,6 +46,9 @@
 - (void) start {
     // check for a valid token
     if ([[UserUtility singleton] isTokenExpired]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObjectForKey:@"loginType"];
+        [defaults synchronize];
         // start the authentication coordinator
         AuthenticationCoordinator *authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self];
         [_childCoordinators addObject:authCoordinator];

@@ -3,7 +3,8 @@
 //  MAGE
 //
 //
-
+@import HexColors;
+@import DateTools;
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
@@ -14,14 +15,12 @@
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "MKAnnotationView+PersonIcon.h"
-#import <StaticLayer.h>
+#import "StaticLayer.h"
 #import "StaticPointAnnotation.h"
-#import <HexColor.h>
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
-#import <NSDate+DateTools.h>
 #import "Server.h"
 #import "CacheOverlays.h"
 #import "XYZDirectoryCacheOverlay.h"
@@ -42,7 +41,8 @@
 #import "MapObservationManager.h"
 #import "WKBGeometryUtils.h"
 #import "MapShapePointAnnotationView.h"
-#import <Event.h>
+#import "Event.h"
+#import "Observation.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -128,7 +128,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [mapView selectAnnotation:obsAnn animated:NO];
                 });
-            } else {
+            } else if (obsAnn.animateDrop) {
                 CGRect endFrame = aV.frame;
                 
                 // Move annotation out of view
@@ -1135,7 +1135,7 @@
         switch(type) {
                 
             case NSFetchedResultsChangeInsert:
-                [self updateObservation:object];
+                [self updateObservation:object withAnimation:YES];
                 break;
                 
             case NSFetchedResultsChangeDelete:
@@ -1143,12 +1143,13 @@
                 NSLog(@"Got delete for observation");
                 break;
                 
-            case NSFetchedResultsChangeUpdate:
-                [self updateObservation:object];
+            case NSFetchedResultsChangeUpdate: {
+                [self updateObservation:object withAnimation:NO];
                 break;
+            }
                 
             case NSFetchedResultsChangeMove:
-                [self updateObservation:object];
+                [self updateObservation:object withAnimation:NO];
                 break;
                 
             default:
@@ -1191,7 +1192,7 @@
 
     for (Observation *observation in observations) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakSelf updateObservation: observation];
+            [weakSelf updateObservation: observation withAnimation:NO];
         });
     }
 }
@@ -1246,9 +1247,9 @@
     }
 }
 
-- (void) updateObservation: (Observation *) observation {
+- (void) updateObservation: (Observation *) observation withAnimation: (BOOL) animateDrop {
     [self.mapObservations removeById:observation.objectID];
-    MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation];
+    MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation andAnimateDrop:animateDrop];
     [self.mapObservations addMapObservation:mapObservation];
 }
 

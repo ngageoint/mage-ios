@@ -8,7 +8,8 @@
 #import "Observations.h"
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
-#import <Event.h>
+#import "Event.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationMapTableViewCell ()
 @property (nonatomic, strong) ObservationDataStore *observationDataStore;
@@ -16,6 +17,10 @@
 @end
 
 @implementation ObservationMapTableViewCell
+
+- (void) themeDidChange:(MageTheme)theme {
+    [UIColor themeMap:self.mapView];
+}
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     Observations *observations = [Observations observationsForObservation:observation];
@@ -39,6 +44,8 @@
             [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
         });
     }];
+    
+    [self registerForThemeChanges];
 }
 
 @end

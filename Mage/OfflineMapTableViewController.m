@@ -13,6 +13,8 @@
 #import "XYZDirectoryCacheOverlay.h"
 #import "GeoPackageCacheOverlay.h"
 #import "GPKGGeoPackageFactory.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface OfflineMapTableViewController ()
 
@@ -25,6 +27,12 @@
 
 @implementation OfflineMapTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    
+    [self.tableView reloadData];
+}
+
 - (instancetype) init {
     self = [super initWithStyle:UITableViewStyleGrouped];
     return self;
@@ -32,6 +40,7 @@
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
+    [self registerForThemeChanges];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.layoutMargins = UIEdgeInsetsZero;
     
@@ -95,6 +104,14 @@
     }
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = nil;
@@ -105,9 +122,11 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"processingOfflineMapCell"];
         }
         cell.textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
+        cell.textLabel.textColor = [UIColor primaryText];
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [activityIndicator setFrame:CGRectZero];
         [activityIndicator startAnimating];
+        activityIndicator.color = [UIColor secondaryText];
         cell.accessoryView = activityIndicator;
     } else {
         CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
@@ -125,13 +144,17 @@
             }
             cell.textLabel.text = [cacheOverlay getName];
             cell.detailTextLabel.text = [cacheOverlay getInfo];
+            cell.textLabel.textColor = [UIColor primaryText];
+            cell.detailTextLabel.textColor = [UIColor secondaryText];
             if (cellImage != nil) {
                 [cell.imageView setImage:cellImage];
+                cell.imageView.tintColor = [UIColor brand];
             }
             
             CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
             cacheSwitch.on = cacheOverlay.enabled;
             cacheSwitch.overlay = cacheOverlay;
+            cacheSwitch.onTintColor = [UIColor themedButton];
             [cacheSwitch addTarget:self action:@selector(childActiveChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = cacheSwitch;
         } else {
@@ -140,6 +163,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
             }
             cell.textLabel.text = [cacheOverlay getName];
+            cell.textLabel.textColor = [UIColor primaryText];
             if (cellImage != nil) {
                 [cell.imageView setImage:cellImage];
             }
@@ -147,12 +171,13 @@
             CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
             cacheSwitch.on = cacheOverlay.enabled;
             cacheSwitch.overlay = cacheOverlay;
+            cacheSwitch.onTintColor = [UIColor themedButton];
             [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = cacheSwitch;
         }
     }
-//    cell.layoutMargins = UIEdgeInsetsZero;
     
+    cell.backgroundColor = [UIColor background];
     return cell;
 }
 

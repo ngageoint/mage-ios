@@ -35,6 +35,16 @@
  */
 -(MapObservation *) addToMapWithObservation: (Observation *) observation;
 
+
+/**
+ * Add an observation to the map as a marker or shape
+ *
+ * @param observation observation
+ * @param animateDrop should animate or not
+ * @return map observation
+ */
+-(MapObservation *) addToMapWithObservation:(Observation *)observation andAnimateDrop: (BOOL) animateDrop;
+
 /**
  * Add an observation to the map as an annotation or shape
  *
@@ -59,9 +69,10 @@
  * @param observation observation
  * @param geometry    geometry
  * @param hidden     hidden state
+ * @param animateDrop should animate or not
  * @return map observation
  */
--(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden;
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden andAnimateDrop: (BOOL) animateDrop;
 
 /**
  * Add a shape annotation to the map at the location.  A shape annotation is a transparent icon for shape info windows.

@@ -5,11 +5,11 @@
 //
 
 #import "AppDelegate.h"
-#import <Mage.h>
-#import <User.h>
+#import "Mage.h"
+#import "User.h"
 #import <CoreLocation/CoreLocation.h>
-#import <FICImageCache.h>
-#import <UserUtility.h>
+#import "FICImageCache.h"
+#import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"
 #import "Attachment+Thumbnail.h"
@@ -20,7 +20,7 @@
 
 #import "OZZipFile+OfflineMap.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 
 #import "MagicalRecord+MAGE.h"
 #import "GPKGGeoPackageFactory.h"
@@ -35,11 +35,11 @@
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "MageOfflineObservationManager.h"
-#import "UIColor+UIColor_Mage.h"
-#import <Server.h>
+#import "Server.h"
 #import "MageAppCoordinator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
+#import "Theme+UIResponder.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -71,10 +71,12 @@
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    [self setupApplicationAppearance];
+    NSUInteger count = [MageOfflineObservationManager offlineObservationCount];
+    NSLog(@"Offline count %lu", (unsigned long)count);
     
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
+    self.window.backgroundColor = [UIColor background];
 
     [self createRootView];
     
@@ -135,6 +137,9 @@
     [[UserUtility singleton] expireToken];
     [[Mage singleton] stopServices];
     [[LocationService singleton] stop];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"loginType"];
+    [defaults synchronize];
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     [self createRootView];
 }
@@ -149,38 +154,6 @@
     }];
     
     [[MageSessionManager manager] addTask:observationFetchTask];
-}
-
-- (void) setupApplicationAppearance {
-    [UIColor setPrimaryColor:[UIColor mageBlue]];
-    [UIColor setSecondaryColor:[UIColor whiteColor]];
-    
-    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryColor]];
-    [[UINavigationBar appearance] setTintColor:[UIColor secondaryColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor secondaryColor]
-                                                           }];
-    [[UINavigationBar appearance] setTranslucent:NO];
-    [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTintColor:[UIColor secondaryColor]];
-    
-    // these are inverted from the rest of the app
-    [[UITabBar appearance] setTintColor:[UIColor primaryColor]];
-    [[UITabBar appearance] setBarTintColor:[UIColor secondaryColor]];
-    
-    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[[UINavigationBar class]]] setTextColor:[UIColor secondaryColor]];
-    if (@available(iOS 11.0, *)) {
-        [[UISearchBar appearance] setBarTintColor:[UIColor primaryColor]];
-        [[UISearchBar appearance] setTintColor:[UIColor secondaryColor]];
-        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor secondaryColor]}];
-        [[UINavigationBar appearance] setPrefersLargeTitles:NO];
-        [[UINavigationBar appearance] setLargeTitleTextAttributes:@{
-                                                                    NSForegroundColorAttributeName: [UIColor secondaryColor]
-                                                                    }];
-    } else {
-        // Fallback on earlier versions
-    }
-    
-
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {

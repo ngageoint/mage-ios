@@ -13,9 +13,21 @@
 
 @interface OAuthViewController()<WKNavigationDelegate>
 @property (strong, nonatomic) WKWebView *webView;
+@property (strong, nonatomic) id<LoginDelegate> delegate;
 @end
 
 @implementation OAuthViewController
+
+- (instancetype) initWithUrl: (NSString *) url andAuthenticationType: (AuthenticationType) authenticationType andRequestType: (OAuthRequestType) requestType andStrategy:(NSDictionary *)strategy andLoginDelegate:(id<LoginDelegate>)delegate {
+    if (self = [super init]) {
+        self.url = url;
+        self.authenticationType = authenticationType;
+        self.requestType = requestType;
+        self.strategy = strategy;
+        self.delegate = delegate;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,11 +45,11 @@
         [webView evaluateJavaScript:@"login" completionHandler:^(id result, NSError *error) {
             webView.hidden = YES;
             
-            if (self.requestType == SIGNUP) {
-                [self completeSignupWithResult:result];
-            } else {
+//            if (self.requestType == SIGNUP) {
+//                [self completeSignupWithResult:result];
+//            } else {
                 [self completeSigninWithResult:result];
-            }
+//            }
         }];
     }
 }
@@ -77,47 +89,53 @@
 }
 
 - (void) completeSigninWithResult: (NSDictionary *) result {
-    id<Authentication> authentication = [Authentication authenticationModuleForType:self.authenticationType];
+//    id<Authentication> authentication = [Authentication authenticationModuleForType:self.authenticationType];
     NSDictionary* parameters = @{
+                                 @"strategy": self.strategy,
                                  @"requestType": [NSNumber numberWithInt:SIGNIN],
-                                 @"result": result
+                                 @"result": result,
+                                 @"uid": [DeviceUUID retrieveDeviceUUID].UUIDString
                                  };
-    
     __weak typeof(self) weakSelf = self;
-    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-        if (authenticationStatus == AUTHENTICATION_SUCCESS) {            
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
-                [[UserUtility singleton] acceptConsent];
-                [self performSegueWithIdentifier:@"SkipDisclaimerSegue" sender:nil];
-            } else {
-                [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
-            }
-        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"Registration Sent"
-                                         message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-            }]];
-            
-            [weakSelf presentViewController:alert animated:YES completion:nil];
-            
-        } else {
-            UIAlertController * alert = [UIAlertController
-                                         alertControllerWithTitle:@"Signin Failed"
-                                         message:[result valueForKey:@"errorMessage"]
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-            }]];
-            
-            [weakSelf presentViewController:alert animated:YES completion:nil];
-        }
+    [self.delegate loginWithParameters:parameters withAuthenticationType:self.authenticationType complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        NSLog(@"Authentication complete %ld", (long)authenticationStatus);
+        //        [weakSelf dismissViewControllerAnimated:YES completion:nil];
     }];
+//    __weak typeof(self) weakSelf = self;
+//    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
+//                [[UserUtility singleton] acceptConsent];
+//                [self performSegueWithIdentifier:@"SkipDisclaimerSegue" sender:nil];
+//            } else {
+//                [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
+//            }
+//        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
+//            UIAlertController * alert = [UIAlertController
+//                                         alertControllerWithTitle:@"Registration Sent"
+//                                         message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
+//                                         preferredStyle:UIAlertControllerStyleAlert];
+//
+//            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+//            }]];
+//
+//            [weakSelf presentViewController:alert animated:YES completion:nil];
+//
+//        } else {
+//            UIAlertController * alert = [UIAlertController
+//                                         alertControllerWithTitle:@"Signin Failed"
+//                                         message:[result valueForKey:@"errorMessage"]
+//                                         preferredStyle:UIAlertControllerStyleAlert];
+//
+//            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+//            }]];
+//
+//            [weakSelf presentViewController:alert animated:YES completion:nil];
+//        }
+//    }];
 }
 
 @end

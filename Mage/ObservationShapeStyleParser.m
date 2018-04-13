@@ -5,9 +5,8 @@
 //  Created by Brian Osborn on 6/19/17.
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
-
+@import HexColors;
 #import "ObservationShapeStyleParser.h"
-#import <HexColor.h>
 #import "Event.h"
 #import "Server.h"
 

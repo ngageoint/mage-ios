@@ -9,9 +9,9 @@
 #import "FormPickerViewController.h"
 #import "FormCollectionViewCell.h"
 #import <MapKit/MapKit.h>
-#import <GeometryUtility.h>
-#import <KTCenterFlowLayout.h>
-#import "UIColor+UIColor_Mage.h"
+#import "GeometryUtility.h"
+#import "KTCenterFlowLayout.h"
+#import "Theme+UIResponder.h"
 
 @interface FormPickerViewController ()
 
@@ -30,6 +30,20 @@
 
 static NSString *CellIdentifier = @"FormCell";
 
+- (void) themeDidChange:(MageTheme)theme {
+    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.blurView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.blurView.backgroundColor = [UIColor dialog];
+    }
+    self.closeButton.backgroundColor = [UIColor dialog];
+    self.closeButton.layer.sublayers = nil;
+    [self.closeButton.layer addSublayer:[self createInnerLineWithColor:[UIColor brand]]];
+    
+    [UIColor themeMap:self.mapView];
+    self.headerLabel.textColor = [UIColor brand];
+}
+
 - (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (WKBGeometry *) location andNewObservation: (BOOL) newObservation {
     self = [super init];
     if (!self) return nil;
@@ -47,6 +61,8 @@ static NSString *CellIdentifier = @"FormCell";
     
     [self drawCloseButton];
     [self setupMapBackground];
+    
+    [self registerForThemeChanges];
 }
 
 - (void)viewDidLoad {
@@ -65,22 +81,23 @@ static NSString *CellIdentifier = @"FormCell";
     self.closeButton.layer.cornerRadius = self.closeButton.frame.size.width / 2;
     self.closeButton.layer.borderWidth = 1;
     self.closeButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    
+}
+
+- (CALayer *) createInnerLineWithColor: (UIColor *) color {
     CALayer *borderLayer = [[CALayer alloc] init];
     borderLayer.frame = CGRectMake(3, 3, 44, 44);
     borderLayer.backgroundColor = [UIColor clearColor].CGColor;
     borderLayer.cornerRadius = borderLayer.frame.size.width / 2;
-    borderLayer.borderColor = [UIColor mageBlue].CGColor;
+    borderLayer.borderColor = color.CGColor;
     borderLayer.borderWidth = 1.5;
-
-    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 15) toPointB:CGPointMake(29, 29)];
-    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 29) toPointB:CGPointMake(29, 15)];
-
     
-    [self.closeButton.layer addSublayer:borderLayer];
+    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 15) toPointB:CGPointMake(29, 29) withColor:color];
+    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 29) toPointB:CGPointMake(29, 15) withColor:color];
+    
+    return borderLayer;
 }
 
--(void) makeLineLayer: (CALayer *) layer lineFromPointA: (CGPoint) pointA toPointB: (CGPoint) pointB {
+-(void) makeLineLayer: (CALayer *) layer lineFromPointA: (CGPoint) pointA toPointB: (CGPoint) pointB withColor: (UIColor *) color {
     CAShapeLayer *line = [CAShapeLayer layer];
     UIBezierPath *linePath=[UIBezierPath bezierPath];
     [linePath moveToPoint: pointA];
@@ -89,7 +106,7 @@ static NSString *CellIdentifier = @"FormCell";
     line.fillColor = nil;
     line.opacity = 1.0;
     line.lineWidth = 1.5;
-    line.strokeColor = [UIColor mageBlue].CGColor;
+    line.strokeColor = color.CGColor;
     [layer addSublayer:line];
 }
 
@@ -126,7 +143,7 @@ static NSString *CellIdentifier = @"FormCell";
         
         [self.blurView addSubview:blurEffectView];
     } else {
-        self.blurView.backgroundColor = [UIColor whiteColor];
+        self.blurView.backgroundColor = [UIColor dialog];
     }
 }
 

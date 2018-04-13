@@ -4,18 +4,20 @@
 //
 //
 
+@import DateTools;
+@import HexColors;
+
 #import "ObservationTableViewCell.h"
 #import "ObservationImage.h"
 #import "ObservationFavorite.h"
-#import <NSDate+DateTools.h>
 #import "User.h"
 #import "Server.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Event.h"
-#import "NSDate+iso8601.h"
 #import "Attachment+Thumbnail.h"
-#import <MageEnums.h>
+#import "MageEnums.h"
 #import "ObservationShapeStyleParser.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationTableViewCell()
 
@@ -27,21 +29,43 @@
 @property (weak, nonatomic) IBOutlet UIImageView *syncBadge;
 @property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
+@property (weak, nonatomic) IBOutlet UIButton *directionsButton;
 
 @end
 
 @implementation ObservationTableViewCell
 
 -(id)initWithCoder:(NSCoder *) aDecoder {
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
+    if (self = [super initWithCoder:aDecoder]) {
         self.currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-        self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:.38];
-        self.favoriteHighlightColor = [UIColor colorWithRed:126/255.0 green:211/255.0 blue:33/255.0 alpha:1.0];
     }
     
     return self;
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.primaryField.textColor = [UIColor primaryText];
+    self.backgroundColor = [UIColor background];
+    self.variantField.textColor = [UIColor primaryText];
+    self.timeField.textColor = [UIColor secondaryText];
+    self.userField.textColor = [UIColor secondaryText];
+    self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:1];
+    self.favoriteHighlightColor = [UIColor colorWithHexString:@"00C853" alpha:1.0];
+    self.directionsButton.tintColor = [UIColor inactiveIcon];
+    if (self.observation) {
+        [self displayFavoriteForObservation:self.observation];
+    }
+    self.importantBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.importantBadge.layer.borderWidth = 2.5;
+    self.importantBadge.layer.cornerRadius = self.importantBadge.frame.size.width / 2.0f;
+    
+    self.syncBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.syncBadge.layer.borderWidth = 2.5;
+    self.syncBadge.layer.cornerRadius = self.syncBadge.frame.size.width / 2.0f;
+    
+    self.errorBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.errorBadge.layer.borderWidth = 2.5;
+    self.errorBadge.layer.cornerRadius = self.errorBadge.frame.size.width / 2.0f;
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
@@ -114,17 +138,19 @@
         self.syncBadge.hidden = YES;
         self.errorBadge.hidden = YES;
     }
+    
+    [self registerForThemeChanges];
 }
 
 - (void) displayFavoriteForObservation: (Observation *) observation {
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
-        self.favoriteButton.imageView.tintColor = self.favoriteHighlightColor;
-        self.favoriteNumber.textColor = self.favoriteHighlightColor;
+        self.favoriteButton.imageView.tintColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
+        self.favoriteNumber.textColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
     } else {
-        self.favoriteButton.imageView.tintColor = self.favoriteDefaultColor;
-        self.favoriteNumber.textColor = self.favoriteDefaultColor;
+        self.favoriteButton.imageView.tintColor = [UIColor inactiveIcon];
+        self.favoriteNumber.textColor = [UIColor inactiveIcon];
     }
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     if ([favorites count]) {

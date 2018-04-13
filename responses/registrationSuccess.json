@@ -1,0 +1,7 @@
+{
+    "id": "DEVICEID",
+    "uid": "DEVICEUUID",
+    "name": "string",
+    "description": "string",
+    "registered": false
+}

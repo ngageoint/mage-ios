@@ -6,7 +6,7 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import <Observation.h>
+#import "Observation.h"
 
 @interface Observation (Section)
 

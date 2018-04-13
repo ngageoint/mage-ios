@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Observation.h>
+#import "Observation.h"
 #import "ObservationEditListener.h"
 #import "AttachmentSelectionDelegate.h"
 
@@ -24,5 +24,7 @@
 
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 @property (nonatomic, weak) id<ObservationEditListener> delegate;
+
+@property (nonatomic) BOOL fieldValueValid;
 
 @end

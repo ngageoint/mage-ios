@@ -7,6 +7,7 @@
 //
 
 #import "SelectEditViewController.h"
+#import "Theme+UIResponder.h"
 
 @interface SelectEditViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -23,10 +24,24 @@
 @property (strong, nonatomic) id value;
 @property (strong, nonatomic) id<PropertyEditDelegate> delegate;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *clearButton;
+@property (weak, nonatomic) IBOutlet UILabel *selectedTextLabel;
 
 @end
 
 @implementation SelectEditViewController
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.view.backgroundColor = [UIColor background];
+    self.selectedChoicesView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+    self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
+    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    self.selectedTextLabel.textColor = [UIColor secondaryText];
+    self.selectedLabel.textColor = [UIColor primaryText];
+    self.clearButton.tintColor = [UIColor flatButton];
+    [self.tableView reloadData];
+}
 
 - (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate {
     self = [super initWithNibName:@"ObservationEditSelectPickerView" bundle:nil];
@@ -74,6 +89,8 @@
         self.selectedChoicesConstraint.constant = self.navigationController.navigationBar.frame.size.height + 20;
         self.tableView.tableHeaderView = self.searchController.searchBar;
     }
+    
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL) animated {
@@ -122,6 +139,10 @@
     cell.textLabel.text = choice;
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
+    
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.backgroundColor = [UIColor background];
+    cell.tintColor = [UIColor flatButton];
     
     if ([self.selectedChoices containsObject:choice]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

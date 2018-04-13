@@ -5,7 +5,6 @@
 //
 
 #import "GPSLocationAnnotation.h"
-#import <NSDate+DateTools.h>
 #import "MKAnnotationView+PersonIcon.h"
 #import "WKBGeometry.h"
 #import "WKBGeometryUtils.h"

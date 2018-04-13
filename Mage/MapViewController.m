@@ -34,6 +34,7 @@
 #import "ObservationEditCoordinator.h"
 #import "ObservationAnnotationView.h"
 #import "MapSettingsCoordinator.h"
+#import "Theme+UIResponder.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -55,7 +56,7 @@
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
         CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         CLLocation *mapPressLocation = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude longitude:touchMapCoordinate.longitude];
@@ -64,8 +65,22 @@
     }
 }
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.trackingButton.backgroundColor = [UIColor dialog];
+    self.trackingButton.tintColor = [UIColor activeTabIcon];
+    self.reportLocationButton.backgroundColor = [UIColor dialog];
+    self.mapSettingsButton.backgroundColor = [UIColor dialog];
+    self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
+    [UIColor themeMap:self.mapView];
+    [self setNavBarTitle];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self registerForThemeChanges];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
@@ -202,6 +217,7 @@
                                                object:nil];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
+    
 }
 
 - (BOOL)isForceTouchAvailable {

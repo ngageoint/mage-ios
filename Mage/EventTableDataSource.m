@@ -5,13 +5,14 @@
 //
 
 #import "EventTableDataSource.h"
-#import <Event.h>
-#import <User.h>
-#import <Server.h>
+#import "Event.h"
+#import "User.h"
+#import "Server.h"
 #import "EventChooserController.h"
 #import "Observation.h"
 #import "EventTableViewCell.h"
-#import "UIColor+UIColor_Mage.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface EventTableDataSource()
 
@@ -33,22 +34,11 @@
     
     User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
-    
-    self.otherFetchedResultsController = [Event MR_fetchAllSortedBy:@"name"
-                                                      ascending:YES
-                                                  withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds]
-                                                        groupBy:nil
-                                                       delegate:self
-                                                      inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
     self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     
-    self.recentFetchedResultsController = [Event MR_fetchAllSortedBy:@"recentSortOrder"
-                                                       ascending:YES
-                                                   withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]
-                                                         groupBy:nil
-                                                        delegate:self
-                                                       inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.recentFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
     self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
 
@@ -127,6 +117,19 @@
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Event *event = nil;
+    if (indexPath.section == 1) {
+        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 2) {
+        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    }
+    if (event.eventDescription) {
+        return 72.0f;
+    }
+    return 48.0f;
+}
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
     
     UITableView *tableView = self.tableView;
@@ -202,10 +205,10 @@
             messageLabel.text = @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         }
         
-        messageLabel.textColor = [UIColor primaryColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:14];
+        messageLabel.textColor = [UIColor secondaryText];
         [view addSubview:messageLabel];
         return view;
     }
@@ -219,26 +222,16 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    UIView *viewForSection = [tableView.delegate tableView:tableView viewForHeaderInSection:section];
-    return viewForSection.frame.size.height;
+    return 48.0f;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 25)];
-    [label setFont:[UIFont boldSystemFontOfSize:18]];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setText: [tableView.dataSource tableView:tableView titleForHeaderInSection:section]];
-    [view addSubview:label];
-    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 1)];
-    [bottomBorder setBackgroundColor:[UIColor primaryColor]];
-    [view addSubview:bottomBorder];
     
-    [view setBackgroundColor:[UIColor primaryColor]];
-    return view;
+    NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 @end

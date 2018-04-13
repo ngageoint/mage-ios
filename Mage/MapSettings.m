@@ -6,15 +6,23 @@
 
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource>
-    @property (weak, nonatomic) IBOutlet UISegmentedControl *mapTypeSegmentedControl;
-    @property (weak, nonatomic) IBOutlet UISwitch *showObservationsSwitch;
-    @property (weak, nonatomic) IBOutlet UISwitch *showPeopleSwitch;
     @property (strong) id<MapSettingsDelegate> delegate;
 @end
 
 @implementation MapSettings
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor navBarPrimaryText] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.translucent = NO;
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    [self.tableView reloadData];
+}
 
 - (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -25,19 +33,9 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    [self registerForThemeChanges];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
-    
-    
-    self.showObservationsSwitch.on = ![defaults boolForKey:@"hideObservations"];
-    
-    self.showPeopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -66,7 +64,7 @@
     if (indexPath.section == 0) {
         MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
         cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
-
+        cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
         return cell;
     } else if (indexPath.section == 1) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ObservationSettingsCell"];
@@ -77,6 +75,7 @@
         cell.detailTextLabel.text = @"Show observations on map";
         UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         observationSwitch.on = ![defaults boolForKey:@"hideObservations"];
+        observationSwitch.onTintColor = [UIColor themedButton];
         [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = observationSwitch;
         
@@ -90,6 +89,7 @@
         cell.detailTextLabel.text = @"Show people on map";
         UISwitch *peopleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         peopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
+        peopleSwitch.onTintColor = [UIColor themedButton];
         [peopleSwitch addTarget:self action:@selector(peopleSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = peopleSwitch;
         
@@ -117,7 +117,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"MAP TYPE";
+        return @"Map Type";
     }
     return @"";
 }
@@ -137,6 +137,23 @@
     } else if (indexPath.section == 4) {
         [self.delegate offlineMapsCellTapped];
     }
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = [UIColor background];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.textLabel.textColor = [UIColor primaryText];
+}
+
+-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return 45.0f;
+    }
+    return UITableViewAutomaticDimension;
 }
 
 @end

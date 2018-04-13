@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,18 +19,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-m4-OJb">
-                        <rect key="frame" x="8" y="8" width="48" height="24"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-m4-OJb">
+                        <rect key="frame" x="16" y="10" width="24" height="24"/>
                         <color key="tintColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                         <state key="normal" image="favorite_large"/>
                         <connections>
                             <action selector="favoriteButtonTapped:" destination="ffI-tt-rrf" eventType="touchUpInside" id="kAa-L0-SHI"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTz-jf-Kkk">
-                        <rect key="frame" x="64" y="8" width="48" height="24"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTz-jf-Kkk">
+                        <rect key="frame" x="70" y="10" width="24" height="24"/>
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                         <state key="normal" image="directions_large"/>
                         <state key="highlighted" image="directions_highlight"/>
@@ -38,10 +37,17 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="xTz-jf-Kkk" firstAttribute="centerY" secondItem="yqQ-Hu-hx0" secondAttribute="centerY" id="1Ow-Kz-9sX"/>
+                    <constraint firstItem="ate-m4-OJb" firstAttribute="centerY" secondItem="yqQ-Hu-hx0" secondAttribute="centerY" id="FVa-7y-Osx"/>
+                    <constraint firstItem="xTz-jf-Kkk" firstAttribute="leading" secondItem="ate-m4-OJb" secondAttribute="trailing" constant="30" id="g94-Vp-B7x"/>
+                    <constraint firstItem="ate-m4-OJb" firstAttribute="leading" secondItem="yqQ-Hu-hx0" secondAttribute="leadingMargin" id="zjx-zw-SeL"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
+                <outlet property="directionsButton" destination="xTz-jf-Kkk" id="Gny-sc-kJM"/>
                 <outlet property="favoriteButton" destination="ate-m4-OJb" id="s0X-UB-HCy"/>
             </connections>
         </tableViewCell>

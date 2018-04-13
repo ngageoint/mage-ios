@@ -4,11 +4,10 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "MapAnnotation.h"
-#import <Event.h>
+#import "Event.h"
 
 @interface ObservationAnnotation :  MapAnnotation
 
@@ -19,6 +18,8 @@
 @property (nonatomic) Observation *observation;
 
 @property (nonatomic) BOOL selected;
+
+@property (nonatomic) BOOL animateDrop;
 
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
 

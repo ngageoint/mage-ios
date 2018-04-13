@@ -8,19 +8,42 @@
 
 #import "LocationFilterTableViewController.h"
 #import "TimeFilter.h"
+#import "Theme+UIResponder.h"
+#import "ObservationTableHeaderView.h"
 
 @interface LocationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
 @property (assign, nonatomic) TimeUnit customTimeUnit;
 @property (assign, nonatomic) NSInteger customTimeNumber;
 @property (assign, nonatomic) BOOL isPopover;
+@property (weak, nonatomic) IBOutlet UILabel *customLabel;
+@property (weak, nonatomic) IBOutlet UILabel *customDescription;
+@property (weak, nonatomic) IBOutlet UILabel *lastLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *periodSegmentedControl;
+@property (weak, nonatomic) IBOutlet UITextField *timeNumberTextField;
 
 @end
 
 @implementation LocationFilterTableViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.view.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.customLabel.textColor = [UIColor primaryText];
+    self.customDescription.textColor = [UIColor secondaryText];
+    self.lastLabel.textColor = [UIColor primaryText];
+    self.timeNumberTextField.textColor = [UIColor primaryText];
+    self.timeNumberTextField.layer.borderWidth = .5f;
+    self.timeNumberTextField.layer.borderColor = [[UIColor secondaryText] CGColor];
+    self.periodSegmentedControl.tintColor = [UIColor brand];
+    
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -36,6 +59,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = self.timeFilter == [indexPath row] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor background];
     
     if ([indexPath row] == 5) {
         UISegmentedControl *timeUnitControl = (UISegmentedControl *) [cell viewWithTag:300];
@@ -59,6 +86,12 @@
     [self applyFilter];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

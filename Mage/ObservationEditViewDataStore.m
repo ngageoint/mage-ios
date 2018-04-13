@@ -9,9 +9,10 @@
 #import "AttachmentEditTableViewCell.h"
 #import "ObservationEditGeometryTableViewCell.h"
 #import "ObservationFields.h"
+#import "ObservationTableHeaderView.h"
 
-#import <Server.h>
-#import <Event.h>
+#import "Server.h"
+#import "Event.h"
 
 static NSInteger const ATTACHMENT_SECTION = 0;
 static NSInteger const COMMON_SECTION = 1;
@@ -217,7 +218,10 @@ static NSInteger const COMMON_SECTION = 1;
     if ([cell respondsToSelector:@selector(populateCellWithFormField:andValue:)]) {
         id value = [self valueForIndexPath:indexPath];
         [cell populateCellWithFormField:[self fieldForIndexPath:indexPath] andValue:value];
-        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+        // recheck
+        if ([self.invalidIndexPaths containsObject:indexPath]) {
+            [cell setValid:[cell isValid]];
+        }
     }
     
     return cell;
@@ -279,7 +283,7 @@ static NSInteger const COMMON_SECTION = 1;
         
         id cell = [self.editTable cellForRowAtIndexPath:indexPath];
         [cell populateCellWithFormField:field andValue:[self valueForIndexPath:indexPath]];
-        [cell setValid:![self.invalidIndexPaths containsObject:indexPath]];
+        [cell setValid:[cell isValid]];
     }
     
 }
@@ -301,10 +305,16 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == ATTACHMENT_SECTION || section == COMMON_SECTION) {
-        return CGFLOAT_MIN;
+    if ([self.formFields count] > (section - 2)) {
+        return 48.0f;
     }
-    return UITableViewAutomaticDimension;
+    return 15.0f;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *name = [self tableView:tableView titleForHeaderInSection:section];
+    
+    return [[ObservationTableHeaderView alloc] initWithName:name];
 }
 
 @end

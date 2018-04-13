@@ -6,7 +6,7 @@
 
 #import "Attachment+Thumbnail.h"
 #import "Attachment.h"
-#import <FICImageCache.h>
+#import "FICImageCache.h"
 #import "FICUtilities.h"
 
 #pragma mark External Definitions

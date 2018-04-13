@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectEditViewController">
             <connections>
+                <outlet property="clearButton" destination="xpv-Y5-5ok" id="bij-fT-W2a"/>
                 <outlet property="selectedChoicesConstraint" destination="XXR-iL-S6z" id="BqF-pa-spd"/>
                 <outlet property="selectedChoicesView" destination="tv3-DP-HKm" id="UWc-9B-Yqv"/>
                 <outlet property="selectedLabel" destination="2C5-jj-aVB" id="q3f-ib-ACl"/>
+                <outlet property="selectedTextLabel" destination="Bly-jO-WjA" id="Pw3-zb-A5X"/>
                 <outlet property="tableView" destination="mwg-2L-vPx" id="mzY-PN-rr9"/>
                 <outlet property="view" destination="U3P-aZ-5Pc" id="4SQ-PR-cR4"/>
             </connections>
@@ -61,7 +63,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="1" alpha="0.25" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="3Vg-fg-86Q"/>
                         <constraint firstItem="q1C-ly-u8f" firstAttribute="leading" secondItem="tv3-DP-HKm" secondAttribute="leading" id="7Kg-Ij-uRd"/>

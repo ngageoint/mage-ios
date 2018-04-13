@@ -8,8 +8,8 @@
 
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
-#import <LocationService.h>
-#import <WKBPoint.h>
+#import "LocationService.h"
+#import "WKBPoint.h"
 
 @interface GeometryEditCoordinator()
 
@@ -58,7 +58,6 @@
 
 - (void) fieldEditDone {
     [self.delegate geometryUpdated:self.currentGeometry];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) updateGeometry: (WKBGeometry *) geometry {

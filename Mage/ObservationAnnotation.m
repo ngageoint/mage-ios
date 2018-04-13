@@ -4,12 +4,14 @@
 //
 //
 
+@import DateTools;
+
 #import "ObservationAnnotation.h"
-#import "NSDate+DateTools.h"
-#import <ObservationImage.h>
+#import "ObservationImage.h"
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
+#import "Theme+UIResponder.h"
 
 @interface ObservationAnnotation ()
 
@@ -61,7 +63,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
+        rightButton.tintColor = [UIColor flatButton];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {
         annotationView.annotation = self;

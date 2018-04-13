@@ -5,9 +5,9 @@
 //
 
 #import "AttachmentViewController.h"
-#import <FICImageCache.h>
+#import "FICImageCache.h"
 #import "AppDelegate.h"
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 #import "AVFoundation/AVFoundation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>

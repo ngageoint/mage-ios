@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -45,6 +45,7 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User flagged as important" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDw-tC-S0y">
                                                         <rect key="frame" x="0.0" y="-2" width="0.0" height="21"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="21" id="Kj5-Ba-sSa"/>
                                                         </constraints>
@@ -54,6 +55,7 @@
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="October 23 2009" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qPP-as-uFa">
                                                         <rect key="frame" x="0.0" y="16" width="0.0" height="21"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="21" id="i9d-Fn-r6F"/>
                                                         </constraints>
@@ -62,7 +64,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="qPP-as-uFa" firstAttribute="leading" secondItem="i86-AP-eCe" secondAttribute="leading" id="22w-ml-0vE"/>
                                                     <constraint firstItem="qPP-as-uFa" firstAttribute="top" secondItem="FDw-tC-S0y" secondAttribute="bottom" constant="-3" id="67Q-LH-5n5"/>
@@ -75,11 +77,13 @@
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uY2-zG-cjG">
                                                 <rect key="frame" x="0.0" y="49" width="0.0" height="18"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="i86-AP-eCe" firstAttribute="leading" secondItem="we4-bQ-NL7" secondAttribute="leading" id="C9g-0j-ZZV"/>
                                             <constraint firstAttribute="trailing" secondItem="uY2-zG-cjG" secondAttribute="trailing" id="G4O-of-FZi"/>
@@ -88,7 +92,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="we4-bQ-NL7" secondAttribute="trailing" constant="8" id="6CA-sK-gFh"/>
                                     <constraint firstAttribute="bottom" secondItem="we4-bQ-NL7" secondAttribute="bottom" constant="-3" id="A5R-MB-04H"/>
@@ -128,7 +132,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="8Ni-ko-Rv9" firstAttribute="top" secondItem="oBo-JV-Ide" secondAttribute="top" id="HdT-pn-phh"/>
                                     <constraint firstAttribute="bottom" secondItem="r6v-sT-Jc4" secondAttribute="bottom" id="TI2-o0-fmP"/>
@@ -139,11 +143,13 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="oBo-JV-Ide" firstAttribute="leading" secondItem="cG4-W0-ALl" secondAttribute="leading" id="A3O-HC-QlK"/>
                         </constraints>
                     </stackView>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="cG4-W0-ALl" firstAttribute="top" secondItem="jh0-6N-6J7" secondAttribute="topMargin" id="ILG-DN-37g"/>
                     <constraint firstAttribute="trailing" secondItem="cG4-W0-ALl" secondAttribute="trailing" id="IfC-92-OKX"/>
@@ -151,13 +157,15 @@
                     <constraint firstAttribute="bottomMargin" secondItem="cG4-W0-ALl" secondAttribute="bottom" id="u0h-pB-4fB"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <color key="tintColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="dateLabel" destination="qPP-as-uFa" id="Li0-EN-yJ6"/>
                 <outlet property="descriptionLabel" destination="uY2-zG-cjG" id="TRQ-d0-f5U"/>
                 <outlet property="importantActions" destination="oBo-JV-Ide" id="Rzs-wH-qqp"/>
+                <outlet property="removeButton" destination="8Ni-ko-Rv9" id="u5b-Bw-YvB"/>
+                <outlet property="updateButton" destination="r6v-sT-Jc4" id="896-jb-JNT"/>
                 <outlet property="userLabel" destination="FDw-tC-S0y" id="aMQ-aj-LGm"/>
             </connections>
         </tableViewCell>

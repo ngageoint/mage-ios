@@ -4,7 +4,6 @@
 //
 //
 
-#import <Observation.h>
 #import "ObservationViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "ObservationActionsTableViewCell.h"

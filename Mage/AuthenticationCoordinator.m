@@ -10,21 +10,24 @@
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "GoogleSignUpViewController.h"
+#import "OAuthLoginView.h"
+#import "OAuthViewController.h"
 #import "DisclaimerViewController.h"
-#import <MageServer.h>
+#import "MageServer.h"
 #import "Server.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
-#import <UserUtility.h>
+#import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "ServerURLController.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "GoogleAuthentication.h"
-#import <MageSessionManager.h>
+#import "MageSessionManager.h"
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
+#import "Authentication.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate, OAuthButtonDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
@@ -67,7 +70,11 @@ BOOL signingIn = YES;
 }
 
 - (void) createAccount {
-    [self showSignupView];
+    [[GIDSignIn sharedInstance] signOut];
+    signingIn = NO;
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
+    [self.navigationController pushViewController:signupView animated:NO];
 }
 
 - (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error {
@@ -143,14 +150,32 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessful];
+            [weakSelf authenticationWasSuccessfulWithModule:authentication];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
             [[GIDSignIn sharedInstance] signOut];
         } else {
-            [weakSelf authenticationHadFailure: errorString];
             [[GIDSignIn sharedInstance] signOut];
         }
+    }];
+}
+
+- (void) signinForStrategy:(NSDictionary *)strategy {
+    NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
+    OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN andStrategy: strategy andLoginDelegate: self];
+    [self.navigationController pushViewController:ovc animated:YES];
+}
+
+- (void) startLoginOnly {
+    NSURL *url = [MageServer baseURL];
+    __weak __typeof__(self) weakSelf = self;
+    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+        if (mageServer.serverHasGoogleAuthenticationStrategy) {
+            [self setupGoogleSignIn];
+        }
+        [weakSelf showLoginViewForCurrentUserForServer:mageServer];
+    } failure:^(NSError *error) {
+        NSLog(@"failed to contact server");
     }];
 }
 
@@ -172,12 +197,12 @@ BOOL signingIn = YES;
     }
 }
 
-- (void) showSignupView {
-    [[GIDSignIn sharedInstance] signOut];
-    signingIn = NO;
+- (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
+    self.server = mageServer;
+    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
-    [self.navigationController pushViewController:signupView animated:NO];
+    [self.navigationController pushViewController:self.loginView animated:NO];
 }
 
 - (void) showLoginViewForServer: (MageServer *) mageServer {
@@ -186,6 +211,9 @@ BOOL signingIn = YES;
     [[GIDSignIn sharedInstance] signOut];
     // If the user is logging in, force them to pick the event again
     [Server removeCurrentEventId];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"loginType"];
+    [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self];
     [self.navigationController pushViewController:self.loginView animated:NO];
@@ -210,6 +238,7 @@ BOOL signingIn = YES;
 
 - (void) setServerURL:(NSURL *)url {
     __weak __typeof__(self) weakSelf = self;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
         [MagicalRecord deleteAndSetupMageCoreDataStack];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -227,36 +256,8 @@ BOOL signingIn = YES;
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
-- (void) loginWithParameters:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    
-    if (self.server.reachabilityManager.reachable && [self didUserChange:[parameters objectForKey:@"username"]]) {
-        if ([MageOfflineObservationManager offlineObservationCount] > 0) {
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
-                                                                           message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            __weak __typeof__(self) weakSelf = self;
-            [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [MagicalRecord deleteAndSetupMageCoreDataStack];
-                [weakSelf doLogin:parameters complete:complete];
-                
-            }]];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-            
-            [self.navigationController presentViewController:alert animated:NO completion:nil];
-        } else {
-            [MagicalRecord deleteAndSetupMageCoreDataStack];
-            [self doLogin:parameters complete:complete];
-        }
-        
-    } else {
-        [self doLogin:parameters complete:complete];
-    }
-}
-
-- (void) doLogin:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:SERVER]];
+- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationType:(AuthenticationType)authenticationType complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:authenticationType]];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     }
@@ -264,35 +265,126 @@ BOOL signingIn = YES;
     __weak __typeof__(self) weakSelf = self;
     [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessful];
+            if ([parameters objectForKey:@"username"] != NULL && [self didUserChange:[parameters objectForKey:@"username"]]) {
+                if ([MageOfflineObservationManager offlineObservationCount] > 0) {
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
+                                                                                   message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        [MagicalRecord deleteAndSetupMageCoreDataStack];
+                        [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+                    }]];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                    
+                    [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
+                } else {
+                    [MagicalRecord deleteAndSetupMageCoreDataStack];
+                    [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+                }
+                
+            } else {
+                [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
+            }
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
-        } else {
-            [weakSelf authenticationHadFailure:errorString];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate: parameters complete:complete];
+            return;
         }
         complete(authenticationStatus, errorString);
     }];
 }
 
-- (void) authenticationWasSuccessful {
+- (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    __weak typeof(self) weakSelf = self;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
-        [self disclaimerAgree];
-        NSLog(@"Skip the disclaimer screen");
-    } else {
-        NSLog(@"Segue to the disclaimer screen");
-        DisclaimerViewController *disclaimer = [[DisclaimerViewController alloc] initWithDelegate:self];
-        [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [self.navigationController pushViewController:disclaimer animated:NO];
+    // if the user has already logged in offline just tell them
+    if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+        UIAlertController *alert = [UIAlertController
+                                    alertControllerWithTitle:@"Disconnected Login"
+                                    message:@"We are still unable to connect to the server to log you in. You will continue to work offline."
+                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.delegate couldNotAuthenticate];
+            complete(AUTHENTICATION_SUCCESS, nil);
+        }]];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        return;
     }
+    
+    // If there is a stored password do this
+    id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+    if (localAuthenticationModel) {
+        UIAlertController *alert = [UIAlertController
+                                     alertControllerWithTitle:@"Disconnected Login"
+                                     message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
+                                     preferredStyle:UIAlertControllerStyleAlert];
 
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf workOffline: parameters complete:complete];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Return to Login" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf returnToLogin: complete];
+        }]];
+
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    } else {
+        // there is no stored password for this server
+        UIAlertController *alert = [UIAlertController
+                                    alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf returnToLogin: complete];
+        }]];
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    }
 }
 
-- (void) authenticationHadFailure: (NSString *) errorString {
-    [self.loginView authenticationHadFailure:errorString];
+- (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    __weak typeof(self) weakSelf = self;
+
+    NSLog(@"work offline");
+    id<Authentication> localAuthenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+    [localAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+            [weakSelf authenticationWasSuccessfulWithModule:localAuthenticationModule];
+        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
+            [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
+            [weakSelf unableToAuthenticate: parameters complete:complete];
+            return;
+        }
+        complete(authenticationStatus, errorString);
+    }];
+}
+
+- (void) returnToLogin: (void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    complete(UNABLE_TO_AUTHENTICATE, @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored.");
+}
+
+- (void) authenticationWasSuccessfulWithModule: (id<Authentication>) module {
+    
+    [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            
+            if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
+                [self disclaimerAgree];
+                NSLog(@"Skip the disclaimer screen");
+            } else {
+                NSLog(@"Segue to the disclaimer screen");
+                DisclaimerViewController *disclaimer = [[DisclaimerViewController alloc] initWithDelegate:self];
+                [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+                
+                [self.navigationController popToRootViewControllerAnimated:NO];
+                [self.navigationController pushViewController:disclaimer animated:NO];
+            }
+        }
+    }];
 }
 
 - (void) registrationWasSuccessful {
@@ -302,6 +394,9 @@ BOOL signingIn = YES;
                                  preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self.navigationController presentViewController:alert animated:YES completion:nil];
     
 }
