@@ -94,6 +94,10 @@
 
 }
 
+- (void) viewDidDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) registerCellTypes {
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationEditCell" bundle:nil] forCellReuseIdentifier:@"ObservationEditCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationDateEditCell" bundle:nil] forCellReuseIdentifier:@"date"];
