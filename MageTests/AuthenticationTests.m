@@ -150,7 +150,7 @@
             OCMVerifyAll(delegatePartialMock);
         });
 
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             NSString *token = [StoredPassword retrieveStoredToken];
@@ -252,7 +252,7 @@
             XCTAssertTrue([alert.title isEqualToString:@"Registration Sent"]);
         });
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             XCTAssertTrue(authenticationStatus == REGISTRATION_SUCCESS);
             [loginResponseArrived fulfill];
@@ -330,7 +330,7 @@
             OCMVerifyAll(delegatePartialMock);
         });
 
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
@@ -419,7 +419,7 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
@@ -502,7 +502,7 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
@@ -575,7 +575,7 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
             [loginResponseArrived fulfill];
@@ -668,7 +668,7 @@
             [disclaimerDelegate disclaimerAgree];
         });
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             NSLog(@"Unable to authenticate");
             XCTFail(@"Should not be in here");
         }];
@@ -756,7 +756,7 @@
             XCTFail(@"Should not have pushed the disclaimer");
         });
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             NSLog(@"Unable to authenticate");
             XCTFail(@"Should not be in here");
         }];
@@ -842,7 +842,7 @@
             }];
         });
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             NSLog(@"Unable to authenticate");
             XCTFail(@"Should not be in here");
         }];

@@ -123,7 +123,7 @@
             [disclaimerDelegate disclaimerAgree];
         });
         
-        [loginDelegate loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             NSLog(@"Unable to authenticate");
             XCTFail(@"Should not be in here");
         }];
