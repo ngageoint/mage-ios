@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
 #import "OAuthAuthentication.h"
+#import "LoginViewController.h"
 
 @interface OAuthViewController : UIViewController
 
@@ -16,7 +17,8 @@
 @property (strong, nonatomic) MageServer *server;
 @property (assign, nonatomic) AuthenticationType authenticationType;
 @property (assign, nonatomic) OAuthRequestType requestType;
+@property (assign, nonatomic) NSDictionary *strategy;
 
-- (instancetype) initWithUrl: (NSString *) url andAuthenticationType: (AuthenticationType) authenticationType andRequestType: (OAuthRequestType) requestType;
+- (instancetype) initWithUrl: (NSString *) url andAuthenticationType: (AuthenticationType) authenticationType andRequestType: (OAuthRequestType) requestType andStrategy: (NSDictionary *) strategy andLoginDelegate: (id<LoginDelegate>) delegate;
 
 @end

@@ -200,6 +200,10 @@
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015D1A659B4D00902B4F /* setupTests.js */; };
 		F7C001601A659B5800902B4F /* tearDownTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015F1A659B5800902B4F /* tearDownTests.js */; };
+		F7C3DB98207D1B3D00154281 /* login-gov-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB97207D1B3D00154281 /* login-gov-authView.xib */; };
+		F7C3DB9B207D1C0F00154281 /* LoginGovLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9A207D1C0F00154281 /* LoginGovLoginView.m */; };
+		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
+		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89A1F506627002C78D3 /* ObservationCell.xib */; };
@@ -647,6 +651,12 @@
 		F7C0015F1A659B5800902B4F /* tearDownTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tearDownTests.js; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
+		F7C3DB97207D1B3D00154281 /* login-gov-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "login-gov-authView.xib"; sourceTree = "<group>"; };
+		F7C3DB99207D1C0F00154281 /* LoginGovLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginGovLoginView.h; sourceTree = "<group>"; };
+		F7C3DB9A207D1C0F00154281 /* LoginGovLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginGovLoginView.m; sourceTree = "<group>"; };
+		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
+		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
+		F7C3DB9F207FECEB00154281 /* LocalLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalLoginView.m; sourceTree = "<group>"; };
 		F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditMapDelegate.h; sourceTree = "<group>"; };
 		F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditMapDelegate.m; sourceTree = "<group>"; };
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
@@ -924,6 +934,10 @@
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
 				F7AA6AFA206EA9F7004F9437 /* OAuthLoginView.h */,
 				F7AA6AFB206EA9F7004F9437 /* OAuthLoginView.m */,
+				F7C3DB99207D1C0F00154281 /* LoginGovLoginView.h */,
+				F7C3DB9A207D1C0F00154281 /* LoginGovLoginView.m */,
+				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
+				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1369,6 +1383,8 @@
 				F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */,
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7AA6AF8206EA810004F9437 /* OAuthLoginView.xib */,
+				F7C3DB97207D1B3D00154281 /* login-gov-authView.xib */,
+				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1725,10 +1741,12 @@
 				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
 				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
+				F7C3DB98207D1B3D00154281 /* login-gov-authView.xib in Resources */,
 				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				F7003948200D3FFA00E6E660 /* loginSuccess.json in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
+				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
 				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
 				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
@@ -1886,7 +1904,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1914,7 +1932,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2186,10 +2204,12 @@
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
+				F7C3DB9B207D1C0F00154281 /* LoginGovLoginView.m in Sources */,
 				F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator.m in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
+				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,

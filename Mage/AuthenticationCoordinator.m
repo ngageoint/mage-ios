@@ -155,7 +155,6 @@ BOOL signingIn = YES;
             [weakSelf registrationWasSuccessful];
             [[GIDSignIn sharedInstance] signOut];
         } else {
-            [weakSelf authenticationHadFailure: errorString];
             [[GIDSignIn sharedInstance] signOut];
         }
     }];
@@ -163,7 +162,7 @@ BOOL signingIn = YES;
 
 - (void) signinForStrategy:(NSDictionary *)strategy {
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
-    OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN];
+    OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN andStrategy: strategy andLoginDelegate: self];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
@@ -257,8 +256,8 @@ BOOL signingIn = YES;
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
-- (void) loginWithParameters:(NSDictionary *)parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:SERVER]];
+- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationType:(AuthenticationType)authenticationType complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:authenticationType]];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     }
@@ -266,13 +265,12 @@ BOOL signingIn = YES;
     __weak __typeof__(self) weakSelf = self;
     [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            if ([self didUserChange:[parameters objectForKey:@"username"]]) {
+            if ([parameters objectForKey:@"username"] != NULL && [self didUserChange:[parameters objectForKey:@"username"]]) {
                 if ([MageOfflineObservationManager offlineObservationCount] > 0) {
                     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
                                                                                    message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     
-//                    __weak __typeof__(self) weakSelf = self;
                     [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                         [MagicalRecord deleteAndSetupMageCoreDataStack];
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
@@ -294,8 +292,6 @@ BOOL signingIn = YES;
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
-        } else {
-            [weakSelf authenticationHadFailure:errorString];
         }
         complete(authenticationStatus, errorString);
     }];
@@ -361,8 +357,6 @@ BOOL signingIn = YES;
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
-        } else {
-            [weakSelf authenticationHadFailure:errorString];
         }
         complete(authenticationStatus, errorString);
     }];
@@ -370,7 +364,6 @@ BOOL signingIn = YES;
 
 - (void) returnToLogin: (void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     complete(UNABLE_TO_AUTHENTICATE, @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored.");
-    [self authenticationHadFailure:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."];
 }
 
 - (void) authenticationWasSuccessfulWithModule: (id<Authentication>) module {
@@ -394,10 +387,6 @@ BOOL signingIn = YES;
     }];
 }
 
-- (void) authenticationHadFailure: (NSString *) errorString {
-    [self.loginView authenticationHadFailure:errorString];
-}
-
 - (void) registrationWasSuccessful {
     UIAlertController * alert = [UIAlertController
                                  alertControllerWithTitle:@"Registration Sent"
@@ -405,6 +394,9 @@ BOOL signingIn = YES;
                                  preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self.navigationController presentViewController:alert animated:YES completion:nil];
     
 }

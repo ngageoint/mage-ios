@@ -9,26 +9,24 @@
 #import "OAuthLoginView.h"
 #import "Theme+UIResponder.h"
 
+@import HexColors;
+
 @interface OAuthLoginView()
 
 @property (weak, nonatomic) IBOutlet UIView *oauthButtonView;
-@property (weak, nonatomic) IBOutlet UILabel *leftLineLabel;
-@property (weak, nonatomic) IBOutlet UILabel *rightLineLabel;
 @property (strong, nonatomic) IBOutlet UIView *topLevelSubView;
 @property (weak, nonatomic) IBOutlet UILabel *secureIcon;
 @property (weak, nonatomic) IBOutlet UILabel *loginTypeLabel;
-
+@property (weak, nonatomic) IBOutlet UIImageView *oauthImage;
+@property (weak, nonatomic) IBOutlet UIView *oauthImageViewContainer;
 
 @end
 
 @implementation OAuthLoginView
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.leftLineLabel.textColor = [UIColor brand];
-    self.rightLineLabel.textColor = [UIColor brand];
     self.secureIcon.textColor = [UIColor secondaryText];
-    self.oauthButtonView.backgroundColor = [UIColor dialog];
-    self.loginTypeLabel.textColor = [UIColor secondaryText];
+    
     [self.oauthButtonView.layer setShadowOffset:CGSizeMake(0, 1)];
     [self.oauthButtonView.layer setShadowColor:[UIColor secondaryText].CGColor];
     [self.oauthButtonView.layer setShadowOpacity:.7];
@@ -70,6 +68,23 @@
     NSDictionary *strategyDef = [self.strategy objectForKey:@"strategy"];
     self.secureIcon.text = @"\U0000f132";
     self.loginTypeLabel.text = [NSString stringWithFormat:@"Sign in with %@", [strategyDef objectForKey:@"title"]];
+    if ([strategyDef objectForKey:@"icon"] != NULL) {
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:[strategyDef valueForKey:@"icon"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        [self.oauthImage setImage:[UIImage imageWithData:data]];
+        [self.oauthImageViewContainer setHidden:NO];
+    } else {
+        [self.oauthImageViewContainer setHidden:YES];
+    }
+    if ([strategyDef objectForKey:@"buttonColor"] != NULL) {
+        self.oauthButtonView.backgroundColor = [UIColor colorWithHexString:[strategyDef valueForKey:@"buttonColor"] alpha:1.0];
+    } else {
+        self.oauthButtonView.backgroundColor = [UIColor dialog];
+    }
+    if ([strategyDef objectForKey:@"textColor"] != NULL) {
+        self.loginTypeLabel.textColor = [UIColor colorWithHexString:[strategyDef valueForKey:@"textColor"] alpha:1.0];
+    } else {
+        self.loginTypeLabel.textColor = [UIColor primaryText];
+    }
     [self registerForThemeChanges];
 }
 
