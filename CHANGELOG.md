@@ -5,11 +5,18 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## 2.0.2 (TBD)
 
-* TBD
-
 ##### Feature
 
+* Themes: Currently support day and night themes
+* Disconnected login has been improved to give the user more feedback
+* Additions for login.gov
+
 ##### Bug Fixes
+
+* Fixes case where an observation was being edited when the user logged out and then changed their server.
+* Attachment cell constraint fix
+* Observation markers are not dropped multiple times when an observation is created
+* Apple maps URL fixed for case with primary fields with spaces
 
 ## [2.0.1](https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (02-15-2018)
 
