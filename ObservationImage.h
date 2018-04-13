@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import <Observation.h>
+#import "Observation.h"
 
 @interface ObservationImage : NSObject
 

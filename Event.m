@@ -50,6 +50,24 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return event;
 }
 
++ (NSFetchedResultsController *) caseInsensitiveSortFetchAll:(NSString *)sortTerm ascending:(BOOL)ascending withPredicate:(NSPredicate *)searchTerm groupBy:(nullable NSString *)groupingKeyPath delegate:(id<NSFetchedResultsControllerDelegate>)delegate inContext: (NSManagedObjectContext *) context {
+    NSFetchRequest *request = [Event MR_requestAllInContext:context];
+    [request setPredicate:searchTerm];
+    [request setIncludesSubentities:NO];
+    
+    if (sortTerm != nil){
+        NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:sortTerm ascending:ascending selector:@selector(caseInsensitiveCompare:)];
+        [request setSortDescriptors:[NSArray arrayWithObject:sortBy]];
+    }
+    
+    NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                                 managedObjectContext:context
+                                                                                   sectionNameKeyPath:groupingKeyPath
+                                                                                            cacheName:nil];
+    [controller setDelegate:delegate];
+    return controller;
+}
+
 - (void) updateEventForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setName:[json objectForKey:@"name"]];

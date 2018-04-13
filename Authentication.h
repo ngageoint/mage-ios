@@ -9,7 +9,8 @@
 typedef NS_ENUM(NSInteger, AuthenticationType) {
 	LOCAL,
     SERVER,
-    GOOGLE
+    GOOGLE,
+    OAUTH2
 };
 
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
@@ -23,10 +24,10 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 
 @required
 - (instancetype) initWithParameters: (NSDictionary *) parameters;
-- (NSDictionary *) loginParameters;
 - (NSDictionary *) parameters;
 - (BOOL) canHandleLoginToURL: (NSString *) url;
-- (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
+- (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 
 @end
 

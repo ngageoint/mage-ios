@@ -22,6 +22,14 @@ static NSString * const kKeyChainToken = @"mil.nga.mage.token";
     return [StoredPassword persistItemToKeyChain:token withService:kKeyChainToken forCurrentItem:currentToken];
 }
 
++ (void) clearToken {
+    [StoredPassword deleteItemWithService:kKeyChainToken];
+}
+
++ (void) clearPassword {
+    [StoredPassword deleteItemWithService:kKeyChainPassword];
+}
+
 + (NSString *) retrieveStoredPassword {
     return [StoredPassword retrieveStoredItemWithService:kKeyChainPassword];
 }
@@ -100,6 +108,21 @@ static NSString * const kKeyChainToken = @"mil.nga.mage.token";
     }
     
     return item;
+}
+
++ (void) deleteItemWithService: (NSString *) service {
+    
+    NSDictionary *query = @{
+                            (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+                            (__bridge id)kSecAttrService: service,
+                            (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                            };
+    
+    
+    OSStatus result = SecItemDelete((__bridge CFDictionaryRef) query);
+    if (result != noErr) {
+        NSLog(@"ERROR: Couldn't delete from the Keychain. Result = %d; Query = %@", (int)result, query);
+    }
 }
 
 

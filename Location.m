@@ -6,13 +6,14 @@
 //  Copyright © 2016 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
+@import DateTools;
+
 #import "Location.h"
 #import "User.h"
 #import "Server.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
-#import <NSDate+DateTools.h>
 #import "WKBGeometryUtils.h"
 
 @implementation Location

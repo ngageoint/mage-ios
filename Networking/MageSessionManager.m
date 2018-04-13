@@ -10,6 +10,7 @@
 #import "SessionTaskQueue.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
+NSString * const MAGEServerContactedAfterOfflineLogin = @"mil.nga.mage.server.contacted";
 NSInteger const MAGE_HTTPMaximumConnectionsPerHost = 6;
 NSInteger const MAGE_MaxConcurrentTasks = 6;
 NSInteger const MAGE_MaxConcurrentEvents = 4;
@@ -34,14 +35,14 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
 
 @implementation MageSessionManager
 
-static MageSessionManager *managerSingleton = nil;
-
-+ (MageSessionManager *) manager {
++(MageSessionManager *)manager
+{
+    static MageSessionManager *managerSingleton = nil;
+    static dispatch_once_t pred;
+    dispatch_once(&pred, ^{
+        managerSingleton = ([[MageSessionManager alloc] init]);
+    });
     
-    if (managerSingleton == nil) {
-        managerSingleton = [[self alloc] init];
-    }
-
     return managerSingleton;
 }
 
@@ -84,7 +85,7 @@ static MageSessionManager *managerSingleton = nil;
     return _token;
 }
 
--(void) clearToken{
+-(void) clearToken {
     [self setToken:nil];
 }
 
@@ -101,7 +102,10 @@ static MageSessionManager *managerSingleton = nil;
 - (void)networkRequestDidFinish:(NSNotification *)notification {
     NSURLRequest *request = AFNetworkRequestFromNotification(notification);
     NSURLResponse *response = [notification.object response];
-    
+    if (request) {
+        NSLog(@"Request URL: %@", request.URL);
+        NSLog(@"Request Status: %lu", (unsigned long)[(NSHTTPURLResponse *)response statusCode]);
+    }
     if (!request && !response) {
         return;
     }
@@ -110,10 +114,31 @@ static MageSessionManager *managerSingleton = nil;
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
-        // token expired
-        if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401 && (![[request.URL path] safeContainsString:@"login"] && ![[request.URL path] safeContainsString:@"devices"] && ![[request.URL path] safeContainsString:@"password"]) ) {
-            [[UserUtility singleton] expireToken];
-            [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
+        if ([[request.URL path] safeContainsString:@"login"] || [[request.URL path] safeContainsString:@"devices"] || [[request.URL path] safeContainsString:@"password"]) {
+            return;
+        }
+        
+        // if the token expired, kick the user out and make them log in again
+        if ([[UserUtility singleton] isTokenExpired]) {
+            return;
+        }
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        // user was logged in online
+        if ([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            // if the user was online and the token was expired ie 401 we should force them to the login screen
+            if (![[UserUtility singleton] isTokenExpired] && responseStatusCode == 401) {
+                [[UserUtility singleton] expireToken];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MAGETokenExpiredNotification object:response];
+                return;
+            }
+        } else if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+            // if the user was logged in offline and a request makes it, we should tell them that they can try to login again
+            if (responseStatusCode == 401) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MAGEServerContactedAfterOfflineLogin object:response];
+                return;
+            }
         }
     }
     return;

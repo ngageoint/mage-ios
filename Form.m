@@ -4,8 +4,9 @@
 //
 //
 
+@import AFNetworking;
+
 #import "Form.h"
-#import <AFNetworking.h>
 #import "MageSessionManager.h"
 #import "zlib.h"
 #import "Objective-Zip+NSError.h"

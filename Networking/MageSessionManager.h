@@ -4,8 +4,9 @@
 //
 //
 
+@import AFNetworking;
+
 #import <Foundation/Foundation.h>
-#import <AFNetworking.h>
 #import "TaskSessionManager.h"
 #import "SessionTask.h"
 
@@ -15,6 +16,7 @@
 @interface MageSessionManager : TaskSessionManager
 
 extern NSString * const MAGETokenExpiredNotification;
+extern NSString * const MAGEServerContactedAfterOfflineLogin;
 extern NSInteger const MAGE_HTTPMaximumConnectionsPerHost;
 extern NSInteger const MAGE_MaxConcurrentTasks;
 extern NSInteger const MAGE_MaxConcurrentEvents;
