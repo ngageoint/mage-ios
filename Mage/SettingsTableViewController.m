@@ -218,7 +218,7 @@ static NSInteger legalSection = 6;
         UILabel *offlineLabel = [[UILabel alloc] init];
         offlineLabel.font = [UIFont systemFontOfSize:14];
         offlineLabel.textAlignment = NSTextAlignmentCenter;
-        offlineLabel.textColor = [UIColor primaryText];
+        offlineLabel.textColor = [UIColor whiteColor];
         offlineLabel.backgroundColor = [UIColor orangeColor];
         offlineLabel.text = @"!";
         [offlineLabel sizeToFit];
