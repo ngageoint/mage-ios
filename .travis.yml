@@ -11,10 +11,9 @@ env:
   - DESTINATION="$IOS11"
   - DESTINATION="$IOS10"
 after_success: bundle exec slather
-before_script:
-- bundle exec pod install --project-directory=.
 script:
 - pod repo update
+- bundle exec pod install --project-directory=.
 - set -o pipefail
 - echo xcodebuild build test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME"
   -sdk "$TRAVIS_XCODE_SDK" -destination "$DESTINATION"
