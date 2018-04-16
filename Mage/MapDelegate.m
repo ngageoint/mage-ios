@@ -197,6 +197,7 @@
                         
                         [_mapView addAnnotation:_areaAnnotation];
                         [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                        return;
 
                     }
                 }
@@ -225,6 +226,7 @@
                     
                     [_mapView addAnnotation:_areaAnnotation];
                     [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                    return;
                 }
                 
                 CGPathRelease(mpr);
