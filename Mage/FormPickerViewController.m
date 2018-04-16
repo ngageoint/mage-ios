@@ -31,11 +31,7 @@
 static NSString *CellIdentifier = @"FormCell";
 
 - (void) themeDidChange:(MageTheme)theme {
-    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
-        self.blurView.backgroundColor = [UIColor clearColor];
-    } else {
-        self.blurView.backgroundColor = [UIColor dialog];
-    }
+    self.blurView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.6];
     self.closeButton.backgroundColor = [UIColor dialog];
     self.closeButton.layer.sublayers = nil;
     [self.closeButton.layer addSublayer:[self createInnerLineWithColor:[UIColor brand]]];
@@ -118,6 +114,7 @@ static NSString *CellIdentifier = @"FormCell";
     KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
     layout.minimumLineSpacing = 10.f;
     layout.minimumInteritemSpacing = 25.f;
+    layout.estimatedItemSize = CGSizeMake(90.f, 120.f);
     layout.itemSize = CGSizeMake(90.f, 120.f);
     
     [self.collectionView setCollectionViewLayout:layout];
