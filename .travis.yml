@@ -12,7 +12,7 @@ env:
   - DESTINATION="$IOS10"
 after_success: bundle exec slather
 before_script:
-- bundle exec pod repo update
+- pod repo update
 - bundle exec pod install --project-directory=.
 script:
 - set -o pipefail
