@@ -21,6 +21,7 @@ Tired of burning your retinas while using MAGE at night or in a dark area?  MAGE
 * Attachment cell constraint fix
 * Observation markers are not dropped multiple times when an observation is created
 * Apple maps URL fixed for case with primary fields with spaces
+* You can now cancel adding a voice recording
 
 ## [2.0.1](https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (02-15-2018)
 
