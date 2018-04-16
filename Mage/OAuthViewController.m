@@ -89,53 +89,20 @@
 }
 
 - (void) completeSigninWithResult: (NSDictionary *) result {
-//    id<Authentication> authentication = [Authentication authenticationModuleForType:self.authenticationType];
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+
+    NSString *appVersion = [infoDict objectForKey: @"CFBundleShortVersionString"];
+    NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
     NSDictionary* parameters = @{
                                  @"strategy": self.strategy,
                                  @"requestType": [NSNumber numberWithInt:SIGNIN],
                                  @"result": result,
-                                 @"uid": [DeviceUUID retrieveDeviceUUID].UUIDString
+                                 @"uid": [DeviceUUID retrieveDeviceUUID].UUIDString,
+                                 @"appVersion": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber]
                                  };
-    __weak typeof(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters withAuthenticationType:self.authenticationType complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         NSLog(@"Authentication complete %ld", (long)authenticationStatus);
-        //        [weakSelf dismissViewControllerAnimated:YES completion:nil];
     }];
-//    __weak typeof(self) weakSelf = self;
-//    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-//        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//            if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
-//                [[UserUtility singleton] acceptConsent];
-//                [self performSegueWithIdentifier:@"SkipDisclaimerSegue" sender:nil];
-//            } else {
-//                [self performSegueWithIdentifier:@"LoginSegue" sender:nil];
-//            }
-//        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-//            UIAlertController * alert = [UIAlertController
-//                                         alertControllerWithTitle:@"Registration Sent"
-//                                         message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-//                                         preferredStyle:UIAlertControllerStyleAlert];
-//
-//            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-//            }]];
-//
-//            [weakSelf presentViewController:alert animated:YES completion:nil];
-//
-//        } else {
-//            UIAlertController * alert = [UIAlertController
-//                                         alertControllerWithTitle:@"Signin Failed"
-//                                         message:[result valueForKey:@"errorMessage"]
-//                                         preferredStyle:UIAlertControllerStyleAlert];
-//
-//            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-//            }]];
-//
-//            [weakSelf presentViewController:alert animated:YES completion:nil];
-//        }
-//    }];
 }
 
 @end
