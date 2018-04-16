@@ -38,6 +38,7 @@
     self.usernameField.selectedLineColor = [UIColor brand];
     self.usernameField.selectedTitleColor = [UIColor brand];
     self.usernameField.placeholderColor = [UIColor secondaryText];
+    self.usernameField.disabledColor = [UIColor secondaryText];
     self.usernameField.lineColor = [UIColor secondaryText];
     self.usernameField.titleColor = [UIColor secondaryText];
     self.usernameField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
@@ -82,7 +83,6 @@
     [self.passwordField setDelegate:self];
     if (self.user) {
         self.usernameField.enabled = NO;
-        self.usernameField.backgroundColor = [UIColor lightGrayColor];
         self.usernameField.text = self.user.username;
         self.signupContainerView.hidden = YES;
     }
