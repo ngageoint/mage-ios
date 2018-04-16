@@ -307,10 +307,13 @@
     [attachmentJson setValue:recording.fileName forKey:@"name"];
     [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
     
-    Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.observation.managedObjectContext];
-    attachment.observation = self.observation;
-    
-    [self.editController refreshObservation];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.observation.managedObjectContext];
+        attachment.observation = self.observation;
+        
+        [self.editController refreshObservation];
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 }
 
 #pragma
@@ -451,9 +454,7 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         AudioRecorderViewController *recorder = [[AudioRecorderViewController alloc] init];
         recorder.delegate = weakSelf;
-        [weakSelf.navigationController.visibleViewController presentViewController:recorder animated:YES completion:^{
-            NSLog(@"recorder shown");
-        }];
+        [weakSelf.navigationController.visibleViewController.navigationController pushViewController:recorder animated:YES];// presentViewController:recorder animated:YES completion:NULL];
     }];
 }
 

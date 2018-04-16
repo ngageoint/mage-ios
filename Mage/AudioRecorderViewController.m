@@ -93,8 +93,9 @@
 -(void) performRecording{
     
     if(!isRecording){
-        
-        [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+        }];
         
         self.recording = [[Recording alloc]init];
         
@@ -299,9 +300,9 @@
     if (self.delegate) {
         [self.delegate recordingAvailable:self.recording];
     }
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+//    [self dismissViewControllerAnimated:YES completion:^{
+//        
+//    }];
 }
 
 @end
