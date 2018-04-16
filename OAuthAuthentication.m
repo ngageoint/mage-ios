@@ -205,7 +205,7 @@
     
     NSDictionary *oauth = [loginResult objectForKey:@"oauth"];
     if (!oauth) {
-        // authentication failed
+        return complete(AUTHENTICATION_ERROR, @"Login failed");
     }
     
     // check if the user is active and if not but they have a user tell them to talk to a MAGE admin
@@ -218,6 +218,7 @@
     [authorizeParameters setObject:oauthToken forKey:@"access_token"];
     [authorizeParameters setObject:[loginParameters valueForKey:@"uid"] forKey:@"uid"];
     [authorizeParameters setObject:[strategy objectForKey:@"identifier"] forKey:@"strategy"];
+    [authorizeParameters setObject:[loginParameters valueForKey:@"appVersion"] forKey:@"appVersion"];
 
     // make an authorize call to the MAGE server and then we will get a token back
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
