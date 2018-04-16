@@ -138,7 +138,9 @@
         self.syncBadge.hidden = YES;
         self.errorBadge.hidden = YES;
     }
-    
+}
+
+- (void) didMoveToSuperview {
     [self registerForThemeChanges];
 }
 
