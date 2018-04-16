@@ -11,9 +11,12 @@
 #import "DayTheme.h"
 #import "DarkTheme.h"
 
-@interface MKMapView ()
--(void) _setShowsNightMode:(BOOL)yesOrNo;
-@end
+// This is a private API.  We have submitted Apple Bugs 38149636, 38151251, 38151240, 38150133, 38150851
+// 38149636 was closed because it is a duplicate of 31187460
+// Until this API is public, this will remain commented out. (2018-14-16)
+// @interface MKMapView ()
+// -(void) _setShowsNightMode:(BOOL)yesOrNo;
+// @end
 
 @implementation UIColor (Mage)
 
@@ -22,9 +25,10 @@
 }
 
 + (void) themeMap: (MKMapView *) map {
-    if ([map respondsToSelector:@selector(_setShowsNightMode:)]) {
-        [map _setShowsNightMode:[[[ThemeManager sharedManager] curentThemeDefinition] darkMap]];
-    }
+    // Commenting out; see above before this is uncommented or removed
+//    if ([map respondsToSelector:@selector(_setShowsNightMode:)]) {
+//        [map _setShowsNightMode:[[[ThemeManager sharedManager] curentThemeDefinition] darkMap]];
+//    }
 }
 
 + (UIColor *) primaryText {
