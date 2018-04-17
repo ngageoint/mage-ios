@@ -63,7 +63,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor flatButton];
+        rightButton.tintColor = [UIColor mageBlue];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {
         annotationView.annotation = self;
