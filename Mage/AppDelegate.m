@@ -374,6 +374,9 @@
         // Create the GeoPackage overlay with child tables
         cacheOverlay = [[GeoPackageCacheOverlay alloc] initWithName:name andTables:tables];
     }
+    @catch (NSException *exception) {
+        NSLog(@"Failed to import GeoPackage %@", exception);
+    }
     @finally {
         [geoPackage close];
     }
@@ -429,12 +432,15 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path{
+-(BOOL) importGeoPackageFile: (NSString *) path {
     // Import the GeoPackage file
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
         imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Failed to import GeoPackage %@", exception);
     }
     @finally {
         [manager close];
