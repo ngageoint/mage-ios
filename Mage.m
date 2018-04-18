@@ -76,6 +76,8 @@
         } failure:^(NSError *error) {
             NSLog(@"Failure to pull events");
             [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+            NSArray *events = [Event MR_findAll];
+            [self fetchFormAndStaticLayerForEvents: events];
         }];
         [manager addTask:eventTask];
     } failure:^(NSError *error) {
