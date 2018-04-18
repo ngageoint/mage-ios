@@ -3,7 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.2 (TBD)
+## 2.0.3 (TBD)
+
+##### Release Notes
+
+##### Feature
+
+##### Bug Fixes
+
+## [2.0.2](https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (04-18-2018) 
 
 ##### Release Notes
 
@@ -22,6 +30,7 @@ Tired of burning your retinas while using MAGE at night or in a dark area?  MAGE
 * Observation markers are not dropped multiple times when an observation is created
 * Apple maps URL fixed for case with primary fields with spaces
 * You can now cancel adding a voice recording
+* Fixes case where connection is lost before events are pulled
 
 ## [2.0.1](https://github.com/ngageoint/mage-ios/releases/tag/2.0.1) (02-15-2018)
 
