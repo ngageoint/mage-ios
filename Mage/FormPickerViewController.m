@@ -66,9 +66,14 @@ static NSString *CellIdentifier = @"FormCell";
     if (self.newObservation) {
         _headerLabel.text = @"What type of observation would you like to create?";
     } else {
-        _headerLabel.text = @"What tyep of form would you like to add to this observation?";
+        _headerLabel.text = @"What type of form would you like to add to this observation?";
     }
     [self setupCollectionView];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 - (void) drawCloseButton {
@@ -115,7 +120,6 @@ static NSString *CellIdentifier = @"FormCell";
     layout.minimumLineSpacing = 10.f;
     layout.minimumInteritemSpacing = 25.f;
     layout.estimatedItemSize = CGSizeMake(90.f, 120.f);
-    layout.itemSize = CGSizeMake(90.f, 120.f);
     
     [self.collectionView setCollectionViewLayout:layout];
 }
