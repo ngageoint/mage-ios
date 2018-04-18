@@ -49,6 +49,7 @@
     self.passwordField.selectedLineColor = [UIColor brand];
     self.passwordField.selectedTitleColor = [UIColor brand];
     self.passwordField.placeholderColor = [UIColor secondaryText];
+    self.passwordField.disabledColor = [UIColor secondaryText];
     self.passwordField.lineColor = [UIColor secondaryText];
     self.passwordField.titleColor = [UIColor secondaryText];
     self.passwordField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
