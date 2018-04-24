@@ -277,7 +277,9 @@ BOOL signingIn = YES;
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
                     }]];
                     
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        NSLog(@"Do not delete the data");
+                    }]];
                     
                     [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
                 } else {

@@ -19,9 +19,8 @@
 
 @property (strong, nonatomic) EventTableDataSource *eventDataSource;
 @property (strong, nonatomic) id<EventChooserDelegate> delegate;
-@property (strong, nonatomic) EventChooserController *eventController;
+@property (strong, nonatomic) EventChooserController<NSFetchedResultsControllerDelegate> *eventController;
 @property (strong, nonatomic) UIViewController *viewController;
-@property (strong, nonatomic) NSMutableArray *formsFetched;
 @property (strong, nonatomic) Event *eventToSegueTo;
 @end
 
@@ -30,16 +29,13 @@
 - (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate {
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name:MAGEFormFetched object:nil];
         self.delegate = delegate;
         self.viewController = viewController;
-        self.formsFetched = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void) start {
-    
     if ([Server currentEventId] != nil) {
         Event *event = [Event getEventById:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];
         self.eventToSegueTo = event;
@@ -50,36 +46,27 @@
     }
     
     self.eventDataSource = [[EventTableDataSource alloc] init];
-    self.eventController = [[EventChooserController alloc] initWithDataSource:self.eventDataSource andDelegate:self];
+    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self];
     [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
+    __weak typeof(self) weakSelf = self;
     [self.viewController presentViewController:self.eventController animated:NO completion:^{
+        [weakSelf.eventDataSource startFetchController];
+        [weakSelf.eventController initializeView];
+        weakSelf.eventDataSource.otherFetchedResultsController.delegate = weakSelf.eventController;
+        weakSelf.eventDataSource.recentFetchedResultsController.delegate = weakSelf.eventController;
         [[Mage singleton] fetchEvents];
     }];
 }
 
 - (void) didSelectEvent:(Event *)event {
-    // first ensure the form for that event was pulled or else we will just wait for the form fetched notification
     self.eventToSegueTo = event;
-    if ([self.formsFetched containsObject:event.remoteId]) {
-        [self.eventController dismissViewControllerAnimated:NO completion:nil];
-        [self.delegate eventChoosen:self.eventToSegueTo];
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
+    [self.eventController dismissViewControllerAnimated:NO completion:nil];
+    [self.delegate eventChoosen:self.eventToSegueTo];
 }
 
 - (void) actionButtonTapped {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate logout];
-}
-
-- (void) formFetched: (NSNotification *) notification {
-    Event *event = (Event *)notification.object;
-    if (self.eventToSegueTo && [self.eventToSegueTo.remoteId isEqualToNumber:event.remoteId]) {
-        [self.eventController dismissViewControllerAnimated:NO completion:nil];
-        [self.delegate eventChoosen:self.eventToSegueTo];
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
-    [self.formsFetched addObject:event.remoteId];
 }
 
 - (void) eventsFetched: (NSNotification *) notification {

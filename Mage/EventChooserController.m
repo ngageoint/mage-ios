@@ -12,10 +12,13 @@
 #import "UserUtility.h"
 #import "Theme+UIResponder.h"
 
-@interface EventChooserController()
+@interface EventChooserController() <NSFetchedResultsControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *refreshingButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *refreshingActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIView *refreshingView;
 
 @end
 
@@ -23,6 +26,8 @@
 
 BOOL checkForms = NO;
 BOOL eventsFetched = NO;
+BOOL eventsInitialized = NO;
+BOOL eventsChanged = NO;
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate {
     self = [super initWithNibName:@"EventChooserView" bundle:nil];
@@ -58,7 +63,7 @@ BOOL eventsFetched = NO;
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (eventsFetched == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+    if (eventsFetched == NO && eventsInitialized == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         self.loadingView.alpha = 1.0f;
         self.loadingLabel.text = @"Loading Events";
         self.actionButton.hidden = YES;
@@ -66,18 +71,20 @@ BOOL eventsFetched = NO;
     
     self.tableView.estimatedRowHeight = 52;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    eventsChanged = NO;
 }
 
 -(void) didSelectEvent:(Event *) event {
     
     [self.delegate didSelectEvent:event];
-    
+    __weak typeof(self) weakSelf = self;
+
     // show the loading indicator
     self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
     [UIView animateWithDuration:0.75f animations:^{
-        self.loadingView.alpha = 1.0f;
+        weakSelf.loadingView.alpha = 1.0f;
     } completion:^(BOOL finished) {
-        self.loadingView.alpha = 1.0;
+        weakSelf.loadingView.alpha = 1.0;
     }];
 }
 
@@ -85,19 +92,57 @@ BOOL eventsFetched = NO;
     [self.delegate actionButtonTapped];
 }
 
+
+- (IBAction)actionButtonTapped:(id)sender {
+    [self.delegate actionButtonTapped];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(nullable NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(nullable NSIndexPath *)newIndexPath {
+    NSLog(@"Events changed");
+    eventsChanged = YES;
+}
+
+- (void) initializeView {
+    NSLog(@"Initializing View");
+    eventsInitialized = YES;
+    
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+        // no events have been fetched at this point
+        [self.refreshingView setHidden:YES];
+    } else {
+        if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+            Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
+            [Server setCurrentEventId:e.remoteId];
+        }
+        __weak typeof(self) weakSelf = self;
+        
+        [UIView animateWithDuration:0.75f animations:^{
+            weakSelf.loadingView.alpha = 0.0f;
+        } completion:^(BOOL finished) {
+            weakSelf.loadingView.alpha = 0.0;
+        }];
+    }
+    [self.tableView reloadData];
+    
+    // TODO set up a timer to update the refresh button to indicate the request is taking a while
+    
+}
+
 - (void) eventsFetched {
     NSLog(@"Events were fetched");
     eventsFetched = YES;
+    __weak typeof(self) weakSelf = self;
     
-    [UIView animateWithDuration:0.75f animations:^{
-        self.loadingView.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        self.loadingView.alpha = 0.0;
-    }];
+    // were new events found that weren't already in the list?
+    if (eventsChanged) {
+        [self.refreshingButton setTitle:@"Tap To Refresh Your Events" forState:UIControlStateNormal];
+    } else {
+        [self.refreshingView setHidden:YES];
+    }
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
         messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -117,6 +162,14 @@ BOOL eventsFetched = NO;
         [Server setCurrentEventId:e.remoteId];
     }
     [self.tableView reloadData];
+    
+    [UIView animateWithDuration:0.75f animations:^{
+        weakSelf.loadingView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        weakSelf.loadingView.alpha = 0.0;
+    }];
+    
+    [self.refreshingActivityIndicator stopAnimating];
 }
 
 @end

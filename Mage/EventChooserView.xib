@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue-Medium</string>
-        </array>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EventChooserController">
             <connections>
@@ -22,6 +17,9 @@
                 <outlet property="chooseEventTitle" destination="lba-YF-RHW" id="Ddz-WR-cYh"/>
                 <outlet property="loadingLabel" destination="M9H-W8-t0D" id="4M6-SD-KP8"/>
                 <outlet property="loadingView" destination="DUb-5Z-FfH" id="v5o-d2-S4B"/>
+                <outlet property="refreshingActivityIndicator" destination="jdI-b6-hzr" id="0q6-vj-uih"/>
+                <outlet property="refreshingButton" destination="afQ-S2-Rc3" id="7Am-CE-mNM"/>
+                <outlet property="refreshingView" destination="bjf-eC-ajK" id="XNW-LQ-6hr"/>
                 <outlet property="tableView" destination="9U8-H1-4fr" id="lHq-u9-wz9"/>
                 <outlet property="view" destination="eXm-OM-C9g" id="Kxu-MP-rTN"/>
             </connections>
@@ -31,13 +29,51 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9U8-H1-4fr">
-                    <rect key="frame" x="16" y="69" width="343" height="590"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                    <sections/>
-                </tableView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CSe-sb-PIx">
+                    <rect key="frame" x="0.0" y="69" width="375" height="598"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9U8-H1-4fr">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="574"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="separatorColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <sections/>
+                        </tableView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bjf-eC-ajK">
+                            <rect key="frame" x="0.0" y="574" width="375" height="24"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afQ-S2-Rc3">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="24"/>
+                                    <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="24" id="MEL-TF-Ugg"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <state key="normal" title="Refreshing Events">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="jdI-b6-hzr">
+                                    <rect key="frame" x="347" y="2" width="20" height="20"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="45g-6S-Ep7"/>
+                                <constraint firstItem="jdI-b6-hzr" firstAttribute="trailing" secondItem="afQ-S2-Rc3" secondAttribute="trailing" constant="-8" id="7bP-La-M8E"/>
+                                <constraint firstItem="afQ-S2-Rc3" firstAttribute="leading" secondItem="bjf-eC-ajK" secondAttribute="leading" id="Hsq-Ha-fCq"/>
+                                <constraint firstItem="afQ-S2-Rc3" firstAttribute="top" secondItem="bjf-eC-ajK" secondAttribute="top" id="aFS-UE-7Dl"/>
+                                <constraint firstAttribute="trailing" secondItem="afQ-S2-Rc3" secondAttribute="trailing" id="ihx-Ki-bcF"/>
+                                <constraint firstItem="jdI-b6-hzr" firstAttribute="centerY" secondItem="afQ-S2-Rc3" secondAttribute="centerY" id="otw-7x-DMb"/>
+                                <constraint firstAttribute="bottom" secondItem="afQ-S2-Rc3" secondAttribute="bottom" id="tSi-Vx-P2r"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="bjf-eC-ajK" secondAttribute="trailing" id="qFR-7u-uTc"/>
+                        <constraint firstItem="bjf-eC-ajK" firstAttribute="leading" secondItem="CSe-sb-PIx" secondAttribute="leading" id="sSt-9P-Swg"/>
+                    </constraints>
+                </stackView>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="byS-3P-7WH">
                     <rect key="frame" x="16" y="607" width="343" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -58,7 +94,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <action selector="actionButtonTapped:" destination="-1" eventType="touchUpInside" id="mz8-q1-b2n"/>
+                        <action selector="actionButtonTapped:" destination="-1" eventType="touchUpInside" id="3iP-di-2tN"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose An Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lba-YF-RHW">
@@ -103,19 +139,19 @@
                 <bool key="isElement" value="NO"/>
             </accessibility>
             <constraints>
+                <constraint firstItem="CSe-sb-PIx" firstAttribute="leadingMargin" secondItem="eXm-OM-C9g" secondAttribute="leading" id="0N3-EK-5CB"/>
+                <constraint firstItem="CSe-sb-PIx" firstAttribute="top" secondItem="lba-YF-RHW" secondAttribute="bottom" constant="8" id="7qW-sz-lmm"/>
                 <constraint firstAttribute="bottom" secondItem="DUb-5Z-FfH" secondAttribute="bottom" id="7sC-lz-fbA"/>
                 <constraint firstAttribute="trailing" secondItem="DUb-5Z-FfH" secondAttribute="trailing" id="IQc-3F-TGt"/>
                 <constraint firstAttribute="bottomMargin" secondItem="byS-3P-7WH" secondAttribute="bottom" constant="20" id="JNi-xt-2QH"/>
                 <constraint firstItem="lba-YF-RHW" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="L1O-PX-4Eu"/>
                 <constraint firstAttribute="trailing" secondItem="lba-YF-RHW" secondAttribute="trailing" constant="16" id="Mcv-IE-wku"/>
-                <constraint firstItem="9U8-H1-4fr" firstAttribute="top" secondItem="lba-YF-RHW" secondAttribute="bottom" constant="8" id="N42-eU-KY3"/>
+                <constraint firstAttribute="bottomMargin" secondItem="CSe-sb-PIx" secondAttribute="bottom" id="Zg5-RM-Ui9"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="top" constant="-20" id="fWW-ca-dhe"/>
+                <constraint firstAttribute="trailing" secondItem="CSe-sb-PIx" secondAttribute="trailingMargin" id="hiK-iY-xCx"/>
                 <constraint firstAttribute="trailing" secondItem="byS-3P-7WH" secondAttribute="trailing" constant="16" id="hne-4a-v1U"/>
                 <constraint firstItem="byS-3P-7WH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="mul-3X-cGq"/>
-                <constraint firstAttribute="trailing" secondItem="9U8-H1-4fr" secondAttribute="trailing" constant="16" id="q91-wK-nYP"/>
                 <constraint firstItem="lba-YF-RHW" firstAttribute="top" secondItem="eXm-OM-C9g" secondAttribute="topMargin" constant="20" id="qME-Sx-G4b"/>
-                <constraint firstItem="9U8-H1-4fr" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" constant="16" id="sAd-UY-RIy"/>
-                <constraint firstAttribute="bottomMargin" secondItem="9U8-H1-4fr" secondAttribute="bottom" constant="8" id="yTa-US-zFS"/>
                 <constraint firstItem="DUb-5Z-FfH" firstAttribute="leading" secondItem="eXm-OM-C9g" secondAttribute="leading" id="zx6-Kh-hCl"/>
             </constraints>
         </view>

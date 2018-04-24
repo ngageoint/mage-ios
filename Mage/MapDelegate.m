@@ -42,6 +42,7 @@
 #import "WKBGeometryUtils.h"
 #import "MapShapePointAnnotationView.h"
 #import "Event.h"
+#import "Form.h"
 #import "Observation.h"
 
 @interface MapDelegate ()
@@ -97,6 +98,8 @@
         
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
     }
     
     return self;
@@ -322,6 +325,18 @@
         }
         complete();
     });
+}
+
+- (void) formFetched: (NSNotification *) notification {
+    Event *event = (Event *)notification.object;
+    NSLog(@"Form fetched for event %@", event.name);
+    if ([[Server currentEventId] isEqualToNumber:event.remoteId]) {
+        __weak typeof(self) weakSelf = self;
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+            [weakSelf updateObservations:[weakSelf.observations.fetchedResultsController fetchedObjects]];
+        });
+    }
 }
 
 - (void) setObservations:(Observations *)observations {

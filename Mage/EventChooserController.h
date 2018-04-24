@@ -29,5 +29,6 @@
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate;
 - (void) eventsFetched;
+- (void) initializeView;
 
 @end

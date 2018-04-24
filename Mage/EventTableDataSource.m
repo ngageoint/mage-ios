@@ -12,7 +12,7 @@
 #import "Observation.h"
 #import "EventTableViewCell.h"
 #import "Theme+UIResponder.h"
-#import "ObservationTableHeaderView.h"
+#import "EventTableHeaderView.h"
 
 @interface EventTableDataSource()
 
@@ -48,7 +48,7 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }
-        
+    
     if (![self.recentFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -130,51 +130,51 @@
     return 48.0f;
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
-    
-    UITableView *tableView = self.tableView;
-    
-    NSIndexPath *realNewPath = newIndexPath;
-    NSIndexPath *realOldPath = indexPath;
-    
-    if ([controller.accessibilityLabel isEqualToString: self.otherFetchedResultsController.accessibilityLabel]) {
-        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
-        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
-    } else {
-        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:1];
-        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:1];
-    }
-    
-    switch(type) {
-            
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:NO];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
-    [self.tableView endUpdates];
-}
-
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
-    [self.tableView beginUpdates];
-}
+//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
+//
+//    UITableView *tableView = self.tableView;
+//
+//    NSIndexPath *realNewPath = newIndexPath;
+//    NSIndexPath *realOldPath = indexPath;
+//
+//    if ([controller.accessibilityLabel isEqualToString: self.otherFetchedResultsController.accessibilityLabel]) {
+//        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
+//        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
+//    } else {
+//        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:1];
+//        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:1];
+//    }
+//
+//    switch(type) {
+//
+//        case NSFetchedResultsChangeInsert:
+//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//
+//        case NSFetchedResultsChangeDelete:
+//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//
+//        case NSFetchedResultsChangeUpdate:
+//            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:NO];
+//            break;
+//
+//        case NSFetchedResultsChangeMove:
+//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//    }
+//}
+//
+//- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
+//    // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
+//    [self.tableView endUpdates];
+//}
+//
+//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+//    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
+//    [self.tableView beginUpdates];
+//}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = nil;
@@ -193,7 +193,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 80)];
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, tableView.frame.size.width, 70)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 5, tableView.frame.size.width-16, 70)];
         if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
             messageLabel.text = @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
         } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count == 1) {
@@ -222,6 +222,12 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) return CGFLOAT_MIN;
+    
+    if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return CGFLOAT_MIN;
+    
+    if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return CGFLOAT_MIN;
+   
     return 48.0f;
 }
 
@@ -231,7 +237,7 @@
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     
     NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[EventTableHeaderView alloc] initWithName:name];
 }
 
 @end
