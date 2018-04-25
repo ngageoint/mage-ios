@@ -22,13 +22,6 @@
 
 @implementation EventTableDataSource
 
-- (id) init {
-    if (self = [super init]) {
-
-    }
-    return self;
-}
-
 // This method should not be called until the events have been loaded from the server
 - (void) startFetchController {
     
@@ -76,9 +69,7 @@
         [offlineCount setObject:[group objectForKey:@"count"] forKey:[group objectForKey:@"eventId"]];
     }
     self.eventIdToOfflineObservationCount = offlineCount;
-
 }
-
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 1) {
@@ -130,52 +121,6 @@
     return 48.0f;
 }
 
-//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id) anObject atIndexPath:(NSIndexPath *) indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *) newIndexPath {
-//
-//    UITableView *tableView = self.tableView;
-//
-//    NSIndexPath *realNewPath = newIndexPath;
-//    NSIndexPath *realOldPath = indexPath;
-//
-//    if ([controller.accessibilityLabel isEqualToString: self.otherFetchedResultsController.accessibilityLabel]) {
-//        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
-//        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
-//    } else {
-//        realNewPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:1];
-//        realOldPath = [NSIndexPath indexPathForRow:indexPath.row inSection:1];
-//    }
-//
-//    switch(type) {
-//
-//        case NSFetchedResultsChangeInsert:
-//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//
-//        case NSFetchedResultsChangeDelete:
-//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//
-//        case NSFetchedResultsChangeUpdate:
-//            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:NO];
-//            break;
-//
-//        case NSFetchedResultsChangeMove:
-//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:realOldPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:realNewPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-//
-//- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
-//    // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
-//    [self.tableView endUpdates];
-//}
-//
-//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-//    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
-//    [self.tableView beginUpdates];
-//}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = nil;
     if (indexPath.section == 1) {
@@ -190,35 +135,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 0) {
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 80)];
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 5, tableView.frame.size.width-16, 70)];
-        if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
-            messageLabel.text = @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count == 1) {
-            messageLabel.text = @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count == 1) {
-            // they are part of one event and have seen this page before.  Should I show it?
-            messageLabel.text = @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count > 1) {
-            messageLabel.text = @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at anytime within MAGE.";
-        }
-        
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = NSTextAlignmentCenter;
-        messageLabel.font = [UIFont systemFontOfSize:14];
-        messageLabel.textColor = [UIColor secondaryText];
-        [view addSubview:messageLabel];
-        return view;
-    }
-    
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    UIView *viewForSection = [tableView.delegate tableView:tableView viewForFooterInSection:section];
-    return viewForSection.frame.size.height;
+    if (section == 0) {
+        return 80.0f;
+    }
+    return CGFLOAT_MIN;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -231,8 +152,24 @@
     return 48.0f;
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
+            return @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at any time within MAGE.";
+        } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count == 1) {
+            return @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
+        } else if (self.recentFetchedResultsController.fetchedObjects.count == 1) {
+            // they are part of one event and have seen this page before.  Should I show it?
+            return @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
+        } else if (self.recentFetchedResultsController.fetchedObjects.count > 1) {
+            return @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at any time within MAGE.";
+        }
+    }
+    return nil;
+}
+
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
+    if (section == 0) return [[UIView alloc] initWithFrame:CGRectZero];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     

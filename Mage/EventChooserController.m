@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *refreshingButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *refreshingActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *refreshingView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *refreshingViewHeight;
 
 @end
 
@@ -48,6 +49,7 @@ BOOL eventsChanged = NO;
     self.actionButton.backgroundColor = [UIColor themedButton];
     self.loadingLabel.textColor = [UIColor brand];
     self.activityIndicator.color = [UIColor brand];
+    self.tableView.backgroundColor = [UIColor background];
     
     [self.tableView reloadData];
 }
@@ -58,6 +60,15 @@ BOOL eventsChanged = NO;
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
+}
+
+- (BOOL) isIphoneX {
+    if (@available(iOS 11.0, *)) {
+        return self.view.safeAreaInsets.top > 0.0;
+    } else {
+        return NO;
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -74,7 +85,15 @@ BOOL eventsChanged = NO;
     eventsChanged = NO;
 }
 
--(void) didSelectEvent:(Event *) event {
+- (void) viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if ([self isIphoneX]) {
+        self.refreshingViewHeight.constant = 56.0f;
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void) didSelectEvent:(Event *) event {
     
     [self.delegate didSelectEvent:event];
     __weak typeof(self) weakSelf = self;
@@ -92,7 +111,6 @@ BOOL eventsChanged = NO;
     [self.delegate actionButtonTapped];
 }
 
-
 - (IBAction)actionButtonTapped:(id)sender {
     [self.delegate actionButtonTapped];
 }
@@ -106,6 +124,8 @@ BOOL eventsChanged = NO;
     NSLog(@"Initializing View");
     eventsInitialized = YES;
     
+    __weak typeof(self) weakSelf = self;
+    
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         // no events have been fetched at this point
         [self.refreshingView setHidden:YES];
@@ -114,7 +134,6 @@ BOOL eventsChanged = NO;
             Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
             [Server setCurrentEventId:e.remoteId];
         }
-        __weak typeof(self) weakSelf = self;
         
         [UIView animateWithDuration:0.75f animations:^{
             weakSelf.loadingView.alpha = 0.0f;
@@ -125,7 +144,16 @@ BOOL eventsChanged = NO;
     [self.tableView reloadData];
     
     // TODO set up a timer to update the refresh button to indicate the request is taking a while
+    NSTimer *timer = [NSTimer timerWithTimeInterval:10.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        //code
+        if (eventsFetched) {
+            [timer invalidate];
+        } else {
+            [weakSelf.refreshingButton setTitle:@"Refreshing Events seems to be taking a while..." forState:UIControlStateNormal];
+        }
+    }];
     
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 - (void) eventsFetched {
