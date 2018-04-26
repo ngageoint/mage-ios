@@ -17,6 +17,7 @@
 @interface EventTableDataSource()
 
 @property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
+@property (strong, nonatomic) NSString *currentFilter;
 
 @end
 
@@ -72,6 +73,9 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.filteredFetchedResultsController) {
+        return self.filteredFetchedResultsController.fetchedObjects.count;
+    }
     if (section == 1) {
         return self.recentFetchedResultsController.fetchedObjects.count;
     } else if (section == 2) {
@@ -81,11 +85,15 @@
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.filteredFetchedResultsController != nil) return 1;
     if (self.otherFetchedResultsController.fetchedObjects.count == 0 && self.recentFetchedResultsController.fetchedObjects.count == 0) return 0;
     return 3;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (self.filteredFetchedResultsController) {
+        return [NSString stringWithFormat:@"%@ (%lu)", self.filteredFetchedResultsController.accessibilityLabel, (unsigned long)self.filteredFetchedResultsController.fetchedObjects.count];
+    }
     if (section == 1) {
         return [NSString stringWithFormat:@"%@ (%lu)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
     } else if (section == 2) {
@@ -94,10 +102,29 @@
     return nil;
 }
 
+- (void) setEventFilter: (NSString *) filter {
+    if (!filter) {
+        self.filteredFetchedResultsController = nil;
+        return;
+    }
+    self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";
+    NSError *error;
+    if (![self.filteredFetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+}
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     Event *event = nil;
-    if (indexPath.section == 1) {
+    
+    if (self.filteredFetchedResultsController != nil) {
+        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
         event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
@@ -110,7 +137,9 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = nil;
-    if (indexPath.section == 1) {
+    if (self.filteredFetchedResultsController != nil) {
+        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
         event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
@@ -123,7 +152,9 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = nil;
-    if (indexPath.section == 1) {
+    if (self.filteredFetchedResultsController != nil) {
+        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
         event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
@@ -143,6 +174,10 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.filteredFetchedResultsController != nil) {
+        return 48.0f;
+    }
+    
     if (section == 0) return CGFLOAT_MIN;
     
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return CGFLOAT_MIN;
@@ -153,6 +188,9 @@
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (self.filteredFetchedResultsController != nil) {
+        return @"End of Results";
+    }
     if (section == 0) {
         if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
             return @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at any time within MAGE.";
@@ -169,6 +207,11 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.filteredFetchedResultsController != nil) {
+        NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
+        return [[EventTableHeaderView alloc] initWithName:name];
+    }
+        
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectZero];
     if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];

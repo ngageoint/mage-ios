@@ -12,7 +12,7 @@
 #import "UserUtility.h"
 #import "Theme+UIResponder.h"
 
-@interface EventChooserController() <NSFetchedResultsControllerDelegate>
+@interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating>
 
 @property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *refreshingActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *refreshingView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *refreshingViewHeight;
+@property (strong, nonatomic) UISearchController *searchController;
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
 
 @end
 
@@ -51,6 +53,10 @@ BOOL eventsChanged = NO;
     self.activityIndicator.color = [UIColor brand];
     self.tableView.backgroundColor = [UIColor background];
     
+    self.searchController.searchBar.barTintColor = [UIColor dialog];
+    self.searchController.searchBar.tintColor = [UIColor flatButton];
+    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+
     [self.tableView reloadData];
 }
 
@@ -60,7 +66,34 @@ BOOL eventsChanged = NO;
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.searchBar.barTintColor = [UIColor whiteColor];
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
+    
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
+    [self.searchContainer addSubview:self.searchController.searchBar];
+    
+    self.searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+    
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
+    
+    self.definesPresentationContext = YES;
+}
+
+- (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
+    if (self.searchController.active) {
+        [self.eventDataSource setEventFilter:searchController.searchBar.text];
+    } else {
+        [self.eventDataSource setEventFilter:nil];
+    }
+    [self.tableView reloadData];
 }
 
 - (BOOL) isIphoneX {
@@ -87,6 +120,8 @@ BOOL eventsChanged = NO;
 
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    [self.searchContainer layoutIfNeeded];
+    [self.searchController.searchBar sizeToFit];
     if ([self isIphoneX]) {
         self.refreshingViewHeight.constant = 56.0f;
         [self.view layoutIfNeeded];
