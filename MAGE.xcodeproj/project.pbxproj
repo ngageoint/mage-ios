@@ -1922,7 +1922,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1950,7 +1950,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",

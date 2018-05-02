@@ -23,7 +23,6 @@
 
 @implementation EventTableDataSource
 
-// This method should not be called until the events have been loaded from the server
 - (void) startFetchController {
     
     User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
@@ -73,6 +72,7 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"Section %ld", (long)section);
     if (self.filteredFetchedResultsController) {
         return self.filteredFetchedResultsController.fetchedObjects.count;
     }
@@ -90,6 +90,50 @@
     return 3;
 }
 
+#pragma mark - NSFetchedResultsControllerDelegate
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [[self tableView] beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [[self tableView] insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [[self tableView] deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeMove:
+        case NSFetchedResultsChangeUpdate:
+            break;
+    }
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeMove:
+            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [[self tableView] endUpdates];
+}
+
+#pragma
+
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.filteredFetchedResultsController) {
         return [NSString stringWithFormat:@"%@ (%lu)", self.filteredFetchedResultsController.accessibilityLabel, (unsigned long)self.filteredFetchedResultsController.fetchedObjects.count];
@@ -102,19 +146,23 @@
     return nil;
 }
 
-- (void) setEventFilter: (NSString *) filter {
+- (void) setEventFilter: (NSString *) filter withDelegate:(id<NSFetchedResultsControllerDelegate>) delegate {
     if (!filter) {
+        self.filteredFetchedResultsController.delegate = nil;
         self.filteredFetchedResultsController = nil;
         return;
     }
-    self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
+    if (!self.filteredFetchedResultsController) {
+        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil delegate:delegate inContext:[NSManagedObjectContext MR_defaultContext]];
     
-    self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";
+        self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";
+    } else {
+        [self.filteredFetchedResultsController.fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter]];
+    }
     NSError *error;
     if (![self.filteredFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
     }
 }
 

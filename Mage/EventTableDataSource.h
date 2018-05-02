@@ -18,6 +18,6 @@
 @property (weak, nonatomic) IBOutlet id<EventSelectionDelegate> eventSelectionDelegate;
 
 - (void) startFetchController;
-- (void) setEventFilter: (NSString *) filter;
+- (void) setEventFilter: (NSString *) filter withDelegate:(id<NSFetchedResultsControllerDelegate>) delegate;
 
 @end

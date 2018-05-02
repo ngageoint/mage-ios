@@ -89,9 +89,9 @@ BOOL eventsChanged = NO;
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
     if (self.searchController.active) {
-        [self.eventDataSource setEventFilter:searchController.searchBar.text];
+        [self.eventDataSource setEventFilter:searchController.searchBar.text withDelegate: self];
     } else {
-        [self.eventDataSource setEventFilter:nil];
+        [self.eventDataSource setEventFilter:nil withDelegate: nil];
     }
     [self.tableView reloadData];
 }
@@ -150,7 +150,12 @@ BOOL eventsChanged = NO;
     [self.delegate actionButtonTapped];
 }
 
+- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSLog(@"controller changed content");
+}
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(nullable NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(nullable NSIndexPath *)newIndexPath {
+    
     NSLog(@"Events changed");
     eventsChanged = YES;
 }
