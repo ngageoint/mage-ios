@@ -162,6 +162,7 @@ BOOL signingIn = YES;
 
 - (void) signinForStrategy:(NSDictionary *)strategy {
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
+    
     OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN andStrategy: strategy andLoginDelegate: self];
     [self.navigationController pushViewController:ovc animated:YES];
 }
@@ -292,9 +293,28 @@ BOOL signingIn = YES;
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
+        } else if (authenticationStatus == ACCOUNT_CREATION_SUCCESS) {
+            [weakSelf accountCreationSuccess:parameters complete:complete];
         }
         complete(authenticationStatus, errorString);
     }];
+}
+
+- (void) accountCreationSuccess: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorStrign)) complete {
+    __weak __typeof__(self) weakSelf = self;
+    [self.navigationController popToViewController:self.loginView animated:NO];
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
+                                                                   message:@"Account created, contact an administrator to activate your account."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
