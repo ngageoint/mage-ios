@@ -19,6 +19,7 @@
 #import "OAuthLoginView.h"
 #import "LoginGovLoginView.h"
 #import "LocalLoginView.h"
+#import "OrView.h"
 
 @interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
 
@@ -139,6 +140,8 @@
         [subview removeFromSuperview];
     }
     
+    BOOL localAuth = NO;
+    
     for (NSDictionary *strategy in strategies) {
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"login-gov"]) {
             OAuthLoginView *view = [[OAuthLoginView alloc] init];
@@ -146,17 +149,23 @@
             view.delegate = self.delegate;
             [self.loginsStackView insertArrangedSubview:view atIndex:0];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
+            localAuth = YES;
             LocalLoginView *view = [[LocalLoginView alloc] init];
             view.strategy = strategy;
             view.delegate = self.delegate;
             view.user = self.user;
-            [self.loginsStackView insertArrangedSubview:view atIndex:0];
+            [self.loginsStackView insertArrangedSubview:view atIndex:self.loginsStackView.arrangedSubviews.count];
         } else {
             OAuthLoginView *view = [[OAuthLoginView alloc] init];
             view.strategy = strategy;
             view.delegate = self.delegate;
             [self.loginsStackView insertArrangedSubview:view atIndex:0];
         }
+    }
+    
+    if (strategies.count > 1 && localAuth) {
+        OrView *orView = [[OrView alloc] init];
+        [self.loginsStackView insertArrangedSubview:orView atIndex:self.loginsStackView.arrangedSubviews.count-1];
     }
     
     self.statusView.hidden = !self.loginFailure;

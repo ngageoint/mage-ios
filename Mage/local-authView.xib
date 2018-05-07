@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -218,13 +217,12 @@
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="WKF-P5-6oy" firstAttribute="trailing" secondItem="NGa-Oo-ehZ" secondAttribute="trailing" id="5pU-F0-eXB"/>
-                <constraint firstItem="NGa-Oo-ehZ" firstAttribute="top" secondItem="WKF-P5-6oy" secondAttribute="top" id="Fx2-mY-Gf6"/>
-                <constraint firstItem="NGa-Oo-ehZ" firstAttribute="leading" secondItem="WKF-P5-6oy" secondAttribute="leading" id="Ksi-O1-sGY"/>
-                <constraint firstItem="WKF-P5-6oy" firstAttribute="bottom" secondItem="NGa-Oo-ehZ" secondAttribute="bottom" id="vZ3-hX-GTJ"/>
+                <constraint firstAttribute="trailing" secondItem="NGa-Oo-ehZ" secondAttribute="trailing" id="5pU-F0-eXB"/>
+                <constraint firstItem="NGa-Oo-ehZ" firstAttribute="top" secondItem="42o-Su-1Wy" secondAttribute="top" id="Fx2-mY-Gf6"/>
+                <constraint firstItem="NGa-Oo-ehZ" firstAttribute="leading" secondItem="42o-Su-1Wy" secondAttribute="leading" id="Ksi-O1-sGY"/>
+                <constraint firstAttribute="bottom" secondItem="NGa-Oo-ehZ" secondAttribute="bottom" id="vZ3-hX-GTJ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="WKF-P5-6oy"/>
             <point key="canvasLocation" x="7.5" y="-296.5"/>
         </view>
     </objects>

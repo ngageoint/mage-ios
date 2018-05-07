@@ -20,14 +20,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
-                <outlet property="googleSignInButton" destination="7yL-sy-yvo" id="7lC-my-acs"/>
-                <outlet property="googleView" destination="fRG-af-yaE" id="oZX-6J-ZfU"/>
-                <outlet property="loginStatus" destination="eIq-ag-kOm" id="f7T-hz-oki"/>
                 <outlet property="loginsStackView" destination="zEg-A8-aMM" id="ca4-6i-hda"/>
                 <outlet property="mageLabel" destination="AjL-hK-ohz" id="vZj-Un-uog"/>
                 <outlet property="serverURL" destination="6wE-Es-XY5" id="V2h-fy-Dgp"/>
-                <outlet property="statusButton" destination="xof-Rp-EAn" id="MY7-UU-95C"/>
-                <outlet property="statusView" destination="cSE-Mn-iBQ" id="Big-4d-5YO"/>
                 <outlet property="versionLabel" destination="McJ-Ia-VcZ" id="xY3-Vu-rKe"/>
                 <outlet property="view" destination="HSM-eT-VRH" id="Xgh-Ms-s2S"/>
                 <outlet property="wandLabel" destination="yBZ-Db-LW7" id="9nM-dy-f55"/>
@@ -60,67 +55,10 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jM-R6-Uqf">
                     <rect key="frame" x="0.0" y="155" width="375" height="454"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
-                            <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRG-af-yaE">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="42"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7yL-sy-yvo" customClass="GIDSignInButton">
-                                            <rect key="frame" x="20" y="0.0" width="335" height="42"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="42" id="Lwo-iE-uDs"/>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <constraints>
-                                        <constraint firstItem="7yL-sy-yvo" firstAttribute="top" secondItem="fRG-af-yaE" secondAttribute="top" id="7GA-7V-aXx"/>
-                                        <constraint firstAttribute="trailing" secondItem="7yL-sy-yvo" secondAttribute="trailing" constant="20" symbolic="YES" id="WVx-PF-1SF"/>
-                                        <constraint firstAttribute="bottom" secondItem="7yL-sy-yvo" secondAttribute="bottom" id="Ztq-eR-jJ9"/>
-                                        <constraint firstItem="7yL-sy-yvo" firstAttribute="leading" secondItem="fRG-af-yaE" secondAttribute="leading" constant="20" symbolic="YES" id="h5f-w7-rys"/>
-                                    </constraints>
-                                </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cSE-Mn-iBQ">
-                                    <rect key="frame" x="0.0" y="52" width="375" height="108"/>
-                                    <subviews>
-                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xof-Rp-EAn">
-                                            <rect key="frame" x="20" y="0.0" width="24" height="24"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="24" id="Un6-XQ-gOL"/>
-                                                <constraint firstAttribute="width" constant="24" id="eXC-ki-8it"/>
-                                            </constraints>
-                                            <state key="normal" image="error">
-                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                        </button>
-                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eIq-ag-kOm">
-                                            <rect key="frame" x="52" y="0.0" width="303" height="108"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <accessibility key="accessibilityConfiguration" label="Login Status"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="108" id="uB1-s7-8ws"/>
-                                            </constraints>
-                                            <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-BoldItalic" family="Helvetica Neue" pointSize="9"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        </textView>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="eIq-ag-kOm" secondAttribute="bottom" id="3Qg-gP-co0"/>
-                                        <constraint firstItem="eIq-ag-kOm" firstAttribute="top" secondItem="cSE-Mn-iBQ" secondAttribute="top" id="ED0-yp-QXK"/>
-                                        <constraint firstItem="xof-Rp-EAn" firstAttribute="leading" secondItem="cSE-Mn-iBQ" secondAttribute="leading" constant="20" symbolic="YES" id="PI2-hR-Hp0"/>
-                                        <constraint firstItem="eIq-ag-kOm" firstAttribute="leading" secondItem="xof-Rp-EAn" secondAttribute="trailing" constant="8" id="UcO-Ui-X2n"/>
-                                        <constraint firstItem="xof-Rp-EAn" firstAttribute="top" secondItem="cSE-Mn-iBQ" secondAttribute="top" id="lKE-dl-viJ"/>
-                                        <constraint firstAttribute="trailing" secondItem="eIq-ag-kOm" secondAttribute="trailing" constant="20" symbolic="YES" id="sa5-2o-jsv"/>
-                                    </constraints>
-                                </view>
-                            </subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="454"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="fRG-af-yaE" secondAttribute="trailing" id="V8J-dB-Rwd"/>
-                                <constraint firstItem="fRG-af-yaE" firstAttribute="leading" secondItem="zEg-A8-aMM" secondAttribute="leading" id="pyK-Uj-iNP"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="V0W-aJ-EIZ"/>
                             </constraints>
                         </stackView>
                     </subviews>
@@ -129,6 +67,7 @@
                         <constraint firstItem="zEg-A8-aMM" firstAttribute="leading" secondItem="7jM-R6-Uqf" secondAttribute="leading" id="NX6-ZB-crD"/>
                         <constraint firstAttribute="trailing" secondItem="zEg-A8-aMM" secondAttribute="trailing" id="SUg-xU-HxZ"/>
                         <constraint firstItem="zEg-A8-aMM" firstAttribute="width" secondItem="7jM-R6-Uqf" secondAttribute="width" id="XSX-5c-GKM"/>
+                        <constraint firstItem="zEg-A8-aMM" firstAttribute="height" secondItem="7jM-R6-Uqf" secondAttribute="height" priority="1" id="ntC-tL-X48"/>
                         <constraint firstItem="zEg-A8-aMM" firstAttribute="top" secondItem="7jM-R6-Uqf" secondAttribute="top" id="vin-hy-8MB"/>
                     </constraints>
                 </scrollView>
@@ -190,7 +129,4 @@
             <point key="canvasLocation" x="35.5" y="53.5"/>
         </view>
     </objects>
-    <resources>
-        <image name="error" width="24" height="24"/>
-    </resources>
 </document>
