@@ -208,10 +208,16 @@
         return complete(AUTHENTICATION_ERROR, @"Login failed");
     }
     
-    // check if the user is active and if not but they have a user tell them to talk to a MAGE admin
     
     // authentication succeeded, authorize with the mage server
     NSString *oauthToken = [oauth valueForKey:@"access_token"];
+    NSDictionary *user = [loginResult objectForKey:@"user"];
+    
+    // check if the user is active and if not but they have a user tell them to talk to a MAGE admin
+    if (!oauthToken && user && [[user objectForKey:@"active"] intValue] == 0) {
+        return complete(ACCOUNT_CREATION_SUCCESS, @"Your account has been created.  You will be able to login once and administrator approves your account");
+    }
+    
     NSDictionary *strategy = [loginParameters objectForKey:@"strategy"];
     
     NSMutableDictionary *authorizeParameters = [[NSMutableDictionary alloc] init];
