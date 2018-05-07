@@ -31,13 +31,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.webView = [[WKWebView alloc] init];
-    self.view = self.webView;
+    self.webView = [[WKWebView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.webView];
     self.webView.navigationDelegate = self;
     
     NSString *uidString = [DeviceUUID retrieveDeviceUUID].UUIDString;
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?uid=%@", self.url, uidString]]]];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = YES;
+    [super viewWillDisappear:animated];
 }
 
 - (void)webView:(WKWebView *) webView didFinishNavigation:(WKNavigation *) navigation {    
@@ -100,6 +109,8 @@
                                  @"uid": [DeviceUUID retrieveDeviceUUID].UUIDString,
                                  @"appVersion": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber]
                                  };
+    
+    __weak typeof(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters withAuthenticationType:self.authenticationType complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         NSLog(@"Authentication complete %ld", (long)authenticationStatus);
     }];

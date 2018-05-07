@@ -127,6 +127,9 @@
 		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
 		F73E29DB20597737001B9307 /* Pods_MAGE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73E29DC20597737001B9307 /* Pods_MAGE.framework */; };
+		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
+		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
+		F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B7D209A419E00EABA63 /* google-authView.xib */; };
 		F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */; };
 		F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */; };
 		F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */; };
@@ -523,6 +526,10 @@
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
 		F73CD0841F7E941E00B4124D /* TransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransitionViewController.m; sourceTree = "<group>"; };
 		F73E29DC20597737001B9307 /* Pods_MAGE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
+		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
+		F7467B7B209A2F0B00EABA63 /* OrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrView.m; sourceTree = "<group>"; };
+		F7467B7D209A419E00EABA63 /* google-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "google-authView.xib"; sourceTree = "<group>"; };
 		F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditCell.xib; sourceTree = "<group>"; };
 		F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDateEditCell.xib; sourceTree = "<group>"; };
 		F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationGeometryEditCell.xib; sourceTree = "<group>"; };
@@ -938,6 +945,8 @@
 				F7C3DB9A207D1C0F00154281 /* LoginGovLoginView.m */,
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
+				F7467B7A209A2F0B00EABA63 /* OrView.h */,
+				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1385,6 +1394,8 @@
 				F7AA6AF8206EA810004F9437 /* OAuthLoginView.xib */,
 				F7C3DB97207D1B3D00154281 /* login-gov-authView.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
+				F7467B78209A2DC600EABA63 /* orView.xib */,
+				F7467B7D209A419E00EABA63 /* google-authView.xib */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1749,6 +1760,7 @@
 				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
 				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
 				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
+				F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
 				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
@@ -1757,6 +1769,7 @@
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
+				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,
 				F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */,
 				F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */,
@@ -2190,6 +2203,7 @@
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
+				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
