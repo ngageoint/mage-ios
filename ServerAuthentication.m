@@ -158,33 +158,15 @@
         }
     } completion:^(BOOL contextDidSave, NSError *error) {
         NSString *token = [response objectForKey:@"token"];
-        NSString *username = (NSString *) [parameters objectForKey:@"username"];
-        NSString *password = (NSString *) [parameters objectForKey:@"password"];
         // Always use this locale when parsing fixed format date strings
         NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[response objectForKey:@"expirationDate"]];
         
         [MageSessionManager manager].token = token;
         
         [[UserUtility singleton] resetExpiration];
-        
-        NSDictionary *loginParameters = @{
-                                          @"username": username,
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        
-        NSDictionary *userJson = [response objectForKey:@"user"];
-        NSString *userId = [userJson objectForKey:@"id"];
-        [defaults setObject: userId forKey:@"currentUserId"];
-        
         NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
         [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:SERVER] forKey:@"loginType"];
         [defaults synchronize];
-        [StoredPassword persistPasswordToKeyChain:password];
         [StoredPassword persistTokenToKeyChain:token];
         
         complete(AUTHENTICATION_SUCCESS, nil);
