@@ -61,9 +61,17 @@
 - (void) didSelectEvent:(Event *)event {
     self.eventToSegueTo = event;
     __weak typeof(self) weakSelf = self;
-    [self.eventController dismissViewControllerAnimated:NO completion:^{
-        [weakSelf.delegate eventChoosen:weakSelf.eventToSegueTo];
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        // Save this event as the most recent one
+        // this will get changed once it re-pulls from the server but that is fine
+        Event *localEvent = [event MR_inContext:localContext];
+        localEvent.recentSortOrder = [NSNumber numberWithInt:-1];
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        [weakSelf.eventController dismissViewControllerAnimated:NO completion:^{
+            [weakSelf.delegate eventChoosen:weakSelf.eventToSegueTo];
+        }];
     }];
+    
 }
 
 - (void) actionButtonTapped {

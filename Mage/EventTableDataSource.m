@@ -28,12 +28,19 @@
     User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
     self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
-//    self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"recentEventSortOrder" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
-    
     self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     
-    self.recentFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
+    NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
+    [recentRequest setIncludesSubentities:NO];
+    NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
+    [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
+    self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentRequest
+                                                                                 managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                   sectionNameKeyPath:nil
+                                                                                            cacheName:nil];
+    [self.recentFetchedResultsController setDelegate:self];
     self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
 
     NSError *error;
