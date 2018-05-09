@@ -61,5 +61,6 @@
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
 - (void) mapClickAtPoint: (CGPoint) point;
+- (void) cleanup;
 
 @end

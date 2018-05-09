@@ -14,7 +14,7 @@ extern NSString * const kImportantFilterKey;
 extern NSString * const kFavortiesFilterKey;
 
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
-@property(nonatomic, assign) id< NSFetchedResultsControllerDelegate > delegate;
+@property(nonatomic, weak) id< NSFetchedResultsControllerDelegate > delegate;
 
 + (BOOL) getImportantFilter;
 + (void) setImportantFilter:(BOOL) filter;

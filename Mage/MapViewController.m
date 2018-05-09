@@ -290,6 +290,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
     [self stopMapAnnotationsUpdateTimer];
+    
+    [self.mapDelegate cleanup];
 }
 
 - (void) applicationWillResignActive {

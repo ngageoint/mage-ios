@@ -257,12 +257,36 @@
     }
 }
 
-- (void) dealloc {
+- (void) cleanup {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:@"mapType"];
-    [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+    @try {
+        [defaults removeObserver:self forKeyPath:@"mapType"];
+        [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+    }
+    @catch (id exception) {
+        NSLog(@"Failed to remove observer from user defaults: %@", exception);
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
     
     self.locationManager.delegate = nil;
+    self.locationManager = nil;
+    self.observations = nil;
+    self.locations = nil;
+    [self.cacheOverlays unregisterListener:self];
+    self.cacheOverlays = nil;
+}
+
+- (void) dealloc {
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults removeObserver:self forKeyPath:@"mapType"];
+//    [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+    
+//    self.locationManager.delegate = nil;
+//    self.observations = nil;
+//    self.locations = nil;
 }
 
 - (NSMutableDictionary *) staticLayers {
@@ -275,6 +299,7 @@
 
 - (void) setLocations:(Locations *) locations {
     _locations = locations;
+    if (!_locations) return;
     _locations.delegate = self;
     
     [self.mapView removeAnnotations:[self.locationAnnotations allValues]];
@@ -292,6 +317,7 @@
 
 - (void) setObservations:(Observations *)observations withCompletion: (void (^)(void)) complete {
     _observations = observations;
+    if (!_observations) return;
     _observations.delegate = self;
     
     Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
