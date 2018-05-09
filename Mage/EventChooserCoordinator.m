@@ -76,9 +76,7 @@
     
     // does the user already have a current event?
     if ([Server currentEventId] != nil) {
-        Event *event = [Event getEventById:[Server currentEventId] inContext:self.eventDataSource.recentFetchedResultsController.managedObjectContext];
         return;
-//        return [self didSelectEvent:event];
     }
     
     // does the user only have one event, and they have picked it? if so inform the delegate
