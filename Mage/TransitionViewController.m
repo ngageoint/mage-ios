@@ -19,9 +19,9 @@
 @implementation TransitionViewController
 
 - (void) themeDidChange:(MageTheme)theme {
-//    self.view.backgroundColor = [UIColor background];
-//    self.wandLabel.textColor = [UIColor brand];
-//    self.mageLabel.textColor = [UIColor brand];
+    self.view.backgroundColor = [UIColor background];
+    self.wandLabel.textColor = [UIColor brand];
+    self.mageLabel.textColor = [UIColor brand];
 }
 
 - (void)viewDidLoad {
