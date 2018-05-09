@@ -28,6 +28,7 @@
     User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
     self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
+//    self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"recentEventSortOrder" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
     
     self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     
@@ -215,8 +216,8 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 0) {
-        return 80.0f;
+    if (section == 0 && self.filteredFetchedResultsController != nil && [self.filteredFetchedResultsController.fetchedObjects count] != 0) {
+            return 40.0f;
     }
     return CGFLOAT_MIN;
 }
@@ -236,20 +237,8 @@
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (self.filteredFetchedResultsController != nil) {
+    if (self.filteredFetchedResultsController != nil && [self.filteredFetchedResultsController.fetchedObjects count] != 0) {
         return @"End of Results";
-    }
-    if (section == 0) {
-        if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count > 1) {
-            return @"Welcome to MAGE.  Please choose an event.  The observations you create and your reported location will be part of the selected event.  You can change your event at any time within MAGE.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count == 0 && self.otherFetchedResultsController.fetchedObjects.count == 1) {
-            return @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count == 1) {
-            // they are part of one event and have seen this page before.  Should I show it?
-            return @"Welcome to MAGE.  You are a part of one event.  The observations you create and your reported location will be part of this event.";
-        } else if (self.recentFetchedResultsController.fetchedObjects.count > 1) {
-            return @"You are part of multiple events.  The observations you create and your reported location will be part of the selected event.  You can change your event at any time within MAGE.";
-        }
     }
     return nil;
 }

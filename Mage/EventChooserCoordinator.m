@@ -18,7 +18,7 @@
 @interface EventChooserCoordinator() <EventSelectionDelegate>
 
 @property (strong, nonatomic) EventTableDataSource *eventDataSource;
-@property (strong, nonatomic) id<EventChooserDelegate> delegate;
+@property (weak, nonatomic) id<EventChooserDelegate> delegate;
 @property (strong, nonatomic) EventChooserController<NSFetchedResultsControllerDelegate> *eventController;
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) Event *eventToSegueTo;
@@ -60,8 +60,10 @@
 
 - (void) didSelectEvent:(Event *)event {
     self.eventToSegueTo = event;
-    [self.eventController dismissViewControllerAnimated:NO completion:nil];
-    [self.delegate eventChoosen:self.eventToSegueTo];
+    __weak typeof(self) weakSelf = self;
+    [self.eventController dismissViewControllerAnimated:NO completion:^{
+        [weakSelf.delegate eventChoosen:weakSelf.eventToSegueTo];
+    }];
 }
 
 - (void) actionButtonTapped {
@@ -75,7 +77,8 @@
     // does the user already have a current event?
     if ([Server currentEventId] != nil) {
         Event *event = [Event getEventById:[Server currentEventId] inContext:self.eventDataSource.recentFetchedResultsController.managedObjectContext];
-        return [self didSelectEvent:event];
+        return;
+//        return [self didSelectEvent:event];
     }
     
     // does the user only have one event, and they have picked it? if so inform the delegate

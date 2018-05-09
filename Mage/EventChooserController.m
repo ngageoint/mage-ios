@@ -12,7 +12,7 @@
 #import "UserUtility.h"
 #import "Theme+UIResponder.h"
 
-@interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating>
+@interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -22,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *refreshingViewHeight;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UILabel *refreshingStatus;
+@property (weak, nonatomic) IBOutlet UITextView *eventInstructions;
 
 @end
 
@@ -45,24 +47,30 @@ BOOL eventsChanged = NO;
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
+    self.view.backgroundColor = [UIColor primary];
     self.loadingView.backgroundColor = [UIColor background];
-    self.chooseEventTitle.textColor = [UIColor brand];
+    self.chooseEventTitle.textColor = [UIColor navBarPrimaryText];
+    self.eventInstructions.textColor = [UIColor navBarSecondaryText];
     self.actionButton.backgroundColor = [UIColor themedButton];
     self.loadingLabel.textColor = [UIColor brand];
     self.activityIndicator.color = [UIColor brand];
     self.tableView.backgroundColor = [UIColor background];
+    self.refreshingButton.backgroundColor = [UIColor primary];
+    self.refreshingView.backgroundColor = [UIColor primary];
+    self.refreshingButton.tintColor = [UIColor navBarPrimaryText];
+    self.refreshingStatus.textColor = [UIColor navBarPrimaryText];
     
-    self.searchController.searchBar.barTintColor = [UIColor dialog];
-    self.searchController.searchBar.tintColor = [UIColor flatButton];
-    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    // There currently is no way to change the text color in the UITextField in the search bar
+    // DRB 2018-04-09
+    self.searchController.searchBar.barTintColor = [UIColor primary];
+    self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
+    self.searchContainer.backgroundColor = [UIColor primary];
 
     [self.tableView reloadData];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self registerForThemeChanges];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
@@ -72,10 +80,18 @@ BOOL eventsChanged = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.barTintColor = [UIColor whiteColor];
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
+    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    self.searchController.searchBar.translucent = YES;
+    self.searchController.delegate = self;
     
-    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
+    self.refreshingButton.layer.shadowRadius = 3.0f;
+    self.refreshingButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.refreshingButton.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    self.refreshingButton.layer.shadowOpacity = 0.5f;
+    self.refreshingButton.layer.masksToBounds = NO;
+    [self.refreshingButton setHidden:YES];
+    
     [self.searchContainer addSubview:self.searchController.searchBar];
     
     self.searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -83,8 +99,10 @@ BOOL eventsChanged = NO;
     [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
     [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
     [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
     
     self.definesPresentationContext = YES;
+    [self registerForThemeChanges];
 }
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
@@ -118,10 +136,20 @@ BOOL eventsChanged = NO;
     eventsChanged = NO;
 }
 
+- (void) viewWillDisappear:(BOOL)animated {
+    self.searchController.delegate = nil;
+    self.searchController.searchResultsUpdater = nil;
+    self.searchController.searchBar.delegate = nil;
+    self.searchController = nil;
+}
+
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self.searchContainer layoutIfNeeded];
-    [self.searchController.searchBar sizeToFit];
+    // This is necessary because on initial load the search bar is 1 pixel short of the width of the screen....
+    // DRB 2018-04-09
+    CGRect searchBarFrame = self.searchController.searchBar.frame;
+    searchBarFrame.size.width = self.tableView.frame.size.width;
+    self.searchController.searchBar.frame = searchBarFrame;
     if ([self isIphoneX]) {
         self.refreshingViewHeight.constant = 56.0f;
         [self.view layoutIfNeeded];
@@ -129,8 +157,6 @@ BOOL eventsChanged = NO;
 }
 
 - (void) didSelectEvent:(Event *) event {
-    
-    [self.delegate didSelectEvent:event];
     __weak typeof(self) weakSelf = self;
 
     // show the loading indicator
@@ -140,6 +166,14 @@ BOOL eventsChanged = NO;
     } completion:^(BOOL finished) {
         weakSelf.loadingView.alpha = 1.0;
     }];
+    
+    [self.eventDataSource setEventFilter:nil withDelegate: nil];
+    [self.searchController setActive:NO];
+    self.searchController.delegate = nil;
+    self.searchController.searchResultsUpdater = nil;
+    self.searchController = nil;
+    
+    [self.delegate didSelectEvent:event];
 }
 
 - (void)actionButtonTapped {
@@ -155,9 +189,14 @@ BOOL eventsChanged = NO;
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(nullable NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(nullable NSIndexPath *)newIndexPath {
-    
     NSLog(@"Events changed");
-    eventsChanged = YES;
+    if (type == NSFetchedResultsChangeInsert || type == NSFetchedResultsChangeDelete) {
+        eventsChanged = YES;
+    }
+}
+- (IBAction)refreshingButtonTapped:(id)sender {
+    [self.tableView reloadData];
+    [self.refreshingButton setHidden:YES];
 }
 
 - (void) initializeView {
@@ -181,6 +220,13 @@ BOOL eventsChanged = NO;
             weakSelf.loadingView.alpha = 0.0;
         }];
     }
+    
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count > 1) {
+        self.eventInstructions.text = @"Please choose an event.  The observations you create and your reported location will be part of the selected event.";
+    } else if ((self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1) || self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
+        self.eventInstructions.text = @"You are a part of one event.  The observations you create and your reported location will be part of this event.";
+    }
+    
     [self.tableView reloadData];
     
     // TODO set up a timer to update the refresh button to indicate the request is taking a while
@@ -189,7 +235,7 @@ BOOL eventsChanged = NO;
         if (eventsFetched) {
             [timer invalidate];
         } else {
-            [weakSelf.refreshingButton setTitle:@"Refreshing Events seems to be taking a while..." forState:UIControlStateNormal];
+            weakSelf.refreshingStatus.text = @"Refreshing Events seems to be taking a while...";
         }
     }];
     
@@ -201,11 +247,39 @@ BOOL eventsChanged = NO;
     eventsFetched = YES;
     __weak typeof(self) weakSelf = self;
     
+    [self.refreshingView setHidden:YES];
+    
     // were new events found that weren't already in the list?
     if (eventsChanged) {
-        [self.refreshingButton setTitle:@"Tap To Refresh Your Events" forState:UIControlStateNormal];
-    } else {
-        [self.refreshingView setHidden:YES];
+        [self.refreshingButton setHidden:NO];
+        UIView *aV = self.refreshingButton;
+        CGRect endFrame = aV.frame;
+        
+        // Move annotation out of view
+        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - self.view.frame.size.height, aV.frame.size.width, aV.frame.size.height);
+        
+        // Animate drop
+        [UIView animateWithDuration:1.0 delay:0 options: UIViewAnimationOptionCurveLinear animations:^{
+            
+            aV.frame = endFrame;
+            
+            // Animate squash
+        }completion:^(BOOL finished){
+            if (finished) {
+                [UIView animateWithDuration:0.05 animations:^{
+                    aV.transform = CGAffineTransformMakeScale(1.0, 0.8);
+                    
+                }completion:^(BOOL finished){
+                    if (finished) {
+                        [UIView animateWithDuration:0.1 animations:^{
+                            aV.transform = CGAffineTransformIdentity;
+                            
+                        }];
+                    }
+                }];
+            }
+        }];
+        
     }
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
@@ -229,7 +303,6 @@ BOOL eventsChanged = NO;
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
         [Server setCurrentEventId:e.remoteId];
     }
-    [self.tableView reloadData];
     
     [UIView animateWithDuration:0.75f animations:^{
         weakSelf.loadingView.alpha = 0.0f;
@@ -239,5 +312,33 @@ BOOL eventsChanged = NO;
     
     [self.refreshingActivityIndicator stopAnimating];
 }
+
+// These methods stop the search bar from moving its frame when clicked
+// DRB 2018-04-09
+#pragma mark - Search Bar Presentation Methods
+
+BOOL registeredForSearchFrameUpdates = NO;
+- (void)willPresentSearchController:(UISearchController *)searchController {
+    registeredForSearchFrameUpdates = YES;
+    [searchController.searchBar addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+}
+
+- (void)willDismissSearchController:(UISearchController *)searchController{
+    if (registeredForSearchFrameUpdates) {
+        registeredForSearchFrameUpdates = NO;
+        [searchController.searchBar removeObserver:self forKeyPath:@"frame"];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (object == self.searchController.searchBar) {
+        if (!CGSizeEqualToSize(self.searchController.searchBar.frame.size, self.searchContainer.frame.size)) {
+            self.searchController.searchBar.superview.clipsToBounds = NO;
+            self.searchController.searchBar.frame = CGRectMake(0, 0, self.searchContainer.frame.size.width, self.searchContainer.frame.size.height);
+        }
+    }
+}
+
+#pragma mark
 
 @end

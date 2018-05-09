@@ -82,7 +82,9 @@
         UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         UIViewController *vc = [iphoneStoryboard instantiateInitialViewController];
         vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentViewController:vc animated:YES completion:NULL];
+        [self.navigationController presentViewController:vc animated:NO completion:^{
+            NSLog(@"presented iphone storyboard");
+        }];
     }
 }
 
