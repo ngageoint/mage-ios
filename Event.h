@@ -22,7 +22,7 @@ extern NSString * const MAGEEventsFetched;
 + (void) sendRecentEvent;
 + (Event *) getCurrentEventInContext:(NSManagedObjectContext *) context;
 + (Event *) getEventById: (id) eventId inContext: (NSManagedObjectContext *) context;
-+ (NSFetchedResultsController *) caseInsensitiveSortFetchAll:(NSString *)sortTerm ascending:(BOOL)ascending withPredicate:(NSPredicate *)searchTerm groupBy:(nullable NSString *)groupingKeyPath delegate:(id<NSFetchedResultsControllerDelegate>)delegate inContext: (NSManagedObjectContext *) context;
++ (NSFetchedResultsController *) caseInsensitiveSortFetchAll:(NSString *)sortTerm ascending:(BOOL)ascending withPredicate:(nullable NSPredicate *)searchTerm groupBy:(nullable NSString *)groupingKeyPath inContext: (NSManagedObjectContext *) context;
 - (BOOL) isUserInEvent: (User *) user;
 - (NSDictionary *) formForObservation: (Observation *) observation;
 - (NSDictionary *) formWithId: (long) id;

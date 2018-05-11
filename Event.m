@@ -50,9 +50,11 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return event;
 }
 
-+ (NSFetchedResultsController *) caseInsensitiveSortFetchAll:(NSString *)sortTerm ascending:(BOOL)ascending withPredicate:(NSPredicate *)searchTerm groupBy:(nullable NSString *)groupingKeyPath delegate:(id<NSFetchedResultsControllerDelegate>)delegate inContext: (NSManagedObjectContext *) context {
++ (NSFetchedResultsController *) caseInsensitiveSortFetchAll:(NSString *)sortTerm ascending:(BOOL)ascending withPredicate:(nullable NSPredicate *)searchTerm groupBy:(nullable NSString *)groupingKeyPath inContext: (NSManagedObjectContext *) context {
     NSFetchRequest *request = [Event MR_requestAllInContext:context];
-    [request setPredicate:searchTerm];
+    if (searchTerm) {
+        [request setPredicate:searchTerm];
+    }
     [request setIncludesSubentities:NO];
     
     if (sortTerm != nil){
@@ -64,7 +66,6 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                                                                                  managedObjectContext:context
                                                                                    sectionNameKeyPath:groupingKeyPath
                                                                                             cacheName:nil];
-    [controller setDelegate:delegate];
     return controller;
 }
 
