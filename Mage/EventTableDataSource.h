@@ -6,6 +6,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "Event.h"
 
 @protocol EventSelectionDelegate;
 
@@ -19,5 +20,6 @@
 
 - (void) startFetchController;
 - (void) setEventFilter: (NSString *) filter withDelegate:(id<NSFetchedResultsControllerDelegate>) delegate;
+- (void) refreshEventData;
 
 @end

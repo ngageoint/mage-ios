@@ -24,15 +24,16 @@
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
 @property (weak, nonatomic) IBOutlet UILabel *refreshingStatus;
 @property (weak, nonatomic) IBOutlet UITextView *eventInstructions;
+@property (strong, nonatomic) NSFetchedResultsController *allEventsController;
 
 @end
 
-@implementation EventChooserController
-
-BOOL checkForms = NO;
-BOOL eventsFetched = NO;
-BOOL eventsInitialized = NO;
-BOOL eventsChanged = NO;
+@implementation EventChooserController {
+    BOOL checkForms;
+    BOOL eventsFetched;
+    BOOL eventsInitialized;
+    BOOL eventsChanged;
+}
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate {
     self = [super initWithNibName:@"EventChooserView" bundle:nil];
@@ -42,6 +43,19 @@ BOOL eventsChanged = NO;
     self.eventDataSource = eventDataSource;
     self.eventDataSource.tableView = self.tableView;
     self.eventDataSource.eventSelectionDelegate = self;
+    eventsInitialized = NO;
+    eventsChanged = NO;
+    eventsFetched = NO;
+    checkForms = NO;
+    
+    self.allEventsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.allEventsController.delegate = self;
+    NSError *error;
+    
+    if (![self.allEventsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
     
     return self;
 }
@@ -159,21 +173,35 @@ BOOL eventsChanged = NO;
 - (void) didSelectEvent:(Event *) event {
     __weak typeof(self) weakSelf = self;
 
-    // show the loading indicator
-    self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
-    [UIView animateWithDuration:0.75f animations:^{
-        weakSelf.loadingView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        weakSelf.loadingView.alpha = 1.0;
-    }];
+    // verify the user is still in this event
+    Event *fetchedEvent = [Event getEventById:event.remoteId inContext:[NSManagedObjectContext MR_defaultContext]];
+    if (fetchedEvent == nil) {
     
-    [self.eventDataSource setEventFilter:nil withDelegate: nil];
-    [self.searchController setActive:NO];
-    self.searchController.delegate = nil;
-    self.searchController.searchResultsUpdater = nil;
-    self.searchController = nil;
-    
-    [self.delegate didSelectEvent:event];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unauthorized"
+                                                                       message:[NSString stringWithFormat:@"You are no longer part of the event '%@'.  Please contact an administrator if you need access.", event.name]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Refresh Events" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf refreshingButtonTapped:nil];
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // show the loading indicator
+        self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
+        [UIView animateWithDuration:0.75f animations:^{
+            weakSelf.loadingView.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            weakSelf.loadingView.alpha = 1.0;
+        }];
+        
+        [self.eventDataSource setEventFilter:nil withDelegate: nil];
+        [self.searchController setActive:NO];
+        self.searchController.delegate = nil;
+        self.searchController.searchResultsUpdater = nil;
+        self.searchController = nil;
+        [self.delegate didSelectEvent:event];
+    }
 }
 
 - (void)actionButtonTapped {
@@ -192,16 +220,48 @@ BOOL eventsChanged = NO;
     NSLog(@"Events changed");
     if (type == NSFetchedResultsChangeInsert || type == NSFetchedResultsChangeDelete) {
         eventsChanged = YES;
+        if (type == NSFetchedResultsChangeDelete) {
+            Event *deletedEvent = (Event *)anObject;
+            if ([deletedEvent remoteId] != nil) {
+                [self.eventDataSource.deletedEvents addObject:[deletedEvent remoteId]];
+            }
+        }
     }
 }
+
 - (IBAction)refreshingButtonTapped:(id)sender {
+    [self.eventDataSource refreshEventData];
     [self.tableView reloadData];
     [self.refreshingButton setHidden:YES];
+    
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+        
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
+        messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
+        messageLabel.numberOfLines = 0;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel.font = [UIFont systemFontOfSize:20];
+        messageLabel.textColor = [UIColor secondaryText];
+        [messageLabel sizeToFit];
+        
+        UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
+        [messageView addSubview:messageLabel];
+        
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.backgroundView = messageView;
+        
+        self.actionButton.hidden = NO;
+    } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+        Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
+        [self didSelectEvent:e];
+    } else if (self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0) {
+        Event *e = [self.eventDataSource.recentFetchedResultsController.fetchedObjects objectAtIndex:0];
+        [self didSelectEvent:e];
+    }
 }
 
 - (void) initializeView {
     NSLog(@"Initializing View");
-    eventsInitialized = YES;
     
     __weak typeof(self) weakSelf = self;
     
@@ -209,6 +269,7 @@ BOOL eventsChanged = NO;
         // no events have been fetched at this point
         [self.refreshingView setHidden:YES];
     } else {
+        eventsInitialized = YES;
         if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
             Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
             [Server setCurrentEventId:e.remoteId];
@@ -249,8 +310,11 @@ BOOL eventsChanged = NO;
     
     [self.refreshingView setHidden:YES];
     
-    // were new events found that weren't already in the list?
-    if (eventsChanged) {
+    if (!eventsInitialized) {
+        eventsInitialized = YES;
+        [self refreshingButtonTapped:nil];
+    } else if (eventsChanged) {
+        // were new events found that weren't already in the list?
         [self.refreshingButton setHidden:NO];
         UIView *aV = self.refreshingButton;
         CGRect endFrame = aV.frame;
@@ -280,28 +344,6 @@ BOOL eventsChanged = NO;
             }
         }];
         
-    }
-    
-    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
-        
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
-        messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = NSTextAlignmentCenter;
-        messageLabel.font = [UIFont systemFontOfSize:20];
-        messageLabel.textColor = [UIColor secondaryText];
-        [messageLabel sizeToFit];
-        
-        UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
-        [messageView addSubview:messageLabel];
-        
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.backgroundView = messageView;
-        
-        self.actionButton.hidden = NO;
-    } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
-        Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
-        [Server setCurrentEventId:e.remoteId];
     }
     
     [UIView animateWithDuration:0.75f animations:^{

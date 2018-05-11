@@ -5,7 +5,6 @@
 //
 
 #import "EventTableDataSource.h"
-#import "Event.h"
 #import "User.h"
 #import "Server.h"
 #import "EventChooserController.h"
@@ -23,38 +22,49 @@
 
 @implementation EventTableDataSource
 
-- (void) startFetchController {
-    
-    User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
-    self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil delegate:self inContext:[NSManagedObjectContext MR_defaultContext]];
-    self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
-    
-    
+- (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
+    if (!self.otherFetchedResultsController) {
+        self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
+    }
+    NSError *error;
+    if (![self.otherFetchedResultsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
+}
+
+- (void) updateRecentFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
     NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
     [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
     [recentRequest setIncludesSubentities:NO];
     NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
     [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
-    self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentRequest
-                                                                                 managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                   sectionNameKeyPath:nil
-                                                                                            cacheName:nil];
-    [self.recentFetchedResultsController setDelegate:self];
-    self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
-
-    NSError *error;
-    if (![self.otherFetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
+    if (!self.recentFetchedResultsController) {
+        self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentRequest
+                                                                                  managedObjectContext:[NSManagedObjectContext MR_defaultContext]
+                                                                                    sectionNameKeyPath:nil
+                                                                                             cacheName:nil];
+        self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
     }
+    
+    NSError *error;
     
     if (![self.recentFetchedResultsController performFetch:&error]) {
         // Update to handle the error appropriately.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
     }
+}
+
+- (void) refreshEventData {
+    User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
+    [self updateOtherFetchedResultsControllerWithRecentEvents:recentEventIds];
+    [self updateRecentFetchedResultsControllerWithRecentEvents:recentEventIds];
+}
+
+- (void) startFetchController {    
+    [self refreshEventData];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:[Observation MR_entityName]];
     
@@ -87,7 +97,7 @@
     if (section == 1) {
         return self.recentFetchedResultsController.fetchedObjects.count;
     } else if (section == 2) {
-        return self.otherFetchedResultsController.fetchedObjects.count;
+        return self.otherFetchedResultsController.fetchedObjects.count;// self.otherFetchedResultsController.fetchedObjects.count;
     }
     return 0;
 }
@@ -149,7 +159,7 @@
     if (section == 1) {
         return [NSString stringWithFormat:@"%@ (%lu)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
     } else if (section == 2) {
-        return [NSString stringWithFormat:@"%@ (%lu)", self.otherFetchedResultsController.accessibilityLabel, (unsigned long)self.otherFetchedResultsController.fetchedObjects.count];
+        return [NSString stringWithFormat:@"%@ (%lu)", @"Other Events", (unsigned long)self.otherFetchedResultsController.fetchedObjects.count];
     }
     return nil;
 }
@@ -161,7 +171,8 @@
         return;
     }
     if (!self.filteredFetchedResultsController) {
-        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil delegate:delegate inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.filteredFetchedResultsController.delegate = delegate;
     
         self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";
     } else {
