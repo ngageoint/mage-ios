@@ -75,7 +75,7 @@
     self.refreshingStatus.textColor = [UIColor navBarPrimaryText];
     
     // There currently is no way to change the text color in the UITextField in the search bar
-    // DRB 2018-04-09
+    // DRB 2018-05-09
     self.searchController.searchBar.barTintColor = [UIColor primary];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
     self.searchContainer.backgroundColor = [UIColor primary];
@@ -150,17 +150,10 @@
     eventsChanged = NO;
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
-    self.searchController.delegate = nil;
-    self.searchController.searchResultsUpdater = nil;
-    self.searchController.searchBar.delegate = nil;
-    self.searchController = nil;
-}
-
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     // This is necessary because on initial load the search bar is 1 pixel short of the width of the screen....
-    // DRB 2018-04-09
+    // DRB 2018-05-09
     CGRect searchBarFrame = self.searchController.searchBar.frame;
     searchBarFrame.size.width = self.tableView.frame.size.width;
     self.searchController.searchBar.frame = searchBarFrame;
@@ -195,11 +188,10 @@
             weakSelf.loadingView.alpha = 1.0;
         }];
         
-        [self.eventDataSource setEventFilter:nil withDelegate: nil];
+        // if the searchcontroller is active, new views will not present themselves...
+        // also don't try doing this in viewwilldisappear because it will not work...
+        // DRB 2018-05-11
         [self.searchController setActive:NO];
-        self.searchController.delegate = nil;
-        self.searchController.searchResultsUpdater = nil;
-        self.searchController = nil;
         [self.delegate didSelectEvent:event];
     }
 }
@@ -220,12 +212,6 @@
     NSLog(@"Events changed");
     if (type == NSFetchedResultsChangeInsert || type == NSFetchedResultsChangeDelete) {
         eventsChanged = YES;
-        if (type == NSFetchedResultsChangeDelete) {
-            Event *deletedEvent = (Event *)anObject;
-            if ([deletedEvent remoteId] != nil) {
-                [self.eventDataSource.deletedEvents addObject:[deletedEvent remoteId]];
-            }
-        }
     }
 }
 
@@ -356,7 +342,7 @@
 }
 
 // These methods stop the search bar from moving its frame when clicked
-// DRB 2018-04-09
+// DRB 2018-05-09
 #pragma mark - Search Bar Presentation Methods
 
 BOOL registeredForSearchFrameUpdates = NO;

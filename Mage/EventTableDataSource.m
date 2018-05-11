@@ -63,7 +63,7 @@
     [self updateRecentFetchedResultsControllerWithRecentEvents:recentEventIds];
 }
 
-- (void) startFetchController {    
+- (void) startFetchController {
     [self refreshEventData];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:[Observation MR_entityName]];
