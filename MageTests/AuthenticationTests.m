@@ -333,7 +333,6 @@
         [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
         }];
 
@@ -422,7 +421,6 @@
         [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
         }];
         
@@ -505,7 +503,6 @@
         [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue([[Authentication authenticationTypeToString:SERVER] isEqualToString:[defaults valueForKey:@"loginType"]]);
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
         }];
         

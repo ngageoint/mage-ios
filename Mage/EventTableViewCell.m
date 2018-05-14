@@ -23,12 +23,17 @@
 - (void) registerForThemeChanges {
     self.eventName.textColor = [UIColor primaryText];
     self.eventDescription.textColor = [UIColor secondaryText];
+    self.backgroundColor = [UIColor background];
+}
+
+- (void) prepareForReuse {
+    [super prepareForReuse];
+    [self.eventName setText:nil];
 }
 
 - (void) populateCellWithEvent:(Event *) event offlineObservationCount:(NSUInteger) count {
     [self registerForThemeChanges];
-    
-    self.eventName.text = event.name;
+    [self.eventName setText:event.name];
     self.eventDescription.text = event.eventDescription;
     
     if (count > 0) {

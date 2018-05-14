@@ -129,8 +129,9 @@
 
 - (void) chooseEvent {
     [Server removeCurrentEventId];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    [self createRootView];
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:^{
+        [self createRootView];
+    }];
 }
 
 - (void) logout {

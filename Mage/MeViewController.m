@@ -215,6 +215,10 @@
     }
 }
 
+- (void) dealloc {
+    [self.mapDelegate cleanup];
+}
+
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     

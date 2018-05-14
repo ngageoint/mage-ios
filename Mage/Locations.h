@@ -10,7 +10,7 @@
 
 @interface Locations : NSObject
 
-@property (nonatomic, strong) id<NSFetchedResultsControllerDelegate> delegate;
+@property (nonatomic, weak) id<NSFetchedResultsControllerDelegate> delegate;
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
 
 + (id) locationsForAllUsers;

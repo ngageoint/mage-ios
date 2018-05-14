@@ -12,17 +12,28 @@
 #import "UserUtility.h"
 #import "Theme+UIResponder.h"
 
-@interface EventChooserController()
+@interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *chooseEventTitle;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *refreshingButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *refreshingActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIView *refreshingView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *refreshingViewHeight;
+@property (strong, nonatomic) UISearchController *searchController;
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UILabel *refreshingStatus;
+@property (weak, nonatomic) IBOutlet UITextView *eventInstructions;
+@property (strong, nonatomic) NSFetchedResultsController *allEventsController;
 
 @end
 
-@implementation EventChooserController
-
-BOOL checkForms = NO;
-BOOL eventsFetched = NO;
+@implementation EventChooserController {
+    BOOL checkForms;
+    BOOL eventsFetched;
+    BOOL eventsInitialized;
+    BOOL eventsChanged;
+}
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate {
     self = [super initWithNibName:@"EventChooserView" bundle:nil];
@@ -32,33 +43,103 @@ BOOL eventsFetched = NO;
     self.eventDataSource = eventDataSource;
     self.eventDataSource.tableView = self.tableView;
     self.eventDataSource.eventSelectionDelegate = self;
+    eventsInitialized = NO;
+    eventsChanged = NO;
+    eventsFetched = NO;
+    checkForms = NO;
+    
+    self.allEventsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.allEventsController.delegate = self;
+    NSError *error;
+    
+    if (![self.allEventsController performFetch:&error]) {
+        // Update to handle the error appropriately.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
     
     return self;
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
+    self.view.backgroundColor = [UIColor primary];
     self.loadingView.backgroundColor = [UIColor background];
-    self.chooseEventTitle.textColor = [UIColor brand];
+    self.chooseEventTitle.textColor = [UIColor navBarPrimaryText];
+    self.eventInstructions.textColor = [UIColor navBarSecondaryText];
     self.actionButton.backgroundColor = [UIColor themedButton];
     self.loadingLabel.textColor = [UIColor brand];
     self.activityIndicator.color = [UIColor brand];
+    self.tableView.backgroundColor = [UIColor background];
+    self.refreshingButton.backgroundColor = [UIColor primary];
+    self.refreshingView.backgroundColor = [UIColor primary];
+    self.refreshingButton.tintColor = [UIColor navBarPrimaryText];
+    self.refreshingStatus.textColor = [UIColor navBarPrimaryText];
     
+    // There currently is no way to change the text color in the UITextField in the search bar
+    // DRB 2018-05-09
+    self.searchController.searchBar.barTintColor = [UIColor primary];
+    self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
+    self.searchContainer.backgroundColor = [UIColor primary];
+
     [self.tableView reloadData];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self registerForThemeChanges];
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
+    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    self.searchController.searchBar.translucent = YES;
+    self.searchController.delegate = self;
+    
+    self.refreshingButton.layer.shadowRadius = 3.0f;
+    self.refreshingButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.refreshingButton.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    self.refreshingButton.layer.shadowOpacity = 0.5f;
+    self.refreshingButton.layer.masksToBounds = NO;
+    [self.refreshingButton setHidden:YES];
+    
+    [self.searchContainer addSubview:self.searchController.searchBar];
+    
+    self.searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+    
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
+    [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+    
+    self.definesPresentationContext = YES;
+    [self registerForThemeChanges];
+}
+
+- (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
+    if (self.searchController.active) {
+        [self.eventDataSource setEventFilter:searchController.searchBar.text withDelegate: self];
+    } else {
+        [self.eventDataSource setEventFilter:nil withDelegate: nil];
+    }
+    [self.tableView reloadData];
+}
+
+- (BOOL) isIphoneX {
+    if (@available(iOS 11.0, *)) {
+        return self.view.safeAreaInsets.top > 0.0;
+    } else {
+        return NO;
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (eventsFetched == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+    if (eventsFetched == NO && eventsInitialized == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         self.loadingView.alpha = 1.0f;
         self.loadingLabel.text = @"Loading Events";
         self.actionButton.hidden = YES;
@@ -66,38 +147,82 @@ BOOL eventsFetched = NO;
     
     self.tableView.estimatedRowHeight = 52;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    eventsChanged = NO;
 }
 
--(void) didSelectEvent:(Event *) event {
+- (void) viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    // This is necessary because on initial load the search bar is 1 pixel short of the width of the screen....
+    // DRB 2018-05-09
+    CGRect searchBarFrame = self.searchController.searchBar.frame;
+    searchBarFrame.size.width = self.tableView.frame.size.width;
+    self.searchController.searchBar.frame = searchBarFrame;
+    if ([self isIphoneX]) {
+        self.refreshingViewHeight.constant = 56.0f;
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void) didSelectEvent:(Event *) event {
+    __weak typeof(self) weakSelf = self;
+
+    // verify the user is still in this event
+    Event *fetchedEvent = [Event getEventById:event.remoteId inContext:[NSManagedObjectContext MR_defaultContext]];
+    if (fetchedEvent == nil) {
     
-    [self.delegate didSelectEvent:event];
-    
-    // show the loading indicator
-    self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
-    [UIView animateWithDuration:0.75f animations:^{
-        self.loadingView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        self.loadingView.alpha = 1.0;
-    }];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unauthorized"
+                                                                       message:[NSString stringWithFormat:@"You are no longer part of the event '%@'.  Please contact an administrator if you need access.", event.name]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Refresh Events" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf refreshingButtonTapped:nil];
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // show the loading indicator
+        self.loadingLabel.text = [NSString stringWithFormat:@"Gathering information for %@", event.name];
+        [UIView animateWithDuration:0.75f animations:^{
+            weakSelf.loadingView.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            weakSelf.loadingView.alpha = 1.0;
+        }];
+        
+        // if the searchcontroller is active, new views will not present themselves...
+        // also don't try doing this in viewwilldisappear because it will not work...
+        // DRB 2018-05-11
+        [self.searchController setActive:NO];
+        [self.delegate didSelectEvent:event];
+    }
 }
 
 - (void)actionButtonTapped {
     [self.delegate actionButtonTapped];
 }
 
-- (void) eventsFetched {
-    NSLog(@"Events were fetched");
-    eventsFetched = YES;
-    
-    [UIView animateWithDuration:0.75f animations:^{
-        self.loadingView.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        self.loadingView.alpha = 0.0;
-    }];
+- (IBAction)actionButtonTapped:(id)sender {
+    [self.delegate actionButtonTapped];
+}
+
+- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSLog(@"controller changed content");
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(nullable NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(nullable NSIndexPath *)newIndexPath {
+    NSLog(@"Events changed");
+    if (type == NSFetchedResultsChangeInsert || type == NSFetchedResultsChangeDelete) {
+        eventsChanged = YES;
+    }
+}
+
+- (IBAction)refreshingButtonTapped:(id)sender {
+    [self.eventDataSource refreshEventData];
+    [self.tableView reloadData];
+    [self.refreshingButton setHidden:YES];
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.bounds.size.width, 0)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
         messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -114,9 +239,134 @@ BOOL eventsFetched = NO;
         self.actionButton.hidden = NO;
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
-        [Server setCurrentEventId:e.remoteId];
+        [self didSelectEvent:e];
+    } else if (self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0) {
+        Event *e = [self.eventDataSource.recentFetchedResultsController.fetchedObjects objectAtIndex:0];
+        [self didSelectEvent:e];
     }
-    [self.tableView reloadData];
 }
+
+- (void) initializeView {
+    NSLog(@"Initializing View");
+    
+    __weak typeof(self) weakSelf = self;
+    
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+        // no events have been fetched at this point
+        [self.refreshingView setHidden:YES];
+    } else {
+        eventsInitialized = YES;
+        if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+            Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
+            [Server setCurrentEventId:e.remoteId];
+        }
+        
+        [UIView animateWithDuration:0.75f animations:^{
+            weakSelf.loadingView.alpha = 0.0f;
+        } completion:^(BOOL finished) {
+            weakSelf.loadingView.alpha = 0.0;
+        }];
+    }
+    
+    if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count > 1) {
+        self.eventInstructions.text = @"Please choose an event.  The observations you create and your reported location will be part of the selected event.";
+    } else if ((self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1) || self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
+        self.eventInstructions.text = @"You are a part of one event.  The observations you create and your reported location will be part of this event.";
+    }
+    
+    [self.tableView reloadData];
+    
+    // TODO set up a timer to update the refresh button to indicate the request is taking a while
+    NSTimer *timer = [NSTimer timerWithTimeInterval:10.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        //code
+        if (eventsFetched) {
+            [timer invalidate];
+        } else {
+            weakSelf.refreshingStatus.text = @"Refreshing Events seems to be taking a while...";
+        }
+    }];
+    
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+- (void) eventsFetched {
+    NSLog(@"Events were fetched");
+    eventsFetched = YES;
+    __weak typeof(self) weakSelf = self;
+    
+    [self.refreshingView setHidden:YES];
+    
+    if (!eventsInitialized) {
+        eventsInitialized = YES;
+        [self refreshingButtonTapped:nil];
+    } else if (eventsChanged) {
+        // were new events found that weren't already in the list?
+        [self.refreshingButton setHidden:NO];
+        UIView *aV = self.refreshingButton;
+        CGRect endFrame = aV.frame;
+        
+        // Move annotation out of view
+        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - self.view.frame.size.height, aV.frame.size.width, aV.frame.size.height);
+        
+        // Animate drop
+        [UIView animateWithDuration:1.0 delay:0 options: UIViewAnimationOptionCurveLinear animations:^{
+            
+            aV.frame = endFrame;
+            
+            // Animate squash
+        }completion:^(BOOL finished){
+            if (finished) {
+                [UIView animateWithDuration:0.05 animations:^{
+                    aV.transform = CGAffineTransformMakeScale(1.0, 0.8);
+                    
+                }completion:^(BOOL finished){
+                    if (finished) {
+                        [UIView animateWithDuration:0.1 animations:^{
+                            aV.transform = CGAffineTransformIdentity;
+                            
+                        }];
+                    }
+                }];
+            }
+        }];
+        
+    }
+    
+    [UIView animateWithDuration:0.75f animations:^{
+        weakSelf.loadingView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        weakSelf.loadingView.alpha = 0.0;
+    }];
+    
+    [self.refreshingActivityIndicator stopAnimating];
+}
+
+// These methods stop the search bar from moving its frame when clicked
+// DRB 2018-05-09
+#pragma mark - Search Bar Presentation Methods
+
+BOOL registeredForSearchFrameUpdates = NO;
+- (void)willPresentSearchController:(UISearchController *)searchController {
+    registeredForSearchFrameUpdates = YES;
+    [searchController.searchBar addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+}
+
+- (void)willDismissSearchController:(UISearchController *)searchController{
+    if (registeredForSearchFrameUpdates) {
+        registeredForSearchFrameUpdates = NO;
+        [searchController.searchBar removeObserver:self forKeyPath:@"frame"];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (object == self.searchController.searchBar) {
+        if (!CGSizeEqualToSize(self.searchController.searchBar.frame.size, self.searchContainer.frame.size)) {
+            self.searchController.searchBar.superview.clipsToBounds = NO;
+            self.searchController.searchBar.frame = CGRectMake(0, 0, self.searchContainer.frame.size.width, self.searchContainer.frame.size.height);
+        }
+    }
+}
+
+#pragma mark
 
 @end
