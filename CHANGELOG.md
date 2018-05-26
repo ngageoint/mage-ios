@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Feature
 
 ##### Bug Fixes
+* Fix new observation form picker crash when theme is set to auto.
 
 ## [2.0.2](https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (04-18-2018) 
 

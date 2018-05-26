@@ -139,7 +139,15 @@
 - (UIColor *) flatButton {
     return [[self autoTheme] flatButton];
 }
-
+    
+- (UIColor *) brightButton {
+    return [[self autoTheme] brightButton];
+}
+    
+- (UIColor *) themedWhite {
+    return [[self autoTheme] themedWhite];
+}
+    
 - (UIColor *) inactiveIcon {
     return [[self autoTheme] inactiveIcon];
 }
