@@ -273,20 +273,6 @@
     self.locationManager = nil;
     self.observations = nil;
     self.locations = nil;
-    [self.cacheOverlays unregisterListener:self];
-    self.cacheOverlays = nil;
-}
-
-- (void) dealloc {
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults removeObserver:self forKeyPath:@"mapType"];
-//    [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
-    
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
-    
-//    self.locationManager.delegate = nil;
-//    self.observations = nil;
-//    self.locations = nil;
 }
 
 - (NSMutableDictionary *) staticLayers {
