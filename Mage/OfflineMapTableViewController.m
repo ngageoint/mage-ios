@@ -166,6 +166,7 @@
             cell.textLabel.textColor = [UIColor primaryText];
             if (cellImage != nil) {
                 [cell.imageView setImage:cellImage];
+                cell.imageView.tintColor = [UIColor brand];
             }
             
             CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
@@ -190,6 +191,7 @@
             [self updateAndReloadData];
         }
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (IBAction)activeChanged:(CacheActiveSwitch *)sender {
