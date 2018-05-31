@@ -208,8 +208,14 @@ Event *_event;
                 id value = [form objectForKey:key];
                 id field = [[self fieldNameToFieldForEvent:event andFormId:[form objectForKey:@"formId"]] objectForKey:key];
                 if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-                    WKBGeometry *fieldGeometry = value;
-                    [formProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
+                    @try {
+                        WKBGeometry *fieldGeometry = value;
+                        [formProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
+                    }
+                    @catch (NSException *e){
+                        NSLog(@"Problem parsing geometry %@", e);
+                    }
+                
                 }
             }
             [formArray addObject:formProperties];
@@ -245,9 +251,14 @@ Event *_event;
     State state = [Observation  observationStateFromJson:json];
     [self setState:[NSNumber numberWithInt:(int) state]];
 
+    @try {
     WKBGeometry * geometry = [GeometryDeserializer parseGeometry:[json valueForKeyPath:@"geometry"]];
-    [self setGeometry:geometry];
-
+        [self setGeometry:geometry];
+    }
+    @catch (NSException *e){
+        NSLog(@"Problem parsing geometry %@", e);
+    }
+    
     return self;
 }
 
@@ -266,8 +277,13 @@ Event *_event;
                     id value = [formProperties objectForKey:formKey];
                     id field = [fields objectForKey:formKey];
                     if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-                        WKBGeometry * geometry = [GeometryDeserializer parseGeometry:value];
-                        [parsedFormProperties setObject:geometry forKey:formKey];
+                        @try {
+                            WKBGeometry * geometry = [GeometryDeserializer parseGeometry:value];
+                            [parsedFormProperties setObject:geometry forKey:formKey];
+                        }
+                        @catch (NSException *e){
+                            NSLog(@"Problem parsing geometry %@", e);
+                        }
                     }
                 }
                 [forms addObject:parsedFormProperties];
