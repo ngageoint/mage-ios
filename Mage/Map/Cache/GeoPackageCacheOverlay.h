@@ -14,6 +14,8 @@
  */
 @interface GeoPackageCacheOverlay : CacheOverlay
 
+@property (nonatomic, strong) NSString *filePath;
+
 /**
  *  Initializer
  *
@@ -22,6 +24,6 @@
  *
  *  @return new instance
  */
--(instancetype) initWithName: (NSString *) name andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables;
+-(instancetype) initWithName: (NSString *) name andPath: (NSString *) filePath andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables;
 
 @end

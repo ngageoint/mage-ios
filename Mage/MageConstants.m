@@ -11,6 +11,7 @@
 NSString * const MAGE_CACHE_DIRECTORY = @"MapCache";
 NSString * const MAGE_SELECTED_CACHES = @"selectedCaches";
 NSInteger const MAGE_FEATURES_MAX_ZOOM = 21;
+NSString * const GeoPackageImported = @"mil.nga.giat.mage.geopackage.imported";
 
 @implementation MageConstants
 

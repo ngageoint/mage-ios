@@ -285,6 +285,7 @@
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
+		F7FEF8C220BF4A0A006C0D70 /* GeoPackageFileImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FEF8C120BF4A0A006C0D70 /* GeoPackageFileImporter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -779,6 +780,8 @@
 		F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolyline.m; sourceTree = "<group>"; };
 		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
 		F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaAnnotation.m; sourceTree = "<group>"; };
+		F7FEF8C020BF4A0A006C0D70 /* GeoPackageFileImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoPackageFileImporter.h; sourceTree = "<group>"; };
+		F7FEF8C120BF4A0A006C0D70 /* GeoPackageFileImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoPackageFileImporter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1453,6 +1456,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7FEF8BF20BF49EF006C0D70 /* GeoPackage */,
 				F75A10DF204856C7002F9906 /* Theme */,
 				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
@@ -1633,6 +1637,15 @@
 				F7FC59241F3CEBF80010351A /* FormPickerViewController.m */,
 			);
 			name = Form;
+			sourceTree = "<group>";
+		};
+		F7FEF8BF20BF49EF006C0D70 /* GeoPackage */ = {
+			isa = PBXGroup;
+			children = (
+				F7FEF8C020BF4A0A006C0D70 /* GeoPackageFileImporter.h */,
+				F7FEF8C120BF4A0A006C0D70 /* GeoPackageFileImporter.m */,
+			);
+			path = GeoPackage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2135,6 +2148,7 @@
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
+				F7FEF8C220BF4A0A006C0D70 /* GeoPackageFileImporter.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,

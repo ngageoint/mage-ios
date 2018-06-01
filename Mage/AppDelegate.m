@@ -40,6 +40,8 @@
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
 #import "Theme+UIResponder.h"
+#import "Layer.h"
+#import "MageConstants.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -58,6 +60,7 @@
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:GeoPackageDownloaded object:nil];
     NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     
@@ -81,6 +84,11 @@
     [self createRootView];
     
 	return YES;
+}
+
+- (void) geoPackageDownloaded: (NSNotification *) notification {
+    NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
+    [self importGeoPackageFile:filePath andMove:NO];
 }
 
 - (BOOL)application:(UIApplication *)app
@@ -373,7 +381,7 @@
         }
         
         // Create the GeoPackage overlay with child tables
-        cacheOverlay = [[GeoPackageCacheOverlay alloc] initWithName:name andTables:tables];
+        cacheOverlay = [[GeoPackageCacheOverlay alloc] initWithName:name andPath: geoPackage.path andTables:tables];
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
@@ -434,11 +442,15 @@
 }
 
 -(BOOL) importGeoPackageFile: (NSString *) path {
+    return [self importGeoPackageFile:path andMove:YES];
+}
+
+-(BOOL) importGeoPackageFile: (NSString *) path andMove: (BOOL) moveFile {
     // Import the GeoPackage file
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
-        imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
+        imported = [manager importGeoPackageAsLinkToPath:path withName:[[path lastPathComponent] stringByDeletingPathExtension]];
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
@@ -451,6 +463,7 @@
         NSLog(@"Error importing GeoPackage file: %@", path);
     } else {
         [self processOfflineMapArchives];
+        [[NSNotificationCenter defaultCenter] postNotificationName:GeoPackageImported object:nil];
     }
     
     return imported;

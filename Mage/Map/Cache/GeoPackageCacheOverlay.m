@@ -17,9 +17,10 @@
 
 @implementation GeoPackageCacheOverlay
 
--(instancetype) initWithName: (NSString *) name andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables{
+-(instancetype) initWithName: (NSString *) name andPath: (NSString *) filePath andTables: (NSArray<GeoPackageTableCacheOverlay *> *) tables{
     self = [super initWithName:name andType:GEOPACKAGE andSupportsChildren:true];
     if(self){
+        self.filePath = filePath;
         self.tables = [[NSMutableArray alloc] init];
         for(GeoPackageTableCacheOverlay * table in tables){
             [table setParent:self];
