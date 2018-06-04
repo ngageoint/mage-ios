@@ -79,6 +79,11 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
         
+        [defaults addObserver:self
+                   forKeyPath:kCurrentEventIdKey
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+        
         if (!self.hideStaticLayers) {
             [defaults addObserver:self
                        forKeyPath:@"selectedStaticLayers"
@@ -262,6 +267,7 @@
     @try {
         [defaults removeObserver:self forKeyPath:@"mapType"];
         [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+        [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
     }
     @catch (id exception) {
         NSLog(@"Failed to remove observer from user defaults: %@", exception);
@@ -429,6 +435,8 @@
         self.mapView.mapType = [object integerForKey:keyPath];
     } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateStaticLayers: [object objectForKey:keyPath]];
+    } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
+        [self updateCacheOverlaysSynchronized:[self.cacheOverlays getOverlays]];
     }
 }
 

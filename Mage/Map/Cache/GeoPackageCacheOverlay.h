@@ -15,6 +15,8 @@
 @interface GeoPackageCacheOverlay : CacheOverlay
 
 @property (nonatomic, strong) NSString *filePath;
+@property (strong, nonatomic) NSString *layerName;
+
 
 /**
  *  Initializer

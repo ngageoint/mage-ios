@@ -88,7 +88,7 @@
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
     NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
-    [self importGeoPackageFile:filePath andMove:NO];
+    [self importGeoPackageFileAsLink:filePath andMove:NO withLayerId:[notification.userInfo valueForKey:@"layerId"]];
 }
 
 - (BOOL)application:(UIApplication *)app
@@ -287,21 +287,27 @@
 -(void) addGeoPackageCacheOverlays:(NSMutableArray<CacheOverlay *> *) cacheOverlays{
     // Add the GeoPackage caches
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
-    NSArray * geoPackages = [manager databases];
-    for(NSString * geoPackage in geoPackages){
-        
-        // Make sure the GeoPackage file exists
-        NSString * filePath = [manager documentsPathForDatabase:geoPackage];
-        if(filePath != nil && [[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        
-            GeoPackageCacheOverlay * cacheOverlay = [self getGeoPackageCacheOverlayWithManager:manager andName:geoPackage];
-            if(cacheOverlay != nil){
-                [cacheOverlays addObject:cacheOverlay];
+    @try {
+        //databases call only returns the geopacakge if it is named the same as the name of the actual file on disk
+        NSArray * geoPackages = [manager databases];
+        for(NSString * geoPackage in geoPackages){
+            
+            // Make sure the GeoPackage file exists
+            NSString * filePath = [manager documentsPathForDatabase:geoPackage];
+            if(filePath != nil && [[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+            
+                GeoPackageCacheOverlay * cacheOverlay = [self getGeoPackageCacheOverlayWithManager:manager andName:geoPackage];
+                if(cacheOverlay != nil){
+                    [cacheOverlays addObject:cacheOverlay];
+                }
+            }else{
+                // Delete if the file was deleted
+                [manager delete:geoPackage];
             }
-        }else{
-            // Delete if the file was deleted
-            [manager delete:geoPackage];
         }
+    }
+    @catch (NSException *e) {
+        NSLog(@"Problem getting GeoPackages %@", e);
     }
 }
 
@@ -442,15 +448,11 @@
 }
 
 -(BOOL) importGeoPackageFile: (NSString *) path {
-    return [self importGeoPackageFile:path andMove:YES];
-}
-
--(BOOL) importGeoPackageFile: (NSString *) path andMove: (BOOL) moveFile {
     // Import the GeoPackage file
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
-        imported = [manager importGeoPackageAsLinkToPath:path withName:[[path lastPathComponent] stringByDeletingPathExtension]];
+        imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
@@ -463,7 +465,47 @@
         NSLog(@"Error importing GeoPackage file: %@", path);
     } else {
         [self processOfflineMapArchives];
-        [[NSNotificationCenter defaultCenter] postNotificationName:GeoPackageImported object:nil];
+    }
+    
+    return imported;
+}
+
+-(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId {
+    // Import the GeoPackage file
+    BOOL imported = false;
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    @try {
+        NSString *newPath = [NSString stringWithFormat:@"%@_%@.gpkg", [[path stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[path lastPathComponent] stringByDeletingPathExtension]], @"from_server"];
+        [[NSFileManager defaultManager] copyItemAtPath:path toPath:newPath error:nil];
+        imported = [manager importGeoPackageAsLinkToPath:newPath withName:[[newPath lastPathComponent] stringByDeletingPathExtension]];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Failed to import GeoPackage %@", exception);
+    }
+    @finally {
+        [manager close];
+    }
+    
+    if(!imported){
+        NSLog(@"Error importing GeoPackage file: %@", path);
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+            NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
+            for (Layer *layer in layers) {
+                layer.loaded = [NSNumber numberWithBool:NO];
+                layer.downloading = NO;
+            }
+        }];
+    } else {
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+            NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
+            for (Layer *layer in layers) {
+                layer.loaded = [NSNumber numberWithBool:YES];
+                layer.downloading = NO;
+            }
+        } completion:^(BOOL contextDidSave, NSError * _Nullable magicalRecordError) {
+            [self processOfflineMapArchives];
+            [[NSNotificationCenter defaultCenter] postNotificationName:GeoPackageImported object:nil];
+        }];
     }
     
     return imported;

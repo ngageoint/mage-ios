@@ -148,8 +148,9 @@
             if ([[pathComponents objectAtIndex:[pathComponents count] - 3] isEqualToString:@"geopackages"]) {
                 NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
                 // check if this layer is in the event
-                NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %@", [Server currentEventId], layerId] inContext:[NSManagedObjectContext MR_defaultContext]];
-                if (count != 0) {
+                Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %@", [Server currentEventId], layerId] inContext:[NSManagedObjectContext MR_defaultContext]];
+                if (layer) {
+                    gpCacheOverlay.layerName = layer.name;
                     arrayToAddTo = self.downloadedGeoPackageCells;
                 }
             } else {
@@ -215,7 +216,7 @@
     UITableViewCell *cell = nil;
     
     if (indexPath.section == 0) {
-        CacheOverlay * cacheOverlay = [self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
+        GeoPackageCacheOverlay * cacheOverlay = (GeoPackageCacheOverlay *)[self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
         
         UIImage * cellImage = nil;
         NSString * typeImage = [cacheOverlay getIconImageName];
@@ -248,7 +249,7 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
             }
-            cell.textLabel.text = [cacheOverlay getName];
+            cell.textLabel.text = [cacheOverlay layerName];//[cacheOverlay getName];
             cell.textLabel.textColor = [UIColor primaryText];
             if (cellImage != nil) {
                 [cell.imageView setImage:cellImage];
@@ -524,8 +525,12 @@
                 NSString *filePath = cacheOverlay.filePath;
                 NSArray *pathComponents = [filePath pathComponents];
                 NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
-                Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", layerId] inContext:localContext];
-                layer.loaded = [NSNumber numberWithBool:NO];
+                NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", layerId] inContext:localContext];
+                for (Layer *layer in layers) {
+                    layer.loaded = [NSNumber numberWithBool:NO];
+                    layer.downloadedBytes = 0;
+                    layer.downloading = NO;
+                }
             } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
                 [weakSelf deleteCacheOverlay:cacheOverlay];
                 [weakSelf updateAndReloadData];
