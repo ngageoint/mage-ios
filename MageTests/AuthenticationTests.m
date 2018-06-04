@@ -568,6 +568,14 @@
             return response;
         }];
         
+        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/devices"];
+        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+            NSString* fixture = OHPathForFile(@"apiFail.json", self.class);
+            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                    statusCode:401 headers:@{@"Content-Type":@"application/json"}];
+        }];
+        
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
