@@ -37,6 +37,7 @@
 #import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "Server.h"
+#import "MageConstants.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -207,7 +208,7 @@
                   context:NULL];
     
     [defaults addObserver:self
-               forKeyPath:kCurrentEventIdKey
+               forKeyPath:GeoPackageImported
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -293,7 +294,7 @@
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
-    [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
+    [defaults removeObserver:self forKeyPath:GeoPackageImported];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
@@ -354,8 +355,8 @@
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
-    } else if ([kCurrentEventIdKey isEqualToString:keyPath]) {
-        
+    } else if ([GeoPackageImported isEqualToString:keyPath]) {
+        [self setupMapSettingsButton];
     }
 }
 
@@ -504,6 +505,7 @@
     NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"geopackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
     if (count > 0) {
         UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(self.mapSettingsButton.frame.size.width-10, -10, 20, 20)];
+        circle.tag = 998;
         circle.layer.cornerRadius = 10;
         [circle setBackgroundColor:[UIColor mageBlue]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
@@ -511,6 +513,12 @@
         [imageView setTintColor:[UIColor whiteColor]];
         [circle addSubview:imageView];
         [self.mapSettingsButton addSubview:circle];
+    } else {
+        for (UIView *subview in self.mapSettingsButton.subviews) {
+            if (subview.tag == 998) {
+                [subview removeFromSuperview];
+            }
+        }
     }
 }
 
