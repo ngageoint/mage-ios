@@ -849,11 +849,16 @@
                     if(geometryData != nil && !geometryData.empty){
                         WKBGeometry * geometry = geometryData.geometry;
                         if(geometry != nil){
-                            GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
-                            [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
-                            });
+                            @try {
+                                GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
+                                [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
+                                });
+                            }
+                            @catch (NSException *e) {
+                                NSLog(@"Failed to parse geometry: %@", e);
+                            }
                             
                             if(++count >= maxFeaturesPerTable){
                                 if(count < totalCount){
