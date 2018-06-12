@@ -8,6 +8,8 @@
 #import "MapTypeTableViewCell.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "Layer.h"
+#import "Server.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource>
     @property (strong) id<MapSettingsDelegate> delegate;
@@ -108,6 +110,18 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OfflineMapsCell"];
         }
         cell.textLabel.text = @"Offline Maps";
+        
+        NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
+        if (count > 0) {
+            UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+            circle.layer.cornerRadius = 10;
+            [circle setBackgroundColor:[UIColor mageBlue]];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+            [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
+            [imageView setTintColor:[UIColor whiteColor]];
+            [circle addSubview:imageView];
+            cell.accessoryView = circle;
+        }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }

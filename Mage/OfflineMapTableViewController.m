@@ -249,7 +249,7 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
             }
-            cell.textLabel.text = [cacheOverlay layerName];//[cacheOverlay getName];
+            cell.textLabel.text = [cacheOverlay layerName];
             cell.textLabel.textColor = [UIColor primaryText];
             if (cellImage != nil) {
                 [cell.imageView setImage:cellImage];

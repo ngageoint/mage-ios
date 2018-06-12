@@ -942,7 +942,7 @@
     }
     
     for (NSNumber *unselectedStaticLayerId in unselectedStaticLayers) {
-        StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", unselectedStaticLayerId, [Server currentEventId]]];
+        StaticLayer *unselectedStaticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", unselectedStaticLayerId]];
         NSLog(@"removing the layer %@ from the map", unselectedStaticLayer.name);
         for (id staticItem in [self.staticLayers objectForKey:unselectedStaticLayerId]) {
             if ([staticItem conformsToProtocol:@protocol(MKOverlay)]) {
