@@ -502,7 +502,7 @@
 }
 
 - (void) setupMapSettingsButton {
-    NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"geopackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
+    NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
     if (count > 0) {
         UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(self.mapSettingsButton.frame.size.width-10, -10, 20, 20)];
         circle.tag = 998;
