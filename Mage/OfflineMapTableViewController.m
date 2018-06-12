@@ -54,8 +54,8 @@
     self.tableView.layoutMargins = UIEdgeInsetsZero;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"geopackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"geopackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageLayerFetched:) name: GeoPackageLayerFetched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageDownloaded object:nil];
@@ -87,8 +87,8 @@
 }
 
 - (void) reloadTable {
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"geopackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"geopackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
     [self.tableView reloadData];
     self.refreshLayersButton.enabled = YES;
 }
@@ -134,8 +134,8 @@
     self.downloadedGeoPackageCells = [[NSMutableArray alloc] init];
     self.cacheNamesToOverlays = [[NSMutableDictionary alloc] init];
     
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"geopackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"geopackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
     self.refreshLayersButton.enabled = YES;
     
     NSMutableArray *arrayToAddTo = nil;
@@ -291,7 +291,7 @@
                                          [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
 
             UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            [activityIndicator setFrame:CGRectZero];
+            [activityIndicator setFrame:CGRectMake(0, 0, 24, 24)];
             [activityIndicator startAnimating];
             activityIndicator.color = [UIColor secondaryText];
             cell.accessoryView = activityIndicator;
