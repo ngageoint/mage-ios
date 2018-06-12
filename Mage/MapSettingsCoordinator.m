@@ -11,8 +11,10 @@
 #import "StaticLayerTableViewController.h"
 #import "OfflineMapTableViewController.h"
 #import "UIColor+UIColor_Mage.h"
+#import "Layer.h"
+#import "Server.h"
 
-@interface MapSettingsCoordinator() <MapSettingsDelegate>
+@interface MapSettingsCoordinator() <MapSettingsDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) UINavigationController *rootViewController;
 @property (strong, nonatomic) UINavigationController *settingsNavController;
@@ -38,6 +40,7 @@
 - (void) start {
     MapSettings *settings = [[MapSettings alloc] initWithDelegate: self];
     self.settingsNavController = [[UINavigationController alloc] initWithRootViewController:settings];
+    self.settingsNavController.delegate = self;
     
     self.settingsNavController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *popoverPresentationController = self.settingsNavController.popoverPresentationController;
@@ -65,6 +68,15 @@
 - (void) staticLayersCellTapped {
     StaticLayerTableViewController *staticController = [[StaticLayerTableViewController alloc] init];
     [self.settingsNavController pushViewController:staticController animated:YES];
+}
+
+- (void) navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if ([viewController isKindOfClass:[MapSettings class]]) {
+        MapSettings *settings = (MapSettings *)viewController;
+        
+        NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
+        settings.mapsToDownloadCount = count;
+    }
 }
 
 @end

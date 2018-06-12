@@ -8,8 +8,6 @@
 #import "MapTypeTableViewCell.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
-#import "Layer.h"
-#import "Server.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource>
     @property (strong) id<MapSettingsDelegate> delegate;
@@ -38,6 +36,11 @@
     [self registerForThemeChanges];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
+}
+
+- (void) setMapsToDownloadCount:(NSUInteger)mapsToDownloadCount {
+    _mapsToDownloadCount = mapsToDownloadCount;
+    [self.tableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -111,8 +114,7 @@
         }
         cell.textLabel.text = @"Offline Maps";
         
-        NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
-        if (count > 0) {
+        if (self.mapsToDownloadCount > 0) {
             UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
             circle.layer.cornerRadius = 10;
             [circle setBackgroundColor:[UIColor mageBlue]];
@@ -121,8 +123,10 @@
             [imageView setTintColor:[UIColor whiteColor]];
             [circle addSubview:imageView];
             cell.accessoryView = circle;
+        } else {
+            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }
 

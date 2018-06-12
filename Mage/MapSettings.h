@@ -15,6 +15,8 @@
 
 @interface MapSettings : UITableViewController
 
+@property (nonatomic) NSUInteger mapsToDownloadCount;
+
 - (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate;
 
 @end
