@@ -143,14 +143,15 @@
 }
 
 - (void) logout {
-    [[UserUtility singleton] expireToken];
     [[Mage singleton] stopServices];
     [[LocationService singleton] stop];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"loginType"];
-    [defaults synchronize];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    [self createRootView];
+    [[UserUtility singleton] logout:^{
+        [defaults removeObjectForKey:@"loginType"];
+        [defaults synchronize];
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        [self createRootView];
+    }];
 }
 
 - (void) application: (UIApplication *) application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
