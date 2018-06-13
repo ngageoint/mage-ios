@@ -476,9 +476,7 @@
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
-        NSString *newPath = [NSString stringWithFormat:@"%@_%@.gpkg", [[path stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[path lastPathComponent] stringByDeletingPathExtension]], @"from_server"];
-        [[NSFileManager defaultManager] copyItemAtPath:path toPath:newPath error:nil];
-        imported = [manager importGeoPackageAsLinkToPath:newPath withName:[[newPath lastPathComponent] stringByDeletingPathExtension]];
+        imported = [manager importGeoPackageAsLinkToPath:path withName:[[path lastPathComponent] stringByDeletingPathExtension]];
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
