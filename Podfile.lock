@@ -99,7 +99,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   mage-ios-sdk:
-    :commit: 4d6486330f37aac81037f96c7633cfb37f6220ba
+    :commit: 4733c1e22475aafe45a4cde0df8495f9b543431d
     :git: https://github.com/ngageoint/mage-ios-sdk.git
 
 SPEC CHECKSUMS:
