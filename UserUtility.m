@@ -8,6 +8,7 @@
 
 #import "UserUtility.h"
 #import "MageSessionManager.h"
+#import "MageServer.h"
 #import <StoredPassword.h>
 
 @interface UserUtility()
@@ -85,6 +86,24 @@
     
     [defaults synchronize];
     self.expired = YES;
+}
+
+- (void) logoutWithCompletion: (void (^)(void)) completion {
+    NSString *url = [NSString stringWithFormat:@"%@/api/logout", [MageServer baseURL]];
+
+    MageSessionManager *manager = [MageSessionManager manager];
+    __weak typeof(self) weakSelf = self;
+
+    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSLog(@"Logged out");
+        [weakSelf expireToken];
+        completion();
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [weakSelf expireToken];
+        completion();
+    }];
+    [manager addTask:task];
 }
 
 @end

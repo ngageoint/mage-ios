@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *remoteId;
 @property (nullable, nonatomic, retain) NSString *type;
 @property (nullable, nonatomic, retain) NSString *url;
+@property (nullable, nonatomic, retain) NSDictionary* file;
+@property (nullable, nonatomic, retain) NSNumber *downloadedBytes;
+@property (nonatomic) BOOL downloading;
 
 @end
 

@@ -20,5 +20,8 @@
 @dynamic remoteId;
 @dynamic type;
 @dynamic url;
+@dynamic file;
+@dynamic downloadedBytes;
+@dynamic downloading;
 
 @end
