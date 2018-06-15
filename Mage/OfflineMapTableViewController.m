@@ -274,15 +274,21 @@
         cell.textLabel.text = layer.name;
         cell.textLabel.textColor = [UIColor primaryText];
         cell.detailTextLabel.textColor = [UIColor secondaryText];
-        cell.backgroundColor = [UIColor background];
+        cell.backgroundColor = [UIColor dialog];
 
         if (!layer.downloading) {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download_thumbnail"]];
-            imageView.frame = CGRectMake(0, 0, 30, 30);
-            imageView.layer.cornerRadius = 15.0f;
-            imageView.layer.masksToBounds = YES;
-            cell.accessoryView = imageView;
+            
+            UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+            circle.layer.cornerRadius = 15;
+            circle.layer.borderWidth = .5;
+            circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [circle setBackgroundColor:[UIColor mageBlue]];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+            [imageView setFrame:CGRectMake(-2, -2, 35, 35)];
+            [imageView setTintColor:[UIColor whiteColor]];
+            [circle addSubview:imageView];
+            cell.accessoryView = circle;
         } else {
             uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
             NSLog(@"Download bytes %ld", (long)downloadBytes);
@@ -358,7 +364,7 @@
         }
     }
     
-    cell.backgroundColor = [UIColor background];
+    cell.backgroundColor = [UIColor dialog];
     return cell;
 }
 

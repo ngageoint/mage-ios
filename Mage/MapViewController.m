@@ -507,6 +507,8 @@
         UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(self.mapSettingsButton.frame.size.width-10, -10, 20, 20)];
         circle.tag = 998;
         circle.layer.cornerRadius = 10;
+        circle.layer.borderWidth = .5;
+        circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
         [circle setBackgroundColor:[UIColor mageBlue]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
         [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
