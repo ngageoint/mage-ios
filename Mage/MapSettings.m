@@ -38,6 +38,11 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
 }
 
+- (void) setMapsToDownloadCount:(NSUInteger)mapsToDownloadCount {
+    _mapsToDownloadCount = mapsToDownloadCount;
+    [self.tableView reloadData];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
@@ -108,7 +113,22 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OfflineMapsCell"];
         }
         cell.textLabel.text = @"Offline Maps";
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (self.mapsToDownloadCount > 0) {
+            UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+            circle.layer.cornerRadius = 10;
+            circle.layer.borderWidth = .5;
+            circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [circle setBackgroundColor:[UIColor mageBlue]];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+            [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
+            [imageView setTintColor:[UIColor whiteColor]];
+            [circle addSubview:imageView];
+            cell.accessoryView = circle;
+        } else {
+            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
         return cell;
     }
 
@@ -140,7 +160,7 @@
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor background];
+    cell.backgroundColor = [UIColor dialog];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.textLabel.textColor = [UIColor primaryText];
 }

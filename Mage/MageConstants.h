@@ -14,6 +14,7 @@
 extern NSString * const MAGE_CACHE_DIRECTORY;
 extern NSString * const MAGE_SELECTED_CACHES;
 extern NSInteger const MAGE_FEATURES_MAX_ZOOM;
+extern NSString * const GeoPackageImported;
 
 @interface MageConstants : NSObject
 

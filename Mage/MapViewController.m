@@ -35,6 +35,9 @@
 #import "ObservationAnnotationView.h"
 #import "MapSettingsCoordinator.h"
 #import "Theme+UIResponder.h"
+#import "Layer.h"
+#import "Server.h"
+#import "MageConstants.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
@@ -172,6 +175,7 @@
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupShowObservationButtonWithState:![[defaults objectForKey:@"hideObservations"] boolValue]];
     [self setupShowPeopleButtonWithState:![[defaults objectForKey:@"hidePeople"] boolValue]];
+    [self setupMapSettingsButton];
     
     [defaults addObserver:self
                forKeyPath:@"hideObservations"
@@ -200,6 +204,11 @@
     
     [defaults addObserver:self
                forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:GeoPackageImported
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -285,6 +294,7 @@
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     [defaults removeObserver:self forKeyPath:kImportantFilterKey];
+    [defaults removeObserver:self forKeyPath:GeoPackageImported];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
@@ -345,6 +355,8 @@
     } else if ([kImportantFilterKey isEqualToString:keyPath] || [kFavortiesFilterKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
+    } else if ([GeoPackageImported isEqualToString:keyPath]) {
+        [self setupMapSettingsButton];
     }
 }
 
@@ -486,6 +498,29 @@
         [self.showPeopleButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
     } else {
         [self.showPeopleButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
+    }
+}
+
+- (void) setupMapSettingsButton {
+    NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
+    if (count > 0) {
+        UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(self.mapSettingsButton.frame.size.width-10, -10, 20, 20)];
+        circle.tag = 998;
+        circle.layer.cornerRadius = 10;
+        circle.layer.borderWidth = .5;
+        circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+        [circle setBackgroundColor:[UIColor mageBlue]];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+        [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
+        [imageView setTintColor:[UIColor whiteColor]];
+        [circle addSubview:imageView];
+        [self.mapSettingsButton addSubview:circle];
+    } else {
+        for (UIView *subview in self.mapSettingsButton.subviews) {
+            if (subview.tag == 998) {
+                [subview removeFromSuperview];
+            }
+        }
     }
 }
 

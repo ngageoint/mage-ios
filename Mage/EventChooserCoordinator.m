@@ -63,6 +63,7 @@
 
 - (void) didSelectEvent:(Event *)event {
     self.eventToSegueTo = event;
+    [Server setCurrentEventId:event.remoteId];
     __weak typeof(self) weakSelf = self;
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         // Save this event as the most recent one

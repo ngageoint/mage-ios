@@ -286,7 +286,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
     BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] containsObject:@"syncObservation"];
-    if (!isSyncSectionShowing && indexPath.section == STATUS_SECTION && [[self.tableLayout objectAtIndex:STATUS_SECTION] containsObject:@"statusNeedsSync"]) {
+    if (!isSyncSectionShowing && indexPath.section == STATUS_SECTION && ([[self.tableLayout objectAtIndex:STATUS_SECTION] containsObject:@"statusNeedsSync"] || [[self.tableLayout objectAtIndex:STATUS_SECTION] containsObject: @"statusError"])) {
         [self.tableLayout replaceObjectAtIndex:SYNC_SECTION withObject:@[@"syncObservation"]];
 
         [tableView cellForRowAtIndexPath:indexPath].selectionStyle = UITableViewCellSelectionStyleNone;

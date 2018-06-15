@@ -9,6 +9,9 @@
 #import "CacheOverlays.h"
 #import "CacheOverlay.h"
 #import "CacheOverlayListener.h"
+#import "GeoPackageCacheOverlay.h"
+#import "Layer.h"
+#import "Server.h"
 
 @interface CacheOverlays ()
 
@@ -44,7 +47,7 @@ static CacheOverlays * instance;
 -(void) registerListener: (NSObject<CacheOverlayListener> *) listener{
     @synchronized(self) {
         [self.listeners addObject:listener];
-        [listener cacheOverlaysUpdated:[self.overlays allValues]];
+        [listener cacheOverlaysUpdated:[self getOverlays]];
     }
 }
 
@@ -109,14 +112,37 @@ static CacheOverlays * instance;
     @synchronized(self) {
         for(NSObject<CacheOverlayListener> * listener in self.listeners){
             if(caller == nil || listener != caller){
-                [listener cacheOverlaysUpdated:[self.overlays allValues]];
+                [listener cacheOverlaysUpdated:[self getOverlays]];
             }
         }
     }
 }
 
 -(NSArray<CacheOverlay *> *) getOverlays{
-    return [self.overlays allValues];
+    NSMutableArray<CacheOverlay *> *overlaysInCurrentEvent = [[NSMutableArray alloc] init];
+    
+    
+    for(CacheOverlay * cacheOverlay in [self.overlays allValues]) {
+        if ([cacheOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
+            GeoPackageCacheOverlay *gpCacheOverlay = (GeoPackageCacheOverlay *)cacheOverlay;
+            NSString *filePath = gpCacheOverlay.filePath;
+            // check if this filePath is consistent with a downloaded layer and if so, verify that layer is in this event
+            NSArray *pathComponents = [filePath pathComponents];
+            if ([[pathComponents objectAtIndex:[pathComponents count] - 3] isEqualToString:@"geopackages"]) {
+                NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
+                // check if this layer is in the event
+                NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %@", [Server currentEventId], layerId] inContext:[NSManagedObjectContext MR_defaultContext]];
+                if (count != 0) {
+                    [overlaysInCurrentEvent addObject:cacheOverlay];
+                }
+            } else {
+                [overlaysInCurrentEvent addObject:cacheOverlay];
+            }
+        } else {
+            [overlaysInCurrentEvent addObject:cacheOverlay];
+        }
+    }
+    return overlaysInCurrentEvent;
 }
 
 -(NSUInteger) count{

@@ -78,7 +78,12 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 }
 
 -(void) addShapeWithId: (NSNumber *) id andShape: (GPKGMapShape *) shape{
+    @try {
     [self.shapes setObject:shape forKey:id];
+    }
+    @catch (NSException *e) {
+        NSLog(@"Failure adding shape to map %@", e);
+    }
 }
 
 -(GPKGMapShape *) removeShapeWithId: (NSNumber *) id{
