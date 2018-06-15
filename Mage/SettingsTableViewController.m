@@ -199,7 +199,7 @@ static NSInteger legalSection = 6;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor background];
+    cell.backgroundColor = [UIColor dialog];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     

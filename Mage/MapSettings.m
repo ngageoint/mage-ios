@@ -160,7 +160,7 @@
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor background];
+    cell.backgroundColor = [UIColor dialog];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.textLabel.textColor = [UIColor primaryText];
 }
