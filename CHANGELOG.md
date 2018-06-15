@@ -10,12 +10,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 
 * Download GeoPackages that are linked to the events, from the server
+* Event chooser screen loading time should be improved
 
 ##### Bug Fixes
 
 * Fix new observation form picker crash when theme is set to auto.
 * Invalidate server token when a user logs out on the app
 * Bug fixes for some exceptions when opening invalid GeoPackage files
+* Bug fixes for oauth login type
 
 ## [2.0.2](https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (04-18-2018)
 
