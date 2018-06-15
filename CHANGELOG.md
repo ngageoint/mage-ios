@@ -7,18 +7,23 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Release Notes
 
-##### Feature
+##### Features
+
+* Download GeoPackages that are linked to the events, from the server
 
 ##### Bug Fixes
-* Fix new observation form picker crash when theme is set to auto.
 
-## [2.0.2](https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (04-18-2018) 
+* Fix new observation form picker crash when theme is set to auto.
+* Invalidate server token when a user logs out on the app
+* Bug fixes for some exceptions when opening invalid GeoPackage files
+
+## [2.0.2](https://github.com/ngageoint/mage-ios/releases/tag/2.0.2) (04-18-2018)
 
 ##### Release Notes
 
 Tired of burning your retinas while using MAGE at night or in a dark area?  MAGE now comes with a wonderful night theme.  Sometimes, users would log in without a connection and immediately be logged out as soon as the app would regain connection.  How rude.  Now when you are logged in without a connection to the server, you will be notified and allowed to log in from the settings screen when you have a connection again.  MAGE will no longer log you out when a connection is obtained, however, before you see any updates from your team, and before your local updates are sent to them, you will need to log in again.  Also, bug fixes.  Found them all this time...
 
-##### Feature
+##### Features
 
 * Themes: Currently support day and night themes
 * Disconnected login has been improved to give the user more feedback
