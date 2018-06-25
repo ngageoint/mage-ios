@@ -392,30 +392,27 @@
     } else if (indexPath.section == 1) {
         [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
         
-        UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
         Layer *geopackageLayer = [self geoPackageForRow:indexPath.row];
         // kick off the download
-        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [activityIndicator setFrame:CGRectZero];
-        [activityIndicator startAnimating];
-        activityIndicator.color = [UIColor secondaryText];
-        cell.accessoryView = activityIndicator;
-        [self.tableView reloadData];
         
-        __weak typeof(self) weakSelf = self;
+        if (geopackageLayer.downloading) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"GeoPackage is Currently Downloading"
+                                                                           message:@"It appears the GeoPackage is currently being downloaded, however if the download has failed you can restart it."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            __weak typeof(self) weakSelf = self;
 
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-            Layer *localLayer = [geopackageLayer MR_inContext:localContext];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Restart Download" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf startGeoPackageDownload:indexPath];
+            }]];
             
-            localLayer.downloading = YES;
-            localLayer.downloadedBytes = 0;
-        } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-            [Layer downloadGeoPackage:geopackageLayer success:^{
-            } failure:^(NSError * _Nonnull error) {
-            }];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Continue Downloading" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"Do not restart the download");
+            }]];
             
-            [weakSelf updateAndReloadData];
-        }];
+            [self.navigationController presentViewController:alert animated:YES completion:nil];
+        } else {
+            [self startGeoPackageDownload:indexPath];
+        }
         
     } else if (self.processingCaches.count == 0 || [indexPath section] == 2){
         CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
@@ -425,6 +422,32 @@
         }
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) startGeoPackageDownload: (NSIndexPath *) indexPath {
+    UITableViewCell *cell =  [self.tableView cellForRowAtIndexPath:indexPath];
+    Layer *geopackageLayer = [self geoPackageForRow:indexPath.row];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicator setFrame:CGRectZero];
+    [activityIndicator startAnimating];
+    activityIndicator.color = [UIColor secondaryText];
+    cell.accessoryView = activityIndicator;
+    [self.tableView reloadData];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Layer *localLayer = [geopackageLayer MR_inContext:localContext];
+        
+        localLayer.downloading = YES;
+        localLayer.downloadedBytes = 0;
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        [Layer downloadGeoPackage:geopackageLayer success:^{
+        } failure:^(NSError * _Nonnull error) {
+        }];
+        
+        [weakSelf updateAndReloadData];
+    }];
 }
 
 - (IBAction)activeChanged:(CacheActiveSwitch *)sender {

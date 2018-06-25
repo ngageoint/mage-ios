@@ -476,7 +476,12 @@
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
-        imported = [manager importGeoPackageAsLinkToPath:path withName:[[path lastPathComponent] stringByDeletingPathExtension]];
+        NSArray *alreadyImported = [manager databasesLike:[[path lastPathComponent] stringByDeletingPathExtension]];
+        if ([alreadyImported count] == 1) {
+            imported = YES;
+        } else {
+            imported = [manager importGeoPackageAsLinkToPath:path withName:[[path lastPathComponent] stringByDeletingPathExtension]];
+        }
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
