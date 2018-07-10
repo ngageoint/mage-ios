@@ -415,14 +415,16 @@
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
-    
+    [self ensureMapLayout];
+}
+
+- (void) ensureMapLayout {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     _mapView.mapType = [defaults integerForKey:@"mapType"];
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
-
-    [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     
+    [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath

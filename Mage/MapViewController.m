@@ -226,7 +226,7 @@
                                                object:nil];
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
-    
+    [self.mapDelegate ensureMapLayout];
 }
 
 - (BOOL)isForceTouchAvailable {
