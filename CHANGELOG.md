@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.3 (TBD)
+## 2.0.4 (TBD)
+
+##### Release Notes
+
+##### Bug Fixes
+
+* Maps should update when going back to the map 
+* Events with no forms will not crash the app
+
+## 2.0.3 ()
 
 ##### Release Notes
 
