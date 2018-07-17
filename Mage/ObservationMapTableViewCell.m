@@ -38,9 +38,9 @@
     
     __weak __typeof__(self) weakSelf = self;
     [self.mapDelegate setObservations:observations withCompletion:^{
-        MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
-        MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
         dispatch_sync(dispatch_get_main_queue(), ^{
+            MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
+            MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
             [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
         });
     }];
