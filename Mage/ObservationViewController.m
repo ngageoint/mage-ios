@@ -313,7 +313,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
     BOOL isSyncSectionShowing = [[self.tableLayout objectAtIndex:SYNC_SECTION] count];
     if (isSyncSectionShowing && section == SYNC_SECTION) {
-        title = @"Manually push";
+        title = nil;
     } else if (section >= self.tableLayout.count) {
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[self.observationForms objectAtIndex:(section - self.tableLayout.count)] objectForKey:@"formId"]];
