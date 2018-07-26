@@ -28,7 +28,7 @@
 @interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate>
 
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
-@property (strong, nonatomic) Observation *observation;
+@property (weak, nonatomic) Observation *observation;
 @property (nonatomic) BOOL newObservation;
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) ObservationEditViewController *editController;
