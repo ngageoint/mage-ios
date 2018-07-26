@@ -204,8 +204,11 @@
 }
 
 - (void) propertiesEditCanceled {
+    __weak typeof(self) weakSelf = self;
+
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"root view dismissed");
+        weakSelf.managedObjectContext = nil;
     }];
 }
 
@@ -229,6 +232,7 @@
         
         [_rootViewController dismissViewControllerAnimated:YES completion:^{
             NSLog(@"root view dismissed");
+            weakSelf.managedObjectContext = nil;
         }];
     }];
 }
