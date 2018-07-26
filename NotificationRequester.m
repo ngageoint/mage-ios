@@ -19,13 +19,13 @@
     Event *event = [Event getEventById:observation.eventId inContext:observation.managedObjectContext];
     NSString *body = @"";
     if ([observation primaryFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@ ", [observation primaryFieldText]]];
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [observation primaryFieldText]]];
     }
     if ([observation secondaryFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@ ", [observation secondaryFieldText]]];
+        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@", [observation secondaryFieldText]]];
     }
     
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"observation was created in %@ event.", event.name]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@" observation was created in %@ event.", event.name]];
     
     content.title = [NSString stringWithFormat: @"New Observation"];
     content.body = body;

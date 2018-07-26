@@ -542,6 +542,7 @@ Event *_event;
             NSLog(@"Observation request complete");
             Event *event = [Event getEventById:eventId inContext:localContext];
             NSUInteger count = 0;
+            Observation *obsToNotifyAbout;
             for (id feature in features) {
                 NSString *remoteId = [Observation observationIdFromJson:feature];
                 State state = [Observation observationStateFromJson:feature];
@@ -581,7 +582,7 @@ Event *_event;
                     NSLog(@"Saving new observation with id: %@", observation.remoteId);
                     count++;
                     if (!sendBulkNotification) {
-                        [NotificationRequester observationPulled:observation];
+                        obsToNotifyAbout = observation;
                     }
                     newData = YES;
                 } else if (state != Archive && ![existingObservation.dirty boolValue]) {
@@ -655,8 +656,10 @@ Event *_event;
                 }
             }
             NSLog(@"Recieved %lu new observations and send bulk is %d", (unsigned long)count, sendBulkNotification);
-            if (sendBulkNotification && count > 0) {
+            if ((sendBulkNotification && count > 0) || count > 1) {
                 [NotificationRequester sendBulkNotificationCount: count inEvent: event];
+            } else if (obsToNotifyAbout) {
+                [NotificationRequester observationPulled:obsToNotifyAbout];
             }
         } completion:^(BOOL successful, NSError *error) {
             if (!successful) {
