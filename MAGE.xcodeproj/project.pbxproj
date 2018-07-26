@@ -1668,7 +1668,6 @@
 				F7ED5D2120052161007BD768 /* Frameworks */,
 				F7ED5D2220052161007BD768 /* Resources */,
 				DF91E123B6068F4EB4EE945D /* [CP] Embed Pods Frameworks */,
-				F597BFE585567E18FEA5C89E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1922,7 +1921,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2012,58 +2011,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F597BFE585567E18FEA5C89E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
-				"${PODS_ROOT}/tuneup_js/assertions.js",
-				"${PODS_ROOT}/tuneup_js/image_assertion.js",
-				"${PODS_ROOT}/tuneup_js/lang-ext.js",
-				"${PODS_ROOT}/tuneup_js/screen.js",
-				"${PODS_ROOT}/tuneup_js/test.js",
-				"${PODS_ROOT}/tuneup_js/tuneup.js",
-				"${PODS_ROOT}/tuneup_js/uiautomation-ext.js",
-				"${PODS_ROOT}/tuneup_js/image_asserter",
-				"${PODS_ROOT}/tuneup_js/image_assertion.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/abbreviated_console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/colored_console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/preprocessor.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/run",
-				"${PODS_ROOT}/tuneup_js/test_runner/xunit_output.rb",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assertions.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lang-ext.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/screen.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/test.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tuneup.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uiautomation-ext.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_asserter",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/abbreviated_console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/colored_console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/preprocessor.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/run",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/xunit_output.rb",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

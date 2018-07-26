@@ -1,18 +1,18 @@
 PODS:
-  - AFNetworking (3.1.0):
-    - AFNetworking/NSURLSession (= 3.1.0)
-    - AFNetworking/Reachability (= 3.1.0)
-    - AFNetworking/Security (= 3.1.0)
-    - AFNetworking/Serialization (= 3.1.0)
-    - AFNetworking/UIKit (= 3.1.0)
-  - AFNetworking/NSURLSession (3.1.0):
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.1.0)
-  - AFNetworking/Security (3.1.0)
-  - AFNetworking/Serialization (3.1.0)
-  - AFNetworking/UIKit (3.1.0):
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - DateTools (2.0.0)
   - EDSunriseSet (1.0)
@@ -22,30 +22,30 @@ PODS:
     - tiff-ios (~> 1.0.3)
     - wkb-ios (~> 1.0.7)
   - GoogleSignIn (4.1.2):
-    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
-    - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
     - GTMOAuth2 (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3):
-    - GoogleToolboxForMac/DebugUtils (= 2.1.3)
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
-  - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
+  - GoogleToolboxForMac/DebugUtils (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - GoogleToolboxForMac/Defines (2.1.4)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.1.4)":
+    - GoogleToolboxForMac/DebugUtils (= 2.1.4)
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.1.4)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.1.4)"
   - GTMOAuth2 (1.1.6):
     - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.14):
-    - GTMSessionFetcher/Full (= 1.1.14)
-  - GTMSessionFetcher/Core (1.1.14)
-  - GTMSessionFetcher/Full (1.1.14):
-    - GTMSessionFetcher/Core (= 1.1.14)
+  - GTMSessionFetcher (1.2.0):
+    - GTMSessionFetcher/Full (= 1.2.0)
+  - GTMSessionFetcher/Core (1.2.0)
+  - GTMSessionFetcher/Full (1.2.0):
+    - GTMSessionFetcher/Core (= 1.2.0)
   - HexColors (2.2.1)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.13)
-  - mage-ios-sdk (2.0.5):
-    - AFNetworking (~> 3.1.0)
+  - mage-ios-sdk (2.0.6):
+    - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0.0)
     - geopackage-ios (~> 1.3.0)
     - MagicalRecord (~> 2.3.2)
@@ -54,7 +54,7 @@ PODS:
     - MagicalRecord/Core (= 2.3.2)
   - MagicalRecord/Core (2.3.2)
   - objective-zip (1.0.5)
-  - OCMock (3.4.1)
+  - OCMock (3.4.2)
   - OHHTTPStubs (6.1.0):
     - OHHTTPStubs/Default (= 6.1.0)
   - OHHTTPStubs/Core (6.1.0)
@@ -69,7 +69,7 @@ PODS:
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (6.1.0)
   - proj4-ios (4.9.3)
-  - SkyFloatingLabelTextField (3.4.0)
+  - SkyFloatingLabelTextField (3.5.1)
   - tiff-ios (1.0.3)
   - tuneup_js (1.2.3)
   - UIImage-Categories (0.0.1)
@@ -84,7 +84,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `2.0.5`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, branch `develop`)
   - OCMock
   - OHHTTPStubs
   - SkyFloatingLabelTextField (~> 3.4)
@@ -92,42 +92,68 @@ DEPENDENCIES:
   - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - DateTools
+    - EDSunriseSet
+    - FastImageCache
+    - geopackage-ios
+    - GoogleSignIn
+    - GoogleToolboxForMac
+    - GTMOAuth2
+    - GTMSessionFetcher
+    - HexColors
+    - KTCenterFlowLayout
+    - libPhoneNumber-iOS
+    - MagicalRecord
+    - objective-zip
+    - OCMock
+    - OHHTTPStubs
+    - proj4-ios
+    - SkyFloatingLabelTextField
+    - tiff-ios
+    - tuneup_js
+    - UIImage-Categories
+    - wkb-ios
+    - zxcvbn-ios
+
 EXTERNAL SOURCES:
   mage-ios-sdk:
+    :branch: develop
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 2.0.5
 
 CHECKOUT OPTIONS:
   mage-ios-sdk:
+    :commit: 52fe8de2656667dc4f4c253e07f931036aba63eb
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 2.0.5
 
 SPEC CHECKSUMS:
-  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
   geopackage-ios: a39621e8ddbc693d82ea07fa5c7353833b358502
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
-  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+  GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
-  mage-ios-sdk: 18f54b8efae80ade70aaf5924ad93ff80204c822
+  mage-ios-sdk: d40d6ae712de8e0fa64220865a9714dd334c746a
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
-  OCMock: 2cd0716969bab32a2283ff3a46fd26a8c8b4c5e3
+  OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
   OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
-  SkyFloatingLabelTextField: 703aa1420b697392b1e7dba25571180dde018477
+  SkyFloatingLabelTextField: 4cbeece9c3aae97c6019d8fae511cb5b755874f7
   tiff-ios: acedffc7d4f7bde19e9a87e345ac9fed6c31a7f4
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   wkb-ios: 7a2678852f9c4d166048a7277df37d4d2af5436b
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 4204c1b57df6d0665039cf896c06b2377d33c171
+PODFILE CHECKSUM: 5a92609163b0859eadcaeb8568d45573d78f8724
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
