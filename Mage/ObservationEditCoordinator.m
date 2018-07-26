@@ -40,6 +40,11 @@
     self = [super init];
     if (!self) return nil;
     
+    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
+    [self.managedObjectContext MR_setWorkingName:@"Observation New Context"];
+    self.managedObjectContext.stalenessInterval = 0.0;
+    
     self.newObservation = YES;
     self.observation = [self createObservationAtLocation:location withAccuracy:accuracy andProvider:provider andDelta:delta];
     
@@ -51,6 +56,11 @@
 - (instancetype) initWithRootViewController:(UIViewController *)rootViewController andDelegate:(id<ObservationEditDelegate>)delegate andObservation:(Observation *)observation {
     self = [super init];
     if (!self) return nil;
+    
+    self.managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
+    self.managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
+    [self.managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
+    self.managedObjectContext.stalenessInterval = 0.0;
     
     self.observation = [self setupObservation: observation];
     [self setupCoordinatorWithRootViewController:rootViewController andDelegate:delegate];
@@ -96,14 +106,6 @@
 
 - (void) pushViewController: (UIViewController *) viewController {
     [self.viewControllers addObject:viewController];
-}
-
-- (NSManagedObjectContext *) managedObjectContext {
-    if (_managedObjectContext) return _managedObjectContext;
-    _managedObjectContext = [NSManagedObjectContext MR_newMainQueueContext];
-    _managedObjectContext.parentContext = [NSManagedObjectContext MR_rootSavingContext];
-    [_managedObjectContext MR_setWorkingName:@"Observation Edit Context"];
-    return _managedObjectContext;
 }
 
 - (Event *) event {
@@ -204,11 +206,10 @@
 }
 
 - (void) propertiesEditCanceled {
-    __weak typeof(self) weakSelf = self;
-
+    self.managedObjectContext = nil;
+    
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"root view dismissed");
-        weakSelf.managedObjectContext = nil;
     }];
 }
 
