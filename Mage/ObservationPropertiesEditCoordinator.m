@@ -72,6 +72,7 @@
 
 - (void) editComplete {
     if ([self.editController validate]) {
+        [self.editController.navigationItem.rightBarButtonItem setEnabled:NO];
         [_delegate propertiesEditComplete];
     }
 }
