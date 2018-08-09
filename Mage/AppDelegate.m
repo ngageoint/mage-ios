@@ -7,6 +7,7 @@
 #import "AppDelegate.h"
 #import "Mage.h"
 #import "User.h"
+#import "Canary.h"
 #import <CoreLocation/CoreLocation.h>
 #import "FICImageCache.h"
 #import "UserUtility.h"
@@ -50,13 +51,44 @@
 @property (nonatomic, strong) MageAppCoordinator *appCoordinator;
 @property (nonatomic, strong) UINavigationController *rootViewController;
 @property (nonatomic, strong) UIApplication *application;
+@property (nonatomic) BOOL applicationStarted;
 @end
 
 @implementation AppDelegate
 
+- (void) applicationProtectedDataDidBecomeAvailable:(UIApplication *)application {
+    NSLog(@"Application Protected Data Did Become Available");
+    if (!_applicationStarted) {
+        _applicationStarted = YES;
+        if(self.splashView != nil) {
+            [self.splashView.view removeFromSuperview];
+            self.splashView = nil;
+        }
+        [self setupMageApplication:application];
+        [self startMageApp];
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+
+    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    [self.window makeKeyAndVisible];
+    self.window.backgroundColor = [UIColor background];
     
+    [self createLoadingView];
+    
+    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    
+    if (protectedDataAvailable) {
+        [self setupMageApplication:application];
+        [self startMageApp];
+    }
+    
+	return YES;
+}
+
+- (void) setupMageApplication: (UIApplication *) application {
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
@@ -73,17 +105,6 @@
     
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
-    
-    NSUInteger count = [MageOfflineObservationManager offlineObservationCount];
-    NSLog(@"Offline count %lu", (unsigned long)count);
-    
-    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
-    [self.window makeKeyAndVisible];
-    self.window.backgroundColor = [UIColor background];
-
-    [self createRootView];
-    
-	return YES;
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
@@ -125,14 +146,45 @@
     return YES;
 }
 
-- (void) createRootView {
+- (void) createLoadingView {
     self.rootViewController = [[UINavigationController alloc] init];
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
     TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [self.rootViewController pushViewController:transitionView animated:NO];
-    self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
-    [self.appCoordinator start];
+}
+
+- (void) startMageApp {
+    // do a canary save
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Canary *canary = [Canary MR_findFirstInContext:localContext];
+        if (!canary) {
+            canary = [Canary MR_createEntityInContext:localContext];
+        }
+        canary.launchDate = [NSDate date];
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        // error should be null and contextDidSave should be true
+        if (contextDidSave && error == NULL) {
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
+            [self.appCoordinator start];
+        } else {
+            NSLog(@"Could not read or write from the database");
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
+                                                                           message:@"It appears the app data is unavailable at this time.  If this continues, please notify your administrator."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [MagicalRecord cleanUp];
+            _applicationStarted = NO;
+        }
+    }];
+}
+
+- (void) createRootView {
+    [self createLoadingView];
+    [self startMageApp];
 }
 
 - (void) chooseEvent {
@@ -152,18 +204,6 @@
         [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
         [self createRootView];
     }];
-}
-
-- (void) application: (UIApplication *) application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"background fetch");
-    
-    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
-        completionHandler(UIBackgroundFetchResultNewData);
-    } failure:^(NSError* error) {
-        completionHandler(UIBackgroundFetchResultFailed);
-    }];
-    
-    [[MageSessionManager manager] addTask:observationFetchTask];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *) application {
@@ -192,12 +232,40 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
     
-    if(self.splashView != nil) {
-        [self.splashView.view removeFromSuperview];
-        self.splashView = nil;
+    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+    
+    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    
+    if (protectedDataAvailable) {
+        // do a canary save
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+            Canary *canary = [Canary MR_findFirstInContext:localContext];
+            if (!canary) {
+                canary = [Canary MR_createEntityInContext:localContext];
+            }
+            canary.launchDate = [NSDate date];
+        } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+            // error should be null and contextDidSave should be true
+            if (contextDidSave && error == NULL) {
+                if(self.splashView != nil) {
+                    [self.splashView.view removeFromSuperview];
+                    self.splashView = nil;
+                }
+                
+                [self processOfflineMapArchives];
+            } else {
+                NSLog(@"Could not read or write from the database");
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
+                                                                               message:@"It appears the app data was unavailable when the app became active.  If this continues, please notify your administrator."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                
+                [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            }
+        }];
     }
     
-    [self processOfflineMapArchives];
 }
 
 - (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
