@@ -3,18 +3,25 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.4 (TBD)
+## 2.0.4 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.4) (TBD)
 
 ##### Release Notes
+
+Getting duplicate observations? Not anymore. Found what we believe was causing this to happen in the case where the phone stops the app and the database is not set up properly when the app restarts.
 
 ##### Bug Fixes
 
-* Maps should update when going back to the map 
+* Check if protected data is available prior to setting up the database
+* Verify that the database was opened properly before moving on to the app
+* Removed background fetch
+* Maps should update when going back to the map
 * Events with no forms will not crash the app
 
-## 2.0.3 ()
+## 2.0.3 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.3) (07-02-2018)
 
 ##### Release Notes
+
+On the go? Initial support for GeoPackage download from the MAGE server.
 
 ##### Features
 
