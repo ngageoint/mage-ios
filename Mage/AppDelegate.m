@@ -83,14 +83,6 @@
     if (protectedDataAvailable) {
         [self setupMageApplication:application];
         [self startMageApp];
-    } else {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Protected Data Not Available"
-                                                                       message:@"Protected Data Not Available"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        
-        [self.rootViewController presentViewController:alert animated:YES completion:nil];
     }
     
 	return YES;
@@ -113,8 +105,6 @@
     
     [MagicalRecord setupMageCoreDataStack];
     [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
-    
-    [self startMageApp];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
@@ -165,8 +155,31 @@
 }
 
 - (void) startMageApp {
-    self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
-    [self.appCoordinator start];
+    // do a canary save
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Canary *canary = [Canary MR_findFirstInContext:localContext];
+        if (!canary) {
+            canary = [Canary MR_createEntityInContext:localContext];
+        }
+        canary.launchDate = [NSDate date];
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        // error should be null and contextDidSave should be true
+        if (contextDidSave && error == NULL) {
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
+            [self.appCoordinator start];
+        } else {
+            NSLog(@"Could not read or write from the database");
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
+                                                                           message:@"It appears the app data is unavailable at this time.  If this continues, please notify your administrator."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [MagicalRecord cleanUp];
+            _applicationStarted = NO;
+        }
+    }];
 }
 
 - (void) createRootView {
@@ -242,6 +255,13 @@
                 [self processOfflineMapArchives];
             } else {
                 NSLog(@"Could not read or write from the database");
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
+                                                                               message:@"It appears the app data was unavailable when the app became active.  If this continues, please notify your administrator."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                
+                [self.rootViewController presentViewController:alert animated:YES completion:nil];
             }
         }];
     }
