@@ -39,6 +39,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *changePasswordCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *goOnlineCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *themeCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *locationDisplayCell;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
@@ -117,11 +118,15 @@ static NSInteger legalSection = 6;
     }
     
     if (![NSDate isDisplayGMT]) {
-        self.timeZoneSelectionCell.textLabel.text = @"Local Time";
-        self.timeZoneSelectionCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [[NSTimeZone systemTimeZone] name]];
+        self.timeZoneSelectionCell.detailTextLabel.text = [NSString stringWithFormat:@"Local Time %@", [[NSTimeZone systemTimeZone] name]];
     } else {
-        self.timeZoneSelectionCell.textLabel.text = @"GMT Time";
-        self.timeZoneSelectionCell.detailTextLabel.text = @"";
+        self.timeZoneSelectionCell.detailTextLabel.text = @"GMT Time";
+    }
+    
+    if ([[defaults objectForKey:@"showMGRS"] boolValue]) {
+        self.locationDisplayCell.detailTextLabel.text = @"MGRS";
+    } else {
+        self.locationDisplayCell.detailTextLabel.text = @"Latitude, Longitude";
     }
     
     self.themeCell.detailTextLabel.text = [[[ThemeManager sharedManager] curentThemeDefinition] displayName];
@@ -311,7 +316,7 @@ static NSInteger legalSection = 6;
         case 2:
             return 1;
         case 3:
-            return 1;
+            return 2;
         case 4:
             return 3;
         case 5:

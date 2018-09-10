@@ -30,6 +30,8 @@
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "Theme+UIResponder.h"
+#import <mgrs/MGRS.h>
+#import <mgrs/mgrs-umbrella.h>
 
 @import SkyFloatingLabelTextField;
 
@@ -54,20 +56,25 @@ static float paddingPercentage = .1;
 @property (nonatomic) BOOL validLocation;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *latitudeField;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *longitudeField;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *mgrsField;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
 @property (strong, nonatomic) id fieldDefinition;
-//@property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
 @property (weak, nonatomic) IBOutlet UIView *fieldEntryBackground;
+@property (weak, nonatomic) IBOutlet UIStackView *fieldStackView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *locationEntryMethod;
 
 @end
 
 @implementation GeometryEditViewController
+
+#define degreesToRadians(x) (M_PI * x / 180.0)
+#define radiansToDegrees(x) (x * 180.0 / M_PI)
 
 - (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
     field.textColor = [UIColor primaryText];
@@ -88,6 +95,7 @@ static float paddingPercentage = .1;
     [self setShapeTypeSelection];
     [self themeTextField:self.latitudeField];
     [self themeTextField:self.longitudeField];
+    [self themeTextField:self.mgrsField];
 }
 
 -(void) setShapeTypeSelection {
@@ -115,11 +123,20 @@ static float paddingPercentage = .1;
     return self;
 }
 
+- (IBAction)locationEntryMethodChanged:(id)sender {
+    if (self.locationEntryMethod.selectedSegmentIndex == 0) {
+        self.mgrsField.hidden = YES;
+        self.latitudeField.hidden = NO;
+        self.longitudeField.hidden = NO;
+    } else {
+        self.mgrsField.hidden = NO;
+        self.latitudeField.hidden = YES;
+        self.longitudeField.hidden = YES;
+    }
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-
-    
     self.map.delegate = _mapDelegate;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -133,10 +150,23 @@ static float paddingPercentage = .1;
     
     [self.latitudeField setDelegate: self];
     [self.longitudeField setDelegate: self];
+    [self.mgrsField setDelegate:self];
     
     [self.latitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.mgrsField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
+    if ([defaults boolForKey:@"showMGRS"]) {
+        [self.locationEntryMethod setSelectedSegmentIndex:1];
+        self.mgrsField.hidden = NO;
+        self.latitudeField.hidden = YES;
+        self.longitudeField.hidden = YES;
+    } else {
+        [self.locationEntryMethod setSelectedSegmentIndex:0];
+        self.mgrsField.hidden = YES;
+        self.latitudeField.hidden = NO;
+        self.longitudeField.hidden = NO;
+    }
     
     WKBGeometry *geometry = [self.coordinator currentGeometry];
     
@@ -229,6 +259,7 @@ static float paddingPercentage = .1;
 - (void) clearLatitudeAndLongitudeFocus{
     [self.latitudeField resignFirstResponder];
     [self.longitudeField resignFirstResponder];
+    [self.mgrsField resignFirstResponder];
     [self updateHint];
 }
 
@@ -246,7 +277,7 @@ static float paddingPercentage = .1;
  */
 -(void) updateHintWithDragging: (BOOL) dragging{
     
-    BOOL locationEdit = self.latitudeField.isEditing || self.longitudeField.isEditing;
+    BOOL locationEdit = self.latitudeField.isEditing || self.longitudeField.isEditing || self.mgrsField.isEditing;
     
     NSString *hint = @"";
     
@@ -329,6 +360,7 @@ static float paddingPercentage = .1;
 - (void) updateLocationTextWithLatitudeString: (NSString *) latitude andLongitudeString: (NSString *) longitude {
     self.latitudeField.text = latitude;
     self.longitudeField.text = longitude;
+    self.mgrsField.text = [MGRS MGRSfromCoordinate:CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue])];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -349,16 +381,26 @@ static float paddingPercentage = .1;
     
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     NSNumber *number = [self.decimalFormatter numberFromString:text];
-    if (!number) {
-        return NO;
-    }
+    
     
     // check for valid lat lng
     CLLocationCoordinate2D coordinate;
     if (textField == self.latitudeField) {
+        if (!number) {
+            return NO;
+        }
         coordinate = CLLocationCoordinate2DMake([number doubleValue], [self.longitudeField.text doubleValue]);
-    } else {
+    } else if (textField == self.longitudeField) {
+        if (!number) {
+            return NO;
+        }
         coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [number doubleValue]);
+    } else {
+        double lat;
+        double lon;
+        char* mgrs = [text UTF8String];
+        Convert_MGRS_To_Geodetic(mgrs, &lat, &lon);
+        coordinate = CLLocationCoordinate2DMake(radiansToDegrees(lat), radiansToDegrees(lon));
     }
     
     return CLLocationCoordinate2DIsValid(coordinate);
@@ -378,40 +420,66 @@ static float paddingPercentage = .1;
     NSString *longitudeString = self.longitudeField.text;
     
     NSDecimalNumber *latitude = nil;
-    if(latitudeString.length > 0){
-        @try {
-            latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
-        } @catch (NSException *exception) {
-        }
-    }
     NSDecimalNumber *longitude = nil;
-    if(longitudeString.length > 0){
-        @try {
-            longitude = [[NSDecimalNumber alloc] initWithDouble:[longitudeString doubleValue]];
-        } @catch (NSException *exception) {
+
+    if (self.locationEntryMethod.selectedSegmentIndex == 0) {
+        if(latitudeString.length > 0){
+            @try {
+                latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
+            } @catch (NSException *exception) {
+            }
         }
+        if(longitudeString.length > 0){
+            @try {
+                longitude = [[NSDecimalNumber alloc] initWithDouble:[longitudeString doubleValue]];
+            } @catch (NSException *exception) {
+            }
+        }
+        self.validLocation = latitude != nil && longitude != nil;
+        
+        if (latitude == nil) {
+            latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+        }
+        if (longitude == nil) {
+            longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+        }
+    } else {
+        double lat;
+        double lon;
+        const char* mgrs = [self.mgrsField.text UTF8String];
+        long error = Convert_MGRS_To_Geodetic(mgrs, &lat, &lon);
+        if (lat == 0.0) {
+            latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+        } else {
+            latitude = [[NSDecimalNumber alloc] initWithDouble:radiansToDegrees(lat)];
+        }
+        if (lon == 0.0) {
+            longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+        } else {
+            longitude = [[NSDecimalNumber alloc] initWithDouble:radiansToDegrees(lon)];
+        }
+        
+        self.validLocation = error == UTM_NO_ERROR;
     }
     
-    self.validLocation = latitude != nil && longitude != nil;
-    
-    if (latitude == nil) {
-        latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
-    }
-    if (longitude == nil) {
-        longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
-    }
-    
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    
-    [self.map setCenterCoordinate:coordinate];
-    
-    if (self.selectedMapPoint != nil) {
-        [self.selectedMapPoint setCoordinate:coordinate];
-        [self updateShape:coordinate];
-    } else if([self.mapObservation isKindOfClass:[MapAnnotationObservation class]]){
-        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-        mapAnnotationObservation.annotation.coordinate = coordinate;
-        [self updateAcceptState];
+    if (self.validLocation){
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
+        
+        [self.map setCenterCoordinate:coordinate];
+        
+        if (self.selectedMapPoint != nil) {
+            [self.selectedMapPoint setCoordinate:coordinate];
+            [self updateShape:coordinate];
+        } else if([self.mapObservation isKindOfClass:[MapAnnotationObservation class]]){
+            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+            mapAnnotationObservation.annotation.coordinate = coordinate;
+            [self updateAcceptState];
+        }
+        // if it is a point just update the geometry
+        if (self.shapeType == WKB_POINT) {
+            WKBPoint *updatedGeometry = [[WKBPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
+            [self.coordinator updateGeometry:updatedGeometry];
+        }
     }
     
 }
@@ -522,12 +590,15 @@ static float paddingPercentage = .1;
 - (void) locationEnabled: (BOOL) enabled{
     self.latitudeField.enabled = enabled;
     self.longitudeField.enabled = enabled;
+    self.mgrsField.enabled = enabled;
+    self.locationEntryMethod.enabled = enabled;
     UIColor *backgroundColor = nil;
     if(!enabled){
         backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
     }
     self.latitudeField.backgroundColor = backgroundColor;
     self.longitudeField.backgroundColor = backgroundColor;
+    self.mgrsField.backgroundColor = backgroundColor;
 }
 
 - (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
@@ -853,7 +924,6 @@ static float paddingPercentage = .1;
             options.image = self.coordinator.pinImage;
             GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
             self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
-            
             WKBPoint *point = (WKBPoint *)geometry;
             [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
         }

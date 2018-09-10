@@ -53,6 +53,7 @@ PODS:
   - MagicalRecord (2.3.2):
     - MagicalRecord/Core (= 2.3.2)
   - MagicalRecord/Core (2.3.2)
+  - mgrs (0.1.0)
   - objective-zip (1.0.5)
   - OCMock (3.4.2)
   - OHHTTPStubs (6.1.0):
@@ -85,6 +86,7 @@ DEPENDENCIES:
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
   - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `2.0.6`)
+  - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
   - SkyFloatingLabelTextField (~> 3.4)
@@ -107,6 +109,7 @@ SPEC REPOS:
     - KTCenterFlowLayout
     - libPhoneNumber-iOS
     - MagicalRecord
+    - mgrs
     - objective-zip
     - OCMock
     - OHHTTPStubs
@@ -143,6 +146,7 @@ SPEC CHECKSUMS:
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
   mage-ios-sdk: d40d6ae712de8e0fa64220865a9714dd334c746a
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
+  mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
   OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
   OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
@@ -154,6 +158,6 @@ SPEC CHECKSUMS:
   wkb-ios: 7a2678852f9c4d166048a7277df37d4d2af5436b
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: df8b8a179856130dafdd27d410b3e1bb52094708
+PODFILE CHECKSUM: 01f1ff62ae76d91a9b6af54f02893f073d50625e
 
 COCOAPODS: 1.5.3

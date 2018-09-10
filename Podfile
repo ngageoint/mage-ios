@@ -14,6 +14,7 @@ target 'MAGE' do
     pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '2.0.6'
     #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'develop'
     #pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
+    pod 'mgrs', '~>0.1.0'
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'tuneup_js'
     pod 'KTCenterFlowLayout'

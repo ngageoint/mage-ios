@@ -16,6 +16,7 @@
 #import "GPKGMapShapePoints.h"
 #import "MapShapePointsObservation.h"
 #import "Theme+UIResponder.h"
+#import <mgrs/MGRS.h>
 
 @import SkyFloatingLabelTextField;
 @import HexColors;
@@ -69,8 +70,11 @@
     }
     
     self.locationField.errorMessage = nil;
-    self.locationField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [NSString stringWithFormat:@"%@ (Lat, Long)", [field objectForKey:@"title"]] : [NSString stringWithFormat:@"%@ (Lat, Long) %@", [field objectForKey:@"title"], @"*"];
-    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
+        self.locationField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [NSString stringWithFormat:@"%@ (MGRS)", [field objectForKey:@"title"]] : [NSString stringWithFormat:@"%@ (MGRS) %@", [field objectForKey:@"title"], @"*"];
+    } else {
+        self.locationField.placeholder = ![[field objectForKey: @"required"] boolValue] ? [NSString stringWithFormat:@"%@ (Lat, Long)", [field objectForKey:@"title"]] : [NSString stringWithFormat:@"%@ (Lat, Long) %@", [field objectForKey:@"title"], @"*"];
+    }
     self.mapDelegate = [[MapDelegate alloc] init];
 
     [self.mapDelegate setMapView: self.mapView];
@@ -89,7 +93,11 @@
         }
         
         WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
-        self.locationField.text = [NSString stringWithFormat:@"%.6f, %.6f", [point.y doubleValue], [point.x doubleValue]];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
+            self.locationField.text = [MGRS MGRSfromCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
+        } else {
+            self.locationField.text = [NSString stringWithFormat:@"%.6f, %.6f", [point.y doubleValue], [point.x doubleValue]];
+        }
 
         if (!self.isGeometryField) {
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
