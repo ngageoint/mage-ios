@@ -96,6 +96,7 @@ static float paddingPercentage = .1;
     [self themeTextField:self.latitudeField];
     [self themeTextField:self.longitudeField];
     [self themeTextField:self.mgrsField];
+    [self.locationEntryMethod setTintColor:[UIColor brand]];
 }
 
 -(void) setShapeTypeSelection {

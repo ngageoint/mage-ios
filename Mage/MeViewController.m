@@ -27,6 +27,8 @@
 #import "WKBGeometryUtils.h"
 #import "ObservationViewController.h"
 #import "Theme+UIResponder.h"
+#import <HexColors/HexColor.h>
+#import <mgrs/MGRS.h>
 
 @import PhotosUI;
 
@@ -41,12 +43,15 @@
 @property (weak, nonatomic) IBOutlet UITextView *phoneNumber;
 @property (weak, nonatomic) IBOutlet UIView *emailView;
 @property (weak, nonatomic) IBOutlet UITextView *email;
-@property (weak, nonatomic) IBOutlet UIImageView *emailIcon;
-@property (weak, nonatomic) IBOutlet UIImageView *phoneIcon;
 @property (weak, nonatomic) IBOutlet UIView *avatarBorder;
+@property (weak, nonatomic) IBOutlet UITextView *location;
+@property (weak, nonatomic) IBOutlet UITextView *locationIcon;
+@property (weak, nonatomic) IBOutlet UITextView *phoneIcon;
+@property (weak, nonatomic) IBOutlet UITextView *emailIcon;
 
 @property (assign, nonatomic) BOOL currentUserIsMe;
 @property (nonatomic, strong) id previewingContext;
+@property (nonatomic, strong) CLLocation *userLastLocation;
 
 @end
 
@@ -58,10 +63,19 @@
     self.tableView.tableHeaderView.backgroundColor = [UIColor background];
     self.tableView.backgroundColor = [UIColor background];
     self.name.textColor = [UIColor primaryText];
-    self.emailIcon.tintColor = [UIColor activeIcon];
-    self.phoneIcon.tintColor = [UIColor activeIcon];
     self.avatar.tintColor = [UIColor inactiveIcon];
     self.avatarBorder.backgroundColor = [UIColor background];
+    
+    self.phoneIcon.textColor = [UIColor secondaryText];
+    self.phoneIcon.font = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.phoneIcon.text = @"\U0000f095";
+    self.emailIcon.textColor = [UIColor secondaryText];
+    self.emailIcon.font = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.emailIcon.text = @"\U0000f0e0";
+    self.locationIcon.textColor = [UIColor secondaryText];
+    self.locationIcon.font = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.locationIcon.text = @"\U0000f0ac";
+    self.location.textColor = [UIColor flatButton];
     self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     [UIColor themeMap:self.map];
@@ -95,6 +109,11 @@
     }
     
     [self registerForThemeChanges];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateUserDefaults:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,6 +126,13 @@
     
     self.email.text = self.user.email;
     self.emailView.hidden = self.user.email ? NO : YES;
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(locationSingleTap:)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.location addGestureRecognizer:singleTap];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(locationLongPress:)];
+    [self.location addGestureRecognizer:longPress];
     
     [self.observationDataStore startFetchControllerWithObservations:[Observations observationsForUser:self.user]];
     if (self.mapDelegate != nil) {
@@ -121,31 +147,109 @@
         self.avatar.image = [UIImage imageWithContentsOfFile:avatarFile];
     }
     
-    CLLocation *location = nil;
     if (self.currentUserIsMe) {
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
             WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:gpsLocation.geometry];
-            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
+            self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
     }
     
-    if (!location) {
+    if (!self.userLastLocation) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
             WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
-            location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
+            self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         }
         [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
     }
     
-    if (location) {
-        [self zoomAndCenterMapOnLocation:location];
+    if (self.userLastLocation) {
+        [self zoomAndCenterMapOnLocation:self.userLastLocation];
+        [self setLocationText];
      }
     
     [self sizeHeaderToFit];
+}
+
+- (void) updateUserDefaults: (NSNotification *) notification {
+    [self setLocationText];
+}
+
+- (void) setLocationText {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
+        self.location.text = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
+    } else {
+        self.location.text = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
+    }
+}
+
+- (void) locationSingleTap: (id) sender {
+    [self launchMapApp];
+}
+
+- (void) locationLongPress: (id) sender {
+    [self launchMapApp];
+}
+
+- (NSDictionary *) getLaunchableUrls {
+    NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude, self.user.name];
+    NSString *appleMapsQueryStringEncoded = [appleMapsQueryString stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?%@", appleMapsQueryStringEncoded]];
+    NSURL *googleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.com/maps/dir/?api=1&destination=%f,%f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude]];
+    
+    NSMutableDictionary *urlMap = [[NSMutableDictionary alloc] init];
+    [urlMap setObject:appleMapsUrl forKey:@"Apple Maps"];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:googleMapsUrl]) {
+        [urlMap setObject:googleMapsUrl forKey:@"Google Maps"];
+    }
+    return urlMap;
+}
+
+- (void) launchMapApp {
+    NSDictionary *urlMap = [self getLaunchableUrls];
+    if ([urlMap count] > 0) {
+        [self presentMapsActionSheetForURLs:urlMap];
+    } else {
+        [[UIApplication sharedApplication] openURL:[urlMap objectForKey:@"Apple Maps"]  options:@{} completionHandler:^(BOOL success) {
+            NSLog(@"opened? %d", success);
+        }];
+    }
+}
+
+- (void) presentMapsActionSheetForURLs: (NSDictionary *) urlMap {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Get Directions With..."
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Copy To Clipboard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
+            pasteboard.string = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
+        } else {
+            pasteboard.string = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
+        }
+    }]];
+    for (NSString *app in urlMap) {
+        [alert addAction:[UIAlertAction actionWithTitle:app style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[urlMap valueForKey:app] options:@{} completionHandler:^(BOOL success) {
+                NSLog(@"opened? %d", success);
+            }];
+        }]];
+    }
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    
+    if (alert.popoverPresentationController) {
+        alert.popoverPresentationController.sourceView = self.view;
+        alert.popoverPresentationController.sourceRect = self.view.frame;
+        alert.popoverPresentationController.permittedArrowDirections = 0;
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (BOOL)isForceTouchAvailable {
