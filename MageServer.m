@@ -114,7 +114,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     
     [defaults synchronize];
     
-    return (serverCompatibilityMajorVersion == serverMajorVersion && serverCompatibilityMinorVersion <= serverMinorVersion);
+    return ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]);
 }
 
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
