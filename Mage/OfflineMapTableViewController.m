@@ -54,8 +54,8 @@
     self.tableView.layoutMargins = UIEdgeInsetsZero;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageLayerFetched:) name: GeoPackageLayerFetched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageDownloaded object:nil];
@@ -87,8 +87,8 @@
 }
 
 - (void) reloadTable {
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
     [self.tableView reloadData];
     self.refreshLayersButton.enabled = YES;
 }
@@ -134,8 +134,8 @@
     self.downloadedGeoPackageCells = [[NSMutableArray alloc] init];
     self.cacheNamesToOverlays = [[NSMutableDictionary alloc] init];
     
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND loaded == 1", [Server currentEventId], @"GeoPackage"]];
+    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
     self.refreshLayersButton.enabled = YES;
     
     NSMutableArray *arrayToAddTo = nil;
@@ -533,13 +533,7 @@
         if(![cacheOverlay isChild]){
             style = UITableViewCellEditingStyleDelete;
         }
-    } else if ([indexPath section] == 1) {
-        CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
-        if(![cacheOverlay isChild]){
-            style = UITableViewCellEditingStyleDelete;
-        }
     }
-
     return style;
 }
 

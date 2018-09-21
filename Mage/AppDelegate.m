@@ -568,6 +568,7 @@
             }
         }];
     } else {
+        NSLog(@"GeoPackage file %@ has been imported", path);
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
