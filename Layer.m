@@ -59,8 +59,7 @@ NSString * const GeoPackageDownloaded = @"mil.nga.giat.mage.geopackage.downloade
     MageSessionManager *manager = [MageSessionManager manager];
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/geopackages/%@/%@", layer.remoteId, [layer.file valueForKey:@"name"]]];
     
-    stringPath = [NSString stringWithFormat:@"%@_%@.gpkg", [[stringPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[stringPath lastPathComponent] stringByDeletingPathExtension]], @"from_server"];
-
+    stringPath = [NSString stringWithFormat:@"%@_%@_%@.gpkg", [[stringPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[stringPath lastPathComponent] stringByDeletingPathExtension]], layer.remoteId, @"from_server"];
     
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     [request setValue:[layer.file valueForKey:@"contentType"] forHTTPHeaderField:@"Accept"];
