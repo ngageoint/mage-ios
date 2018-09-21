@@ -73,6 +73,8 @@
 	<string>Save photos/videos you take to the photo libarary so you can access them outside of MAGE.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>MAGE uses the photo library to save photos/videos as well as attach already captured photos/videos.</string>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Medium.ttf</string>
