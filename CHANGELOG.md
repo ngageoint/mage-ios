@@ -3,7 +3,21 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.4 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.4) (TBD)
+## 2.0.5 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.5) (TBD)
+
+##### Release Notes
+
+Locations can now be viewed and edited in MGRS or Latitude Longitude.
+
+##### Features
+
+* Added MGRS as an option to show and edit locations.
+
+##### Bug Fixes
+
+* GeoPackage downloading does not fail if two GeoPackages had the same name
+
+## 2.0.4 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.4) (08-21-2018)
 
 ##### Release Notes
 
