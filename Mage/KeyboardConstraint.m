@@ -41,13 +41,15 @@ CGFloat initialConstant;
     dispatch_async(dispatch_get_main_queue(), ^{
         UITableView *table = self.secondItem;
         UIView *responder = [UIResponder currentFirstResponder];
+        if (responder) {
         UIView *cell = responder.superview;
-        while (cell != nil && ![cell isKindOfClass:[UITableViewCell class]]) {
-            cell = cell.superview;
-        }
-        if (cell != nil) {
-            CGRect textFieldRect = [table convertRect:cell.bounds fromView:cell];
-            [table scrollRectToVisible:textFieldRect animated:NO];
+            while (cell != nil && ![cell isKindOfClass:[UITableViewCell class]]) {
+                cell = cell.superview;
+            }
+            if (cell != nil) {
+                CGRect textFieldRect = [table convertRect:cell.bounds fromView:cell];
+                [table scrollRectToVisible:textFieldRect animated:NO];
+            }
         }
 
     });
