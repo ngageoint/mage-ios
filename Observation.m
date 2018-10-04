@@ -79,8 +79,8 @@ Event *_event;
 - (NSDictionary *) getPrimaryForm {
     Event *event = [self event];
     NSArray *forms = event.forms;
-    if (forms != nil && [forms count] > 0) {
-        NSArray *observationForms = [self.properties objectForKey:@"forms"];
+    NSArray *observationForms = [self.properties objectForKey:@"forms"];
+    if (forms != nil && [forms count] > 0 && observationForms != nil && [observationForms count] > 0) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[observationForms objectAtIndex:0] objectForKey:@"formId"]];
         NSArray *filteredArray = [forms filteredArrayUsingPredicate:predicate];
         
