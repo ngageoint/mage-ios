@@ -7,17 +7,17 @@
 //
 
 #import "GeometryDeserializer.h"
-#import "WKBPoint.h"
-#import "WKBMultiPoint.h"
-#import "WKBLineString.h"
-#import "WKBMultiLineString.h"
-#import "WKBPolygon.h"
-#import "WKBMultiPolygon.h"
-#import "WKBGeometryCollection.h"
+#import "SFPoint.h"
+#import "SFMultiPoint.h"
+#import "SFLineString.h"
+#import "SFMultiLineString.h"
+#import "SFPolygon.h"
+#import "SFMultiPolygon.h"
+#import "SFGeometryCollection.h"
 
 @implementation GeometryDeserializer
 
-+(WKBGeometry *) parseGeometry: (NSDictionary *) json{
++(SFGeometry *) parseGeometry: (NSDictionary *) json{
     
     NSString *typeName = [json objectForKey:@"type"];
     NSArray *coordinates = [json objectForKey:@"coordinates"];
@@ -26,7 +26,7 @@
         [NSException raise:@"Geometry Type" format:@"'type' not present"];
     }
     
-    WKBGeometry *geometry = nil;
+    SFGeometry *geometry = nil;
     if([typeName isEqualToString:@"Point"]){
         geometry = [self toPoint:coordinates];
     } else if([typeName isEqualToString:@"MultiPoint"]){
@@ -48,82 +48,82 @@
     return geometry;
 }
 
-+(WKBPoint *) toPoint: (NSArray *) coordinates{
++(SFPoint *) toPoint: (NSArray *) coordinates{
     double x = [[coordinates objectAtIndex:0] doubleValue];
     double y = [[coordinates objectAtIndex:1] doubleValue];
-    WKBPoint *point = [[WKBPoint alloc] initWithXValue:x andYValue:y];
+    SFPoint *point = [[SFPoint alloc] initWithXValue:x andYValue:y];
     return point;
 }
 
-+(WKBMultiPoint *) toMultiPoint: (NSArray *) coordinates{
++(SFMultiPoint *) toMultiPoint: (NSArray *) coordinates{
     
-    WKBMultiPoint *multiPoint = [[WKBMultiPoint alloc] init];
+    SFMultiPoint *multiPoint = [[SFMultiPoint alloc] init];
     
     for (int i = 0; i < coordinates.count; ++i) {
-        WKBPoint *point = [self toPoint: [coordinates objectAtIndex:i]];
+        SFPoint *point = [self toPoint: [coordinates objectAtIndex:i]];
         [multiPoint addPoint:point];
     }
     
     return multiPoint;
 }
 
-+(WKBLineString *) toLineString: (NSArray *) coordinates{
++(SFLineString *) toLineString: (NSArray *) coordinates{
 
-    WKBLineString *lineString = [[WKBLineString alloc] init];
+    SFLineString *lineString = [[SFLineString alloc] init];
     
     for (int i = 0; i < coordinates.count; ++i) {
-        WKBPoint *point = [self toPoint: [coordinates objectAtIndex:i]];
+        SFPoint *point = [self toPoint: [coordinates objectAtIndex:i]];
         [lineString addPoint:point];
     }
     
     return lineString;
 }
 
-+(WKBMultiLineString *) toMultiLineString: (NSArray *) coordinates{
++(SFMultiLineString *) toMultiLineString: (NSArray *) coordinates{
 
-    WKBMultiLineString *multiLineString = [[WKBMultiLineString alloc] init];
+    SFMultiLineString *multiLineString = [[SFMultiLineString alloc] init];
     
     for (int i = 0; i < coordinates.count; ++i) {
-        WKBLineString *lineString = [self toLineString: [coordinates objectAtIndex:i]];
+        SFLineString *lineString = [self toLineString: [coordinates objectAtIndex:i]];
         [multiLineString addLineString:lineString];
     }
     
     return multiLineString;
 }
 
-+(WKBPolygon *) toPolygon: (NSArray *) coordinates{
++(SFPolygon *) toPolygon: (NSArray *) coordinates{
 
-    WKBPolygon *polygon = [[WKBPolygon alloc] init];
+    SFPolygon *polygon = [[SFPolygon alloc] init];
     
-    WKBLineString *polygonLineString = [self toLineString:[coordinates objectAtIndex:0]];
+    SFLineString *polygonLineString = [self toLineString:[coordinates objectAtIndex:0]];
     [polygon addRing:polygonLineString];
     
     for (int i = 1; i < coordinates.count; ++i) {
-        WKBLineString *holeLineString = [self toLineString: [coordinates objectAtIndex:i]];
+        SFLineString *holeLineString = [self toLineString: [coordinates objectAtIndex:i]];
         [polygon addRing:holeLineString];
     }
     
     return polygon;
 }
 
-+(WKBMultiPolygon *) toMultiPolygon: (NSArray *) coordinates{
++(SFMultiPolygon *) toMultiPolygon: (NSArray *) coordinates{
 
-    WKBMultiPolygon *multiPolygon = [[WKBMultiPolygon alloc] init];
+    SFMultiPolygon *multiPolygon = [[SFMultiPolygon alloc] init];
     
     for (int i = 0; i < coordinates.count; ++i) {
-        WKBPolygon *polygon = [self toPolygon: [coordinates objectAtIndex:i]];
+        SFPolygon *polygon = [self toPolygon: [coordinates objectAtIndex:i]];
         [multiPolygon addPolygon:polygon];
     }
     
     return multiPolygon;
 }
 
-+(WKBGeometryCollection *) toGeometryCollection: (NSArray *) coordinates{
++(SFGeometryCollection *) toGeometryCollection: (NSArray *) coordinates{
 
-    WKBGeometryCollection *geometryCollection = [[WKBGeometryCollection alloc] init];
+    SFGeometryCollection *geometryCollection = [[SFGeometryCollection alloc] init];
     
     for (int i = 0; i < coordinates.count; ++i) {
-        WKBGeometry *geometry = [self parseGeometry: [coordinates objectAtIndex:i]];
+        SFGeometry *geometry = [self parseGeometry: [coordinates objectAtIndex:i]];
         [geometryCollection addGeometry:geometry];
     }
     

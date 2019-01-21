@@ -12,8 +12,8 @@
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
 #import "Server.h"
-#import "WKBPoint.h"
-#import "WKBGeometryUtils.h"
+#import "SFPoint.h"
+#import "SFGeometryUtils.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation GPSLocation
@@ -47,7 +47,7 @@
     
     GPSLocation *gpsLocation = [GPSLocation MR_createEntityInContext:managedObjectContext];
     
-    gpsLocation.geometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+    gpsLocation.geometry = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
     gpsLocation.timestamp = location.timestamp;
     gpsLocation.eventId = [Server currentEventId];
     gpsLocation.properties = @{
@@ -92,8 +92,8 @@
     MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
-        WKBGeometry *point = location.geometry;
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:point];
+        SFGeometry *point = location.geometry;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:point];
         [parameters addObject:@{
                                 @"geometry": @{
                                         @"type": @"Point",

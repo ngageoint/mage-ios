@@ -9,7 +9,7 @@
 #import "UserUtility.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
-#import <StoredPassword.h>
+#import "StoredPassword.h"
 
 @interface UserUtility()
 

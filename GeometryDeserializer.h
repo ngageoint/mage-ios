@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 
 @interface GeometryDeserializer : NSObject
 
-+(WKBGeometry *) parseGeometry: (NSDictionary *) json;
++(SFGeometry *) parseGeometry: (NSDictionary *) json;
 
 @end

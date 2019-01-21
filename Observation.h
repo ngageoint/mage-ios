@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
-#import "WKBGeometry.h"
-#import "WKBPoint.h"
+#import "SFGeometry.h"
+#import "SFPoint.h"
 
 extern NSString * _Nonnull const kObservationErrorStatusCode;
 extern NSString * _Nullable const kObservationErrorDescription;
@@ -28,8 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 
-+ (Observation *) observationWithGeometry:(WKBGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
-+ (BOOL) checkIfRectangle: (NSArray<WKBPoint *> *) points;
++ (Observation *) observationWithGeometry:(SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
++ (BOOL) checkIfRectangle: (NSArray<SFPoint *> *) points;
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
 - (void) addTransientAttachment: (Attachment *) attachment;
@@ -39,8 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLLocation *) location;
 
-- (WKBGeometry *) getGeometry;
-- (void) setGeometry: (WKBGeometry *) geometry;
+- (SFGeometry *) getGeometry;
+- (void) setGeometry: (SFGeometry *) geometry;
 
 - (Boolean) isDirty;
 - (Boolean) isImportant;

@@ -7,15 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WKBGeometry.h"
-#import "WKBPoint.h"
+#import "SFGeometry.h"
+#import "SFPoint.h"
 
 @interface GeometryUtility : NSObject
 
-+(WKBGeometry *) toGeometryFromGeometryData: (NSData *) geometryData;
++(SFGeometry *) toGeometryFromGeometryData: (NSData *) geometryData;
 
-+(NSData *) toGeometryDataFromGeometry: (WKBGeometry *) geometry;
++(NSData *) toGeometryDataFromGeometry: (SFGeometry *) geometry;
 
-+(WKBPoint *) centroidOfGeometry: (WKBGeometry *) geometry;
++(SFPoint *) centroidOfGeometry: (SFGeometry *) geometry;
 
 @end

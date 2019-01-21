@@ -7,28 +7,28 @@
 //
 
 #import "GeometryUtility.h"
-#import "WKBByteReader.h"
-#import "WKBGeometryReader.h"
-#import "WKBByteWriter.h"
-#import "WKBGeometryWriter.h"
-#import "WKBGeometryUtils.h"
-#import "GPKGProjectionConstants.h"
+#import "SFByteReader.h"
+#import "SFWGeometryReader.h"
+#import "SFByteWriter.h"
+#import "SFWGeometryWriter.h"
+#import "SFGeometryUtils.h"
+#import "SFPProjectionConstants.h"
 
 @implementation GeometryUtility
 
-+(WKBGeometry *) toGeometryFromGeometryData: (NSData *) geometryData{
-    WKBByteReader *reader = [[WKBByteReader alloc] initWithData: geometryData];
++(SFGeometry *) toGeometryFromGeometryData: (NSData *) geometryData{
+    SFByteReader *reader = [[SFByteReader alloc] initWithData: geometryData];
     reader.byteOrder = CFByteOrderBigEndian;
-    WKBGeometry *geometry = [WKBGeometryReader readGeometryWithReader: reader];
+    SFGeometry *geometry = [SFWGeometryReader readGeometryWithReader: reader];
     return geometry;
 }
 
-+(NSData *) toGeometryDataFromGeometry: (WKBGeometry *) geometry{
++(NSData *) toGeometryDataFromGeometry: (SFGeometry *) geometry{
     NSData *data = nil;
-    WKBByteWriter *writer = [[WKBByteWriter alloc] init];
+    SFByteWriter *writer = [[SFByteWriter alloc] init];
     @try {
         writer.byteOrder = CFByteOrderBigEndian;
-        [WKBGeometryWriter writeGeometry:geometry withWriter:writer];
+        [SFWGeometryWriter writeGeometry:geometry withWriter:writer];
         data = [writer getData];
     } @catch (NSException *exception) {
         NSLog(@"Problem reading observation, %@: %@", [exception name], [exception reason]);
@@ -38,15 +38,15 @@
     return data;
 }
 
-+(WKBPoint *) centroidOfGeometry: (WKBGeometry *) geometry{
-    WKBPoint *centroid = nil;
-    if(geometry.geometryType == WKB_POINT){
-        centroid = (WKBPoint *) geometry;
++(SFPoint *) centroidOfGeometry: (SFGeometry *) geometry{
+    SFPoint *centroid = nil;
+    if(geometry.geometryType == SF_POINT){
+        centroid = (SFPoint *) geometry;
     }else{
-        WKBGeometry *clonedGeometry = [geometry mutableCopy];
-        [WKBGeometryUtils minimizeGeometry:clonedGeometry withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
-        centroid = [WKBGeometryUtils centroidOfGeometry:clonedGeometry];
-        [WKBGeometryUtils normalizeGeometry:centroid withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
+        SFGeometry *clonedGeometry = [geometry mutableCopy];
+        [SFGeometryUtils minimizeGeometry:clonedGeometry withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
+        centroid = [SFGeometryUtils centroidOfGeometry:clonedGeometry];
+        [SFGeometryUtils normalizeGeometry:centroid withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
     }
     return centroid;
 }

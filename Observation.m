@@ -19,13 +19,13 @@
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
 #import "GeometryDeserializer.h"
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 #import "GeometryUtility.h"
 #import "GeometrySerializer.h"
 #import "GeometryUtility.h"
-#import "WKBPolygon.h"
-#import "WKBLineString.h"
-#import "WKBGeometryUtils.h"
+#import "SFPolygon.h"
+#import "SFLineString.h"
+#import "SFGeometryUtils.h"
 #import "NotificationRequester.h"
 
 NSString * const kObservationErrorStatusCode = @"errorStatusCode";
@@ -40,7 +40,7 @@ NSDictionary *_fieldNameToField;
 Event *_event;
 
 //NSNumber *_currentEventId;
-+ (Observation *) observationWithGeometry:(WKBGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
++ (Observation *) observationWithGeometry:(SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
 
     [observation setTimestamp:[NSDate date]];
@@ -192,7 +192,7 @@ Event *_event;
                                  @"name": stringState
                                  } forKey:@"state"];
 
-    WKBGeometry *geometry = [self getGeometry];
+    SFGeometry *geometry = [self getGeometry];
     [observationJson setObject:[GeometrySerializer serializeGeometry:geometry] forKey:@"geometry"];
 
     [observationJson setObject: [dateFormat stringFromDate:self.timestamp] forKey:@"timestamp"];
@@ -209,7 +209,7 @@ Event *_event;
                 id field = [[self fieldNameToFieldForEvent:event andFormId:[form objectForKey:@"formId"]] objectForKey:key];
                 if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                     @try {
-                        WKBGeometry *fieldGeometry = value;
+                        SFGeometry *fieldGeometry = value;
                         [formProperties setObject:[GeometrySerializer serializeGeometry:fieldGeometry] forKey:key];
                     }
                     @catch (NSException *e){
@@ -252,7 +252,7 @@ Event *_event;
     [self setState:[NSNumber numberWithInt:(int) state]];
 
     @try {
-    WKBGeometry * geometry = [GeometryDeserializer parseGeometry:[json valueForKeyPath:@"geometry"]];
+    SFGeometry * geometry = [GeometryDeserializer parseGeometry:[json valueForKeyPath:@"geometry"]];
         [self setGeometry:geometry];
     }
     @catch (NSException *e){
@@ -278,7 +278,7 @@ Event *_event;
                     id field = [fields objectForKey:formKey];
                     if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                         @try {
-                            WKBGeometry * geometry = [GeometryDeserializer parseGeometry:value];
+                            SFGeometry * geometry = [GeometryDeserializer parseGeometry:value];
                             [parsedFormProperties setObject:geometry forKey:formKey];
                         }
                         @catch (NSException *e){
@@ -300,20 +300,20 @@ Event *_event;
 }
 
 - (CLLocation *) location {
-    WKBGeometry *geometry = [self getGeometry];
-    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    SFGeometry *geometry = [self getGeometry];
+    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     return [[CLLocation alloc] initWithLatitude:[point.y doubleValue] longitude:[point.x doubleValue]];
 }
 
-- (WKBGeometry *) getGeometry{
-    WKBGeometry *geometry = nil;
+- (SFGeometry *) getGeometry{
+    SFGeometry *geometry = nil;
     if(self.geometryData != nil){
         geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
     }
     return geometry;
 }
 
-- (void) setGeometry: (WKBGeometry *) geometry{
+- (void) setGeometry: (SFGeometry *) geometry{
     NSData *data = nil;
     if(geometry != nil){
         data = [GeometryUtility toGeometryDataFromGeometry:geometry];
@@ -321,21 +321,21 @@ Event *_event;
     [self setGeometryData:data];
 }
 
-+(BOOL) checkIfRectangle: (NSArray<WKBPoint *> *) points{
++(BOOL) checkIfRectangle: (NSArray<SFPoint *> *) points{
     return [Observation checkIfRectangleAndFindSide:points] != nil;
 }
 
-+(NSNumber *) checkIfRectangleAndFindSide: (NSArray<WKBPoint *> *) points{
++(NSNumber *) checkIfRectangleAndFindSide: (NSArray<SFPoint *> *) points{
     NSNumber *sameXSide1 = nil;
     int size = (int)points.count;
     if (size == 4 || size == 5) {
-        WKBPoint *point1 = [points objectAtIndex:0];
-        WKBPoint *lastPoint = [points objectAtIndex:size - 1];
+        SFPoint *point1 = [points objectAtIndex:0];
+        SFPoint *lastPoint = [points objectAtIndex:size - 1];
         BOOL closed = [point1.x isEqualToNumber:lastPoint.x] && [point1.y isEqualToNumber:lastPoint.y];
         if ((closed && size == 5) || (!closed && size == 4)) {
-            WKBPoint *point2 = [points objectAtIndex:1];
-            WKBPoint *point3 = [points objectAtIndex:2];
-            WKBPoint *point4 = [points objectAtIndex:3];
+            SFPoint *point2 = [points objectAtIndex:1];
+            SFPoint *point3 = [points objectAtIndex:2];
+            SFPoint *point4 = [points objectAtIndex:3];
             if ([point1.x isEqualToNumber:point2.x] && [point2.y isEqualToNumber:point3.y]) {
                 if ([point1.y isEqualToNumber:point4.y] && [point3.x isEqualToNumber:point4.x]) {
                     sameXSide1 = [NSNumber numberWithInt:1];
@@ -803,8 +803,8 @@ Event *_event;
     [text appendFormat:@"Date:\n%@\n\n", [dateFormatter stringFromDate:self.timestamp]];
 
     // geometry
-    WKBGeometry *geometry = [self getGeometry];
-    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    SFGeometry *geometry = [self getGeometry];
+    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
 
     // type
