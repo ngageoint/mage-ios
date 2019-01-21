@@ -33,7 +33,7 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  *
  *  @return new instance
  */
--(instancetype) initWithName: (NSString *) name andGeoPackage: (NSString *) geoPackage andCacheName: (NSString *) cacheName andCount: (int) count andMinZoom: (int) minZoom andIndexed: (BOOL) indexed andGeometryType: (enum WKBGeometryType) geometryType;
+-(instancetype) initWithName: (NSString *) name andGeoPackage: (NSString *) geoPackage andCacheName: (NSString *) cacheName andCount: (int) count andMinZoom: (int) minZoom andIndexed: (BOOL) indexed andGeometryType: (enum SFGeometryType) geometryType;
 
 /**
  *  Get the indexed value
@@ -47,7 +47,7 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  *
  *  @return geometry type
  */
--(enum WKBGeometryType) getGeometryType;
+-(enum SFGeometryType) getGeometryType;
 
 /**
  *  Add a shape

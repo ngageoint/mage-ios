@@ -87,15 +87,15 @@
         self.variantField.hidden = YES;
     }
     
-    if ([observation getGeometry].geometryType == WKB_POINT) {
+    if ([observation getGeometry].geometryType == SF_POINT) {
         [self.observationShapeImage setImage:[UIImage imageNamed:@"marker"]];
         [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFit];
         self.observationShapeImage.tintColor = [UIColor grayColor];
     } else {
-        if ([observation getGeometry].geometryType == WKB_LINESTRING) {
+        if ([observation getGeometry].geometryType == SF_LINESTRING) {
             [self.observationShapeImage setImage:[UIImage imageNamed:@"line_string"]];
             [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFill];
-        } else if ([observation getGeometry].geometryType == WKB_POLYGON) {
+        } else if ([observation getGeometry].geometryType == SF_POLYGON) {
             [self.observationShapeImage setImage:[UIImage imageNamed:@"polygon"]];
             [self.observationShapeImage setContentMode:UIViewContentModeScaleAspectFill];
         }

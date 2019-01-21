@@ -7,7 +7,7 @@
 //
 
 #import "MapPolygonObservation.h"
-#import "GPKGMapShapeConverter.h"
+#import "GPKGMapUtils.h"
 
 @interface MapPolygonObservation ()
 
@@ -34,7 +34,7 @@
     
     // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
     if(!onShape){
-        CGPathRef complementaryPath = [GPKGMapShapeConverter complementaryWorldPathOfPolygon:self.polygon];
+        CGPathRef complementaryPath = [GPKGMapUtils complementaryWorldPathOfPolygon:self.polygon];
         onShape = CGPathContainsPoint(complementaryPath, NULL, CGPointMake(mapPoint.x, mapPoint.y), NO);
         CGPathRelease(complementaryPath);
     }

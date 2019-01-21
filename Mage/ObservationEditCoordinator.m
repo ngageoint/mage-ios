@@ -23,7 +23,7 @@
 @property (strong, nonatomic) FormPickerViewController *formController;
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) Observation *observation;
-@property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) SFGeometry *location;
 @property (strong, nonatomic) NSMutableArray *viewControllers;
 @property (strong, nonatomic) NSDictionary *currentEditField;
 @property (strong, nonatomic) id currentEditValue;
@@ -36,7 +36,7 @@
 
 @implementation ObservationEditCoordinator
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (WKBGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (SFGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
     self = [super init];
     if (!self) return nil;
     
@@ -77,7 +77,7 @@
     self.navigationController = [[UINavigationController alloc] init];
 }
 
-- (Observation *) createObservationAtLocation: (WKBGeometry *) location withAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
+- (Observation *) createObservationAtLocation: (SFGeometry *) location withAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
     self.newObservation = YES;
     Observation *observation = [Observation observationWithGeometry:location andAccuracy: accuracy andProvider: provider andDelta: delta inManagedObjectContext:self.managedObjectContext];
     observation.dirty = [NSNumber numberWithBool:YES];

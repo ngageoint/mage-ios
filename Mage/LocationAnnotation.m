@@ -9,7 +9,7 @@
 #import "LocationAnnotation.h"
 #import "User.h"
 #import "MKAnnotationView+PersonIcon.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometryUtils.h"
 #import "Theme+UIResponder.h"
 
 @implementation LocationAnnotation
@@ -18,7 +18,7 @@
 	if ((self = [super init])) {
 		_location = location;
 		
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:location.geometry];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:location.geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [self setCoordinate:coordinate];
 		_timestamp = location.timestamp;

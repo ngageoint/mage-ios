@@ -21,7 +21,7 @@
 #import "ExternalDevice.h"
 #import "AttachmentViewController.h"
 #import "MapUtils.h"
-#import "WKBLineString.h"
+#import "SFLineString.h"
 #import "GeometryEditCoordinator.h"
 #import "ObservationImage.h"
 
@@ -121,7 +121,7 @@
         [self.navigationController pushViewController:editSelect animated:YES];
     } else if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
         if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
-            WKBGeometry *geometry = [self.observation getGeometry];
+            SFGeometry *geometry = [self.observation getGeometry];
             GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage scaledImageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController];
             [self.childCoordinators addObject:editCoordinator];
             [editCoordinator start];
@@ -134,7 +134,7 @@
     }
 }
 
-- (void) geometryUpdated: (WKBGeometry *) geometry {
+- (void) geometryUpdated: (SFGeometry *) geometry {
     NSLog(@"Geometry updated");
     self.currentEditValue = geometry;
     [self fieldEditDone];

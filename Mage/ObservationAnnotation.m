@@ -27,8 +27,8 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
     return [self initWithObservation:observation andEventForms: forms andGeometry:[observation getGeometry]];
 }
 
--(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry {
-    WKBPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+-(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (SFGeometry *) geometry {
+    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;
     return [self initWithObservation:observation andEventForms: forms andLocation:location];

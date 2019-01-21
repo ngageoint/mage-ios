@@ -9,7 +9,7 @@
 #import "MapShapeObservation.h"
 #import "MapPolylineObservation.h"
 #import "MapPolygonObservation.h"
-#import "GPKGProjectionConstants.h"
+#import "SFPProjectionConstants.h"
 
 @interface MapShapeObservation ()
 

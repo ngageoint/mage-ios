@@ -9,7 +9,7 @@
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
 #import "LocationService.h"
-#import "WKBPoint.h"
+#import "SFPoint.h"
 
 @interface GeometryEditCoordinator()
 
@@ -19,7 +19,7 @@
 
 @implementation GeometryEditCoordinator
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (WKBGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController {
     if (self = [super init]) {
         self.delegate = delegate;
         self.navigationController = navigationController;
@@ -31,10 +31,10 @@
             CLLocation *location = [[LocationService singleton] location];
 
             if (location) {
-                self.currentGeometry = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+                self.currentGeometry = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
             } else {
                 // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
-                self.currentGeometry = [[WKBPoint alloc] initWithXValue:1.0 andYValue:1.0];
+                self.currentGeometry = [[SFPoint alloc] initWithXValue:1.0 andYValue:1.0];
             }
         }
     }
@@ -60,7 +60,7 @@
     [self.delegate geometryUpdated:self.currentGeometry];
 }
 
-- (void) updateGeometry: (WKBGeometry *) geometry {
+- (void) updateGeometry: (SFGeometry *) geometry {
     self.currentGeometry = geometry;
 }
 

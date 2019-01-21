@@ -8,7 +8,7 @@
 
 #import "MapUtils.h"
 #import "GPKGMapShapePoints.h"
-#import "WKBLineString.h"
+#import "SFLineString.h"
 
 @implementation MapUtils
 
@@ -25,21 +25,21 @@
     return tolerance;
 }
 
-+ (BOOL) polygonHasIntersections: (WKBPolygon *) wkbPolygon {
-    for (WKBLineString *line1 in wkbPolygon.rings) {
-        WKBPoint *lastPoint = [line1.points objectAtIndex:[[line1 numPoints] intValue] - 1];
-        for (WKBLineString *line2 in wkbPolygon.rings) {
-            for (int i = 0; i < [[line1 numPoints] intValue] - 1; i++) {
-                WKBPoint *point1 = [line1.points objectAtIndex:i];
-                WKBPoint *nextPoint1 = [line1.points objectAtIndex:i+1];
-                for (int k = i; k < [[line2 numPoints] intValue] - 1; k++) {
-                    WKBPoint *point2 = [line2.points objectAtIndex:k];
-                    WKBPoint *nextPoint2 = [line2.points objectAtIndex:k+1];
++ (BOOL) polygonHasIntersections: (SFPolygon *) wkbPolygon {
+    for (SFLineString *line1 in wkbPolygon.rings) {
+        SFPoint *lastPoint = [line1.points objectAtIndex:[line1 numPoints] - 1];
+        for (SFLineString *line2 in wkbPolygon.rings) {
+            for (int i = 0; i < [line1 numPoints] - 1; i++) {
+                SFPoint *point1 = [line1.points objectAtIndex:i];
+                SFPoint *nextPoint1 = [line1.points objectAtIndex:i+1];
+                for (int k = i; k < [line2 numPoints] - 1; k++) {
+                    SFPoint *point2 = [line2.points objectAtIndex:k];
+                    SFPoint *nextPoint2 = [line2.points objectAtIndex:k+1];
                     if (line1 != line2) continue;
                     if (abs(i-k) == 1) {
                         continue;
                     }
-                    if (i == 0 && k == [[line1 numPoints] intValue] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) {
+                    if (i == 0 && k == [line1 numPoints] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) {
                         continue;
                     }
                     BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue]) andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue]) intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue]) andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];

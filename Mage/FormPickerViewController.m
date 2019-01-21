@@ -17,7 +17,7 @@
 
 @property (strong, nonatomic) id<FormPickedDelegate> delegate;
 @property (strong, nonatomic) NSArray *forms;
-@property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) SFGeometry *location;
 @property (nonatomic) BOOL newObservation;
 @property (weak, nonatomic) IBOutlet UIView *blurView;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -40,7 +40,7 @@ static NSString *CellIdentifier = @"FormCell";
     self.headerLabel.textColor = [UIColor brand];
 }
 
-- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (WKBGeometry *) location andNewObservation: (BOOL) newObservation {
+- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (SFGeometry *) location andNewObservation: (BOOL) newObservation {
     self = [super init];
     if (!self) return nil;
     
@@ -126,7 +126,7 @@ static NSString *CellIdentifier = @"FormCell";
 
 - (void) setupMapBackground {
     if (self.location != nil) {
-        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.location];
+        SFPoint *point = [GeometryUtility centroidOfGeometry:self.location];
         MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
         MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
         [self.mapView setRegion:viewRegion animated:NO];

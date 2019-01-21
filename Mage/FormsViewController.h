@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 
 @interface FormsViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) SFGeometry *location;
 @property (strong, nonatomic) NSArray *forms;
 
 @end

@@ -14,7 +14,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 @interface GeoPackageFeatureTableCacheOverlay ()
 
 @property (nonatomic) BOOL indexed;
-@property (nonatomic) enum WKBGeometryType geometryType;
+@property (nonatomic) enum SFGeometryType geometryType;
 @property (strong, nonatomic) NSMutableDictionary<NSNumber *, GPKGMapShape *> * shapes;
 @property (strong, nonatomic) NSMutableArray<GeoPackageTileTableCacheOverlay *> * linkedTiles;
 
@@ -22,7 +22,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 
 @implementation GeoPackageFeatureTableCacheOverlay
 
--(instancetype) initWithName: (NSString *) name andGeoPackage: (NSString *) geoPackage andCacheName: (NSString *) cacheName andCount: (int) count andMinZoom: (int) minZoom andIndexed: (BOOL) indexed andGeometryType: (enum WKBGeometryType) geometryType{
+-(instancetype) initWithName: (NSString *) name andGeoPackage: (NSString *) geoPackage andCacheName: (NSString *) cacheName andCount: (int) count andMinZoom: (int) minZoom andIndexed: (BOOL) indexed andGeometryType: (enum SFGeometryType) geometryType{
     self = [super initWithName:name andGeoPackage:geoPackage andCacheName:cacheName andType:GEOPACKAGE_FEATURE_TABLE andCount:count andMinZoom:minZoom andMaxZoom:GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM];
     if(self){
         self.shapes = [[NSMutableDictionary alloc] init];
@@ -73,7 +73,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     return self.indexed;
 }
 
--(enum WKBGeometryType) getGeometryType{
+-(enum SFGeometryType) getGeometryType{
     return self.geometryType;
 }
 

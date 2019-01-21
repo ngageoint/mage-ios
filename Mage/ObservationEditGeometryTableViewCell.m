@@ -62,7 +62,7 @@
     } else {
         id geometry = value;
         if (geometry) {
-            self.geometry = (WKBGeometry *) geometry;
+            self.geometry = (SFGeometry *) geometry;
         } else {
             self.geometry = nil;
         }
@@ -92,7 +92,7 @@
             [self.mapView setRegion:viewRegion animated:NO];
         }
         
-        WKBPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
+        SFPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
             self.locationField.text = [MGRS MGRSfromCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
         } else {
@@ -101,7 +101,7 @@
 
         if (!self.isGeometryField) {
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
-            if (self.geometry.geometryType == WKB_POINT) {
+            if (self.geometry.geometryType == SF_POINT) {
                 GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
                 [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
             } else {

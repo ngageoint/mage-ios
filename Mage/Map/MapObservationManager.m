@@ -7,7 +7,7 @@
 //
 
 #import "MapObservationManager.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometryUtils.h"
 #import "GPKGMapShapeConverter.h"
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
@@ -46,15 +46,15 @@
     return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:hidden andAnimateDrop:YES];
 }
 
--(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry {
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (SFGeometry *) geometry {
     return [self addToMapWithObservation:observation withGeometry:geometry andHidden:NO andAnimateDrop:YES];
 }
 
--(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (WKBGeometry *) geometry andHidden: (BOOL) hidden andAnimateDrop: (BOOL) animateDrop {
+-(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (SFGeometry *) geometry andHidden: (BOOL) hidden andAnimateDrop: (BOOL) animateDrop {
     
     MapObservation *observationShape = nil;
     
-    if(geometry.geometryType == WKB_POINT){
+    if(geometry.geometryType == SF_POINT){
         
         ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andGeometry:geometry];
         annotation.view.layer.zPosition = [observation.timestamp timeIntervalSinceReferenceDate];

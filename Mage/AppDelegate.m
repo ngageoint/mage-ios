@@ -414,7 +414,7 @@
             NSString * tableCacheName = [CacheOverlay buildChildCacheNameWithName:name andChildName:featureTable];
             GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:featureTable];
             int count = [featureDao count];
-            enum WKBGeometryType geometryType = [featureDao getGeometryType];
+            enum SFGeometryType geometryType = [featureDao getGeometryType];
             GPKGFeatureIndexManager * indexer = [[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
             BOOL indexed = [indexer isIndexed];
             int minZoom = 0;

@@ -7,26 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 
 @protocol GeometryEditDelegate
 
-- (void) geometryUpdated: (WKBGeometry *) geometry;
+- (void) geometryUpdated: (SFGeometry *) geometry;
 
 @end
 
 @interface GeometryEditCoordinator : NSObject
 
-@property (strong, nonatomic) WKBGeometry *originalGeometry;
-@property (strong, nonatomic) WKBGeometry *currentGeometry;
+@property (strong, nonatomic) SFGeometry *originalGeometry;
+@property (strong, nonatomic) SFGeometry *currentGeometry;
 
 @property (strong, nonatomic) id<GeometryEditDelegate> delegate;
 @property (strong, nonatomic) UIImage *pinImage;
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (WKBGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController;
 - (void) start;
-- (void) updateGeometry: (WKBGeometry *) geometry;
+- (void) updateGeometry: (SFGeometry *) geometry;
 - (NSString *) fieldName;
 
 @end

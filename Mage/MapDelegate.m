@@ -33,17 +33,19 @@
 #import "GPKGNumberFeaturesTile.h"
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureTileTableLinker.h"
-#import "CacheOverlayUpdate.h"
-#import "GPKGProjectionTransform.h"
-#import "GPKGProjectionConstants.h"
 #import "GPKGTileBoundingBoxUtils.h"
-#import "MapUtils.h"
+#import "CacheOverlayUpdate.h"
+#import "SFPProjectionTransform.h"
+#import "SFPProjectionConstants.h"
 #import "MapObservationManager.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometryUtils.h"
+#import "SFPProjection.h"
+#import "SFPProjectionTransform.h"
 #import "MapShapePointAnnotationView.h"
 #import "Event.h"
 #import "Form.h"
 #import "Observation.h"
+#import "MapUtils.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -683,10 +685,10 @@
                 GPKGContentsDao * contentsDao = [geoPackage getContentsDao];
                 GPKGContents * contents = (GPKGContents *)[contentsDao queryForIdObject:[tableCacheOverlay getName]];
                 GPKGBoundingBox * contentsBoundingBox = [contents getBoundingBox];
-                GPKGProjection * projection = [contentsDao getProjection:contents];
+                SFPProjection * projection = [contentsDao getProjection:contents];
                 
-                GPKGProjectionTransform * transform = [[GPKGProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
-                GPKGBoundingBox * boundingBox = [transform transformWithBoundingBox:contentsBoundingBox];
+                SFPProjectionTransform * transform = [[SFPProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
+                GPKGBoundingBox * boundingBox = [[GPKGBoundingBox alloc] initWithGeometryEnvelope:[transform transformWithGeometryEnvelope:[contentsBoundingBox buildEnvelope]]];
                 boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
                 
                 if(self.addedCacheBoundingBox == nil){
@@ -725,7 +727,7 @@
         if(cacheOverlay == nil){
             // Create a new GeoPackage tile provider and add to the map
             GPKGTileDao * tileDao = [geoPackage getTileDaoWithTableName:[tileTableCacheOverlay getName]];
-            geoPackageTileOverlay = [GPKGOverlayFactory getBoundedOverlay:tileDao];
+            geoPackageTileOverlay = [GPKGOverlayFactory boundedOverlay:tileDao];
             geoPackageTileOverlay.canReplaceMapContent = false;
             [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
             
@@ -809,7 +811,7 @@
             if([featureTableCacheOverlay getIndexed]){
                 GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithFeatureDao:featureDao];
                 int maxFeaturesPerTile = 0;
-                if([featureDao getGeometryType] == WKB_POINT){
+                if([featureDao getGeometryType] == SF_POINT){
                     maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
                 }else{
                     maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
@@ -843,12 +845,12 @@
             // Not indexed, add the features to the map
             else {
                 int maxFeaturesPerTable = 0;
-                if([featureDao getGeometryType] == WKB_POINT){
+                if([featureDao getGeometryType] == SF_POINT){
                     maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
                 }else{
                     maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
                 }
-                GPKGProjection * projection = featureDao.projection;
+                SFPProjection * projection = featureDao.projection;
                 GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];
                 GPKGResultSet * resultSet = [featureDao queryForAll];
                 @try {
@@ -866,7 +868,7 @@
                         GPKGFeatureRow * featureRow = [featureDao getFeatureRow:resultSet];
                         GPKGGeometryData * geometryData = [featureRow getGeometry];
                         if(geometryData != nil && !geometryData.empty){
-                            WKBGeometry * geometry = geometryData.geometry;
+                            SFGeometry * geometry = geometryData.geometry;
                             if(geometry != nil){
                                 @try {
                                     GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
@@ -1304,13 +1306,13 @@
         annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
-        WKBGeometry * geometry = location.geometry;
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        SFGeometry * geometry = location.geometry;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        WKBGeometry * geometry = location.geometry;
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        SFGeometry * geometry = location.geometry;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [annotation setCoordinate:coordinate];
         if (shouldCenter) {

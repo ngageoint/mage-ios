@@ -6,16 +6,16 @@
 
 #import "GPSLocationAnnotation.h"
 #import "MKAnnotationView+PersonIcon.h"
-#import "WKBGeometry.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometry.h"
+#import "SFGeometryUtils.h"
 
 @implementation GPSLocationAnnotation
 
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation andUser: (User *) user {
     if ((self = [super init])) {
         _gpsLocation = gpsLocation;
-        WKBGeometry *geometry = (WKBGeometry *)gpsLocation.geometry;
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+        SFGeometry *geometry = (SFGeometry *)gpsLocation.geometry;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D location = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [self setCoordinate:location];
         _timestamp = gpsLocation.timestamp;

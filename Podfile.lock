@@ -17,10 +17,10 @@ PODS:
   - DateTools (2.0.0)
   - EDSunriseSet (1.0)
   - FastImageCache (1.5.1)
-  - geopackage-ios (1.3.0):
-    - proj4-ios (~> 4.9.3)
-    - tiff-ios (~> 1.0.3)
-    - wkb-ios (~> 1.0.7)
+  - geopackage-ios (3.1.0):
+    - sf-proj-ios (~> 2.0.1)
+    - sf-wkb-ios (~> 2.0.1)
+    - tiff-ios (~> 1.1.1)
   - GoogleSignIn (4.1.2):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -44,10 +44,10 @@ PODS:
   - HexColors (2.2.1)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.13)
-  - mage-ios-sdk (2.0.8):
+  - mage-ios-sdk (2.0.9):
     - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0.0)
-    - geopackage-ios (~> 1.3.0)
+    - geopackage-ios (~> 3.1.0)
     - MagicalRecord (~> 2.3.2)
     - objective-zip (~> 1.0.2)
   - MagicalRecord (2.3.2):
@@ -70,11 +70,16 @@ PODS:
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (6.1.0)
   - proj4-ios (4.9.3)
+  - sf-ios (2.0.1)
+  - sf-proj-ios (2.0.1):
+    - proj4-ios (~> 4.9.3)
+    - sf-ios (~> 2.0.1)
+  - sf-wkb-ios (2.0.1):
+    - sf-ios (~> 2.0.1)
   - SkyFloatingLabelTextField (3.5.1)
-  - tiff-ios (1.0.3)
+  - tiff-ios (1.1.1)
   - tuneup_js (1.2.3)
   - UIImage-Categories (0.0.1)
-  - wkb-ios (1.0.9)
   - zxcvbn-ios (1.0.4)
 
 DEPENDENCIES:
@@ -85,7 +90,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `2.0.8`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -114,29 +119,25 @@ SPEC REPOS:
     - OCMock
     - OHHTTPStubs
     - proj4-ios
+    - sf-ios
+    - sf-proj-ios
+    - sf-wkb-ios
     - SkyFloatingLabelTextField
     - tiff-ios
     - tuneup_js
     - UIImage-Categories
-    - wkb-ios
     - zxcvbn-ios
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 2.0.8
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 2.0.8
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
-  geopackage-ios: a39621e8ddbc693d82ea07fa5c7353833b358502
+  geopackage-ios: 667ea05113a5b66744354451cbf4f2842e5eed4d
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
@@ -144,20 +145,22 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
-  mage-ios-sdk: e2e9dba2c10d2409a46dd1ce6f3aef0b264d73c4
+  mage-ios-sdk: e57a717f1761cef15db81a9c361e0bd69b361d76
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
   OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
   OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
+  sf-ios: c438e385b7b4b430895e766d65601717dd69b35e
+  sf-proj-ios: 692f9b74245079a22ea8f2302fce6fbd9d4f3355
+  sf-wkb-ios: 06be3e6fe25791c4811021a5568b0f964b72223f
   SkyFloatingLabelTextField: 4cbeece9c3aae97c6019d8fae511cb5b755874f7
-  tiff-ios: acedffc7d4f7bde19e9a87e345ac9fed6c31a7f4
+  tiff-ios: 825d103441e9b0114ed65faef295a0840f912711
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
-  wkb-ios: 7a2678852f9c4d166048a7277df37d4d2af5436b
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 3c6abbf3860e330687ac2c4688851b0a3e00ac3c
+PODFILE CHECKSUM: 6e68d735c936eff8731bc40a3744bf1cf379eb94
 
 COCOAPODS: 1.5.3

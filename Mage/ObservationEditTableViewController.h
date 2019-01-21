@@ -10,7 +10,7 @@
 #import "AttachmentCollectionDataStore.h"
 #import "ObservationEditViewDataStore.h"
 #import "AudioRecordingDelegate.h"
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 
 @protocol PropertyEditDelegate <NSObject>
 - (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
@@ -20,7 +20,7 @@
 @interface ObservationEditTableViewController : UITableViewController<PropertyEditDelegate>
 
 @property (strong, nonatomic) Observation *observation;
-@property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) SFGeometry *location;
 
 @property (strong, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
 

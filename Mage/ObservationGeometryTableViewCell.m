@@ -5,8 +5,8 @@
 //
 
 #import "ObservationGeometryTableViewCell.h"
-#import "WKBGeometry.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometry.h"
+#import "SFGeometryUtils.h"
 #import "MapDelegate.h"
 #import "GPKGMapShapeConverter.h"
 #import "Theme+UIResponder.h"
@@ -39,14 +39,14 @@
     
     self.mapDelegate.hideStaticLayers = YES;
     
-    if ([value isKindOfClass:[WKBGeometry class]]) {
-        WKBGeometry *geometry = value;
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:geometry];
+    if ([value isKindOfClass:[SFGeometry class]]) {
+        SFGeometry *geometry = value;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         NSString *geoString = [NSString stringWithFormat:@"%.6f, %.6f", [centroid.y doubleValue], [centroid.x doubleValue]];
         self.valueTextView.text = [NSString stringWithFormat:@"%@", geoString];
         
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
-        if (geometry.geometryType == WKB_POINT) {
+        if (geometry.geometryType == SF_POINT) {
             GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:geometry];
             [shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
         } else {

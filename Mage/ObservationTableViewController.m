@@ -19,7 +19,7 @@
 #import "LocationService.h"
 #import "Filter.h"
 #import "Observations.h"
-#import "WKBPoint.h"
+#import "SFPoint.h"
 #import "ObservationEditCoordinator.h"
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
@@ -240,15 +240,15 @@
 
     ObservationEditCoordinator *edit;
     
-    WKBPoint *point;
+    SFPoint *point;
     CLLocationAccuracy accuracy = 0;
     double delta = 0;
     if (location) {
         if (location.altitude != 0) {
-            point = [[WKBPoint alloc] initWithHasZ:YES andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble: location.coordinate.longitude] andY:[[NSDecimalNumber alloc] initWithDouble:location.coordinate.latitude]];
+            point = [[SFPoint alloc] initWithHasZ:YES andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble: location.coordinate.longitude] andY:[[NSDecimalNumber alloc] initWithDouble:location.coordinate.latitude]];
             [point setZValue:location.altitude];
         } else {
-            point = [[WKBPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+            point = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
         }
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;

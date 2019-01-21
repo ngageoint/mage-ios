@@ -11,17 +11,17 @@
 #import "ObservationAnnotationView.h"
 #import "ObservationImage.h"
 #import "LocationService.h"
-#import "WKBPoint.h"
+#import "SFPoint.h"
 #import "GeometryUtility.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometryUtils.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
 #import "GPKGMapShapeConverter.h"
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
-#import "GPKGProjectionConstants.h"
-#import "WKBGeometryEnvelopeBuilder.h"
+#import "SFPProjectionConstants.h"
+#import "SFGeometryEnvelopeBuilder.h"
 #import "Observation.h"
 #import "ObservationShapeStyle.h"
 #import "Event.h"
@@ -42,13 +42,13 @@ static float paddingPercentage = .1;
 
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
 @property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
-@property (strong, nonatomic) WKBGeometry *geometry;
+@property (strong, nonatomic) SFGeometry *geometry;
 
 @property (strong, nonatomic) MapObservation *mapObservation;
 @property (strong, nonatomic) MapObservationManager *observationManager;
 @property (strong, nonatomic) GPKGMapShapeConverter *shapeConverter;
 @property (nonatomic) BOOL newDrawing;
-@property (nonatomic) enum WKBGeometryType shapeType;
+@property (nonatomic) enum SFGeometryType shapeType;
 @property (nonatomic) BOOL isRectangle;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameXMarker;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
@@ -100,10 +100,10 @@ static float paddingPercentage = .1;
 }
 
 -(void) setShapeTypeSelection {
-    [self updateButton:self.pointButton toSelected:self.shapeType == WKB_POINT];
-    [self updateButton:self.lineButton toSelected:self.shapeType == WKB_LINESTRING];
-    [self updateButton:self.rectangleButton toSelected:self.shapeType == WKB_POLYGON && self.isRectangle];
-    [self updateButton:self.polygonButton toSelected:self.shapeType == WKB_POLYGON && !self.isRectangle];
+    [self updateButton:self.pointButton toSelected:self.shapeType == SF_POINT];
+    [self updateButton:self.lineButton toSelected:self.shapeType == SF_LINESTRING];
+    [self updateButton:self.rectangleButton toSelected:self.shapeType == SF_POLYGON && self.isRectangle];
+    [self updateButton:self.polygonButton toSelected:self.shapeType == SF_POLYGON && !self.isRectangle];
 }
 
 - (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
@@ -169,13 +169,13 @@ static float paddingPercentage = .1;
         self.longitudeField.hidden = NO;
     }
     
-    WKBGeometry *geometry = [self.coordinator currentGeometry];
+    SFGeometry *geometry = [self.coordinator currentGeometry];
     
     [self setShapeTypeFromGeometry:geometry];
     [self addMapShape:geometry];
     
-    if (self.shapeType == WKB_POINT) {
-        WKBPoint *centroid = [GeometryUtility centroidOfGeometry:geometry];
+    if (self.shapeType == SF_POINT) {
+        SFPoint *centroid = [GeometryUtility centroidOfGeometry:geometry];
         MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
         MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
         [self.map setRegion:viewRegion animated:NO];
@@ -199,7 +199,7 @@ static float paddingPercentage = .1;
     [self registerForThemeChanges];
 }
 
--(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (WKBGeometry *) geometry {
+-(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {
     GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
     GPKGBoundingBox *bbox = [shape boundingBox];
     struct GPKGBoundingBoxSize size = [bbox sizeInMeters];
@@ -283,7 +283,7 @@ static float paddingPercentage = .1;
     NSString *hint = @"";
     
     switch (self.shapeType) {
-        case WKB_POINT:
+        case SF_POINT:
         {
             if (locationEdit) {
                 hint = @"Manually modify point coordinates";
@@ -292,7 +292,7 @@ static float paddingPercentage = .1;
             }
         }
             break;
-        case WKB_POLYGON:
+        case SF_POLYGON:
         {
             if (self.isRectangle) {
                 if (locationEdit) {
@@ -307,7 +307,7 @@ static float paddingPercentage = .1;
                 break;
             }
         }
-        case WKB_LINESTRING:
+        case SF_LINESTRING:
             if (locationEdit) {
                 hint = @"Manually modify point coordinates";
             } else if (dragging) {
@@ -477,8 +477,8 @@ static float paddingPercentage = .1;
             [self updateAcceptState];
         }
         // if it is a point just update the geometry
-        if (self.shapeType == WKB_POINT) {
-            WKBPoint *updatedGeometry = [[WKBPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
+        if (self.shapeType == SF_POINT) {
+            SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
             [self.coordinator updateGeometry:updatedGeometry];
         }
     }
@@ -508,7 +508,7 @@ static float paddingPercentage = .1;
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
         if(self.selectedMapPoint != nil && self.selectedMapPoint.id == mapPoint.id){
             MKAnnotationView *view = [self.map viewForAnnotation:self.selectedMapPoint];
-            if (self.shapeType != WKB_POINT) {
+            if (self.shapeType != SF_POINT) {
                 view.image = [UIImage imageNamed:@"shape_edit"];
             }
             self.selectedMapPoint = nil;
@@ -567,11 +567,11 @@ static float paddingPercentage = .1;
 }
 
 - (void) updateGeometry {    
-    WKBGeometry *geometry = nil;
-    if (self.shapeType == WKB_POINT && self.isObservationGeometry) {
+    SFGeometry *geometry = nil;
+    if (self.shapeType == SF_POINT && self.isObservationGeometry) {
         MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
         ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-        geometry = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+        geometry = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
     } else {
         @try {
             geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
@@ -608,17 +608,17 @@ static float paddingPercentage = .1;
     [self updateShape:coordinate];
 }
 
--(void) setShapeTypeFromGeometry: (WKBGeometry *) geometry{
+-(void) setShapeTypeFromGeometry: (SFGeometry *) geometry{
     _shapeType = geometry.geometryType;
     [self checkIfRectangle:geometry];
     [self setShapeTypeSelection];
 }
 
--(void) checkIfRectangle: (WKBGeometry *) geometry{
+-(void) checkIfRectangle: (SFGeometry *) geometry{
     _isRectangle = false;
-    if(geometry.geometryType == WKB_POLYGON){
-        WKBPolygon *polygon = (WKBPolygon *) geometry;
-        WKBLineString *ring = [polygon.rings objectAtIndex:0];
+    if(geometry.geometryType == SF_POLYGON){
+        SFPolygon *polygon = (SFPolygon *) geometry;
+        SFLineString *ring = [polygon.rings objectAtIndex:0];
         NSArray *points = ring.points;
         [self updateIfRectangle: points];
     }
@@ -627,13 +627,13 @@ static float paddingPercentage = .1;
 -(void) updateIfRectangle: (NSArray *) points{
     NSUInteger size = points.count;
     if(size == 4 || size == 5){
-        WKBPoint *point1 = [points objectAtIndex:0];
-        WKBPoint *lastPoint = [points objectAtIndex:size - 1];
+        SFPoint *point1 = [points objectAtIndex:0];
+        SFPoint *lastPoint = [points objectAtIndex:size - 1];
         BOOL closed = [point1.x isEqualToNumber:lastPoint.x] && [point1.y isEqualToNumber:lastPoint.y];
         if ((closed && size == 5) || (!closed && size == 4)) {
-            WKBPoint *point2 = [points objectAtIndex:1];
-            WKBPoint *point3 = [points objectAtIndex:2];
-            WKBPoint *point4 = [points objectAtIndex:3];
+            SFPoint *point2 = [points objectAtIndex:1];
+            SFPoint *point3 = [points objectAtIndex:2];
+            SFPoint *point4 = [points objectAtIndex:3];
             if ([point1.x isEqualToNumber:point2.x] && [point2.y isEqualToNumber:point3.y]) {
                 if ([point1.y isEqualToNumber:point4.y] && [point3.x isEqualToNumber:point4.x]) {
                     self.isRectangle = true;
@@ -654,22 +654,22 @@ static float paddingPercentage = .1;
 }
 
 - (IBAction)pointButtonClick:(UIButton *)sender {
-    [self confirmAndChangeShapeType:WKB_POINT andRectangle:NO];
+    [self confirmAndChangeShapeType:SF_POINT andRectangle:NO];
 }
 
 - (IBAction)lineButtonClick:(UIButton *)sender {
-    [self confirmAndChangeShapeType:WKB_LINESTRING andRectangle:NO];
+    [self confirmAndChangeShapeType:SF_LINESTRING andRectangle:NO];
 }
 
 - (IBAction)rectangleButtonClick:(UIButton *)sender {
-    [self confirmAndChangeShapeType:WKB_POLYGON andRectangle:YES];
+    [self confirmAndChangeShapeType:SF_POLYGON andRectangle:YES];
 }
 
 - (IBAction)polygonButtonClick:(UIButton *)sender {
-    [self confirmAndChangeShapeType:WKB_POLYGON andRectangle:NO];
+    [self confirmAndChangeShapeType:SF_POLYGON andRectangle:NO];
 }
 
--(void) confirmAndChangeShapeType: (enum WKBGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
+-(void) confirmAndChangeShapeType: (enum SFGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
     
     // Only care if not the current shape type
     if (selectedType != self.shapeType || selectedRectangle != self.isRectangle) {
@@ -680,14 +680,14 @@ static float paddingPercentage = .1;
         NSString *message = nil;
         
         // Changing to a point or rectangle, and there are multiple unique positions in the shape
-        if ((selectedType == WKB_POINT || selectedRectangle) && [self multipleShapePointPositions]) {
+        if ((selectedType == SF_POINT || selectedRectangle) && [self multipleShapePointPositions]) {
             
             if (selectedRectangle) {
                 // Changing to a rectangle
                 NSArray *points = [self shapePoints];
                 BOOL formRectangle = NO;
                 if (points.count == 4 || points.count == 5) {
-                    NSMutableArray<WKBPoint *> *checkPoints = [[NSMutableArray alloc] init];
+                    NSMutableArray<SFPoint *> *checkPoints = [[NSMutableArray alloc] init];
                     for (GPKGMapPoint *point in points) {
                         [checkPoints addObject:[self.shapeConverter toPointWithMapPoint:point]];
                     }
@@ -732,23 +732,23 @@ static float paddingPercentage = .1;
     }
 }
 
--(void) changeShapeType: (enum WKBGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
+-(void) changeShapeType: (enum SFGeometryType) selectedType andRectangle: (BOOL) selectedRectangle{
     
     self.isRectangle = selectedRectangle;
     
-    WKBGeometry *geometry = nil;
+    SFGeometry *geometry = nil;
     
     // Changing from point to a shape
-    if (self.shapeType == WKB_POINT) {
+    if (self.shapeType == SF_POINT) {
         
-        WKBPoint *firstPoint = (WKBPoint *)self.coordinator.currentGeometry;
+        SFPoint *firstPoint = (SFPoint *)self.coordinator.currentGeometry;
         
 //        MapShapePointsObservation *mapAnnotationObservation = (MapShapePointsObservation *)self.mapObservation;
 //
 //        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
 //        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-//        WKBPoint *firstPoint = [[WKBPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
-        WKBLineString *lineString = [[WKBLineString alloc] init];
+//        SFPoint *firstPoint = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+        SFLineString *lineString = [[SFLineString alloc] init];
         [lineString addPoint:firstPoint];
         // Changing to a rectangle
         if (selectedRectangle) {
@@ -763,12 +763,12 @@ static float paddingPercentage = .1;
             self.newDrawing = true;
         }
         switch (selectedType) {
-            case WKB_LINESTRING:
+            case SF_LINESTRING:
                 geometry = lineString;
                 break;
-            case WKB_POLYGON:
+            case SF_POLYGON:
                 {
-                    WKBPolygon *polygon = [[WKBPolygon alloc] init];
+                    SFPolygon *polygon = [[SFPolygon alloc] init];
                     [polygon addRing:lineString];
                     geometry = polygon;
                 }
@@ -778,15 +778,15 @@ static float paddingPercentage = .1;
         }
     }
     // Changing from line or polygon to a point
-    else if (selectedType == WKB_POINT) {
+    else if (selectedType == SF_POINT) {
         CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-        geometry = [[WKBPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+        geometry = [[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
         self.newDrawing = NO;
     }
     // Changing from between a line, polygon, and rectangle
     else {
         
-        WKBLineString *lineString = nil;
+        SFLineString *lineString = nil;
         if (self.mapObservation != nil) {
             
             NSArray *points = [self shapePoints];
@@ -807,7 +807,7 @@ static float paddingPercentage = .1;
             }
             
             // When going from the polygon or rectangle to a line
-            if (selectedType == WKB_LINESTRING) {
+            if (selectedType == SF_LINESTRING) {
                 // Break the polygon closure when changing to a line
                 if (mapPoints.count > 1 && [mapPoints objectAtIndex:0].id == [mapPoints objectAtIndex:mapPoints.count - 1].id) {
                     [mapPoints removeObjectAtIndex:mapPoints.count - 1];
@@ -824,38 +824,38 @@ static float paddingPercentage = .1;
             lineString = [self.shapeConverter toLineStringWithMapPoints:mapPoints];
         } else {
             CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-            lineString = [[WKBLineString alloc] init];
-            [lineString addPoint:[[WKBPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude]];
+            lineString = [[SFLineString alloc] init];
+            [lineString addPoint:[[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude]];
         }
         
         switch (selectedType) {
                 
-            case WKB_LINESTRING:
+            case SF_LINESTRING:
                 {
-                    self.newDrawing = [[lineString numPoints] intValue] <= 1;
+                    self.newDrawing = [lineString numPoints] <= 1;
                     geometry = lineString;
                 }
                 break;
                 
-            case WKB_POLYGON:
+            case SF_POLYGON:
                 {
                     // If converting to a rectangle, use the current shape bounds
                     if (selectedRectangle) {
-                        WKBLineString *lineStringCopy = [lineString mutableCopy];
-                        [WKBGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
-                        WKBGeometryEnvelope *envelope = [WKBGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
-                        lineString = [[WKBLineString alloc] init];
-                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
-                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
-                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
-                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
-                        [lineString addPoint:[[WKBPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                        SFLineString *lineStringCopy = [lineString mutableCopy];
+                        [SFGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
+                        SFGeometryEnvelope *envelope = [SFGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
+                        lineString = [[SFLineString alloc] init];
+                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
+                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
+                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
+                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
                         [self updateIfRectangle:lineString.points];
                     }
                     
-                    WKBPolygon *polygon = [[WKBPolygon alloc] init];
+                    SFPolygon *polygon = [[SFPolygon alloc] init];
                     [polygon addRing:lineString];
-                    self.newDrawing = [[lineString numPoints] intValue] <= 2;
+                    self.newDrawing = [lineString numPoints] <= 2;
                     geometry = polygon;
                 }
                 break;
@@ -870,8 +870,8 @@ static float paddingPercentage = .1;
     [self setShapeTypeSelection];
     [self updateAcceptState];
     
-    if (selectedType == WKB_POINT) {
-        WKBPoint *centroidPoint = [WKBGeometryUtils centroidOfGeometry:geometry];
+    if (selectedType == SF_POINT) {
+        SFPoint *centroidPoint = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D centroidLocation = CLLocationCoordinate2DMake([centroidPoint.y doubleValue], [centroidPoint.x doubleValue]);
         [self.map setCenterCoordinate:centroidLocation animated:YES];
     }
@@ -899,7 +899,7 @@ static float paddingPercentage = .1;
     return newPointPosition;
 }
 
--(void) addMapShape: (WKBGeometry *) geometry{
+-(void) addMapShape: (SFGeometry *) geometry{
     self.geometry = geometry;
     CLLocationCoordinate2D previousSelectedPointLocation = kCLLocationCoordinate2DInvalid;
     if(self.selectedMapPoint != nil){
@@ -911,7 +911,7 @@ static float paddingPercentage = .1;
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
     }
-    if (geometry.geometryType == WKB_POINT) {
+    if (geometry.geometryType == SF_POINT) {
         if (self.isObservationGeometry) {
             self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
             MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
@@ -925,7 +925,7 @@ static float paddingPercentage = .1;
             options.image = self.coordinator.pinImage;
             GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
             self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
-            WKBPoint *point = (WKBPoint *)geometry;
+            SFPoint *point = (SFPoint *)geometry;
             [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
         }
         
@@ -1039,7 +1039,7 @@ static float paddingPercentage = .1;
                                 // Get the previous point index
                                 if (index > 0) {
                                     index--;
-                                } else if (self.shapeType == WKB_LINESTRING) {
+                                } else if (self.shapeType == SF_LINESTRING) {
                                     // Select next point in the line
                                     index++;
                                 } else {
@@ -1080,25 +1080,25 @@ static float paddingPercentage = .1;
         CLLocationCoordinate2D point = [self.map convertPoint:cgPoint toCoordinateFromView:self.map];
         
         // Add a new point to a line or polygon
-        if (self.shapeType != WKB_POINT) {
+        if (self.shapeType != SF_POINT) {
             
             if (!self.isRectangle) {
                 
                 if (self.mapObservation == nil) {
-                    WKBGeometry *geometry = nil;
-                    WKBPoint *firstPoint = [[WKBPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+                    SFGeometry *geometry = nil;
+                    SFPoint *firstPoint = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
                     switch (self.shapeType) {
-                        case WKB_LINESTRING:
+                        case SF_LINESTRING:
                             {
-                                WKBLineString *lineString = [[WKBLineString alloc] init];
+                                SFLineString *lineString = [[SFLineString alloc] init];
                                 [lineString addPoint:firstPoint];
                                 geometry = lineString;
                             }
                             break;
-                        case WKB_POLYGON:
+                        case SF_POLYGON:
                             {
-                                WKBPolygon *polygon = [[WKBPolygon alloc] init];
-                                WKBLineString *ring = [[WKBLineString alloc] init];
+                                SFPolygon *polygon = [[SFPolygon alloc] init];
+                                SFLineString *ring = [[SFLineString alloc] init];
                                 [ring addPoint:firstPoint];
                                 [polygon addRing: ring];
                                 geometry = polygon;
@@ -1166,7 +1166,7 @@ static float paddingPercentage = .1;
     self.selectedMapPoint = point;
     [self updateLocationTextWithCoordinate:point.coordinate];
     MKAnnotationView *view = [self.map viewForAnnotation:point];
-    if (self.shapeType != WKB_POINT) {
+    if (self.shapeType != SF_POINT) {
         view.image= [UIImage imageNamed:@"shape_edit_selected"];
     }
     [self findRectangleCorners:point];
@@ -1192,15 +1192,15 @@ static float paddingPercentage = .1;
 - (NSString *) validate {
     NSString *validateMessage = nil;
     
-    if (self.shapeType == WKB_LINESTRING) {
+    if (self.shapeType == SF_LINESTRING) {
         if ([[self shapePoints] count] < 2) {
             validateMessage = @"Lines must contain at least 2 points.";
         }
-    } else if (self.shapeType == WKB_POLYGON) {
+    } else if (self.shapeType == SF_POLYGON) {
         if ([[self shapePoints] count] < 3 || ![self shapePointsValid]) {
             validateMessage = @"Polygons must contain at least 3 points.";
         } else if (!self.allowsPolygonIntersections) {
-            WKBPolygon *geometry = (WKBPolygon *)[self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+            SFPolygon *geometry = (SFPolygon *)[self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
             
             BOOL hasIntersections = [MapUtils polygonHasIntersections:geometry];
             if (hasIntersections) {
@@ -1217,7 +1217,7 @@ static float paddingPercentage = .1;
  */
 -(void) updateAcceptState{
     BOOL acceptEnabled = NO;
-    if (self.shapeType == WKB_POINT) {
+    if (self.shapeType == SF_POINT) {
         // could be in the process of deselecting the shape and changing to a point
         if (![self isShape]) {
             acceptEnabled = YES;

@@ -23,7 +23,7 @@
 
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms;
 
-- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (WKBGeometry *) geometry;
+- (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (SFGeometry *) geometry;
 
 - (id)initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andLocation:(CLLocationCoordinate2D) location;
 

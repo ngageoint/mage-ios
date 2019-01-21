@@ -1888,8 +1888,10 @@
 				"${BUILT_PRODUCTS_DIR}/mgrs/mgrs.framework",
 				"${BUILT_PRODUCTS_DIR}/objective-zip/objective_zip.framework",
 				"${BUILT_PRODUCTS_DIR}/proj4-ios/proj4_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/sf-ios/sf_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/sf-proj-ios/sf_proj_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/sf-wkb-ios/sf_wkb_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/tiff-ios/tiff_ios.framework",
-				"${BUILT_PRODUCTS_DIR}/wkb-ios/wkb_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/zxcvbn-ios/zxcvbn_ios.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1911,8 +1913,10 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/mgrs.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/objective_zip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/proj4_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sf_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sf_proj_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sf_wkb_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/tiff_ios.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/wkb_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/zxcvbn_ios.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1978,7 +1982,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",

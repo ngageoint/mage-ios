@@ -24,7 +24,7 @@
 #import "LocationAnnotation.h"
 #import "GPSLocation.h"
 #import "AttachmentSelectionDelegate.h"
-#import "WKBGeometryUtils.h"
+#import "SFGeometryUtils.h"
 #import "ObservationViewController.h"
 #import "Theme+UIResponder.h"
 #import <HexColors/HexColor.h>
@@ -151,7 +151,7 @@
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
             self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
@@ -160,7 +160,7 @@
     if (!self.userLastLocation) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
-            WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
             self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         }
         [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
@@ -313,7 +313,7 @@
     NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
     [self.mapDelegate updateLocations: locations];
     if ([locations count]) {
-        WKBPoint *centroid = [WKBGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         [self zoomAndCenterMapOnLocation:location];
     }

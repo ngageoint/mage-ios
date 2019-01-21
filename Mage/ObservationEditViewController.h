@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "Observation.h"
 #import "ObservationEditListener.h"
-#import "WKBGeometry.h"
+#import "SFGeometry.h"
 
 @protocol ObservationEditViewControllerDelegate
 
@@ -25,7 +25,7 @@
 
 @property (nonatomic) BOOL newObservation;
 @property (strong, nonatomic) Observation *observation;
-@property (strong, nonatomic) WKBGeometry *location;
+@property (strong, nonatomic) SFGeometry *location;
 @property (strong, nonatomic) id<ObservationEditViewControllerDelegate> delegate;
 
 - (instancetype) initWithDelegate: (id<ObservationEditViewControllerDelegate>) delegate andObservation: (Observation *) observation andNew: (BOOL) newObservation;

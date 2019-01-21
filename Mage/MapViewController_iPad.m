@@ -12,7 +12,7 @@
 #import "Event.h"
 #import "TimeFilter.h"
 #import "SettingsViewController.h"
-#import "WKBPoint.h"
+#import "SFPoint.h"
 #import "MeViewController.h"
 #import "MageOfflineObservationManager.h"
 #import "AppDelegate.h"
