@@ -58,6 +58,10 @@
 
 - (void) settingsComplete {
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    if (self.delegate) {
+        [self.delegate mapSettingsComplete:self];
+    }
 }
 
 - (void) offlineMapsCellTapped {

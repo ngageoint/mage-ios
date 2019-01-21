@@ -3,14 +3,23 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.6 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.6) (TBD)
+## 2.0.7 (TBD)
+
+##### Release Notes
+
+##### Features
+* URLs in GeoPackage features are now clickable.
 
 ##### Bug Fixes
+* Cleanup coordinators lists when controllers are done.
 
+## 2.0.6 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.6)
+
+##### Bug Fixes
 * Upgrade to 2.0.8 SDK which fixes the case where an observation has no forms but an event does
 * No more crashing when signing up for an account
 
-## 2.0.5 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.5) (TBD)
+## 2.0.5 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.5) 
 
 ##### Release Notes
 

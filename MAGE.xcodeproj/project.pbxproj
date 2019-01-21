@@ -36,6 +36,7 @@
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
+		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
@@ -62,6 +63,8 @@
 		2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */; };
 		2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4A09F1D999F6F00797C18 /* ObservationFavoritesTableViewCell.m */; };
 		2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4A0A21D999FEE00797C18 /* ObservationActionsTableViewCell.m */; };
+		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
+		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
 		2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */; };
@@ -361,6 +364,8 @@
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
+		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
+		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
 		2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditNumberFieldTableViewCell.m; sourceTree = "<group>"; };
 		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
@@ -412,6 +417,9 @@
 		2FB4A09F1D999F6F00797C18 /* ObservationFavoritesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavoritesTableViewCell.m; sourceTree = "<group>"; };
 		2FB4A0A11D999FEE00797C18 /* ObservationActionsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsTableViewCell.h; sourceTree = "<group>"; };
 		2FB4A0A21D999FEE00797C18 /* ObservationActionsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationActionsTableViewCell.m; sourceTree = "<group>"; };
+		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
+		2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailViewController.h; sourceTree = "<group>"; };
+		2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailViewController.m; sourceTree = "<group>"; };
 		2FC5903E1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAddImportantTableViewCell.h; sourceTree = "<group>"; };
 		2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAddImportantTableViewCell.m; sourceTree = "<group>"; };
 		2FC590411DC26D04003F60C7 /* ObservationImportantDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantDelegate.h; sourceTree = "<group>"; };
@@ -860,6 +868,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		2F2287D921F0EADE0058E527 /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */,
+				2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */,
+				2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */,
+				2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */,
+			);
+			name = Feature;
+			sourceTree = "<group>";
+		};
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -886,6 +905,7 @@
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
 				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
+				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1047,6 +1067,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				2F2287D921F0EADE0058E527 /* Feature */,
 				043FF11D1C22F571000CA07F /* Cache */,
 				2F5F2E9819DDE87D005BA157 /* iPhone */,
 				2FFBCA0E19DB43C80033132F /* iPad */,
@@ -1225,6 +1246,7 @@
 				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
 				F75DD30C1A97AA3B0007FA3F /* Cells */,
 				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
+				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */,
 				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */,
 				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
 				F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */,
@@ -1233,7 +1255,6 @@
 				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
 				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
-				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */,
 				F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */,
 				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
 			);
@@ -1787,6 +1808,7 @@
 				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */,
+				2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */,
 				F7DCCC271F46473800E4C616 /* AttachmentCell.xib in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */,
@@ -1928,7 +1950,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2085,6 +2107,7 @@
 				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */,
+				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
@@ -2098,6 +2121,7 @@
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
+				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,

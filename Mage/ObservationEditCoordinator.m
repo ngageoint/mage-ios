@@ -202,15 +202,13 @@
         NSLog(@"Deleted");
     }];
     [self propertiesEditCanceled];
-    [self.delegate observationDeleted:self.observation];
+    [self.delegate observationDeleted:self.observation coordinator:self];
 }
 
 - (void) propertiesEditCanceled {
     self.managedObjectContext = nil;
-    
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"root view dismissed");
-    }];
+    [self.delegate editCancel:self];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) propertiesEditComplete {
@@ -229,7 +227,7 @@
         
         NSLog(@"saved the observation: %@", weakSelf.observation.remoteId);
         
-        [weakSelf.delegate editComplete:weakSelf.observation];
+        [weakSelf.delegate editComplete:weakSelf.observation coordinator:self];
         
         [_rootViewController dismissViewControllerAnimated:YES completion:^{
             NSLog(@"root view dismissed");

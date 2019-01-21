@@ -31,15 +31,17 @@
 #import "GPSLocation.h"
 #import "Filter.h"
 #import "WKBPoint.h"
-#import "ObservationEditCoordinator.h"
 #import "ObservationAnnotationView.h"
-#import "MapSettingsCoordinator.h"
 #import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "Server.h"
 #import "MageConstants.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, UIViewControllerPreviewingDelegate>
+#import "ObservationEditCoordinator.h"
+#import "MapSettingsCoordinator.h"
+#import "FeatureDetailCoordinator.h"
+
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -367,6 +369,7 @@
 
 - (IBAction)mapSettingsButtonTapped:(id)sender {
     MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController];
+    settingsCoordinator.delegate = self;
     [self.childCoordinators addObject:settingsCoordinator];
     [settingsCoordinator start];
 }
@@ -391,15 +394,6 @@
     [self.childCoordinators addObject:edit];
     [edit start];
 }
-
-- (void) editComplete:(Observation *)observation {
-    
-}
-
-- (void) observationDeleted:(Observation *)observation {
-    
-}
-
 
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
@@ -570,12 +564,10 @@
 }
 
 - (void) onCacheOverlayTapped:(NSString *)message {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
-                                                                    message:message
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    FeatureDetailCoordinator *detailCoordinator = [[FeatureDetailCoordinator alloc] initWithViewController:self detail:message];
+    detailCoordinator.delegate = self;
+    [detailCoordinator start];
+    [self.childCoordinators addObject:detailCoordinator];
 }
 
 -(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
@@ -588,6 +580,32 @@
 
 -(void) doubleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
     
+}
+
+#pragma mark - Observation Edit Coordinator Delegate
+
+- (void) editCancel:(NSObject *) coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+- (void) editComplete:(Observation *)observation coordinator:(NSObject *) coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+- (void) observationDeleted:(Observation *)observation coordinator:(NSObject *) coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+#pragma mark - Feature Detail Coordinator Delegate
+
+- (void) featureDetailComplete:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+#pragma mark - Map Settings Coordinator Delegate
+
+- (void) mapSettingsComplete:(NSObject *) coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 @end

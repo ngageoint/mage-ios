@@ -14,8 +14,9 @@
 
 @protocol ObservationEditDelegate
 
-- (void) editComplete: (Observation *) observation;
-- (void) observationDeleted: (Observation *) observation;
+- (void) editCancel: (NSObject *) coordinator;
+- (void) editComplete: (Observation *) observation coordinator: (NSObject *) coordinator;
+- (void) observationDeleted: (Observation *) observation coordinator: (NSObject *) coordinator;
 
 @end
 

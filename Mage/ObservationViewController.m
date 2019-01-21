@@ -51,13 +51,19 @@ static NSInteger const HEADER_SECTION = 2;
 static NSInteger const ATTACHMENT_SECTION = 3;
 static NSInteger const IMPORTANT_SECTION = 4;
 
-- (void) editComplete: (Observation *) observation {
+- (void) editCancel:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+- (void) editComplete: (Observation *) observation coordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
     self.observation = [observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
     _formFields = nil;
     [self setupObservation];
 }
 
-- (void) observationDeleted:(Observation *)observation {
+- (void) observationDeleted:(Observation *)observation coordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
@@ -215,7 +221,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
     return self.tableLayout.count + [self.formFields count];
 }
-
 
 - (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
     if (section < self.tableLayout.count) {

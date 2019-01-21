@@ -294,13 +294,16 @@
     }
 }
 
-
-- (void)editComplete:(Observation *)observation {
-    
+- (void) editCancel:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
-- (void)observationDeleted:(Observation *)observation {
-    
+- (void)editComplete:(Observation *)observation coordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
+- (void) observationDeleted:(Observation *)observation coordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 @end

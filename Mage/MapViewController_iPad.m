@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "MapSettingsCoordinator.h"
 
-@interface MapViewController_iPad ()<OfflineObservationDelegate>
+@interface MapViewController_iPad ()<OfflineObservationDelegate, MapSettingsCoordinatorDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *filterButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *profileButton;
@@ -119,6 +119,7 @@
 
 - (IBAction) mapSettingsTapped:(id)sender {
     MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender];
+    settingsCoordinator.delegate = self;
     [self.childCoordinators addObject:settingsCoordinator];
     [settingsCoordinator start];
 }
@@ -221,6 +222,12 @@
     [items removeObject:self.profileBadgeTrailingSpacer];
 
     self.toolbar.items = items;
+}
+
+#pragma mark - Map Settings Coordinator Delegate
+
+- (void) mapSettingsComplete:(NSObject *) coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 @end
