@@ -7,6 +7,7 @@
 //
 
 #import "FeatureDetailViewController.h"
+#import "UIColor+Mage.h"
 
 @interface FeatureDetailViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *detailTextView;
@@ -30,6 +31,9 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.view.backgroundColor = [UIColor background];
+    self.detailTextView.textColor = [UIColor secondaryText];
+
     // If scrolling is enabled 'systemLayoutSizeFittingSize' will not calulate the correct height
     self.detailTextView.scrollEnabled = NO;
 

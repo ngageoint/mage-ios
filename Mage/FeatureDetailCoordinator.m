@@ -26,6 +26,7 @@
         _detailController.detail = detail;
         _detailController.modalPresentationStyle = UIModalPresentationPopover;
         _detailController.popoverPresentationController.delegate = self;
+        _detailController.popoverPresentationController.backgroundColor = [UIColor clearColor];
         _detailController.popoverPresentationController.sourceView = viewController.view;
         _detailController.popoverPresentationController.sourceRect = CGRectMake(viewController.view.bounds.size.width / 2, viewController.view.bounds.size.height / 2, 1, 1);
         _detailController.popoverPresentationController.permittedArrowDirections = 0;
