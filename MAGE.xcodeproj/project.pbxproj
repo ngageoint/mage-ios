@@ -1982,7 +1982,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
