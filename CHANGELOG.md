@@ -3,12 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.7 (TBD)
+## 2.0.8 (TBD)
+
+## 2.0.7 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.7)
 
 ##### Release Notes
 
 ##### Features
 * URLs in GeoPackage features are now clickable.
+* GeoPackage SDK updated to 3.1.0.
 
 ##### Bug Fixes
 * Cleanup coordinators lists when controllers are done.
