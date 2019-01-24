@@ -688,7 +688,7 @@
                 SFPProjection * projection = [contentsDao getProjection:contents];
                 
                 SFPProjectionTransform * transform = [[SFPProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
-                GPKGBoundingBox * boundingBox = [[GPKGBoundingBox alloc] initWithGeometryEnvelope:[transform transformWithGeometryEnvelope:[contentsBoundingBox buildEnvelope]]];
+                GPKGBoundingBox * boundingBox = [contentsBoundingBox transform:transform];
                 boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
                 
                 if(self.addedCacheBoundingBox == nil){
