@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Xcode 8.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18C54" minimumToolsVersion="Xcode 8.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Attachment" representedClassName="Attachment" syncable="YES">
         <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dirty" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="NO" syncable="YES"/>
@@ -15,7 +15,7 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="attachments" inverseEntity="Observation" syncable="YES"/>
     </entity>
-    <entity name="Canary" representedClassName="Canary" syncable="YES" codeGenerationType="class">
+    <entity name="Canary" representedClassName="Canary" syncable="YES">
         <attribute name="launchDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="Event" representedClassName="Event" syncable="YES">
@@ -123,6 +123,7 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="30"/>
+        <element name="Canary" positionX="-2322" positionY="-1008" width="128" height="60"/>
         <element name="Event" positionX="-2466" positionY="-973" width="128" height="150"/>
         <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="105"/>
         <element name="Layer" positionX="-2243" positionY="-1035" width="128" height="195"/>
@@ -135,6 +136,5 @@
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="58"/>
         <element name="Team" positionX="-2529" positionY="-441" width="128" height="120"/>
         <element name="User" positionX="-1622" positionY="-516" width="128" height="255"/>
-        <element name="Canary" positionX="-2322" positionY="-1008" width="128" height="60"/>
     </elements>
 </model>
