@@ -11,7 +11,8 @@
 
 @protocol GeometryEditDelegate
 
-- (void) geometryUpdated: (SFGeometry *) geometry;
+- (void) geometryEditComplete:(SFGeometry *) geometry coordinator:(id) coordinator;
+- (void) geometryEditCancel:(id) coordinator;
 
 @end
 

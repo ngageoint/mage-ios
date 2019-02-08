@@ -15,6 +15,6 @@
 
 @interface DisclaimerViewController : UIViewController
 
-- (instancetype) initWithDelegate: (id<DisclaimerDelegate>) delegate;
+@property (weak, nonatomic) id<DisclaimerDelegate> delegate;
 
 @end

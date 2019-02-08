@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UINavigationController
+@interface SettingsViewController : UISplitViewController
 
 @property (nonatomic, assign) BOOL dismissable;
 

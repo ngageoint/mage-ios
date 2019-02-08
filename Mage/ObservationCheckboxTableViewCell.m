@@ -16,7 +16,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
     if (self.fieldValueValid) {
         self.keyLabel.textColor = [UIColor secondaryText];
     } else {
@@ -34,7 +34,8 @@
         [self.checkboxSwitch setOn:NO];
     }
     
-    self.keyLabel.text = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
+    NSString *text = ![[field objectForKey: @"required"] boolValue] ? [field objectForKey:@"title"] : [NSString stringWithFormat:@"%@ %@", [field objectForKey:@"title"], @"*"];
+    self.keyLabel.text = [text uppercaseString];
     
     [self.checkboxSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
 }

@@ -39,7 +39,7 @@
 }
 
 - (UIColor *) tableBackground {
-    return [self background];
+    return [UIColor colorWithHexString:@"212121"];
 }
 
 - (UIColor *) dialog {

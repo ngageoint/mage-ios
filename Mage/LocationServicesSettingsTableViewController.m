@@ -8,8 +8,9 @@
 #import "LocationService.h"
 #import "ObservationTableHeaderView.h"
 #import "Theme+UIResponder.h"
+#import "LocationServicesHeaderView.h"
 
-@interface LocationServicesSettingsTableViewController ()
+@interface LocationServicesSettingsTableViewController ()<LocationServicesDelegate>
 
 @property (weak, nonatomic) IBOutlet UISwitch *reportLocationSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
@@ -25,6 +26,41 @@
 @end
 
 @implementation LocationServicesSettingsTableViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    if (@available(iOS 11.0, *)) {
+        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    }
+    
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    [self.reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
+    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
+    
+    [self registerForThemeChanges];
+    [self setupHeader];
+}
+
+- (void) setupHeader {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusDenied) {
+        LocationServicesHeaderView *header = [[NSBundle mainBundle] loadNibNamed:@"LocationServicesHeader" owner:self options:nil][0];
+        self.tableView.tableHeaderView = header;
+        header.delegate = self;
+    } else {
+//        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
+    }
+}
 
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
@@ -43,12 +79,12 @@
 
 - (IBAction) reportLocationChanged:(id)sender {
     BOOL isOn = [sender isOn];
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:2];
-
+    NSIndexSet *sections = [NSIndexSet indexSetWithIndex:1];
+    
     if (isOn) {
-        [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
     } else {
-        [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
     }
     
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
@@ -56,48 +92,7 @@
     [defaults synchronize];
 }
 
-
-- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    
-    if (section != 0) return;
-
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerClicked:)];
-    [view addGestureRecognizer:tap];
-}
-
-- (void) headerClicked: (UIGestureRecognizer *) sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    } else {
-        // Fallback on earlier versions
-    }
-    
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [_reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
-    
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
-    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
-    
-    [self registerForThemeChanges];
-}
-
-- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
-{
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
@@ -115,66 +110,28 @@
     
 }
 
+#pragma mark - Table view data source
+
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     cell.backgroundColor = [UIColor background];
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        return [_reportLocationSwitch isOn] ? 3 : 2;
+        return [self.reportLocationSwitch isOn] ? 2 : 1;
     }
     
-    return 1;
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
-        return CGFLOAT_MIN;
-    }
-    
-    return 45.0;
-}
-
--(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
-        return CGFLOAT_MIN;
-    }
-    
-    return UITableViewAutomaticDimension;
-}
-
--(UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
-        return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-    
-    return nil;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
-        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
-        tableViewHeaderFooterView.textLabel.textColor  = [UIColor brand];
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = [UIColor brand];
     }
 }
 
--(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
-        return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-    
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if([segue.identifier hasPrefix:@"value_"]) {
         ValuePickerTableViewController *vc = [segue destinationViewController];
@@ -188,7 +145,20 @@
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self setupHeader];
     [self.tableView reloadData];
 }
+
+- (void)openSettingsTapped {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+//-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+//    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+//}
 
 @end

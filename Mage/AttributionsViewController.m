@@ -11,7 +11,6 @@
 #import "Theme+UIResponder.h"
 
 @interface AttributionsViewController ()
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) NSArray *attributions;
 @end
 
@@ -27,15 +26,15 @@
     
     [self registerForThemeChanges];
     
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    } else {
-        // Fallback on earlier versions
-    }
+//    [self.navigationController.navigationBar setPrefersLargeTitles:YES];
+//    self.navigationController.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAutomatic;
     
+//    self.navigationItem.title = @"Attributions";
+
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];
+    [self.tableView registerNib:[UINib nibWithNibName:@"AttributionCell" bundle:nil] forCellReuseIdentifier:@"attributionCell"];
 }
 
 - (NSArray *) attributions {

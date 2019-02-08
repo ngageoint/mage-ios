@@ -1189,27 +1189,53 @@ static float paddingPercentage = .1;
     [self updateAcceptState];
 }
 
-- (NSString *) validate {
-    NSString *validateMessage = nil;
-    
+- (BOOL) validate:(NSError **) error {    
     if (self.shapeType == SF_LINESTRING) {
         if ([[self shapePoints] count] < 2) {
-            validateMessage = @"Lines must contain at least 2 points.";
+            NSString *domain = @"mil.nga.MAGE.Error";
+            NSString *description = @"Lines must contain at least 2 points.";
+            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : description };
+            
+            if (error) {
+                *error = [NSError errorWithDomain:domain
+                                             code:0
+                                         userInfo:userInfo];
+            }
+            
+            return NO;
         }
     } else if (self.shapeType == SF_POLYGON) {
         if ([[self shapePoints] count] < 3 || ![self shapePointsValid]) {
-            validateMessage = @"Polygons must contain at least 3 points.";
+            NSString *domain = @"mil.nga.MAGE.Error";
+            NSString *description = @"Polygons must contain at least 3 points.";
+            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : description };
+            
+            if (error) {
+                *error = [NSError errorWithDomain:domain
+                                             code:0
+                                         userInfo:userInfo];
+            }
+            
+            return NO;
         } else if (!self.allowsPolygonIntersections) {
             SFPolygon *geometry = (SFPolygon *)[self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
-            
-            BOOL hasIntersections = [MapUtils polygonHasIntersections:geometry];
-            if (hasIntersections) {
-                validateMessage = @"Polygon geometries cannot have self intersections.  Please update the polygon to remove all intersections.";
+            if ([MapUtils polygonHasIntersections:geometry]) {
+                NSString *domain = @"mil.nga.MAGE.Error";
+                NSString *description = @"Polygon geometries cannot have self intersections.  Please update the polygon to remove all intersections.";
+                NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : description };
+                
+                if (error) {
+                    *error = [NSError errorWithDomain:domain
+                                                 code:0
+                                             userInfo:userInfo];
+                }
+                
+                return NO;
             }
         }
-        
     }
-    return validateMessage;
+    
+    return YES;
 }
 
 /**

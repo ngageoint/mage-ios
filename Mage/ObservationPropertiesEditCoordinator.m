@@ -130,15 +130,17 @@
             [self.childCoordinators addObject:editCoordinator];
             [editCoordinator start];
         }
-        
     }
 }
 
-- (void) geometryUpdated: (SFGeometry *) geometry {
-    NSLog(@"Geometry updated");
+- (void) geometryEditComplete:(SFGeometry *)geometry coordinator:(id)coordinator {
     self.currentEditValue = geometry;
     [self fieldEditDone];
-    [self.childCoordinators removeLastObject];
+    [self.childCoordinators removeObject:coordinator];
+}
+
+- (void) geometryEditCancel:(id)coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 - (void) attachmentSelected:(Attachment *)attachment {
@@ -151,23 +153,6 @@
 - (void) fieldEditDone {
     NSDictionary *field = self.currentEditField;
     id value = self.currentEditValue;
-    
-    // validate the geometry for no self intersections
-    if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-        GeometryEditViewController *gevc = (GeometryEditViewController *)self.navigationController.topViewController;
-        NSString *message = [gevc validate];
-        
-        if (message != nil) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
-                                                                           message:message
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-
-            [self.navigationController.visibleViewController presentViewController:alert animated:YES completion:nil];
-            return;
-        }
-    }
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.observation.geometry = value;
@@ -192,14 +177,13 @@
         [forms replaceObjectAtIndex:formIndex withObject:newFormProperties];
         [newProperties setObject:forms forKey:@"forms"];
         
-        
         self.observation.properties = newProperties;
     }
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) fieldEditCanceled{
+- (void) fieldEditCanceled {
     self.currentEditValue = nil;
     self.currentEditField = nil;
     [self.navigationController popViewControllerAnimated:YES];

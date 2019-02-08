@@ -38,7 +38,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
     
     self.locationField.textColor = [UIColor primaryText];
     self.locationField.selectedLineColor = [UIColor brand];
@@ -119,6 +119,7 @@
     } else {
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
+        self.locationField.text = @"";
     }
 }
 

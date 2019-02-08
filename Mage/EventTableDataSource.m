@@ -14,10 +14,8 @@
 #import "EventTableHeaderView.h"
 
 @interface EventTableDataSource()
-
 @property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
 @property (strong, nonatomic) NSString *currentFilter;
-
 @end
 
 @implementation EventTableDataSource

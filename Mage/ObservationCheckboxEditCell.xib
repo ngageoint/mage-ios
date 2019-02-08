@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="checkbox" rowHeight="64" id="IQf-8M-FcO" customClass="ObservationCheckboxTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="checkbox" rowHeight="65" id="IQf-8M-FcO" customClass="ObservationCheckboxTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IQf-8M-FcO" id="bIw-Yw-TUE">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aam-9e-vy9">
-                        <rect key="frame" x="16" y="16" width="51" height="31"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="49" id="fSh-CX-wIr"/>
-                        </constraints>
-                    </switch>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b3K-Ro-bA4">
-                        <rect key="frame" x="73" y="11" width="286" height="41.5"/>
+                        <rect key="frame" x="16" y="4" width="343" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aam-9e-vy9">
+                        <rect key="frame" x="16" y="29" width="51" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="49" id="fSh-CX-wIr"/>
+                        </constraints>
+                    </switch>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="b3K-Ro-bA4" firstAttribute="leading" secondItem="aam-9e-vy9" secondAttribute="trailing" constant="8" id="2k2-3k-Wcm"/>
-                    <constraint firstItem="aam-9e-vy9" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leadingMargin" id="5Xv-09-Ece"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="b3K-Ro-bA4" secondAttribute="trailing" id="EQn-Et-DpP"/>
-                    <constraint firstItem="aam-9e-vy9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="bIw-Yw-TUE" secondAttribute="top" constant="10" id="El5-Pc-mxc"/>
-                    <constraint firstItem="aam-9e-vy9" firstAttribute="centerY" secondItem="bIw-Yw-TUE" secondAttribute="centerY" id="PUF-Gv-VIy"/>
-                    <constraint firstAttribute="bottom" secondItem="b3K-Ro-bA4" secondAttribute="bottom" constant="11" id="RPn-43-QvO"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="aam-9e-vy9" secondAttribute="bottom" constant="10" id="UnO-7c-IRh"/>
-                    <constraint firstItem="b3K-Ro-bA4" firstAttribute="top" secondItem="bIw-Yw-TUE" secondAttribute="top" constant="11" id="ZLT-Pa-n5o"/>
+                    <constraint firstItem="b3K-Ro-bA4" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leading" constant="16" id="1nv-oM-soh"/>
+                    <constraint firstAttribute="trailing" secondItem="b3K-Ro-bA4" secondAttribute="trailing" constant="16" id="4Md-6a-Jni"/>
+                    <constraint firstItem="b3K-Ro-bA4" firstAttribute="top" secondItem="bIw-Yw-TUE" secondAttribute="top" constant="4" id="bDH-AN-zV4"/>
+                    <constraint firstItem="aam-9e-vy9" firstAttribute="top" secondItem="b3K-Ro-bA4" secondAttribute="bottom" constant="8" id="eRM-No-fdQ"/>
+                    <constraint firstAttribute="bottom" secondItem="aam-9e-vy9" secondAttribute="bottom" constant="4.5" id="tWp-nW-zC1"/>
+                    <constraint firstItem="aam-9e-vy9" firstAttribute="leading" secondItem="bIw-Yw-TUE" secondAttribute="leadingMargin" id="tlq-ys-LCt"/>
                 </constraints>
             </tableViewCellContentView>
             <gestureRecognizers/>
@@ -49,7 +46,7 @@
                 <outlet property="checkboxSwitch" destination="aam-9e-vy9" id="YdH-ea-cxv"/>
                 <outlet property="keyLabel" destination="b3K-Ro-bA4" id="4XD-SI-gaI"/>
             </connections>
-            <point key="canvasLocation" x="33.5" y="54"/>
+            <point key="canvasLocation" x="32.799999999999997" y="53.523238380809602"/>
         </tableViewCell>
     </objects>
 </document>

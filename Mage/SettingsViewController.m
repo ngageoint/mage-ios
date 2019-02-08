@@ -11,7 +11,6 @@
 
 @interface SettingsViewController ()<UISplitViewControllerDelegate>
 
-@property (nonatomic, weak) UISplitViewController *splitViewController;
 @property (nonatomic, assign) BOOL isCollapsed;
 
 @end
@@ -21,18 +20,16 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    self.splitViewController = (UISplitViewController *) [self.viewControllers firstObject];
-    [self.splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
-    self.splitViewController.delegate = self;
+    [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+    self.delegate = self;
     
     if (self.dismissable) {
-        UINavigationController *masterController = [self.splitViewController.viewControllers firstObject];
+        UINavigationController *masterController = [self.viewControllers firstObject];
         masterController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
     }
 }
 
 -(BOOL) splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
-    
     return YES;
 }
 
@@ -60,6 +57,5 @@
 -(void) done:(UIBarButtonItem *) sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 @end

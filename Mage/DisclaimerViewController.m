@@ -11,7 +11,6 @@
 @interface DisclaimerViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *consentText;
 @property (weak, nonatomic) IBOutlet UITextView *consentTitle;
-@property (strong, nonatomic) id<DisclaimerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *disagreeButton;
@@ -19,15 +18,6 @@
 @end
 
 @implementation DisclaimerViewController
-
-- (instancetype) initWithDelegate: (id<DisclaimerDelegate>) delegate {
-    self = [super init];
-    if (!self) return nil;
-    
-    self.delegate = delegate;
-    
-    return self;
-}
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
@@ -47,6 +37,7 @@
     if (self.navigationController && self.agreeButton) {
         self.navigationController.navigationBarHidden = YES;
     }
+    self.navigationItem.title = @"Disclaimer";
     self.wandLabel.text = @"\U0000f0d0";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

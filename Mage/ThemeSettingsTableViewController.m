@@ -16,6 +16,8 @@
 
 @implementation ThemeSettingsTableViewController
 
+static  NSString *THEME_CELL_REUSE_ID = @"THEME_CELL";
+
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
     self.tableView.backgroundColor = [UIColor tableBackground];
@@ -25,17 +27,9 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
+    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    
     [self registerForThemeChanges];
-    
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    } else {
-        // Fallback on earlier versions
-    }
-    
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 45.0;
-    self.tableView.tableFooterView = [UIView new];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,8 +38,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:THEME_CELL_REUSE_ID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:THEME_CELL_REUSE_ID];
+    }
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"themeCell"];
     cell.backgroundColor = [UIColor background];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.tintColor = [UIColor flatButton];
@@ -75,18 +72,6 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Theme";
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:@"Theme"];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45.0f;
 }
 
 @end

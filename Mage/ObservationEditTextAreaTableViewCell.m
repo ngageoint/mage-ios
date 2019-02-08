@@ -23,7 +23,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
     
     self.textArea.textColor = [UIColor primaryText];
     self.textArea.keyboardAppearance = [UIColor keyboardAppearance];

@@ -20,6 +20,6 @@
 @property (nonatomic) BOOL allowsPolygonIntersections;
 
 - (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator;
-- (NSString *) validate;
+- (BOOL) validate:(NSError **) error;
 
 @end

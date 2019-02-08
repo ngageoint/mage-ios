@@ -399,11 +399,12 @@ BOOL signingIn = YES;
                 NSLog(@"Skip the disclaimer screen");
             } else {
                 NSLog(@"Segue to the disclaimer screen");
-                DisclaimerViewController *disclaimer = [[DisclaimerViewController alloc] initWithDelegate:self];
+                DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"DisclaimerConsent" bundle:nil];
+                viewController.delegate = self;
                 [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
                 
                 [self.navigationController popToRootViewControllerAnimated:NO];
-                [self.navigationController pushViewController:disclaimer animated:NO];
+                [self.navigationController pushViewController:viewController animated:NO];
             }
         }
     }];

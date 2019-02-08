@@ -14,6 +14,7 @@
 @interface GeometryEditCoordinator()
 
 @property (strong, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
 
 @end
 
@@ -43,21 +44,39 @@
 }
 
 - (void) start {
-    GeometryEditViewController *vc = [[GeometryEditViewController alloc] initWithCoordinator: self];
+    self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
-    [vc.navigationItem setLeftBarButtonItem:backButton];
-    [vc.navigationItem setRightBarButtonItem:doneButton];
-    [self.navigationController pushViewController:vc animated:YES];
+    [self.geometryEditViewController.navigationItem setLeftBarButtonItem:backButton];
+    [self.geometryEditViewController.navigationItem setRightBarButtonItem:doneButton];
+    [self.navigationController pushViewController:self.geometryEditViewController animated:YES];
 }
 
 - (void) fieldEditCanceled {
+    [self.delegate geometryEditCancel:self];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) fieldEditDone {
-    [self.delegate geometryUpdated:self.currentGeometry];
+    // Validate the geometry
+    NSError *error;
+    if (![self.geometryEditViewController validate:&error]) {
+        NSString *message = [[error userInfo] valueForKey:NSLocalizedDescriptionKey];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+    
+    [self.delegate geometryEditComplete:self.currentGeometry coordinator:self];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) updateGeometry: (SFGeometry *) geometry {
@@ -65,7 +84,7 @@
 }
 
 - (NSString *) fieldName {
-    return [[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"] ? @"Location" : [self.fieldDefinition objectForKey:@"name"];
+    return [[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"] ? @"Location" : [self.fieldDefinition objectForKey:@"title"];
 }
 
 @end
