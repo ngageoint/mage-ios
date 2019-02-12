@@ -525,8 +525,6 @@ Event *_event;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSLog(@"Fetching observations from event %@", eventId);
     
-    __block BOOL sendBulkNotification = initialPull;
-
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"lastModified+DESC" forKey:@"sort"];
     __block NSDate *lastObservationDate = [Observation fetchLastObservationDateInContext:[NSManagedObjectContext MR_defaultContext]];
     if (lastObservationDate != nil) {
@@ -535,44 +533,61 @@ Event *_event;
 
     MageSessionManager *manager = [MageSessionManager manager];
     
-    __block BOOL newData = NO;
+    __block BOOL sendBulkNotification = initialPull;
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable features) {
-        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:[NSManagedObjectContext MR_rootSavingContext]];
+        NSManagedObjectContext *rootSavingContext = [NSManagedObjectContext MR_rootSavingContext];
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:rootSavingContext];
         [localContext performBlock:^{
             [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
             NSMutableArray *chunks = [Observation chunk:features];
-            
+            NSUInteger newObservationCount = 0;
+            Observation *obsToNotifyAbout = nil;
+
             while ([chunks count] > 0) {
                 @autoreleasepool {
                     NSArray *features = [chunks lastObject];
                     [chunks removeLastObject];
                     
-                    for (id feature in features) {
-                        [Observation createObservation:feature inContext:localContext];
+                    for (id observation in features) {
+                        Observation *newObservation = [Observation createObservation:observation inContext:localContext];
+                        if (newObservation) {
+                            newObservationCount++;
+                            
+                            if (!sendBulkNotification) {
+                                obsToNotifyAbout = observation;
+                            }
+                        }
                     }
                     
-                    NSLog(@"Saved %d observations", [features count]);
+                    NSLog(@"Saved %lu observations", (unsigned long)[features count]);
                 }
                 
                 // only save once per chunk
                 NSError *error = nil;
                 [localContext save:&error];
+                if (error) {
+                    NSLog(@"Error saving observations: %@", error);
+                }
                 
+                [rootSavingContext save:&error];
                 if (error) {
                     NSLog(@"Error saving observations: %@", error);
                 }
                 
                 [localContext reset];
-                NSLog(@"Saved chunk %d", [chunks count]);
+                NSLog(@"Saved chunk %lu", (unsigned long)[chunks count]);
             }
             
-            [[NSManagedObjectContext MR_rootSavingContext] MR_saveWithOptions:MRSaveParentContexts completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"Error saving observations to root saving context: %@", error);
-                }
-                
-                success();
-            }];
+            NSLog(@"Recieved %lu new observations and send bulk is %d", (unsigned long) newObservationCount, sendBulkNotification);
+            if ((sendBulkNotification && newObservationCount > 0) || newObservationCount > 1) {
+                NSNumber *eventId = [Server currentEventId];
+                Event *event = [Event getEventById:eventId inContext:localContext];
+                [NotificationRequester sendBulkNotificationCount:newObservationCount inEvent:event];
+            } else if (obsToNotifyAbout) {
+                [NotificationRequester observationPulled:obsToNotifyAbout];
+            }
+            
+            success();
          }];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error);
@@ -591,7 +606,7 @@ Event *_event;
     int i = 0;
     
     while(remaining) {
-        NSRange range = NSMakeRange(i, MIN(300, remaining));
+        NSRange range = NSMakeRange(i, MIN(250, remaining));
         NSArray *chunk = [items subarrayWithRange:range];
         [chunks addObject:chunk];
         remaining -= range.length;
@@ -601,14 +616,10 @@ Event *_event;
     return chunks;
 }
 
-+ (BOOL) createObservation:(id) feature inContext:(NSManagedObjectContext *) localContext {
-    BOOL newData = NO;
-
-    NSNumber *eventId = [Server currentEventId];
-//    Event *event = [Event getEventById:eventId inContext:localContext];
-    NSUInteger count = 0;
-//    Observation *obsToNotifyAbout;
++ (Observation *) createObservation:(id) feature inContext:(NSManagedObjectContext *) localContext {
+    Observation *newObservation = nil;
     
+    NSNumber *eventId = [Server currentEventId];
     NSString *remoteId = [Observation observationIdFromJson:feature];
     State state = [Observation observationStateFromJson:feature];
 
@@ -617,7 +628,6 @@ Event *_event;
     if (state == Archive && existingObservation) {
         NSLog(@"Deleting archived observation with id: %@", remoteId);
         [existingObservation MR_deleteEntity];
-        newData = YES;
     } else if (state != Archive && !existingObservation) {
         // if the observation doesn't exist, insert it
         Observation *observation = [Observation MR_createEntityInContext:localContext];
@@ -644,20 +654,14 @@ Event *_event;
         }
 
         [observation setEventId:eventId];
-        count++;
-        
-//        if (!sendBulkNotification) {
-//            obsToNotifyAbout = observation;
-//        }
-        
-        newData = YES;
+        newObservation = observation;
     } else if (state != Archive && ![existingObservation.dirty boolValue]) {
 
         // if the observation is not dirty, and has been updated, update it
         NSDate *lastModified = [NSDate dateFromIso8601String:[feature objectForKey:@"lastModified"]];
         if ([lastModified compare:existingObservation.lastModified] == NSOrderedSame) {
             // If the last modified date for this observation has not changed no need to update.
-            return NO;
+            return newObservation;
         }
 
         [existingObservation populateObjectFromJson:feature];
@@ -715,13 +719,12 @@ Event *_event;
             }
         }
         [existingObservation setEventId:eventId];
-        newData = YES;
         NSLog(@"Updating object with id: %@", existingObservation.remoteId);
     } else {
         NSLog(@"Observation with id: %@ is dirty", remoteId);
     }
     
-    return newData;
+    return newObservation;
 }
 
 - (void) shareObservationForViewController:(UIViewController *) viewController {
