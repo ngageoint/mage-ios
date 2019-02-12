@@ -2,79 +2,48 @@
 //  ValuePickerTableViewController.m
 //  Mage
 //
-//
 
 #import "ValuePickerTableViewController.h"
-#import "ValueTableViewCell.h"
 #import "Theme+UIResponder.h"
-#import "ObservationTableHeaderView.h"
-
-@interface ValuePickerTableViewController ()
-
-@end
 
 @implementation ValuePickerTableViewController
+
+- (void) viewDidLoad {
+    [self registerForThemeChanges];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewDidLoad];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.selected = [defaults objectForKey:self.preferenceKey];
+    
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+}
 
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    _selected = [defaults objectForKey:_preferenceKey];
-    [self registerForThemeChanges];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _values.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.values.count;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45.0f;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:self.section];
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"valueTableCell";
-    ValueTableViewCell *cell = [tableView
-                              dequeueReusableCellWithIdentifier:CellIdentifier
-                              forIndexPath:indexPath];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.backgroundColor = [UIColor background];
     
-    long row = [indexPath row];
-    cell.valueLabel.text = _labels[row];
-    cell.preferenceValue = _values[row];
+    cell.textLabel.text = self.labels[indexPath.row];
+    cell.tag = [self.values[indexPath.row] integerValue];
     
-    if ([_values[row] unsignedLongLongValue] == [_selected unsignedLongLongValue]) {
+    if ([self.values[indexPath.row] unsignedLongLongValue] == [self.selected unsignedLongLongValue]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -83,17 +52,30 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    long row = [indexPath row];
-    _selected = _values[row];
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    ValueTableViewCell *cell = (ValueTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    [defaults setObject: cell.preferenceValue forKey:_preferenceKey];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selected = self.values[indexPath.row];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [defaults setObject:[NSNumber numberWithInteger:cell.tag] forKey:self.preferenceKey];
     [defaults synchronize];
     
     [tableView reloadData];
-    
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return self.section;
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = [UIColor brand];
+    }
 }
 
 @end

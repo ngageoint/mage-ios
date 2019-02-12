@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, SettingType) {
     kConnection,
+    kLocationServices,
+    kDataFetching,
+    kLocationDisplay,
+    kTimeDisplay,
     kEventInfo,
     kChangeEvent,
     kMoreEvents,

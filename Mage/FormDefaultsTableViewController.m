@@ -31,14 +31,16 @@
     [self.tableView setEstimatedRowHeight:126.0f];
     [self.tableView setRowHeight:UITableViewAutomaticDimension];
     
-    [self registerForThemeChanges];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    EventInformationView *header = [[NSBundle mainBundle] loadNibNamed:@"EventInformationView" owner:self options:nil][0];
+    header.nameLabel.text = [self.form objectForKey:@"name"];
+    NSString *description = [self.form valueForKey:@"description"];
+    header.descriptionLabel.hidden = [description length] == 0 ? YES : NO;
+    header.descriptionLabel.text = description;
+    self.tableView.tableHeaderView = header;
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    [self setupHeader];
+    [self registerForThemeChanges];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -85,25 +87,18 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"ObservationTextfieldEditCell" bundle:nil] forCellReuseIdentifier:@"textfield"];
 }
 
-- (void) setupHeader {
-    EventInformationView *header = [[NSBundle mainBundle] loadNibNamed:@"EventInformationView" owner:self options:nil][0];
-    header.nameLabel.text = [self.form objectForKey:@"name"];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     
-    NSString *description = [self.form valueForKey:@"description"];
-    header.descriptionLabel.hidden = [description length] == 0 ? YES : NO;
-    header.descriptionLabel.text = description;
-    
-    [header setNeedsLayout];
-    [header layoutIfNeeded];
-    
+    UIView *header = self.tableView.tableHeaderView;
     CGSize size = [header systemLayoutSizeFittingSize:CGSizeMake(header.frame.size.width, 0) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
-    
-    CGRect frame = [header frame];
-    frame.size.height = size.height;
-    [header setFrame:frame];
-    
-    header.backgroundColor = [UIColor background];
-    self.tableView.tableHeaderView = header;
+    if (header.frame.size.height != size.height) {
+        CGRect frame = [header frame];
+        frame.size.height = size.height;
+        [header setFrame:frame];
+        self.tableView.tableHeaderView = header;
+        [self.tableView layoutIfNeeded];
+    }
 }
 
 #pragma mark - Table view data source

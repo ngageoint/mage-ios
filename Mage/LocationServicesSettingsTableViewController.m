@@ -27,28 +27,36 @@
 
 @implementation LocationServicesSettingsTableViewController
 
-- (void)viewDidLoad {
+static NSInteger TIME_INTERVAL_CELL_ROW = 0;
+static NSInteger GPS_DISTANCE_CELL_ROW = 1;
+
+- (void) viewDidLoad {
     [super viewDidLoad];
     
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    }
+    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self.reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
+    
+    [self registerForThemeChanges];
 }
+
+//- (void) viewWillAppear:(BOOL)animated {
+//    [super viewWillAppear:animated];
+//    
+//    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
+//    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
+//    
+//    [self setupHeader];
+//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
-    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
     
-    [self registerForThemeChanges];
-    [self setupHeader];
+    [self.tableView reloadData];
 }
 
 - (void) setupHeader {
@@ -64,15 +72,6 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
-    self.reportLocationSwitch.onTintColor = [UIColor themedButton];
-    self.gpsSensitivityLabel.textColor = [UIColor primaryText];
-    self.userReportingFrequencyLabel.textColor = [UIColor primaryText];
-    self.reportLocationlabel.textColor = [UIColor primaryText];
-    self.reportLocationDescription.textColor = [UIColor secondaryText];
-    self.gpsDistanceLabel.textColor = [UIColor primaryText];
-    self.gpsDistanceDescription.textColor = [UIColor secondaryText];
-    self.timeIntervalLabel.textColor = [UIColor primaryText];
-    self.timeIntervalDescription.textColor = [UIColor secondaryText];
     
     [self.tableView reloadData];
 }

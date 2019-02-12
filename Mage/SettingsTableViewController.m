@@ -23,6 +23,10 @@
 #import "AttributionsViewController.h"
 #import "DisclaimerViewController.h"
 #import "ThemeSettingsTableViewController.h"
+#import "LocationDisplayTableViewController.h"
+#import "TimeSettingsTableViewController.h"
+#import "DataFetchSettingsTableViewController.h"
+#import "LocationServicesSettingsTableViewController.h"
 
 @interface SettingsTableViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate>
 @property (strong, nonatomic) SettingsDataSource *dataSource;
@@ -101,6 +105,26 @@
     switch (setting) {
         case kConnection: {
             [self onLogin];
+            break;
+        }
+        case kLocationServices: {
+            LocationServicesSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationServices" owner:self options:nil][0];
+            [self.navigationController pushViewController:viewController animated:YES];
+            break;
+        }
+        case kDataFetching: {
+            DataFetchSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"DataFetchingServices" owner:self options:nil][0];
+            [self.navigationController pushViewController:viewController animated:YES];
+            break;
+        }
+        case kLocationDisplay: {
+            LocationDisplayTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationDisplay" owner:self options:nil][0];
+            [self.navigationController pushViewController:viewController animated:YES];
+            break;
+        }
+        case kTimeDisplay: {
+            TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
+            [self.navigationController pushViewController:viewController animated:YES];
             break;
         }
         case kEventInfo: {

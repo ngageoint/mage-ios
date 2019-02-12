@@ -186,6 +186,7 @@ static const NSInteger LEGAL_SECTION = 7;
             switch ([indexPath row]) {
                 case 0: {
                     cell = [tableView dequeueReusableCellWithIdentifier:@"locationServicesCell" forIndexPath:indexPath];
+                    cell.type = [NSNumber numberWithInteger:kLocationServices];
 
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     CLAuthorizationStatus authorizationStatus =[CLLocationManager authorizationStatus];
@@ -199,6 +200,8 @@ static const NSInteger LEGAL_SECTION = 7;
                 }
                 case 1: {
                     cell = [tableView dequeueReusableCellWithIdentifier:@"dataFetchingCell" forIndexPath:indexPath];
+                    cell.type = [NSNumber numberWithInteger:kDataFetching];
+
                     cell.textLabel.textColor = [UIColor primaryText];
                     cell.detailTextLabel.textColor = [UIColor primaryText];
 
@@ -238,6 +241,7 @@ static const NSInteger LEGAL_SECTION = 7;
             switch ([indexPath row]) {
                 case 0: {
                     cell = [tableView dequeueReusableCellWithIdentifier:@"timeDisplayCell" forIndexPath:indexPath];
+                    cell.type = [NSNumber numberWithInteger:kTimeDisplay];
 
                     if ([NSDate isDisplayGMT]) {
                         cell.detailTextLabel.text = @"GMT Time";
@@ -249,6 +253,7 @@ static const NSInteger LEGAL_SECTION = 7;
                 }
                 case 1: {
                     cell = [tableView dequeueReusableCellWithIdentifier:@"locationDisplayCell" forIndexPath:indexPath];
+                    cell.type = [NSNumber numberWithInteger:kLocationDisplay];
 
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     cell.detailTextLabel.text = [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude";

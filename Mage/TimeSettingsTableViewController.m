@@ -11,102 +11,107 @@
 #import "NSDate+display.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "DisplaySettingsHeader.h"
 
 @interface TimeSettingsTableViewController ()
-
-@property (weak, nonatomic) IBOutlet UITableViewCell *localTimeCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *gmtCell;
-
+@property (assign, nonatomic) BOOL gmtTime;
 @end
 
 @implementation TimeSettingsTableViewController
+
+static NSString *TIME_DISPLAY_REUSE_ID = @"TIME_DISPLAY_REUSE_ID";
+static NSString *TIME_DISPLAY_USER_DEFAULTS_KEY = @"gmtTimeZome";
+static NSInteger LOCAL_TIME_CELL_ROW = 0;
+static NSInteger GMT_TIME_CELL_ROW = 1;
+
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.gmtTime = [defaults boolForKey:TIME_DISPLAY_USER_DEFAULTS_KEY];
+    
+    DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
+    header.label.text = @"All times in the app will be entered and displayed in either the local time zone or GMT.";
+    self.tableView.tableHeaderView = header;
+    
+    [self registerForThemeChanges];
+}
+
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    UIView *header = self.tableView.tableHeaderView;
+    CGSize size = [header systemLayoutSizeFittingSize:CGSizeMake(header.frame.size.width, 0) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
+    if (header.frame.size.height != size.height) {
+        CGRect frame = [header frame];
+        frame.size.height = size.height;
+        [header setFrame:frame];
+        self.tableView.tableHeaderView = header;
+        [self.tableView layoutIfNeeded];
+    }
+}
 
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
     [self.tableView reloadData];
 }
 
-- (void) viewDidLoad {
-    [super viewDidLoad];
-    [self registerForThemeChanges];
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    } else {
-        // Fallback on earlier versions
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL gmtTimeZome = [defaults boolForKey:@"gmtTimeZome"];
-    if (!gmtTimeZome) {
-        self.localTimeCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.gmtCell.accessoryType = UITableViewCellAccessoryNone;
-    } else {
-        self.localTimeCell.accessoryType = UITableViewCellAccessoryNone;
-        self.gmtCell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    self.localTimeCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [[NSTimeZone systemTimeZone] name]];
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 1) {
-        return 2;
-    }
-    return 0;
+    return 2;
 }
 
-- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TIME_DISPLAY_REUSE_ID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TIME_DISPLAY_REUSE_ID];
+    }
+    
+    if (indexPath.row == LOCAL_TIME_CELL_ROW) {
+        cell.textLabel.text = @"Local Time";
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [[NSTimeZone systemTimeZone] name]];
+        cell.accessoryType = self.gmtTime ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.textLabel.text = @"GMT";
+        cell.detailTextLabel.text = @"";
+        cell.accessoryType = self.gmtTime ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    }
+    
     cell.backgroundColor = [UIColor background];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.tintColor = [UIColor flatButton];
+    
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    long row = [indexPath row];
+    UITableViewCell *localCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:LOCAL_TIME_CELL_ROW inSection:0]];
+    UITableViewCell *gmtCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:GMT_TIME_CELL_ROW inSection:0]];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (row == 0) {
+    if (indexPath.row == LOCAL_TIME_CELL_ROW) {
         [NSDate setDisplayGMT:NO];
-        self.localTimeCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.gmtCell.accessoryType = UITableViewCellAccessoryNone;
+        localCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        gmtCell.accessoryType = UITableViewCellAccessoryNone;
     } else {
         [NSDate setDisplayGMT:YES];
-        self.localTimeCell.accessoryType = UITableViewCellAccessoryNone;
-        self.gmtCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        localCell.accessoryType = UITableViewCellAccessoryNone;
+        gmtCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
+    
     [defaults synchronize];
-    [tableView reloadData];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
-    if (section == 0) {
-        return 0.0001;
-    }
-    return 45.0;
+    return 24.0;
 }
-
--(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-    
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
-    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
-        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
-        tableViewHeaderFooterView.textLabel.textColor  = [UIColor brand];
-    }
-}
-
 
 @end
