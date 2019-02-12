@@ -527,7 +527,7 @@ Event *_event;
     
     __block BOOL sendBulkNotification = initialPull;
 
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"lastModified+DESC" forKey:@"sort"];
     __block NSDate *lastObservationDate = [Observation fetchLastObservationDateInContext:[NSManagedObjectContext MR_defaultContext]];
     if (lastObservationDate != nil) {
         [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
@@ -536,148 +536,192 @@ Event *_event;
     MageSessionManager *manager = [MageSessionManager manager];
     
     __block BOOL newData = NO;
-
-    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id features) {
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSLog(@"Observation request complete");
-            Event *event = [Event getEventById:eventId inContext:localContext];
-            NSUInteger count = 0;
-            Observation *obsToNotifyAbout;
-            for (id feature in features) {
-                NSString *remoteId = [Observation observationIdFromJson:feature];
-                State state = [Observation observationStateFromJson:feature];
-
-                Observation *existingObservation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteId] inContext:localContext];
-                // if the Observation is archived, delete it
-                if (state == Archive && existingObservation) {
-                    NSLog(@"Deleting archived observation with id: %@", remoteId);
-                    [existingObservation MR_deleteEntity];
-                    newData = YES;
-                } else if (state != Archive && !existingObservation) {
-                    // if the observation doesn't exist, insert it
-                    Observation *observation = [Observation MR_createEntityInContext:localContext];
-                    observation.eventId = eventId;
-                    [observation populateObjectFromJson:feature];
-                    observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
-
-                    NSDictionary *importantJson = [feature objectForKey:@"important"];
-                    if (importantJson) {
-                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
-                        important.observation = observation;
-                        observation.observationImportant = important;
+    NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable features) {
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:[NSManagedObjectContext MR_rootSavingContext]];
+        [localContext performBlock:^{
+            [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+            NSMutableArray *chunks = [Observation chunk:features];
+            
+            while ([chunks count] > 0) {
+                @autoreleasepool {
+                    NSArray *features = [chunks lastObject];
+                    [chunks removeLastObject];
+                    
+                    for (id feature in features) {
+                        [Observation createObservation:feature inContext:localContext];
                     }
-
-                    for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
-                        ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
-                        favorite.observation = observation;
-                        [observation addFavoritesObject:favorite];
-                    }
-
-                    for (id attachmentJson in [feature objectForKey:@"attachments"]) {
-                        Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
-                        [observation addAttachmentsObject:attachment];
-                    }
-
-                    [observation setEventId:eventId];
-                    NSLog(@"Saving new observation with id: %@", observation.remoteId);
-                    count++;
-                    if (!sendBulkNotification) {
-                        obsToNotifyAbout = observation;
-                    }
-                    newData = YES;
-                } else if (state != Archive && ![existingObservation.dirty boolValue]) {
-
-                    // if the observation is not dirty, and has been updated, update it
-                    NSDate *lastModified = [NSDate dateFromIso8601String:[feature objectForKey:@"lastModified"]];
-                    if ([lastModified compare:existingObservation.lastModified] == NSOrderedSame) {
-                        // If the last modified date for this observation has not changed no need to update.
-                        continue;
-                    }
-
-                    [existingObservation populateObjectFromJson:feature];
-                    existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
-
-                    NSDictionary *importantJson = [feature objectForKey:@"important"];
-                    if (importantJson) {
-                        ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
-                        important.observation = existingObservation;
-                        existingObservation.observationImportant = important;
-                    } else {
-                        if (existingObservation.observationImportant) {
-                            [existingObservation.observationImportant MR_deleteEntityInContext:localContext];
-                            existingObservation.observationImportant = nil;
-                        }
-                    }
-
-                    NSDictionary *favoritesMap = [existingObservation getFavoritesMap];
-                    NSArray *favoriteUserIds = [feature objectForKey:@"favoriteUserIds"];
-                    for (NSString *userId in favoriteUserIds) {
-                        ObservationFavorite *favorite = [favoritesMap objectForKey:userId];
-                        if (!favorite) {
-                            favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
-                            favorite.observation = existingObservation;
-                            [existingObservation addFavoritesObject:favorite];
-                        }
-                    }
-
-                    for (ObservationFavorite *favorite in [favoritesMap allValues]) {
-                        if (![favoriteUserIds containsObject:favorite.userId]) {
-                            [favorite MR_deleteEntityInContext:localContext];
-                            [existingObservation removeFavoritesObject:favorite];
-                        }
-                    }
-
-                    for (id attachmentJson in [feature objectForKey:@"attachments"]) {
-                        NSString *remoteId = [attachmentJson objectForKey:@"id"];
-                        BOOL attachmentFound = NO;
-                        for (Attachment *attachment in existingObservation.attachments) {
-                            if (remoteId != nil && [remoteId isEqualToString:attachment.remoteId]) {
-                                attachment.contentType = [attachmentJson objectForKey:@"contentType"];
-                                attachment.name = [attachmentJson objectForKey:@"name"];
-                                attachment.remotePath = [attachmentJson objectForKey:@"remotePath"];
-                                attachment.size = [attachmentJson objectForKey:@"size"];
-                                attachment.url = [attachmentJson objectForKey:@"url"];
-                                attachment.observation = existingObservation;
-                                attachmentFound = YES;
-                                break;
-                            }
-                        }
-
-                        if (!attachmentFound) {
-                            Attachment *newAttachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
-                            [existingObservation addAttachmentsObject:newAttachment];
-                        }
-                    }
-                    [existingObservation setEventId:eventId];
-                    newData = YES;
-                    NSLog(@"Updating object with id: %@", existingObservation.remoteId);
-                } else {
-                    NSLog(@"Observation with id: %@ is dirty", remoteId);
+                    
+                    NSLog(@"Saved %d observations", [features count]);
                 }
-            }
-            NSLog(@"Recieved %lu new observations and send bulk is %d", (unsigned long)count, sendBulkNotification);
-            if ((sendBulkNotification && count > 0) || count > 1) {
-                [NotificationRequester sendBulkNotificationCount: count inEvent: event];
-            } else if (obsToNotifyAbout) {
-                [NotificationRequester observationPulled:obsToNotifyAbout];
-            }
-        } completion:^(BOOL successful, NSError *error) {
-            if (!successful) {
-                if (failure) {
-                    failure(error);
+                
+                // only save once per chunk
+                NSError *error = nil;
+                [localContext save:&error];
+                
+                if (error) {
+                    NSLog(@"Error saving observations: %@", error);
                 }
-            } else if (success) {
+                
+                [localContext reset];
+                NSLog(@"Saved chunk %d", [chunks count]);
+            }
+            
+            [[NSManagedObjectContext MR_rootSavingContext] MR_saveWithOptions:MRSaveParentContexts completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"Error saving observations to root saving context: %@", error);
+                }
+                
                 success();
-            }
-        }];
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
+            }];
+         }];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error);
         if (failure) {
             failure(error);
         }
     }];
-
+    
     return task;
+}
+
++ (NSMutableArray *) chunk:(NSArray *) items {
+    NSMutableArray *chunks = [NSMutableArray array];
+    
+    long remaining = [items count];
+    int i = 0;
+    
+    while(remaining) {
+        NSRange range = NSMakeRange(i, MIN(300, remaining));
+        NSArray *chunk = [items subarrayWithRange:range];
+        [chunks addObject:chunk];
+        remaining -= range.length;
+        i += range.length;
+    }
+    
+    return chunks;
+}
+
++ (BOOL) createObservation:(id) feature inContext:(NSManagedObjectContext *) localContext {
+    BOOL newData = NO;
+
+    NSNumber *eventId = [Server currentEventId];
+//    Event *event = [Event getEventById:eventId inContext:localContext];
+    NSUInteger count = 0;
+//    Observation *obsToNotifyAbout;
+    
+    NSString *remoteId = [Observation observationIdFromJson:feature];
+    State state = [Observation observationStateFromJson:feature];
+
+    Observation *existingObservation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@)", remoteId] inContext:localContext];
+    // if the Observation is archived, delete it
+    if (state == Archive && existingObservation) {
+        NSLog(@"Deleting archived observation with id: %@", remoteId);
+        [existingObservation MR_deleteEntity];
+        newData = YES;
+    } else if (state != Archive && !existingObservation) {
+        // if the observation doesn't exist, insert it
+        Observation *observation = [Observation MR_createEntityInContext:localContext];
+        observation.eventId = eventId;
+        [observation populateObjectFromJson:feature];
+        observation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", observation.userId] inContext:localContext];
+
+        NSDictionary *importantJson = [feature objectForKey:@"important"];
+        if (importantJson) {
+            ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
+            important.observation = observation;
+            observation.observationImportant = important;
+        }
+
+        for (NSString *userId in [feature objectForKey:@"favoriteUserIds"]) {
+            ObservationFavorite *favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
+            favorite.observation = observation;
+            [observation addFavoritesObject:favorite];
+        }
+
+        for (id attachmentJson in [feature objectForKey:@"attachments"]) {
+            Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
+            [observation addAttachmentsObject:attachment];
+        }
+
+        [observation setEventId:eventId];
+        count++;
+        
+//        if (!sendBulkNotification) {
+//            obsToNotifyAbout = observation;
+//        }
+        
+        newData = YES;
+    } else if (state != Archive && ![existingObservation.dirty boolValue]) {
+
+        // if the observation is not dirty, and has been updated, update it
+        NSDate *lastModified = [NSDate dateFromIso8601String:[feature objectForKey:@"lastModified"]];
+        if ([lastModified compare:existingObservation.lastModified] == NSOrderedSame) {
+            // If the last modified date for this observation has not changed no need to update.
+            return NO;
+        }
+
+        [existingObservation populateObjectFromJson:feature];
+        existingObservation.user = [User MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId = %@)", existingObservation.userId] inContext:localContext];
+
+        NSDictionary *importantJson = [feature objectForKey:@"important"];
+        if (importantJson) {
+            ObservationImportant *important = [ObservationImportant importantForJson:importantJson inManagedObjectContext:localContext];
+            important.observation = existingObservation;
+            existingObservation.observationImportant = important;
+        } else {
+            if (existingObservation.observationImportant) {
+                [existingObservation.observationImportant MR_deleteEntityInContext:localContext];
+                existingObservation.observationImportant = nil;
+            }
+        }
+
+        NSDictionary *favoritesMap = [existingObservation getFavoritesMap];
+        NSArray *favoriteUserIds = [feature objectForKey:@"favoriteUserIds"];
+        for (NSString *userId in favoriteUserIds) {
+            ObservationFavorite *favorite = [favoritesMap objectForKey:userId];
+            if (!favorite) {
+                favorite = [ObservationFavorite favoriteForUserId:userId inManagedObjectContext:localContext];
+                favorite.observation = existingObservation;
+                [existingObservation addFavoritesObject:favorite];
+            }
+        }
+
+        for (ObservationFavorite *favorite in [favoritesMap allValues]) {
+            if (![favoriteUserIds containsObject:favorite.userId]) {
+                [favorite MR_deleteEntityInContext:localContext];
+                [existingObservation removeFavoritesObject:favorite];
+            }
+        }
+
+        for (id attachmentJson in [feature objectForKey:@"attachments"]) {
+            NSString *remoteId = [attachmentJson objectForKey:@"id"];
+            BOOL attachmentFound = NO;
+            for (Attachment *attachment in existingObservation.attachments) {
+                if (remoteId != nil && [remoteId isEqualToString:attachment.remoteId]) {
+                    attachment.contentType = [attachmentJson objectForKey:@"contentType"];
+                    attachment.name = [attachmentJson objectForKey:@"name"];
+                    attachment.remotePath = [attachmentJson objectForKey:@"remotePath"];
+                    attachment.size = [attachmentJson objectForKey:@"size"];
+                    attachment.url = [attachmentJson objectForKey:@"url"];
+                    attachment.observation = existingObservation;
+                    attachmentFound = YES;
+                    break;
+                }
+            }
+
+            if (!attachmentFound) {
+                Attachment *newAttachment = [Attachment attachmentForJson:attachmentJson inContext:localContext];
+                [existingObservation addAttachmentsObject:newAttachment];
+            }
+        }
+        [existingObservation setEventId:eventId];
+        newData = YES;
+        NSLog(@"Updating object with id: %@", existingObservation.remoteId);
+    } else {
+        NSLog(@"Observation with id: %@ is dirty", remoteId);
+    }
+    
+    return newData;
 }
 
 - (void) shareObservationForViewController:(UIViewController *) viewController {
