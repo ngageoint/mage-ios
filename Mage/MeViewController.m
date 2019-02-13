@@ -319,14 +319,10 @@
     }
 }
 
-- (void) dealloc {
-    [self.mapDelegate cleanup];
-}
-
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    // TODO make sure callback stop when I am not on this view
+    [self.mapDelegate cleanup];
     self.observationDataStore.observations.delegate = nil;
 }
 

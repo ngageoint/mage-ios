@@ -133,10 +133,6 @@
     
     if (self.mapDelegate.observations != nil) {
         [self.mapDelegate updateObservationPredicates: [Observations getPredicatesForObservationsForMap]];
-        NSError *error;
-        if (![self.mapDelegate.observations.fetchedResultsController performFetch:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        }
     } else {
         Observations *observations = [Observations observationsForMap];
         [self.mapDelegate setObservations:observations];

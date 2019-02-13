@@ -277,7 +277,9 @@
     
     self.locationManager.delegate = nil;
     self.locationManager = nil;
+    self.observations.fetchedResultsController.delegate = nil;
     self.observations = nil;
+    self.locations.fetchedResultsController.delegate = nil;
     self.locations = nil;
 }
 
