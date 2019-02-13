@@ -18,7 +18,7 @@
 	if ((self = [super init])) {
 		_location = location;
 		
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:location.geometry];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[location getGeometry]];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [self setCoordinate:coordinate];
 		_timestamp = location.timestamp;
