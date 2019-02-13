@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Location (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) NSNumber *eventId;
-@property (nullable, nonatomic, retain) id geometry;
+@property (nullable, nonatomic, retain) NSData *geometryData;
 @property (nullable, nonatomic, retain) id properties;
 @property (nullable, nonatomic, retain) NSString *remoteId;
 @property (nullable, nonatomic, retain) NSDate *timestamp;

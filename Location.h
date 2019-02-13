@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Location : NSManagedObject
 
-@property (nonatomic, retain) SFGeometry* geometry;
+- (SFGeometry *) getGeometry;
+- (void) setGeometry: (SFGeometry *) geometry;
 
 -(CLLocation *) location;
 - (NSString *) sectionName;

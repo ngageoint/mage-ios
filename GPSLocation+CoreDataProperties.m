@@ -14,7 +14,7 @@
 @implementation GPSLocation (CoreDataProperties)
 
 @dynamic eventId;
-@dynamic geometry;
+@dynamic geometryData;
 @dynamic properties;
 @dynamic timestamp;
 

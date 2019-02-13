@@ -9,10 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
+#import "SFGeometry.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GPSLocation : NSManagedObject
+
+- (SFGeometry *) getGeometry;
+- (void) setGeometry: (SFGeometry *) geometry;
 
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 + (NSArray *) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context;

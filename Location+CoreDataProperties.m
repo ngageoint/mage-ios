@@ -14,7 +14,7 @@
 @implementation Location (CoreDataProperties)
 
 @dynamic eventId;
-@dynamic geometry;
+@dynamic geometryData;
 @dynamic properties;
 @dynamic remoteId;
 @dynamic timestamp;

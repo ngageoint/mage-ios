@@ -14,9 +14,26 @@
 #import "Server.h"
 #import "SFPoint.h"
 #import "SFGeometryUtils.h"
+#import "GeometryUtility.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation GPSLocation
+
+- (SFGeometry *) getGeometry {
+    SFGeometry *geometry = nil;
+    if (self.geometryData != nil){
+        geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+    }
+    return geometry;
+}
+
+- (void) setGeometry: (SFGeometry *) geometry {
+    NSData *data = nil;
+    if (geometry != nil){
+        data = [GeometryUtility toGeometryDataFromGeometry:geometry];
+    }
+    [self setGeometryData:data];
+}
 
 + (GPSLocation *) gpsLocationForLocation:(CLLocation *) location inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
     UIDevice *device = [UIDevice currentDevice];
@@ -92,7 +109,7 @@
     MageSessionManager *manager = [MageSessionManager manager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
-        SFGeometry *point = location.geometry;
+        SFGeometry *point = [location getGeometry];
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:point];
         [parameters addObject:@{
                                 @"geometry": @{
