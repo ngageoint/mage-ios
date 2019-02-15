@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>timeFilterKey</key>
+	<integer>4</integer>
+	<key>locationtimeFilterKey</key>
+	<string>4</string>
 	<key>shape_screen_click_percentage</key>
 	<real>0.03</real>
 	<key>line_default_color</key>

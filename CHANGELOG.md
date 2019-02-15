@@ -3,7 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.8 (TBD)
+## 2.0.9 (TBD)
+
+## 2.0.8 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.8)
+
+##### Release Notes
+* Updated default observation and location filters to 'last month' from 'all'.
+
+##### Features
+* New mage sdk will keep UI up to date by pulling observation in chunks.
 
 ## 2.0.7 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.7)
 
