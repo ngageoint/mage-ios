@@ -72,6 +72,11 @@
         <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ObservationFavorite" inverseName="observation" inverseEntity="ObservationFavorite" syncable="YES"/>
         <relationship name="observationImportant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ObservationImportant" inverseName="observation" inverseEntity="ObservationImportant" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="observations" inverseEntity="User" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="remoteId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="ObservationFavorite" representedClassName="ObservationFavorite" syncable="YES">
         <attribute name="dirty" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
