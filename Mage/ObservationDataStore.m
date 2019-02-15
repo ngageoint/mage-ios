@@ -59,9 +59,8 @@
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
+        NSLog(@"Failed to perform fetch in the ObservationDataStore %@, %@", error, [error userInfo]);
+        return;
     }
     
     [self.tableView reloadData];

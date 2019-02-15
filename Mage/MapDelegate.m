@@ -301,9 +301,8 @@
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for locations %@, %@", error, [error userInfo]);
+        return;
     }
     
     [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
@@ -322,9 +321,8 @@
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
+        return;
     }
     
     __weak typeof(self) weakSelf = self;
@@ -333,9 +331,8 @@
         
         NSError *error;
         if (![weakSelf.observations.fetchedResultsController performFetch:&error]) {
-            // Update to handle the error appropriately.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            exit(-1);
+            NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
+            return;
         }
         
         if (weakSelf.hideObservations) {
@@ -369,9 +366,8 @@
     [self.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for new observation predeicates %@, %@", error, [error userInfo]);
+        return;
     }
     NSArray *observations = [self.observations.fetchedResultsController fetchedObjects];
     NSMutableArray *newObservations = [[NSMutableArray alloc] init];
@@ -397,9 +393,8 @@
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for new location predicates %@, %@", error, [error userInfo]);
+        return;
     }
     
     NSArray *locations = [self.locations.fetchedResultsController fetchedObjects];
