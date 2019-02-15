@@ -587,7 +587,9 @@ Event *_event;
                 [NotificationRequester observationPulled:obsToNotifyAbout];
             }
             
-            success();
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success();
+            });
          }];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error);
@@ -627,7 +629,7 @@ Event *_event;
     // if the Observation is archived, delete it
     if (state == Archive && existingObservation) {
         NSLog(@"Deleting archived observation with id: %@", remoteId);
-        [existingObservation MR_deleteEntity];
+        [existingObservation MR_deleteEntityInContext:localContext];
     } else if (state != Archive && !existingObservation) {
         // if the observation doesn't exist, insert it
         Observation *observation = [Observation MR_createEntityInContext:localContext];
