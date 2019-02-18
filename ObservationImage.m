@@ -10,7 +10,22 @@
 
 const CGFloat annotationScaleWidth = 35.0;
 
+@interface ObservationImage()
+
++ (NSCache *) imageCache;
+
+@end
+
 @implementation ObservationImage
+
++ (NSCache *) imageCache {
+    static NSCache *imageDictionary = nil;
+    if (imageDictionary == nil) {
+        imageDictionary = [[NSCache alloc] init];
+        imageDictionary.countLimit = 100;
+    }
+    return imageDictionary;
+}
 
 + (NSString *) imageNameForObservation:(Observation *) observation {
     if (!observation) return nil;
@@ -67,38 +82,20 @@ const CGFloat annotationScaleWidth = 35.0;
 
 + (UIImage *) imageForObservation:(Observation *) observation {
     NSString *imagePath = [ObservationImage imageNameForObservation:observation];
-    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    UIImage *image = [[ObservationImage imageCache] objectForKey:imagePath];
+    if (!image) {
+        image = [UIImage imageWithContentsOfFile:imagePath];
+        float scale = image.size.width / annotationScaleWidth;
+        
+        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
+        [[ObservationImage imageCache] setObject:scaledImage forKey:imagePath];
+        image = scaledImage;
+    }
     if (image == nil) {
         image = [UIImage imageNamed:@"defaultMarker"];
     }
     
     [image setAccessibilityIdentifier:imagePath];
-    
-    return image;
-}
-
-+ (UIImage *) imageForObservation:(Observation *) observation inMapView: (MKMapView *) mapView {
-    UIImage *image = [self imageForObservation:observation];
-    
-    if (mapView != nil && image != nil) {
-        float scale = image.size.width / annotationScaleWidth;
-        
-        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
-        return scaledImage;
-    }
-    
-    return image;
-}
-
-+ (UIImage *) scaledImageForObservation: (Observation *) observation {
-    UIImage *image = [self imageForObservation:observation];
-    
-    if (image != nil) {
-        float scale = image.size.width / annotationScaleWidth;
-        
-        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
-        return scaledImage;
-    }
     
     return image;
 }
