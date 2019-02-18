@@ -569,10 +569,13 @@ Event *_event;
                     NSLog(@"Error saving observations: %@", error);
                 }
                 
-                [rootSavingContext save:&error];
-                if (error) {
-                    NSLog(@"Error saving observations: %@", error);
-                }
+                [rootSavingContext performBlock:^{
+                    NSError *error = nil;
+                    [rootSavingContext save:&error];
+                    if (error) {
+                        NSLog(@"Error saving observations: %@", error);
+                    }
+                }];
                 
                 [localContext reset];
                 NSLog(@"Saved chunk %lu", (unsigned long)[chunks count]);
