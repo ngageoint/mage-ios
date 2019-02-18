@@ -122,7 +122,7 @@
     } else if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
         if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
             SFGeometry *geometry = [self.observation getGeometry];
-            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage scaledImageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController];
+            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage imageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController];
             [self.childCoordinators addObject:editCoordinator];
             [editCoordinator start];
         } else {
