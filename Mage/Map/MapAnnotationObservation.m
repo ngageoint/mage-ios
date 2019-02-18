@@ -10,7 +10,7 @@
 
 @interface MapAnnotationObservation ()
 
-@property (nonatomic, strong) ObservationAnnotation *annotation;
+@property (nonatomic, weak) ObservationAnnotation *annotation;
 
 @end
 
