@@ -273,8 +273,12 @@
         NSLog(@"Failed to remove observer from user defaults: %@", exception);
     }
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+    [[CacheOverlays getInstance] unregisterListener:self];
     
+    [self.mapObservations clear];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+
     self.locationManager.delegate = nil;
     self.locationManager = nil;
     self.observations.fetchedResultsController.delegate = nil;

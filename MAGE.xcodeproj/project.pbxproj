@@ -1160,34 +1160,34 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7481F0219A663B100E9C56D /* Edit */,
+				F75DD30D1A97AABD0007FA3F /* View */,
+				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
+				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
+				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
+				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
+				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
+				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
+				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
+				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
+				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
+				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
+				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
+				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
+				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
+				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
+				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
+				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */,
 				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */,
 				F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */,
 				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */,
-				F75DD30D1A97AABD0007FA3F /* View */,
-				F7481F0219A663B100E9C56D /* Edit */,
-				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
-				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
-				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
-				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
-				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
-				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
-				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
-				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
-				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
-				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
-				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
-				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
-				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
-				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
-				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
-				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
-				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
-				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
-				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
-				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
 				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
+				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
+				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
+				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
+				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1955,7 +1955,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

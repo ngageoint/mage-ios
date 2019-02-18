@@ -10,7 +10,7 @@
 @interface ObservationAnnotationView ()
 
 @property (nonatomic, weak) MKMapView *mapView;
-@property (nonatomic, strong) NSObject<AnnotationDragCallback> *dragCallback;
+@property (nonatomic, weak) NSObject<AnnotationDragCallback> *dragCallback;
 
 @end
 

@@ -48,4 +48,13 @@
     [self registerForThemeChanges];
 }
 
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
+
+    if (self.mapDelegate) {
+        [self.mapDelegate cleanup];
+        self.mapDelegate = nil;
+    }
+}
+
 @end
