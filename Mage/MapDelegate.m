@@ -1264,6 +1264,7 @@
     __weak typeof(self) weakSelf = self;
 
     for (Observation *observation in observations) {
+        if (!self.observations) return;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateObservation: observation withAnimation:NO];
         });
