@@ -59,6 +59,7 @@
     }
     
     self.observationDataStore.viewController = self;
+    [self.observationDataStore startFetchController];
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -88,8 +89,6 @@
     [self.view setNeedsLayout];
     
     [self setNavBarTitle];
-    
-    [self.observationDataStore startFetchController];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
