@@ -328,13 +328,6 @@
     __weak typeof(self) weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        
-        NSError *error;
-        if (![weakSelf.observations.fetchedResultsController performFetch:&error]) {
-            NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
-            return;
-        }
-        
         if (weakSelf.hideObservations) {
             [weakSelf updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
         } else {
