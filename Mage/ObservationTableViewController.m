@@ -61,35 +61,6 @@
     self.observationDataStore.viewController = self;
     [self.observationDataStore startFetchController];
     
-    self.childCoordinators = [[NSMutableArray alloc] init];
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    
-    [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
-    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
-                                                                forKey:NSForegroundColorAttributeName];
-    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh observations" attributes:attrsDictionary]];
-    
-    self.tableView.refreshControl = self.refreshControl;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 64;
-    
-    if ([self isForceTouchAvailable]) {
-        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-    }
-    
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    // iOS bug fix.
-    // For some reason the first view in a TabBarViewController when that TabBarViewController
-    // is the master view of a split view the toolbar will not attach to the status bar correctly.
-    // Forcing it to relayout seems to fix the issue.
-    [self.view setNeedsLayout];
-    
-    [self setNavBarTitle];
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults addObserver:self
                forKeyPath:kObservationTimeFilterKey
@@ -116,15 +87,46 @@
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
+    self.childCoordinators = [[NSMutableArray alloc] init];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    
+    [self.refreshControl addTarget:self action:@selector(refreshObservations) forControlEvents:UIControlEventValueChanged];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                forKey:NSForegroundColorAttributeName];
+    [self.refreshControl setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Pull to refresh observations" attributes:attrsDictionary]];
+    
+    self.tableView.refreshControl = self.refreshControl;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 64;
+    
+    if ([self isForceTouchAvailable]) {
+        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    }
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // iOS bug fix.
+    // For some reason the first view in a TabBarViewController when that TabBarViewController
+    // is the master view of a split view the toolbar will not attach to the status bar correctly.
+    // Forcing it to relayout seems to fix the issue.
+    [self.view setNeedsLayout];
+    
+    [self setNavBarTitle];
+    
     [self startUpdateTimer];
     
     [self registerForThemeChanges];
-
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    [self stopUpdateTimer];
+}
+
+- (void) dealloc {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
     [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
@@ -133,8 +135,6 @@
     [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
     
     self.observationDataStore.observations.delegate = nil;
-    
-    [self stopUpdateTimer];
 }
 
 - (BOOL)isForceTouchAvailable {
@@ -284,10 +284,10 @@
                        context:(void *)context {
     
     if ([keyPath isEqualToString:kObservationTimeFilterKey] || [keyPath isEqualToString:kObservationTimeFilterNumberKey] || [keyPath isEqualToString:kObservationTimeFilterUnitKey]) {
-        [self.observationDataStore startFetchController];
+        [self.observationDataStore updatePredicates];
         [self setNavBarTitle];
     } else if ([keyPath isEqualToString:kImportantFilterKey] || [keyPath isEqualToString:kFavortiesFilterKey]) {
-        [self.observationDataStore startFetchController];
+        [self.observationDataStore updatePredicates];
     }
 }
 
