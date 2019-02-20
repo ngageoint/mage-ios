@@ -65,27 +65,27 @@
     [defaults addObserver:self
                forKeyPath:kObservationTimeFilterKey
                   options:NSKeyValueObservingOptionNew
-                  context:NULL];
+                  context:nil];
     
     [defaults addObserver:self
                forKeyPath:kObservationTimeFilterNumberKey
                   options:NSKeyValueObservingOptionNew
-                  context:NULL];
+                  context:nil];
     
     [defaults addObserver:self
                forKeyPath:kObservationTimeFilterUnitKey
                   options:NSKeyValueObservingOptionNew
-                  context:NULL];
+                  context:nil];
     
     [defaults addObserver:self
                forKeyPath:kImportantFilterKey
                   options:NSKeyValueObservingOptionNew
-                  context:NULL];
+                  context:nil];
     
     [defaults addObserver:self
                forKeyPath:kFavortiesFilterKey
                   options:NSKeyValueObservingOptionNew
-                  context:NULL];
+                  context:nil];
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -127,13 +127,6 @@
 }
 
 - (void) dealloc {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
-    [defaults removeObserver:self forKeyPath:kImportantFilterKey];
-    [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
-    
     self.observationDataStore.observations.delegate = nil;
 }
 
