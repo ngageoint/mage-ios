@@ -51,7 +51,7 @@
     [navigationController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Set Defaults" style:UIBarButtonItemStyleDone target:self action:@selector(save)];
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(save)];
     self.formDefaultsController.navigationItem.leftBarButtonItem = cancelButton;
     self.formDefaultsController.navigationItem.rightBarButtonItem = saveButton;
     
@@ -60,9 +60,13 @@
 
 - (void)save {
     FormDefaults *formDefaults = [[FormDefaults alloc] initWithEventId:[self.event.remoteId integerValue] formId:[[self.form objectForKey:@"id"] integerValue]];
-    [formDefaults setDefaults:self.defaults];
     
-    // TODO delete from shared preferences if form defaults was cleared or reset.
+    // Compare server defaults with self.defaults.  If they are the same clear the defaults
+    if ([self.defaults isEqual:[self serverDefaults]]) {
+        [formDefaults clearDefaults];
+    } else {
+        [formDefaults setDefaults:self.defaults];
+    }
     
     [self.formDefaultsController.navigationController dismissViewControllerAnimated:YES completion:nil];
     [self.delegate formDefaultsComplete:self];

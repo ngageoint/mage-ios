@@ -17,7 +17,6 @@
 @implementation EventInformationController
 
 static const NSInteger FORMS_SECTION = 0;
-static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
 
 - (instancetype) init {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -72,14 +71,10 @@ static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FORM_CELL_REUSE_ID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FORM_CELL_REUSE_ID];
-    }
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
     NSDictionary* form = [self.event.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form valueForKey:@"name"];
-    cell.accessoryType = UITableViewCellAccessoryDetailButton;
     cell.tintColor = [UIColor brand];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.backgroundColor = [UIColor background];
