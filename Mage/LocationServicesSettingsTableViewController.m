@@ -36,8 +36,6 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.locationServicesEnabled = [[defaults objectForKey:kReportLocationKey] boolValue];
     
@@ -52,6 +50,8 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+
     [self registerForThemeChanges];
 }
 
@@ -67,10 +67,6 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.tableView.backgroundColor = [UIColor tableBackground];
     
     [self.tableView reloadData];

@@ -27,8 +27,8 @@ static  NSString *THEME_CELL_REUSE_ID = @"THEME_CELL";
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+
     [self registerForThemeChanges];
 }
 

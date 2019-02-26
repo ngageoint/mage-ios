@@ -2,7 +2,6 @@
 //  MageRootViewController.m
 //  Mage
 //
-//
 
 #import "MageRootViewController.h"
 #import "Mage.h"

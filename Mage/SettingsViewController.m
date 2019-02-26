@@ -22,8 +22,9 @@
 #import "Server.h"
 #import "AppDelegate.h"
 
-@interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate>
+@interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @end
 
@@ -48,16 +49,16 @@
     [super viewDidLoad];
     
     [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
-    self.delegate = self;
     
-    if (self.collapsed) {
-        NSLog(@"yp");
-    }
+    self.delegate = self;
     
     if (self.dismissable) {
         UINavigationController *masterController = [self.viewControllers firstObject];
         masterController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
     }
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userDefaultsChanged:)
@@ -153,7 +154,7 @@
         }
         case kChangePassword: {
             ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES];
-            [self showDetailViewController:viewController sender:nil];
+            [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
         case kLogout: {
@@ -254,6 +255,13 @@
 - (void) userDefaultsChanged: (NSNotification *) notification {
     [self.settingsTableViewController.dataSource reloadData];
     [self.settingsTableViewController.tableView reloadData];
+}
+
+# pragma mark - CLLocationManager delegate
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self.settingsTableViewController.dataSource reloadData];
+    [self.settingsTableViewController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

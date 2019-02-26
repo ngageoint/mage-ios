@@ -227,6 +227,14 @@ static const NSInteger LEGAL_SECTION = 7;
 
 - (NSDictionary *) servicesSection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *locationServicesLabel = nil;
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        locationServicesLabel = [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off";
+    } else {
+        locationServicesLabel =  @"Disabled";
+    }
 
     return [@{
       @"header": @"Services",
@@ -236,7 +244,7 @@ static const NSInteger LEGAL_SECTION = 7;
                      @"image": @"location_tracking_on",
                      @"textLabel": @"Location Services",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
-                     @"detailTextLabel": [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off"
+                     @"detailTextLabel": locationServicesLabel
                      },
                  @{
                      @"type": [NSNumber numberWithInteger:kDataFetching],

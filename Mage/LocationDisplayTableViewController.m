@@ -13,9 +13,7 @@
 #import "DisplaySettingsHeader.h"
 
 @interface LocationDisplayTableViewController ()
-
 @property (assign, nonatomic) BOOL showMGRS;
-
 @end
 
 @implementation LocationDisplayTableViewController
@@ -27,8 +25,9 @@ static NSInteger MGRS_CELL_ROW = 1;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    
+
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+
     DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
     header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS." uppercaseString];
     self.tableView.tableHeaderView = header;

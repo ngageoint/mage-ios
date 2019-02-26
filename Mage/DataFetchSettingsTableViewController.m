@@ -29,12 +29,8 @@
 static NSInteger USER_FETCH_CELL_ROW = 0;
 static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
 
-
-
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.fetchEnabled = [[defaults objectForKey:@"dataFetchEnabled"] boolValue];
@@ -52,6 +48,8 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     [self registerForThemeChanges];
 }

@@ -26,7 +26,8 @@ static NSInteger GMT_TIME_CELL_ROW = 1;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.gmtTime = [defaults boolForKey:TIME_DISPLAY_USER_DEFAULTS_KEY];

@@ -6,10 +6,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ValuePickerTableViewController.h"
-#import <CoreLocation/CoreLocation.h>
 #import "SettingsDataSource.h"
 
-@interface SettingsTableViewController : UITableViewController<CLLocationManagerDelegate>
+@interface SettingsTableViewController : UITableViewController
 
 @property (strong, nonatomic) SettingsDataSource *dataSource;
 
