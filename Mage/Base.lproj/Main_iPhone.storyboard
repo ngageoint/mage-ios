@@ -926,7 +926,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="BiB-9C-5wL"/>
+                    <tabBarItem key="tabBarItem" tag="4" systemItem="more" id="BiB-9C-5wL"/>
                     <navigationItem key="navigationItem" title="Settings" id="ylx-zX-Yzd"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nee-LE-ufC" userLabel="First Responder" sceneMemberID="firstResponder"/>

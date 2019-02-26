@@ -202,19 +202,11 @@
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        UIStoryboard *ipadStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
-        UIViewController *vc = [ipadStoryboard instantiateInitialViewController];
-        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentViewController:vc animated:YES completion:NULL];
-    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        UIViewController *vc = [iphoneStoryboard instantiateInitialViewController];
-        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentViewController:vc animated:NO completion:^{
-            NSLog(@"presented iphone storyboard");
-        }];
-    }
+    NSString *storyboardName = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? @"Main_iPad" : @"Main_iPhone";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+    UIViewController *initialViewController = [storyboard instantiateInitialViewController];
+    initialViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:initialViewController animated:YES completion:NULL];
 }
 
 - (void) onLogout {
