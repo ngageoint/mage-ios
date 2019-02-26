@@ -15,7 +15,7 @@
 @implementation ObservationEditTextFieldTableViewCell
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
     
     self.textField.textColor = [UIColor primaryText];
     self.textField.selectedLineColor = [UIColor brand];

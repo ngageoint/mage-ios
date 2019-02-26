@@ -8,8 +8,10 @@
 #import "LocationService.h"
 #import "ObservationTableHeaderView.h"
 #import "Theme+UIResponder.h"
+#import "LocationServicesHeaderView.h"
+#import "RightDetailSubtitleTableViewCell.h"
 
-@interface LocationServicesSettingsTableViewController ()
+@interface LocationServicesSettingsTableViewController ()<LocationServicesDelegate>
 
 @property (weak, nonatomic) IBOutlet UISwitch *reportLocationSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
@@ -22,83 +24,72 @@
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 
+@property (assign, nonatomic) BOOL locationServicesEnabled;
+
 @end
 
 @implementation LocationServicesSettingsTableViewController
 
+static NSInteger TIME_INTERVAL_CELL_ROW = 0;
+static NSInteger GPS_DISTANCE_CELL_ROW = 1;
+
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.locationServicesEnabled = [[defaults objectForKey:kReportLocationKey] boolValue];
+    
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+
+    [self registerForThemeChanges];
+}
+
+- (void) setupHeader {
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    if (authorizationStatus == kCLAuthorizationStatusDenied) {
+        LocationServicesHeaderView *header = [[NSBundle mainBundle] loadNibNamed:@"LocationServicesHeader" owner:self options:nil][0];
+        self.tableView.tableHeaderView = header;
+        header.delegate = self;
+    } else {
+        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
+    }
+}
+
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
-    self.reportLocationSwitch.onTintColor = [UIColor themedButton];
-    self.gpsSensitivityLabel.textColor = [UIColor primaryText];
-    self.userReportingFrequencyLabel.textColor = [UIColor primaryText];
-    self.reportLocationlabel.textColor = [UIColor primaryText];
-    self.reportLocationDescription.textColor = [UIColor secondaryText];
-    self.gpsDistanceLabel.textColor = [UIColor primaryText];
-    self.gpsDistanceDescription.textColor = [UIColor secondaryText];
-    self.timeIntervalLabel.textColor = [UIColor primaryText];
-    self.timeIntervalDescription.textColor = [UIColor secondaryText];
     
     [self.tableView reloadData];
 }
 
-- (IBAction) reportLocationChanged:(id)sender {
-    BOOL isOn = [sender isOn];
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:2];
+- (void) reportLocationChanged:(id)sender {
+    BOOL on = [sender isOn];
+    self.locationServicesEnabled = on;
+    NSIndexSet *sections = [NSIndexSet indexSetWithIndex:1];
 
-    if (isOn) {
-        [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+    if (on) {
+        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
     } else {
-        [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
     }
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [defaults setBool:isOn forKey:kReportLocationKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject: on ? @"YES" : @"NO" forKey:kReportLocationKey];
     [defaults synchronize];
 }
 
-
-- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    
-    if (section != 0) return;
-
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerClicked:)];
-    [view addGestureRecognizer:tap];
-}
-
-- (void) headerClicked: (UIGestureRecognizer *) sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    if (@available(iOS 11.0, *)) {
-        [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    } else {
-        // Fallback on earlier versions
-    }
-    
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [_reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
-    
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
-    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
-    
-    [self registerForThemeChanges];
-}
-
-- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey
-{
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
     NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
@@ -112,83 +103,109 @@
             break;
         }
     }
-    
-}
-
-- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor background];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        return [_reportLocationSwitch isOn] ? 3 : 2;
+        return self.locationServicesEnabled ? 2 : 1;
     }
     
-    return 1;
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
-        return CGFLOAT_MIN;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return section == 0 ? 1 : 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        cell.textLabel.text =  @"Report Location";
+        cell.textLabel.textColor = [UIColor primaryText];
+        cell.backgroundColor = [UIColor background];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UISwitch *toggle = [[UISwitch alloc] init];
+        toggle.onTintColor = [UIColor themedButton];
+        cell.accessoryView = toggle;
+        
+        [toggle setOn:self.locationServicesEnabled animated:NO];
+        [toggle addTarget:self action:@selector(reportLocationChanged:) forControlEvents:UIControlEventValueChanged];
+        
+        return cell;
+    } else {
+        RightDetailSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rightDetailSubtitleCell"];
+        
+        if (indexPath.row == TIME_INTERVAL_CELL_ROW) {
+            cell.title.text = @"Time Interval";
+            cell.subtitle.text = @"Minimum time interval between location reports to the server. Smaller intervals will report your location to the server more often.";
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
+        } else {
+            cell.title.text = @"GPS Distance Filter";
+            cell.subtitle.text = @"Minimum distance between location updates. Smaller distances will give a more precise location at the cost of battery drain.";
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"gpsSensitivities"];
+        }
+        
+        cell.title.textColor = [UIColor primaryText];
+        cell.subtitle.textColor = [UIColor secondaryText];
+        cell.detail.textColor = [UIColor primaryText];
+        cell.backgroundColor = [UIColor background];
+        
+        return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return;
     }
     
-    return 45.0;
-}
-
--(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && (authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
-        return CGFLOAT_MIN;
-    }
+    NSString *key = indexPath.row == TIME_INTERVAL_CELL_ROW ? @"userReporting" : @"gpsSensitivities";
     
-    return UITableViewAutomaticDimension;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
+    
+    ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+    
+    viewController.title = [fetchPreferences valueForKey:@"title"];
+    viewController.section = [fetchPreferences valueForKey:@"section"];
+    viewController.labels = [fetchPreferences valueForKey:@"labels"];
+    viewController.values = [fetchPreferences valueForKey:@"values"];
+    viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
+    [self.navigationController pushViewController:viewController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger) section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
-        return [[UIView alloc] initWithFrame:CGRectZero];
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return @"Location Time/Distance Sensitivity";
     }
     
     return nil;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
-        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
-        tableViewHeaderFooterView.textLabel.textColor  = [UIColor brand];
-    }
-}
-
--(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (section == 0 && authorizationStatus != kCLAuthorizationStatusDenied) {
-        return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-    
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([segue.identifier hasPrefix:@"value_"]) {
-        ValuePickerTableViewController *vc = [segue destinationViewController];
-        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        vc.title = [valueDictionary valueForKey:@"title"];
-        vc.section = [valueDictionary valueForKey:@"section"];
-        vc.labels = [valueDictionary valueForKey:@"labels"];
-        vc.values = [valueDictionary valueForKey:@"values"];
-        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = [UIColor brand];
     }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self setupHeader];
+    
     [self.tableView reloadData];
+}
+
+- (void)openSettingsTapped {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
 }
 
 @end

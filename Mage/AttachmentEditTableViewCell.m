@@ -17,7 +17,7 @@
 @implementation AttachmentEditTableViewCell
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
 }
 
 - (void) didMoveToSuperview {

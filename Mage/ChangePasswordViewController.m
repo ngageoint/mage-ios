@@ -106,7 +106,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+        
     [self registerForThemeChanges];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];

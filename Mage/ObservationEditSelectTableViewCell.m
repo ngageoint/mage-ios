@@ -16,7 +16,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor dialog];
+    self.backgroundColor = [UIColor background];
 
     self.labelField.textColor = [UIColor primaryText];
 

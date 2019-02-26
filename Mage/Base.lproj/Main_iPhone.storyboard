@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TUi-FW-u5I">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TUi-FW-u5I">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -575,7 +575,7 @@
                         <segue destination="BEj-Ik-6TY" kind="relationship" relationship="viewControllers" id="CyT-sR-JTk"/>
                         <segue destination="ebu-M3-ht6" kind="relationship" relationship="viewControllers" id="sMb-wV-Wec"/>
                         <segue destination="H0M-W5-7fi" kind="relationship" relationship="viewControllers" id="ycv-U6-tl1"/>
-                        <segue destination="kRd-8k-rNE" kind="relationship" relationship="viewControllers" id="hs4-MG-jIf"/>
+                        <segue destination="ZVa-Of-7Ih" kind="relationship" relationship="viewControllers" id="mbQ-Lf-rb6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Air-Ze-nyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -615,7 +615,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="GCl-vQ-1KG">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="GCl-vQ-1KG">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="316"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -665,10 +665,10 @@
                                     </connections>
                                 </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dnM-7x-Mb9">
-                                    <rect key="frame" x="8" y="202" width="359" height="114"/>
+                                    <rect key="frame" x="8" y="202" width="359" height="1"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firstname Lastname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tdu-jV-iDi">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="24"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="1"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="24" id="LbD-cn-x7I"/>
                                             </constraints>
@@ -677,7 +677,7 @@
                                             <size key="shadowOffset" width="0.0" height="0.0"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vW8-rj-QKy">
-                                            <rect key="frame" x="0.0" y="24" width="359" height="30"/>
+                                            <rect key="frame" x="0.0" y="1" width="359" height="0.0"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jvx-c4-YiY">
                                                     <rect key="frame" x="0.0" y="0.0" width="24" height="30"/>
@@ -712,7 +712,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zSp-be-95N">
-                                            <rect key="frame" x="0.0" y="54" width="359" height="30"/>
+                                            <rect key="frame" x="0.0" y="1" width="359" height="0.0"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PAM-gk-abO">
                                                     <rect key="frame" x="0.0" y="0.0" width="24" height="30"/>
@@ -747,7 +747,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRD-H0-3zd">
-                                            <rect key="frame" x="0.0" y="84" width="359" height="30"/>
+                                            <rect key="frame" x="0.0" y="1" width="359" height="0.0"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gG-qe-c9c">
                                                     <rect key="frame" x="0.0" y="0.0" width="24" height="30"/>
@@ -866,50 +866,6 @@
             </objects>
             <point key="canvasLocation" x="288.80000000000001" y="-542.87856071964018"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="dtr-6Q-SWZ">
-            <objects>
-                <viewController id="kRd-8k-rNE" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8jT-iq-RJ7"/>
-                        <viewControllerLayoutGuide type="bottom" id="fJQ-kB-pwy"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="y5z-Dp-8Tm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Isv-0X-LZm">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
-                                <connections>
-                                    <segue destination="aSL-AS-EHY" kind="embed" id="glB-h7-nhQ"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="fJQ-kB-pwy" firstAttribute="top" secondItem="Isv-0X-LZm" secondAttribute="bottom" id="Ixd-qd-UHF"/>
-                            <constraint firstAttribute="trailing" secondItem="Isv-0X-LZm" secondAttribute="trailing" id="KJe-cl-55y"/>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="leading" secondItem="y5z-Dp-8Tm" secondAttribute="leading" id="YtU-e5-tVT"/>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="top" secondItem="y5z-Dp-8Tm" secondAttribute="top" id="iL3-NY-5mF"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" tag="4" systemItem="more" id="XLz-PK-mAw"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fZI-Xr-TW6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4820" y="780.35982008995506"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="sx5-Uf-js3">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="settingsViewController" storyboardName="Settings" id="aSL-AS-EHY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="SVi-PY-6kz"/>
-                    <navigationItem key="navigationItem" id="UV0-mc-VH9"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uhd-Ko-tkF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4196.8000000000002" y="779.91004497751135"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="wnA-dQ-isd">
             <objects>
@@ -957,15 +913,35 @@
             </objects>
             <point key="canvasLocation" x="2212" y="-1555"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="p0S-hW-Wx4">
+            <objects>
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="ZVa-Of-7Ih" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="epO-g3-tyH"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Ss-er-0Jb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="t2g-Vd-WyW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" tag="4" systemItem="more" id="BiB-9C-5wL"/>
+                    <navigationItem key="navigationItem" title="Settings" id="ylx-zX-Yzd"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nee-LE-ufC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4820" y="534"/>
+        </scene>
     </scenes>
     <resources>
         <image name="layers" width="22" height="22"/>
         <image name="location_arrow_off" width="22" height="22"/>
-        <image name="location_tracking_off" width="24" height="24"/>
+        <image name="location_tracking_off" width="48" height="48"/>
         <image name="map" width="25" height="25"/>
-        <image name="me" width="24" height="24"/>
+        <image name="me" width="48" height="48"/>
         <image name="observations" width="24" height="24"/>
-        <image name="people" width="24" height="24"/>
+        <image name="people" width="48" height="48"/>
         <image name="portrait" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>

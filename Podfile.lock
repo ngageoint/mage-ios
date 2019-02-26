@@ -76,7 +76,7 @@ PODS:
     - sf-ios (~> 2.0.1)
   - sf-wkb-ios (2.0.1):
     - sf-ios (~> 2.0.1)
-  - SkyFloatingLabelTextField (3.5.1)
+  - SkyFloatingLabelTextField (3.6.0)
   - tiff-ios (1.1.1)
   - tuneup_js (1.2.3)
   - UIImage-Categories (0.0.1)
@@ -90,11 +90,11 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.0`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
-  - SkyFloatingLabelTextField (~> 3.4)
+  - SkyFloatingLabelTextField (~> 3.6.0)
   - tuneup_js
   - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
@@ -130,13 +130,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.0
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.0
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -151,7 +145,7 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
-  mage-ios-sdk: 6174a5ca3ed088742b904c4e71b8dada67e6e298
+  mage-ios-sdk: dadddcd00b70a72ec8343d31111b3c9003f8b272
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
@@ -161,12 +155,12 @@ SPEC CHECKSUMS:
   sf-ios: c438e385b7b4b430895e766d65601717dd69b35e
   sf-proj-ios: 692f9b74245079a22ea8f2302fce6fbd9d4f3355
   sf-wkb-ios: 06be3e6fe25791c4811021a5568b0f964b72223f
-  SkyFloatingLabelTextField: 4cbeece9c3aae97c6019d8fae511cb5b755874f7
+  SkyFloatingLabelTextField: 38164979b79512f9ff9288ad8acfc4bbf5d843e3
   tiff-ios: 825d103441e9b0114ed65faef295a0840f912711
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: bfa670e24b771f4ea4039d9f29a039082faa5be1
+PODFILE CHECKSUM: e742adc48b528ebc9488b15dcb7a49af42088d02
 
 COCOAPODS: 1.5.3
