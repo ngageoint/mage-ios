@@ -30,7 +30,7 @@ static NSInteger MGRS_CELL_ROW = 1;
     [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     
     DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
-    header.label.text = @"All locations in the app will be entered and displayed in either latitude, longitude or MGRS.";
+    header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS." uppercaseString];
     self.tableView.tableHeaderView = header;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

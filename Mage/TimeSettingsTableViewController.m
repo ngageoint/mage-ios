@@ -32,7 +32,7 @@ static NSInteger GMT_TIME_CELL_ROW = 1;
     self.gmtTime = [defaults boolForKey:TIME_DISPLAY_USER_DEFAULTS_KEY];
     
     DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
-    header.label.text = @"All times in the app will be entered and displayed in either the local time zone or GMT.";
+    header.label.text = [@"All times in the app will be entered and displayed in either the local time zone or GMT." uppercaseString];
     self.tableView.tableHeaderView = header;
     
     [self registerForThemeChanges];

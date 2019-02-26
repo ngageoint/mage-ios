@@ -14,7 +14,7 @@
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation andUser: (User *) user {
     if ((self = [super init])) {
         _gpsLocation = gpsLocation;
-        SFGeometry *geometry = (SFGeometry *)gpsLocation.geometry;
+        SFGeometry *geometry = [gpsLocation getGeometry];
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D location = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [self setCoordinate:location];

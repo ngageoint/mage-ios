@@ -55,7 +55,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
 }
 
 -(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
-    UIImage *image = [ObservationImage imageForObservation:self.observation inMapView:mapView];
+    UIImage *image = [ObservationImage imageForObservation:self.observation];
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
     
     if (annotationView == nil) {

@@ -9,6 +9,7 @@
 #import "ObservationTableHeaderView.h"
 #import "Theme+UIResponder.h"
 #import "LocationServicesHeaderView.h"
+#import "RightDetailSubtitleTableViewCell.h"
 
 @interface LocationServicesSettingsTableViewController ()<LocationServicesDelegate>
 
@@ -23,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 
+@property (assign, nonatomic) BOOL locationServicesEnabled;
+
 @end
 
 @implementation LocationServicesSettingsTableViewController
@@ -36,27 +39,20 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
     [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [self.reportLocationSwitch setOn:[[defaults objectForKey:kReportLocationKey] boolValue] animated:NO];
+    self.locationServicesEnabled = [[defaults objectForKey:kReportLocationKey] boolValue];
+    
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    
-    [self registerForThemeChanges];
 }
-
-//- (void) viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    
-//    [self setPreferenceDisplayLabel:self.userReportingFrequencyLabel forPreference:@"userReporting"];
-//    [self setPreferenceDisplayLabel:self.gpsSensitivityLabel forPreference:@"gpsSensitivities"];
-//    
-//    [self setupHeader];
-//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [self registerForThemeChanges];
 }
 
 - (void) setupHeader {
@@ -66,33 +62,38 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
         self.tableView.tableHeaderView = header;
         header.delegate = self;
     } else {
-//        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
+        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
     }
 }
 
 - (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.tableView.backgroundColor = [UIColor tableBackground];
     
     [self.tableView reloadData];
 }
 
-- (IBAction) reportLocationChanged:(id)sender {
-    BOOL isOn = [sender isOn];
+- (void) reportLocationChanged:(id)sender {
+    BOOL on = [sender isOn];
+    self.locationServicesEnabled = on;
     NSIndexSet *sections = [NSIndexSet indexSetWithIndex:1];
-    
-    if (isOn) {
+
+    if (on) {
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
     } else {
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
     }
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
-    [defaults setBool:isOn forKey:kReportLocationKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject: on ? @"YES" : @"NO" forKey:kReportLocationKey];
     [defaults synchronize];
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
     NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
@@ -106,21 +107,92 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
             break;
         }
     }
-    
 }
 
 #pragma mark - Table view data source
 
-- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor background];
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        return [self.reportLocationSwitch isOn] ? 2 : 1;
+        return self.locationServicesEnabled ? 2 : 1;
     }
     
     return 0;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return section == 0 ? 1 : 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        cell.textLabel.text =  @"Report Location";
+        cell.textLabel.textColor = [UIColor primaryText];
+        cell.backgroundColor = [UIColor background];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UISwitch *toggle = [[UISwitch alloc] init];
+        toggle.onTintColor = [UIColor themedButton];
+        cell.accessoryView = toggle;
+        
+        [toggle setOn:self.locationServicesEnabled animated:NO];
+        [toggle addTarget:self action:@selector(reportLocationChanged:) forControlEvents:UIControlEventValueChanged];
+        
+        return cell;
+    } else {
+        RightDetailSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rightDetailSubtitleCell"];
+        
+        if (indexPath.row == TIME_INTERVAL_CELL_ROW) {
+            cell.title.text = @"Time Interval";
+            cell.subtitle.text = @"Minimum time interval between location reports to the server. Smaller intervals will report your location to the server more often.";
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
+        } else {
+            cell.title.text = @"GPS Distance Filter";
+            cell.subtitle.text = @"Minimum distance between location updates. Smaller distances will give a more precise location at the cost of battery drain.";
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"gpsSensitivities"];
+        }
+        
+        cell.title.textColor = [UIColor primaryText];
+        cell.subtitle.textColor = [UIColor secondaryText];
+        cell.detail.textColor = [UIColor primaryText];
+        cell.backgroundColor = [UIColor background];
+        
+        return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return;
+    }
+    
+    NSString *key = indexPath.row == TIME_INTERVAL_CELL_ROW ? @"userReporting" : @"gpsSensitivities";
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
+    
+    ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+    
+    viewController.title = [fetchPreferences valueForKey:@"title"];
+    viewController.section = [fetchPreferences valueForKey:@"section"];
+    viewController.labels = [fetchPreferences valueForKey:@"labels"];
+    viewController.values = [fetchPreferences valueForKey:@"values"];
+    viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
+    [self.navigationController pushViewController:viewController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return @"Location Time/Distance Sensitivity";
+    }
+    
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
@@ -130,34 +202,14 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([segue.identifier hasPrefix:@"value_"]) {
-        ValuePickerTableViewController *vc = [segue destinationViewController];
-        NSDictionary *valueDictionary = [defaults dictionaryForKey:[segue.identifier substringFromIndex:6]];
-        vc.title = [valueDictionary valueForKey:@"title"];
-        vc.section = [valueDictionary valueForKey:@"section"];
-        vc.labels = [valueDictionary valueForKey:@"labels"];
-        vc.values = [valueDictionary valueForKey:@"values"];
-        vc.preferenceKey = [valueDictionary valueForKey:@"preferenceKey"];
-    }
-}
-
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self setupHeader];
+    
     [self.tableView reloadData];
 }
 
 - (void)openSettingsTapped {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
 }
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45.0f;
-}
-
-//-(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-//    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
-//}
 
 @end

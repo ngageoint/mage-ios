@@ -29,11 +29,7 @@
 static NSInteger USER_FETCH_CELL_ROW = 0;
 static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    
-    [self.tableView reloadData];
-}
+
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -43,18 +39,21 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.fetchEnabled = [[defaults objectForKey:@"dataFetchEnabled"] boolValue];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
-    
     self.tableView.estimatedRowHeight = 100;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.tableView.backgroundColor = [UIColor tableBackground];
     
-    [self registerForThemeChanges];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [self registerForThemeChanges];
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
@@ -86,7 +85,7 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
         [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
     
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject: on ? @"YES" : @"NO" forKey:@"dataFetchEnabled"];
     [defaults synchronize];
 }
@@ -107,6 +106,7 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
         cell.textLabel.text =  @"Data Fetching";
         cell.textLabel.textColor = [UIColor primaryText];
         cell.backgroundColor = [UIColor background];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         UISwitch *toggle = [[UISwitch alloc] init];
         toggle.onTintColor = [UIColor themedButton];

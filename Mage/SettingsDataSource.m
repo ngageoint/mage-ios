@@ -19,11 +19,10 @@
 
 @interface SettingsDataSource ()
 
-@property (assign, nonatomic) BOOL showDisclaimer;
 @property (assign, nonatomic) NSInteger versionCellSelectionCount;
 @property (strong, nonatomic) Event* event;
 @property (strong, nonatomic) NSArray<Event *>* recentEvents;
-@property (strong, nonatomic) NSArray* sections;
+@property (strong, nonatomic) NSMutableArray* sections;
 
 @end
 
@@ -65,80 +64,20 @@ static const NSInteger LEGAL_SECTION = 7;
     return self;
 }
 
-- (void) initDatasource {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL isLocalLogin = [[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]];
-    self.showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
-
-    NSMutableArray *sections = [[NSMutableArray alloc] initWithCapacity:self.sections.count];
-    
-    [sections setObject:@{
-                          @"header": @"Connection Status",
-                          @"footer": @"You are currently logged in offline. You are not receiving updates from, nor pushing your location or observations to the server. When you regain network connectivity, please log in again to reconnect to the server and work online.",
-                          @"rows": [NSNumber numberWithInt:isLocalLogin ? 1 : 0]
-                          }
-     atIndexedSubscript:CONNECTION_SECTION];
-    
-    [sections setObject:@{
-                          @"header": @"Services",
-                          @"rows": [NSNumber numberWithInt:2]
-                          }
-     atIndexedSubscript:SERVICES_SECION];
-    
-    [sections setObject:@{
-                          @"header": @"Event Information",
-                          @"rows": [NSNumber numberWithInteger:1]
-                          }
-     atIndexedSubscript:CURRENT_EVENT_SECTION];
-
-    [sections setObject:@{
-                          @"header": @"Change Event",
-                          @"rows": [NSNumber numberWithLong:self.recentEvents.count + 1]
-                          }
-     atIndexedSubscript:CHANGE_EVENT_SECTION];
-
-    [sections setObject:@{
-                          @"header": @"Display Settings",
-                          @"rows": [NSNumber numberWithInt:2]
-                          }
-     atIndexedSubscript:DISPLAY_SECTION];
-
-    [sections setObject:@{
-                          @"header": @"Settings",
-                          @"rows": [NSNumber numberWithInt:3]
-                          }
-     atIndexedSubscript:SETTINGS_SECTION];
-
-    [sections setObject:@{
-                          @"header": @"About",
-                          @"rows": [NSNumber numberWithInt:3]
-                          }
-     atIndexedSubscript:ABOUT_SECTION];
-
-    [sections setObject:@{
-                          @"header": @"Legal",
-                          @"rows": [NSNumber numberWithInt:self.showDisclaimer ? 2 : 1]
-                          }
-     atIndexedSubscript:LEGAL_SECTION];
-    
-    self.sections = sections;
-}
-
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
     return self.sections.count;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
-    return [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] integerValue];
+    return [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-
-    if (indexPath.section == ABOUT_SECTION && indexPath.row == 1) {
+    if (indexPath.section == ABOUT_SECTION && indexPath.row == 2) {
         self.versionCellSelectionCount++;
 
         if (self.versionCellSelectionCount == 5) {
+            [self initDatasource];
             [tableView reloadData];
         }
         
@@ -152,207 +91,54 @@ static const NSInteger LEGAL_SECTION = 7;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = nil;
-
-    switch ([indexPath section]) {
-        case CONNECTION_SECTION: {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"connectionCell" forIndexPath:indexPath];
-            cell.type = [NSNumber numberWithInteger:kConnection];
-            
-            UILabel *offlineLabel = [[UILabel alloc] init];
-            offlineLabel.font = [UIFont systemFontOfSize:14];
-            offlineLabel.textAlignment = NSTextAlignmentCenter;
-            offlineLabel.textColor = [UIColor whiteColor];
-            offlineLabel.backgroundColor = [UIColor orangeColor];
-            offlineLabel.text = @"!";
-            [offlineLabel sizeToFit];
-            // Adjust frame to be square for single digits or elliptical for numbers > 9
-            CGRect frame = offlineLabel.frame;
-            frame.size.height += (int)(0.4*14);
-            frame.size.width = frame.size.height;
-            offlineLabel.frame = frame;
-            
-            // Set radius and clip to bounds
-            offlineLabel.layer.cornerRadius = frame.size.height/2.0;
-            offlineLabel.clipsToBounds = true;
-            
-            // Show label in accessory view and remove disclosure
-            cell.accessoryView = offlineLabel;
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            
-            break;
-        }
-        case SERVICES_SECION: {
-            switch ([indexPath row]) {
-                case 0: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"locationServicesCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kLocationServices];
-
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    CLAuthorizationStatus authorizationStatus =[CLLocationManager authorizationStatus];
-                    if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
-                        cell.detailTextLabel.text = [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off";
-                    } else {
-                        cell.detailTextLabel.text = @"Disabled";
-                    }
-                    
-                    break;
-                }
-                case 1: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"dataFetchingCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kDataFetching];
-
-                    cell.textLabel.textColor = [UIColor primaryText];
-                    cell.detailTextLabel.textColor = [UIColor primaryText];
-
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    cell.detailTextLabel.text = [defaults boolForKey:@"dataFetchEnabled"] ? @"On" : @"Off";
-                    
-                    break;
-                }
-            }
-            
-            break;
-        }
-        case CURRENT_EVENT_SECTION: {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"currentEventCell" forIndexPath:indexPath];
-            cell.textLabel.textColor = [UIColor primaryText];
-            cell.textLabel.text = self.event.name;
-            cell.imageView.tintColor = [UIColor brightButton];
-            cell.type = [NSNumber numberWithInteger:kEventInfo];
-            cell.info = self.event;
-            
-            break;
-        }
-        case CHANGE_EVENT_SECTION: {
-            if (indexPath.row < self.recentEvents.count) {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"recentEventCell" forIndexPath:indexPath];
-                cell.textLabel.text = [self.recentEvents objectAtIndex:[indexPath row]].name;
-                cell.type = [NSNumber numberWithInteger:kChangeEvent];
-                cell.info = [self.recentEvents objectAtIndex:indexPath.row];
-            } else {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"moreEventsCell" forIndexPath:indexPath];
-                cell.type = [NSNumber numberWithInteger:kMoreEvents];
-            }
-            
-            break;
-        }
-        case DISPLAY_SECTION: {
-            switch ([indexPath row]) {
-                case 0: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"timeDisplayCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kTimeDisplay];
-
-                    if ([NSDate isDisplayGMT]) {
-                        cell.detailTextLabel.text = @"GMT Time";
-                    } else {
-                        cell.detailTextLabel.text = [NSString stringWithFormat:@"Local Time %@", [[NSTimeZone systemTimeZone] name]];
-                    }
-                    
-                    break;
-                }
-                case 1: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"locationDisplayCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kLocationDisplay];
-
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    cell.detailTextLabel.text = [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude";
-                    break;
-                }
-            }
-            
-            break;
-        }
-        case SETTINGS_SECTION: {
-            switch ([indexPath row]) {
-                case 0: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"themeCell" forIndexPath:indexPath];
-                    cell.detailTextLabel.text = [[[ThemeManager sharedManager] curentThemeDefinition] displayName];
-                    cell.type = [NSNumber numberWithInteger:kTheme];
-                    break;
-                }
-                case 1: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"changePasswordCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kChangePassword];
-                    break;
-                }
-                case 2: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell" forIndexPath:indexPath];
-                    cell.type = [NSNumber numberWithInteger:kLogout];
-                    break;
-                }
-            }
-            
-            break;
-        }
-        case ABOUT_SECTION: {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"aboutCell" forIndexPath:indexPath];
-            
-            switch ([indexPath row]) {
-                case 0: {
-                    [cell setUserInteractionEnabled:NO];
-                    
-                    cell.textLabel.text = @"Server URL";
-                    cell.detailTextLabel.text = [[MageServer baseURL] absoluteString];
-                    break;
-                }
-                case 1: {
-                    cell.textLabel.text = @"Server Version";
-                    
-                    NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-                    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-                    
-                    if (self.versionCellSelectionCount == 5) {
-                        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@)", versionString, buildString];
-                    } else {
-                        cell.detailTextLabel.text = versionString;
-                    }
-                    
-                    break;
-                }
-                case 2: {
-                    [cell setUserInteractionEnabled:NO];
-                    
-                    cell.textLabel.text = @"User";
-                    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-                    cell.detailTextLabel.text = user.name;
-                    
-                    break;
-                }
-            }
-            
-            break;
-        }
-        case LEGAL_SECTION: {
-            if ([indexPath row] == 0 && self.showDisclaimer) {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"disclaimerCell" forIndexPath:indexPath];
-                cell.type = [NSNumber numberWithInteger:kDisclaimer];
-            } else {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"attributionsCell" forIndexPath:indexPath];
-                cell.type = [NSNumber numberWithInteger:kAttributions];
-            }
-            
-            break;
-        }
-        default:
-            return nil;
-    }
     
+    NSDictionary *details = [[[self.sections objectAtIndex:indexPath.section] objectForKey:@"rows"] objectAtIndex:indexPath.row];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:[[details objectForKey:@"style"] integerValue] reuseIdentifier:nil];
     cell.backgroundColor = [UIColor background];
     cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.imageView.tintColor = [UIColor activeIcon];
+    
+    cell.type = [details objectForKey:@"type"];
+    cell.info = [details objectForKey:@"info"];
+
+    NSString *image = [details objectForKey:@"image"];
+    if (image) {
+        cell.imageView.image = [UIImage imageNamed:image];
+    }
+    
+    NSString *textLabel = [details objectForKey:@"textLabel"];
+    if (textLabel) {
+        cell.textLabel.text = textLabel;
+    }
+    
+    NSString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
+    if (detailTextLabel) {
+        cell.detailTextLabel.text = detailTextLabel;
+    }
+    
+    NSNumber *accessoryType = [details objectForKey:@"accessoryType"];
+    if (accessoryType) {
+        if ([accessoryType integerValue] == UITableViewCellAccessoryDisclosureIndicator && self.showDisclosureIndicator) {
+            cell.accessoryType = [accessoryType integerValue];
+        }
+    }
+    
+    UIView *accessoryView = [details objectForKey:@"accessoryView"];
+    if (accessoryView) {
+        cell.accessoryView = accessoryView;
+    }
     
     return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)sectionIndex {
-    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] integerValue];
+    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
     return rows > 0 ? [[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"header"] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] integerValue];
+    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
     id header = [[self.sections objectAtIndex:section] valueForKeyPath:@"header"];
     return rows > 0 && header != nil ? 45.0 : CGFLOAT_MIN;
 }
@@ -365,12 +151,12 @@ static const NSInteger LEGAL_SECTION = 7;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)sectionIndex {
-    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] integerValue];
+    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
     return rows > 0 ? [[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"footer"] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] integerValue];
+    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
     id footer = [[self.sections objectAtIndex:section] valueForKeyPath:@"footer"];
     return rows > 0 && footer != nil ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
@@ -380,6 +166,233 @@ static const NSInteger LEGAL_SECTION = 7;
         UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *) view;
         footer.textLabel.textColor = [UIColor brand];
     }
+}
+
+- (void) reloadData {
+    [self initDatasource];
+}
+
+- (void) initDatasource {
+    NSMutableArray *sections = [[NSMutableArray alloc] initWithCapacity:self.sections.count];
+    
+    [sections setObject:[self offlineSection] atIndexedSubscript:CONNECTION_SECTION];
+    [sections setObject:[self servicesSection] atIndexedSubscript:SERVICES_SECION];
+    [sections setObject:[self currentEventSection] atIndexedSubscript:CURRENT_EVENT_SECTION];
+    [sections setObject:[self changeEventSection] atIndexedSubscript:CHANGE_EVENT_SECTION];
+    [sections setObject:[self displaySection] atIndexedSubscript:DISPLAY_SECTION];
+    [sections setObject:[self setttingsSection] atIndexedSubscript:SETTINGS_SECTION];
+    [sections setObject:[self aboutSection] atIndexedSubscript:ABOUT_SECTION];
+    [sections setObject:[self legalSection] atIndexedSubscript:LEGAL_SECTION];
+    
+    self.sections = sections;
+}
+
+- (NSDictionary *) offlineSection {
+    UILabel *offlineLabel = [[UILabel alloc] init];
+    offlineLabel.font = [UIFont systemFontOfSize:14];
+    offlineLabel.textAlignment = NSTextAlignmentCenter;
+    offlineLabel.textColor = [UIColor whiteColor];
+    offlineLabel.backgroundColor = [UIColor orangeColor];
+    offlineLabel.text = @"!";
+    [offlineLabel sizeToFit];
+    
+    // Adjust frame to be square for single digits or elliptical for numbers > 9
+    CGRect frame = offlineLabel.frame;
+    frame.size.height += (int)(0.4*14);
+    frame.size.width = frame.size.height;
+    offlineLabel.frame = frame;
+    
+    // Set radius and clip to bounds
+    offlineLabel.layer.cornerRadius = frame.size.height/2.0;
+    offlineLabel.clipsToBounds = true;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL isLocalLogin = [[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]];
+    NSArray *connectionRows = isLocalLogin ? @[
+                                               @{
+                                                   @"type": [NSNumber numberWithInteger:kConnection],
+                                                   @"style": [NSNumber numberWithInteger:UITableViewCellStyleDefault],
+                                                   @"image": @"wifi_off",
+                                                   @"textLabel": @"Work Online",
+                                                   @"accessoryView": offlineLabel
+                                                   }
+                                               ] : @[];
+    
+    return [@{
+             @"header": @"Connection Status",
+             @"footer": @"You are currently logged in offline. You are not receiving updates from, nor pushing your location or observations to the server. When you regain network connectivity, please log in again to reconnect to the server and work online.",
+             @"rows": connectionRows
+             } mutableCopy];
+}
+
+- (NSDictionary *) servicesSection {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    return [@{
+      @"header": @"Services",
+      @"rows": @[@{
+                     @"type": [NSNumber numberWithInteger:kLocationServices],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                     @"image": @"location_tracking_on",
+                     @"textLabel": @"Location Services",
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
+                     @"detailTextLabel": [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off"
+                     },
+                 @{
+                     @"type": [NSNumber numberWithInteger:kDataFetching],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                     @"image": @"cached",
+                     @"textLabel": @"Data Fetching",
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
+                     @"detailTextLabel": [defaults boolForKey:@"dataFetchEnabled"] ? @"On" : @"Off"
+                     }]
+      } mutableCopy];
+}
+
+- (NSDictionary *) currentEventSection {
+    return [@{
+      @"header": @"Event Information",
+      @"rows": @[@{
+                     @"type": [NSNumber numberWithInteger:kEventInfo],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                     @"image": @"event_available",
+                     @"textLabel": self.event.name,
+                     @"info": self.event,
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     }]
+      } mutableCopy];
+}
+
+- (NSDictionary *) changeEventSection {
+    NSMutableArray *eventRows = [NSMutableArray array];
+    for (Event *event in self.recentEvents) {
+        [eventRows addObject:@{
+                               @"type": [NSNumber numberWithInteger:kChangeEvent],
+                               @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                               @"image": @"history",
+                               @"textLabel": event.name,
+                               @"info": event,
+                               @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                               }];
+    }
+    [eventRows addObject:@{
+                           @"type": [NSNumber numberWithInteger:kMoreEvents],
+                           @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                           @"image": @"event_note",
+                           @"textLabel": @"More Events",
+                           @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                           }];
+    
+    return [@{
+              @"header": @"Change Event",
+              @"rows": eventRows
+              } mutableCopy];
+}
+
+- (NSDictionary *) displaySection {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    return [@{
+        @"header": @"Display Settings",
+        @"rows": @[@{
+                       @"type": [NSNumber numberWithInteger:kTimeDisplay],
+                       @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                       @"image": @"access_time",
+                       @"textLabel": @"Time",
+                       @"detailTextLabel": [NSDate isDisplayGMT] ? @"GMT Time" : [NSString stringWithFormat:@"Local Time %@", [[NSTimeZone systemTimeZone] name]],
+                       @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                       },
+                   @{
+                       @"type": [NSNumber numberWithInteger:kLocationDisplay],
+                       @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                       @"image": @"observations",
+                       @"textLabel": @"Location",
+                       @"detailTextLabel": [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude",
+                       @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                       }]
+        
+        } mutableCopy];
+}
+
+- (NSDictionary *) setttingsSection {
+    return [@{
+      @"header": @"Settings",
+      @"rows": @[@{
+                     @"type": [NSNumber numberWithInteger:kTheme],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                     @"image": @"brightness_medium",
+                     @"textLabel": @"Theme",
+                     @"detailTextLabel": [[[ThemeManager sharedManager] curentThemeDefinition] displayName],
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     },
+                 @{
+                     @"type": [NSNumber numberWithInteger:kChangePassword],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                     @"image": @"lock",
+                     @"textLabel": @"Change Password",
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     },
+                 @{
+                     @"type": [NSNumber numberWithInteger:kLogout],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                     @"image": @"power",
+                     @"textLabel": @"Log Out"
+                     }]
+      
+      } mutableCopy];
+}
+
+- (NSDictionary *) aboutSection {
+    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    
+    return [@{
+              @"header": @"About",
+              @"rows": @[@{
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"textLabel": @"URL",
+                             @"detailTextLabel": [[MageServer baseURL] absoluteString]
+                             },
+                         @{
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"textLabel": @"User",
+                             @"detailTextLabel": user.name
+                             },
+                         @{
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"textLabel": @"Version",
+                             @"detailTextLabel": self.versionCellSelectionCount >= 5 ? [NSString stringWithFormat:@"%@ (%@)", versionString, buildString] : versionString
+                             }]
+              } mutableCopy];
+}
+
+- (NSDictionary *) legalSection {
+    NSMutableArray *legalRows = [NSMutableArray array];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL showDisclaimer = [defaults objectForKey:@"showDisclaimer"] != nil && [[defaults objectForKey:@"showDisclaimer"] boolValue];
+
+    if (showDisclaimer) {
+        [legalRows addObject:@{
+                               @"type": [NSNumber numberWithInteger:kDisclaimer],
+                               @"style": [NSNumber numberWithInteger:UITableViewCellStyleDefault],
+                               @"textLabel": @"Disclaimer",
+                               @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                               }];
+    }
+    
+    [legalRows addObject:@{
+                           @"type": [NSNumber numberWithInteger:kAttributions],
+                           @"style": [NSNumber numberWithInteger:UITableViewCellStyleDefault],
+                           @"textLabel": @"Attributions",
+                           @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                           }];
+    
+    return [@{
+              @"header": @"Legal",
+              @"rows": legalRows
+              } mutableCopy];
 }
 
 @end

@@ -575,7 +575,7 @@
                         <segue destination="BEj-Ik-6TY" kind="relationship" relationship="viewControllers" id="CyT-sR-JTk"/>
                         <segue destination="ebu-M3-ht6" kind="relationship" relationship="viewControllers" id="sMb-wV-Wec"/>
                         <segue destination="H0M-W5-7fi" kind="relationship" relationship="viewControllers" id="ycv-U6-tl1"/>
-                        <segue destination="kRd-8k-rNE" kind="relationship" relationship="viewControllers" id="hs4-MG-jIf"/>
+                        <segue destination="ZVa-Of-7Ih" kind="relationship" relationship="viewControllers" id="mbQ-Lf-rb6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Air-Ze-nyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -866,50 +866,6 @@
             </objects>
             <point key="canvasLocation" x="288.80000000000001" y="-542.87856071964018"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="dtr-6Q-SWZ">
-            <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="kRd-8k-rNE" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8jT-iq-RJ7"/>
-                        <viewControllerLayoutGuide type="bottom" id="fJQ-kB-pwy"/>
-                    </layoutGuides>
-                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="y5z-Dp-8Tm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <containerView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Isv-0X-LZm">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <connections>
-                                    <segue destination="aSL-AS-EHY" kind="embed" id="glB-h7-nhQ"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="width" secondItem="y5z-Dp-8Tm" secondAttribute="width" id="R5e-tv-w80"/>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="centerY" secondItem="y5z-Dp-8Tm" secondAttribute="centerY" id="SOt-hY-VrO"/>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="centerX" secondItem="y5z-Dp-8Tm" secondAttribute="centerX" id="td9-Rd-xOg"/>
-                            <constraint firstItem="Isv-0X-LZm" firstAttribute="height" secondItem="y5z-Dp-8Tm" secondAttribute="height" id="wjI-Kx-xmD"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" tag="4" systemItem="more" id="XLz-PK-mAw"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fZI-Xr-TW6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4820" y="780.35982008995506"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="sx5-Uf-js3">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="settingsViewController" storyboardName="Settings" id="aSL-AS-EHY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="SVi-PY-6kz"/>
-                    <navigationItem key="navigationItem" id="UV0-mc-VH9"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uhd-Ko-tkF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4196.8000000000002" y="779.91004497751135"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="wnA-dQ-isd">
             <objects>
@@ -957,6 +913,26 @@
             </objects>
             <point key="canvasLocation" x="2212" y="-1555"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="p0S-hW-Wx4">
+            <objects>
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="ZVa-Of-7Ih" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="epO-g3-tyH"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Ss-er-0Jb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="t2g-Vd-WyW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="more" id="BiB-9C-5wL"/>
+                    <navigationItem key="navigationItem" title="Settings" id="ylx-zX-Yzd"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nee-LE-ufC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4820" y="534"/>
+        </scene>
     </scenes>
     <resources>
         <image name="layers" width="22" height="22"/>
@@ -964,7 +940,7 @@
         <image name="location_tracking_off" width="48" height="48"/>
         <image name="map" width="25" height="25"/>
         <image name="me" width="48" height="48"/>
-        <image name="observations" width="48" height="48"/>
+        <image name="observations" width="24" height="24"/>
         <image name="people" width="48" height="48"/>
         <image name="portrait" width="100" height="100"/>
     </resources>

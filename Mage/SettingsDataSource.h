@@ -34,6 +34,9 @@ typedef NS_ENUM(NSUInteger, SettingType) {
 @interface SettingsDataSource : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
+@property (assign, nonatomic) BOOL showDisclosureIndicator;
+
+- (void) reloadData;
 
 @end
 

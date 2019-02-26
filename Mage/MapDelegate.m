@@ -273,11 +273,17 @@
         NSLog(@"Failed to remove observer from user defaults: %@", exception);
     }
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+    [[CacheOverlays getInstance] unregisterListener:self];
     
+    [self.mapObservations clear];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+
     self.locationManager.delegate = nil;
     self.locationManager = nil;
+    self.observations.fetchedResultsController.delegate = nil;
     self.observations = nil;
+    self.locations.fetchedResultsController.delegate = nil;
     self.locations = nil;
 }
 
@@ -299,9 +305,8 @@
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for locations %@, %@", error, [error userInfo]);
+        return;
     }
     
     [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
@@ -320,22 +325,13 @@
     
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
+        return;
     }
     
     __weak typeof(self) weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        
-        NSError *error;
-        if (![weakSelf.observations.fetchedResultsController performFetch:&error]) {
-            // Update to handle the error appropriately.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            exit(-1);
-        }
-        
         if (weakSelf.hideObservations) {
             [weakSelf updateObservations:[((Observations *)[Observations hideObservations]).fetchedResultsController fetchedObjects]];
         } else {
@@ -367,9 +363,8 @@
     [self.observations.fetchedResultsController.fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSError *error;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for new observation predeicates %@, %@", error, [error userInfo]);
+        return;
     }
     NSArray *observations = [self.observations.fetchedResultsController fetchedObjects];
     NSMutableArray *newObservations = [[NSMutableArray alloc] init];
@@ -395,9 +390,8 @@
     
     NSError *error;
     if (![self.locations.fetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);
+        NSLog(@"Failed to perform fetch in the MapDelegate for new location predicates %@, %@", error, [error userInfo]);
+        return;
     }
     
     NSArray *locations = [self.locations.fetchedResultsController fetchedObjects];
@@ -688,7 +682,7 @@
                 SFPProjection * projection = [contentsDao getProjection:contents];
                 
                 SFPProjectionTransform * transform = [[SFPProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
-                GPKGBoundingBox * boundingBox = [[GPKGBoundingBox alloc] initWithGeometryEnvelope:[transform transformWithGeometryEnvelope:[contentsBoundingBox buildEnvelope]]];
+                GPKGBoundingBox * boundingBox = [contentsBoundingBox transform:transform];
                 boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
                 
                 if(self.addedCacheBoundingBox == nil){
@@ -1267,6 +1261,7 @@
     __weak typeof(self) weakSelf = self;
 
     for (Observation *observation in observations) {
+        if (!self.observations) return;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateObservation: observation withAnimation:NO];
         });
@@ -1306,12 +1301,12 @@
         annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
-        SFGeometry * geometry = location.geometry;
+        SFGeometry * geometry = [location getGeometry];
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        SFGeometry * geometry = location.geometry;
+        SFGeometry * geometry = [location getGeometry];
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [annotation setCoordinate:coordinate];

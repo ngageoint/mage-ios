@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EventInformationController : UITableViewController
 
 @property (weak, nonatomic) id<EventInformationControllerDelegate> delegate;
-@property (weak, nonatomic) Event* event;
+@property (strong, nonatomic) Event* event;
 
 @end
 

@@ -17,7 +17,7 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.backgroundColor = [UIColor tableBackground];
+    self.backgroundColor = [UIColor orangeColor];
     self.openSettingsTapped.tintColor = [UIColor brand];
     self.settingsLabel.textColor = [UIColor brand];
 }

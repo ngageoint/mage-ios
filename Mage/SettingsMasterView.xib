@@ -11,17 +11,22 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewController title="Location Services" id="hQp-Nc-eoE" customClass="LocationServicesSettingsTableViewController">
-            <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="XWZ-mc-OQ3">
+        <tableViewController title="Settings" id="Wxd-iN-0Ig" customClass="SettingsTableViewController">
+            <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Wa4-df-pUV">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <userDefinedRuntimeAttributes>
+                    <userDefinedRuntimeAttribute type="rect" keyPath="contentInset">
+                        <rect key="value" x="0.0" y="0.0" width="20" height="0.0"/>
+                    </userDefinedRuntimeAttribute>
+                </userDefinedRuntimeAttributes>
                 <connections>
-                    <outlet property="dataSource" destination="hQp-Nc-eoE" id="FbO-6F-MgO"/>
-                    <outlet property="delegate" destination="hQp-Nc-eoE" id="odj-ZW-yun"/>
+                    <outlet property="dataSource" destination="Wxd-iN-0Ig" id="8HQ-aY-ChB"/>
+                    <outlet property="delegate" destination="Wxd-iN-0Ig" id="YHS-3J-VYW"/>
                 </connections>
             </tableView>
-            <point key="canvasLocation" x="234" y="158"/>
+            <point key="canvasLocation" x="530" y="-166"/>
         </tableViewController>
     </objects>
 </document>

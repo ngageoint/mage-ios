@@ -32,6 +32,9 @@
 		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */; };
 		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
+		2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1069DC221C9005009F661A /* SettingsCoordinator.m */; };
+		2F1069DF221C93DE009F661A /* SettingsMasterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069DE221C93DE009F661A /* SettingsMasterView.xib */; };
+		2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069E0221C9547009F661A /* SettingsDetailView.xib */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
 		2F12FF3B1A190C38003ECB8B /* OZZipFile+OfflineMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F12FF3A1A190C38003ECB8B /* OZZipFile+OfflineMap.m */; };
 		2F142430220A6B4D0070EB46 /* LocationServicesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */; };
@@ -47,7 +50,6 @@
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */; };
 		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
-		2F389C961DCD26C100F05C95 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F389C941DCD26C100F05C95 /* Settings.storyboard */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E1099220CA195001C9F12 /* AttributionCell.xib */; };
 		2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */; };
@@ -383,6 +385,10 @@
 		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate.h; sourceTree = "<group>"; };
 		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
 		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
+		2F1069DB221C9005009F661A /* SettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsCoordinator.h; sourceTree = "<group>"; };
+		2F1069DC221C9005009F661A /* SettingsCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsCoordinator.m; sourceTree = "<group>"; };
+		2F1069DE221C93DE009F661A /* SettingsMasterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsMasterView.xib; sourceTree = "<group>"; };
+		2F1069E0221C9547009F661A /* SettingsDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsDetailView.xib; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
 		2F12FF391A190C38003ECB8B /* OZZipFile+OfflineMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OZZipFile+OfflineMap.h"; sourceTree = "<group>"; };
@@ -410,7 +416,6 @@
 		2F32FAE31B474D47009603D3 /* ObservationContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationContainerViewController.m; sourceTree = "<group>"; };
 		2F3826AE1D9C252D007E0D75 /* ObservationImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantTableViewCell.h; sourceTree = "<group>"; };
 		2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportantTableViewCell.m; sourceTree = "<group>"; };
-		2F389C951DCD26C100F05C95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		2F4E1099220CA195001C9F12 /* AttributionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributionCell.xib; sourceTree = "<group>"; };
@@ -1236,6 +1241,8 @@
 				F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */,
 				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
+				2F1069DB221C9005009F661A /* SettingsCoordinator.h */,
+				2F1069DC221C9005009F661A /* SettingsCoordinator.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1245,32 +1252,32 @@
 			children = (
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
+				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
+				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
+				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
+				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
+				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
+				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
+				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
+				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
+				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
+				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
+				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
+				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
+				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
+				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
+				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
+				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */,
 				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */,
 				F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */,
 				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */,
-				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
-				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
-				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
-				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
-				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
-				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
-				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
-				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
-				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
-				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
-				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
-				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
-				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
-				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
-				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
-				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
-				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
-				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
-				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
-				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
 				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
+				F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */,
+				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
+				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
+				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1726,10 +1733,11 @@
 				2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
-				2F389C941DCD26C100F05C95 /* Settings.storyboard */,
 				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
 				2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */,
 				2F1E4172221227CB00F082B5 /* ValuePicker.xib */,
+				2F1069DE221C93DE009F661A /* SettingsMasterView.xib */,
+				2F1069E0221C9547009F661A /* SettingsDetailView.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1829,12 +1837,13 @@
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
 						DevelopmentTeam = ZL8G5D9G2H;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
@@ -1935,6 +1944,7 @@
 				F7DCCC271F46473800E4C616 /* AttachmentCell.xib in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */,
+				2F1069DF221C93DE009F661A /* SettingsMasterView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7C5C8CA1F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
@@ -1965,6 +1975,7 @@
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
 				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
+				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* OAuthLoginView.xib in Resources */,
 				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,
@@ -1972,7 +1983,6 @@
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
-				2F389C961DCD26C100F05C95 /* Settings.storyboard in Resources */,
 				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
 				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
 			);
@@ -2111,6 +2121,20 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2132,6 +2156,20 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model4To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model5To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model6To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model7To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assertions.js",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.js",
@@ -2360,6 +2398,7 @@
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
+				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
@@ -2396,14 +2435,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2F389C941DCD26C100F05C95 /* Settings.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2F389C951DCD26C100F05C95 /* Base */,
-			);
-			name = Settings.storyboard;
-			sourceTree = "<group>";
-		};
 		2FB41CDE1DC79436005C18F9 /* Filter.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2547,6 +2578,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2557,6 +2589,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2574,6 +2607,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2584,6 +2618,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

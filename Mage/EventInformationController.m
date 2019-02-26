@@ -9,6 +9,7 @@
 #import "EventInformationController.h"
 #import "EventInformationView.h"
 #import "UIColor+Mage.h"
+#import "Theme+UIResponder.h"
 
 @interface EventInformationController ()
 @end
@@ -28,6 +29,8 @@ static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
     
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
+    self.title = @"Event Information";
+    
     self.tableView.backgroundColor = [UIColor tableBackground];
     
     EventInformationView *header = [[NSBundle mainBundle] loadNibNamed:@"EventInformationView" owner:self options:nil][0];
@@ -35,6 +38,8 @@ static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
     header.descriptionLabel.hidden = [self.event.eventDescription length] == 0 ? YES : NO;
     header.descriptionLabel.text = self.event.eventDescription;
     self.tableView.tableHeaderView = header;
+    
+    [self registerForThemeChanges];
 }
 
 - (void) willMoveToParentViewController:(UIViewController *)parent {
@@ -54,6 +59,9 @@ static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
         [self.tableView layoutIfNeeded];
     }
 }
+- (void) themeDidChange:(MageTheme)theme {    
+    [self.tableView reloadData];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -71,7 +79,8 @@ static NSString *FORM_CELL_REUSE_ID = @"EVENT_FORM_CELL";
     
     NSDictionary* form = [self.event.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form valueForKey:@"name"];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryDetailButton;
+    cell.tintColor = [UIColor brand];
     cell.textLabel.textColor = [UIColor primaryText];
     cell.backgroundColor = [UIColor background];
     

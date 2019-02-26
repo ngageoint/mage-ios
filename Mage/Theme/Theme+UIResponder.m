@@ -54,13 +54,14 @@
 - (void)registerForThemeChanges {
     NSAssert([self respondsToSelector:@selector(themeDidChange:)], @"%@ must implement %@", NSStringFromClass(self.class), NSStringFromSelector(@selector(themeDidChange:)));
     
+
     __weak typeof(self) weakSelf = self;
     self.themeChangedNotifier = [[ThemeNotifier alloc] initWithName:kThemeChangedKey object:nil block:^(NSNotification *notification) {
         NSLog(@"Current theme: %ld", (long)TheCurrentTheme);
-        [weakSelf themeDidChange:TheCurrentTheme];
+        [weakSelf themeChanged];
     }];
     
-    [self themeDidChange:TheCurrentTheme];
+    [self themeChanged];
 }
 
 - (ThemeNotifier *)themeChangedNotifier {
@@ -69,6 +70,23 @@
 
 - (void)setThemeChangedNotifier:(ThemeNotifier *)themeChangedNotifier {
     objc_setAssociatedObject(self, @selector(themeChangedNotifier), themeChangedNotifier, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void) themeChanged {
+    [self navigationTheme];
+    [self themeDidChange:TheCurrentTheme];
+}
+
+- (void) navigationTheme {
+    if ([self respondsToSelector:@selector(navigationController)]) {
+        UINavigationController *navigationController = [self performSelector:@selector(navigationController)];
+        if (navigationController) {
+            navigationController.navigationBar.translucent = NO;
+            navigationController.navigationBar.barTintColor = [UIColor primary];
+            navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+            [navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]}];
+        }
+    }
 }
 
 @end

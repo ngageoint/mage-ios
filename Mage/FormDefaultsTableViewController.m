@@ -70,7 +70,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
-    self.tableView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
     [self.tableView reloadData];
 }
 

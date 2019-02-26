@@ -89,11 +89,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     
     [self.propertyTable setEstimatedRowHeight:44.0f];
     [self.propertyTable setRowHeight:UITableViewAutomaticDimension];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateUserDefaults:)
-                                                 name:NSUserDefaultsDidChangeNotification
-                                               object:nil];
     
     [self registerForThemeChanges];
 }
@@ -160,6 +155,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
     
     [self setupObservation];
     [[ObservationPushService singleton] addObservationPushDelegate:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateUserDefaults:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
@@ -172,6 +172,8 @@ static NSInteger const IMPORTANT_SECTION = 4;
     self.importantFetchedResultsController = nil;
 
     [[ObservationPushService singleton] removeObservationPushDelegate:self];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUserDefaultsDidChangeNotification object:nil];
 }
 
 - (void) setupNonPropertySections {

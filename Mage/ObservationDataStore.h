@@ -15,7 +15,7 @@
 @property (strong, nonatomic) Observations *observations;
 @property (strong, nonatomic) Event *event;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) id<ObservationSelectionDelegate> observationSelectionDelegate;
+@property (weak, nonatomic) id<ObservationSelectionDelegate> observationSelectionDelegate;
 @property (strong, nonatomic) UIViewController *viewController;
 
 - (Observation *) observationAtIndexPath: (NSIndexPath *)indexPath;

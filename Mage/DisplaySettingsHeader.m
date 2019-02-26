@@ -17,8 +17,8 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.label.textColor = [UIColor primaryText];
-    self.backgroundColor = [UIColor background];
+    self.label.textColor = [UIColor brand];
+    self.backgroundColor = [UIColor tableBackground];
 }
 
 @end

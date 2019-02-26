@@ -151,7 +151,7 @@
         NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
         if (lastLocation.count != 0) {
             GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[gpsLocation getGeometry]];
             self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
             [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
         }
@@ -160,7 +160,7 @@
     if (!self.userLastLocation) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
-            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] getGeometry]];
             self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         }
         [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
@@ -313,20 +313,16 @@
     NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
     [self.mapDelegate updateLocations: locations];
     if ([locations count]) {
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] geometry]];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] getGeometry]];
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
         [self zoomAndCenterMapOnLocation:location];
     }
 }
 
-- (void) dealloc {
-    [self.mapDelegate cleanup];
-}
-
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    // TODO make sure callback stop when I am not on this view
+    [self.mapDelegate cleanup];
     self.observationDataStore.observations.delegate = nil;
 }
 
