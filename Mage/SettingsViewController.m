@@ -77,8 +77,9 @@
             splitViewController.viewControllers = @[[splitViewController.viewControllers firstObject], navigationController];
         }
     } else {
-        UINavigationController *navigationContoller = [splitViewController.viewControllers lastObject];
-        [navigationContoller pushViewController:vc animated:YES];
+        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+        vc.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+        [navigationController pushViewController:vc animated:YES];
     }
     
     return YES;
@@ -138,6 +139,22 @@
         case kTimeDisplay: {
             TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
             [self showDetailViewController:viewController sender:nil];
+            break;
+        }
+        case kMediaPhoto:
+        case kMediaVideo: {
+            NSString *preferenceKey = setting == kMediaPhoto ? @"imageUploadSizes" : @"videoUploadQualities";
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSDictionary *fetchPreferences = [defaults dictionaryForKey:preferenceKey];
+            
+            ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+            viewController.title = [fetchPreferences valueForKey:@"title"];
+            viewController.section = [fetchPreferences valueForKey:@"section"];
+            viewController.labels = [fetchPreferences valueForKey:@"labels"];
+            viewController.values = [fetchPreferences valueForKey:@"values"];
+            viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
+            [self showDetailViewController:viewController sender:nil];
+            
             break;
         }
         case kEventInfo: {

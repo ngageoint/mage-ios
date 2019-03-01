@@ -17,8 +17,6 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selected = [defaults objectForKey:self.preferenceKey];
-    
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 }
 
 - (void) themeDidChange:(MageTheme)theme {
@@ -41,9 +39,8 @@
     cell.backgroundColor = [UIColor background];
     
     cell.textLabel.text = self.labels[indexPath.row];
-    cell.tag = [self.values[indexPath.row] integerValue];
     
-    if ([self.values[indexPath.row] unsignedLongLongValue] == [self.selected unsignedLongLongValue]) {
+    if ([self.selected isEqual:self.values[indexPath.row]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -53,11 +50,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    id value = [self.values objectAtIndex:indexPath.row];
+    
     self.selected = self.values[indexPath.row];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [defaults setObject:[NSNumber numberWithInteger:cell.tag] forKey:self.preferenceKey];
+    [defaults setObject:value forKey:self.preferenceKey];
     [defaults synchronize];
     
     [tableView reloadData];

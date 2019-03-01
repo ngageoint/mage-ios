@@ -49,8 +49,6 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
-    
     [self registerForThemeChanges];
 }
 

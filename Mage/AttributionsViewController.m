@@ -26,11 +26,6 @@
     
     [self registerForThemeChanges];
     
-//    [self.navigationController.navigationBar setPrefersLargeTitles:YES];
-//    self.navigationController.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAutomatic;
-    
-//    self.navigationItem.title = @"Attributions";
-
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];

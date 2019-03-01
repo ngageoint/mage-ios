@@ -40,6 +40,14 @@
 
 @implementation ObservationPropertiesEditCoordinator
 
+static const NSInteger kImageQualitySmall = 0;
+static const NSInteger kImageQualityMedium = 1;
+static const NSInteger kImageQualityLarge = 2;
+
+static const NSInteger kImageMaxDimensionSmall = 320;
+static const NSInteger kImageMaxDimensionMedium = 640;
+static const NSInteger kImageMaxDimensionLarge = 2048;
+
 - (instancetype) initWithObservation: (Observation *) observation  andNewObservation: (BOOL) newObservation andNavigationController:(UINavigationController *)navigationController andDelegate: (id<ObservationPropertiesEditDelegate>) delegate {
     self = [super init];
     if (!self) return nil;
@@ -312,17 +320,18 @@
     NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
     
     if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
-        NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
+        NSURL *videoUrl = (NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
         NSString *moviePath = [videoUrl path];
         
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
             UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
             [picker dismissViewControllerAnimated:YES completion:NULL];
             
+            NSString *videoQuality = [self videoUploadQuality];
             AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoUrl options:nil];
             NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
-            if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) {
-                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
+            if ([compatiblePresets containsObject:videoQuality]) {
+                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:videoQuality];
                 NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.mp4", [dateFormatter stringFromDate: [NSDate date]]]];
 
                 exportSession.outputURL = [NSURL fileURLWithPath:fileToWriteTo];
@@ -357,10 +366,12 @@
             }
         }
     } else {
+        // TODO Image quality options...
+        
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
         UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
         
-        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]]];
+        NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.jpeg", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];
         BOOL isDirectory;
         if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
@@ -375,7 +386,7 @@
                 NSLog(@"Error creating directory path: %@", [error localizedDescription]);
         }
         
-        NSData *imageData = UIImageJPEGRepresentation(chosenImage, 1.0f);
+        NSData *imageData = [self jpegFromImage:chosenImage withMetaData:info[UIImagePickerControllerMediaMetadata]];
         BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
         if (!success) {
             NSLog(@"Error: Could not write image to destination");
@@ -386,7 +397,7 @@
         NSMutableDictionary *attachmentJson = [NSMutableDictionary dictionary];
         [attachmentJson setValue:@"image/jpeg" forKey:@"contentType"];
         [attachmentJson setValue:fileToWriteTo forKey:@"localPath"];
-        [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.png", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
+        [attachmentJson setValue:[NSString stringWithFormat: @"MAGE_%@.jpeg", [dateFormatter stringFromDate: [NSDate date]]] forKey:@"name"];
         [attachmentJson setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
         
         Attachment *attachment = [Attachment attachmentForJson:attachmentJson inContext:self.observation.managedObjectContext];
@@ -443,5 +454,86 @@
     }];
 }
 
+- (NSString *) videoUploadQuality {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *videoDefaults = [defaults dictionaryForKey:@"videoUploadSizes"];
+    NSString *videoUploadQualityPreference = [defaults valueForKey:[videoDefaults valueForKey:@"preferenceKey"]];
+    NSString *videoQuality = AVAssetExportPresetHighestQuality;
+    if ([videoUploadQualityPreference isEqualToString:AVAssetExportPresetLowQuality]) {
+        videoQuality = AVAssetExportPresetLowQuality;
+    } else if ([videoUploadQualityPreference isEqualToString:AVAssetExportPresetMediumQuality]) {
+        videoQuality = AVAssetExportPresetMediumQuality;
+    }
+    
+    return videoQuality;
+}
+
+- (NSData *) jpegFromImage:(UIImage *) image withMetaData:(NSDictionary *) metadata {
+    UIImage *scaledImage = [self scaledImageWithImage:image];
+    NSData *imageData = UIImageJPEGRepresentation(scaledImage, 1.0f);
+    [self writeMetadataIntoImageData:imageData metadata:[metadata mutableCopy]];
+    
+    return imageData;
+}
+
+- (UIImage *) scaledImageWithImage:(UIImage *)image {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *imageDefaults = [defaults dictionaryForKey:@"imageUploadSizes"];
+    NSInteger imageUploadQuality = [[defaults valueForKey:[imageDefaults valueForKey:@"preferenceKey"]] integerValue];
+    
+    CGFloat largestDimension = MAX(image.size.width, image.size.height);
+    
+    CGSize size = CGSizeZero;
+    if (imageUploadQuality == kImageQualitySmall && largestDimension > kImageMaxDimensionSmall) {
+        CGFloat scale = kImageMaxDimensionSmall / largestDimension;
+        size = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    } else if (imageUploadQuality == kImageQualityMedium && largestDimension > kImageMaxDimensionMedium) {
+        CGFloat scale = kImageMaxDimensionMedium / largestDimension;
+        size = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    } else if (imageUploadQuality == kImageQualityLarge && largestDimension > kImageMaxDimensionLarge) {
+        CGFloat scale = kImageMaxDimensionLarge / largestDimension;
+        size = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    } else {
+        // original
+        return image;
+    }
+    
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.scale = 1.0;
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+    UIImage *newImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext*_Nonnull myContext) {
+        [image drawInRect:(CGRect) {.origin = CGPointZero, .size = size}];
+    }];
+    
+    return newImage;
+}
+
+- (NSData *) writeMetadataIntoImageData:(NSData *) imageData metadata:(NSMutableDictionary *) metadata {
+    // create an imagesourceref
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData, NULL);
+    
+    // this is the type of image (e.g., public.jpeg)
+    CFStringRef UTI = CGImageSourceGetType(source);
+    
+    // create a new data object and write the new image into it
+    NSMutableData *destinationData = [NSMutableData data];
+    CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destinationData, UTI, 1, NULL);
+    if (!destination) {
+        NSLog(@"Error: Could not create image destination");
+    }
+    
+    // add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+    CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef) metadata);
+    BOOL success = NO;
+    success = CGImageDestinationFinalize(destination);
+    if (!success) {
+        NSLog(@"Error: Could not create data from image destination");
+    }
+    
+    CFRelease(destination);
+    CFRelease(source);
+    
+    return destinationData;
+}
 
 @end

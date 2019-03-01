@@ -33,9 +33,10 @@ static const NSInteger SERVICES_SECION = 1;
 static const NSInteger CURRENT_EVENT_SECTION = 2;
 static const NSInteger CHANGE_EVENT_SECTION = 3;
 static const NSInteger DISPLAY_SECTION = 4;
-static const NSInteger SETTINGS_SECTION = 5;
-static const NSInteger ABOUT_SECTION = 6;
-static const NSInteger LEGAL_SECTION = 7;
+static const NSInteger MEDIA_SECTION = 5;
+static const NSInteger SETTINGS_SECTION = 6;
+static const NSInteger ABOUT_SECTION = 7;
+static const NSInteger LEGAL_SECTION = 8;
 
 - (instancetype) init {
     self = [super init];
@@ -180,6 +181,7 @@ static const NSInteger LEGAL_SECTION = 7;
     [sections setObject:[self currentEventSection] atIndexedSubscript:CURRENT_EVENT_SECTION];
     [sections setObject:[self changeEventSection] atIndexedSubscript:CHANGE_EVENT_SECTION];
     [sections setObject:[self displaySection] atIndexedSubscript:DISPLAY_SECTION];
+    [sections setObject:[self mediaSection] atIndexedSubscript:MEDIA_SECTION];
     [sections setObject:[self setttingsSection] atIndexedSubscript:SETTINGS_SECTION];
     [sections setObject:[self aboutSection] atIndexedSubscript:ABOUT_SECTION];
     [sections setObject:[self legalSection] atIndexedSubscript:LEGAL_SECTION];
@@ -321,6 +323,42 @@ static const NSInteger LEGAL_SECTION = 7;
         
         } mutableCopy];
 }
+
+- (NSDictionary *) mediaSection {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *imagePreferences = [defaults dictionaryForKey:@"imageUploadSizes"];
+    NSNumber *imagePreference = [defaults valueForKey:[imagePreferences valueForKey:@"preferenceKey"]];
+    NSInteger imagePreferenceIndex = [[imagePreferences objectForKey:@"values"] indexOfObject:imagePreference];
+    NSString *imagePrefereceLabel = [[imagePreferences objectForKey:@"labels"] objectAtIndex:imagePreferenceIndex];
+
+    NSDictionary *videoPreferences = [defaults dictionaryForKey:@"videoUploadQualities"];
+    NSNumber *videoPreference = [defaults valueForKey:[videoPreferences valueForKey:@"preferenceKey"]];
+    NSInteger videoPreferenceIndex = [[videoPreferences objectForKey:@"values"] indexOfObject:videoPreference];
+    NSString *videoPrefereceLabel = [[videoPreferences objectForKey:@"labels"] objectAtIndex:videoPreferenceIndex];
+    
+    return [@{
+              @"header": @"Media",
+              @"rows": @[@{
+                             @"type": [NSNumber numberWithInteger:kMediaPhoto],
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"image": @"photo",
+                             @"textLabel": @"Photo Upload Size",
+                             @"detailTextLabel": imagePrefereceLabel,
+                             @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                             },
+                         @{
+                             @"type": [NSNumber numberWithInteger:kMediaVideo],
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"image": @"movie",
+                             @"textLabel": @"Video Upload Quality",
+                             @"detailTextLabel": videoPrefereceLabel,
+                             @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                             }]
+              
+              } mutableCopy];
+}
+
 
 - (NSDictionary *) setttingsSection {
     return [@{

@@ -40,6 +40,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
+
     [self registerForThemeChanges];
 }
 

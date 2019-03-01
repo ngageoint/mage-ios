@@ -17,6 +17,8 @@ typedef NS_ENUM(NSUInteger, SettingType) {
     kDataFetching,
     kLocationDisplay,
     kTimeDisplay,
+    kMediaPhoto,
+    kMediaVideo,
     kEventInfo,
     kChangeEvent,
     kMoreEvents,
