@@ -12,6 +12,7 @@
 #import "Attachment.h"
 #import "ObservationEditTableViewController.h"
 #import "ObservationPropertiesEditCoordinator.h"
+#import "FormDefaults.h"
 
 @interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate>
 
@@ -163,10 +164,22 @@
     NSMutableArray *observationForms = [[newProperties objectForKey:@"forms"] mutableCopy];
     NSMutableDictionary *newForm = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[form objectForKey:@"id"], @"formId", nil];
     
-    // fill in defaults
+    FormDefaults *defaults = [[FormDefaults alloc] initWithEventId:[self.observation.eventId integerValue] formId:[[form objectForKey:@"id"] integerValue]];
+    NSDictionary *formDefaults = [defaults getDefaultsMap];
+    
     NSArray *fields = [form objectForKey:@"fields"];
     for (NSDictionary *field in fields) {
+        // grab the server default from the form fields value property
         id value = [field objectForKey:@"value"];
+        
+        // Override server default with user default, if any
+        id defaultField = [formDefaults objectForKey:[field objectForKey:@"id"]];
+        if (defaultField) {
+            id defaultValue = [defaultField objectForKey:@"value"];
+            if (defaultValue) {
+                value = defaultValue;
+            }
+        }
         
         if (value) {
             [newForm setObject:value forKey:[field objectForKey:@"name"]];

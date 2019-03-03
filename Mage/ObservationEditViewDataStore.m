@@ -30,7 +30,6 @@ static NSInteger const COMMON_SECTION = 1;
 @property (nonatomic, strong) NSArray *forms;
 @property (nonatomic, strong) NSArray *observationForms;
 @property (strong, nonatomic) NSMutableArray *formFields;
-@property (strong, nonatomic) NSDictionary *formDefaults;
 @property (nonatomic, strong) NSString *primaryField;
 @property (strong, nonatomic) id<ObservationEditFieldDelegate> delegate;
 @property (nonatomic) BOOL isNew;
@@ -48,10 +47,6 @@ static NSInteger const COMMON_SECTION = 1;
     _attachmentSelectionDelegate = attachmentDelegate;
     _editTable = tableView;
     _isNew = isNew;
-    
-    NSDictionary *form = [self.observation getPrimaryForm];
-    FormDefaults *defaults = [[FormDefaults alloc] initWithEventId:[observation.eventId integerValue] formId:[[form objectForKey:@"id"] integerValue]];
-    self.formDefaults = [defaults getDefaultsMap];
     
     return self;
 }
@@ -180,19 +175,8 @@ static NSInteger const COMMON_SECTION = 1;
 - (id) valueForIndexPath: (NSIndexPath *) indexPath {
     if ([indexPath section] > 1) {
         id field = [self fieldForIndexPath:indexPath];
-        // Get default from server form
-        id value = [[[self.observation.properties objectForKey:@"forms"] objectAtIndex:([indexPath section] - 2)] objectForKey:(NSString *)[field objectForKey:@"name"]];
-        
-        // Override server default with user default
-        id defaultField = [self.formDefaults objectForKey:[field objectForKey:@"id"]];
-        if (defaultField) {
-            id defaultValue = [defaultField objectForKey:@"value"];
-            if (defaultValue) {
-                value = defaultValue;
-            }
-        }
-
-        return value;
+        // Get field value from the observation
+        return [[[self.observation.properties objectForKey:@"forms"] objectAtIndex:([indexPath section] - 2)] objectForKey:(NSString *)[field objectForKey:@"name"]];
     } else if ([indexPath section] == COMMON_SECTION) {
         if ([indexPath row] == 0) {
             return [self.observation.properties objectForKey:@"timestamp"];
