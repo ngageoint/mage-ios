@@ -37,8 +37,7 @@ static NSString *FORM_DEFAULTS_FORMAT = @"EVENT_%ld_FORM_%ld";
         NSArray *fields = [form objectForKey:@"fields"];
         for (NSMutableDictionary *field in fields) {
             if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-                SFGeometry *geometry = [GeometryDeserializer parseGeometry:[field objectForKey:@"value"]];
-                [field setObject:geometry forKey:@"value"];
+                [self deserializeGeometryForField:field];
             }
         }
         
@@ -57,11 +56,7 @@ static NSString *FORM_DEFAULTS_FORMAT = @"EVENT_%ld_FORM_%ld";
         
         for (NSMutableDictionary *field in [form objectForKey:@"fields"]) {
             if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-                id value = [field objectForKey:@"value"];
-                if (value) {
-                    SFGeometry *geometry = [GeometryDeserializer parseGeometry:value];
-                    [field setObject:geometry forKey:@"value"];
-                }
+                [self deserializeGeometryForField:field];
             }
             
             [defaults setObject:field forKey:[field objectForKey:@"id"]];
@@ -76,11 +71,7 @@ static NSString *FORM_DEFAULTS_FORMAT = @"EVENT_%ld_FORM_%ld";
     NSArray *fields = [formDefaults objectForKey:@"fields"];
     for (NSMutableDictionary *field in fields) {
         if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
-            id value = [field objectForKey:@"value"];
-            if (value) {
-                NSDictionary *geometry = [GeometrySerializer serializeGeometry:value];
-                [field setObject:geometry forKey:@"value"];
-            }
+            [self serializeGeometryForField:field];
         }
     }
     
@@ -100,5 +91,22 @@ static NSString *FORM_DEFAULTS_FORMAT = @"EVENT_%ld_FORM_%ld";
 - (NSString *) formDefaultsKey {
     return [NSString stringWithFormat:FORM_DEFAULTS_FORMAT, self.eventId, self.formId];
 }
+
+- (void) deserializeGeometryForField:(NSMutableDictionary *) field {
+    id geometryJson = [field objectForKey:@"value"];
+    if (geometryJson) {
+        SFGeometry *geometry = [GeometryDeserializer parseGeometry:geometryJson];
+        [field setObject:geometry forKey:@"value"];
+    }
+}
+
+- (void) serializeGeometryForField:(NSMutableDictionary *) field {
+    id value = [field objectForKey:@"value"];
+    if (value) {
+        NSDictionary *geometryJson = [GeometrySerializer serializeGeometry:value];
+        [field setObject:geometryJson forKey:@"value"];
+    }
+}
+
 
 @end

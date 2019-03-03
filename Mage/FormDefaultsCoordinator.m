@@ -133,12 +133,10 @@
 }
 
 - (void)setValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {
-    NSLog(@"value forFieldDefinition");
     self.selectedValue = value;
 }
 
 - (void)invalidValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {
-    NSLog(@"invalidValue forFieldDefinition");
 }
 
 - (void) selectFieldEditDone {
