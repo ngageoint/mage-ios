@@ -143,7 +143,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 
 - (void) geometryEditComplete:(SFGeometry *)geometry coordinator:(id)coordinator {
     self.currentEditValue = geometry;
-    [self fieldEditDone];
+    [self fieldEditDone:NO];
     [self.childCoordinators removeObject:coordinator];
 }
 
@@ -159,6 +159,10 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 }
 
 - (void) fieldEditDone {
+    [self fieldEditDone:YES];
+}
+
+- (void) fieldEditDone:(BOOL) popViewController {
     NSDictionary *field = self.currentEditField;
     id value = self.currentEditValue;
     
@@ -188,7 +192,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         self.observation.properties = newProperties;
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if (popViewController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void) fieldEditCanceled {
@@ -366,8 +372,6 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
             }
         }
     } else {
-        // TODO Image quality options...
-        
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
         UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
         
