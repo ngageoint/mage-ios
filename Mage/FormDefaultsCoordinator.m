@@ -125,8 +125,6 @@
         GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry:self.selectedValue andPinImage:nil andDelegate:self andNavigationController:self.formDefaultsController.navigationController];
         [self.childCoordinators addObject:editCoordinator];
         [editCoordinator start];
-        
-        // TODO need to deallocate this coordinator
     }
 }
 
@@ -165,8 +163,12 @@
 }
 
 - (void) saveField:(NSMutableDictionary *) field value:(id) value reload:(BOOL) reload {
-    [field setObject:value forKey:@"value"];
-    
+    if (value == nil) {
+        [field removeObjectForKey:@"value"];
+    } else {
+        [field setObject:value forKey:@"value"];
+    }
+
     if (reload) {
         [self.formDefaultsController.tableView reloadData];
     }
