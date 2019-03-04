@@ -169,27 +169,30 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.observation.geometry = value;
     } else if ([[field objectForKey:@"name"] isEqualToString:@"timestamp"]) {
+        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
         if (value == nil) {
-            [self.observation.properties removeObjectForKey:@"timestamp"];
+            [properties removeObjectForKey:@"timestamp"];
         } else {
-            [self.observation.properties setObject:value forKey:@"timestamp"];
+            [properties setObject:value forKey:@"timestamp"];
         }
+        
+        self.observation.properties = [properties copy];
     } else {
         NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
         NSNumber *number = [field objectForKey:@"formIndex"];
         NSUInteger formIndex = [number integerValue];
-        NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
-        NSMutableArray *forms = [newProperties objectForKey:@"forms"];
-        NSMutableDictionary *newFormProperties = [[NSMutableDictionary alloc] initWithDictionary:[forms objectAtIndex:formIndex]];
+        NSMutableDictionary *newProperties = [self.observation.properties mutableCopy];
+        NSMutableArray *forms = [[newProperties objectForKey:@"forms"] mutableCopy];
+        NSMutableDictionary *newFormProperties = [[forms objectAtIndex:formIndex] mutableCopy];
         if (value == nil) {
             [newFormProperties removeObjectForKey:fieldKey];
         } else {
             [newFormProperties setObject:value forKey:fieldKey];
         }
         [forms replaceObjectAtIndex:formIndex withObject:newFormProperties];
-        [newProperties setObject:forms forKey:@"forms"];
+        [newProperties setObject:[forms copy] forKey:@"forms"];
         
-        self.observation.properties = newProperties;
+        self.observation.properties = [newProperties copy];
     }
     
     if (popViewController) {

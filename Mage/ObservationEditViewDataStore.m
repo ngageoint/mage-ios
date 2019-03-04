@@ -242,37 +242,40 @@ static NSInteger const COMMON_SECTION = 1;
 }
 
 - (void) observationField:(id)field valueChangedTo:(id)value reloadCell:(BOOL)reload {
-    
+    // TODO this needs to be merged with ObservationPropertiesEditCoordinator.fieldEditDone
     NSIndexPath *indexPath;
     
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.observation.geometry = [value objectForKey:@"geometry"];
         indexPath = [NSIndexPath indexPathForRow:1 inSection:COMMON_SECTION];
     } else if ([[field objectForKey:@"name"] isEqualToString:@"timestamp"]) {
+        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
         if (value == nil) {
-            [self.observation.properties removeObjectForKey:@"timestamp"];
+            [properties removeObjectForKey:@"timestamp"];
         } else {
-            [self.observation.properties setObject:value forKey:@"timestamp"];
+            [properties setObject:value forKey:@"timestamp"];
         }
+        
+        self.observation.properties = [properties copy];
         indexPath = [NSIndexPath indexPathForRow:0 inSection:COMMON_SECTION];
     } else {
         NSString *fieldKey = (NSString *)[field objectForKey:@"name"];
         NSNumber *number = [field objectForKey:@"formIndex"];
         NSUInteger formIndex = [number integerValue];
-        NSMutableDictionary *newProperties = [[NSMutableDictionary alloc] initWithDictionary:self.observation.properties];
-        NSMutableArray *forms = [newProperties objectForKey:@"forms"];
-        NSMutableDictionary *newFormProperties = [[NSMutableDictionary alloc] initWithDictionary:[forms objectAtIndex:formIndex]];
+        NSMutableDictionary *newProperties = [self.observation.properties mutableCopy];
+        NSMutableArray *forms = [[newProperties objectForKey:@"forms"] mutableCopy];
+        NSMutableDictionary *newFormProperties = [[forms objectAtIndex:formIndex] mutableCopy];
         if (value == nil) {
             [newFormProperties removeObjectForKey:fieldKey];
         } else {
             [newFormProperties setObject:value forKey:fieldKey];
         }
         [forms replaceObjectAtIndex:formIndex withObject:newFormProperties];
-        [newProperties setObject:forms forKey:@"forms"];
+        [newProperties setObject:[forms copy] forKey:@"forms"];
         
         indexPath = [NSIndexPath indexPathForRow:[[field objectForKey:@"fieldRow"] integerValue] inSection:(formIndex+2)];
         
-        self.observation.properties = newProperties;
+        self.observation.properties = [newProperties copy];
         
         if ([fieldKey isEqualToString:self.primaryField] && self.annotationChangedDelegate) {
             [self.annotationChangedDelegate typeChanged:self.observation];

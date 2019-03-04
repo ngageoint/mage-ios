@@ -168,21 +168,26 @@
     NSDictionary *formDefaults = [defaults getDefaultsMap];
     
     NSArray *fields = [form objectForKey:@"fields"];
-    for (NSDictionary *field in fields) {
-        // grab the server default from the form fields value property
-        id value = [field objectForKey:@"value"];
-        
-        // Override server default with user default, if any
-        id defaultField = [formDefaults objectForKey:[field objectForKey:@"id"]];
-        if (defaultField) {
-            id defaultValue = [defaultField objectForKey:@"value"];
-            if (defaultValue) {
-                value = defaultValue;
+    if (formDefaults.count > 0) { // user defaults
+        for (NSDictionary *field in fields) {
+            id value = nil;
+            id defaultField = [formDefaults objectForKey:[field objectForKey:@"id"]];
+            if (defaultField) {
+                value = [defaultField objectForKey:@"value"];
+            }
+            
+            if (value) {
+                [newForm setObject:value forKey:[field objectForKey:@"name"]];
             }
         }
-        
-        if (value) {
-            [newForm setObject:value forKey:[field objectForKey:@"name"]];
+    } else { // server defaults
+        for (NSDictionary *field in fields) {
+            // grab the server default from the form fields value property
+            id value = [field objectForKey:@"value"];
+            
+            if (value) {
+                [newForm setObject:value forKey:[field objectForKey:@"name"]];
+            }
         }
     }
     
