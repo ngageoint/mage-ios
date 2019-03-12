@@ -100,8 +100,8 @@
     // Make a mutable copy of the original form
     NSMutableDictionary *defaults = [FormDefaults mutableForm:self.form];
     
-    // filter out archived fields and sort
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"archived == %@ || archived == nil", @NO];
+    // filter out archived and hidden fields and sort
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(archived == %@ || archived == nil) && type != %@", @NO, @"hidden"];
     NSArray *fields = [[defaults valueForKey:@"fields"] filteredArrayUsingPredicate:predicate];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
     [defaults setObject:[fields sortedArrayUsingDescriptors:@[sortDescriptor]] forKey:@"fields"];
