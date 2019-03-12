@@ -40,7 +40,6 @@
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
     [coordinator start];
-    // TODO add delegate so I know when finished.
 }
 
 # pragma mark - UINavigationController Delegate

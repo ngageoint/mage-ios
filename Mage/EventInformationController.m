@@ -12,6 +12,7 @@
 #import "Theme+UIResponder.h"
 
 @interface EventInformationController ()
+@property (strong, nonatomic) NSArray* forms;
 @end
 
 @implementation EventInformationController
@@ -37,6 +38,8 @@ static const NSInteger FORMS_SECTION = 0;
     header.descriptionLabel.hidden = [self.event.eventDescription length] == 0 ? YES : NO;
     header.descriptionLabel.text = self.event.eventDescription;
     self.tableView.tableHeaderView = header;
+    
+    self.forms = self.event.nonArchivedForms;
     
     [self registerForThemeChanges];
 }
@@ -67,13 +70,13 @@ static const NSInteger FORMS_SECTION = 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.event.forms count];
+    return [self.forms count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
-    NSDictionary* form = [self.event.forms objectAtIndex:indexPath.row];
+    NSDictionary* form = [self.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form valueForKey:@"name"];
     cell.tintColor = [UIColor brand];
     cell.textLabel.textColor = [UIColor primaryText];
@@ -91,7 +94,7 @@ static const NSInteger FORMS_SECTION = 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *form = [self.event.forms objectAtIndex:indexPath.row];
+    NSDictionary *form = [self.forms objectAtIndex:indexPath.row];
     [self.delegate formSelected:form];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
