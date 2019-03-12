@@ -463,7 +463,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 
 - (NSString *) videoUploadQuality {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *videoDefaults = [defaults dictionaryForKey:@"videoUploadSizes"];
+    NSDictionary *videoDefaults = [defaults dictionaryForKey:@"videoUploadQualities"];
     NSString *videoUploadQualityPreference = [defaults valueForKey:[videoDefaults valueForKey:@"preferenceKey"]];
     NSString *videoQuality = AVAssetExportPresetHighestQuality;
     if ([videoUploadQualityPreference isEqualToString:AVAssetExportPresetLowQuality]) {
