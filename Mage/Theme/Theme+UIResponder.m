@@ -35,10 +35,6 @@
     self.block(notification);
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 @end
 
 #pragma mark - Category
