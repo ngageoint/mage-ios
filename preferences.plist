@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>imageUploadSize</key>
+	<integer>0</integer>
+	<key>videoUploadSize</key>
+	<string>AVAssetExportPresetHighestQuality</string>
 	<key>serverMajorVersion</key>
 	<integer>5</integer>
 	<key>serverMinorVersion</key>
@@ -114,23 +118,44 @@
 		<key>title</key>
 		<string>Image Upload Size</string>
 		<key>section</key>
-		<string>Sizes</string>
+		<string>Upload Size</string>
 		<key>labels</key>
 		<array>
-			<string>3</string>
-			<string>2</string>
-			<string>1</string>
-			<string>0</string>
+			<string>Small</string>
+			<string>Medium</string>
+			<string>Large</string>
+			<string>Original</string>
 		</array>
 		<key>values</key>
 		<array>
-			<integer>3</integer>
-			<integer>2</integer>
-			<integer>1</integer>
 			<integer>0</integer>
+			<integer>1</integer>
+			<integer>2</integer>
+			<string>3</string>
 		</array>
 		<key>preferenceKey</key>
 		<string>imageUploadSize</string>
+	</dict>
+	<key>videoUploadQualities</key>
+	<dict>
+		<key>title</key>
+		<string>Video Upload Quality</string>
+		<key>section</key>
+		<string>Upload Quality</string>
+		<key>labels</key>
+		<array>
+			<string>Low</string>
+			<string>Medium</string>
+			<string>High</string>
+		</array>
+		<key>values</key>
+		<array>
+			<string>AVAssetExportPresetLowQuality</string>
+			<string>AVAssetExportPresetMediumQuality</string>
+			<string>AVAssetExportPresetHighestQuality</string>
+		</array>
+		<key>preferenceKey</key>
+		<string>videoUploadSize</string>
 	</dict>
 	<key>gpsSensitivities</key>
 	<dict>
