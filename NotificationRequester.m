@@ -12,11 +12,10 @@
 
 @implementation NotificationRequester
 
-+ (void) observationPulled: (Observation *) observation {
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    
++ (UNNotificationRequest *) buildObservationNotificationRequest: (Observation *) observation {
     UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
     Event *event = [Event getEventById:observation.eventId inContext:observation.managedObjectContext];
+    
     NSString *body = @"";
     if ([observation primaryFieldText] != nil) {
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [observation primaryFieldText]]];
@@ -36,7 +35,7 @@
     UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
     
     CGFloat sideLength = image.size.height > image.size.width ? image.size.height : image.size.width;
-
+    
     CGSize size = CGSizeMake(sideLength, sideLength);
     UIGraphicsBeginImageContext(size);
     [image drawAtPoint:CGPointMake((sideLength - image.size.width) / 2, (sideLength - image.size.height) / 2)];
@@ -54,14 +53,25 @@
     
     UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger
                                                   triggerWithTimeInterval:1 repeats:NO];
-    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:observation.remoteId
-                                                                          content:content trigger:trigger];
+    return [UNNotificationRequest requestWithIdentifier:observation.remoteId
+                                                content:content trigger:trigger];
+}
+
++ (void) observationPulled: (Observation *) observationOld {
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_context];
     
-    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-        if (error != nil) {
-            NSLog(@"Something went wrong: %@",error);
-        }
-        NSLog(@"notification");
+    
+    [context performBlockAndWait:^{
+        Observation *observation = [observationOld MR_inContext:context];
+        UNNotificationRequest *request = [NotificationRequester buildObservationNotificationRequest:observation];
+        
+        [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+            if (error != nil) {
+                NSLog(@"Something went wrong: %@",error);
+            }
+            NSLog(@"notification");
+        }];
     }];
 }
 
@@ -86,7 +96,6 @@
         }
         NSLog(@"notification");
     }];
-
 }
 
 @end

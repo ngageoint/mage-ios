@@ -554,7 +554,7 @@ Event *_event;
                             newObservationCount++;
                             
                             if (!sendBulkNotification) {
-                                obsToNotifyAbout = observation;
+                                obsToNotifyAbout = newObservation;
                             }
                         }
                     }
