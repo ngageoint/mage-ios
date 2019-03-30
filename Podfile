@@ -42,7 +42,7 @@ post_install do |installer_representation|
     end
     if target.name == 'SkyFloatingLabelTextField'
       target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '3.2'
+        config.build_settings['SWIFT_VERSION'] = '4.2'
       end
     end
   end
