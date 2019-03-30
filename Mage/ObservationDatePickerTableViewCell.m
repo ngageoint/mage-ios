@@ -158,19 +158,6 @@
     self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
 }
 
-- (BOOL) isValid {
-    return [super isValid] && [self isValid: self.value];
-}
-
-- (BOOL) isValid: (NSDate *) date {
-    
-    if (date == nil && [[self.fieldDefinition objectForKey: @"required"] boolValue]) {
-        return NO;
-    }
-    
-    return YES;
-}
-
 - (void) setValid:(BOOL) valid {
     [super setValid:valid];
     

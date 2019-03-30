@@ -59,6 +59,10 @@
 }
 
 - (void)save {
+    if (![self.formDefaultsController validate]) {
+        return;
+    }
+    
     FormDefaults *formDefaults = [[FormDefaults alloc] initWithEventId:[self.event.remoteId integerValue] formId:[[self.form objectForKey:@"id"] integerValue]];
     
     // Compare server defaults with self.defaults.  If they are the same clear the defaults
