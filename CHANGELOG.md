@@ -3,7 +3,19 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.9 (TBD)
+## 2.0.10 (TBD)
+
+## 2.0.9 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.9)
+
+##### Release Notes
+
+##### Features
+* Add custom default values to event forms.
+* From the settings menu you can now select from your most recent events.
+* Customize the size and quality of photo and video uploads.
+
+##### Bug Fixes
+* Fixed a bug that could cause a crash when being notified of an observation.
 
 ## 2.0.8 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.8)
 
