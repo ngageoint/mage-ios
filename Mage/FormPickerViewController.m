@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSArray *forms;
 @property (strong, nonatomic) SFGeometry *location;
 @property (nonatomic) BOOL newObservation;
+@property (nonatomic) BOOL invalidatedLayout;
 @property (weak, nonatomic) IBOutlet UIView *blurView;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
@@ -69,6 +70,18 @@ static NSString *CellIdentifier = @"FormCell";
         _headerLabel.text = @"What type of form would you like to add to this observation?";
     }
     [self setupCollectionView];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.invalidatedLayout = true;
+}
+
+- (void) viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if (!self.invalidatedLayout) {
+        [self.collectionView.collectionViewLayout invalidateLayout];
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
