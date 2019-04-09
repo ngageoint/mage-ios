@@ -183,4 +183,17 @@
     }
 }
 
+- (BOOL) validate {
+    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        ObservationEditTableViewCell *cell = (ObservationEditTableViewCell *) [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+        if (![cell isValid:NO]) {
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
 @end

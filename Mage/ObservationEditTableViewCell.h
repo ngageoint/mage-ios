@@ -14,6 +14,7 @@
 - (void) selectRow;
 - (void) setValid:(BOOL) valid;
 - (BOOL) isValid;
+- (BOOL) isValid:(BOOL) required;
 - (BOOL) isEmpty;
 @end
 

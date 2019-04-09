@@ -120,7 +120,7 @@
     // validate maybe, unless shouldChangeCharactersInRange already validated
     NSString *text = textField.text;
     NSNumber *number = [self.decimalFormatter numberFromString:text];
-    [self setValid:[self isValid:number]];
+    [self setValid:[self isValidNumber:number]];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -134,15 +134,14 @@
 }
 
 - (BOOL) isValid {
-    return [super isValid] && [self isValid: self.value];
+    return [self isValid:YES];
 }
 
-- (BOOL) isValid: (NSNumber *) number {
-    
-    if (number == nil && [[self.fieldDefinition objectForKey: @"required"] boolValue]) {
-        return NO;
-    }
-    
+- (BOOL) isValid:(BOOL) enforceRequired {
+    return [super isValid:enforceRequired] && [self isValidNumber:self.value];
+}
+
+- (BOOL) isValidNumber:(NSNumber *) number {    
     if (number != nil) {
         if ((self.min && self.max && ([number doubleValue] < [self.min doubleValue] || [number doubleValue] > [self.max doubleValue])) ||
             (self.min && ([number doubleValue] < [self.min doubleValue])) ||
@@ -173,7 +172,7 @@
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     NSNumber *number = [self.decimalFormatter numberFromString:text];
     
-    [self setValid:[self isValid:number]];
+    [self setValid:[self isValidNumber:number]];
     
     // allow backspace
     if (!string.length) {

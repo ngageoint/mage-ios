@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) id<FormDefaultsControllerDelegate> delegate;
 @property (weak, nonatomic) NSDictionary* form;
 
+- (BOOL) validate;
+
 @end
 
 NS_ASSUME_NONNULL_END

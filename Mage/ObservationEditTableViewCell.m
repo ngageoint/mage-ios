@@ -24,7 +24,11 @@
 }
 
 - (BOOL) isValid {
-    if ([[self.fieldDefinition objectForKey:@"required"] boolValue] && [self isEmpty]) {
+    return [self isValid:YES];
+}
+
+- (BOOL) isValid:(BOOL) enforceRequired {
+    if ([[self.fieldDefinition objectForKey:@"required"] boolValue] && enforceRequired && [self isEmpty]) {
         return NO;
     }
     
