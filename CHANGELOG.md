@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.10 (TBD)
+## 2.0.11 (TBD)
+
+## 2.0.10 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.10)
+
+##### Release Notes
+
+##### Features
+* Added loading indicator to oauth provider page load
+
+##### Bug Fixes
+* Multi line form names in form picker collection view now wrap correctly.  This is a 
+  workaround for a bug discovered in iOS 12.  
 
 ## 2.0.9 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.9)
 
