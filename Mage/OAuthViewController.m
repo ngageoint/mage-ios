@@ -13,6 +13,7 @@
 
 @interface OAuthViewController()<WKNavigationDelegate>
 @property (strong, nonatomic) WKWebView *webView;
+@property (nonatomic) UIProgressView *progressView;
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 @end
 
@@ -35,7 +36,14 @@
     [self.view addSubview:self.webView];
     self.webView.navigationDelegate = self;
     
+    [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
+    
+    self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    self.progressView.center = self.view.center;
+    [self.view addSubview:self.progressView];
+    
     NSString *uidString = [DeviceUUID retrieveDeviceUUID].UUIDString;
+    NSLog(@"Navigating to Oauth load %@", [NSString stringWithFormat:@"%@?uid=%@", self.url, uidString]);
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?uid=%@", self.url, uidString]]]];
 }
 
@@ -49,8 +57,39 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)webView:(WKWebView *) webView didFinishNavigation:(WKNavigation *) navigation {    
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"estimatedProgress"] && object == self.webView) {
+        [self.progressView setAlpha:1.0f];
+        [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
+        
+        if(self.webView.estimatedProgress >= 1.0f) {
+            [UIView animateWithDuration:0.3 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                [self.progressView setAlpha:0.0f];
+            } completion:^(BOOL finished) {
+                [self.progressView setProgress:0.0f animated:NO];
+            }];
+        }
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+- (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation {
+    NSLog(@"Redirect to %@", webView.URL.absoluteString);
+}
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"Failed navigation to %@", webView.URL.absoluteString);
+    NSLog(@"Error: %@", error);
+}
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"Fail Provisional navigation to %@", webView.URL.absoluteString);
+    NSLog(@"Error: %@", error);
+}
+
+- (void)webView:(WKWebView *) webView didFinishNavigation:(WKNavigation *) navigation {
+    NSLog(@"Finished Navigation to %@", webView.URL.absoluteString);
     if ([webView.URL.path containsString:@"/callback"]) {
+        NSLog(@"Logging in to MAGE");
         [webView evaluateJavaScript:@"login" completionHandler:^(id result, NSError *error) {
             webView.hidden = YES;
             
