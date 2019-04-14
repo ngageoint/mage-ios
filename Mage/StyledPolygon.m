@@ -13,30 +13,71 @@
 
 @implementation StyledPolygon
 
-+(StyledPolygon *) createWithPolygon: (MKPolygon *) polygon{
++ (StyledPolygon *) createWithPolygon: (MKPolygon *) polygon{
     StyledPolygon * styledPolygon = [StyledPolygon polygonWithPoints:[polygon points] count:polygon.pointCount interiorPolygons:[polygon interiorPolygons]];
     [styledPolygon setTitle:polygon.title];
     [styledPolygon setSubtitle:polygon.subtitle];
-    [styledPolygon setLineColor:UIColor.blackColor];
-    [styledPolygon setLineWidth:1.0];
-    [styledPolygon setFillColor:nil];
+    [styledPolygon applyDefaultStyle];
+    
     return styledPolygon;
 }
 
++ (StyledPolygon *)polygonWithPoints:(const MKMapPoint *)points count:(NSUInteger)count {
+    StyledPolygon * styledPolygon = [super polygonWithPoints:points count:count];
+    [styledPolygon applyDefaultStyle];
+
+    return styledPolygon;
+}
+
++ (StyledPolygon *)polygonWithPoints:(const MKMapPoint *)points count:(NSUInteger)count interiorPolygons:(nullable NSArray<MKPolygon *> *)interiorPolygons {
+    StyledPolygon * styledPolygon = [super polygonWithPoints:points count:count interiorPolygons:interiorPolygons];
+    [styledPolygon applyDefaultStyle];
+
+    return styledPolygon;
+}
+
++ (StyledPolygon *)polygonWithCoordinates:(const CLLocationCoordinate2D *)coords count:(NSUInteger)count {
+    StyledPolygon * styledPolygon = [super polygonWithCoordinates:coords count:count];
+    [styledPolygon applyDefaultStyle];
+
+    return styledPolygon;
+}
+
++ (StyledPolygon *)polygonWithCoordinates:(const CLLocationCoordinate2D *)coords count:(NSUInteger)count interiorPolygons:(nullable NSArray<MKPolygon *> *)interiorPolygons {
+    StyledPolygon * styledPolygon = [super polygonWithCoordinates:coords count:count interiorPolygons:interiorPolygons];
+    [styledPolygon applyDefaultStyle];
+
+    return styledPolygon;
+}
+
+- (void) applyDefaultStyle {
+    [self setLineColor:UIColor.blackColor];
+    [self setLineWidth:1.0];
+    [self setFillColor:nil];
+}
+
 - (void) fillColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha {
-    _fillColor = [UIColor colorWithHexString:hex alpha:alpha];
+    if (hex) {
+        _fillColor = [UIColor colorWithHexString:hex alpha:alpha];
+    }
 }
 
 - (void) fillColorWithHexString: (NSString *) hex {
-    _fillColor = [UIColor colorWithHexString:hex];
+    if (hex) {
+        _fillColor = [UIColor colorWithHexString:hex];
+    }
 }
 
 - (void) lineColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha {
-    _lineColor = [UIColor colorWithHexString:hex alpha:alpha];
+    if (hex) {
+        _lineColor = [UIColor colorWithHexString:hex alpha:alpha];
+    }
 }
 
 - (void) lineColorWithHexString: (NSString *) hex {
-    _lineColor = [UIColor colorWithHexString:hex];
+    if (hex) {
+        _lineColor = [UIColor colorWithHexString:hex];
+    }
 }
 
 @end

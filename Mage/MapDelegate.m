@@ -938,27 +938,50 @@
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
                     StyledPolygon *polygon = [MapUtils generatePolygon:coordinates];
-                    [polygon fillColorWithHexString:[feature valueForKeyPath:@"properties.style.polyStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.polyStyle.color.opacity"] floatValue]/255.0f];
-                    [polygon lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"] floatValue]/255.0f];
+                    
+                    CGFloat fillAlpha = 1.0f;
+                    id fillOpacity = [feature valueForKeyPath:@"properties.style.polyStyle.color.opacity"];
+                    if (fillOpacity) {
+                        fillAlpha = [fillOpacity floatValue] / 255.0f;
+                    }
+                    [polygon fillColorWithHexString:[feature valueForKeyPath:@"properties.style.polyStyle.color.rgb"] andAlpha:fillAlpha];
+                    
+                    CGFloat lineAlpha = 1.0f;
+                    id lineOpacity = [feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"];
+                    if (lineOpacity) {
+                        lineAlpha = [lineOpacity floatValue] / 255.0f;
+                    }
+                    [polygon lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha:lineAlpha];
+                    
                     id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
                     if (!lineWidth) {
                         polygon.lineWidth = 1.0f;
                     } else {
                         polygon.lineWidth = [lineWidth floatValue];
                     }
+                    
                     polygon.title = [feature valueForKeyPath:@"properties.name"];
                     [annotations addObject:polygon];
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
                     StyledPolyline *polyline = [MapUtils generatePolyline:coordinates];
-                    [polyline lineColorWithHexString: [feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha: [[feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"] floatValue]/255.0f];
+                    
+                    CGFloat alpha = 1.0f;
+                    id opacity = [feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"];
+                    if (opacity) {
+                        alpha = [opacity floatValue] / 255.0f;
+                    }
+
+                    [polyline lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha:alpha];
+                    
                     id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
                     if (!lineWidth) {
                         polyline.lineWidth = 1.0f;
                     } else {
                         polyline.lineWidth = [lineWidth floatValue];
                     }
+                    
                     polyline.title = [feature valueForKeyPath:@"properties.name"];
                     [annotations addObject:polyline];
                     [_mapView addOverlay:polyline];

@@ -11,6 +11,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
 * Added loading indicator to oauth provider page load
+* Apply default styles to StyledPolyline and StyledPolygon.  This will ensure static features without those styles defined will  appear on the map. 
 
 ##### Bug Fixes
 * Multi line form names in form picker collection view now wrap correctly.  This is a 
