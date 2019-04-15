@@ -21,19 +21,39 @@
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
+    if (self.iconUrl == nil) {
+        return [self defaultAnnotationView:mapView];
+    } else {
+        return [self customAnnotationView:mapView];
+    }
+}
+
+- (MKAnnotationView *) defaultAnnotationView: (MKMapView *) mapView {
+    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"pinAnnotation"];
+    if (annotationView == nil) {
+        annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"pinAnnotation"];
+    } else {
+        annotationView.annotation = self;
+    }
+    
+    return annotationView;
+}
+
+- (MKAnnotationView *) customAnnotationView: (MKMapView *) mapView {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:_iconUrl];
     
     if (annotationView == nil) {
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:_iconUrl];
+        NSLog(@"showing icon from %@", self.iconUrl);
+        
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:self.iconUrl];
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
-        NSLog(@"showing icon from %@", _iconUrl);
         UIImage *image = nil;
-        if ([[_iconUrl lowercaseString] hasPrefix:@"http"]) {
-            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_iconUrl]]];
+        if ([[self.iconUrl lowercaseString] hasPrefix:@"http"]) {
+            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.iconUrl]]];
         } else {
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-            image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory,_iconUrl]]];
+            image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory,self.iconUrl]]];
         }
         
         CGFloat scale = image.size.width / 35.0;
@@ -44,6 +64,7 @@
     } else {
         annotationView.annotation = self;
     }
+    
     return annotationView;
 }
 
