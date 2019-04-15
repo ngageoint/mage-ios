@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FeatureDetailViewController : UIViewController<UIPopoverControllerDelegate, UIPopoverPresentationControllerDelegate>
 
-@property (strong, nonatomic) NSString *detail;
+@property (strong, nonatomic) NSAttributedString *detail;
 @property (weak, nonatomic) id<FeatureDetailControllerDelegate> delegate;
 
 @end

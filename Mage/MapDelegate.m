@@ -34,6 +34,7 @@
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureTileTableLinker.h"
 #import "GPKGTileBoundingBoxUtils.h"
+#import "GPKGMapUtils.h"
 #import "CacheOverlayUpdate.h"
 #import "SFPProjectionTransform.h"
 #import "SFPProjectionConstants.h"
@@ -175,7 +176,7 @@
     MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
     CGPoint mapPointAsCGP = CGPointMake(mapPoint.x, mapPoint.y);
     
-    double tolerance = [MapUtils lineToleranceWithMapView:self.mapView];
+    double tolerance = [GPKGMapUtils toleranceWithCGPoint:tapPoint andMapView:self.mapView andScreenPercentage:.02].screen;
     
     if (_areaAnnotation != nil) {
         [_mapView deselectAnnotation:_areaAnnotation animated:NO];
@@ -199,14 +200,8 @@
                     
                     if ([MapUtils rect:tapRect ContainsLineStart:CGPointMake(mp.x, mp.y) andLineEnd:CGPointMake(mp2.x, mp2.y)]) {
                         NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
-                        _areaAnnotation = [[AreaAnnotation alloc] init];
-                        _areaAnnotation.title = polyline.title;
-                        _areaAnnotation.coordinate = tapCoord;
-                        
-                        [_mapView addAnnotation:_areaAnnotation];
-                        [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                        [self.cacheOverlayDelegate onCacheOverlayTapped:polyline.title];
                         return;
-
                     }
                 }
             } else if ([feature isKindOfClass:[MKPolygon class]]){
@@ -224,16 +219,9 @@
                         CGPathAddLineToPoint(mpr, NULL, mp.x, mp.y);
                 }
                 
-                
-                
                 if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
                     NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
-                    _areaAnnotation = [[AreaAnnotation alloc] init];
-                    _areaAnnotation.title = polygon.title;
-                    _areaAnnotation.coordinate = tapCoord;
-                    
-                    [_mapView addAnnotation:_areaAnnotation];
-                    [_mapView selectAnnotation:_areaAnnotation animated:NO];
+                    [self.cacheOverlayDelegate onCacheOverlayTapped:polygon.title];
                     return;
                 }
                 
@@ -248,7 +236,7 @@
             NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
             if (message != nil){
                 if ([clickMessage length] > 0){
-                    [clickMessage appendString:@"\n\n"];
+                    [clickMessage appendString:@"</br>"];
                 }
                 [clickMessage appendString:message];
             }
@@ -960,7 +948,8 @@
                         polygon.lineWidth = [lineWidth floatValue];
                     }
                     
-                    polygon.title = [feature valueForKeyPath:@"properties.name"];
+                    polygon.title = [NSString stringWithFormat:@"%@</br>%@",[feature valueForKeyPath:@"properties.name"], [feature valueForKeyPath:@"properties.description"]];
+
                     [annotations addObject:polygon];
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
@@ -982,7 +971,7 @@
                         polyline.lineWidth = [lineWidth floatValue];
                     }
                     
-                    polyline.title = [feature valueForKeyPath:@"properties.name"];
+                    polyline.title = [NSString stringWithFormat:@"%@</br>%@",[feature valueForKeyPath:@"properties.name"], [feature valueForKeyPath:@"properties.description"]];
                     [annotations addObject:polyline];
                     [_mapView addOverlay:polyline];
                 }
@@ -1114,8 +1103,12 @@
         }
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
+        NSString *clickMessage = [annotation detailTextForAnnotation];
+        [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
 
-        view.detailCalloutAccessoryView = [annotation detailViewForAnnotation];
+//        view.detailCalloutAccessoryView = [annotation detailViewForAnnotation];
+    } else {
+        NSLog(@"Annotation is a %@", [view class]);
     }
 }
 

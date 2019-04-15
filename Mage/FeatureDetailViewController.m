@@ -36,8 +36,8 @@
 
     // If scrolling is enabled 'systemLayoutSizeFittingSize' will not calulate the correct height
     self.detailTextView.scrollEnabled = NO;
-
-    [self.detailTextView setText:self.detail];
+    
+    [self.detailTextView setAttributedText:self.detail];
     
     CGSize size = [self.view systemLayoutSizeFittingSize:CGSizeMake(self.view.frame.size.width, 0) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
     self.preferredContentSize = CGSizeMake(size.width, size.height + 8); // pad height a little to avoid scroll if view fits

@@ -17,7 +17,7 @@
 
 @implementation FeatureDetailCoordinator
 
-- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSString *) detail {
+- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail {
     if (self = [super init]) {
         _viewController = viewController;
     

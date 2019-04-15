@@ -20,7 +20,7 @@
     CLLocation *ll2 = [[CLLocation alloc] initWithLatitude:l2.latitude longitude:l2.longitude];
     double mpp = [ll1 distanceFromLocation:ll2] / 500.0;
     
-    double tolerance = mpp * sqrt(2.0) * 20.0;
+    double tolerance = mpp * sqrt(2.0) * 20.0 * [[UIScreen mainScreen] scale];
     
     return tolerance;
 }

@@ -47,7 +47,7 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:self.iconUrl];
         annotationView.enabled = YES;
-        annotationView.canShowCallout = YES;
+        annotationView.canShowCallout = NO;
         UIImage *image = nil;
         if ([[self.iconUrl lowercaseString] hasPrefix:@"http"]) {
             image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.iconUrl]]];
@@ -67,6 +67,16 @@
     
     return annotationView;
 }
+
+- (NSString *) detailTextForAnnotation {
+    NSString *title = [_feature valueForKeyPath: @"properties.name"];
+    NSString *description = [_feature valueForKeyPath: @"properties.description"];
+    
+    NSString *detailText = [NSString stringWithFormat:@"%@</br>%@", title, description];
+    
+    return detailText;
+}
+
 
 - (UIView *) detailViewForAnnotation {
     UIView *view = [[UIView alloc] init];

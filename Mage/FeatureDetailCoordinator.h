@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface FeatureDetailCoordinator : NSObject
-- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSString *) detail;
+- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail;
 
 @property (weak, nonatomic) id<FeatureDetailDelegate> delegate;
 

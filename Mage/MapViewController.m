@@ -557,8 +557,14 @@
     [self.reportLocationButton setHidden:!authorized];
 }
 
+
 - (void) onCacheOverlayTapped:(NSString *)message {
-    FeatureDetailCoordinator *detailCoordinator = [[FeatureDetailCoordinator alloc] initWithViewController:self detail:message];
+    NSAttributedString *attributedMessage = [[NSMutableAttributedString alloc] initWithData:[message dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                    options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                         documentAttributes:nil
+                                                                                      error:nil];
+    FeatureDetailCoordinator *detailCoordinator = [[FeatureDetailCoordinator alloc] initWithViewController:self detail:attributedMessage];
     detailCoordinator.delegate = self;
     [detailCoordinator start];
     [self.childCoordinators addObject:detailCoordinator];

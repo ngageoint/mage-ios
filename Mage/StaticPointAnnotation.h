@@ -15,5 +15,6 @@
 
 - (id)initWithFeature:(NSDictionary *) feature;
 - (UIView *) detailViewForAnnotation;
+- (NSString *) detailTextForAnnotation;
 
 @end
