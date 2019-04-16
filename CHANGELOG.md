@@ -16,6 +16,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Bug Fixes
 * Multi line form names in form picker collection view now wrap correctly.  This is a 
   workaround for a bug discovered in iOS 12.  
+* Fixed bug where static feature map annotation callout wasn't sized correctly.  Updated to use same callout the geopackage features use, which supports
+  html and clickable links.
 
 ## 2.0.9 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.9)
 
