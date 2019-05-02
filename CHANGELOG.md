@@ -5,6 +5,13 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## 2.0.11 (TBD)
 
+##### Release Notes
+
+##### Features
+* Update to mage-ios-sdk 3.0.2, which updates default image upload size to orginal
+
+##### Bug Fixes
+
 ## 2.0.10 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.10)
 
 ##### Release Notes

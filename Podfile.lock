@@ -37,7 +37,7 @@ PODS:
   - HexColors (2.2.1)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.13)
-  - mage-ios-sdk (3.0.1):
+  - mage-ios-sdk (3.0.2):
     - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0.0)
     - geopackage-ios (~> 3.1.0)
@@ -63,14 +63,14 @@ PODS:
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (6.1.0)
   - proj4-ios (4.9.3)
-  - sf-ios (2.0.1)
-  - sf-proj-ios (2.0.1):
+  - sf-ios (2.0.2)
+  - sf-proj-ios (2.0.2):
     - proj4-ios (~> 4.9.3)
-    - sf-ios (~> 2.0.1)
-  - sf-wkb-ios (2.0.1):
-    - sf-ios (~> 2.0.1)
+    - sf-ios (~> 2.0.2)
+  - sf-wkb-ios (2.0.2):
+    - sf-ios (~> 2.0.2)
   - SkyFloatingLabelTextField (3.6.0)
-  - tiff-ios (1.1.1)
+  - tiff-ios (1.1.2)
   - tuneup_js (1.2.3)
   - UIImage-Categories (0.0.1)
   - zxcvbn-ios (1.0.4)
@@ -83,7 +83,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.1`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.2`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -123,12 +123,12 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   mage-ios-sdk:
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.1
+    :tag: 3.0.2
 
 CHECKOUT OPTIONS:
   mage-ios-sdk:
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.1
+    :tag: 3.0.2
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -142,22 +142,22 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
-  mage-ios-sdk: 95668f91465c2165229b6a8eb4d1e853bcf2ab44
+  mage-ios-sdk: cc40852c9fb71a94fc33b9d2432b34f236bbe168
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
   OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
-  sf-ios: c438e385b7b4b430895e766d65601717dd69b35e
-  sf-proj-ios: 692f9b74245079a22ea8f2302fce6fbd9d4f3355
-  sf-wkb-ios: 06be3e6fe25791c4811021a5568b0f964b72223f
+  sf-ios: d7a88eab499349912ccb1d1dead9d1114198ca28
+  sf-proj-ios: d74216669b2605b5460113baaeba59a97c1d83d6
+  sf-wkb-ios: f3a379830ec2ef5aadfe7f0199efe0e7dd0b332d
   SkyFloatingLabelTextField: 38164979b79512f9ff9288ad8acfc4bbf5d843e3
-  tiff-ios: 825d103441e9b0114ed65faef295a0840f912711
+  tiff-ios: f8a47e6aa20fc0d5833041ba5e39b1ab6e187f2e
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 0e93ed1b384bc9dda8712a78749b7a146155a3e3
+PODFILE CHECKSUM: 3bb57e049009dab784f4a04f5e30a7d9d26c7ae8
 
 COCOAPODS: 1.5.3
