@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>imageUploadSize</key>
-	<integer>0</integer>
+	<string>3</string>
 	<key>videoUploadSize</key>
 	<string>AVAssetExportPresetHighestQuality</string>
 	<key>serverMajorVersion</key>
