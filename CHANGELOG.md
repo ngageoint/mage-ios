@@ -8,7 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Release Notes
 
 ##### Features
-* Update to mage-ios-sdk 3.0.2, which updates default image upload size to orginal
+* LDAP authentication module.
+* Default image upload size to orginal changed to orginal.
 
 ##### Bug Fixes
 
