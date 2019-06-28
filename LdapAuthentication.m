@@ -1,24 +1,29 @@
 //
-//  ServerAuthentication.m
+//  LdapAuthentication.m
 //  mage-ios-sdk
 //
+//  Created by William Newman on 6/21/19.
+//  Copyright © 2019 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "ServerAuthentication.h"
-#import "StoredPassword.h"
-#import "MageSessionManager.h"
-#import "MageServer.h"
+#import "LdapAuthentication.h"
 #import "User.h"
+#import "MageSessionManager.h"
 #import "UserUtility.h"
 #import "NSDate+Iso8601.h"
+#import "MageServer.h"
+#import "MagicalRecord+MAGE.h"
+#import "StoredPassword.h"
 
-@interface ServerAuthentication()
-@property (strong, nonatomic) NSDictionary *parameters;
-@property (strong, nonatomic) NSDictionary *loginParameters;
+@interface LdapAuthentication()
+
+@property (strong, nonatomic) NSDictionary* parameters;
+@property (strong, nonatomic) NSDictionary* loginParameters;
 @property (strong, nonatomic) NSDictionary *response;
+
 @end
 
-@implementation ServerAuthentication
+@implementation LdapAuthentication
 
 - (instancetype) initWithParameters:(NSDictionary *)parameters {
     self = [super init];
@@ -29,12 +34,21 @@
     return self;
 }
 
+- (NSDictionary *) loginParameters {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults objectForKey:@"loginParameters"];
+}
+
+- (BOOL) canHandleLoginToURL: (NSString *) url {
+    return YES;
+}
+
 - (void) loginWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSDictionary *strategy = [parameters objectForKey:@"strategy"];
     
     MageSessionManager *manager = [MageSessionManager manager];
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
-    
+
     NSURL *URL = [NSURL URLWithString:url];
     NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         self.loginParameters = parameters;
@@ -69,8 +83,56 @@
     [manager addTask:task];
 }
 
-- (BOOL) canHandleLoginToURL: (NSString *) url {
-    return YES;
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *api = [self.response objectForKey:@"api"];
+    
+    if ([api valueForKey:@"disclaimer"]) {
+        [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
+        [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
+        [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+    }
+    [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
+    
+    NSDictionary *userJson = [self.response objectForKey:@"user"];
+    NSString *userId = [userJson objectForKey:@"id"];
+    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
+        if (!user) {
+            [User insertUserForJson:userJson inManagedObjectContext:localContext];
+        } else {
+            [user updateUserForJson:userJson];
+        }
+    } completion:^(BOOL contextDidSave, NSError *error) {
+        NSString *token = [self.response objectForKey:@"token"];
+        // Always use this locale when parsing fixed format date strings
+        NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
+        
+        [MageSessionManager manager].token = token;
+        
+        [[UserUtility singleton] resetExpiration];
+        
+        NSDictionary *loginParameters = @{
+                                          @"serverUrl": [[MageServer baseURL] absoluteString],
+                                          @"tokenExpirationDate": tokenExpirationDate
+                                          };
+        
+        [defaults setObject:loginParameters forKey:@"loginParameters"];
+        
+        NSDictionary *userJson = [self.response objectForKey:@"user"];
+        NSString *userId = [userJson objectForKey:@"id"];
+        [defaults setObject: userId forKey:@"currentUserId"];
+        
+        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
+        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
+        [defaults setBool:YES forKey:@"deviceRegistered"];
+        [defaults setValue:[Authentication authenticationTypeToString:OAUTH2] forKey:@"loginType"];
+        [defaults synchronize];
+        [StoredPassword persistTokenToKeyChain:token];
+        
+        complete(AUTHENTICATION_SUCCESS, nil);
+    }];
 }
 
 - (void) authorize:(NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -136,62 +198,6 @@
     [manager addTask:task];
 }
 
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *api = [self.response objectForKey:@"api"];
-    
-    if ([api objectForKey:@"disclaimer"] != NULL && [api valueForKey:@"disclaimer"]) {
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
-    }
-    [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
-    
-    NSDictionary *userJson = [self.response objectForKey:@"user"];
-    NSString *userId = [userJson objectForKey:@"id"];
-    
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
-        if (!user) {
-            [User insertUserForJson:userJson inManagedObjectContext:localContext];
-        } else {
-            [user updateUserForJson:userJson];
-        }
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        NSString *token = [self.response objectForKey:@"token"];
-        NSString *username = (NSString *) [self.loginParameters objectForKey:@"username"];
-        NSString *password = (NSString *) [self.loginParameters objectForKey:@"password"];
-        // Always use this locale when parsing fixed format date strings
-        NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
-        
-        [MageSessionManager manager].token = token;
-        
-        [[UserUtility singleton] resetExpiration];
-        
-        NSDictionary *loginParameters = @{
-                                          @"username": username,
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        
-        NSDictionary *userJson = [self.response objectForKey:@"user"];
-        NSString *userId = [userJson objectForKey:@"id"];
-        [defaults setObject: userId forKey:@"currentUserId"];
-        
-        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
-        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:SERVER] forKey:@"loginType"];
-        [defaults synchronize];
-        [StoredPassword persistPasswordToKeyChain:password];
-        [StoredPassword persistTokenToKeyChain:token];
-        
-        complete(AUTHENTICATION_SUCCESS, nil);
-    }];
-}
-
 - (void) registerDevice: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSLog(@"Registering device");
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
@@ -227,5 +233,7 @@
     
     [manager addTask:task];
 }
+
+
 
 @end

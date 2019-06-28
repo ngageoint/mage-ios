@@ -6,6 +6,7 @@
 
 #import "MageServer.h"
 #import "MageSessionManager.h"
+#import "LdapAuthentication.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
 #import "OAuthAuthentication.h"
@@ -42,6 +43,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                     [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"oauth"]) {
                     [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                } else if ([[authParams objectForKey:@"type"] isEqualToString:@"ldap"]) {
+                    [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
                 }
             }
             NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
@@ -156,6 +159,10 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
             } else if ([authenticationType isEqualToString:@"login-gov"]) {
                 [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+            } else if ([authenticationType isEqualToString:@"oauth"]) {
+                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+            } else if ([authenticationType isEqualToString:@"ldap"]) {
+                [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
             }
         }
         NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];

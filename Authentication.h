@@ -10,7 +10,8 @@ typedef NS_ENUM(NSInteger, AuthenticationType) {
 	LOCAL,
     SERVER,
     GOOGLE,
-    OAUTH2
+    OAUTH2,
+    LDAP
 };
 
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
@@ -29,7 +30,6 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 - (BOOL) canHandleLoginToURL: (NSString *) url;
 - (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 - (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-
 @end
 
 @interface Authentication : NSObject

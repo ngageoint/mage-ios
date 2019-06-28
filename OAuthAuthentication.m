@@ -35,7 +35,7 @@
 }
 
 - (NSDictionary *) loginParameters {
-    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:@"loginParameters"];
 }
 
@@ -44,9 +44,8 @@
 }
 
 - (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    OAuthRequestType requestType = [[loginParameters valueForKey:@"requestType"] intValue];
     self.loginParameters = loginParameters;
-    [self signinWithParameters:loginParameters complete:complete];
+    [self authorize:loginParameters complete:complete];
 }
 
 - (void) signupWithParameters: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -199,8 +198,7 @@
     [manager addTask:task];
 }
 
-- (void) signinWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    
+- (void) authorize: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSDictionary *loginResult = [loginParameters valueForKey:@"result"];
     
     NSDictionary *oauth = [loginResult objectForKey:@"oauth"];
@@ -208,31 +206,30 @@
         return complete(AUTHENTICATION_ERROR, @"Login failed");
     }
     
-    
     // authentication succeeded, authorize with the mage server
-    NSString *oauthToken = [oauth valueForKey:@"access_token"];
     NSDictionary *user = [loginResult objectForKey:@"user"];
     
     // check if the user is active and if not but they have a user tell them to talk to a MAGE admin
-    if (!oauthToken && user && [[user objectForKey:@"active"] intValue] == 0) {
+    if (user && [[user objectForKey:@"active"] intValue] == 0) {
         return complete(ACCOUNT_CREATION_SUCCESS, @"Your account has been created.  You will be able to login once and administrator approves your account");
     }
     
     NSDictionary *strategy = [loginParameters objectForKey:@"strategy"];
     
     NSMutableDictionary *authorizeParameters = [[NSMutableDictionary alloc] init];
-    [authorizeParameters setObject:oauthToken forKey:@"access_token"];
     [authorizeParameters setObject:[loginParameters valueForKey:@"uid"] forKey:@"uid"];
     [authorizeParameters setObject:[strategy objectForKey:@"identifier"] forKey:@"strategy"];
     [authorizeParameters setObject:[loginParameters valueForKey:@"appVersion"] forKey:@"appVersion"];
 
     // make an authorize call to the MAGE server and then we will get a token back
+    // TODO make sure MAGE session cookie is passed here
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     MageSessionManager *manager = [MageSessionManager manager];
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/authorize", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
     
     NSURL *URL = [NSURL URLWithString:url];
+    
     NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:authorizeParameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSDictionary *api = [response objectForKey:@"api"];
         BOOL serverCompatible = [MageServer checkServerCompatibility:api];
