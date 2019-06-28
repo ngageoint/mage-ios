@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OrView : UIView
+@interface OrView : UIStackView
 
 @end

@@ -9,7 +9,7 @@
 @import HexColors;
 
 #import "DarkTheme.h"
-#import "UIColor+UIColor_Mage.h"
+#import "UIColor+Mage.h"
 
 @implementation DarkTheme
 

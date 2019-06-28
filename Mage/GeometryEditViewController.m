@@ -26,7 +26,7 @@
 #import "ObservationShapeStyle.h"
 #import "Event.h"
 #import "GeometryEditMapDelegate.h"
-#import "UIColor+UIColor_Mage.h"
+#import "UIColor+Mage.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "Theme+UIResponder.h"
@@ -89,7 +89,6 @@ static float paddingPercentage = .1;
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor backgroundColor];
     self.fieldEntryBackground.backgroundColor = [UIColor dialog];
     [UIColor themeMap:self.map];
     [self setShapeTypeSelection];

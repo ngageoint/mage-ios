@@ -7,7 +7,6 @@
 //
 
 #import "UINavigationItem+Subtitle.h"
-#import "UIColor+UIColor_Mage.h"
 #import "Theme+UIResponder.h"
 
 @implementation UINavigationItem (Subtitle)

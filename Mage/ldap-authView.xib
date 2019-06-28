@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" id="NGa-Oo-ehZ" customClass="LdapLoginView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJE-2l-obt">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="198"/>
+                    <subviews>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Q8A-73-ehK">
+                            <rect key="frame" x="20" y="114" width="51" height="31"/>
+                            <accessibility key="accessibilityConfiguration" label="Show Password"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="31" id="MQe-zQ-zFI"/>
+                                <constraint firstAttribute="width" constant="49" id="QFY-52-aJU"/>
+                            </constraints>
+                            <connections>
+                                <action selector="showPasswordSwitchAction:" destination="NGa-Oo-ehZ" eventType="valueChanged" id="cbU-Js-dTf"/>
+                            </connections>
+                        </switch>
+                        <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NAP-Uf-AMa" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                            <rect key="frame" x="20" y="0.0" width="335" height="45"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <accessibility key="accessibilityConfiguration" hint="" label="Username"/>
+                            <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="45" id="iyc-ym-xFn"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="LDAP Username"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="resignAndLogin:" destination="NGa-Oo-ehZ" eventType="primaryActionTriggered" id="glD-5G-PJh"/>
+                            </connections>
+                        </textField>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjf-hp-DFx">
+                            <rect key="frame" x="77" y="119" width="278" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="yrC-lk-Mgp"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qOJ-dM-0H4" userLabel="Password Field" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                            <rect key="frame" x="20" y="57" width="335" height="45"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <accessibility key="accessibilityConfiguration" label="Password"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="45" id="TEq-P3-oe2"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="LDAP Password"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="resignAndLogin:" destination="NGa-Oo-ehZ" eventType="primaryActionTriggered" id="XDA-nm-1UN"/>
+                            </connections>
+                        </textField>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0iC-As-8T1" userLabel="Login View" customClass="AuthenticationButton">
+                            <rect key="frame" x="20" y="157" width="335" height="40"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="hBf-fw-sn1"/>
+                            </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="z8N-W8-FfD" appends="YES" id="f1c-e8-b8k"/>
+                            </connections>
+                        </view>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="zwt-H4-LxD">
+                            <rect key="frame" x="328" y="167" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="Fir-pm-a4I"/>
+                                <constraint firstAttribute="height" constant="20" id="kaE-lC-4OB"/>
+                            </constraints>
+                        </activityIndicatorView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="Bjf-hp-DFx" firstAttribute="leading" secondItem="Q8A-73-ehK" secondAttribute="trailing" constant="8" id="0jL-xo-6wJ"/>
+                        <constraint firstAttribute="trailing" secondItem="qOJ-dM-0H4" secondAttribute="trailing" constant="20" symbolic="YES" id="1FC-ZE-KtI"/>
+                        <constraint firstItem="Q8A-73-ehK" firstAttribute="top" secondItem="qOJ-dM-0H4" secondAttribute="bottom" constant="12" id="9AR-Ea-Z6Q"/>
+                        <constraint firstItem="Q8A-73-ehK" firstAttribute="leading" secondItem="vJE-2l-obt" secondAttribute="leading" constant="20" id="D20-l4-K6D"/>
+                        <constraint firstItem="NAP-Uf-AMa" firstAttribute="top" secondItem="vJE-2l-obt" secondAttribute="top" id="DFa-Na-vDT"/>
+                        <constraint firstItem="zwt-H4-LxD" firstAttribute="leading" secondItem="0iC-As-8T1" secondAttribute="trailing" constant="-27" id="HEn-cA-Ipn"/>
+                        <constraint firstAttribute="trailing" secondItem="Bjf-hp-DFx" secondAttribute="trailing" constant="20" symbolic="YES" id="Ikl-UR-2aG"/>
+                        <constraint firstAttribute="bottom" secondItem="0iC-As-8T1" secondAttribute="bottom" constant="1" id="Jeu-gg-cXN"/>
+                        <constraint firstItem="zwt-H4-LxD" firstAttribute="centerY" secondItem="0iC-As-8T1" secondAttribute="centerY" id="RlO-Tf-T58"/>
+                        <constraint firstItem="qOJ-dM-0H4" firstAttribute="top" secondItem="NAP-Uf-AMa" secondAttribute="bottom" constant="12" id="Rre-oT-d6M"/>
+                        <constraint firstItem="0iC-As-8T1" firstAttribute="top" secondItem="Q8A-73-ehK" secondAttribute="bottom" constant="12" id="fX2-gg-xXW"/>
+                        <constraint firstAttribute="trailing" secondItem="0iC-As-8T1" secondAttribute="trailing" constant="20" symbolic="YES" id="kH4-ct-PcV"/>
+                        <constraint firstItem="qOJ-dM-0H4" firstAttribute="leading" secondItem="vJE-2l-obt" secondAttribute="leading" constant="20" symbolic="YES" id="ofG-mj-goe"/>
+                        <constraint firstItem="0iC-As-8T1" firstAttribute="leading" secondItem="vJE-2l-obt" secondAttribute="leading" constant="20" symbolic="YES" id="pXj-uH-R7n"/>
+                        <constraint firstItem="NAP-Uf-AMa" firstAttribute="leading" secondItem="vJE-2l-obt" secondAttribute="leading" constant="20" symbolic="YES" id="rin-Pn-C2C"/>
+                        <constraint firstAttribute="trailing" secondItem="NAP-Uf-AMa" secondAttribute="trailing" constant="20" symbolic="YES" id="yhy-1n-ddn"/>
+                        <constraint firstItem="Bjf-hp-DFx" firstAttribute="centerY" secondItem="Q8A-73-ehK" secondAttribute="centerY" id="ykr-qe-Nho"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <connections>
+                <outlet property="activityIndicator" destination="zwt-H4-LxD" id="pR7-vf-b3K"/>
+                <outlet property="authenticationButton" destination="0iC-As-8T1" id="0Ym-dO-jlB"/>
+                <outlet property="passwordField" destination="qOJ-dM-0H4" id="fP4-so-xTL"/>
+                <outlet property="showPassword" destination="Q8A-73-ehK" id="pqu-uZ-1Vn"/>
+                <outlet property="showPasswordLabel" destination="Bjf-hp-DFx" id="awG-fQ-UYu"/>
+                <outlet property="usernameField" destination="NAP-Uf-AMa" id="U0y-Zu-Jh2"/>
+            </connections>
+            <point key="canvasLocation" x="21" y="-232"/>
+        </stackView>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tapGestureRecognizer id="z8N-W8-FfD"/>
+    </objects>
+</document>

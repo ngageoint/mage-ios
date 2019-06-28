@@ -1,35 +1,33 @@
 //
-//  LoginGovLoginView.m
+//  LdapLoginView.m
 //  MAGE
 //
-//  Created by Dan Barela on 4/10/18.
-//  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
+//  Created by William Newman on 6/18/19.
+//  Copyright © 2019 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "LocalLoginView.h"
+#import "LdapLoginView.h"
 #import "Theme+UIResponder.h"
 #import "DeviceUUID.h"
+#import "AuthenticationButton.h"
 
 @import SkyFloatingLabelTextField;
 @import HexColors;
 
-@interface LocalLoginView() <UITextFieldDelegate>
+@interface LdapLoginView() <UITextFieldDelegate, AuthenticationButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
-@property (weak, nonatomic) IBOutlet UILabel *signupDescription;
-@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet UIView *signupContainerView;
+@property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
+@property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @property (strong, nonatomic) UIFont *passwordFont;
-
 @end
 
-@implementation LocalLoginView
+@implementation LdapLoginView
 
 - (void) themeDidChange:(MageTheme)theme {
     self.usernameField.textColor = [UIColor primaryText];
@@ -54,14 +52,13 @@
     self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.passwordField.iconText = @"\U0000f084";
     
-    self.loginButton.backgroundColor = [UIColor themedButton];
     self.showPasswordLabel.textColor = [UIColor secondaryText];
-    self.signupDescription.textColor = [UIColor secondaryText];
-    [self.signupButton setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
-    self.showPassword.onTintColor = [UIColor themedButton];
 }
 
 - (void) didMoveToSuperview {
+    self.authenticationButton.strategy = self.strategy;
+    self.authenticationButton.delegate = self;
+    
     self.passwordFont = self.passwordField.font;
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
@@ -69,9 +66,15 @@
     if (self.user) {
         self.usernameField.enabled = NO;
         self.usernameField.text = self.user.username;
-        self.signupContainerView.hidden = YES;
     }
-
+    self.statusView.hidden = YES;
+    
+    NSDictionary *strategy = [self.strategy objectForKey:@"strategy"];
+    
+    NSString *title = [strategy objectForKey:@"title"];
+    self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
+    self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
+    
     [self registerForThemeChanges];
 }
 
@@ -89,7 +92,7 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
     if (textField == self.passwordField) {
-        [self signInTapped:textField];
+        [self onAuthenticationButtonTapped:textField];
     }
     return YES;
 }
@@ -127,9 +130,9 @@
     }
 }
 
-- (IBAction)signInTapped:(id)sender {
+- (void) onAuthenticationButtonTapped:(id) sender {
     if (![self changeTextViewFocus: sender]) {
-        [sender resignFirstResponder];
+        //        [sender resignFirstResponder];
         if ([self.usernameField isFirstResponder]) {
             [self.usernameField resignFirstResponder];
         } else if([self.passwordField isFirstResponder]) {
@@ -141,7 +144,7 @@
 }
 
 - (void) endLogin {
-    [self.loginButton setEnabled:YES];
+//    [self.loginView setEnabled:YES];
     [self.activityIndicator stopAnimating];
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
@@ -149,7 +152,7 @@
 }
 
 - (void) startLogin {
-    [self.loginButton setEnabled:NO];
+//    [self.loginButton setEnabled:NO];
     [self.activityIndicator startAnimating];
     [self.usernameField setEnabled:NO];
     [self.passwordField setEnabled:NO];
@@ -174,7 +177,7 @@
                                 nil];
     
     __weak __typeof__(self) weakSelf = self;
-    [self.delegate loginWithParameters:parameters withAuthenticationType: SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    [self.delegate loginWithParameters:parameters withAuthenticationType:LDAP complete:^(AuthenticationStatus authenticationStatus, NSString *message) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf resetLogin:YES];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
@@ -195,11 +198,8 @@
         [self.usernameField setText:@""];
         [self.passwordField setText:@""];
     }
-}
-
-- (IBAction)signupTapped:(id)sender {
-    [self.delegate createAccount];
+    
+    self.statusView.hidden = YES;
 }
 
 @end
-

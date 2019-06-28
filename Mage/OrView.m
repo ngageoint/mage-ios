@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *orLabel;
 @property (weak, nonatomic) IBOutlet UIView *rightLine;
 @property (weak, nonatomic) IBOutlet UIView *leftLine;
-@property (strong, nonatomic) IBOutlet UIView *topLevelSubview;
 
 @end
 
@@ -28,29 +27,6 @@
 
 - (void) didMoveToSuperview {
     [self registerForThemeChanges];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (CGSize)intrinsicContentSize {
-    return self.topLevelSubview.frame.size;
-}
-
-- (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (void) initialize {
-    [[NSBundle mainBundle] loadNibNamed:@"orView" owner:self options:nil];
-    [self addSubview:self.topLevelSubview];
 }
 
 @end
