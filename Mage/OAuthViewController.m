@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     self.webView = [[WKWebView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:self.webView];
@@ -93,11 +93,15 @@
         [webView evaluateJavaScript:@"login" completionHandler:^(id result, NSError *error) {
             webView.hidden = YES;
             
-//            if (self.requestType == SIGNUP) {
-//                [self completeSignupWithResult:result];
-//            } else {
+            [self.webView.configuration.websiteDataStore.httpCookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
+                NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+                NSPredicate *cookiePredicate = [NSPredicate predicateWithFormat:@"SELF.name BEGINSWITH 'mage-'"];
+                for (NSHTTPCookie *cookie in [cookies filteredArrayUsingPredicate:cookiePredicate]) {
+                    [cookieStorage setCookie:cookie];
+                }
+                
                 [self completeSigninWithResult:result];
-//            }
+            }];
         }];
     }
 }
@@ -109,6 +113,7 @@
                                  @"result": result
                                  };
     __weak typeof(self) weakSelf = self;
+    
     [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             UIAlertController * alert = [UIAlertController
@@ -138,7 +143,6 @@
 
 - (void) completeSigninWithResult: (NSDictionary *) result {
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-
     NSString *appVersion = [infoDict objectForKey: @"CFBundleShortVersionString"];
     NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
     NSDictionary* parameters = @{
@@ -149,7 +153,6 @@
                                  @"appVersion": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber]
                                  };
     
-    __weak typeof(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters withAuthenticationType:self.authenticationType complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         NSLog(@"Authentication complete %ld", (long)authenticationStatus);
     }];

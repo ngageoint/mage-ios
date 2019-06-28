@@ -14,7 +14,7 @@
 
 @end
 
-@interface OAuthLoginView : UIView
+@interface OAuthLoginView : UIStackView
 
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (strong, nonatomic) id<OAuthButtonDelegate> delegate;

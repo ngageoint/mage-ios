@@ -7,7 +7,7 @@
 //
 
 #import "GoogleSignUpViewController.h"
-#import "UIColor+UIColor_Mage.h"
+#import "UIColor+Mage.h"
 
 @interface GoogleSignUpViewController ()
 
@@ -47,11 +47,12 @@
     self.displayNameField.text = self.googleUser.profile.name;
     self.emailField.text = self.googleUser.profile.email;
     
-    self.mageLabel.textColor = [UIColor primaryColor];
-    self.wandLabel.textColor = [UIColor primaryColor];
+    self.mageLabel.textColor = [UIColor primary];
+    self.wandLabel.textColor = [UIColor primary];
+    
     self.wandLabel.text = @"\U0000f0d0";
     
-    self.displayNameField.layer.borderColor = self.emailField.layer.borderColor = self.phoneField.layer.borderColor = [[UIColor primaryColor] CGColor];
+    self.displayNameField.layer.borderColor = self.emailField.layer.borderColor = self.phoneField.layer.borderColor = [[UIColor primary] CGColor];
     self.displayNameField.layer.borderWidth = self.emailField.layer.borderWidth = self.phoneField.layer.borderWidth = 1.0f;
     self.displayNameField.layer.cornerRadius = self.emailField.layer.cornerRadius = self.phoneField.layer.cornerRadius = 5.0f;
     

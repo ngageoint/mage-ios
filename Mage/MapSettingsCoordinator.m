@@ -10,7 +10,7 @@
 #import "MapSettings.h"
 #import "StaticLayerTableViewController.h"
 #import "OfflineMapTableViewController.h"
-#import "UIColor+UIColor_Mage.h"
+#import "UIColor+Mage.h"
 #import "Layer.h"
 #import "Server.h"
 
@@ -45,9 +45,9 @@
     self.settingsNavController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *popoverPresentationController = self.settingsNavController.popoverPresentationController;
     popoverPresentationController.sourceView = self.sourceView;
-    popoverPresentationController.sourceRect = CGRectMake(0, 0, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
+    popoverPresentationController.sourceRect = CGRectMake(0, -5, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
     popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    popoverPresentationController.backgroundColor = [UIColor primaryColor];
+    popoverPresentationController.backgroundColor = [UIColor primary];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(settingsComplete)];
     [settings.navigationItem setLeftBarButtonItem:doneButton];

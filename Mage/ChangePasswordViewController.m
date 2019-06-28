@@ -8,7 +8,6 @@
 
 #import "ChangePasswordViewController.h"
 #import "UINextField.h"
-#import "UIColor+UIColor_Mage.h"
 #import "MageServer.h"
 #import "ServerAuthentication.h"
 #import "MageSessionManager.h"

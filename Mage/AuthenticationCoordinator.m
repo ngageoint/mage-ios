@@ -264,7 +264,7 @@ BOOL signingIn = YES;
     }
     
     __weak __typeof__(self) weakSelf = self;
-    [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *message) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             if ([parameters objectForKey:@"username"] != NULL && [self didUserChange:[parameters objectForKey:@"username"]]) {
                 if ([MageOfflineObservationManager offlineObservationCount] > 0) {
@@ -292,31 +292,40 @@ BOOL signingIn = YES;
             }
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
+        } else if (authenticationStatus == AUTHENTICATION_ERROR) {
+            [weakSelf failedToAuthenticate:message];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
         } else if (authenticationStatus == ACCOUNT_CREATION_SUCCESS) {
-            [weakSelf accountCreationSuccess:parameters complete:complete];
+            [weakSelf accountCreationSuccess:parameters];
         }
-        complete(authenticationStatus, errorString);
+        complete(authenticationStatus, message);
     }];
 }
 
-- (void) accountCreationSuccess: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorStrign)) complete {
-    __weak __typeof__(self) weakSelf = self;
+- (void) accountCreationSuccess: (NSDictionary *) parameters {
     [self.navigationController popToViewController:self.loginView animated:NO];
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
-                                                                   message:@"Account created, contact an administrator to activate your account."
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"MAGE Account Created"
+                                                                   message:@"Account created, please contact your MAGE administrator to activate your account."
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
-    });
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) failedToAuthenticate:(NSString *) message {
+    NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Login Failed"
+                                                                   message:error
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+
+    
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -331,7 +340,7 @@ BOOL signingIn = YES;
                                     preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.delegate couldNotAuthenticate];
+            [weakSelf.delegate couldNotAuthenticate];
             complete(AUTHENTICATION_SUCCESS, nil);
         }]];
         
@@ -342,10 +351,9 @@ BOOL signingIn = YES;
     // If there is a stored password do this
     id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
     if (localAuthenticationModel) {
-        UIAlertController *alert = [UIAlertController
-                                     alertControllerWithTitle:@"Disconnected Login"
-                                     message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
-                                     preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
+                                                                       message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf workOffline: parameters complete:complete];

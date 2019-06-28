@@ -83,7 +83,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.2`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -122,13 +122,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.2
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.2
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -142,7 +136,7 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
-  mage-ios-sdk: cc40852c9fb71a94fc33b9d2432b34f236bbe168
+  mage-ios-sdk: 1525bcf4ebc51dc0c0cd669574b702c24f116eee
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
@@ -158,6 +152,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 3bb57e049009dab784f4a04f5e30a7d9d26c7ae8
+PODFILE CHECKSUM: 8a99a6f117f0d6e19e064ef91ee6a2147b68475a
 
 COCOAPODS: 1.5.3

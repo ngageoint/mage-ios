@@ -1,16 +1,16 @@
 //
-//  LocalLoginView.h
+//  LdapLoginView.h
 //  MAGE
 //
-//  Created by Dan Barela on 4/12/18.
-//  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
+//  Created by William Newman on 6/18/19.
+//  Copyright © 2019 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "User.h"
 #import "LoginViewController.h"
 
-@interface LocalLoginView : UIStackView
+@interface LdapLoginView : UIStackView
 
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (strong, nonatomic) User *user;
