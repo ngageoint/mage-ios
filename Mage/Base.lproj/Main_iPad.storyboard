@@ -395,6 +395,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="oJy-QL-HWh"/>
                     </view>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="dismissable" value="YES"/>
+                    </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wn-4c-91y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -651,7 +654,7 @@
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="clr-Kh-b1A"/>
                                     <barButtonItem style="plain" id="iNa-9L-Fep">
-                                        <view key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="Qd6-qf-lSK">
+                                        <view key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" id="Qd6-qf-lSK">
                                             <rect key="frame" x="18.5" y="13" width="283" height="24"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
