@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 * LDAP authentication module.
 * Default image upload size to orginal changed to orginal.
+* Observation feed display is now separate from the map marker display
 
 ##### Bug Fixes
 

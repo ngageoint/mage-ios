@@ -25,18 +25,18 @@ PODS:
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleToolboxForMac/Defines (2.2.0)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
-  - GTMSessionFetcher/Core (1.2.1)
+  - GoogleToolboxForMac/DebugUtils (2.2.1):
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+  - GoogleToolboxForMac/Defines (2.2.1)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
+  - GTMSessionFetcher/Core (1.2.2)
   - HexColors (2.2.1)
   - KTCenterFlowLayout (1.3.1)
-  - libPhoneNumber-iOS (0.9.13)
+  - libPhoneNumber-iOS (0.9.15)
   - mage-ios-sdk (3.0.3):
     - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0.0)
@@ -49,19 +49,19 @@ PODS:
   - mgrs (0.1.0)
   - objective-zip (1.0.5)
   - OCMock (3.4.3)
-  - OHHTTPStubs (6.1.0):
-    - OHHTTPStubs/Default (= 6.1.0)
-  - OHHTTPStubs/Core (6.1.0)
-  - OHHTTPStubs/Default (6.1.0):
+  - OHHTTPStubs (8.0.0):
+    - OHHTTPStubs/Default (= 8.0.0)
+  - OHHTTPStubs/Core (8.0.0)
+  - OHHTTPStubs/Default (8.0.0):
     - OHHTTPStubs/Core
     - OHHTTPStubs/JSON
     - OHHTTPStubs/NSURLSession
     - OHHTTPStubs/OHPathHelpers
-  - OHHTTPStubs/JSON (6.1.0):
+  - OHHTTPStubs/JSON (8.0.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/NSURLSession (6.1.0):
+  - OHHTTPStubs/NSURLSession (8.0.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/OHPathHelpers (6.1.0)
+  - OHHTTPStubs/OHPathHelpers (8.0.0)
   - proj4-ios (4.9.3)
   - sf-ios (2.0.2)
   - sf-proj-ios (2.0.2):
@@ -83,7 +83,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.3`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, branch `feed-display`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -122,13 +122,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
+    :branch: feed-display
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.3
 
 CHECKOUT OPTIONS:
   mage-ios-sdk:
+    :commit: 81b799b990d9ab6b9d73c6d48273448225e2cf60
     :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.3
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -137,17 +137,17 @@ SPEC CHECKSUMS:
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
   geopackage-ios: 667ea05113a5b66744354451cbf4f2842e5eed4d
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
+  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
-  libPhoneNumber-iOS: e444379ac18bbfbdefad571da735b2cd7e096caa
+  libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   mage-ios-sdk: e1e620f18c1f4a611c9a00bf44afd6a06dc3ce1a
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   objective-zip: 41b1408cebffceb6b9d15ad691506707e390d359
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
-  OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
+  OHHTTPStubs: 9cbce6364bec557cc3439aa6bb7514670d780881
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
   sf-ios: d7a88eab499349912ccb1d1dead9d1114198ca28
   sf-proj-ios: d74216669b2605b5460113baaeba59a97c1d83d6
@@ -158,6 +158,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: ce300041f22bb8e2e84ae2bc01719201bbdb13c2
+PODFILE CHECKSUM: b34bac91fdd6c0d19133e052e15967aedea7ee7f
 
 COCOAPODS: 1.5.3
