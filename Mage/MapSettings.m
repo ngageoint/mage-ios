@@ -48,7 +48,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 - (void) observationSwitchChanged:(UISwitch *)sender {
@@ -130,6 +130,14 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         return cell;
+    } else if (indexPath.section == 5) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StaticLayerCell"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"StaticLayerCell"];
+        }
+        cell.textLabel.text = @"Online Maps";
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
     }
 
     return nil;
@@ -156,6 +164,8 @@
         [self.delegate staticLayersCellTapped];
     } else if (indexPath.section == 4) {
         [self.delegate offlineMapsCellTapped];
+    } else if (indexPath.section == 5) {
+        [self.delegate onlineMapsCellTapped];
     }
 }
 

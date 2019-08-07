@@ -5,6 +5,7 @@
 //
 @import HexColors;
 @import DateTools;
+
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
@@ -47,6 +48,7 @@
 #import "Form.h"
 #import "Observation.h"
 #import "MapUtils.h"
+#import "WMSTileOverlay.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -92,6 +94,11 @@
                           options:NSKeyValueObservingOptionNew
                           context:NULL];
         }
+        
+        [defaults addObserver:self
+                   forKeyPath:@"selectedOnlineLayers"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
         
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
         [[CacheOverlays getInstance] registerListener:self];
@@ -255,6 +262,7 @@
     @try {
         [defaults removeObserver:self forKeyPath:@"mapType"];
         [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
+        [defaults removeObserver:self forKeyPath:@"selectedOnlineLayers"];
         [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
     }
     @catch (id exception) {
@@ -409,6 +417,7 @@
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
+    [self updateOnlineLayers:[defaults objectForKey:@"selectedOnlineLayers"]];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -419,6 +428,8 @@
         self.mapView.mapType = [object integerForKey:keyPath];
     } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateStaticLayers: [object objectForKey:keyPath]];
+    } else if ([@"selectedOnlineLayers" isEqualToString:keyPath] && self.mapView) {
+        [self updateOnlineLayers: [object objectForKey:keyPath]];
     } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
         [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     }
@@ -905,6 +916,21 @@
             }
         });
     }
+}
+
+- (void) updateOnlineLayers: (NSDictionary *) onlineLayersPerEvent {
+    NSLog(@"update online layers");
+    NSArray *onlineLayers = [onlineLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
+//    for (NSNumber *onlineLayerId in onlineLayers) {
+//        Layer *onlineLayer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", onlineLayerId, [Server currentEventId]]];
+//        NSLog(@"Adding the online layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
+//        MKTileOverlay *overlay = [[MKTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
+//        [self.mapView addOverlay:overlay];
+//    }
+    // This is just hardcoded
+    NSString *wmsUrl = @"https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?request=GetMap&service=WMS&styles=default&layers=GEBCO_Grid&version=1.3.0&CRS=EPSG:3857&width=256&height=256&format=image/png";
+    WMSTileOverlay *wmsLayer = [[WMSTileOverlay alloc] initWithURLTemplate:wmsUrl];
+    [self.mapView addOverlay:wmsLayer];
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {

@@ -10,6 +10,7 @@
 #import "MapSettings.h"
 #import "StaticLayerTableViewController.h"
 #import "OfflineMapTableViewController.h"
+#import "OnlineMapTableViewController.h"
 #import "UIColor+Mage.h"
 #import "Layer.h"
 #import "Server.h"
@@ -67,6 +68,11 @@
 - (void) offlineMapsCellTapped {
     OfflineMapTableViewController *offlineMapController = [[OfflineMapTableViewController alloc] init];
     [self.settingsNavController pushViewController:offlineMapController animated:YES];
+}
+
+- (void) onlineMapsCellTapped {
+    OnlineMapTableViewController *onlineMapController = [[OnlineMapTableViewController alloc] init];
+    [self.settingsNavController pushViewController:onlineMapController animated:YES];
 }
 
 - (void) staticLayersCellTapped {

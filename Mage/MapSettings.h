@@ -10,6 +10,7 @@
 
 - (void) staticLayersCellTapped;
 - (void) offlineMapsCellTapped;
+- (void) onlineMapsCellTapped;
 
 @end
 
