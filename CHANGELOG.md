@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Release Notes
 
 ##### Features
+* Traffic map layer.
 * LDAP authentication module.
 * Default image upload size to orginal changed to orginal.
 

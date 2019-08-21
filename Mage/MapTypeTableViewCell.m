@@ -15,6 +15,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:segmentedControl.selectedSegmentIndex forKey:@"mapType"];
     [defaults synchronize];
+    
+    [self.delegate mapTypeChanged:segmentedControl.selectedSegmentIndex];
 }
 
 @end

@@ -142,6 +142,9 @@
     self.mapDelegate.hideLocations = [defaults boolForKey:@"hidePeople"];
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
     
+    Boolean showTraffic = [defaults boolForKey:@"mapShowTraffic"];
+    self.mapView.showsTraffic = NO;
+    
     [self setNavBarTitle];
     
     [defaults addObserver:self
