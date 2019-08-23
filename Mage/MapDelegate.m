@@ -404,7 +404,10 @@
 
 - (void) ensureMapLayout {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    _mapView.mapType = [defaults integerForKey:@"mapType"];
+    self.mapView.mapType = [defaults integerForKey:@"mapType"];
+    
+    BOOL showTraffic = [defaults boolForKey:@"mapShowTraffic"];
+    self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite;
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
