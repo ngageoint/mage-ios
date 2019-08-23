@@ -143,7 +143,7 @@
     self.mapDelegate.hideObservations = [defaults boolForKey:@"hideObservations"];
     
     Boolean showTraffic = [defaults boolForKey:@"mapShowTraffic"];
-    self.mapView.showsTraffic = NO;
+    self.mapView.showsTraffic = showTraffic;
     
     [self setNavBarTitle];
     
