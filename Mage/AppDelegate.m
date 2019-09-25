@@ -43,6 +43,7 @@
 #import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "MageConstants.h"
+#import <SSZipArchive/SSZipArchive.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -471,29 +472,35 @@
 - (void) processArchiveAtFilePath:(NSString *) archivePath toDirectory:(NSString *) directory {
     NSLog(@"File %@", archivePath);
     
-    NSError *error = nil;
-    OZZipFile *zipFile = [[OZZipFile alloc] initWithFileName:archivePath mode:OZZipFileModeUnzip error:nil];
-    NSArray *caches = [zipFile expandToPath:directory error:&error];
-    if (error) {
-        NSLog(@"Error extracting offline map archive: %@. Error: %@", archivePath, error);
-    }
-    
-    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
-    
-    if (caches.count) {
-        for(NSString * cache in caches){
-            CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:[directory stringByAppendingPathComponent:cache]];
-            [cacheOverlays addCacheOverlay:cacheOverlay];
-        }
-    }
-    
-    [cacheOverlays removeProcessing:[archivePath lastPathComponent]];
-    
-    error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
-    if (error) {
-        NSLog(@"Error deleting extracted offline map archive: %@. Error: %@", archivePath, error);
-    }
+//    NSError *error = nil;
+//    [SSZipArchive unzipFileAtPath:archivePath
+//                    toDestination:directory
+//                        overwrite:YES
+//                         password:NULL
+//                            error:&error];
+//    
+//    OZZipFile *zipFile = [[OZZipFile alloc] initWithFileName:archivePath mode:OZZipFileModeUnzip error:nil];
+//    NSArray *caches = [zipFile expandToPath:directory error:&error];
+//    if (error) {
+//        NSLog(@"Error extracting offline map archive: %@. Error: %@", archivePath, error);
+//    }
+//    
+//    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
+//    
+//    if (caches.count) {
+//        for(NSString * cache in caches){
+//            CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:[directory stringByAppendingPathComponent:cache]];
+//            [cacheOverlays addCacheOverlay:cacheOverlay];
+//        }
+//    }
+//    
+//    [cacheOverlays removeProcessing:[archivePath lastPathComponent]];
+//    
+//    error = nil;
+//    [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
+//    if (error) {
+//        NSLog(@"Error deleting extracted offline map archive: %@. Error: %@", archivePath, error);
+//    }
 }
 
 - (void) applicationWillTerminate:(UIApplication *) application {
