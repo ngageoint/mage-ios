@@ -75,7 +75,7 @@
 
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
-    self.window.backgroundColor = [UIColor background];
+    self.window.backgroundColor = [UIColor blackColor];
     
     [self createLoadingView];
     
@@ -152,6 +152,7 @@
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
     TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    transitionView.modalPresentationStyle = UIModalPresentationFullScreen;
     [self.rootViewController pushViewController:transitionView animated:NO];
 }
 
@@ -478,24 +479,24 @@
 //                        overwrite:YES
 //                         password:NULL
 //                            error:&error];
-//    
+//
 //    OZZipFile *zipFile = [[OZZipFile alloc] initWithFileName:archivePath mode:OZZipFileModeUnzip error:nil];
 //    NSArray *caches = [zipFile expandToPath:directory error:&error];
 //    if (error) {
 //        NSLog(@"Error extracting offline map archive: %@. Error: %@", archivePath, error);
 //    }
-//    
+//
 //    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
-//    
+//
 //    if (caches.count) {
 //        for(NSString * cache in caches){
 //            CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:[directory stringByAppendingPathComponent:cache]];
 //            [cacheOverlays addCacheOverlay:cacheOverlay];
 //        }
 //    }
-//    
+//
 //    [cacheOverlays removeProcessing:[archivePath lastPathComponent]];
-//    
+//
 //    error = nil;
 //    [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
 //    if (error) {

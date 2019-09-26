@@ -19,7 +19,7 @@
 
 - (void) viewDidLoad {
     [[Mage singleton] startServicesAsInitial:YES];
-	
+    	
 	[super viewDidLoad];
     
     [self registerForThemeChanges];

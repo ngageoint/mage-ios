@@ -39,6 +39,8 @@
     self = [super initWithNibName:@"EventChooserView" bundle:nil];
     if (!self) return nil;
     
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
+    
     self.delegate = delegate;
     self.eventDataSource = eventDataSource;
     self.eventDataSource.tableView = self.tableView;
