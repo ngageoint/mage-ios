@@ -76,10 +76,10 @@
     self.refreshingButton.tintColor = [UIColor navBarPrimaryText];
     self.refreshingStatus.textColor = [UIColor navBarPrimaryText];
     
-    // There currently is no way to change the text color in the UITextField in the search bar
-    // DRB 2018-05-09
     self.searchController.searchBar.barTintColor = [UIColor primary];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
+    self.searchController.searchBar.backgroundColor = [UIColor primary];
+    self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.searchContainer.backgroundColor = [UIColor primary];
 
     [self.tableView reloadData];

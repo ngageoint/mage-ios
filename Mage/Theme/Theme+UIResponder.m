@@ -82,19 +82,19 @@
             navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
             navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
             if (@available(iOS 13.0, *)) {
-                UINavigationBarAppearance *appeareance = [[UINavigationBarAppearance alloc] init];
-                [appeareance configureWithOpaqueBackground];
-                appeareance.titleTextAttributes = @{
+                UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+                [appearance configureWithOpaqueBackground];
+                appearance.titleTextAttributes = @{
                     NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
                     NSBackgroundColorAttributeName: [UIColor primary]
                 };
-                appeareance.largeTitleTextAttributes = @{
+                appearance.largeTitleTextAttributes = @{
                     NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
                     NSBackgroundColorAttributeName: [UIColor primary]
                 };
                 
-                navigationController.navigationBar.standardAppearance = appeareance;
-                navigationController.navigationBar.scrollEdgeAppearance = appeareance;
+                navigationController.navigationBar.standardAppearance = appearance;
+                navigationController.navigationBar.scrollEdgeAppearance = appearance;
                 navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor primary];
                 navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor primary];
             } else {
