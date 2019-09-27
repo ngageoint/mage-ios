@@ -8,11 +8,10 @@
 
 #import "Form.h"
 #import "MageSessionManager.h"
-#import "zlib.h"
-#import "Objective-Zip+NSError.h"
 #import "ObservationFetchService.h"
 #import "MageServer.h"
 #import "Server.h"
+#import <SSZipArchive/SSZipArchive.h>
 
 NSString * const MAGEFormFetched = @"mil.nga.giat.mage.form.fetched";
 
@@ -27,7 +26,6 @@ NSString * const MAGEFormFetched = @"mil.nga.giat.mage.form.fetched";
     
     MageSessionManager *manager = [MageSessionManager manager];
     
-    
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:stringPath];
@@ -39,40 +37,7 @@ NSString * const MAGEFormFetched = @"mil.nga.giat.mage.form.fetched";
             NSString * fileString = [filePath path];
             
             NSError *error = nil;
-            OZZipFile *unzipFile = [[OZZipFile alloc] initWithFileName:fileString mode:OZZipFileModeUnzip error:&error];
-            
-            NSArray *infos = [unzipFile listFileInZipInfosWithError:&error];
-            for (OZFileInZipInfo *info in infos) {
-                [unzipFile locateFileInZip:info.name error:&error];
-                NSString *name = info.name;
-                if (![name hasSuffix:@"/"]) {
-                    NSString *filePath = [folderToUnzipTo stringByAppendingPathComponent:name];
-                    NSString *basePath = [filePath stringByDeletingLastPathComponent];
-                    if (![[NSFileManager defaultManager] createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:&error]) {
-                        [unzipFile closeWithError:nil];
-                    }
-                    
-                    [[NSData data] writeToFile:filePath options:0 error:nil];
-                    NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
-                    OZZipReadStream *read = [unzipFile readCurrentFileInZipWithError:&error];
-                    NSMutableData *buffer = [NSMutableData dataWithLength:2048];
-                    do {
-                        long bytesRead = [read readDataWithBuffer:buffer error:nil];
-                        if (bytesRead <= 0) {
-                            break;
-                        }
-                        
-                        [buffer setLength:bytesRead];
-                        
-                        [handle writeData:buffer];
-                    } while(YES);
-                    
-                    [read finishedReadingWithError:nil];
-                    [handle closeFile];
-                }
-            }
-            
-            [unzipFile closeWithError:nil];
+            [SSZipArchive unzipFileAtPath:fileString toDestination:folderToUnzipTo];
             if ([[NSFileManager defaultManager] isDeletableFileAtPath:fileString]) {
                 BOOL successfulRemoval = [[NSFileManager defaultManager] removeItemAtPath:fileString error:&error];
                 if (!successfulRemoval) {
