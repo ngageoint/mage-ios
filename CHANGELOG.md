@@ -3,13 +3,32 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.11 (TBD)
+## 2.0.13 (TBD)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+
+## 2.0.12 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.12)
+
+##### Release Notes
+
+##### Features
+* iOS 13 updates.
+* Integrate SSZipArchive
+* SAML authentication support.
+
+##### Bug Fixes
+
+## 2.0.11 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.11)
 
 ##### Release Notes
 
 ##### Features
 * Traffic map layer.
-* LDAP authentication module.
+* LDAP authentication support.
 * Default image upload size to orginal changed to orginal.
 
 ##### Bug Fixes
