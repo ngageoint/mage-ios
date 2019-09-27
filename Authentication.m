@@ -8,7 +8,7 @@
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
 #import "GoogleAuthentication.h"
-#import "OAuthAuthentication.h"
+#import "IdpAuthentication.h"
 #import "LdapAuthentication.h"
 
 @interface Authentication ()
@@ -28,8 +28,9 @@
         case GOOGLE: {
             return [[GoogleAuthentication alloc] init];
         }
-        case OAUTH2: {
-            return [[OAuthAuthentication alloc] init];
+        case OAUTH2:
+        case SAML: {
+            return [[IdpAuthentication alloc] init];
         }
         case LDAP: {
             return [[LdapAuthentication alloc] init];
@@ -42,7 +43,7 @@
 }
 
 + (AuthenticationType) authenticationTypeFromString: (NSString *) value {
-    return  (AuthenticationType) [[Authentication stringToAuthenticationType] objectForKey:value];
+    return  [[[Authentication stringToAuthenticationType] valueForKey:value] intValue];
 }
 
 + (NSString *) authenticationTypeToString: (AuthenticationType) authenticationType {
@@ -58,6 +59,7 @@
                       [NSNumber numberWithInteger:SERVER], @"server",
                       [NSNumber numberWithInteger:GOOGLE], @"google",
                       [NSNumber numberWithInteger:OAUTH2], @"oauth2",
+                      [NSNumber numberWithInteger:SAML], @"saml",
                       [NSNumber numberWithInteger:LDAP], @"ldap",
                       nil];
     });
@@ -74,6 +76,7 @@
                       @"server", [NSNumber numberWithInteger:SERVER],
                       @"google", [NSNumber numberWithInteger:GOOGLE],
                       @"oauth2", [NSNumber numberWithInteger:OAUTH2],
+                      @"saml", [NSNumber numberWithInteger:SAML],
                       @"ldap", [NSNumber numberWithInteger:LDAP],
                       nil];
     });

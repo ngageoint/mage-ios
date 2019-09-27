@@ -14,5 +14,5 @@ typedef NS_ENUM(NSInteger, OAuthRequestType) {
     SIGNUP
 };
 
-@interface OAuthAuthentication : NSObject<Authentication>
+@interface IdpAuthentication : NSObject<Authentication>
 @end

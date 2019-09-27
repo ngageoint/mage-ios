@@ -6,7 +6,7 @@
 //  Copyright © 2015 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "OAuthAuthentication.h"
+#import "IdpAuthentication.h"
 #import "User.h"
 #import "MageSessionManager.h"
 #import "UserUtility.h"
@@ -15,7 +15,7 @@
 #import "MagicalRecord+MAGE.h"
 #import "StoredPassword.h"
 
-@interface OAuthAuthentication()
+@interface IdpAuthentication()
 
 @property (strong, nonatomic) NSDictionary* parameters;
 @property (strong, nonatomic) NSDictionary* loginParameters;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation OAuthAuthentication
+@implementation IdpAuthentication
 
 - (instancetype) initWithParameters:(NSDictionary *)parameters {
     self = [super init];
@@ -200,11 +200,6 @@
 
 - (void) authorize: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     NSDictionary *loginResult = [loginParameters valueForKey:@"result"];
-    
-    NSDictionary *oauth = [loginResult objectForKey:@"oauth"];
-    if (!oauth) {
-        return complete(AUTHENTICATION_ERROR, @"Login failed");
-    }
     
     // authentication succeeded, authorize with the mage server
     NSDictionary *user = [loginResult objectForKey:@"user"];

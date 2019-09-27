@@ -9,7 +9,7 @@
 #import "LdapAuthentication.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
-#import "OAuthAuthentication.h"
+#import "IdpAuthentication.h"
 #import "StoredPassword.h"
 
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
@@ -36,13 +36,15 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             for (NSString *authenticationType in authenticationStrategies) {
                 NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
                 if ([authenticationType isEqualToString:@"google"]) {
-                    [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
                 } else if ([authenticationType isEqualToString:@"local"]) {
                     [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
                 } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                    [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"oauth"]) {
-                    [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                } else if ([[authParams objectForKey:@"type"] isEqualToString:@"saml"]) {
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SAML]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"ldap"]) {
                     [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
                 }
@@ -154,13 +156,13 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         for (NSString *authenticationType in authenticationStrategies) {
             NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
             if ([authenticationType isEqualToString:@"google"]) {
-                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
             } else if ([authenticationType isEqualToString:@"local"]) {
                 [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
             } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
             } else if ([authenticationType isEqualToString:@"oauth"]) {
-                [authenticationModules setObject:[[OAuthAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
             } else if ([authenticationType isEqualToString:@"ldap"]) {
                 [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
             }
