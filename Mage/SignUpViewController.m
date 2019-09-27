@@ -14,7 +14,7 @@
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "OAuthViewController.h"
-#import "OAuthAuthentication.h"
+#import "IdpAuthentication.h"
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"
 #import <GoogleSignIn/GoogleSignIn.h>
