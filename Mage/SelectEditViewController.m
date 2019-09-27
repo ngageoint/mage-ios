@@ -36,7 +36,8 @@
     self.view.backgroundColor = [UIColor background];
     self.selectedChoicesView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
-    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    self.searchController.searchBar.backgroundColor = [UIColor primary];
+    self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.selectedTextLabel.textColor = [UIColor secondaryText];
     self.selectedLabel.textColor = [UIColor primaryText];
     self.clearButton.tintColor = [UIColor flatButton];
