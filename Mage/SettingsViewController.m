@@ -224,6 +224,7 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
     UIViewController *initialViewController = [storyboard instantiateInitialViewController];
     initialViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    initialViewController.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:initialViewController animated:YES completion:NULL];
 }
 

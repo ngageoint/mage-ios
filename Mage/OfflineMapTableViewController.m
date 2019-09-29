@@ -310,7 +310,6 @@
         cell.textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
         cell.textLabel.textColor = [UIColor primaryText];
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [activityIndicator setFrame:CGRectZero];
         [activityIndicator startAnimating];
         activityIndicator.color = [UIColor secondaryText];
         cell.accessoryView = activityIndicator;

@@ -9,7 +9,7 @@
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 
-@interface MapSettings () <UITableViewDelegate, UITableViewDataSource>
+@interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
 @end
 
@@ -44,6 +44,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSInteger mapType = [defaults integerForKey:@"mapType"];
+        return (mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid) ? 2 : 1;
+    }
+    
     return 1;
 }
 
@@ -51,26 +57,33 @@
     return 6;
 }
 
-- (void) observationSwitchChanged:(UISwitch *)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hideObservations"];
-    [defaults synchronize];
-}
-
-- (void) peopleSwitchChanged: (UISwitch *) sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hidePeople"];
-    [defaults synchronize];
-}
-
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (indexPath.section == 0) {
-        MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
-        cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
-        cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
-        return cell;
+        if (indexPath.row == 0) {
+            MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
+            cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
+            cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
+            cell.delegate = self;
+            
+            return cell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ObservationSettingsCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"ObservationSettingsCell"];
+            }
+            
+            cell.textLabel.text = @"Traffic";
+            cell.detailTextLabel.text = @"Show Apple Maps Traffic";
+            UISwitch *trafficSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+            trafficSwitch.on = [defaults boolForKey:@"mapShowTraffic"];
+            trafficSwitch.onTintColor = [UIColor themedButton];
+            [trafficSwitch addTarget:self action:@selector(trafficSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = trafficSwitch;
+            
+            return cell;
+        }
     } else if (indexPath.section == 1) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ObservationSettingsCell"];
         if (!cell) {
@@ -145,8 +158,9 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Map Type";
+        return @"Maps";
     }
+    
     return @"";
 }
 
@@ -184,6 +198,33 @@
         return 45.0f;
     }
     return UITableViewAutomaticDimension;
+}
+
+- (void) mapTypeChanged:(MKMapType) mapType {
+    Boolean showingTraffic = [self.tableView numberOfRowsInSection:0] == 2 ? true : false;
+    if (mapType == MKMapTypeSatellite && showingTraffic) {
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+    } else if ((mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid) && !showingTraffic) {
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (void) trafficSwitchChanged:(UISwitch *)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:sender.on forKey:@"mapShowTraffic"];
+    [defaults synchronize];
+}
+
+- (void) observationSwitchChanged:(UISwitch *)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:!sender.on forKey:@"hideObservations"];
+    [defaults synchronize];
+}
+
+- (void) peopleSwitchChanged: (UISwitch *) sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:!sender.on forKey:@"hidePeople"];
+    [defaults synchronize];
 }
 
 @end
