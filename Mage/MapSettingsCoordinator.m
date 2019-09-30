@@ -42,7 +42,7 @@
     self.settingsNavController = [[UINavigationController alloc] initWithRootViewController:settings];
     self.settingsNavController.delegate = self;
     
-    self.settingsNavController.modalPresentationStyle = UIModalPresentationPopover;
+    self.settingsNavController.modalPresentationStyle = UIModalPresentationFullScreen;
     UIPopoverPresentationController *popoverPresentationController = self.settingsNavController.popoverPresentationController;
     popoverPresentationController.sourceView = self.sourceView;
     popoverPresentationController.sourceRect = CGRectMake(0, -5, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
