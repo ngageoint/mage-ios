@@ -89,7 +89,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat: @"%@ %@", layer.name, layer.remoteId];
+    cell.textLabel.text = layer.name;
     if ([layer.type isEqualToString:@"Imagery"]) {
         cell.detailTextLabel.text = layer.url;
     } else {

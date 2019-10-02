@@ -50,6 +50,7 @@
 #import "MapUtils.h"
 #import "WMSTileOverlay.h"
 #import "XYZTileOverlay.h"
+#import "TMSTileOverlay.h"
 #import "ImageryLayer.h"
 
 @interface MapDelegate ()
@@ -948,6 +949,16 @@
         } else if ([[onlineLayer format] isEqualToString:@"XYZ"]) {
             NSLog(@"Adding the online layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
             XYZTileOverlay *overlay = [[XYZTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
+            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
+                [baseLayers addObject:overlay];
+            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
+                [transparentLayers addObject:overlay];
+            } else {
+                [nonBaseLayers addObject:overlay];
+            }
+        } else if ([[onlineLayer format] isEqualToString:@"TMS"]) {
+            NSLog(@"Adding the TMS layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
+            TMSTileOverlay *overlay = [[TMSTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
             if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
                 [baseLayers addObject:overlay];
             } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
