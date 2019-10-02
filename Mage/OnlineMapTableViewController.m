@@ -89,8 +89,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
     }
     
-    cell.textLabel.text = layer.name;
-    cell.detailTextLabel.text = layer.type;
+    cell.textLabel.text = [NSString stringWithFormat: @"%@ %@", layer.name, layer.remoteId];
+    if ([layer.type isEqualToString:@"Imagery"]) {
+        cell.detailTextLabel.text = layer.url;
+    } else {
+        cell.detailTextLabel.text = layer.type;
+    }
     cell.textLabel.textColor = [UIColor primaryText];
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.backgroundColor = [UIColor dialog];

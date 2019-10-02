@@ -57,7 +57,6 @@
     self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
     self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageLayerFetched:) name: GeoPackageLayerFetched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageDownloaded object:nil];
     
     self.cacheOverlays = [CacheOverlays getInstance];
@@ -94,14 +93,6 @@
 }
 
 - (void) geoPackageImported: (NSNotification *) notification {
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [weakSelf updateAndReloadData];
-    });
-}
-
-- (void)geoPackageLayerFetched:(NSNotification *)notification {
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {

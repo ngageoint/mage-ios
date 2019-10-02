@@ -1,8 +1,8 @@
 //
-//  WMSTileOverlay.h
+//  XYZTileOverlay.h
 //  MAGE
 //
-//  Created by Dan Barela on 8/6/19.
+//  Created by Dan Barela on 9/24/19.
 //  Copyright © 2019 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -10,9 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WMSTileOverlay : MKTileOverlay
-
-- (id) initWithURL: (NSString *) url andParameters: (NSDictionary *) parameters;
+@interface XYZTileOverlay : MKTileOverlay
 
 @end
 

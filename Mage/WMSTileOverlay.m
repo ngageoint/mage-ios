@@ -10,24 +10,23 @@
 
 @interface WMSTileOverlay ()
 @property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSDictionary *parameters;
 @end
 
 @implementation WMSTileOverlay 
 
-
-/**
- Initializes a WMSTileOverlay
- 
- url should look something like this:
- 
- https://yourWmsService.com/wms?request=GetMap&service=WMS&styles=default&layers=layer&version=1.3.0&CRS=EPSG:4326&width=256&height=256&format=image/png
- 
- - parameter url: A string representation of URL to WMS Service
- - returns: An overlay to be used with MapKit
- */
-- (id) initWithURLTemplate:(NSString *)url {
-    self.url = url;
-    return [super initWithURLTemplate:url];
+- (id) initWithURL: (NSString *) url andParameters: (NSDictionary *) parameters {
+    self.parameters = parameters;
+    self.url = [NSString stringWithFormat:@"%@?request=GetMap&service=WMS&styles=%@&layers=%@&version=%@&%@=EPSG:3857&width=256&height=256&format=%@&transparent=%@",
+                url,
+                [parameters valueForKey:@"styles"],
+                [parameters valueForKey:@"layers"],
+                [parameters valueForKey:@"version"],
+                [(NSString *)[parameters valueForKey:@"version"] containsString: @"1.3"] ? @"CRS" : @"SRS",
+                [parameters valueForKey:@"format"],
+                [[parameters valueForKey:@"transparent"] intValue] == 1 ? @"true" : @"false"
+    ];
+    return [super initWithURLTemplate:self.url];
 }
 
 - (double) xOfColumn:(long) column andZoom: (long) zoom {

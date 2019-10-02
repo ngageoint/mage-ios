@@ -49,6 +49,8 @@
 #import "Observation.h"
 #import "MapUtils.h"
 #import "WMSTileOverlay.h"
+#import "XYZTileOverlay.h"
+#import "ImageryLayer.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -923,17 +925,48 @@
 
 - (void) updateOnlineLayers: (NSDictionary *) onlineLayersPerEvent {
     NSLog(@"update online layers");
+    NSMutableArray *transparentLayers = [[NSMutableArray alloc] init];
+    NSMutableArray *nonBaseLayers = [[NSMutableArray alloc] init];
+    NSMutableArray *baseLayers = [[NSMutableArray alloc] init];
     NSArray *onlineLayers = [onlineLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
-//    for (NSNumber *onlineLayerId in onlineLayers) {
-//        Layer *onlineLayer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", onlineLayerId, [Server currentEventId]]];
-//        NSLog(@"Adding the online layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
-//        MKTileOverlay *overlay = [[MKTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
-//        [self.mapView addOverlay:overlay];
-//    }
-    // This is just hardcoded
-    NSString *wmsUrl = @"https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?request=GetMap&service=WMS&styles=default&layers=GEBCO_Grid&version=1.3.0&CRS=EPSG:3857&width=256&height=256&format=image/png";
-    WMSTileOverlay *wmsLayer = [[WMSTileOverlay alloc] initWithURLTemplate:wmsUrl];
-    [self.mapView addOverlay:wmsLayer];
+    for (NSNumber *onlineLayerId in onlineLayers) {
+        ImageryLayer *onlineLayer = [ImageryLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", onlineLayerId, [Server currentEventId]]];
+        NSLog(@"Online layer %@", onlineLayer.name);
+
+        NSLog(@"Online layer file %@", [onlineLayer options]);
+        if ([[onlineLayer format] isEqualToString:@"WMS"]) {
+            NSDictionary *wms = [onlineLayer options];
+            NSLog(@"Adding the WMS layer %@ to the map", onlineLayer.name);
+            WMSTileOverlay *wmsLayer = [[WMSTileOverlay alloc] initWithURL: [onlineLayer url] andParameters: wms];
+            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
+                [baseLayers addObject:wmsLayer];
+            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
+                [transparentLayers addObject:wmsLayer];
+            } else {
+                [nonBaseLayers addObject:wmsLayer];
+            }
+        } else if ([[onlineLayer format] isEqualToString:@"XYZ"]) {
+            NSLog(@"Adding the online layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
+            XYZTileOverlay *overlay = [[XYZTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
+            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
+                [baseLayers addObject:overlay];
+            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
+                [transparentLayers addObject:overlay];
+            } else {
+                [nonBaseLayers addObject:overlay];
+            }
+        }
+    }
+    
+    for (MKTileOverlay *overlay in baseLayers) {
+        [self.mapView addOverlay:overlay];
+    }
+    for (MKTileOverlay *overlay in nonBaseLayers) {
+        [self.mapView addOverlay:overlay];
+    }
+    for (MKTileOverlay *overlay in transparentLayers) {
+        [self.mapView addOverlay:overlay];
+    }
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {

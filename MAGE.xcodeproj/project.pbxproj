@@ -192,6 +192,7 @@
 		F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11002049D6A3002F9906 /* ThemeManager.m */; };
 		F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11072049E61A002F9906 /* Theme+UIResponder.m */; };
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
+		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
@@ -659,6 +660,8 @@
 		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
 		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
+		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
@@ -1220,6 +1223,8 @@
 				04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */,
 				F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */,
 				F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */,
+				F75FC904233AAA4100547315 /* XYZTileOverlay.h */,
+				F75FC905233AAA4100547315 /* XYZTileOverlay.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -2105,7 +2110,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2139,6 +2144,8 @@
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
@@ -2174,6 +2181,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To16.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model15To16.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
@@ -2352,6 +2361,7 @@
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
+				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
