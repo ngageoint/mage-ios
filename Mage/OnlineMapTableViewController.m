@@ -95,7 +95,11 @@
     } else {
         cell.detailTextLabel.text = layer.type;
     }
-    cell.textLabel.textColor = [UIColor primaryText];
+    if (![[layer url] hasPrefix:@"https"]) {
+        cell.textLabel.textColor = [UIColor secondaryText];
+    } else {
+        cell.textLabel.textColor = [UIColor primaryText];
+    }
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.backgroundColor = [UIColor dialog];
     
@@ -112,6 +116,17 @@
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
+    
+    if (![[[self layerForRow:indexPath.row] url] hasPrefix:@"https"]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Non HTTPS Layer"
+                                                                       message:@"We cannot load this layer on mobile because it cannot be accessed securely."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
     
     UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
     

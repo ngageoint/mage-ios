@@ -932,43 +932,27 @@
     NSArray *onlineLayers = [onlineLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
     for (NSNumber *onlineLayerId in onlineLayers) {
         ImageryLayer *onlineLayer = [ImageryLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", onlineLayerId, [Server currentEventId]]];
-        NSLog(@"Online layer %@", onlineLayer.name);
-
-        NSLog(@"Online layer file %@", [onlineLayer options]);
+        MKTileOverlay *overlay = nil;
         if ([[onlineLayer format] isEqualToString:@"WMS"]) {
             NSDictionary *wms = [onlineLayer options];
             NSLog(@"Adding the WMS layer %@ to the map", onlineLayer.name);
-            WMSTileOverlay *wmsLayer = [[WMSTileOverlay alloc] initWithURL: [onlineLayer url] andParameters: wms];
-            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
-                [baseLayers addObject:wmsLayer];
-            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
-                [transparentLayers addObject:wmsLayer];
-            } else {
-                [nonBaseLayers addObject:wmsLayer];
-            }
+            overlay = [[WMSTileOverlay alloc] initWithURL: [onlineLayer url] andParameters: wms];
         } else if ([[onlineLayer format] isEqualToString:@"XYZ"]) {
             NSLog(@"Adding the online layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
-            XYZTileOverlay *overlay = [[XYZTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
-            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
-                [baseLayers addObject:overlay];
-            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
-                [transparentLayers addObject:overlay];
-            } else {
-                [nonBaseLayers addObject:overlay];
-            }
+            overlay = [[XYZTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
         } else if ([[onlineLayer format] isEqualToString:@"TMS"]) {
             NSLog(@"Adding the TMS layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
-            TMSTileOverlay *overlay = [[TMSTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
-            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
-                [baseLayers addObject:overlay];
-            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
-                [transparentLayers addObject:overlay];
-            } else {
-                [nonBaseLayers addObject:overlay];
-            }
+            overlay = [[TMSTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
+        }
+        if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
+            [baseLayers addObject:overlay];
+        } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
+            [transparentLayers addObject:overlay];
+        } else {
+            [nonBaseLayers addObject:overlay];
         }
     }
-    
+    // Add the layers in the proper order to the map
     for (MKTileOverlay *overlay in baseLayers) {
         [self.mapView addOverlay:overlay];
     }
