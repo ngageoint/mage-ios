@@ -78,9 +78,12 @@
     
     self.searchController.searchBar.barTintColor = [UIColor primary];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
-    self.searchController.searchBar.backgroundColor = [UIColor primary];
-    self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.searchContainer.backgroundColor = [UIColor primary];
+
+    if (@available(iOS 13.0, *)) {
+        self.searchController.searchBar.backgroundColor = [UIColor primary];
+        self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+    }
 
     [self.tableView reloadData];
 }
