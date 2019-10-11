@@ -85,6 +85,11 @@
         [self startMageApp];
     }
     
+    if (@available(iOS 13.0, *)) {
+    } else {
+        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor whiteColor]];
+    }
+    
 	return YES;
 }
 

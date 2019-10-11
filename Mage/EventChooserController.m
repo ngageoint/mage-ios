@@ -82,8 +82,6 @@
 
     if (@available(iOS 13.0, *)) {
         self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
-    } else {
-        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor navBarPrimaryText]];
     }
 
     [self.tableView reloadData];
@@ -103,11 +101,6 @@
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchController.searchBar.translucent = YES;
     self.searchController.delegate = self;
-    
-    if (@available(iOS 13.0, *)) {
-    } else {
-        self.searchController.searchBar.barStyle = UIBarStyleBlack;
-    }
     
     self.refreshingButton.layer.shadowRadius = 3.0f;
     self.refreshingButton.layer.shadowColor = [UIColor blackColor].CGColor;
