@@ -19,11 +19,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *refreshingButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *refreshingActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *refreshingView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *refreshingViewHeight;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
 @property (weak, nonatomic) IBOutlet UILabel *refreshingStatus;
-@property (weak, nonatomic) IBOutlet UITextView *eventInstructions;
+@property (weak, nonatomic) IBOutlet UILabel *eventInstructions;
 @property (strong, nonatomic) NSFetchedResultsController *allEventsController;
 
 @end
@@ -78,10 +77,10 @@
     
     self.searchController.searchBar.barTintColor = [UIColor primary];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
+    self.searchController.searchBar.backgroundColor = [UIColor primary];
     self.searchContainer.backgroundColor = [UIColor primary];
 
     if (@available(iOS 13.0, *)) {
-        self.searchController.searchBar.backgroundColor = [UIColor primary];
         self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     }
 
@@ -99,10 +98,14 @@
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
-    self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchController.searchBar.translucent = YES;
     self.searchController.delegate = self;
+    
+    if (@available(iOS 13.0, *)) {
+    } else {
+        self.searchController.searchBar.barStyle = UIBarStyleBlack;
+    }
     
     self.refreshingButton.layer.shadowRadius = 3.0f;
     self.refreshingButton.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -133,14 +136,6 @@
     [self.tableView reloadData];
 }
 
-- (BOOL) isIphoneX {
-    if (@available(iOS 11.0, *)) {
-        return self.view.safeAreaInsets.top > 0.0;
-    } else {
-        return NO;
-    }
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -162,10 +157,6 @@
     CGRect searchBarFrame = self.searchController.searchBar.frame;
     searchBarFrame.size.width = self.tableView.frame.size.width;
     self.searchController.searchBar.frame = searchBarFrame;
-    if ([self isIphoneX]) {
-        self.refreshingViewHeight.constant = 56.0f;
-        [self.view layoutIfNeeded];
-    }
 }
 
 - (void) didSelectEvent:(Event *) event {

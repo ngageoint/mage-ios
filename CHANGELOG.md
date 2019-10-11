@@ -3,13 +3,22 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.13 (TBD)
+## 2.0.14 (TBD)
 
 ##### Release Notes
 
 ##### Features
 
 ##### Bug Fixes
+
+## 2.0.13 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.13)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Wrap UISearchBar background color setter in iOS 13 check.
 
 ## 2.0.12 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.12)
 
