@@ -82,6 +82,8 @@
 
     if (@available(iOS 13.0, *)) {
         self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+    } else {
+        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor navBarPrimaryText]];
     }
 
     [self.tableView reloadData];
