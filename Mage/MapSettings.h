@@ -8,7 +8,6 @@
 
 @protocol MapSettingsDelegate
 
-- (void) staticLayersCellTapped;
 - (void) offlineMapsCellTapped;
 - (void) onlineMapsCellTapped;
 

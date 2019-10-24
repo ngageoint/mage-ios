@@ -8,13 +8,17 @@
 
 #import "OnlineMapTableViewController.h"
 #import "Theme+UIResponder.h"
+#import "ImageryLayer.h"
 #import "Layer.h"
 #import "Server.h"
+#import "ObservationTableHeaderView.h"
 
-@interface OnlineMapTableViewController ()
+@interface OnlineMapTableViewController () <NSFetchedResultsControllerDelegate>
     @property (nonatomic, strong) NSMutableSet *selectedOnlineLayers;
     @property (nonatomic, strong) NSArray *onlineLayers;
+    @property (nonatomic, strong) NSArray *insecureOnlineLayers;
     @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
+@property (strong, nonatomic) NSFetchedResultsController *onlineLayersFetchedResultsController;
 @end
 
 @implementation OnlineMapTableViewController
@@ -37,65 +41,91 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.selectedOnlineLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedOnlineLayers.%@", [Server currentEventId]]]];
     
+    self.onlineLayersFetchedResultsController = [ImageryLayer MR_fetchAllGroupedBy:@"isSecure" withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]] sortedBy:@"isSecure,name:YES" ascending:NO delegate:self];
+    [self.onlineLayersFetchedResultsController performFetch:nil];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
-    [self update];
     [self registerForThemeChanges];
 }
 
-- (void) reloadTable {
-    self.onlineLayers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-
-    [self.tableView reloadData];
-    self.refreshLayersButton.enabled = YES;
-}
-
 - (IBAction)refreshLayers:(id)sender {
-    self.refreshLayersButton.enabled = NO;
-    
-    [self updateAndReloadData];
-    
     [Layer refreshLayersForEvent:[Server currentEventId]];
 }
 
--(void) updateAndReloadData{
-    [self update];
-    [self.tableView reloadData];
+#pragma mark - NSFetchedResultsControllerDelegate
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [[self tableView] beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [[self tableView] insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [[self tableView] deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeMove:
+        case NSFetchedResultsChangeUpdate:
+            break;
+    }
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeMove:
+            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [[self tableView] endUpdates];
 }
 
--(void) update{
-    self.onlineLayers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ && type == %@", [Server currentEventId], @"Imagery"]];
-
-    self.refreshLayersButton.enabled = YES;
-}
 
 #pragma mark - Table view data source
 
+- (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return [[ObservationTableHeaderView alloc] initWithName:@"Insecure Layers"];
+    }
+    return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers"];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 45.0f;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
-    return 1;
+    return [[self.onlineLayersFetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.onlineLayers.count;
+    return [[[self.onlineLayersFetchedResultsController sections] objectAtIndex:section] numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = nil;
-
-    Layer *layer = [self.onlineLayers objectAtIndex:indexPath.row];
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:@"onlineLayerCell"];
+    ImageryLayer *layer = [self.onlineLayersFetchedResultsController objectAtIndexPath:indexPath];
+      
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"onlineLayerCell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
     }
     
     cell.textLabel.text = layer.name;
-    if ([layer.type isEqualToString:@"Imagery"]) {
-        cell.detailTextLabel.text = layer.url;
-    } else {
-        cell.detailTextLabel.text = layer.type;
-    }
-    if (![[layer url] hasPrefix:@"https"]) {
+    cell.detailTextLabel.text = layer.url;
+    if (!layer.isSecure) {
         cell.textLabel.textColor = [UIColor secondaryText];
     } else {
         cell.textLabel.textColor = [UIColor primaryText];
@@ -105,19 +135,18 @@
     
     cell.accessoryView = nil;
     cell.accessoryType = [self.selectedOnlineLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
- 
-    cell.backgroundColor = [UIColor dialog];
     return cell;
 }
 
-- (Layer *) layerForRow: (NSUInteger) row {
+- (ImageryLayer *) layerForRow: (NSUInteger) row {
     return [self.onlineLayers objectAtIndex: row];
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
+    ImageryLayer *layer = [self.onlineLayersFetchedResultsController objectAtIndexPath:indexPath];
     
-    if (![[[self layerForRow:indexPath.row] url] hasPrefix:@"https"]) {
+    if (!layer.isSecure) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Non HTTPS Layer"
                                                                        message:@"We cannot load this layer on mobile because it cannot be accessed securely."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
@@ -132,10 +161,10 @@
     
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.selectedOnlineLayers addObject:[self layerForRow:indexPath.row].remoteId];
+        [self.selectedOnlineLayers addObject:layer.remoteId];
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.selectedOnlineLayers removeObject:[self layerForRow:indexPath.row].remoteId];
+        [self.selectedOnlineLayers removeObject:layer.remoteId];
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -146,8 +175,11 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *view = [[UIView alloc] init];
-    
-    return view;
+    return [[UIView alloc] initWithFrame:CGRectZero];
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.0;
+}
+
 @end

@@ -23,7 +23,7 @@
 }
 
 -(NSString *) getInfo{
-    return [NSString stringWithFormat:@"tiles: %d, zoom: %d - %d", [self getCount], [self getMinZoom], [self getMaxZoom]];
+    return [NSString stringWithFormat:@"%d tile%@, zoom: %d - %d", [self getCount], [self getCount] == 1 ? @"" : @"s", [self getMinZoom], [self getMaxZoom]];
 }
 
 -(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{

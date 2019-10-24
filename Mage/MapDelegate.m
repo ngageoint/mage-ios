@@ -65,6 +65,7 @@
     @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
+    @property (nonatomic, strong) NSMutableDictionary *onlineLayers;
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
     @property (nonatomic) BOOL isTrackingAnimation;
@@ -292,6 +293,13 @@
     }
     
     return _staticLayers;
+}
+
+- (NSMutableDictionary *) onlineLayers {
+    if (_onlineLayers == nil) {
+        _onlineLayers = [[NSMutableDictionary alloc] init];
+    }
+    return _onlineLayers;
 }
 
 - (void) setLocations:(Locations *) locations {
@@ -634,6 +642,8 @@
             template = [NSString stringWithFormat:@"%@.%@", template, patternExtension];
         }
         MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
+        tileOverlay.minimumZ = xyzDirectoryCacheOverlay.minZoom;
+        tileOverlay.maximumZ = xyzDirectoryCacheOverlay.maxZoom;
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveRoads];
@@ -926,11 +936,12 @@
 
 - (void) updateOnlineLayers: (NSDictionary *) onlineLayersPerEvent {
     NSLog(@"update online layers");
+    NSMutableSet *unselectedOnlineLayers = [[self.onlineLayers allKeys] mutableCopy];
     NSMutableArray *transparentLayers = [[NSMutableArray alloc] init];
     NSMutableArray *nonBaseLayers = [[NSMutableArray alloc] init];
     NSMutableArray *baseLayers = [[NSMutableArray alloc] init];
-    NSArray *onlineLayers = [onlineLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
-    for (NSNumber *onlineLayerId in onlineLayers) {
+    NSArray *onlineLayersInEvent = [onlineLayersPerEvent objectForKey:[[Server currentEventId] stringValue]];
+    for (NSNumber *onlineLayerId in onlineLayersInEvent) {
         ImageryLayer *onlineLayer = [ImageryLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", onlineLayerId, [Server currentEventId]]];
         MKTileOverlay *overlay = nil;
         if ([[onlineLayer format] isEqualToString:@"WMS"]) {
@@ -951,6 +962,9 @@
         } else {
             [nonBaseLayers addObject:overlay];
         }
+        [self.onlineLayers setObject:overlay forKey:onlineLayerId];
+
+        [unselectedOnlineLayers removeObject:onlineLayerId];
     }
     // Add the layers in the proper order to the map
     for (MKTileOverlay *overlay in baseLayers) {
@@ -962,6 +976,15 @@
     for (MKTileOverlay *overlay in transparentLayers) {
         [self.mapView addOverlay:overlay];
     }
+    
+    for (NSNumber *unselectedOnlineLayerId in unselectedOnlineLayers) {
+        ImageryLayer *unselectedOnlineLayer = [ImageryLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", unselectedOnlineLayerId, [Server currentEventId]]];
+
+        NSLog(@"removing the layer %@ from the map", unselectedOnlineLayer.name);
+        [self.mapView removeOverlay:[self.onlineLayers objectForKey:unselectedOnlineLayerId]];
+        [self.onlineLayers removeObjectForKey:unselectedOnlineLayerId];
+    }
+
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {

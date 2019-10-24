@@ -8,7 +8,6 @@
 
 #import "MapSettingsCoordinator.h"
 #import "MapSettings.h"
-#import "StaticLayerTableViewController.h"
 #import "OfflineMapTableViewController.h"
 #import "OnlineMapTableViewController.h"
 #import "UIColor+Mage.h"
@@ -73,11 +72,6 @@
 - (void) onlineMapsCellTapped {
     OnlineMapTableViewController *onlineMapController = [[OnlineMapTableViewController alloc] init];
     [self.settingsNavController pushViewController:onlineMapController animated:YES];
-}
-
-- (void) staticLayersCellTapped {
-    StaticLayerTableViewController *staticController = [[StaticLayerTableViewController alloc] init];
-    [self.settingsNavController pushViewController:staticController animated:YES];
 }
 
 - (void) navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {

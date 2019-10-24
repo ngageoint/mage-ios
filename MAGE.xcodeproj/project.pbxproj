@@ -141,7 +141,6 @@
 		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
-		F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
 		F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B81F43978B001D120A /* ObservationEditView.xib */; };
@@ -180,7 +179,6 @@
 		F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */; };
 		F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */; };
 		F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */; };
-		F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */; };
@@ -580,8 +578,6 @@
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
-		F71B0C871A71683C00DB83B3 /* StaticLayerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayerTableViewCell.h; sourceTree = "<group>"; };
-		F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewCell.m; sourceTree = "<group>"; };
 		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
@@ -638,8 +634,6 @@
 		F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
-		F750A1661A7164B300C7A4FC /* StaticLayerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayerTableViewController.h; sourceTree = "<group>"; };
-		F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayerTableViewController.m; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		F7531EF919100E7D00CA084C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		F7531EFB191010A600CA084C /* ObservationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewController.h; sourceTree = "<group>"; };
@@ -1189,10 +1183,6 @@
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
 				F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */,
-				F750A1661A7164B300C7A4FC /* StaticLayerTableViewController.h */,
-				F750A1671A7164B300C7A4FC /* StaticLayerTableViewController.m */,
-				F71B0C871A71683C00DB83B3 /* StaticLayerTableViewCell.h */,
-				F71B0C881A71683C00DB83B3 /* StaticLayerTableViewCell.m */,
 				F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */,
 				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */,
 				F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */,
@@ -2303,9 +2293,7 @@
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
-				F71B0C891A71683C00DB83B3 /* StaticLayerTableViewCell.m in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
-				F750A1681A7164B300C7A4FC /* StaticLayerTableViewController.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
