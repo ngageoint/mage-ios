@@ -93,7 +93,7 @@ DEPENDENCIES:
   - zxcvbn-ios
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - DateTools
     - EDSunriseSet
@@ -158,6 +158,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: f491356f6e002afdebe589a45ff2942d94bef43f
+PODFILE CHECKSUM: 74a30c8ba2eb3c443f2b5e708ae0bea4b3c99ac2
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

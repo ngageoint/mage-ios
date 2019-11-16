@@ -29,8 +29,16 @@ target 'MAGE' do
     end
 end
 
-post_install do |installer_representation|
-  installer_representation.pods_project.targets.each do |target|
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+    if s.name == 'SkyFloatingLabelTextField'
+      s.swift_version = '4.2'
+    end
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
     if target.name == 'mage-ios-sdk'
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ENABLE_CODE_COVERAGE'] = 'YES'
@@ -38,11 +46,6 @@ post_install do |installer_representation|
     else
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ENABLE_CODE_COVERAGE'] = 'NO'
-      end
-    end
-    if target.name == 'SkyFloatingLabelTextField'
-      target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '4.2'
       end
     end
   end
