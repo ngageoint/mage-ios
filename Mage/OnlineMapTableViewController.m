@@ -98,7 +98,7 @@
 
 - (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        return [[ObservationTableHeaderView alloc] initWithName:@"Insecure Layers"];
+        return [[ObservationTableHeaderView alloc] initWithName:@"Nonsecure Layers"];
     }
     return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers"];
 }
@@ -133,9 +133,27 @@
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.backgroundColor = [UIColor dialog];
     
-    cell.accessoryView = nil;
-    cell.accessoryType = [self.selectedOnlineLayers containsObject:layer.remoteId] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+    cacheSwitch.on = [self.selectedOnlineLayers containsObject:layer.remoteId];
+    cacheSwitch.onTintColor = [UIColor themedButton];
+    cacheSwitch.tag = indexPath.row;
+    [cacheSwitch addTarget:self action:@selector(layerToggled:) forControlEvents:UIControlEventTouchUpInside];
+    cell.accessoryView = cacheSwitch;
+    
     return cell;
+}
+
+- (IBAction)layerToggled: (UISwitch *)sender {
+    ImageryLayer *layer = [self.onlineLayersFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
+    if (sender.on) {
+        [self.selectedOnlineLayers addObject:layer.remoteId];
+    } else {
+        [self.selectedOnlineLayers removeObject:layer.remoteId];
+    }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedOnlineLayers allObjects]} forKey:@"selectedOnlineLayers"];
+    [defaults synchronize];
 }
 
 - (ImageryLayer *) layerForRow: (NSUInteger) row {
@@ -157,21 +175,21 @@
         return;
     }
     
-    UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
-    
-    if (cell.accessoryType == UITableViewCellAccessoryNone) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.selectedOnlineLayers addObject:layer.remoteId];
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.selectedOnlineLayers removeObject:layer.remoteId];
-    }
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedOnlineLayers allObjects]} forKey:@"selectedOnlineLayers"];
-    [defaults synchronize];
-    
-    [tableView reloadData];
+//    UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
+//
+//    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+//        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+//        [self.selectedOnlineLayers addObject:layer.remoteId];
+//    } else {
+//        cell.accessoryType = UITableViewCellAccessoryNone;
+//        [self.selectedOnlineLayers removeObject:layer.remoteId];
+//    }
+//
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedOnlineLayers allObjects]} forKey:@"selectedOnlineLayers"];
+//    [defaults synchronize];
+//
+//    [tableView reloadData];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

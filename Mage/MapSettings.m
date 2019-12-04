@@ -124,7 +124,7 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OfflineMapsCell"];
             }
-            cell.textLabel.text = @"Downloadable Maps";
+            cell.textLabel.text = @"Offline Layers";
             
             if (self.mapsToDownloadCount > 0) {
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
@@ -140,7 +140,7 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"StaticLayerCell"];
             }
-            cell.textLabel.text = @"Online Maps";
+            cell.textLabel.text = @"Online Layers";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return cell;
         }

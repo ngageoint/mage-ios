@@ -36,9 +36,9 @@ static const NSInteger MY_MAPS_SECTION = 1;
 static const NSInteger AVAILABLE_SECTION = 2;
 static const NSInteger PROCESSING_SECTION = 3;
 
-static NSString *DOWNLOADED_SECTION_NAME = @"%@ Maps";
-static NSString *MY_MAPS_SECTION_NAME = @"My Maps";
-static NSString *AVAILABLE_SECTION_NAME = @"Available Maps";
+static NSString *DOWNLOADED_SECTION_NAME = @"%@ Layers";
+static NSString *MY_MAPS_SECTION_NAME = @"My Layers";
+static NSString *AVAILABLE_SECTION_NAME = @"Available Layers";
 static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (void) themeDidChange:(MageTheme)theme {
@@ -106,7 +106,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 }
 
 - (BOOL) hasLoadedSection {
-    return ((Layer *)[[[[self.mapsFetchedResultsController sections] objectAtIndex:0] objects] objectAtIndex:0]).loaded;
+    return [self.mapsFetchedResultsController sections].count != 0 && ((Layer *)[[[[self.mapsFetchedResultsController sections] objectAtIndex:0] objects] objectAtIndex:0]).loaded;
 }
 
 - (Layer *) layerFromIndexPath: (NSIndexPath *) indexPath {
@@ -196,6 +196,53 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
+    if (![self hasLoadedSection] && [self.mapsFetchedResultsController sections].count == 0 && [self.cacheOverlays getLocallyLoadedOverlays].count == 0 && [self.cacheOverlays getProcessing].count == 0) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        imageView.image = [UIImage imageNamed:@"layers_large"];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.translatesAutoresizingMaskIntoConstraints = NO;
+        imageView.alpha = 0.6f;
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        title.text = @"No Layers";
+        title.numberOfLines = 0;
+        title.textAlignment = NSTextAlignmentCenter;
+        title.translatesAutoresizingMaskIntoConstraints = NO;
+        title.font = [UIFont systemFontOfSize:24];
+        title.alpha = 0.6f;
+        [title sizeToFit];
+        
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        description.text = @"Event administrators can add layers to your event, or can be shared from other applications.";
+        description.numberOfLines = 0;
+        description.textAlignment = NSTextAlignmentCenter;
+        description.translatesAutoresizingMaskIntoConstraints = NO;
+        description.alpha = 0.6f;
+        [description sizeToFit];
+        
+        [view addSubview:title];
+        [view addSubview:description];
+        [view addSubview:imageView];
+        
+        [title addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+
+        [description addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:imageView attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:title attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        
+        self.tableView.backgroundView = view;
+        return 0;
+    }
+    self.tableView.backgroundView = nil;
     return ([self.cacheOverlays getProcessing].count > 0 ? 4 : 3);
 }
 
@@ -203,7 +250,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     if (section == DOWNLOADED_SECTION) {
         return [self hasLoadedSection] ? [[[self.mapsFetchedResultsController sections] objectAtIndex:0] numberOfObjects] : 0;
     } else if (section == AVAILABLE_SECTION) {
-        return [[[self.mapsFetchedResultsController sections] objectAtIndex:[self hasLoadedSection] ? 1 : 0] numberOfObjects];
+        if ([self.mapsFetchedResultsController sections].count != 0) {
+            return [[[self.mapsFetchedResultsController sections] objectAtIndex:[self hasLoadedSection] ? 1 : 0] numberOfObjects];
+        }
+        return 0;
     } else if (section == MY_MAPS_SECTION) {
         return [self.cacheOverlays getLocallyLoadedOverlays].count;
     } else if (section == PROCESSING_SECTION) {
@@ -387,6 +437,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     if ([layer isKindOfClass:[StaticLayer class]]) {
         [StaticLayer fetchStaticLayerData:[Server currentEventId] layer:(StaticLayer *)layer];
     } else {
+        [Layer cancelGeoPackageDownload: layer];
         [self startGeoPackageDownload:layer];
     }
 }
@@ -404,6 +455,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
             [alert addAction:[UIAlertAction actionWithTitle:@"Restart Download" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf retrieveLayerData:layer];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel Download" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf cancelGeoPackageDownload:layer];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Continue Downloading" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -446,6 +501,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         } failure:^(NSError * _Nonnull error) {
         }];
     }];
+}
+
+- (void) cancelGeoPackageDownload: (Layer *) layer {
+    [Layer cancelGeoPackageDownload: layer];
 }
 
 - (IBAction)activeChanged:(CacheActiveSwitch *)sender {
