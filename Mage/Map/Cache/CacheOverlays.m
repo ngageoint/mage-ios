@@ -145,6 +145,25 @@ static CacheOverlays * instance;
     return overlaysInCurrentEvent;
 }
 
+-(NSArray <CacheOverlay *> *) getLocallyLoadedOverlays {
+    NSMutableArray<CacheOverlay *> *localOverlays = [[NSMutableArray alloc] init];
+    
+    for(CacheOverlay * cacheOverlay in [self.overlays allValues]) {
+        if ([cacheOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
+            GeoPackageCacheOverlay *gpCacheOverlay = (GeoPackageCacheOverlay *)cacheOverlay;
+            NSString *filePath = gpCacheOverlay.filePath;
+            // check if this filePath is consistent with a downloaded layer and if so, verify that layer is in this event
+            NSArray *pathComponents = [filePath pathComponents];
+            if (![[pathComponents objectAtIndex:[pathComponents count] - 3] isEqualToString:@"geopackages"]) {
+                [localOverlays addObject:cacheOverlay];
+            }
+        } else {
+            [localOverlays addObject:cacheOverlay];
+        }
+    }
+    return localOverlays;
+}
+
 -(NSUInteger) count{
     return [self.overlayNames count];
 }

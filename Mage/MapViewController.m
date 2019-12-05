@@ -499,7 +499,7 @@
         circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
         [circle setBackgroundColor:[UIColor mageBlue]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
-        [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
+        [imageView setFrame:CGRectMake(3, 2, 14, 15)];
         [imageView setTintColor:[UIColor whiteColor]];
         [circle addSubview:imageView];
         [self.mapSettingsButton addSubview:circle];

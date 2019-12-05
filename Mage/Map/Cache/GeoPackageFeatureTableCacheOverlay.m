@@ -46,7 +46,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 }
 
 -(NSString *) getIconImageName{
-    return @"observations";
+    return @"marker_outline";
 }
 
 -(NSString *) getInfo{
@@ -56,7 +56,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
         minZoom = MIN(minZoom, [linkedTileTable getMinZoom]);
         maxZoom = MAX(maxZoom, [linkedTileTable getMaxZoom]);
     }
-    return [NSString stringWithFormat:@"features: %d, zoom: %d - %d", [self getCount], minZoom, maxZoom];
+    return [NSString stringWithFormat:@"%d feature%@, zoom: %d - %d", [self getCount], [self getCount] == 1 ? @"" : @"s", minZoom, maxZoom];
 }
 
 -(NSString *) onMapClickWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{

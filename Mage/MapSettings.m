@@ -15,6 +15,24 @@
 
 @implementation MapSettings
 
+static const NSInteger TOTAL_SECTIONS = 3;
+
+static const NSInteger LAYERS_SECTION = 0;
+static const NSInteger MAGE_SECTION = 1;
+static const NSInteger EXTERNAL_SECTION = 2;
+
+static const NSInteger LAYERS_ROW_MAP_TYPE = 0;
+static const NSInteger LAYERS_ROW_TRAFFIC = 1;
+static const NSInteger LAYERS_ROW_DOWNLOADABLE = 2;
+static const NSInteger LAYERS_ROW_ONLINE = 3;
+
+static const NSInteger MAGE_ROW_OBSERVATIONS = 0;
+static const NSInteger MAGE_ROW_PEOPLE = 1;
+
+static NSString *LAYERS_SECTION_NAME = @"Layers";
+static NSString *MAGE_SECTION_NAME = @"MAGE";
+static NSString *EXTERNAL_SECTION_NAME = @"External Data";
+
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
@@ -43,35 +61,53 @@
     [self.tableView reloadData];
 }
 
+- (BOOL) isTrafficAvailable {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger mapType = [defaults integerForKey:@"mapType"];
+    return (mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid);
+}
+
+- (BOOL) hasExternalData {
+    return NO;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSInteger mapType = [defaults integerForKey:@"mapType"];
-        return (mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid) ? 2 : 1;
+    if (section == LAYERS_SECTION) {
+        return [self isTrafficAvailable] ? 4 : 3;
+    } else if (section == MAGE_SECTION) {
+        return 2;
+    } else if (section == EXTERNAL_SECTION) {
+        return 0;
     }
     
-    return 1;
+    return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return [self hasExternalData] ? TOTAL_SECTIONS : TOTAL_SECTIONS - 1;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
+    if (indexPath.section == LAYERS_SECTION) {
+        if (indexPath.row == LAYERS_ROW_MAP_TYPE) {
             MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
             cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
             cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
             cell.delegate = self;
             
             return cell;
-        } else if (indexPath.row == 1) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ObservationSettingsCell"];
+        }
+        NSInteger row = indexPath.row;
+        if (![self isTrafficAvailable]) {
+            row = row + 1;
+        }
+        
+        if (row == LAYERS_ROW_TRAFFIC) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
             if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"ObservationSettingsCell"];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CellWithSwitch"];
             }
             
             cell.textLabel.text = @"Traffic";
@@ -83,74 +119,75 @@
             cell.accessoryView = trafficSwitch;
             
             return cell;
-        }
-    } else if (indexPath.section == 1) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ObservationSettingsCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"ObservationSettingsCell"];
-        }
-        cell.textLabel.text = @"Observations";
-        cell.detailTextLabel.text = @"Show observations on map";
-        UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-        observationSwitch.on = ![defaults boolForKey:@"hideObservations"];
-        observationSwitch.onTintColor = [UIColor themedButton];
-        [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = observationSwitch;
-        
-        return cell;
-    } else if (indexPath.section == 2) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PeopleSettingsCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"PeopleSettingsCell"];
-        }
-        cell.textLabel.text = @"People";
-        cell.detailTextLabel.text = @"Show people on map";
-        UISwitch *peopleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-        peopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
-        peopleSwitch.onTintColor = [UIColor themedButton];
-        [peopleSwitch addTarget:self action:@selector(peopleSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = peopleSwitch;
-        
-        return cell;
-    } else if (indexPath.section == 3) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StaticLayerCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"StaticLayerCell"];
-        }
-        cell.textLabel.text = @"Static Layers";
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        return cell;
-    } else if (indexPath.section == 4) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OfflineMapsCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OfflineMapsCell"];
-        }
-        cell.textLabel.text = @"Offline Maps";
-        
-        if (self.mapsToDownloadCount > 0) {
-            UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-            circle.layer.cornerRadius = 10;
-            circle.layer.borderWidth = .5;
-            circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-            [circle setBackgroundColor:[UIColor mageBlue]];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
-            [imageView setFrame:CGRectMake(-2, -2, 24, 24)];
-            [imageView setTintColor:[UIColor whiteColor]];
-            [circle addSubview:imageView];
-            cell.accessoryView = circle;
-        } else {
-            cell.accessoryView = nil;
+        } else if (row == LAYERS_ROW_DOWNLOADABLE) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OfflineMapsCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OfflineMapsCell"];
+            }
+            cell.textLabel.text = @"Offline Layers";
+            
+            if (self.mapsToDownloadCount > 0) {
+                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+                [imageView setTintColor:[UIColor brand]];
+                cell.accessoryView = imageView;
+            } else {
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+            return cell;
+        } else if (row == LAYERS_ROW_ONLINE) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StaticLayerCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"StaticLayerCell"];
+            }
+            cell.textLabel.text = @"Online Layers";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
         }
-        return cell;
+    } else if (indexPath.section == MAGE_SECTION) {
+        if (indexPath.row == MAGE_ROW_OBSERVATIONS) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CellWithSwitch"];
+            }
+            cell.textLabel.text = @"Observations";
+            cell.detailTextLabel.text = @"Show observations on map";
+            UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+            observationSwitch.on = ![defaults boolForKey:@"hideObservations"];
+            observationSwitch.onTintColor = [UIColor themedButton];
+            [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = observationSwitch;
+            
+            return cell;
+        } else if (indexPath.row == MAGE_ROW_PEOPLE) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CellWithSwitch"];
+            }
+            cell.textLabel.text = @"People";
+            cell.detailTextLabel.text = @"Show people on map";
+            UISwitch *peopleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+            peopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
+            peopleSwitch.onTintColor = [UIColor themedButton];
+            [peopleSwitch addTarget:self action:@selector(peopleSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = peopleSwitch;
+            
+            return cell;
+        }
+    } else if (indexPath.section == EXTERNAL_SECTION) {
+        return 0;
     }
 
     return nil;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"Maps";
+    if (section == LAYERS_SECTION) {
+        return LAYERS_SECTION_NAME;
+    } else if (section == MAGE_SECTION) {
+        return MAGE_SECTION_NAME;
+    } else if (section == EXTERNAL_SECTION) {
+        return EXTERNAL_SECTION_NAME;
     }
     
     return @"";
@@ -158,18 +195,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.section == 1) {
-        UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
-        accessorySwitch.on = !accessorySwitch.on;
-        [self observationSwitchChanged:accessorySwitch];
-    } else if (indexPath.section == 2) {
-        UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
-        accessorySwitch.on = !accessorySwitch.on;
-        [self peopleSwitchChanged:accessorySwitch];
-    } else if (indexPath.section == 3) {
-        [self.delegate staticLayersCellTapped];
-    } else if (indexPath.section == 4) {
-        [self.delegate offlineMapsCellTapped];
+    if (indexPath.section == LAYERS_SECTION) {
+        if (indexPath.row == LAYERS_ROW_ONLINE) {
+            [self.delegate onlineMapsCellTapped];
+        } else if (indexPath.row == LAYERS_ROW_DOWNLOADABLE) {
+            [self.delegate offlineMapsCellTapped];
+        }
+    } else if (indexPath.section == MAGE_SECTION) {
+        if (indexPath.row == MAGE_ROW_OBSERVATIONS) {
+            UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
+            accessorySwitch.on = !accessorySwitch.on;
+            [self observationSwitchChanged:accessorySwitch];
+        } else if (indexPath.row == MAGE_ROW_PEOPLE) {
+            UISwitch *accessorySwitch = (UISwitch *)([self.tableView cellForRowAtIndexPath:indexPath].accessoryView);
+            accessorySwitch.on = !accessorySwitch.on;
+            [self peopleSwitchChanged:accessorySwitch];
+        }
     }
 }
 
@@ -179,23 +220,26 @@
     cell.textLabel.textColor = [UIColor primaryText];
 }
 
--(UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
     return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return 45.0f;
-    }
-    return UITableViewAutomaticDimension;
+    return 45.0f;
+}
+
+- (UIView *) tableView:(UITableView*) tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.0f;
 }
 
 - (void) mapTypeChanged:(MKMapType) mapType {
-    Boolean showingTraffic = [self.tableView numberOfRowsInSection:0] == 2 ? true : false;
-    if (mapType == MKMapTypeSatellite && showingTraffic) {
-        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-    } else if ((mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid) && !showingTraffic) {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    if (([self isTrafficAvailable] && [self.tableView numberOfRowsInSection:LAYERS_SECTION] == 3)
+        || (![self isTrafficAvailable] && [self.tableView numberOfRowsInSection:LAYERS_SECTION] == 4)){
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:LAYERS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

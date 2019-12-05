@@ -72,6 +72,8 @@
     self.observation = observation;
     NSString *primaryText = [observation primaryFieldText];
     NSString *variantText = [observation secondaryFieldText];
+//    NSString *primaryText = [observation primaryFeedFieldText];
+//    NSString *variantText = [observation secondaryFeedFieldText];
     
     if (primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryField.text = primaryText;

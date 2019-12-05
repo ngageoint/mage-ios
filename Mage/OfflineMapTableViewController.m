@@ -15,37 +15,39 @@
 #import "GPKGGeoPackageFactory.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
-#import "StaticLayerTableViewController.h"
-#import "StaticLayerTableViewCell.h"
 #import "StaticLayer.h"
 #import "Layer.h"
 #import "Server.h"
+#import "Event.h"
 
-@interface OfflineMapTableViewController ()
+@interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSArray *processingCaches;
 @property (nonatomic, strong) CacheOverlays *cacheOverlays;
-@property (nonatomic, strong) NSMutableArray<CacheOverlay *> *tableCells;
-@property (nonatomic, strong) NSMutableArray<CacheOverlay *> *downloadedGeoPackageCells;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *cacheNamesToOverlays;
-@property (nonatomic, strong) NSArray *geoPackagesToDownload;
-@property (nonatomic, strong) NSArray *downloadedGeoPackages;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
-@property (nonatomic, strong) NSTimer *downloadProgressTimer;
-
+@property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
+@property (nonatomic, strong) NSFetchedResultsController *mapsFetchedResultsController;
+@property (nonatomic) BOOL hadLoaded;
 @end
 
 @implementation OfflineMapTableViewController
 
+static const NSInteger DOWNLOADED_SECTION = 0;
+static const NSInteger MY_MAPS_SECTION = 1;
+static const NSInteger AVAILABLE_SECTION = 2;
+static const NSInteger PROCESSING_SECTION = 3;
+
+static NSString *DOWNLOADED_SECTION_NAME = @"%@ Layers";
+static NSString *MY_MAPS_SECTION_NAME = @"My Layers";
+static NSString *AVAILABLE_SECTION_NAME = @"Available Layers";
+static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
+
 - (void) themeDidChange:(MageTheme)theme {
     self.tableView.backgroundColor = [UIColor tableBackground];
-    
     [self.tableView reloadData];
 }
 
 - (instancetype) init {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    return self;
+    return [super initWithStyle:UITableViewStyleGrouped];
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -54,91 +56,37 @@
     self.tableView.layoutMargins = UIEdgeInsetsZero;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    self.mapsFetchedResultsController = [Layer MR_fetchAllGroupedBy:@"loaded" withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND (type == %@ OR type == %@)", [Server currentEventId], @"GeoPackage", @"Feature"] sortedBy:@"loaded,name:YES" ascending:NO delegate:self];
+    [self.mapsFetchedResultsController performFetch:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageLayerFetched:) name: GeoPackageLayerFetched object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageDownloaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageImported object:nil];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
     
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
-    [self update];
+    
     [self registerForThemeChanges];
-    [self startDownloadProgressTimer];
-}
-
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self stopDownloadProgressTimer];
-}
-
-- (void) startDownloadProgressTimer {
-    NSLog(@"Get timer");
-    if (!_downloadProgressTimer) {
-        _downloadProgressTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateDownloadProgress:) userInfo:nil repeats:YES];
-    }
-}
-
-- (void) stopDownloadProgressTimer {
-    if (_downloadProgressTimer) {
-        [_downloadProgressTimer invalidate];
-        _downloadProgressTimer = nil;
-    }
-}
-
-- (void) reloadTable {
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
-    [self.tableView reloadData];
-    self.refreshLayersButton.enabled = YES;
+    
+    self.hadLoaded = [self hasLoadedSection];
 }
 
 - (void) geoPackageImported: (NSNotification *) notification {
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [weakSelf updateAndReloadData];
-    });
-}
-
-- (void)geoPackageLayerFetched:(NSNotification *)notification {
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [weakSelf updateAndReloadData];
-    });
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
 - (IBAction)refreshLayers:(id)sender {
     self.refreshLayersButton.enabled = NO;
-    
-    [self updateAndReloadData];
-    
     [Layer refreshLayersForEvent:[Server currentEventId]];
 }
 
 -(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateAndReloadData];
-    });
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
--(void) updateAndReloadData{
-    [self update];
-    [self.tableView reloadData];
-}
-
--(void) update{
-    self.processingCaches = [self.cacheOverlays getProcessing];
-    self.tableCells = [[NSMutableArray alloc] init];
-    self.downloadedGeoPackageCells = [[NSMutableArray alloc] init];
-    self.cacheNamesToOverlays = [[NSMutableDictionary alloc] init];
-    
-    self.geoPackagesToDownload = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND (loaded == %@ OR loaded == nil)", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:NO]] inContext:[NSManagedObjectContext MR_defaultContext]];
-    self.downloadedGeoPackages = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %d AND type == %@ AND loaded == %@", [[Server currentEventId] intValue], @"GeoPackage", [NSNumber numberWithBool:YES]] inContext:[NSManagedObjectContext MR_defaultContext]];
-    self.refreshLayersButton.enabled = YES;
-    
-    NSMutableArray *arrayToAddTo = nil;
+- (CacheOverlay *) findOverlayByRemoteId: (NSNumber *) remoteId {
     for(CacheOverlay * cacheOverlay in [self.cacheOverlays getOverlays]) {
         if ([cacheOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
             GeoPackageCacheOverlay *gpCacheOverlay = (GeoPackageCacheOverlay *)cacheOverlay;
@@ -147,59 +95,182 @@
             NSArray *pathComponents = [filePath pathComponents];
             if ([[pathComponents objectAtIndex:[pathComponents count] - 3] isEqualToString:@"geopackages"]) {
                 NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
-                // check if this layer is in the event
-                Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %@", [Server currentEventId], layerId] inContext:[NSManagedObjectContext MR_defaultContext]];
-                if (layer) {
-                    gpCacheOverlay.layerName = layer.name;
-                    arrayToAddTo = self.downloadedGeoPackageCells;
+                if ([layerId isEqualToString:[remoteId stringValue]]) {
+                    return gpCacheOverlay;
                 }
-            } else {
-                arrayToAddTo = self.tableCells;
-            }
-        } else {
-            arrayToAddTo = self.tableCells;
-        }
-        
-        [arrayToAddTo addObject:cacheOverlay];
-        [self.cacheNamesToOverlays setObject:cacheOverlay forKey:[cacheOverlay getCacheName]];
-        if(cacheOverlay.expanded){
-            for(CacheOverlay * childCacheOverlay in [cacheOverlay getChildren]){
-                [arrayToAddTo addObject:childCacheOverlay];
-                [self.cacheNamesToOverlays setObject:childCacheOverlay forKey:[childCacheOverlay getCacheName]];
             }
         }
     }
+    
+    return nil;
+}
+
+- (BOOL) hasLoadedSection {
+    return [self.mapsFetchedResultsController sections].count != 0 && ((Layer *)[[[[self.mapsFetchedResultsController sections] objectAtIndex:0] objects] objectAtIndex:0]).loaded;
+}
+
+- (Layer *) layerFromIndexPath: (NSIndexPath *) indexPath {
+    Layer *layer = nil;
+    
+    if (indexPath.section == DOWNLOADED_SECTION) {
+        layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+    } else if (indexPath.section == AVAILABLE_SECTION) {
+        if ([self hasLoadedSection]) {
+            layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]];
+        } else {
+            layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+        }
+    }
+    return layer;
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [[self tableView] beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    Layer *layer = (Layer *)anObject;
+
+    NSIndexPath *correctedIndexPath = indexPath;
+    if ((!self.hadLoaded && indexPath.section == 0)
+        || (self.hadLoaded && indexPath.section == 1)) {
+        correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
+    }
+    NSIndexPath *correctedNewIndexPath = newIndexPath;
+    if (([self hasLoadedSection] && newIndexPath.section == 1)
+        || (![self hasLoadedSection] && newIndexPath.section == 0)) {
+        correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
+    }
+    if (type == NSFetchedResultsChangeMove) {
+        if(!layer.loaded) {
+            correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+            correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
+        } else {
+            correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
+            correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:0];
+        }
+    }
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [[self tableView] insertRowsAtIndexPaths:@[correctedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [[self tableView] deleteRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeUpdate: {
+            // 2019-10-23 DRB (iOS 13): This is a total hack.  If the first row in the available section is reloaded to show the download progress
+            // it still shows an animation and bounces the row.  Does not matter if you try to put it in a performWithoutAnimation block
+            // or any other way.  You should be able to just do reloadRowsAtIndexPaths (the else block) if this ever gets fixed.
+            // Has been a bug since at least ios5: https://stackoverflow.com/questions/4557930/uitableview-reloadrowsatindexpaths-performing-animation-when-it-shouldnt
+            if (correctedIndexPath.section == AVAILABLE_SECTION && correctedIndexPath.row == 0) {
+                Layer *layer = (Layer *)anObject;
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:correctedIndexPath];
+                if (layer.file) {
+                    uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
+                               NSLog(@"Download bytes %ld", (long)downloadBytes);
+                               cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
+                                                            [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
+                                                            [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+                } else {
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
+                }
+            } else {
+                [self.tableView reloadRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            break;
+        }
+        case NSFetchedResultsChangeMove:
+            [[self tableView] deleteRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [[self tableView] insertRowsAtIndexPaths:@[correctedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [[self tableView] endUpdates];
+    self.hadLoaded = [self hasLoadedSection];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
-    return self.processingCaches.count > 0 ? 4 : 3;
+    if (![self hasLoadedSection] && [self.mapsFetchedResultsController sections].count == 0 && [self.cacheOverlays getLocallyLoadedOverlays].count == 0 && [self.cacheOverlays getProcessing].count == 0) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        imageView.image = [UIImage imageNamed:@"layers_large"];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.translatesAutoresizingMaskIntoConstraints = NO;
+        imageView.alpha = 0.6f;
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        title.text = @"No Layers";
+        title.numberOfLines = 0;
+        title.textAlignment = NSTextAlignmentCenter;
+        title.translatesAutoresizingMaskIntoConstraints = NO;
+        title.font = [UIFont systemFontOfSize:24];
+        title.alpha = 0.6f;
+        [title sizeToFit];
+        
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        description.text = @"Event administrators can add layers to your event, or can be shared from other applications.";
+        description.numberOfLines = 0;
+        description.textAlignment = NSTextAlignmentCenter;
+        description.translatesAutoresizingMaskIntoConstraints = NO;
+        description.alpha = 0.6f;
+        [description sizeToFit];
+        
+        [view addSubview:title];
+        [view addSubview:description];
+        [view addSubview:imageView];
+        
+        [title addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+
+        [description addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:imageView attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:title attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        
+        self.tableView.backgroundView = view;
+        return 0;
+    }
+    self.tableView.backgroundView = nil;
+    return ([self.cacheOverlays getProcessing].count > 0 ? 4 : 3);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger count = 0;
-    if (section == 0) {
-        count = self.downloadedGeoPackageCells.count;
-    } else if (section == 1) {
-        count = self.geoPackagesToDownload.count;
-    } else if (self.processingCaches.count > 0 && section == 2) {
-        count = self.processingCaches.count;
-    } else {
-        count = [self.tableCells count];
+    if (section == DOWNLOADED_SECTION) {
+        return [self hasLoadedSection] ? [[[self.mapsFetchedResultsController sections] objectAtIndex:0] numberOfObjects] : 0;
+    } else if (section == AVAILABLE_SECTION) {
+        if ([self.mapsFetchedResultsController sections].count != 0) {
+            return [[[self.mapsFetchedResultsController sections] objectAtIndex:[self hasLoadedSection] ? 1 : 0] numberOfObjects];
+        }
+        return 0;
+    } else if (section == MY_MAPS_SECTION) {
+        return [self.cacheOverlays getLocallyLoadedOverlays].count;
+    } else if (section == PROCESSING_SECTION) {
+        return [self.cacheOverlays getProcessing].count;
     }
-    return count;
+    return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"Downloaded Event Maps";
-    } else if (section == 1) {
-        return @"Available Maps";
-    } else if (self.processingCaches.count > 0 && section == 2) {
-        return @"Extracting Archives";
+    if (section == DOWNLOADED_SECTION) {
+        return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name];
+    } else if (section == AVAILABLE_SECTION) {
+        return AVAILABLE_SECTION_NAME;
+    } else if (section == PROCESSING_SECTION) {
+        return PROCESSING_SECTION_NAME;
     } else {
-        return @"Externally Loaded Maps";
+        return MY_MAPS_SECTION_NAME;
     }
 }
 
@@ -211,197 +282,183 @@
     return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = nil;
-    
-    if (indexPath.section == 0) {
-        GeoPackageCacheOverlay * cacheOverlay = (GeoPackageCacheOverlay *)[self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
-        
-        UIImage * cellImage = nil;
-        NSString * typeImage = [cacheOverlay getIconImageName];
-        if(typeImage != nil){
-            cellImage = [UIImage imageNamed:typeImage];
-        }
-        
-        if([cacheOverlay isChild]){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"childCacheOverlayCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"childCacheOverlayCell"];
-            }
-            cell.textLabel.text = [cacheOverlay getName];
-            cell.detailTextLabel.text = [cacheOverlay getInfo];
-            cell.textLabel.textColor = [UIColor primaryText];
-            cell.detailTextLabel.textColor = [UIColor secondaryText];
-            if (cellImage != nil) {
-                [cell.imageView setImage:cellImage];
-                cell.imageView.tintColor = [UIColor brand];
-            }
-            
-            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
-            cacheSwitch.on = cacheOverlay.enabled;
-            cacheSwitch.overlay = cacheOverlay;
-            cacheSwitch.onTintColor = [UIColor themedButton];
-            [cacheSwitch addTarget:self action:@selector(childActiveChanged:) forControlEvents:UIControlEventTouchUpInside];
-            cell.accessoryView = cacheSwitch;
-        } else {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"cacheOverlayCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
-            }
-            cell.textLabel.text = [cacheOverlay layerName];
-            cell.textLabel.textColor = [UIColor primaryText];
-            if (cellImage != nil) {
-                [cell.imageView setImage:cellImage];
-                cell.imageView.tintColor = [UIColor brand];
-            }
-            
-            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
-            cacheSwitch.on = cacheOverlay.enabled;
-            cacheSwitch.overlay = cacheOverlay;
-            cacheSwitch.onTintColor = [UIColor themedButton];
-            [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
-            cell.accessoryView = cacheSwitch;
-        }
-    } else if (indexPath.section == 1) {
-        Layer *layer = [self geoPackageForRow:indexPath.row];
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.0f;
+}
 
-        cell = [tableView dequeueReusableCellWithIdentifier:@"staticLayerCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"staticLayerCell"];
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Layer *layer = [self layerFromIndexPath:indexPath];
+    if (indexPath.section == DOWNLOADED_SECTION) {
+        CacheOverlay * cacheOverlay = [self findOverlayByRemoteId:layer.remoteId];
+        if (cacheOverlay.expanded) {
+            return 58.0f + (58.0f * [cacheOverlay getChildren].count);
         }
-        
-        cell.textLabel.text = layer.name;
+        return 58.0f;
+    } else if (indexPath.section == MY_MAPS_SECTION) {
+        CacheOverlay *cacheOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+        if (cacheOverlay.expanded) {
+            return 58.0f + (58.0f * [cacheOverlay getChildren].count);
+        }
+        return 58.0f;
+    }
+    
+    return UITableViewAutomaticDimension;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"onlineLayerCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
         cell.textLabel.textColor = [UIColor primaryText];
         cell.detailTextLabel.textColor = [UIColor secondaryText];
         cell.backgroundColor = [UIColor dialog];
+        cell.imageView.tintColor = [UIColor brand];
+    }
+
+    Layer *layer = [self layerFromIndexPath:indexPath];
+    if (indexPath.section == AVAILABLE_SECTION) {
+        cell.textLabel.text = layer.name;
 
         if (!layer.downloading) {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
-            
-            UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-            circle.layer.cornerRadius = 15;
-            circle.layer.borderWidth = .5;
-            circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-            [circle setBackgroundColor:[UIColor mageBlue]];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
-            [imageView setFrame:CGRectMake(-2, -2, 35, 35)];
-            [imageView setTintColor:[UIColor whiteColor]];
-            [circle addSubview:imageView];
-            cell.accessoryView = circle;
-        } else {
-            uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
-            NSLog(@"Download bytes %ld", (long)downloadBytes);
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
-                                         [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
-                                         [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+            if (layer.file) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+            } else {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Static feature data"];
+            }
 
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
+            [imageView setTintColor:[UIColor brand]];
+            cell.accessoryView = imageView;
+        } else {
+            if (layer.file) {
+                uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
+                           NSLog(@"Download bytes %ld", (long)downloadBytes);
+                           cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
+                                                        [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
+                                                        [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+            } else {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
+            }
+           
             UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             [activityIndicator setFrame:CGRectMake(0, 0, 24, 24)];
             [activityIndicator startAnimating];
             activityIndicator.color = [UIColor secondaryText];
             cell.accessoryView = activityIndicator;
         }
-    } else if (self.processingCaches.count > 0 && [indexPath section] == 2) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"processingOfflineMapCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"processingOfflineMapCell"];
+    } else if (indexPath.section == DOWNLOADED_SECTION) {
+        if ([layer isKindOfClass:[StaticLayer class]]) {
+            StaticLayer *staticLayer = (StaticLayer *)layer;
+            cell.textLabel.text = layer.name;
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[staticLayer.data objectForKey:@"features"] count]];
+            
+            [cell.imageView setImage:[UIImage imageNamed:@"marker_outline"]];
+            
+            UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+            cacheSwitch.on = [self.selectedStaticLayers containsObject:layer.remoteId];
+            cacheSwitch.onTintColor = [UIColor themedButton];
+            cacheSwitch.tag = indexPath.row;
+            [cacheSwitch addTarget:self action:@selector(staticLayerToggled:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = cacheSwitch;
+        } else {
+            CacheOverlayTableCell *gpCell = [tableView dequeueReusableCellWithIdentifier:@"geoPackageLayerCell"];
+            if (!gpCell) {
+                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell"];
+            }
+            
+            CacheOverlay * cacheOverlay = [self findOverlayByRemoteId:layer.remoteId];
+            gpCell.overlay = cacheOverlay;
+            gpCell.mageLayer = layer;
+            gpCell.mainTable = self.tableView;
+            [gpCell configure];
+            return gpCell;
         }
-        cell.textLabel.text = [self.processingCaches objectAtIndex:[indexPath row]];
-        cell.textLabel.textColor = [UIColor primaryText];
+    } else if (indexPath.section == MY_MAPS_SECTION) {
+        CacheOverlay *localOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+        if ([localOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
+            CacheOverlayTableCell *gpCell = [tableView dequeueReusableCellWithIdentifier:@"geoPackageLayerCell"];
+            if (!gpCell) {
+                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell"];
+            }
+            gpCell.overlay = localOverlay;
+            gpCell.mainTable = self.tableView;
+            [gpCell configure];
+            return gpCell;
+        } else {
+            cell.textLabel.text = [localOverlay getCacheName];
+            cell.detailTextLabel.text = [localOverlay getInfo];
+            [cell.imageView setImage:[UIImage imageNamed:[localOverlay getIconImageName]]];
+            
+            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
+            cacheSwitch.on = localOverlay.enabled;
+            cacheSwitch.overlay = localOverlay;
+            cacheSwitch.onTintColor = [UIColor themedButton];
+            [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = cacheSwitch;
+        }
+    } else if (indexPath.section == PROCESSING_SECTION) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *processingOverlay = [[self.cacheOverlays getProcessing] objectAtIndex:indexPath.row];
+        cell.textLabel.text = processingOverlay;
+        NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[documentsDirectory stringByAppendingPathComponent: processingOverlay] error:nil];
+        cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:(unsigned long long)attrs.fileSize countStyle:NSByteCountFormatterCountStyleFile];
+        [cell.imageView setImage:nil];
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [activityIndicator startAnimating];
         activityIndicator.color = [UIColor secondaryText];
         cell.accessoryView = activityIndicator;
     } else {
-        CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
-        
-        UIImage * cellImage = nil;
-        NSString * typeImage = [cacheOverlay getIconImageName];
-        if(typeImage != nil){
-            cellImage = [UIImage imageNamed:typeImage];
-        }
-        
-        if([cacheOverlay isChild]){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"childCacheOverlayCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"childCacheOverlayCell"];
-            }
-            cell.textLabel.text = [cacheOverlay getName];
-            cell.detailTextLabel.text = [cacheOverlay getInfo];
-            cell.textLabel.textColor = [UIColor primaryText];
-            cell.detailTextLabel.textColor = [UIColor secondaryText];
-            if (cellImage != nil) {
-                [cell.imageView setImage:cellImage];
-                cell.imageView.tintColor = [UIColor brand];
-            }
-            
-            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
-            cacheSwitch.on = cacheOverlay.enabled;
-            cacheSwitch.overlay = cacheOverlay;
-            cacheSwitch.onTintColor = [UIColor themedButton];
-            [cacheSwitch addTarget:self action:@selector(childActiveChanged:) forControlEvents:UIControlEventTouchUpInside];
-            cell.accessoryView = cacheSwitch;
-        } else {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"cacheOverlayCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cacheOverlayCell"];
-            }
-            cell.textLabel.text = [cacheOverlay getName];
-            cell.textLabel.textColor = [UIColor primaryText];
-            if (cellImage != nil) {
-                [cell.imageView setImage:cellImage];
-                cell.imageView.tintColor = [UIColor brand];
-            }
-            
-            CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
-            cacheSwitch.on = cacheOverlay.enabled;
-            cacheSwitch.overlay = cacheOverlay;
-            cacheSwitch.onTintColor = [UIColor themedButton];
-            [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
-            cell.accessoryView = cacheSwitch;
-        }
+        cell.textLabel.text = layer.name;
+        cell.detailTextLabel.text = nil;
+        cell.accessoryView = nil;
     }
-    
-    cell.backgroundColor = [UIColor dialog];
     return cell;
 }
 
-- (void) updateDownloadProgress: (NSTimer *) timer {
-    NSIndexSet *section = [NSIndexSet indexSetWithIndex:1];
-    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+- (IBAction)staticLayerToggled: (UISwitch *)sender {
+    Layer *layer = [self layerFromIndexPath: [NSIndexPath indexPathForRow:sender.tag inSection:0]];
+    if (sender.on) {
+        [self.selectedStaticLayers addObject:layer.remoteId];
+    } else {
+        [self.selectedStaticLayers removeObject:layer.remoteId];
+    }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedStaticLayers allObjects]} forKey:@"selectedStaticLayers"];
+    [defaults synchronize];
 }
 
-- (Layer *) geoPackageForRow: (NSUInteger) row {
-    return [self.geoPackagesToDownload objectAtIndex: row];
-}
-
-- (Layer *) downloadedGeoPackageForRow: (NSUInteger) row {
-    return [self.downloadedGeoPackages objectAtIndex: row];
+- (void) retrieveLayerData: (Layer *) layer {
+    if ([layer isKindOfClass:[StaticLayer class]]) {
+        [StaticLayer fetchStaticLayerData:[Server currentEventId] layer:(StaticLayer *)layer];
+    } else {
+        [Layer cancelGeoPackageDownload: layer];
+        [self startGeoPackageDownload:layer];
+    }
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
-    if (indexPath.section == 0) {
-        // add the geopackage to the map
-        CacheOverlay * cacheOverlay = [self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
-        if([cacheOverlay getSupportsChildren]){
-            [cacheOverlay setExpanded:!cacheOverlay.expanded];
-            [self updateAndReloadData];
-        }
-    } else if (indexPath.section == 1) {
-        [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
-        
-        Layer *geopackageLayer = [self geoPackageForRow:indexPath.row];
-        // kick off the download
-        
-        if (geopackageLayer.downloading) {
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"GeoPackage is Currently Downloading"
-                                                                           message:@"It appears the GeoPackage is currently being downloaded, however if the download has failed you can restart it."
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    if (indexPath.section == AVAILABLE_SECTION) {
+        Layer *layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:[self hasLoadedSection] ? 1 : 0]];
+        if (layer.downloading) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Layer is Currently Downloading"
+                                                                           message:[NSString stringWithFormat:@"It appears the %@ layer is currently being downloaded, however if the download has failed you can restart it.", layer.name]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             __weak typeof(self) weakSelf = self;
 
             [alert addAction:[UIAlertAction actionWithTitle:@"Restart Download" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf startGeoPackageDownload:indexPath];
+                [weakSelf retrieveLayerData:layer];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel Download" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf cancelGeoPackageDownload:layer];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Continue Downloading" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -410,49 +467,48 @@
             
             [self.navigationController presentViewController:alert animated:YES completion:nil];
         } else {
-            [self startGeoPackageDownload:indexPath];
+            [self retrieveLayerData:layer];
         }
-        
-    } else if (self.processingCaches.count == 0 || [indexPath section] == 2){
-        CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
-        if([cacheOverlay getSupportsChildren]){
-            [cacheOverlay setExpanded:!cacheOverlay.expanded];
-            [self updateAndReloadData];
+    } else if (indexPath.section == DOWNLOADED_SECTION) {
+        Layer *layer = [self.mapsFetchedResultsController objectAtIndexPath:indexPath];
+        if ([layer isKindOfClass:[StaticLayer class]]) {
+            UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
+            
+            if (cell.accessoryType == UITableViewCellAccessoryNone) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                [self.selectedStaticLayers addObject:layer.remoteId];
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                [self.selectedStaticLayers removeObject:layer.remoteId];
+            }
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedStaticLayers allObjects]} forKey:@"selectedStaticLayers"];
+            [defaults synchronize];
+            
+            [tableView reloadData];
         }
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void) startGeoPackageDownload: (NSIndexPath *) indexPath {
-    UITableViewCell *cell =  [self.tableView cellForRowAtIndexPath:indexPath];
-    Layer *geopackageLayer = [self geoPackageForRow:indexPath.row];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator setFrame:CGRectZero];
-    [activityIndicator startAnimating];
-    activityIndicator.color = [UIColor secondaryText];
-    cell.accessoryView = activityIndicator;
-    [self.tableView reloadData];
-    
-    __weak typeof(self) weakSelf = self;
-    
+- (void) startGeoPackageDownload: (Layer *) layer {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Layer *localLayer = [geopackageLayer MR_inContext:localContext];
-        
+        Layer *localLayer = [layer MR_inContext:localContext];
         localLayer.downloading = YES;
         localLayer.downloadedBytes = 0;
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        [Layer downloadGeoPackage:geopackageLayer success:^{
+        [Layer downloadGeoPackage:layer success:^{
         } failure:^(NSError * _Nonnull error) {
         }];
-        
-        [weakSelf updateAndReloadData];
     }];
 }
 
+- (void) cancelGeoPackageDownload: (Layer *) layer {
+    [Layer cancelGeoPackageDownload: layer];
+}
+
 - (IBAction)activeChanged:(CacheActiveSwitch *)sender {
-    
     CacheOverlay * cacheOverlay = sender.overlay;
-    
     [cacheOverlay setEnabled:sender.on];
     
     BOOL modified = false;
@@ -464,31 +520,6 @@
     }
     
     if(modified){
-        [self.tableView reloadData];
-    }
-    
-    [self updateSelectedAndNotify];
-}
-
-- (IBAction)childActiveChanged:(CacheActiveSwitch *)sender {
-    
-    CacheOverlay * cacheOverlay = sender.overlay;
-    CacheOverlay * parentOverlay = [cacheOverlay getParent];
-    
-    [cacheOverlay setEnabled:sender.on];
-    
-    BOOL parentEnabled = true;
-    if(!cacheOverlay.enabled){
-        parentEnabled = false;
-        for(CacheOverlay * childOverlay in [parentOverlay getChildren]){
-            if(childOverlay.enabled){
-                parentEnabled = true;
-                break;
-            }
-        }
-    }
-    if(parentEnabled != parentOverlay.enabled){
-        [parentOverlay setEnabled:parentEnabled];
         [self.tableView reloadData];
     }
     
@@ -524,42 +555,45 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
 
-    if([indexPath section] == 0){
-        CacheOverlay * cacheOverlay = [self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
-        if(![cacheOverlay isChild]){
-            style = UITableViewCellEditingStyleDelete;
-        }
+    if(indexPath.section == DOWNLOADED_SECTION || indexPath.section == MY_MAPS_SECTION) {
+        style = UITableViewCellEditingStyleDelete;
     }
     return style;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self) weakSelf = self;
+    
+    Layer *editedLayer = [self layerFromIndexPath:indexPath];
 
     // If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        if (indexPath.section == 0) {
-            GeoPackageCacheOverlay *cacheOverlay = (GeoPackageCacheOverlay *)[self.downloadedGeoPackageCells objectAtIndex:[indexPath row]];
-            [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-                NSString *filePath = cacheOverlay.filePath;
-                NSArray *pathComponents = [filePath pathComponents];
-                NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
-                NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", layerId] inContext:localContext];
-                for (Layer *layer in layers) {
-                    layer.loaded = [NSNumber numberWithBool:NO];
-                    layer.downloadedBytes = 0;
-                    layer.downloading = NO;
-                }
-            } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-                [weakSelf deleteCacheOverlay:cacheOverlay];
-                [weakSelf updateAndReloadData];
-            }];
-        } else if (indexPath.section == 3) {
-            CacheOverlay * cacheOverlay = [self.tableCells objectAtIndex:[indexPath row]];
-            [self deleteCacheOverlay:cacheOverlay];
+        NSLog(@"Editing style delete");
+        if (indexPath.section == DOWNLOADED_SECTION) {
+            if ([editedLayer isKindOfClass:[StaticLayer class]]) {
+                StaticLayer *staticLayer = (StaticLayer *)editedLayer;
+                [staticLayer removeStaticLayerData];
+            } else {
+                [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+                    NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", editedLayer.remoteId] inContext:localContext];
+                    for (Layer *layer in layers) {
+                        layer.loaded = nil;
+                        layer.downloadedBytes = 0;
+                        layer.downloading = NO;
+                    }
+                } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+                    GeoPackageCacheOverlay *cacheOverlay = (GeoPackageCacheOverlay *)[self findOverlayByRemoteId:editedLayer.remoteId];
+                    if (cacheOverlay) {
+                        [weakSelf deleteCacheOverlay:cacheOverlay];
+                    }
+                    [weakSelf.tableView reloadData];
+                }];
+            }
+        } else if (indexPath.section == MY_MAPS_SECTION) {
+            CacheOverlay *localOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+            [self deleteCacheOverlay:localOverlay];
         }
     }
 }
@@ -573,7 +607,6 @@
             [self deleteGeoPackageCacheOverlay:(GeoPackageCacheOverlay *)cacheOverlay];
             break;
         default:
-            
             break;
     }
     [self.cacheOverlays removeCacheOverlay:cacheOverlay];

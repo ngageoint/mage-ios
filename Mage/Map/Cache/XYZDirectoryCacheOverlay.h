@@ -17,6 +17,9 @@
  *  Tile overlay
  */
 @property (strong, nonatomic) MKTileOverlay * tileOverlay;
+@property (nonatomic) int minZoom;
+@property (nonatomic) int maxZoom;
+@property (nonatomic) int tileCount;
 
 /**
  *  Initializer

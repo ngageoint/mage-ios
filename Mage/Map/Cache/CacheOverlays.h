@@ -75,6 +75,9 @@
  */
 -(NSArray<CacheOverlay *> *) getOverlays;
 
+
+-(NSArray <CacheOverlay *> *) getLocallyLoadedOverlays;
+
 /**
  *  Get the count of cache overlays
  *
