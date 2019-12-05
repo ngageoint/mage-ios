@@ -118,7 +118,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     NSArray *obsForms = [self.observation.properties objectForKey:@"forms"];
     NSNumber *formIndex = [field valueForKey:@"formIndex"];
     id name = [field valueForKey:@"name"];
-    id value = self.currentEditValue = [[obsForms objectAtIndex:[formIndex integerValue]] objectForKey:name];
+    id value = self.currentEditValue = formIndex ? [[obsForms objectAtIndex:[formIndex integerValue]] objectForKey:name] : nil;
     if ([[field objectForKey:@"type"] isEqualToString:@"dropdown"] || [[field objectForKey:@"type"] isEqualToString:@"multiselectdropdown"] || [[field objectForKey:@"type"] isEqualToString:@"radio"]) {
         SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue: value andDelegate: self];
         editSelect.title = [field valueForKey:@"title"];

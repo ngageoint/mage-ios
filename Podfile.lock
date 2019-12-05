@@ -83,7 +83,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `../mage-ios-sdk`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.4`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -93,7 +93,7 @@ DEPENDENCIES:
   - zxcvbn-ios
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - DateTools
     - EDSunriseSet
@@ -122,7 +122,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :path: "../mage-ios-sdk"
+    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.4
+
+CHECKOUT OPTIONS:
+  mage-ios-sdk:
+    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.4
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -136,7 +142,7 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  mage-ios-sdk: a5061be62ef9fa39e57a4c62f04ba0674b16cd6e
+  mage-ios-sdk: 033f681085df0eb9f152e702e7f3be94a83e2431
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
@@ -152,6 +158,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 5e66009b1e1fc7c008bccfc9801885a93acc3046
+PODFILE CHECKSUM: 74a30c8ba2eb3c443f2b5e708ae0bea4b3c99ac2
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

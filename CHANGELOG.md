@@ -3,13 +3,32 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.13 (TBD)
+## 2.0.15 (TBD)
 
 ##### Release Notes
 
 ##### Features
 
 ##### Bug Fixes
+
+## 2.0.14 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.14)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Fix iPad layout issues for iOS 13
+* Fix crash when trying to modify observation location for events with no forms.
+
+## 2.0.13 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.13)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Wrap UISearchBar background color setter in iOS 13 check.
 
 ## 2.0.12 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.12)
 

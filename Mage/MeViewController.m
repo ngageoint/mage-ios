@@ -78,6 +78,7 @@
     self.location.textColor = [UIColor flatButton];
     self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
+    self.location.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     [UIColor themeMap:self.map];
 }
 

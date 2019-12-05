@@ -37,10 +37,14 @@
     self.selectedChoicesView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
     self.searchController.searchBar.backgroundColor = [UIColor primary];
-    self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
     self.selectedTextLabel.textColor = [UIColor secondaryText];
     self.selectedLabel.textColor = [UIColor primaryText];
     self.clearButton.tintColor = [UIColor flatButton];
+    
+    if (@available(iOS 13.0, *)) {
+        self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -81,15 +85,15 @@
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
-
-    if (@available(iOS 11.0, *)) {
-        self.navigationItem.searchController = self.searchController;
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
+    self.searchController.searchBar.translucent = YES;
+    
+    if (@available(iOS 13.0, *)) {
     } else {
-        self.definesPresentationContext = YES;
-        self.extendedLayoutIncludesOpaqueBars = YES;
-        self.selectedChoicesConstraint.constant = self.navigationController.navigationBar.frame.size.height + 20;
-        self.tableView.tableHeaderView = self.searchController.searchBar;
+        self.searchController.searchBar.barStyle = UIBarStyleBlack;
     }
+
+    self.navigationItem.searchController = self.searchController;
     
     [self registerForThemeChanges];
 }
