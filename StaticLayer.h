@@ -17,6 +17,8 @@ extern NSString * const StaticLayerLoaded;
 
 + (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer;
 + (void) createOrUpdateStaticLayer: (id) layer withEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
++ (void) fetchStaticLayerData: (NSNumber *)eventId layer: (StaticLayer *) staticLayer;
+- (void) removeStaticLayerData;
 
 @end
 

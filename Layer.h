@@ -13,15 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Layer : NSManagedObject
 
-extern NSString * const LayerFetched;
-extern NSString * const GeoPackageLayerFetched;
 extern NSString * const GeoPackageDownloaded;
 
 + (NSString *) layerTypeFromJson:(NSDictionary *) json;
 - (id) populateObjectFromJson: (NSDictionary *) json withEventId: (NSNumber *) eventId;
 + (NSURLSessionDataTask *) operationToPullLayersForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
++ (NSMutableArray *) populateLayersFromJson: (NSArray *) layers inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 + (void) refreshLayersForEvent: (NSNumber *) eventId;
 + (void) downloadGeoPackage: (Layer *) layer success: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
++ (void) cancelGeoPackageDownload: (Layer *) layer;
 
 @end
 

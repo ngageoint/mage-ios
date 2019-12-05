@@ -91,25 +91,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             }
         }
     }
-    for (NSDictionary *layerJson in [json objectForKey:@"layers"]) {
-        NSString *layerType = [Layer layerTypeFromJson:layerJson];
-        if ([layerType isEqualToString:@"Feature"]) {
-            [StaticLayer createOrUpdateStaticLayer:layerJson withEventId:self.remoteId inContext:context];
-        } else if ([layerType isEqualToString: @"GeoPackage"]) {
-            Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", [layerJson objectForKey:@"id"], self.remoteId] inContext:context];
-            if (!layer) {
-                layer = [Layer MR_createEntityInContext:context];
-            }
-            [layer populateObjectFromJson:layerJson withEventId:self.remoteId];
-            [[NSNotificationCenter defaultCenter] postNotificationName:GeoPackageLayerFetched object:layer];
-        } else {
-            Layer *layer = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", [layerJson objectForKey:@"id"], self.remoteId] inContext:context];
-            if (!layer) {
-                layer = [Layer MR_createEntityInContext:context];
-            }
-            [layer populateObjectFromJson:layerJson withEventId:self.remoteId];
-        }
-    }
+    [Layer populateLayersFromJson:[json objectForKey:@"layers"] inEventId: self.remoteId inContext:context];
 }
 
 - (BOOL) isUserInEvent: (User *) user {

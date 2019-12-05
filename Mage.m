@@ -113,23 +113,23 @@
         }
     }
     
-    for (Event *e in events) {
-        
-        NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", e.remoteId]];
-        for (StaticLayer *s in staticLayers) {
-            if (s.data == nil) {
-                NSLog(@"Static layer data is nil for %@ in event %@ retrieving data", s.name, s.eventId);
-                NSURLSessionTask *layerTask = [StaticLayer operationToFetchStaticLayerData:s];
-                
-                if(currentEventId != nil && [currentEventId isEqualToNumber:e.remoteId]){
-                    [manager addTask:layerTask];
-                }else{
-                    [task addTask:layerTask];
-                    [self addTask:layerTask toTasks:eventTasks forEvent:e];
-                }
-            }
-        }
-    }
+//    for (Event *e in events) {
+//
+//        NSArray *staticLayers = [StaticLayer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", e.remoteId]];
+//        for (StaticLayer *s in staticLayers) {
+//            if (s.data == nil) {
+//                NSLog(@"Static layer data is nil for %@ in event %@ retrieving data", s.name, s.eventId);
+//                NSURLSessionTask *layerTask = [StaticLayer operationToFetchStaticLayerData:s];
+//
+//                if(currentEventId != nil && [currentEventId isEqualToNumber:e.remoteId]){
+//                    [manager addTask:layerTask];
+//                }else{
+//                    [task addTask:layerTask];
+//                    [self addTask:layerTask toTasks:eventTasks forEvent:e];
+//                }
+//            }
+//        }
+//    }
     
     [MageSessionManager setEventTasks:eventTasks];
     

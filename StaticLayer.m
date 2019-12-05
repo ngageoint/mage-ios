@@ -30,6 +30,16 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
         NSLog(@"Updating layer with id: %@ into event: %@", l.remoteId, eventId);
         [l populateObjectFromJson:layer withEventId:eventId];
     }
+    NSLog(@"layer loaded %@ ? %@", l.name, l.loaded);
+    if (l.loaded) {
+        [StaticLayer fetchStaticLayerData:eventId layer:l];
+    }
+}
+
++ (void) fetchStaticLayerData: (NSNumber *)eventId layer: (StaticLayer *) staticLayer {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *fetchFeaturesTask = [StaticLayer operationToFetchStaticLayerData:staticLayer];
+    [manager addTask:fetchFeaturesTask];
 }
 
 + (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer {
@@ -47,10 +57,9 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
             NSLog(@"fetched static features for %@", localLayer.name);
             NSMutableDictionary *dictionaryResponse = (NSMutableDictionary *)CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault, (CFDictionaryRef)responseObject, kCFPropertyListMutableContainers));
             
-            localLayer.loaded = [NSNumber numberWithBool:YES];
             for (NSDictionary *feature in [dictionaryResponse objectForKey:@"features"]) {
                 NSString *iconUrl = [feature valueForKeyPath:@"properties.style.iconStyle.icon.href"];
-                if (iconUrl) {
+                if (iconUrl && [iconUrl hasPrefix:@"https"]) {
                     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
                     NSString *featureIconRelativePath = [NSString stringWithFormat:@"featureIcons/%@/%@", localLayer.remoteId, [feature valueForKey:@"id"]];
                     NSString *featureIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, featureIconRelativePath];
@@ -65,6 +74,8 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
                 }
             }
             localLayer.data = dictionaryResponse;
+            localLayer.loaded = [NSNumber numberWithBool:YES];
+            localLayer.downloading = nil;
             
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (contextDidSave) {
@@ -75,8 +86,23 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        Layer *localLayer = [layer MR_inContext:localContext];
+        
+        localLayer.downloading = YES;
+    }];
     
     return task;
+}
+
+- (void) removeStaticLayerData {
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        StaticLayer *localLayer = [weakSelf MR_inContext:localContext];
+        localLayer.loaded = nil;
+        localLayer.data = nil;
+    } completion:^(BOOL contextDidSave, NSError *error) {
+   }];
 }
 
 @end
