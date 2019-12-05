@@ -9,6 +9,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
 
+* Support XYZ/TMS/WMS layers form the server on the mobile client
+* Allow cancelling a GeoPackage download
+
 ##### Bug Fixes
 
 ## 2.0.14 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.14)
