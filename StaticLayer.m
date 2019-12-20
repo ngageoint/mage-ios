@@ -74,7 +74,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
                 }
             }
             localLayer.data = dictionaryResponse;
-            localLayer.loaded = [NSNumber numberWithBool:YES];
+            localLayer.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_LOADED];
             localLayer.downloading = nil;
             
         } completion:^(BOOL contextDidSave, NSError *error) {
@@ -99,7 +99,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     __weak typeof(self) weakSelf = self;
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         StaticLayer *localLayer = [weakSelf MR_inContext:localContext];
-        localLayer.loaded = nil;
+        localLayer.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_NOT_DOWNLOADED];
         localLayer.data = nil;
     } completion:^(BOOL contextDidSave, NSError *error) {
    }];

@@ -16,6 +16,10 @@
 @implementation Layer
 
 NSString * const GeoPackageDownloaded = @"mil.nga.giat.mage.geopackage.downloaded";
+float const OFFLINE_LAYER_LOADED = 1;
+float const EXTERNAL_LAYER_LOADED = .5;
+float const OFFLINE_LAYER_NOT_DOWNLOADED = 0;
+float const EXTERNAL_LAYER_PROCESSING = -1;
 
 - (id) populateObjectFromJson: (NSDictionary *) json withEventId: (NSNumber *) eventId {
     [self setRemoteId:[json objectForKey:@"id"]];
@@ -132,6 +136,7 @@ NSString * const GeoPackageDownloaded = @"mil.nga.giat.mage.geopackage.downloade
             Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId] inContext:context];
             if (l == nil) {
                 l = [Layer MR_createEntityInContext:context];
+                l.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_NOT_DOWNLOADED];
             }
             [l populateObjectFromJson:layer withEventId:eventId];
             

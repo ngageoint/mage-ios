@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Layer : NSManagedObject
 
 extern NSString * const GeoPackageDownloaded;
+extern float const OFFLINE_LAYER_LOADED;
+extern float const OFFLINE_LAYER_NOT_DOWNLOADED;
+extern float const EXTERNAL_LAYER_LOADED;
+extern float const EXTERNAL_LAYER_PROCESSING;
 
 + (NSString *) layerTypeFromJson:(NSDictionary *) json;
 - (id) populateObjectFromJson: (NSDictionary *) json withEventId: (NSNumber *) eventId;
