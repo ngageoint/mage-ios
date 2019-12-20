@@ -283,6 +283,24 @@
     }
 }
 
+- (void) removeOutdatedOfflineMapArchives {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        NSArray * layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == -1 AND (type == %@ OR type == %@)", [Server currentEventId], @"GeoPackage", @"Local_XYZ"] inContext:localContext];
+        for (Layer * layer in layers) {
+            CacheOverlay * overlay =  [[CacheOverlays getInstance] getByCacheName:layer.name];
+            if (!overlay) {
+                [layer MR_deleteEntity];
+            }
+            else if ([overlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
+                GeoPackageCacheOverlay *gpOverlay = (GeoPackageCacheOverlay *)overlay;
+                if (!overlay || ![[NSFileManager defaultManager] fileExistsAtPath:gpOverlay.filePath]) {
+                    [layer MR_deleteEntity];
+                }
+            }
+        }
+    }];
+}
+
 - (void) processOfflineMapArchives {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -305,6 +323,16 @@
         if(isDirectory){
             CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:cacheDirectory];
             [overlays addObject:cacheOverlay];
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == -1 AND (type == %@ OR type == %@) AND name == %@", @"GeoPackage", @"Local_XYZ", cache] inContext:localContext];
+                if (!l) {
+                    l = [Layer MR_createEntityInContext:localContext];
+                    l.name = cache;
+                    l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                    l.type = @"Local_XYZ";
+                    l.eventId = [NSNumber numberWithInt:-1];
+                }
+            }];
         }
     }
     
@@ -357,6 +385,7 @@
             [self processArchiveAtFilePath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, archive] toDirectory:baseCacheDirectory];
         });
     }
+    [self removeOutdatedOfflineMapArchives];
 }
 
 -(void) addGeoPackageCacheOverlays:(NSMutableArray<CacheOverlay *> *) cacheOverlays{
@@ -376,6 +405,7 @@
                     [cacheOverlays addObject:cacheOverlay];
                 }
             }else{
+                [[CacheOverlays getInstance] removeByCacheName:[[filePath lastPathComponent] stringByDeletingPathExtension]];
                 // Delete if the file was deleted
                 [manager delete:geoPackage];
             }
@@ -474,12 +504,11 @@
     return cacheOverlay;
 }
 
-#pragma mark - SSZipArchiveDelegate methods
-- (void) zipArchiveDidUnzipArchiveAtPath:(NSString *)path zipInfo:(unz_global_info)zipInfo unzippedPath:(NSString *)unzippedPath {
+- (void) finishDidUnzipAtPath:(NSString *)path zipInfo:(unz_global_info)zipInfo unzippedPath:(NSString *)unzippedPath {
     CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
-    
+
     [cacheOverlays removeProcessing:[path lastPathComponent]];
-    
+
     // There is no way to know what was in the zip that was unarchived, so just add all current caches to the list
     NSArray* caches = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:unzippedPath error:nil];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -490,8 +519,26 @@
         if(isDirectory){
             CacheOverlay * cacheOverlay = [[XYZDirectoryCacheOverlay alloc] initWithName:cache andDirectory:cacheDirectory];
             [cacheOverlays addCacheOverlay:cacheOverlay];
+            NSLog(@"Imported local XYZ Zip");
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Layer *l = [Layer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == -1 AND (type == %@ OR type == %@) AND name == %@", @"GeoPackage", @"Local_XYZ", cache] inContext:localContext];
+                if (!l) {
+                    l = [Layer MR_createEntityInContext:localContext];
+                    l.name = cache;
+                    l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                    l.type = @"Local_XYZ";
+                    l.eventId = [NSNumber numberWithInt:-1];
+                }
+            }];
         }
     }
+}
+
+#pragma mark - SSZipArchiveDelegate methods
+- (void) zipArchiveDidUnzipArchiveAtPath:(NSString *)path zipInfo:(unz_global_info)zipInfo unzippedPath:(NSString *)unzippedPath {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self finishDidUnzipAtPath:path zipInfo:zipInfo unzippedPath:unzippedPath];
+    });
 }
 #pragma mark -
 
@@ -532,6 +579,14 @@
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
     @try {
         imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
+        NSLog(@"Imported local Geopackage");
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            Layer *l = [Layer MR_createEntityInContext:localContext];
+            l.name = [[path lastPathComponent] stringByDeletingPathExtension];
+            l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+            l.type = @"GeoPackage";
+            l.eventId = [NSNumber numberWithInt:-1];
+        }];
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
@@ -573,7 +628,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
-                layer.loaded = [NSNumber numberWithBool:NO];
+                layer.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_NOT_DOWNLOADED];
                 layer.downloading = NO;
             }
         }];
@@ -582,7 +637,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
-                layer.loaded = [NSNumber numberWithBool:YES];
+                layer.loaded = [NSNumber numberWithInteger: OFFLINE_LAYER_LOADED];
                 layer.downloading = NO;
             }
         } completion:^(BOOL contextDidSave, NSError * _Nullable magicalRecordError) {

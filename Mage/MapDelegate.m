@@ -818,7 +818,7 @@
             
             // If indexed, add as a tile overlay
             if([featureTableCacheOverlay getIndexed]){
-                GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithFeatureDao:featureDao];
+                GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
                 int maxFeaturesPerTile = 0;
                 if([featureDao getGeometryType] == SF_POINT){
                     maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];

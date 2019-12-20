@@ -103,12 +103,12 @@
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
             if (self.geometry.geometryType == SF_POINT) {
                 GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
-                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:nil andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
             } else {
                 GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:self.geometry];
                 GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
                 options.image = [[UIImage alloc] init];
-                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:options andPolylinePointOptions:options andPolygonPointOptions:options andPolygonPointHoleOptions:options];
+                [shapeConverter addMapShape:shape asPointsToMapView:self.mapView withPointOptions:options andPolylinePointOptions:options andPolygonPointOptions:options andPolygonPointHoleOptions:options andPolylineOptions:options andPolygonOptions:options];
             }
             
             MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));

@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
 @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
 @property (nonatomic, strong) NSFetchedResultsController *mapsFetchedResultsController;
-@property (nonatomic) BOOL hadLoaded;
 @end
 
 @implementation OfflineMapTableViewController
@@ -57,7 +56,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
     
-    self.mapsFetchedResultsController = [Layer MR_fetchAllGroupedBy:@"loaded" withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND (type == %@ OR type == %@)", [Server currentEventId], @"GeoPackage", @"Feature"] sortedBy:@"loaded,name:YES" ascending:NO delegate:self];
+    self.mapsFetchedResultsController = [Layer MR_fetchAllGroupedBy:@"loaded" withPredicate:[NSPredicate predicateWithFormat:@"(eventId == %@ OR eventId == -1) AND (type == %@ OR type == %@ OR type == %@)", [Server currentEventId], @"GeoPackage", @"Local_XYZ", @"Feature"] sortedBy:@"loaded,name:YES" ascending:NO delegate:self];
     [self.mapsFetchedResultsController performFetch:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageImported:) name: GeoPackageImported object:nil];
@@ -69,8 +68,6 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     [self.cacheOverlays registerListener:self];
     
     [self registerForThemeChanges];
-    
-    self.hadLoaded = [self hasLoadedSection];
 }
 
 - (void) geoPackageImported: (NSNotification *) notification {
@@ -105,23 +102,8 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     return nil;
 }
 
-- (BOOL) hasLoadedSection {
-    return [self.mapsFetchedResultsController sections].count != 0 && ((Layer *)[[[[self.mapsFetchedResultsController sections] objectAtIndex:0] objects] objectAtIndex:0]).loaded;
-}
-
 - (Layer *) layerFromIndexPath: (NSIndexPath *) indexPath {
-    Layer *layer = nil;
-    
-    if (indexPath.section == DOWNLOADED_SECTION) {
-        layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
-    } else if (indexPath.section == AVAILABLE_SECTION) {
-        if ([self hasLoadedSection]) {
-            layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]];
-        } else {
-            layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
-        }
-    }
-    return layer;
+    return [self.mapsFetchedResultsController objectAtIndexPath:indexPath];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate
@@ -129,74 +111,75 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     [[self tableView] beginUpdates];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-    Layer *layer = (Layer *)anObject;
-
-    NSIndexPath *correctedIndexPath = indexPath;
-    if ((!self.hadLoaded && indexPath.section == 0)
-        || (self.hadLoaded && indexPath.section == 1)) {
-        correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
-    }
-    NSIndexPath *correctedNewIndexPath = newIndexPath;
-    if (([self hasLoadedSection] && newIndexPath.section == 1)
-        || (![self hasLoadedSection] && newIndexPath.section == 0)) {
-        correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
-    }
-    if (type == NSFetchedResultsChangeMove) {
-        if(!layer.loaded) {
-            correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
-            correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:2];
-        } else {
-            correctedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:2];
-            correctedNewIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:0];
-        }
-    }
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{   NSLog(@"didChangeSection: called");
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [[self tableView] insertRowsAtIndexPaths:@[correctedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
+
         case NSFetchedResultsChangeDelete:
-            [[self tableView] deleteRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-        case NSFetchedResultsChangeUpdate: {
-            // 2019-10-23 DRB (iOS 13): This is a total hack.  If the first row in the available section is reloaded to show the download progress
-            // it still shows an animation and bounces the row.  Does not matter if you try to put it in a performWithoutAnimation block
-            // or any other way.  You should be able to just do reloadRowsAtIndexPaths (the else block) if this ever gets fixed.
-            // Has been a bug since at least ios5: https://stackoverflow.com/questions/4557930/uitableview-reloadrowsatindexpaths-performing-animation-when-it-shouldnt
-            if (correctedIndexPath.section == AVAILABLE_SECTION && correctedIndexPath.row == 0) {
-                Layer *layer = (Layer *)anObject;
-                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:correctedIndexPath];
-                if (layer.file) {
-                    uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
-                               NSLog(@"Download bytes %ld", (long)downloadBytes);
-                               cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
-                                                            [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
-                                                            [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
-                } else {
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
-                }
-            } else {
-                [self.tableView reloadRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-            }
-            break;
-        }
+            
         case NSFetchedResultsChangeMove:
-            [[self tableView] deleteRowsAtIndexPaths:@[correctedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [[self tableView] insertRowsAtIndexPaths:@[correctedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+        case NSFetchedResultsChangeUpdate:
             break;
     }
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    NSUInteger section = [self getSectionFromLayer:anObject];
+    switch(type) {
+    
+       case NSFetchedResultsChangeInsert:
+           [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                      withRowAnimation:UITableViewRowAnimationFade];
+           break;
+
+       case NSFetchedResultsChangeDelete:
+           [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                      withRowAnimation:UITableViewRowAnimationFade];
+           break;
+
+       case NSFetchedResultsChangeUpdate:
+           if (section == AVAILABLE_SECTION && indexPath.row == 0) {
+               Layer *layer = (Layer *)anObject;
+               UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+               if (layer.file) {
+                   uint64_t downloadBytes = [layer.downloadedBytes longLongValue];
+                              NSLog(@"Download bytes %ld", (long)downloadBytes);
+                              cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
+                                                           [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
+                                                           [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+               } else {
+                   cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
+               }
+           } else {
+               [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+           }               break;
+
+       case NSFetchedResultsChangeMove:
+           [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                      withRowAnimation:UITableViewRowAnimationFade];
+           [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                      withRowAnimation:UITableViewRowAnimationFade];
+           break;
+   }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [[self tableView] endUpdates];
-    self.hadLoaded = [self hasLoadedSection];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
-    if (![self hasLoadedSection] && [self.mapsFetchedResultsController sections].count == 0 && [self.cacheOverlays getLocallyLoadedOverlays].count == 0 && [self.cacheOverlays getProcessing].count == 0) {
+    NSUInteger sectionCount = [self.mapsFetchedResultsController sections].count;
+    
+    if (sectionCount == 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
@@ -243,35 +226,39 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         return 0;
     }
     self.tableView.backgroundView = nil;
-    return ([self.cacheOverlays getProcessing].count > 0 ? 4 : 3);
+    
+    return sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == DOWNLOADED_SECTION) {
-        return [self hasLoadedSection] ? [[[self.mapsFetchedResultsController sections] objectAtIndex:0] numberOfObjects] : 0;
-    } else if (section == AVAILABLE_SECTION) {
-        if ([self.mapsFetchedResultsController sections].count != 0) {
-            return [[[self.mapsFetchedResultsController sections] objectAtIndex:[self hasLoadedSection] ? 1 : 0] numberOfObjects];
-        }
-        return 0;
-    } else if (section == MY_MAPS_SECTION) {
-        return [self.cacheOverlays getLocallyLoadedOverlays].count;
-    } else if (section == PROCESSING_SECTION) {
-        return [self.cacheOverlays getProcessing].count;
+    return [[self.mapsFetchedResultsController.sections objectAtIndex:section] numberOfObjects];
+}
+
+- (NSInteger) getSectionFromLayer: (Layer *) layer {
+    if (layer.loaded.floatValue == [NSNumber numberWithFloat:OFFLINE_LAYER_NOT_DOWNLOADED].floatValue || layer.loaded == nil) {
+        return AVAILABLE_SECTION;
+    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:OFFLINE_LAYER_LOADED].floatValue ) {
+        return DOWNLOADED_SECTION;
+    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED].floatValue ) {
+        return MY_MAPS_SECTION;
+    } else {
+        return PROCESSING_SECTION;
     }
-    return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == DOWNLOADED_SECTION) {
-        return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name];
-    } else if (section == AVAILABLE_SECTION) {
-        return AVAILABLE_SECTION_NAME;
-    } else if (section == PROCESSING_SECTION) {
-        return PROCESSING_SECTION_NAME;
-    } else {
-        return MY_MAPS_SECTION_NAME;
+    Layer *layer = [[[self.mapsFetchedResultsController.sections objectAtIndex:section] objects] objectAtIndex:0];
+    switch ([self getSectionFromLayer:layer]) {
+        case AVAILABLE_SECTION:
+            return AVAILABLE_SECTION_NAME;
+        case DOWNLOADED_SECTION:
+            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name];
+        case PROCESSING_SECTION:
+            return PROCESSING_SECTION_NAME;
+        case MY_MAPS_SECTION:
+            return MY_MAPS_SECTION_NAME;
     }
+    return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -292,14 +279,15 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     Layer *layer = [self layerFromIndexPath:indexPath];
-    if (indexPath.section == DOWNLOADED_SECTION) {
+    NSUInteger section = [self getSectionFromLayer:layer];
+    if (section == DOWNLOADED_SECTION) {
         CacheOverlay * cacheOverlay = [self findOverlayByRemoteId:layer.remoteId];
         if (cacheOverlay.expanded) {
             return 58.0f + (58.0f * [cacheOverlay getChildren].count);
         }
         return 58.0f;
-    } else if (indexPath.section == MY_MAPS_SECTION) {
-        CacheOverlay *cacheOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+    } else if (section == MY_MAPS_SECTION) {
+        CacheOverlay *cacheOverlay = [self.cacheOverlays getByCacheName:layer.name]; //[[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
         if (cacheOverlay.expanded) {
             return 58.0f + (58.0f * [cacheOverlay getChildren].count);
         }
@@ -320,7 +308,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     }
 
     Layer *layer = [self layerFromIndexPath:indexPath];
-    if (indexPath.section == AVAILABLE_SECTION) {
+    NSUInteger section = [self getSectionFromLayer:layer];
+
+    if (section == AVAILABLE_SECTION) {
         cell.textLabel.text = layer.name;
 
         if (!layer.downloading) {
@@ -350,7 +340,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             activityIndicator.color = [UIColor secondaryText];
             cell.accessoryView = activityIndicator;
         }
-    } else if (indexPath.section == DOWNLOADED_SECTION) {
+    } else if (section == DOWNLOADED_SECTION) {
         if ([layer isKindOfClass:[StaticLayer class]]) {
             StaticLayer *staticLayer = (StaticLayer *)layer;
             cell.textLabel.text = layer.name;
@@ -377,8 +367,8 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             [gpCell configure];
             return gpCell;
         }
-    } else if (indexPath.section == MY_MAPS_SECTION) {
-        CacheOverlay *localOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+    } else if (section == MY_MAPS_SECTION) {
+        CacheOverlay *localOverlay = [self.cacheOverlays getByCacheName:layer.name];
         if ([localOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
             CacheOverlayTableCell *gpCell = [tableView dequeueReusableCellWithIdentifier:@"geoPackageLayerCell"];
             if (!gpCell) {
@@ -400,7 +390,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = cacheSwitch;
         }
-    } else if (indexPath.section == PROCESSING_SECTION) {
+    } else if (section == PROCESSING_SECTION) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *processingOverlay = [[self.cacheOverlays getProcessing] objectAtIndex:indexPath.row];
@@ -444,9 +434,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    Layer *layer = [self layerFromIndexPath:indexPath];
+    NSUInteger section = [self getSectionFromLayer:layer];
 
-    if (indexPath.section == AVAILABLE_SECTION) {
-        Layer *layer = [self.mapsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:[self hasLoadedSection] ? 1 : 0]];
+    if (section == AVAILABLE_SECTION) {
         if (layer.downloading) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Layer is Currently Downloading"
                                                                            message:[NSString stringWithFormat:@"It appears the %@ layer is currently being downloaded, however if the download has failed you can restart it.", layer.name]
@@ -469,8 +460,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         } else {
             [self retrieveLayerData:layer];
         }
-    } else if (indexPath.section == DOWNLOADED_SECTION) {
-        Layer *layer = [self.mapsFetchedResultsController objectAtIndexPath:indexPath];
+    } else if (section == DOWNLOADED_SECTION) {
         if ([layer isKindOfClass:[StaticLayer class]]) {
             UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
             
@@ -556,8 +546,11 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
+    
+    Layer *layer = [[[self.mapsFetchedResultsController.sections objectAtIndex:indexPath.section] objects] objectAtIndex:0];
+    NSUInteger section = [self getSectionFromLayer:layer];
 
-    if(indexPath.section == DOWNLOADED_SECTION || indexPath.section == MY_MAPS_SECTION) {
+    if(section == DOWNLOADED_SECTION || section == MY_MAPS_SECTION) {
         style = UITableViewCellEditingStyleDelete;
     }
     return style;
@@ -567,11 +560,11 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     __weak typeof(self) weakSelf = self;
     
     Layer *editedLayer = [self layerFromIndexPath:indexPath];
-
+    NSUInteger section = [self getSectionFromLayer:editedLayer];
     // If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSLog(@"Editing style delete");
-        if (indexPath.section == DOWNLOADED_SECTION) {
+        if (section == DOWNLOADED_SECTION) {
             if ([editedLayer isKindOfClass:[StaticLayer class]]) {
                 StaticLayer *staticLayer = (StaticLayer *)editedLayer;
                 [staticLayer removeStaticLayerData];
@@ -591,9 +584,13 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
                     [weakSelf.tableView reloadData];
                 }];
             }
-        } else if (indexPath.section == MY_MAPS_SECTION) {
-            CacheOverlay *localOverlay = [[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+        } else if (section == MY_MAPS_SECTION) {
+            CacheOverlay *localOverlay = [self.cacheOverlays getByCacheName:editedLayer.name];
             [self deleteCacheOverlay:localOverlay];
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+                Layer *localLayer = [editedLayer MR_inContext: localContext];
+                [localLayer MR_deleteEntity];
+            }];
         }
     }
 }
@@ -626,6 +623,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     if(![manager delete:[geoPackageCacheOverlay getName]]){
         NSLog(@"Error deleting GeoPackage cache file: %@", [geoPackageCacheOverlay getName]);
     }
+    [self.cacheOverlays removeCacheOverlay:geoPackageCacheOverlay];
 }
 
 @end
