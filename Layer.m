@@ -170,8 +170,34 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSMutableArray *layerRemoteIds = [Layer populateLayersFromJson:responseObject inEventId: eventId inContext:localContext];
+            NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
             [Layer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"(NOT (remoteId IN %@)) AND eventId == %@", layerRemoteIds, eventId] inContext:localContext];
+            NSMutableDictionary *selectedOnlineLayers = [[standardUserDefaults objectForKey:@"selectedOnlineLayers"] mutableCopy];
+            
+            // get the currently selected online layers, remove all existing layers and then delete the ones that are left
+            NSMutableArray *removedSelectedOnlineLayers = [[selectedOnlineLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
+            [removedSelectedOnlineLayers removeObjectsInArray:layerRemoteIds];
+            
+            NSMutableArray *selectedEventOnlineLayers = [[selectedOnlineLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
+            [selectedEventOnlineLayers removeObjectsInArray:removedSelectedOnlineLayers];
+            [selectedOnlineLayers setObject:selectedEventOnlineLayers forKey:[[Server currentEventId] stringValue]];
+            
+            [standardUserDefaults setObject:selectedOnlineLayers forKey:@"selectedOnlineLayers"];
+            
+            
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"(NOT (remoteId IN %@)) AND eventId == %@", layerRemoteIds, eventId] inContext:localContext];
+            NSMutableDictionary *selectedStaticLayers = [[standardUserDefaults objectForKey:@"selectedStaticLayers"] mutableCopy];
+            
+            // get the currently selected online layers, remove all existing layers and then delete the ones that are left
+            NSMutableArray *removedSelectedStaticLayers = [[selectedStaticLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
+            [removedSelectedStaticLayers removeObjectsInArray:layerRemoteIds];
+            
+            NSMutableArray *selectedEventStaticLayers = [[selectedStaticLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
+            [selectedEventStaticLayers removeObjectsInArray:removedSelectedStaticLayers];
+            [selectedStaticLayers setObject:selectedEventStaticLayers forKey:[[Server currentEventId] stringValue]];
+            
+            [standardUserDefaults setObject:selectedStaticLayers forKey:@"selectedStaticLayers"];
+            [standardUserDefaults synchronize];
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {
                 if (failure) {
