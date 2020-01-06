@@ -955,14 +955,17 @@
             NSLog(@"Adding the TMS layer %@ to the map %@", onlineLayer.name, onlineLayer.url);
             overlay = [[TMSTileOverlay alloc] initWithURLTemplate:onlineLayer.url];
         }
-        if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
-            [baseLayers addObject:overlay];
-        } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
-            [transparentLayers addObject:overlay];
-        } else {
-            [nonBaseLayers addObject:overlay];
+        if (![self.onlineLayers objectForKey:onlineLayerId]) {
+            [self.onlineLayers setObject:overlay forKey:onlineLayerId];
+
+            if ([[onlineLayer options] objectForKey:@"base"] && [[[onlineLayer options] objectForKey:@"base"] intValue] == 1) {
+                [baseLayers addObject:overlay];
+            } else if ([[onlineLayer options] objectForKey:@"transparent"] && [[[onlineLayer options] objectForKey:@"transparent"] intValue] == 1) {
+                [transparentLayers addObject:overlay];
+            } else {
+                [nonBaseLayers addObject:overlay];
+            }
         }
-        [self.onlineLayers setObject:overlay forKey:onlineLayerId];
 
         [unselectedOnlineLayers removeObject:onlineLayerId];
     }
@@ -984,7 +987,6 @@
         [self.mapView removeOverlay:[self.onlineLayers objectForKey:unselectedOnlineLayerId]];
         [self.onlineLayers removeObjectForKey:unselectedOnlineLayerId];
     }
-
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {
