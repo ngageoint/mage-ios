@@ -108,7 +108,57 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
-    return [[self.onlineLayersFetchedResultsController sections] count];
+    NSUInteger sectionCount = [[self.onlineLayersFetchedResultsController sections] count];
+    
+    if (sectionCount == 0) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        imageView.image = [UIImage imageNamed:@"layers_large"];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.translatesAutoresizingMaskIntoConstraints = NO;
+        imageView.alpha = 0.6f;
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        title.text = @"No Layers";
+        title.numberOfLines = 0;
+        title.textAlignment = NSTextAlignmentCenter;
+        title.translatesAutoresizingMaskIntoConstraints = NO;
+        title.font = [UIFont systemFontOfSize:24];
+        title.alpha = 0.6f;
+        [title sizeToFit];
+        
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
+        description.text = @"Event administrators can add layers to your event.";
+        description.numberOfLines = 0;
+        description.textAlignment = NSTextAlignmentCenter;
+        description.translatesAutoresizingMaskIntoConstraints = NO;
+        description.alpha = 0.6f;
+        [description sizeToFit];
+        
+        [view addSubview:title];
+        [view addSubview:description];
+        [view addSubview:imageView];
+        
+        [title addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+
+        [description addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:self.view.bounds.size.width * .8]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [imageView addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:100]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:title attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:imageView attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:description attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:title attribute:NSLayoutAttributeBottom multiplier:1 constant:16]];
+        
+        self.tableView.backgroundView = view;
+        return 0;
+    }
+    self.tableView.backgroundView = nil;
+    
+    return sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
