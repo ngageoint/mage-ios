@@ -88,7 +88,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, branch `develop`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.5`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -129,13 +129,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :branch: develop
     :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.5
 
 CHECKOUT OPTIONS:
   mage-ios-sdk:
-    :commit: 7795265f9a5702b5ec10197a1e3b73b7bd8acb36
     :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.5
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -167,6 +167,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 85e41e60900d4ef8aa277117645cd9eb6cfa1f18
+PODFILE CHECKSUM: ceff4396b2eab24b3111bb07c03dd107e8543678
 
 COCOAPODS: 1.8.4

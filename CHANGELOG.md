@@ -3,7 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.15 (TBD)
+## 2.0.16 (TBD)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+
+## 2.0.15 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.15)
 
 ##### Release Notes
 
