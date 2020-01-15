@@ -1849,7 +1849,7 @@
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
-						DevelopmentTeam = XMTP7J7Y9Q;
+						DevelopmentTeam = ZL8G5D9G2H;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
@@ -2602,7 +2602,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XMTP7J7Y9Q;
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
@@ -2632,7 +2632,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XMTP7J7Y9Q;
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";

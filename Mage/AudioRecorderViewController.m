@@ -86,13 +86,13 @@
 #pragma
 #pragma mark - Voice Recording
 
-- (IBAction) startRecording{
+- (IBAction) startRecording {
     [self performSelectorInBackground:@selector(performRecording) withObject:nil];
 }
 
--(void) performRecording{
+-(void) performRecording {
     
-    if(!isRecording){
+    if (!isRecording) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
             [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
         }];
@@ -111,12 +111,12 @@
         }
         [audioSession setActive:YES error:&err];
         err = nil;
-        if(err){
+        if(err) {
             NSLog(@"audioSession: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
             return;
         }
-        NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithCapacity:0];
         
+        NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithCapacity:0];
         [settings setValue :[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
         [settings setValue:[NSNumber numberWithFloat:8000.0] forKey:AVSampleRateKey];
         [settings setValue:[NSNumber numberWithInt: 1] forKey:AVNumberOfChannelsKey];
@@ -177,9 +177,13 @@
         // start recording
         [self.recorder record];
         
-    }else{
+    } else {
         isRecording = NO;
-        [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
+        }];
+        
         [self.recorder stop];
         if (_sliderTimer != nil && _sliderTimer.isValid) {
             [_sliderTimer invalidate];
