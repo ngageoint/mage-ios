@@ -30,6 +30,8 @@
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "Theme+UIResponder.h"
+#import "BaseMapOverlay.h"
+#import "GPKGGeoPackageFactory.h"
 #import <mgrs/MGRS.h>
 #import <mgrs/mgrs-umbrella.h>
 
@@ -68,7 +70,8 @@ static float paddingPercentage = .1;
 @property (weak, nonatomic) IBOutlet UIView *fieldEntryBackground;
 @property (weak, nonatomic) IBOutlet UIStackView *fieldStackView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *locationEntryMethod;
-
+@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
+@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
 @end
 
 @implementation GeometryEditViewController
@@ -96,6 +99,9 @@ static float paddingPercentage = .1;
     [self themeTextField:self.longitudeField];
     [self themeTextField:self.mgrsField];
     [self.locationEntryMethod setTintColor:[UIColor brand]];
+    [self createBackgroundOverlay];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [self setupMapType:defaults];
 }
 
 -(void) setShapeTypeSelection {
@@ -133,6 +139,63 @@ static float paddingPercentage = .1;
         self.latitudeField.hidden = YES;
         self.longitudeField.hidden = YES;
     }
+}
+
+- (void) setupMapType: (id) object {
+    NSInteger mapType = [object integerForKey:@"mapType"];
+    if (mapType == 3) {
+        [self addBackgroundMap];
+    } else {
+        self.map.mapType = [object integerForKey:@"mapType"];
+        [self removeBackgroundMap];
+    }
+}
+
+- (void) addBackgroundMap {
+    if ([UIColor darkMap]) {
+        [self.map removeOverlay:self.backgroundOverlay];
+        [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+    } else {
+        [self.map removeOverlay:self.darkBackgroundOverlay];
+        [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+    }
+}
+
+- (void) removeBackgroundMap {
+    [self.map removeOverlay: self.backgroundOverlay];
+    [self.map removeOverlay: self.darkBackgroundOverlay];
+}
+
+- (void) createBackgroundOverlay {
+    if (self.backgroundOverlay) return;
+    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackage * geoPackage = [manager open:@"countries"];
+
+    GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    
+    // If indexed, add as a tile overlay
+    GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+    [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+    
+    self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+    [self.backgroundOverlay setMinZoom:0];
+    self.backgroundOverlay.darkTheme = NO;
+
+    self.backgroundOverlay.canReplaceMapContent = true;
+    
+    GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
+
+    GPKGFeatureDao * darkFeatureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    
+    // If indexed, add as a tile overlay
+    GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
+    [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+    
+    self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+    [self.darkBackgroundOverlay setMinZoom:0];
+    self.darkBackgroundOverlay.darkTheme = YES;
+
+    self.darkBackgroundOverlay.canReplaceMapContent = true;
 }
 
 - (void) viewDidLoad {

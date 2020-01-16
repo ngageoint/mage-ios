@@ -52,6 +52,8 @@
 #import "XYZTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "ImageryLayer.h"
+#import "BaseMapOverlay.h"
+#import "UIColor+Mage.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -60,6 +62,8 @@
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
     @property (nonatomic, strong) GPKGBoundingBox * addedCacheBoundingBox;
     @property (nonatomic, strong) CacheOverlayUpdate * cacheOverlayUpdate;
+    @property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
+    @property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
     @property (nonatomic, strong) NSObject * cacheOverlayUpdateLock;
     @property (nonatomic) BOOL updatingCacheOverlays;
     @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
@@ -72,6 +76,8 @@
     @property (nonatomic) BOOL canShowUserCallout;
     @property (nonatomic) BOOL canShowObservationCallout;
     @property (nonatomic) BOOL canShowGpsLocationCallout;
+
+    @property (nonatomic) BOOL darkMode;
 
     @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
@@ -117,6 +123,7 @@
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
+        self.darkMode = false;
     }
     
     return self;
@@ -421,12 +428,17 @@
     [self ensureMapLayout];
 }
 
+- (void) updateTheme {
+    [self addBackgroundMap];
+}
+
 - (void) ensureMapLayout {
+    [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.mapView.mapType = [defaults integerForKey:@"mapType"];
-    
+    [self setupMapType:defaults];
+        
     BOOL showTraffic = [defaults boolForKey:@"mapShowTraffic"];
-    self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite;
+    self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite && self.mapView.mapType != 3;
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
@@ -439,13 +451,23 @@
                        change:(NSDictionary *)change
                       context:(void *)context {
     if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
-        self.mapView.mapType = [object integerForKey:keyPath];
+        [self setupMapType:object];
     } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateStaticLayers: [object objectForKey:keyPath]];
     } else if ([@"selectedOnlineLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateOnlineLayers: [object objectForKey:keyPath]];
     } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
         [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
+    }
+}
+
+- (void) setupMapType: (id) object {
+    NSInteger mapType = [object integerForKey:@"mapType"];
+    if (mapType == 3) {
+        [self addBackgroundMap];
+    } else {
+        self.mapView.mapType = [object integerForKey:@"mapType"];
+        [self removeBackgroundMap];
     }
 }
 
@@ -670,7 +692,7 @@
     // Check each GeoPackage table
     for(CacheOverlay * tableCacheOverlay in [geoPackageCacheOverlay getChildren]){
         // Check if the table is enabled
-        if(tableCacheOverlay.enabled){
+        if(tableCacheOverlay.enabled || YES){
             
             // Get and open if needed the GeoPackage
             GPKGGeoPackage * geoPackage = [self.geoPackageCache getOrOpen:[geoPackageCacheOverlay getName]];
@@ -780,6 +802,53 @@
             }
         });
     }
+}
+
+- (void) createBackgroundOverlay {
+    if (self.backgroundOverlay) return;
+    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackage * geoPackage = [manager open:@"countries"];
+
+    GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    
+    // If indexed, add as a tile overlay
+    GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+    [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+    
+    self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+    [self.backgroundOverlay setMinZoom:0];
+    self.backgroundOverlay.darkTheme = NO;
+
+    self.backgroundOverlay.canReplaceMapContent = true;
+    
+    GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
+
+    GPKGFeatureDao * darkFeatureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    
+    // If indexed, add as a tile overlay
+    GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
+    [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+    
+    self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+    [self.darkBackgroundOverlay setMinZoom:0];
+    self.darkBackgroundOverlay.darkTheme = YES;
+
+    self.darkBackgroundOverlay.canReplaceMapContent = true;
+}
+
+- (void) addBackgroundMap {
+    if ([UIColor darkMap]) {
+        [self.mapView removeOverlay:self.backgroundOverlay];
+        [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+    } else {
+        [self.mapView removeOverlay:self.darkBackgroundOverlay];
+        [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+    }
+}
+
+- (void) removeBackgroundMap {
+    [self.mapView removeOverlay: self.backgroundOverlay];
+    [self.mapView removeOverlay: self.darkBackgroundOverlay];
 }
 
 /**
@@ -979,7 +1048,7 @@
     for (MKTileOverlay *overlay in transparentLayers) {
         [self.mapView addOverlay:overlay];
     }
-    
+        
     for (NSNumber *unselectedOnlineLayerId in unselectedOnlineLayers) {
         ImageryLayer *unselectedOnlineLayer = [ImageryLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", unselectedOnlineLayerId, [Server currentEventId]]];
 

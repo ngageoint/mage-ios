@@ -15,7 +15,6 @@
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 
-
 @protocol UserTrackingModeChanged <NSObject>
 
 @required
@@ -63,5 +62,6 @@
 - (void) mapClickAtPoint: (CGPoint) point;
 - (void) cleanup;
 - (void) ensureMapLayout;
+- (void) updateTheme;
 
 @end

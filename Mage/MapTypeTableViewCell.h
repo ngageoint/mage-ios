@@ -19,5 +19,6 @@
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *mapTypeSegmentedControl;
 @property (weak, nonatomic) id<MapTypeDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *cellTitle;
 
 @end

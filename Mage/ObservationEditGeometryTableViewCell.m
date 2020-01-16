@@ -37,6 +37,15 @@
     [self registerForThemeChanges];
 }
 
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
+
+    if (self.mapDelegate) {
+        [self.mapDelegate cleanup];
+        self.mapDelegate = nil;
+    }
+}
+
 - (void) themeDidChange:(MageTheme)theme {
     self.backgroundColor = [UIColor background];
     
@@ -52,6 +61,7 @@
     self.locationField.iconColor = [UIColor secondaryText];
     
     [UIColor themeMap:self.mapView];
+    [self.mapDelegate updateTheme];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
@@ -121,6 +131,7 @@
         self.mapView.region = MKCoordinateRegionForMapRect(MKMapRectWorld);
         self.locationField.text = @"";
     }
+    [self.mapDelegate ensureMapLayout];
 }
 
 - (BOOL) isEmpty {

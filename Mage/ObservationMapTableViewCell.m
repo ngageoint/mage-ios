@@ -20,6 +20,7 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     [UIColor themeMap:self.mapView];
+    [self.mapDelegate updateTheme];
 }
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
@@ -46,6 +47,7 @@
     }];
     
     [self registerForThemeChanges];
+    [self.mapDelegate ensureMapLayout];
 }
 
 - (void)removeFromSuperview {

@@ -389,8 +389,26 @@
 }
 
 -(void) addGeoPackageCacheOverlays:(NSMutableArray<CacheOverlay *> *) cacheOverlays{
+    
+    NSString *countriesDarkGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries_dark" ofType:@"gpkg"];
+    NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
+    
     // Add the GeoPackage caches
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    @try {
+        [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
+    }
+    @catch (NSException *e) {
+        // probably was already imported and that is fine
+    }
+    NSString *countriesGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries" ofType:@"gpkg"];
+    NSLog(@"Countries GeoPackage path %@", countriesGeoPackagePath);
+    @try {
+        [manager importGeoPackageFromPath:countriesGeoPackagePath];
+    }
+    @catch (NSException *e) {
+        // probably was already imported and that is fine
+    }
     @try {
         //databases call only returns the geopacakge if it is named the same as the name of the actual file on disk
         NSArray * geoPackages = [manager databases];

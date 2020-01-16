@@ -212,6 +212,9 @@
 		F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
+		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
+		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
+		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
@@ -700,6 +703,10 @@
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
 		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
+		F7929C6F23C4E69600396D11 /* countries.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries.gpkg; sourceTree = "<group>"; };
+		F7929C7423C66CD000396D11 /* BaseMapOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseMapOverlay.h; sourceTree = "<group>"; };
+		F7929C7523C66CD000396D11 /* BaseMapOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseMapOverlay.m; sourceTree = "<group>"; };
+		F7929C8023C8F48C00396D11 /* countries_dark.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries_dark.gpkg; sourceTree = "<group>"; };
 		F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTableHeaderView.h; sourceTree = "<group>"; };
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
@@ -1073,6 +1080,7 @@
 		2FD853771BE1564F00602CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F7929C6E23C4E64E00396D11 /* Maps */,
 				F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */,
 				F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */,
 				2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */,
@@ -1220,6 +1228,8 @@
 				F75FC905233AAA4100547315 /* XYZTileOverlay.m */,
 				F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */,
 				F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */,
+				F7929C7423C66CD000396D11 /* BaseMapOverlay.h */,
+				F7929C7523C66CD000396D11 /* BaseMapOverlay.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1528,6 +1538,15 @@
 				F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */,
 			);
 			name = Constraints;
+			sourceTree = "<group>";
+		};
+		F7929C6E23C4E64E00396D11 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				F7929C8023C8F48C00396D11 /* countries_dark.gpkg */,
+				F7929C6F23C4E69600396D11 /* countries.gpkg */,
+			);
+			path = Maps;
 			sourceTree = "<group>";
 		};
 		F7A292291FC3938F00DE5463 /* Authentication */ = {
@@ -1950,6 +1969,7 @@
 				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,
 				F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */,
 				F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */,
+				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */,
 				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
@@ -1975,6 +1995,7 @@
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
+				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
 				F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */,
 				F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */,
 				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
@@ -2109,7 +2130,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2342,6 +2363,7 @@
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
+				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */,

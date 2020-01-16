@@ -79,6 +79,7 @@
     self.mapSettingsButton.backgroundColor = [UIColor dialog];
     self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
     [UIColor themeMap:self.mapView];
+    [self.mapDelegate updateTheme];
     [self setNavBarTitle];
 }
 

@@ -34,6 +34,7 @@
 + (UIColor *) navBarPrimaryText;
 + (UIColor *) navBarSecondaryText;
 + (void) themeMap: (MKMapView *) map;
++ (BOOL) darkMap;
 + (UIKeyboardAppearance) keyboardAppearance;
 
 @end
