@@ -15,7 +15,7 @@
 
 @implementation MapSettings
 
-static const NSInteger TOTAL_SECTIONS = 3;
+static const NSInteger TOTAL_SECTIONS = 2;
 
 static const NSInteger LAYERS_SECTION = 0;
 static const NSInteger MAGE_SECTION = 1;
@@ -67,10 +67,6 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
     return (mapType == MKMapTypeStandard || mapType == MKMapTypeHybrid);
 }
 
-- (BOOL) hasExternalData {
-    return NO;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == LAYERS_SECTION) {
         return [self isTrafficAvailable] ? 4 : 3;
@@ -84,7 +80,7 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self hasExternalData] ? TOTAL_SECTIONS : TOTAL_SECTIONS - 1;
+    return TOTAL_SECTIONS;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -95,6 +91,13 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
             MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
             cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
             cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
+            [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName: [UIColor primaryText]
+            } forState:UIControlStateNormal];
+            [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName: [UIColor darkTextColor]
+            } forState:UIControlStateSelected];
+            cell.cellTitle.textColor = [UIColor primaryText];
             cell.delegate = self;
             
             return cell;
@@ -196,6 +199,10 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.section == LAYERS_SECTION) {
+        NSInteger row = indexPath.row;
+//        if (![self isTrafficAvailable]) {
+//            row = row + 1;
+//        }
         if (indexPath.row == LAYERS_ROW_ONLINE) {
             [self.delegate onlineMapsCellTapped];
         } else if (indexPath.row == LAYERS_ROW_DOWNLOADABLE) {

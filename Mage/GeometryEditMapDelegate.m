@@ -97,5 +97,4 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     [self.editDelegate mapView:mapView annotationView:annotationView didChangeDragState:newState fromOldState:oldState];
 }
 
-
 @end

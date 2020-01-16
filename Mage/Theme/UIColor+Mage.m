@@ -31,6 +31,10 @@
 //    }
 }
 
++ (BOOL) darkMap{
+    return [[[ThemeManager sharedManager] curentThemeDefinition] darkMap];
+}
+
 + (UIColor *) primaryText {
     return [[[ThemeManager sharedManager] curentThemeDefinition] primaryText];
 }
