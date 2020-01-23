@@ -13,8 +13,8 @@
 @implementation BaseMapOverlay
 
 -(NSData *) retrieveTileWithX: (NSInteger) x andY: (NSInteger) y andZoom: (NSInteger) zoom {
-    NSInteger tileWidth = 256;
-    NSInteger tileHeight = 256;
+    NSInteger tileWidth = self.tileSize.width;
+    NSInteger tileHeight = self.tileSize.height;
     UIGraphicsBeginImageContext(CGSizeMake(tileWidth, tileHeight));
     CGContextRef context = UIGraphicsGetCurrentContext();
     
