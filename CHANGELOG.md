@@ -21,6 +21,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Allow cancelling a GeoPackage download
 
 ##### Bug Fixes
+* Support new sharing options to pick up GeoPackages being shared into MAGE.
  
 * Fix crash when attaching audio recording
 ## 2.0.14 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.14)
