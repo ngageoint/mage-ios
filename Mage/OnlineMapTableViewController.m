@@ -177,18 +177,18 @@
     cell.detailTextLabel.text = layer.url;
     if (!layer.isSecure) {
         cell.textLabel.textColor = [UIColor secondaryText];
+        cell.accessoryView = nil;
     } else {
         cell.textLabel.textColor = [UIColor primaryText];
+        UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        cacheSwitch.on = [self.selectedOnlineLayers containsObject:layer.remoteId];
+        cacheSwitch.onTintColor = [UIColor themedButton];
+        cacheSwitch.tag = indexPath.row;
+        [cacheSwitch addTarget:self action:@selector(layerToggled:) forControlEvents:UIControlEventTouchUpInside];
+        cell.accessoryView = cacheSwitch;
     }
     cell.detailTextLabel.textColor = [UIColor secondaryText];
     cell.backgroundColor = [UIColor dialog];
-    
-    UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-    cacheSwitch.on = [self.selectedOnlineLayers containsObject:layer.remoteId];
-    cacheSwitch.onTintColor = [UIColor themedButton];
-    cacheSwitch.tag = indexPath.row;
-    [cacheSwitch addTarget:self action:@selector(layerToggled:) forControlEvents:UIControlEventTouchUpInside];
-    cell.accessoryView = cacheSwitch;
     
     return cell;
 }
@@ -224,22 +224,6 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    
-//    UITableViewCell *cell =  [tableView cellForRowAtIndexPath:indexPath];
-//
-//    if (cell.accessoryType == UITableViewCellAccessoryNone) {
-//        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//        [self.selectedOnlineLayers addObject:layer.remoteId];
-//    } else {
-//        cell.accessoryType = UITableViewCellAccessoryNone;
-//        [self.selectedOnlineLayers removeObject:layer.remoteId];
-//    }
-//
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults setObject:@{[[Server currentEventId] stringValue] :[self.selectedOnlineLayers allObjects]} forKey:@"selectedOnlineLayers"];
-//    [defaults synchronize];
-//
-//    [tableView reloadData];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
