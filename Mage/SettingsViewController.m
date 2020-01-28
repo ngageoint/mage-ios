@@ -18,7 +18,9 @@
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
 #import "DataFetchSettingsTableViewController.h"
+#import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
+#import "ObservationServicesSettingsTableViewController.h"
 #import "Server.h"
 #import "AppDelegate.h"
 
@@ -122,12 +124,17 @@
             break;
         }
         case kLocationServices: {
-            LocationServicesSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationServices" owner:self options:nil][0];
+            LocationServicesSettingsTableViewController *viewController = [[LocationServicesSettingsTableViewController alloc] init];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
-        case kDataFetching: {
-            DataFetchSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"DataFetchingServices" owner:self options:nil][0];
+        case kObservationServices: {
+            ObservationServicesSettingsTableViewController *viewController = [[ObservationServicesSettingsTableViewController alloc] init];
+            [self showDetailViewController:viewController sender:nil];
+            break;
+        }
+        case kDataSynchronization: {
+            DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] init];
             [self showDetailViewController:viewController sender:nil];
             break;
         }

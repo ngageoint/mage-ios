@@ -36,12 +36,10 @@
 		2F1069DF221C93DE009F661A /* SettingsMasterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069DE221C93DE009F661A /* SettingsMasterView.xib */; };
 		2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069E0221C9547009F661A /* SettingsDetailView.xib */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
-		2F142430220A6B4D0070EB46 /* LocationServicesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */; };
 		2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
 		2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4172221227CB00F082B5 /* ValuePicker.xib */; };
-		2F1E4175221230AF00F082B5 /* LocationServices.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4174221230AF00F082B5 /* LocationServices.xib */; };
 		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -62,7 +60,6 @@
 		2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */; };
 		2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */; };
 		2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */; };
-		2F4E10B6220E3309001C9F12 /* DataFetchingServices.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */; };
 		2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */; };
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
@@ -229,7 +226,6 @@
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
 		F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */; };
 		F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */; };
-		F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */; };
 		F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */; };
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
@@ -281,6 +277,8 @@
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */; };
 		F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */; };
+		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
+		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
 		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
@@ -324,6 +322,7 @@
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
+		F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -397,7 +396,6 @@
 		2F1069E0221C9547009F661A /* SettingsDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsDetailView.xib; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
-		2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationServicesHeader.xib; sourceTree = "<group>"; };
 		2F142431220A6B610070EB46 /* LocationServicesHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationServicesHeaderView.h; sourceTree = "<group>"; };
 		2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationServicesHeaderView.m; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
@@ -405,7 +403,6 @@
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
 		2F1E4172221227CB00F082B5 /* ValuePicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValuePicker.xib; sourceTree = "<group>"; };
-		2F1E4174221230AF00F082B5 /* LocationServices.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationServices.xib; sourceTree = "<group>"; };
 		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
 		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -438,7 +435,6 @@
 		2F4E10B0220E1A52001C9F12 /* DisplaySettingsHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplaySettingsHeader.h; sourceTree = "<group>"; };
 		2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplaySettingsHeader.m; sourceTree = "<group>"; };
 		2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimeDisplay.xib; sourceTree = "<group>"; };
-		2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DataFetchingServices.xib; sourceTree = "<group>"; };
 		2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightDetailSubtitleTableViewCell.h; sourceTree = "<group>"; };
 		2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightDetailSubtitleTableViewCell.m; sourceTree = "<group>"; };
 		2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailSubtitleCell.xib; sourceTree = "<group>"; };
@@ -733,7 +729,6 @@
 		F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAGE-Info.plist"; sourceTree = "<group>"; };
-		F7A94D7518AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F7A94D7718AD9CB000CB9EE0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F7A94D7918AD9CB000CB9EE0 /* MAGE-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Prefix.pch"; sourceTree = "<group>"; };
 		F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -741,7 +736,6 @@
 		F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAGETests-Info.plist"; sourceTree = "<group>"; };
-		F7A94D9218AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F7A94D9418AD9CB000CB9EE0 /* MageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTests.m; sourceTree = "<group>"; };
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -805,6 +799,10 @@
 		F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSignUpViewController.h; sourceTree = "<group>"; };
 		F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSignUpViewController.m; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
+		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
+		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedWiFiTableViewController.h; sourceTree = "<group>"; };
+		F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvancedWiFiTableViewController.m; sourceTree = "<group>"; };
 		F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
 		F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
 		F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
@@ -876,6 +874,8 @@
 		F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolyline.m; sourceTree = "<group>"; };
 		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
 		F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaAnnotation.m; sourceTree = "<group>"; };
+		F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSynchronizationSettingsTableViewController.h; sourceTree = "<group>"; };
+		F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataSynchronizationSettingsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1267,6 +1267,12 @@
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
 				2F1069DB221C9005009F661A /* SettingsCoordinator.h */,
 				2F1069DC221C9005009F661A /* SettingsCoordinator.m */,
+				F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */,
+				F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */,
+				F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */,
+				F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */,
+				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
+				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1664,7 +1670,6 @@
 			children = (
 				2FD37EC71DF0AC1700429653 /* MAGE.entitlements */,
 				F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */,
-				F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */,
 				F7A94D7718AD9CB000CB9EE0 /* main.m */,
 				F7A94D7918AD9CB000CB9EE0 /* MAGE-Prefix.pch */,
 				F7DEF91C1912A6940026B9D0 /* preferences.plist */,
@@ -1695,7 +1700,6 @@
 			isa = PBXGroup;
 			children = (
 				F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */,
-				F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1754,15 +1758,12 @@
 			children = (
 				2F4E1099220CA195001C9F12 /* AttributionCell.xib */,
 				2F4E10AA220E0D51001C9F12 /* Attributions.xib */,
-				2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */,
 				2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
 				2F8A2C26220235B2007FE473 /* FormDefaults.xib */,
 				2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */,
 				2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */,
-				2F1E4174221230AF00F082B5 /* LocationServices.xib */,
-				2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
 				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
@@ -1899,7 +1900,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
-				en,
 				Base,
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
@@ -1955,13 +1955,11 @@
 				F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
-				2F4E10B6220E3309001C9F12 /* DataFetchingServices.xib in Resources */,
 				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
 				2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */,
 				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
-				2F1E4175221230AF00F082B5 /* LocationServices.xib in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
@@ -2004,12 +2002,10 @@
 				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
 				F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */,
 				F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */,
-				2F142430220A6B4D0070EB46 /* LocationServicesHeader.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
 				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
-				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
 				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
@@ -2266,6 +2262,7 @@
 				F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
+				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
@@ -2294,6 +2291,7 @@
 				F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
+				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */,
 				2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
@@ -2403,6 +2401,7 @@
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
+				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
 				2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
@@ -2502,22 +2501,6 @@
 				4C3A806018B6F67B00B1BA12 /* Base */,
 			);
 			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7A94D7518AD9CB000CB9EE0 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7A94D9218AD9CB000CB9EE0 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
