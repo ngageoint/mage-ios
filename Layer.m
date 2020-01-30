@@ -180,10 +180,12 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
             
             NSMutableArray *selectedEventOnlineLayers = [[selectedOnlineLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
             [selectedEventOnlineLayers removeObjectsInArray:removedSelectedOnlineLayers];
-            [selectedOnlineLayers setObject:selectedEventOnlineLayers forKey:[[Server currentEventId] stringValue]];
-            
-            [standardUserDefaults setObject:selectedOnlineLayers forKey:@"selectedOnlineLayers"];
-            
+            if (selectedEventOnlineLayers) {
+                [selectedOnlineLayers setObject:selectedEventOnlineLayers forKey:[[Server currentEventId] stringValue]];
+            }
+            if (selectedOnlineLayers) {
+                [standardUserDefaults setObject:selectedOnlineLayers forKey:@"selectedOnlineLayers"];
+            }
             
             [StaticLayer MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"(NOT (remoteId IN %@)) AND eventId == %@", layerRemoteIds, eventId] inContext:localContext];
             NSMutableDictionary *selectedStaticLayers = [[standardUserDefaults objectForKey:@"selectedStaticLayers"] mutableCopy];
