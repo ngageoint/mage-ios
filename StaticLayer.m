@@ -25,6 +25,7 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
     if (l == nil) {
         l = [StaticLayer MR_createEntityInContext:context];
         [l populateObjectFromJson:layer withEventId:eventId];
+        l.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_NOT_DOWNLOADED];
         NSLog(@"Inserting layer with id: %@ into event: %@", l.remoteId, eventId);
     } else {
         NSLog(@"Updating layer with id: %@ into event: %@", l.remoteId, eventId);
