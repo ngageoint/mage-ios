@@ -200,12 +200,12 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.section == LAYERS_SECTION) {
         NSInteger row = indexPath.row;
-//        if (![self isTrafficAvailable]) {
-//            row = row + 1;
-//        }
-        if (indexPath.row == LAYERS_ROW_ONLINE) {
+        if (![self isTrafficAvailable]) {
+            row = row + 1;
+        }
+        if (row == LAYERS_ROW_ONLINE) {
             [self.delegate onlineMapsCellTapped];
-        } else if (indexPath.row == LAYERS_ROW_DOWNLOADABLE) {
+        } else if (row == LAYERS_ROW_DOWNLOADABLE) {
             [self.delegate offlineMapsCellTapped];
         }
     } else if (indexPath.section == MAGE_SECTION) {
