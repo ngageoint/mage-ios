@@ -52,8 +52,6 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
     self.wifiNetworkRestrictionType = [defaults objectForKey:@"wifiNetworkRestrictionType"];
     NSArray *whitelist = [defaults objectForKey:@"wifiWhitelist"];
     NSArray *blacklist = [defaults objectForKey:@"wifiBlacklist"];
-    self.wifiWhitelist = [defaults objectForKey:@"wifiWhitelist"];
-    self.wifiBlacklist = [defaults objectForKey:@"wifiBlacklist"];
     if (blacklist == nil) {
         self.wifiBlacklist = [[NSMutableArray alloc] init];
     } else {
@@ -191,7 +189,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
                 return cell;
             } else {
                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-               cell.textLabel.text = [self.wifiWhitelist objectAtIndex:indexPath.row - 1];
+               cell.textLabel.text = [self.wifiBlacklist objectAtIndex:indexPath.row - 1];
                cell.textLabel.textColor = [UIColor primaryText];
                cell.backgroundColor = [UIColor background];
                return cell;
@@ -202,7 +200,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 }
 
 - (void) presentAddSSIDAlert: (BOOL) whitelist {
-    NSString *message = [NSString stringWithFormat:@"Add a WiFi SSID to the list of %@", whitelist ? @"networks to whitelist." : @"networks to blacklist."];
+    NSString *message = [NSString stringWithFormat:@"Add a WiFi SSID to the list of networks to %@", whitelist ? @"whitelist." : @"blacklist."];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Add a WiFi SSID" message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -212,15 +210,29 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
         textField.secureTextEntry = NO;
         textField.text = currentSSID;
     }];
+    __weak typeof(self) weakSelf = self;
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSLog(@"SSID %@", [[alertController textFields][0] text]);
-        // save the SSID to the correct array
-
+        NSString *ssid = [[alertController textFields][0] text];
+        NSLog(@"SSID %@", ssid);
+        if (whitelist) {
+            if (![weakSelf.wifiWhitelist containsObject:ssid]) {
+                [weakSelf.wifiWhitelist addObject:ssid];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:weakSelf.wifiWhitelist forKey:@"wifiWhitelist"];
+                [defaults synchronize];
+            }
+        } else {
+            if (![weakSelf.wifiBlacklist containsObject:ssid]) {
+                [weakSelf.wifiBlacklist addObject:ssid];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:weakSelf.wifiBlacklist forKey:@"wifiBlacklist"];
+                [defaults synchronize];
+            }
+        }
+        [weakSelf.tableView reloadData];
     }];
     [alertController addAction:confirmAction];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        NSLog(@"Canelled");
-    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
@@ -268,5 +280,3 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 }
 
 @end
-
-

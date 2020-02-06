@@ -131,29 +131,29 @@ static NSInteger PUSH_CELL_ROW = 1;
         if (indexPath.row == FETCH_CELL_ROW) {
             cell.title.text = @"Observation Fetch";
             cell.subtitle.text = @"Updates to observations will be fetched at this interval. Smaller intervals will fetch observations more often at the cost of battery drain.";
-            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"observationFetchNetwork"];
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"observationFetchNetworkOption"];
         } else if (indexPath.row == PUSH_CELL_ROW) {
             cell.title.text = @"Observation Push";
             cell.subtitle.text = @"Created or edited observations will be pushed at this interval.";
-            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"observationPushNetwork"];
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"observationPushNetworkOption"];
         }
     } else if (indexPath.section == USER_SYNC_SECTION) {
         if (indexPath.row == FETCH_CELL_ROW) {
             cell.title.text = @"User Fetch";
             cell.subtitle.text = @"Updates to user locations will be fetched at this interval. Smaller intervals will fetch user locations more often at the cost of battery drain.";
-            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"userFetchNetwork"];
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"userFetchNetworkOption"];
         } else if (indexPath.row == PUSH_CELL_ROW) {
             cell.title.text = @"User Push";
             cell.subtitle.text = @"Data is pushed to the server over this network.";
-            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"userPushNetwork"];
+            [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"userPushNetworkOption"];
         }
     } else if (indexPath.section == ATTACHMENT_SYNC_SECTION) {
        if (indexPath.row == FETCH_CELL_ROW) {
            cell.title.text = @"Attachment Fetch";
-           [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"attachmentFetchNetwork"];
+           [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"attachmentFetchNetworkOption"];
        } else if (indexPath.row == PUSH_CELL_ROW) {
            cell.title.text = @"Attachment Push";
-           [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"attachmentPushNetwork"];
+           [self setPreferenceDisplayLabel:cell.detail forPreference:@"networkSyncOptions" withKey:@"attachmentPushNetworkOption"];
        }
     }
     cell.subtitle.hidden = YES;
