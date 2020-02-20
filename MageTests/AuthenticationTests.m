@@ -107,12 +107,22 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    id apiLoginStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        NSLog(@"does it match /api/login? %@", request.URL.path);
-
-        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+    id apiSigninStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"does it match /auth/local/signin? %@", request.URL.path);
+        NSLog(@"is it? %d", [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"]);
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
+        NSString* fixture = OHPathForFile(@"signinSuccess.json", self.class);
+        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+                                                statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    id apiAuthorizeStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"does it match /auth/local/authorize? %@", request.URL.path);
+
+        return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/authorize"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSString* fixture = OHPathForFile(@"authorizeLocalSuccess.json", self.class);
         return [OHHTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
@@ -140,15 +150,18 @@
                                     @"test", @"username",
                                     @"test", @"password",
                                     @"uuid", @"uid",
+                                    [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"local", @"identifier", nil],
+                                    @"strategy",
                                     nil];
 
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
 
-        OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
-            [loginResponseArrived fulfill];
-            [disclaimerDelegate disclaimerAgree];
-            OCMVerifyAll(delegatePartialMock);
-        });
+//        OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
+//            [loginResponseArrived fulfill];
+//            [disclaimerDelegate disclaimerAgree];
+//            OCMVerifyAll(delegatePartialMock);
+//        });
 
         [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
             // login complete

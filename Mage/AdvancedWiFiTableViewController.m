@@ -4,15 +4,12 @@
 //
 //
 
-#import <SystemConfiguration/CaptiveNetwork.h>
-#import <SystemConfiguration/SystemConfiguration.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <CoreTelephony/CTCarrier.h>
 #import "AdvancedWiFiTableViewController.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 #import "ValuePickerTableViewController.h"
+#import "DataConnectionUtilities.h"
 
 @interface AdvancedWiFiTableViewController ()
 
@@ -21,14 +18,6 @@
 @property (strong, nonatomic) NSMutableArray *wifiBlacklist;
 
 @end
-
-typedef enum {
-    ConnectionTypeUnknown,
-    ConnectionTypeNone,
-    ConnectionTypeCell,
-    ConnectionTypeWiFi
-} ConnectionType;
-
 
 @implementation AdvancedWiFiTableViewController
 
@@ -87,66 +76,13 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == RESTRICTION_TYPE_SECTION) return 3;
-    if ([self.wifiNetworkRestrictionType longValue] == NOT_THESE_WIFI_NETWORKS_CELL_ROW) {
+    if ([self.wifiNetworkRestrictionType longValue] == WIFIRestrictionTypeNoRestrictions) {
         return 1 + [self.wifiBlacklist count];
     }
-    if ([self.wifiNetworkRestrictionType longValue] == ONLY_THESE_WIFI_NETWORKS_CELL_ROW) {
+    if ([self.wifiNetworkRestrictionType longValue] == WIFIRestrictionTypeOnlyTheseWifiNetworks) {
         return 1 + [self.wifiWhitelist count];
     }
     return 0;
-}
-
-+ (ConnectionType)connectionType
-{
-    SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, "8.8.8.8");
-    SCNetworkReachabilityFlags flags;
-    BOOL success = SCNetworkReachabilityGetFlags(reachability, &flags);
-    CFRelease(reachability);
-    if (!success) {
-        return ConnectionTypeUnknown;
-    }
-    BOOL isReachable = ((flags & kSCNetworkReachabilityFlagsReachable) != 0);
-    BOOL needsConnection = ((flags & kSCNetworkReachabilityFlagsConnectionRequired) != 0);
-    BOOL isNetworkReachable = (isReachable && !needsConnection);
-
-    if (!isNetworkReachable) {
-        return ConnectionTypeNone;
-    } else if ((flags & kSCNetworkReachabilityFlagsIsWWAN) != 0) {
-        //connection type
-        CTTelephonyNetworkInfo *netinfo = [[CTTelephonyNetworkInfo alloc] init];
-        NSDictionary *carrier = [netinfo serviceSubscriberCellularProviders];
-        NSDictionary *radio = [netinfo serviceCurrentRadioAccessTechnology];
-        
-        NSLog(@"Carrier %@", carrier);
-        NSLog(@"Radio %@", radio);
-        
-        return ConnectionTypeCell;
-    } else {
-        return ConnectionTypeWiFi;
-    }
-}
-
-+ (NSString *) getCurrentWifi {
-    NSString *wifiName;
-    ConnectionType type = [AdvancedWiFiTableViewController connectionType];
-    if (type == ConnectionTypeWiFi) {
-        CFArrayRef interfaces = CNCopySupportedInterfaces();
-        if (interfaces) {
-            CFIndex count = CFArrayGetCount(interfaces);
-            for (int i = 0; i < count; i++) {
-                CFStringRef interface = (CFStringRef)CFArrayGetValueAtIndex(interfaces, i);
-                NSLog(@"Interface %@", interface);
-                NSDictionary *dictionary = (__bridge NSDictionary*)CNCopyCurrentNetworkInfo(interface);
-                NSLog(@"Dictionary %@", dictionary);
-                // if dictionary is nil then there is no wifi
-                if (dictionary) {
-                    wifiName = [NSString stringWithFormat:@"%@",[dictionary objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID]];
-                }
-            }
-            CFRelease(interfaces);
-        }
-    }
-    return wifiName;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -205,7 +141,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         // only actually add it if it doesn't already exist in the list
-        NSString *currentSSID = [AdvancedWiFiTableViewController getCurrentWifi];
+        NSString *currentSSID = [DataConnectionUtilities getCurrentWifiSsid];
         textField.placeholder = @"WiFi SSID";
         textField.secureTextEntry = NO;
         textField.text = currentSSID;

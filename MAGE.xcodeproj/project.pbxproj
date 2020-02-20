@@ -189,6 +189,11 @@
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
+		F760910023FDA5E5000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
+		F760910223FDA78F000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
+		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
+		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
+		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
@@ -657,6 +662,9 @@
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
+		F76090FF23FDA5E5000233A6 /* signinSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signinSuccess.json; sourceTree = "<group>"; };
+		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
+		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
@@ -1500,6 +1508,8 @@
 				F70039452006CB0700E6E660 /* apiFail.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
+				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
+				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1692,6 +1702,7 @@
 				F73C3BF51A608EBD007A734E /* mageTest.js */,
 				F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */,
 				F75A10E320486489002F9906 /* StoredPasswordTests.m */,
+				F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -1989,6 +2000,7 @@
 				F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */,
 				2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
+				F760910223FDA78F000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
@@ -2017,6 +2029,7 @@
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
 				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
+				F760910023FDA5E5000233A6 /* signinSuccess.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2024,6 +2037,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
+				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
@@ -2154,23 +2169,23 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2463,6 +2478,7 @@
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
+				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 			);
