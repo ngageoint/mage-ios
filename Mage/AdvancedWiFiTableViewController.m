@@ -70,13 +70,39 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 
 #pragma mark - Table view data source
 
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1 && indexPath.row != 0) {
+        __weak typeof(self) weakSelf = self;
+
+        UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Remove" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            if ([weakSelf.wifiNetworkRestrictionType longValue] == ONLY_THESE_WIFI_NETWORKS_CELL_ROW) {
+                [weakSelf.wifiWhitelist removeObjectAtIndex:indexPath.row - 1];
+                [defaults setObject:weakSelf.wifiBlacklist forKey:@"wifiWihtelist"];
+                
+            } else if ([weakSelf.wifiNetworkRestrictionType longValue] == NOT_THESE_WIFI_NETWORKS_CELL_ROW) {
+                [weakSelf.wifiBlacklist removeObjectAtIndex:indexPath.row - 1];
+                [defaults setObject:weakSelf.wifiBlacklist forKey:@"wifiBlacklist"];
+            }
+            [defaults synchronize];
+            [weakSelf.tableView reloadData];
+        }];
+
+        UISwipeActionsConfiguration *swipeActions = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction]];
+        swipeActions.performsFirstActionWithFullSwipe = YES;
+        return swipeActions;
+    }
+    return nil;
+}
+
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == RESTRICTION_TYPE_SECTION) return 3;
-    if ([self.wifiNetworkRestrictionType longValue] == WIFIRestrictionTypeNoRestrictions) {
+    if ([self.wifiNetworkRestrictionType longValue] == WIFIRestrictionTypeNotTheseWifiNetworks) {
         return 1 + [self.wifiBlacklist count];
     }
     if ([self.wifiNetworkRestrictionType longValue] == WIFIRestrictionTypeOnlyTheseWifiNetworks) {
