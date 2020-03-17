@@ -20,7 +20,7 @@
     __weak typeof(self) weakSelf = self;
     BOOL imageExists = [[FICImageCache sharedImageCache] retrieveImageForEntity:attachment withFormatName:formatName completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image) {
         // This completion block may be called much later, check to make sure this cell hasn't been reused for a different attachment before displaying the image that has loaded.
-        if (attachment == [self attachment]) {
+        if (attachment == [self attachment] && image) {
             weakSelf.imageView.image = image;
             weakSelf.imageView.layer.cornerRadius = 5;
             weakSelf.imageView.clipsToBounds = YES;

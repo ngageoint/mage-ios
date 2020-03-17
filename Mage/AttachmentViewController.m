@@ -8,6 +8,7 @@
 #import "FICImageCache.h"
 #import "AppDelegate.h"
 #import "MageSessionManager.h"
+#import "DataConnectionUtilities.h"
 #import "AVFoundation/AVFoundation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
@@ -24,7 +25,9 @@
 @property (weak, nonatomic) IBOutlet UIView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *progressPercentLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
+@property (weak, nonatomic) IBOutlet UIView *downloadAttachmentView;
 @property (strong, nonatomic) AVPlayerViewController *playerViewController;
+@property (weak, nonatomic) IBOutlet UILabel *downloadingLabel;
 
 @end
 
@@ -108,18 +111,23 @@
         [self.imageViewHolder setHidden:NO];
         [self.progressView setHidden:YES];
         
-        [self.imageActivityIndicator startAnimating];
-        
         NSInteger size = MAX(self.imageView.frame.size.height, self.imageView.frame.size.width) * [UIScreen mainScreen].scale;
-    
-        __weak typeof(self) weakSelf = self;
-        NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURLWithSize:size]];
-        [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            weakSelf.imageView.image = image;
-            [weakSelf.imageActivityIndicator stopAnimating];
-        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            NSLog(@"Error loading observation attachment");
-        }];
+        NSURL *url = [self.attachment sourceURLWithSize:size];
+        
+//        self.imageView.kf;
+        
+//        [self.imageActivityIndicator startAnimating];
+//
+//        NSInteger size = MAX(self.imageView.frame.size.height, self.imageView.frame.size.width) * [UIScreen mainScreen].scale;
+//
+//        __weak typeof(self) weakSelf = self;
+//        NSURLRequest *request = [NSURLRequest requestWithURL:[self.attachment sourceURLWithSize:size]];
+//        [self.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//            weakSelf.imageView.image = image;
+//            [weakSelf.imageActivityIndicator stopAnimating];
+//        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+//            NSLog(@"Error loading observation attachment");
+//        }];
     } else if ([self.attachment.contentType hasPrefix:@"video"] || [self.attachment.contentType hasPrefix:@"audio"]) {
         [self.imageViewHolder setHidden:YES];
         

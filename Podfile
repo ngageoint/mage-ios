@@ -22,6 +22,7 @@ target 'MAGE' do
     pod 'SkyFloatingLabelTextField', '~> 3.6.0'
     pod 'DateTools', '~> 2.0.0'
     pod 'EDSunriseSet', '~> 1.0'
+    pod 'Kingfisher', '~> 5.0'
     target 'MAGETests' do
         inherit! :search_paths
         pod 'OCMock'

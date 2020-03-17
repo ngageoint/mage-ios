@@ -9,7 +9,6 @@
 #import "User.h"
 #import "Canary.h"
 #import <CoreLocation/CoreLocation.h>
-#import "FICImageCache.h"
 #import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"

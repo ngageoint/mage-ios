@@ -24,6 +24,7 @@
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
+#import "AttachmentViewCoordinator.h"
 
 @interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate>
 
@@ -265,9 +266,11 @@
     if (self.attachmentDelegate != nil) {
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {
-        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-        [attachmentVC setTitle:@"Attachment"];
-        [self.navigationController pushViewController:attachmentVC animated:YES];
+        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andAttachment:attachment];
+        [attachmentCoordinator start];
+//        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+//        [attachmentVC setTitle:@"Attachment"];
+//        [self.navigationController pushViewController:attachmentVC animated:YES];
     }
 }
 
