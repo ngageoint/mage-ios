@@ -9,7 +9,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "ImageCacheProvider.h"
+#import "MAGE-Swift.h"
 #import "Attachment+Thumbnail.h"
 #import <FICImageCache.h>
 #import "MagicalRecord+MAGE.h"
@@ -29,7 +29,7 @@
     [MagicalRecord setupCoreDataStackWithInMemoryStore];
     [[MageSessionManager manager] setToken:@"oldtoken"];
     [StoredPassword persistTokenToKeyChain:@"oldtoken"];
-    self.imageProvider = [[ImageCacheProvider alloc] init];
+    self.imageProvider = ImageCacheProvider.shared;
 }
 
 - (void)tearDown {

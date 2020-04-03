@@ -17,7 +17,7 @@
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MageServer.h"
-#import "ImageCacheProvider.h"
+#import "MAGE-Swift.h"
 
 @interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate>
 
@@ -37,7 +37,7 @@
     _navigationController = navigationController;
 
     [self setupPushNotificationsForApplication:application];
-    self.imageCacheProvider = [[ImageCacheProvider alloc] init];
+    self.imageCacheProvider = ImageCacheProvider.shared;
     
     return self;
 }

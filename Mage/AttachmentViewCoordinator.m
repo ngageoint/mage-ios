@@ -35,13 +35,15 @@
 
 - (void) start {
     if (![DataConnectionUtilities shouldFetchAttachments] && !self.attachment.localPath) {
-        AskToDownloadViewController *vc = [[AskToDownloadViewController alloc] initWithAttachment:self.attachment andDelegate:self];
+        AskToDownloadViewController *vc = [[AskToDownloadViewController alloc] initWithAttachment:self.attachment delegate:self];
+//        vc.view.backgroundColor = [UIColor blackColor];
         [_navigationController pushViewController:vc animated:YES];
         return;
     } else {
         if ([self.attachment.contentType hasPrefix:@"image"]) {
             ImageAttachmentViewController *ac = [[ImageAttachmentViewController alloc] initWithAttachment:self.attachment];
-            [_navigationController pushViewController:ac animated:NO];
+            ac.view.backgroundColor = [UIColor blackColor];
+            [_navigationController pushViewController:ac animated:YES];
         }
     }
 }
