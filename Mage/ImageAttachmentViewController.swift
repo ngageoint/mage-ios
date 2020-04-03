@@ -56,7 +56,6 @@ func getDocumentsDirectory() -> NSString {
 @objc class ImageAttachmentViewController: UIViewController {
     
     @IBOutlet weak var imageActivityIndicator: UIActivityIndicatorView?
-    @IBOutlet weak var imageViewHolder: UIView?
     @IBOutlet weak var imageView: AttachmentUIImageView?
     @IBOutlet weak var mediaHolderView: UIView?
     @IBOutlet weak var progressView: UIView?
@@ -191,7 +190,6 @@ func getDocumentsDirectory() -> NSString {
     }
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        self.imageViewHolder?.isHidden = false;
         self.progressView?.isHidden = true;
         self.imageActivityIndicator?.isHidden = true;
         let i = MyIndicator(parent: self);
