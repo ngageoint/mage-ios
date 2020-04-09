@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AttachmentViewDelegate <NSObject>
 
-- (void) doneViewing;
+- (void) doneViewing: (NSObject *) coordinator;
 
 @end
 

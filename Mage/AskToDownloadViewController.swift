@@ -31,7 +31,11 @@ import Kingfisher
         super.viewDidLoad();
         self.downloadBlock.isHidden = true;
         if (!DataConnectionUtilities.shouldFetchAttachments()) {
-            self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading of attachments.  Would you like to download the attachment?";
+            if (self.attachment.contentType?.hasPrefix("image") == true) {
+                self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading of images.  Would you like to download the image?";
+            } else if (self.attachment.contentType?.hasPrefix("video") == true) {
+                self.descriptionLabel.text = String.init(format: "Your attachment fetch settings do not allow auto downloading of videos.  This video is %.2FMB.  Would you like to download the video?", (self.attachment.size!.doubleValue / (1024.0 * 1024.0)));
+            }
         }
         self.showAttachment();
     }

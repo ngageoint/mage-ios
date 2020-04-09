@@ -26,7 +26,7 @@
 #import "ObservationTableViewCell.h"
 #import "AttachmentViewCoordinator.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
 
 @property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
@@ -267,10 +267,8 @@
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {
         AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andAttachment:attachment];
+        [self.childCoordinators addObject:attachmentCoordinator];
         [attachmentCoordinator start];
-//        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-//        [attachmentVC setTitle:@"Attachment"];
-//        [self.navigationController pushViewController:attachmentVC animated:YES];
     }
 }
 
@@ -298,5 +296,11 @@
 - (void) observationDeleted:(Observation *)observation coordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
 }
+
+- (void)doneViewing: (NSObject *) coordinator {
+    // done viewing the attachment
+    [self.childCoordinators removeObject:coordinator];
+}
+
 
 @end

@@ -11,57 +11,13 @@ import Kingfisher
 
 class PlaceholderImage: UIImageView { }
 extension PlaceholderImage: Placeholder {}
-//extension Data {
-//
-//    /// Data into file
-//    ///
-//    /// - Parameters:
-//    ///   - fileName: the Name of the file you want to write
-//    /// - Returns: Returns the URL where the new file is located in NSURL
-//    func dataToFile(fileName: String) -> NSURL? {
-//
-//        // Make a constant from the data
-//        let data = self
-//
-//        // Make the file path (with the filename) where the file will be loacated after it is created
-//        let filePath = getDocumentsDirectory().appendingPathComponent(fileName)
-//
-//        do {
-//            // Write the file from data into the filepath (if there will be an error, the code jumps to the catch block below)
-//            try data.write(to: URL(fileURLWithPath: filePath))
-//
-//            // Returns the URL where the new file is located in NSURL
-//            return NSURL(fileURLWithPath: filePath)
-//
-//        } catch {
-//            // Prints the localized description of the error from the do block
-//            print("Error writing the file: \(error.localizedDescription)")
-//        }
-//
-//        // Returns nil if there was an error in the do-catch -block
-//        return nil
-//
-//    }
-//
-//}
-/// Get the current directory
-///
-/// - Returns: the Current directory in NSURL
-func getDocumentsDirectory() -> NSString {
-    let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-    let documentsDirectory = paths[0]
-    return documentsDirectory as NSString
-}
 
 @objc class ImageAttachmentViewController: UIViewController {
     
-    @IBOutlet weak var imageActivityIndicator: UIActivityIndicatorView?
     @IBOutlet weak var imageView: AttachmentUIImageView?
-    @IBOutlet weak var mediaHolderView: UIView?
     @IBOutlet weak var progressView: UIView?
     @IBOutlet weak var progressPercentLabel: UILabel?
     @IBOutlet weak var downloadProgressBar: UIProgressView?
-    @IBOutlet weak var downloadAttachmentView: UIView?
     @IBOutlet weak var downloadingLabel: UILabel!
     
     var attachment: Attachment!
@@ -130,7 +86,7 @@ func getDocumentsDirectory() -> NSString {
                     data = image.pngData();
                     fileName = "attachment.png";
                 }
-                let filePath = getDocumentsDirectory().appendingPathComponent(fileName)
+                let filePath = self.getDocumentsDirectory().appendingPathComponent(fileName)
                 
                 do {
                     try data?.write(to: URL(fileURLWithPath: filePath))
@@ -175,6 +131,7 @@ func getDocumentsDirectory() -> NSString {
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func getAttachmentUrl(size: Int) -> URL {
@@ -191,15 +148,23 @@ func getDocumentsDirectory() -> NSString {
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.progressView?.isHidden = true;
-        self.imageActivityIndicator?.isHidden = true;
         let i = MyIndicator(parent: self);
 
         self.imageView?.setAttachment(attachment: self.attachment);
-        self.imageView?.showImage(fullSize: fullSize, indicator: i, progressBlock: {
-            receivedSize, totalSize in
-            let percentage = (Float(receivedSize) / Float(totalSize))
-            i.setProgress(progress: percentage);
-        },
-        completionHandler: completionHandler);
+        self.imageView?.showImage(
+            fullSize: fullSize,
+            indicator: i,
+            progressBlock: {
+                receivedSize, totalSize in
+                let percentage = (Float(receivedSize) / Float(totalSize))
+                i.setProgress(progress: percentage);
+            },
+            completionHandler: completionHandler);
+    }
+    
+    func getDocumentsDirectory() -> NSString {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory as NSString
     }
 }

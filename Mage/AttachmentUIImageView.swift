@@ -46,9 +46,11 @@ import Kingfisher
         return isThumbnailCached() || isLargeSizeCached();
     }
     
-    public func showThumbnail(attachment: Attachment) {
+    public func showThumbnail(indicator: Indicator? = nil,
+                              progressBlock: DownloadProgressBlock? = nil,
+                              completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         let thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!;
-        self.kf.setImage(with: thumbUrl, options: [.requestModifier(ImageCacheProvider.shared.accessTokenModifier)]);
+        self.setImage(url: thumbUrl, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     public func setAttachment(attachment: Attachment) {
@@ -57,11 +59,12 @@ import Kingfisher
     
     public func showImage(cacheOnly: Bool = false,
                           fullSize: Bool = false,
+                          thumbnail: Bool = false,
                           indicator: Indicator? = nil,
                           progressBlock: DownloadProgressBlock? = nil,
                           completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         let url = self.getAttachmentUrl(size: self.imageSize);
-        self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+        self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, thumbnail: thumbnail, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     func getAttachmentUrl(size: Int) -> URL {
@@ -75,24 +78,41 @@ import Kingfisher
     func setImage(url: URL,
                   cacheOnly: Bool = false,
                   fullSize: Bool = false,
+                  thumbnail: Bool = false,
                   indicator: Indicator? = nil,
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        
+        let thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!;
+        
         if (indicator != nil) {
             self.kf.indicatorType = .custom(indicator: indicator!);
         }
         
-        var options: KingfisherOptionsInfo = [.requestModifier(ImageCacheProvider.shared.accessTokenModifier), .transition(.fade(1.5))]
+
+        
+        var options: KingfisherOptionsInfo = [
+            .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+            .transition(.fade(0.3)),
+            .scaleFactor(UIScreen.main.scale),
+            .processor(DownsamplingImageProcessor(size: self.frame.size)),
+            .cacheOriginalImage]
         if (cacheOnly) {
             options.append(.onlyFromCache);
         }
-        
-        let thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!;
-        
+                
         let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
+        placeholder.image = UIImage.init(named: "download");
+        placeholder.contentMode = .center;
+        
+        if (thumbnail) {
+            placeholder.image = UIImage.init(named: "download_thumbnail");
+            let resource = ImageResource(downloadURL: url, cacheKey: String(format: "%@_thumbnail", self.attachment!.url!))
+            self.kf.setImage(with: resource, placeholder: placeholder, options: options)
+        }
         // if they have the original sized image, show that
-        if (self.isFullSizeCached() || fullSize) {
+        else if (self.isFullSizeCached() || fullSize) {
             self.kf.setImage(with: URL(string: self.attachment!.url!),
                              options: options, progressBlock: progressBlock,
                                         completionHandler: completionHandler);
@@ -105,11 +125,6 @@ import Kingfisher
         // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
         else if (ImageCache.default.isCached(forKey: thumbUrl.absoluteString)) {
             placeholder.kf.setImage(with: thumbUrl, options: options)
-        }
-        // otherwise, show a placeholder
-        else {
-            placeholder.image = UIImage.init(named: "download");
-            placeholder.contentMode = .center;
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator
         DispatchQueue.main.async {

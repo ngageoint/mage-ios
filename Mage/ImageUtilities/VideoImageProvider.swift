@@ -28,7 +28,16 @@ struct VideoImageProvider: ImageDataProvider {
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-        let token: String = StoredPassword.retrieveStoredToken();
+            if (!DataConnectionUtilities.shouldFetchAttachments()) {
+                let rect = CGRect(origin: .zero, size: CGSize(width:150, height:150))
+                UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+                UIColor.init(white: 0, alpha: 0.06).setFill();
+                UIRectFill(rect)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                return handler(.success(Data.init((image?.cgImage?.png)!)));
+            }
+            let token: String = StoredPassword.retrieveStoredToken();
         
             var urlComponents: URLComponents? = URLComponents(url: self.url, resolvingAgainstBaseURL: false);
             urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
