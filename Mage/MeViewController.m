@@ -18,7 +18,6 @@
 #import "MapDelegate.h"
 #import "Location.h"
 #import "ObservationDataStore.h"
-#import "AttachmentViewController.h"
 #import "MageServer.h"
 #import "MageSessionManager.h"
 #import "LocationAnnotation.h"
@@ -29,10 +28,11 @@
 #import "Theme+UIResponder.h"
 #import <HexColors/HexColor.h>
 #import <mgrs/MGRS.h>
+#import "MAGE-Swift.h"
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -342,9 +342,13 @@
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-    [attachmentVC setTitle:@"Attachment"];
-    [self.navigationController pushViewController:attachmentVC animated:YES];
+    AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+//    [self.childCoordinators addObject:attachmentCoordinator];
+    [attachmentCoordinator start];
+    
+//    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
+//    [attachmentVC setTitle:@"Attachment"];
+//    [self.navigationController pushViewController:attachmentVC animated:YES];
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -356,8 +360,8 @@
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
 
-            AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-            [self.navigationController pushViewController:attachmentVC animated:YES];
+//            AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
+//            [self.navigationController pushViewController:attachmentVC animated:YES];
         }
         return;
     }
@@ -371,8 +375,8 @@
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
         
-        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-        [self.navigationController pushViewController:attachmentVC animated:YES];
+//        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
+//        [self.navigationController pushViewController:attachmentVC animated:YES];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

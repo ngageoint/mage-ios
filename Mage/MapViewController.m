@@ -26,7 +26,6 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationViewController_iPad.h"
-#import "AttachmentViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"
@@ -36,6 +35,7 @@
 #import "Layer.h"
 #import "Server.h"
 #import "MageConstants.h"
+#import "MAGE-Swift.h"
 
 #import "ObservationEditCoordinator.h"
 #import "MapSettingsCoordinator.h"
@@ -399,10 +399,14 @@
 		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
+        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:sender delegate:nil];
+        [self.childCoordinators addObject:attachmentCoordinator];
+        [attachmentCoordinator start];
+        
+//        // Get reference to the destination view controller
+//        AttachmentViewController *vc = [segue destinationViewController];
+//        [vc setAttachment:sender];
+//        [vc setTitle:@"Attachment"];
     }
 }
 

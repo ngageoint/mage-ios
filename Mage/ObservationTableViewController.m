@@ -11,7 +11,6 @@
 #import "Observation.h"
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
-#import "AttachmentViewController.h"
 #import "Event.h"
 #import "User.h"
 #import "ObservationEditViewController.h"
@@ -24,7 +23,7 @@
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
-#import "AttachmentViewCoordinator.h"
+#import "MAGE-Swift.h"
 
 @interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
 
@@ -266,7 +265,7 @@
     if (self.attachmentDelegate != nil) {
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {
-        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andAttachment:attachment];
+        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
         [self.childCoordinators addObject:attachmentCoordinator];
         [attachmentCoordinator start];
     }
@@ -297,7 +296,7 @@
     [self.childCoordinators removeObject:coordinator];
 }
 
-- (void)doneViewing: (NSObject *) coordinator {
+- (void)doneViewingWithCoordinator:(NSObject *)coordinator {
     // done viewing the attachment
     [self.childCoordinators removeObject:coordinator];
 }

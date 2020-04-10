@@ -14,7 +14,6 @@
 #import "ObservationPropertyTableViewCell.h"
 #import "User.h"
 #import "Role.h"
-#import "AttachmentViewController.h"
 #import "ObservationEditViewController.h"
 #import "Server.h"
 #import "MapDelegate.h"
