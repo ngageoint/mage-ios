@@ -33,8 +33,12 @@ import Kingfisher
             self.imageView?.showThumbnail();
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
             let url = self.getAttachmentUrl(size: imageSize, attachment: attachment);
-            let provider: VideoImageProvider = VideoImageProvider(url: url);
-            self.imageView?.kf.setImage(with: provider, placeholder: UIImage.init(named: "download_thumbnail"), options: [
+            var localPath: String? = nil;
+            if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
+                localPath = attachment.localPath;
+            }
+            let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
+            self.imageView?.kf.setImage(with: provider, placeholder: UIImage.init(named: "play_overlay"), options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                 .transition(.fade(0.2)),
                 .scaleFactor(UIScreen.main.scale),
@@ -49,6 +53,14 @@ import Kingfisher
                     self.imageView?.addSubview(overlay);
                 case .failure(let error):
                     print(error);
+                    self.imageView?.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
+//                    let rect = CGRect(origin: .zero, size: CGSize(width:150, height:150))
+//                    UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+//                    UIColor.init(white: 0, alpha: 0.06).setFill();
+//                    UIRectFill(rect)
+//                    let image = UIGraphicsGetImageFromCurrentImageContext()
+//                    UIGraphicsEndImageContext()
+//                    return handler(.success(Data.init((image?.cgImage?.png)!)));
                     let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
                     overlay.contentMode = .scaleAspectFit;
                     self.imageView?.addSubview(overlay);

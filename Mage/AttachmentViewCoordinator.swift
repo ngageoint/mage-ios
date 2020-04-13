@@ -35,7 +35,7 @@ import MagicalRecord;
         self.attachment = attachment;
         self.delegate = delegate;
         
-        self.tempFile =  NSTemporaryDirectory() + "/" + URL.init(string: self.attachment.url!)!.lastPathComponent;
+        self.tempFile =  NSTemporaryDirectory() + URL.init(string: self.attachment.url!)!.lastPathComponent;
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
     }
     
@@ -111,10 +111,10 @@ import MagicalRecord;
     }
     
     // MARK: MediaLoadDelegate
-    func mediaLoadComplete() {
+    func mediaLoadComplete(_ filePath: String) {
         MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
             let localAttachment = self.attachment.mr_(in: localContext);
-            localAttachment?.localPath = self.tempFile;
+            localAttachment?.localPath = filePath;
         });
     }
 }

@@ -14,6 +14,8 @@ import Kingfisher
     public var attachment: Attachment? = nil;
     var imageSize: Int!
     var largeSizeCached: Bool = false;
+    public var placeholderIsRealImage: Bool = false;
+    public var useDownloadPlaceholder: Bool = true;
     
     override init(image: UIImage?) {
         super.init(image: image)
@@ -54,6 +56,7 @@ import Kingfisher
     }
     
     public func setAttachment(attachment: Attachment) {
+        self.placeholderIsRealImage = false;
         self.attachment = attachment;
     }
     
@@ -89,8 +92,6 @@ import Kingfisher
             self.kf.indicatorType = .custom(indicator: indicator!);
         }
         
-
-        
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
@@ -101,18 +102,23 @@ import Kingfisher
             options.append(.onlyFromCache);
         }
                 
-        let placeholder = PlaceholderImage();
+        let placeholder = PlaceholderImage(frame: CGRect(x: 0, y: 0, width: self.frame.size.width/2, height: self.frame.size.height/2));
         placeholder.contentMode = .scaleAspectFit;
-        placeholder.image = UIImage.init(named: "download");
-        placeholder.contentMode = .center;
+        
+        if (self.useDownloadPlaceholder) {
+            placeholder.image = UIImage.init(named: "big_download");
+        }
         
         if (thumbnail) {
-            placeholder.image = UIImage.init(named: "download_thumbnail");
+            if (self.useDownloadPlaceholder) {
+                placeholder.image = UIImage.init(named: "download_thumbnail");
+            }
             let resource = ImageResource(downloadURL: url, cacheKey: String(format: "%@_thumbnail", self.attachment!.url!))
             self.kf.setImage(with: resource, placeholder: placeholder, options: options)
         }
         // if they have the original sized image, show that
         else if (self.isFullSizeCached() || fullSize) {
+            self.placeholderIsRealImage = true;
             self.kf.setImage(with: URL(string: self.attachment!.url!),
                              options: options, progressBlock: progressBlock,
                                         completionHandler: completionHandler);
@@ -120,10 +126,12 @@ import Kingfisher
         }
         // else if they had a large sized image downloaded
         else if (self.isLargeSizeCached()) {
+            self.placeholderIsRealImage = true;
             placeholder.kf.setImage(with: self.getAttachmentUrl(size: self.imageSize), options: options)
         }
         // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
         else if (ImageCache.default.isCached(forKey: thumbUrl.absoluteString)) {
+            self.placeholderIsRealImage = true;
             placeholder.kf.setImage(with: thumbUrl, options: options)
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator

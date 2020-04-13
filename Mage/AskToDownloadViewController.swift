@@ -20,6 +20,7 @@ import Kingfisher
     @IBOutlet weak var thumbnail: AttachmentUIImageView?
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var downloadBlock: UIView!
+    @IBOutlet weak var emptyContentImage: UIImageView!
     
     @objc public convenience init(attachment: Attachment, delegate: AskToDownloadDelegate?) {
         self.init(nibName: "AskToDownload", bundle: nil);
@@ -45,12 +46,18 @@ import Kingfisher
     }
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        self.thumbnail?.useDownloadPlaceholder = false;
         self.thumbnail?.setAttachment(attachment: self.attachment);
         if (self.thumbnail?.isLargeSizeCached() == true) {
             self.delegate?.downloadAttachment();
         } else {
             self.downloadBlock.isHidden = false;
             self.thumbnail?.showImage(cacheOnly: true);
+            if (self.thumbnail?.placeholderIsRealImage == true) {
+                // this will cause the "do you want to download the image" block to stay close to the bottom of the screen
+                // so that the thumbnail image is not covered as much
+                self.emptyContentImage.removeFromSuperview();
+            }
         }
     }
 }

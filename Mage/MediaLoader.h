@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MediaLoaderDelegate <NSObject>
 
-- (void) mediaLoadComplete;
+- (void) mediaLoadComplete: (NSString *) filePath;
 
 @end
 

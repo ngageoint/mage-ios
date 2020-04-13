@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="descriptionLabel" destination="b8H-7c-crV" id="kZN-d2-NdL"/>
                 <outlet property="downloadBlock" destination="T8P-pN-WLw" id="2j9-Tp-JDD"/>
+                <outlet property="emptyContentImage" destination="h2h-pK-LmQ" id="Fgh-tR-zXg"/>
                 <outlet property="thumbnail" destination="ywz-rf-EaM" id="i16-6M-ILY"/>
                 <outlet property="view" destination="iN0-l3-epB" id="3B9-2t-uOK"/>
             </connections>
@@ -24,9 +25,9 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T8P-pN-WLw">
-                    <rect key="frame" x="0.0" y="555.5" width="375" height="111.5"/>
+                    <rect key="frame" x="0.0" y="349.5" width="375" height="317.5"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="A higher resolution image exists, would you like to download it?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8H-7c-crV">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="A higher resolution image exists, would you like to download it?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8H-7c-crV">
                             <rect key="frame" x="20" y="20" width="335" height="33.5"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" id="h6o-cd-g0F"/>
@@ -37,8 +38,8 @@
                             <size key="shadowOffset" width="0.0" height="0.0"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VYB-Ze-Zlk">
-                            <rect key="frame" x="8" y="62" width="359" height="30"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <rect key="frame" x="8" y="61.5" width="359" height="236"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <state key="normal" title="DOWNLOAD"/>
                             <connections>
                                 <action selector="downloadAttachment:" destination="-1" eventType="touchUpInside" id="Oe1-lt-03R"/>
@@ -56,18 +57,28 @@
                         <constraint firstItem="VYB-Ze-Zlk" firstAttribute="top" secondItem="b8H-7c-crV" secondAttribute="bottom" constant="8" symbolic="YES" id="ttE-kk-3lp"/>
                     </constraints>
                 </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="big_download" translatesAutoresizingMaskIntoConstraints="NO" id="h2h-pK-LmQ">
+                    <rect key="frame" x="62.5" y="205.5" width="250" height="128"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="T8P-pN-WLw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="B0k-io-DWj"/>
                 <constraint firstAttribute="trailing" secondItem="T8P-pN-WLw" secondAttribute="trailing" id="Fjh-SB-RMW"/>
+                <constraint firstItem="T8P-pN-WLw" firstAttribute="top" secondItem="h2h-pK-LmQ" secondAttribute="bottom" constant="16" id="Gb1-Hi-N55"/>
                 <constraint firstItem="ywz-rf-EaM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="M3m-yB-ynB"/>
+                <constraint firstItem="h2h-pK-LmQ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Owp-nA-rDU"/>
+                <constraint firstItem="h2h-pK-LmQ" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PY3-Fc-68J"/>
                 <constraint firstAttribute="bottom" secondItem="T8P-pN-WLw" secondAttribute="bottom" id="WNP-4Y-sQS"/>
                 <constraint firstAttribute="trailing" secondItem="ywz-rf-EaM" secondAttribute="trailing" id="lkq-VP-Kmg"/>
                 <constraint firstItem="ywz-rf-EaM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="rYg-q7-Ov1"/>
+                <constraint firstItem="h2h-pK-LmQ" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="2:3" id="xJy-Qv-UHp"/>
                 <constraint firstAttribute="bottom" secondItem="ywz-rf-EaM" secondAttribute="bottom" id="y0l-e0-WhI"/>
             </constraints>
             <point key="canvasLocation" x="140" y="152.47376311844079"/>
         </view>
     </objects>
+    <resources>
+        <image name="big_download" width="192" height="128"/>
+    </resources>
 </document>

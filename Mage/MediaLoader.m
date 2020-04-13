@@ -17,6 +17,9 @@
 @property (nonatomic, assign) NSUInteger fullAudioDataLength;
 @property (nonatomic, strong) NSURL *urlToLoad;
 @property (nonatomic, strong) id<MediaLoaderDelegate> delegate;
+@property (strong, nonatomic) NSString *existingFile;
+@property (strong, nonatomic) NSString *mimeExtension;
+@property (strong, nonatomic) NSString *finalFile;
 
 @end
 
@@ -25,6 +28,7 @@
 - (instancetype) initWithUrlToLoad: (NSURL *) urlToLoad andTempFile: (NSString *) tempFile andDelegate: (id<MediaLoaderDelegate>) delegate {
     self.urlToLoad = urlToLoad;
     self.tempFile = tempFile;
+    self.finalFile = tempFile;
     self.delegate = delegate;
     // This tracks all pending AVAssetResourceLoadingRequest objects we have not fulfilled yet
     self.pendingRequests = [NSMutableArray array];
@@ -51,10 +55,12 @@
 
 - (void)appendDataToTempFile:(NSData *)data
 {
-    if(![[NSFileManager defaultManager] fileExistsAtPath:self.tempFile]) {
-        [data writeToFile:self.tempFile atomically:YES];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:self.finalFile]) {
+        NSLog(@"write to file %@", self.finalFile);
+
+        [data writeToFile:self.finalFile atomically:YES];
     } else {
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.tempFile];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.finalFile];
         [fileHandle seekToEndOfFile];
         [fileHandle writeData:data];
     }
@@ -64,7 +70,7 @@
 {
     NSLog(@"finished loading the media file");
     [self processPendingRequests];
-    if (self.delegate) [self.delegate mediaLoadComplete];
+    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
 }
 
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -103,7 +109,13 @@
     
     NSString *mimeType = [self.response MIMEType];
     CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)(mimeType), NULL);
+//    CFStringRef extension = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(mimeType), NULL);
     
+    CFStringRef extension = UTTypeCopyPreferredTagWithClass(contentType, kUTTagClassFilenameExtension);
+    self.mimeExtension = CFBridgingRelease(extension);
+    self.finalFile = [NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
+//    use this extension to name the file then pass that back to the other class so it can save it in the local file of attachment
+
     contentInformationRequest.byteRangeAccessSupported = YES;
     contentInformationRequest.contentType = CFBridgingRelease(contentType);
     contentInformationRequest.contentLength = [self.response expectedContentLength];
@@ -141,7 +153,7 @@
 
 - (NSData *)dataFromFileInRange:(NSRange)range
 {
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.tempFile];;
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.finalFile];;
     [fileHandle seekToFileOffset:range.location];
     return [fileHandle readDataOfLength:range.length];
 }
