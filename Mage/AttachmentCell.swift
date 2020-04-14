@@ -30,7 +30,15 @@ import Kingfisher
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView?.setAttachment(attachment: attachment);
-            self.imageView?.showThumbnail();
+            self.imageView?.showThumbnail()
+            { result in
+                switch result {
+                case .success(let success):
+                    print("got it", success.image)
+                case .failure(let error):
+                    print(error);
+                }
+            };
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
             let url = self.getAttachmentUrl(size: imageSize, attachment: attachment);
             var localPath: String? = nil;

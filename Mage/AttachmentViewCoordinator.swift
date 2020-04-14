@@ -59,8 +59,11 @@ import MagicalRecord;
             ac.view.backgroundColor = UIColor.black;
             self.rootViewController.pushViewController(ac, animated: animated);
             self.navigationControllerObserver.observePopTransition(of: ac, delegate: self);
-        } else if (self.attachment.contentType!.hasPrefix("video") || self.attachment.contentType!.hasPrefix("audio")) {
+        } else if (self.attachment.contentType!.hasPrefix("video")) {
             self.downloadAudioVideo();
+        } else if (self.attachment.contentType!.hasPrefix("audio")) {
+//            self.downloadAudioVideo();
+            self.playAudio();
         }
     }
     
@@ -70,6 +73,148 @@ import MagicalRecord;
         self.rootViewController.popViewController(animated: false);
         
         self.showAttachment();
+    }
+    
+    func playAudio() {
+        print("playing audio:", String.init(format: "%@?access_token=%@", self.attachment.url!, StoredPassword.retrieveStoredToken()));
+        self.urlToLoad = URL(string: String.init(format: "%@?access_token=%@", self.attachment.url!, StoredPassword.retrieveStoredToken()));
+        self.mediaLoader = MediaLoader(urlToLoad: self.urlToLoad!, andTempFile: self.tempFile, andDelegate: self);
+
+        self.mediaLoader.playAudio();
+        
+//        if ((self.attachment.localPath != nil) && FileManager.default.fileExists(atPath: self.attachment.localPath!)) {
+//            print("Playing locally");
+//            self.urlToLoad = URL(fileURLWithPath: attachment.localPath!);
+//        } else {
+//            print("Playing from link");
+//            self.urlToLoad = URL(string: String.init(format: "%@?access_token=%@", self.attachment.url!, StoredPassword.retrieveStoredToken()));
+//        }
+//        let components = NSURLComponents(url: self.urlToLoad!, resolvingAgainstBaseURL: false);
+//        components?.scheme = "streaming";
+        
+//        self.mediaLoader = MediaLoader(urlToLoad: self.urlToLoad!, andTempFile: self.tempFile, andDelegate: self);
+        
+//        let asset = AVURLAsset(url: self.urlToLoad!);
+////        asset.resourceLoader.setDelegate(self.mediaLoader, queue: DispatchQueue.main);
+//
+//        let playerItem = AVPlayerItem(asset: asset)
+//
+//        self.observer = playerItem.observe(\.status, options:  [.new, .old], changeHandler: { (playerItem, change) in
+//            switch (playerItem.status) {
+//            case .readyToPlay:
+//                self.player?.play();
+//                break;
+//            case .failed:
+//                print("failed", playerItem.error);
+//                break;
+//            case .unknown:
+//                print("unknown");
+//            }
+//            //            if playerItem.status == .readyToPlay {
+//            //                self.player?.play();
+//            //            }
+//        })
+        
+//        MageSessionManager *manager = [MageSessionManager manager];
+//        NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:url parameters: nil error: nil];
+//
+//        NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+//            dispatch_async(dispatch_get_main_queue(), ^{;
+//            float progress = downloadProgress.fractionCompleted;
+//            weakSelf.downloadProgressBar.progress = progress;
+//            weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
+//            });
+//            } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+//            return [NSURL fileURLWithPath:downloadPath];
+//            } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+//
+//            NSString * fileString = [filePath path];
+//
+//            if(!error){
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//            if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
+//            [weakSelf.progressView setHidden:YES];
+//            [weakSelf playMediaType: type FromDocumentsFolder:fileString];
+//            }
+//            });
+//            }else{
+//            NSLog(@"Error: %@", error);
+//            //delete the file
+//            NSError *deleteError;
+//            [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
+//            }
+//
+//            }];
+//
+//        NSError *error;
+//        if (![[NSFileManager defaultManager] fileExistsAtPath:[downloadPath stringByDeletingLastPathComponent]]) {
+//            NSLog(@"Creating directory %@", [downloadPath stringByDeletingLastPathComponent]);
+//            [[NSFileManager defaultManager] createDirectoryAtPath:[downloadPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+//        }
+//
+//        [manager addTask:task];
+        
+        
+//        self.player = AVPlayer(url: self.urlToLoad!);
+        
+        
+        
+//        guard let url = URL.init(string: self.urlToLoad) else { return }
+//        let playerItem = AVPlayerItem.init(url: self.urlToLoad!)
+//        self.observer = playerItem.observe(\.status, options:  [.new, .old], changeHandler: { (playerItem, change) in
+//            switch (playerItem.status) {
+//            case .readyToPlay:
+//                self.player?.play();
+//                break;
+//            case .failed:
+//                print("failed", playerItem.error);
+//                break;
+//            case .unknown:
+//                print("unknown");
+//            }
+//            //            if playerItem.status == .readyToPlay {
+//            //                self.player?.play();
+//            //            }
+//        })
+//
+//        self.player = AVPlayer.init(playerItem: playerItem)
+//        do {
+//            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: [.mixWithOthers, .allowAirPlay])
+//            print("Playback OK")
+//            try AVAudioSession.sharedInstance().setActive(true)
+//            print("Session is Active")
+//        } catch {
+//            print(error)
+//        }
+        
+//        var player: AVPlayer?
+        
+        
+//        var downloadTask:URLSessionDownloadTask
+//        downloadTask = URLSession.shared.downloadTask(with: self.urlToLoad!, completionHandler: { [weak self](URL, response, error) -> Void in
+//            do {
+//                let audioPlayer = try AVAudioPlayer(contentsOf: self!.urlToLoad!)
+//                audioPlayer.prepareToPlay()
+//                audioPlayer.volume = 1.0
+//                audioPlayer.play()
+//            } catch let error as NSError {
+//                //self.player = nil
+//                print(error.localizedDescription)
+//            } catch {
+//                print("AVAudioPlayer init failed")
+//            }
+//
+//        })
+//
+//        downloadTask.resume()
+//
+//        self.playerViewController = AVPlayerViewController();
+//        self.playerViewController?.player = player;
+//        self.playerViewController?.view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
+//
+//        self.rootViewController.pushViewController(self.playerViewController!, animated: false);
+//        self.navigationControllerObserver.observePopTransition(of: self.playerViewController!, delegate: self);
+        
     }
     
     func downloadAudioVideo() {
@@ -91,9 +236,19 @@ import MagicalRecord;
         let playerItem = AVPlayerItem(asset: asset)
         
         self.observer = playerItem.observe(\.status, options:  [.new, .old], changeHandler: { (playerItem, change) in
-            if playerItem.status == .readyToPlay {
+            switch (playerItem.status) {
+            case .readyToPlay:
                 self.player?.play();
+                break;
+            case .failed:
+                print("failed", playerItem.error);
+                break;
+            case .unknown:
+                print("unknown");
             }
+//            if playerItem.status == .readyToPlay {
+//                self.player?.play();
+//            }
         })
         
         self.player = AVPlayer(playerItem: playerItem);
@@ -116,5 +271,9 @@ import MagicalRecord;
             let localAttachment = self.attachment.mr_(in: localContext);
             localAttachment?.localPath = filePath;
         });
+        print("Content type finished", self.attachment.contentType);
+        if (self.attachment.contentType?.hasPrefix("audio") == true) {
+            self.downloadAudioVideo();
+        }
     }
 }

@@ -4,7 +4,6 @@
 
 #import "FICImageCache.h"
 #import "AppDelegate.h"
-#import "MageSessionManager.h"
 #import "DataConnectionUtilities.h"
 #import "StoredPassword.h"
 #import "Attachment+Thumbnail.h"

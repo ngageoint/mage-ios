@@ -9,6 +9,14 @@
 import Foundation
 import Kingfisher
 
+extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+}
+
 @objc class AttachmentUIImageView: UIImageView {
 
     public var attachment: Attachment? = nil;
@@ -51,8 +59,7 @@ import Kingfisher
     public func showThumbnail(indicator: Indicator? = nil,
                               progressBlock: DownloadProgressBlock? = nil,
                               completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        let thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!;
-        self.setImage(url: thumbUrl, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+        self.setImage(url: self.getAttachmentUrl(size: self.imageSize), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     public func setAttachment(attachment: Attachment) {
@@ -102,11 +109,12 @@ import Kingfisher
             options.append(.onlyFromCache);
         }
                 
-        let placeholder = PlaceholderImage(frame: CGRect(x: 0, y: 0, width: self.frame.size.width/2, height: self.frame.size.height/2));
+        let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
         
         if (self.useDownloadPlaceholder) {
-            placeholder.image = UIImage.init(named: "big_download");
+            placeholder.image = UIImage.init(named: "big_download");//?.resized(to: CGSize(width: self.frame.size.width * 0.66, height: self.frame.size.height));
+            placeholder.tintColor = .lightGray;
         }
         
         if (thumbnail) {
@@ -114,7 +122,8 @@ import Kingfisher
                 placeholder.image = UIImage.init(named: "download_thumbnail");
             }
             let resource = ImageResource(downloadURL: url, cacheKey: String(format: "%@_thumbnail", self.attachment!.url!))
-            self.kf.setImage(with: resource, placeholder: placeholder, options: options)
+            self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
+                             completionHandler: completionHandler);
         }
         // if they have the original sized image, show that
         else if (self.isFullSizeCached() || fullSize) {

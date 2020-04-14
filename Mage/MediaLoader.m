@@ -7,6 +7,7 @@
 //
 
 #import "MediaLoader.h"
+#import "MageSessionManager.h"
 
 @interface MediaLoader()
 
@@ -33,6 +34,51 @@
     // This tracks all pending AVAssetResourceLoadingRequest objects we have not fulfilled yet
     self.pendingRequests = [NSMutableArray array];
     return self;
+}
+
+#pragma mark - Audio playing
+
+- (void) playAudio {
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
+
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
+        dispatch_async(dispatch_get_main_queue(), ^{;
+        float progress = downloadProgress.fractionCompleted;
+//        weakSelf.downloadProgressBar.progress = progress;
+//        weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
+        });
+        } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            return [NSURL fileURLWithPath:self.finalFile];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+
+            NSURLSessionDownloadTask *t = task;
+        NSString * fileString = [filePath path];
+
+        if(!error){
+        dispatch_async(dispatch_get_main_queue(), ^{
+        if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
+            if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
+//        [weakSelf.progressView setHidden:YES];
+//        [weakSelf playMediaType: type FromDocumentsFolder:fileString];
+        }
+        });
+        }else{
+        NSLog(@"Error: %@", error);
+        //delete the file
+        NSError *deleteError;
+        [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
+        }
+
+        }];
+
+    NSError *error;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self.finalFile stringByDeletingLastPathComponent]]) {
+        NSLog(@"Creating directory %@", [self.finalFile stringByDeletingLastPathComponent]);
+        [[NSFileManager defaultManager] createDirectoryAtPath:[self.finalFile stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+    }
+
+    [manager addTask:task];
 }
 
 #pragma mark - NSURLConnection delegate
@@ -113,7 +159,7 @@
     
     CFStringRef extension = UTTypeCopyPreferredTagWithClass(contentType, kUTTagClassFilenameExtension);
     self.mimeExtension = CFBridgingRelease(extension);
-    self.finalFile = [NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
+    self.finalFile = self.tempFile; //[NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
 //    use this extension to name the file then pass that back to the other class so it can save it in the local file of attachment
 
     contentInformationRequest.byteRangeAccessSupported = YES;
