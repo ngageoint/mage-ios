@@ -36,41 +36,37 @@
     return self;
 }
 
-#pragma mark - Audio playing
+#pragma mark - Audio Download
 
-- (void) playAudio {
+- (void) downloadAudio {
     MageSessionManager *manager = [MageSessionManager manager];
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
 
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
-        dispatch_async(dispatch_get_main_queue(), ^{;
-        float progress = downloadProgress.fractionCompleted;
-//        weakSelf.downloadProgressBar.progress = progress;
-//        weakSelf.progressPercentLabel.text = [NSString stringWithFormat:@"%.2f%%", progress * 100];
-        });
-        } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-            return [NSURL fileURLWithPath:self.finalFile];
-        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-
-            NSURLSessionDownloadTask *t = task;
-        NSString * fileString = [filePath path];
-
-        if(!error){
         dispatch_async(dispatch_get_main_queue(), ^{
-        if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
-            if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
-//        [weakSelf.progressView setHidden:YES];
-//        [weakSelf playMediaType: type FromDocumentsFolder:fileString];
-        }
+            float progress = downloadProgress.fractionCompleted;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(mediaLoadProgress:)]) {
+                [self.delegate mediaLoadProgress:progress];
+            }
         });
-        }else{
-        NSLog(@"Error: %@", error);
-        //delete the file
-        NSError *deleteError;
-        [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
+    } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        return [NSURL fileURLWithPath:self.finalFile];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        NSString * fileString = [filePath path];
+        if(!error){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
+                    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
+                }
+            });
+        } else {
+            NSLog(@"Error: %@", error);
+            //delete the file
+            NSError *deleteError;
+            [[NSFileManager defaultManager] removeItemAtPath:fileString error:&deleteError];
         }
 
-        }];
+    }];
 
     NSError *error;
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.finalFile stringByDeletingLastPathComponent]]) {
@@ -155,12 +151,9 @@
     
     NSString *mimeType = [self.response MIMEType];
     CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)(mimeType), NULL);
-//    CFStringRef extension = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)(mimeType), NULL);
-    
     CFStringRef extension = UTTypeCopyPreferredTagWithClass(contentType, kUTTagClassFilenameExtension);
     self.mimeExtension = CFBridgingRelease(extension);
-    self.finalFile = self.tempFile; //[NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
-//    use this extension to name the file then pass that back to the other class so it can save it in the local file of attachment
+    self.finalFile = [NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
 
     contentInformationRequest.byteRangeAccessSupported = YES;
     contentInformationRequest.contentType = CFBridgingRelease(contentType);
@@ -231,146 +224,5 @@
 {
     [self.pendingRequests removeObject:loadingRequest];
 }
-
- //    // MARK: NSURLConnection delegate
- //    //
- //
- //    func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
- //        print("did receive response");
- //        self.fullAudioDataLength = 0;
- //        self.response = response;
- //        self.processPendingRequests();
- //    }
- //
- //    func connection(_ connection: NSURLConnection, didReceive data: Data) {
- ////        print("did recieve data")
- //        self.fullAudioDataLength += data.count;
- //        self.appendDataToTempFile(data: data);
- //        self.processPendingRequests();
- //    }
- //
- //    func connectionDidFinishLoading(_ connection: NSURLConnection) {
- //        print("Finished loading the media file");
- //        // save the path to the downloaded file in the attachment
- //        MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
- //            let localAttachment = self.attachment.mr_(in: localContext);
- //            localAttachment?.localPath = self.tempFile;
- //        });
- //        self.processPendingRequests();
- //    }
- //
- //    func connection(_ connection: NSURLConnection, didFailWithError error: Error) {
- //        print(error)
- //    }
- //
- //    func appendDataToTempFile(data: Data) {
- ////        print("append data")
- //        do {
- //            if (FileManager.default.fileExists(atPath: self.tempFile)) {
- //                try data.write(to: URL(fileURLWithPath: self.tempFile), options: .atomic)
- //            } else {
- //                let fileHandle = FileHandle(forWritingAtPath: self.tempFile);
- //                fileHandle?.seekToEndOfFile();
- //                fileHandle?.write(data);
- //            }
- //        } catch {
- //            print(error)
- //        }
- //    }
- //
- //    // MARK: AVURLAsset resource loading
- //
- //    private func processPendingRequests() {
- //        var requestsCompleted = [AVAssetResourceLoadingRequest]()
- //        for loadingRequest in pendingRequests {
- //            fillInContentInformation(contentInformationRequest: loadingRequest.contentInformationRequest)
- //            let didRespondCompletely = respondWithDataForRequest(dataRequest: loadingRequest.dataRequest!)
- //            if didRespondCompletely == true {
- //                requestsCompleted.append(loadingRequest)
- //                loadingRequest.finishLoading()
- //            }
- //        }
- //        for requestCompleted in requestsCompleted {
- //            for (i, pendingRequest) in pendingRequests.enumerated() {
- //                if requestCompleted == pendingRequest {
- //                    pendingRequests.remove(at: i)
- //                }
- //            }
- //        }
- //    }
- //
- //    private func fillInContentInformation(contentInformationRequest: AVAssetResourceLoadingContentInformationRequest?) {
- //        if(contentInformationRequest == nil) {
- //            return
- //        }
- //        if (self.response == nil) {
- //            return
- //        }
- //
- //        let mimeType = self.response!.mimeType
- //        let unmanagedContentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, mimeType! as CFString, nil)
- //        let cfContentType = unmanagedContentType!.takeRetainedValue()
- //        contentInformationRequest!.contentType = String(cfContentType)
- //        contentInformationRequest!.isByteRangeAccessSupported = true
- //        contentInformationRequest!.contentLength = self.response!.expectedContentLength
- //    }
- //
- //    func respondWithDataForRequest(dataRequest: AVAssetResourceLoadingDataRequest) -> Bool {
- //        var startOffset = dataRequest.requestedOffset;
- //        if (dataRequest.currentOffset != 0) {
- //            startOffset = dataRequest.currentOffset;
- //        }
- //
- //        // No data yet
- //        if (self.fullAudioDataLength < startOffset || self.fullAudioDataLength == 0) {
- //            return false;
- //        }
- //
- //        let unreadBytes = self.fullAudioDataLength - Int(startOffset);
- //        let numberOfBytesToRespondWith = min(dataRequest.requestedLength, unreadBytes);
- //
- //        if let respondData = self.dataFromFileInRange(start: startOffset, length: numberOfBytesToRespondWith) {
- //            dataRequest.respond(with: respondData);
- //        }
- //        let endOffset = Int(startOffset) + dataRequest.requestedLength;
- //
- //        return self.fullAudioDataLength >= endOffset && self.fullAudioDataLength != 0;
- //    }
- //
- //    func dataFromFileInRange(start: Int64, length: Int) -> Data? {
- //        let fileHandle = FileHandle(forReadingAtPath: self.tempFile);
- //        fileHandle?.seek(toFileOffset: UInt64(start));
- //        return fileHandle?.readData(ofLength: length);
- //    }
- //
- //    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
- //        if (self.connection == nil) {
- //            if let interceptedURL = loadingRequest.request.url {
- //                var interceptedURLComponents = URLComponents(url: interceptedURL, resolvingAgainstBaseURL: false);
- //                let loadingComponents = URLComponents(url: self.urlToLoad!, resolvingAgainstBaseURL: false);
- //                interceptedURLComponents?.scheme = loadingComponents?.scheme;
- //
- //                let request = URLRequest(url: (interceptedURLComponents?.url)!);
- //                self.connection = NSURLConnection.init(request: request, delegate: self, startImmediately: false);
- //                self.connection?.setDelegateQueue(OperationQueue.main);
- //                self.connection?.start();
- //            }
- //        }
- //
- //        self.pendingRequests.append(loadingRequest);
- ////        self.processPendingRequests();
- //
- //        return true;
- //    }
- //
- //    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
- //        print("cancel loading request")
- //        print("pnding requets", pendingRequests.count);
- //        self.pendingRequests = self.pendingRequests.filter { value in
- //            value != loadingRequest
- //        }
- //        print("pending requests now", pendingRequests.count);
- //    }
-
 
 @end

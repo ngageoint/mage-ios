@@ -18,13 +18,15 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol MediaLoaderDelegate <NSObject>
 
 - (void) mediaLoadComplete: (NSString *) filePath;
+@optional
+- (void) mediaLoadProgress: (float) progress;
 
 @end
 
 @interface MediaLoader : NSObject <AVAssetResourceLoaderDelegate>
 
 - (instancetype) initWithUrlToLoad: (NSURL *) urlToLoad andTempFile: (NSString *) tempFile andDelegate: (id<MediaLoaderDelegate>) delegate;
-- (void) playAudio;
+- (void) downloadAudio;
 
 @end
 
