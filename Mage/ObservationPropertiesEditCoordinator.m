@@ -155,11 +155,6 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
     [self.childCoordinators addObject:attachmentCoordinator];
     [attachmentCoordinator start];
-    
-//    AttachmentViewController *vc = [[AttachmentViewController alloc] init];
-//    [vc setAttachment:attachment];
-//    [vc setTitle:@"Attachment"];
-//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) doneViewingWithCoordinator:(NSObject *)coordinator {

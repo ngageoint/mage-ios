@@ -52,6 +52,7 @@
 @property (assign, nonatomic) BOOL currentUserIsMe;
 @property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) CLLocation *userLastLocation;
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
@@ -84,6 +85,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
@@ -340,10 +342,14 @@
     [headerView setFrame:frame];    
 }
 
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
     AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
-//    [self.childCoordinators addObject:attachmentCoordinator];
+    [self.childCoordinators addObject:attachmentCoordinator];
     [attachmentCoordinator start];
     
 //    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];

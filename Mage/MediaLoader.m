@@ -21,10 +21,16 @@
 @property (strong, nonatomic) NSString *existingFile;
 @property (strong, nonatomic) NSString *mimeExtension;
 @property (strong, nonatomic) NSString *finalFile;
+@property (nonatomic) BOOL localFile;
 
 @end
 
 @implementation MediaLoader
+
+- (instancetype) initWithDelegate: (id<MediaLoaderDelegate>) delegate {
+    self.delegate = delegate;
+    return self;
+}
 
 - (instancetype) initWithUrlToLoad: (NSURL *) urlToLoad andTempFile: (NSString *) tempFile andDelegate: (id<MediaLoaderDelegate>) delegate {
     self.urlToLoad = urlToLoad;
@@ -38,7 +44,9 @@
 
 #pragma mark - Audio Download
 
-- (void) downloadAudio {
+- (void) downloadAudioToFile: (NSString *) file fromURL: (NSURL *) url {
+    self.urlToLoad = url;
+    self.finalFile = file;
     MageSessionManager *manager = [MageSessionManager manager];
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
 
@@ -56,7 +64,7 @@
         if(!error){
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([[NSFileManager defaultManager] fileExistsAtPath:fileString]){
-                    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
+                    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:YES];
                 }
             });
         } else {
@@ -77,6 +85,29 @@
     [manager addTask:task];
 }
 
+#pragma mark - AVPlayerItem
+
+- (AVPlayerItem *) createPlayerItemFromURL: (NSURL *) url toFile: (nullable NSString *) file {
+    self.pendingRequests = [NSMutableArray array];
+    self.urlToLoad = url;
+
+    self.localFile = url.fileURL;
+    if (self.localFile) {
+        self.finalFile = url.path;
+        self.tempFile = url.path;
+    } else {
+        self.tempFile = file;
+    }
+    
+    NSURLComponents* components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:false];
+    components.scheme = @"streaming";
+    
+    AVURLAsset *asset = [AVURLAsset assetWithURL:components.URL];
+    [asset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
+    
+    return [AVPlayerItem playerItemWithAsset:asset];
+}
+
 #pragma mark - NSURLConnection delegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -90,7 +121,7 @@
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     self.fullAudioDataLength += data.length;
-    [self appendDataToTempFile: data];
+    if (!self.localFile) [self appendDataToTempFile: data];
     
     [self processPendingRequests];
 }
@@ -112,7 +143,7 @@
 {
     NSLog(@"finished loading the media file");
     [self processPendingRequests];
-    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile];
+    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:!self.localFile];
 }
 
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -153,7 +184,9 @@
     CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)(mimeType), NULL);
     CFStringRef extension = UTTypeCopyPreferredTagWithClass(contentType, kUTTagClassFilenameExtension);
     self.mimeExtension = CFBridgingRelease(extension);
-    self.finalFile = [NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
+    if (!self.localFile) {
+        self.finalFile = [NSString stringWithFormat:@"%@.%@", self.tempFile, self.mimeExtension];
+    }
 
     contentInformationRequest.byteRangeAccessSupported = YES;
     contentInformationRequest.contentType = CFBridgingRelease(contentType);
