@@ -265,7 +265,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         case PHAuthorizationStatusNotDetermined: {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
                 if (status == PHAuthorizationStatusAuthorized) {
-                    [self presentGallery];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self presentGallery];
+                    });
                 }
             }];
             

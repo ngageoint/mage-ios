@@ -490,11 +490,13 @@
         }
         case PHAuthorizationStatusNotDetermined: {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
-                    complete(YES);
-                } else {
-                    complete(NO);
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        complete(YES);
+                    } else {
+                        complete(NO);
+                    }
+                });
             }];
             
             break;
