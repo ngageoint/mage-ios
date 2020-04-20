@@ -20,6 +20,7 @@ extension UIImage {
 @objc class AttachmentUIImageView: UIImageView {
 
     public var attachment: Attachment? = nil;
+    var url: URL? = nil;
     var imageSize: Int!
     var largeSizeCached: Bool = false;
     public var placeholderIsRealImage: Bool = false;
@@ -41,11 +42,11 @@ extension UIImage {
     }
     
     public func isFullSizeCached() -> Bool {
-        return ImageCache.default.isCached(forKey: (self.attachment?.url!)!);
+        return self.attachment != nil && ImageCache.default.isCached(forKey: (self.attachment?.url!)!);
     }
     
     public func isLargeSizeCached() -> Bool {
-        return self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: self.imageSize).absoluteString);
+        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: self.imageSize).absoluteString));
     }
     
     public func isThumbnailCached() -> Bool {
@@ -67,13 +68,18 @@ extension UIImage {
         self.attachment = attachment;
     }
     
+    public func setURL(url: URL?) {
+        self.placeholderIsRealImage = false;
+        self.url = url;
+    }
+    
     public func showImage(cacheOnly: Bool = false,
                           fullSize: Bool = false,
                           thumbnail: Bool = false,
                           indicator: Indicator? = nil,
                           progressBlock: DownloadProgressBlock? = nil,
                           completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        let url = self.getAttachmentUrl(size: self.imageSize);
+        let url = self.url != nil ? self.url! : self.getAttachmentUrl(size: self.imageSize);
         self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, thumbnail: thumbnail, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
@@ -85,7 +91,7 @@ extension UIImage {
         }
     }
     
-    func setImage(url: URL,
+    public func setImage(url: URL,
                   cacheOnly: Bool = false,
                   fullSize: Bool = false,
                   thumbnail: Bool = false,
@@ -98,6 +104,7 @@ extension UIImage {
             self.kf.setImage(with: provider)
             return;
         }
+        
         
         var thumbUrl = url;
         if (self.attachment?.url != nil) {
@@ -121,15 +128,14 @@ extension UIImage {
         let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
         
-        if (self.useDownloadPlaceholder) {
-            placeholder.image = UIImage.init(named: "big_download");//?.resized(to: CGSize(width: self.frame.size.width * 0.66, height: self.frame.size.height));
+        if (self.useDownloadPlaceholder && thumbnail) {
+            placeholder.image = UIImage.init(named: "download_thumbnail");
+        } else if (self.useDownloadPlaceholder) {
+            placeholder.image = UIImage.init(named: "big_download");
             placeholder.tintColor = .lightGray;
         }
         
         if (thumbnail) {
-            if (self.useDownloadPlaceholder) {
-                placeholder.image = UIImage.init(named: "download_thumbnail");
-            }
             let resource = ImageResource(downloadURL: url, cacheKey: thumbUrl.absoluteString)
             self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
                              completionHandler: completionHandler);

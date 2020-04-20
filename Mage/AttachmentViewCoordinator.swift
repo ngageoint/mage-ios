@@ -19,7 +19,7 @@ import MagicalRecord;
     var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
-    var tempFile: String
+    var tempFile: String?
     
     var player: AVPlayer!
     var playerViewController: AVPlayerViewController?
@@ -43,17 +43,42 @@ import MagicalRecord;
         self.mediaLoader = MediaLoader(delegate: self);
     }
     
+    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?) {
+        self.rootViewController = rootViewController;
+        self.urlToLoad = url;
+        self.delegate = delegate;
+        
+        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
+        super.init();
+    }
+    
     @objc public func start() {
-        // if the file exists locally, just show it
-        if ((self.attachment.localPath != nil
-            && FileManager.default.fileExists(atPath: self.attachment.localPath!) == true)
-            || DataConnectionUtilities.shouldFetchAttachments()) {
-            return self.showAttachment(animated: true);
+        if let theAttachment = self.attachment {
+            if ((theAttachment.localPath != nil
+                && FileManager.default.fileExists(atPath: theAttachment.localPath!) == true)
+                || DataConnectionUtilities.shouldFetchAttachments()) {
+                return self.showAttachment(animated: true);
+            } else {
+                let vc: AskToDownloadViewController = AskToDownloadViewController(attachment: theAttachment, delegate: self);
+                self.rootViewController.pushViewController(vc, animated: true);
+                self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
+            }
         } else {
-            let vc: AskToDownloadViewController = AskToDownloadViewController(attachment: self.attachment, delegate: self);
-            self.rootViewController.pushViewController(vc, animated: true);
-            self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
+            if (self.urlToLoad?.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars()) {
+                return self.loadURL(animated: true);
+            } else {
+                let vc: AskToDownloadViewController = AskToDownloadViewController(url: self.urlToLoad!, delegate: self);
+                self.rootViewController.pushViewController(vc, animated: true);
+                self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
+            }
         }
+    }
+    
+    func loadURL(animated: Bool = false) {
+        self.imageViewController = ImageAttachmentViewController(url: self.urlToLoad!);
+        self.imageViewController?.view.backgroundColor = UIColor.black;
+        self.rootViewController.pushViewController(self.imageViewController!, animated: animated);
+        self.navigationControllerObserver.observePopTransition(of: self.imageViewController!, delegate: self);
     }
     
     func showAttachment(animated: Bool = false) {
@@ -70,12 +95,15 @@ import MagicalRecord;
         }
     }
     
-    func downloadAttachment() {
+    func downloadApproved() {
         print("Download the attachment")
         FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view);
         self.rootViewController.popViewController(animated: false);
-        
-        self.showAttachment();
+        if (self.attachment != nil) {
+            self.showAttachment();
+        } else {
+            self.loadURL();
+        }
     }
     
     func downloadAudio() {
@@ -86,13 +114,13 @@ import MagicalRecord;
         print("playing audio:", String.init(format: "%@", self.attachment.url!));
         self.urlToLoad = URL(string: String.init(format: "%@", self.attachment.url!));
         if (attachment.name != nil) {
-            self.tempFile = self.tempFile + "_" + attachment.name!;
+            self.tempFile = self.tempFile ?? "" + "_" + attachment.name!;
         } else if let ext = (UTTypeCopyPreferredTagWithClass(attachment.contentType! as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
-            self.tempFile = self.tempFile + "." + String(ext);
+            self.tempFile = self.tempFile ?? "" + "." + String(ext);
         } else {
-            self.tempFile = self.tempFile + ".mp3";
+            self.tempFile = self.tempFile ?? "" + ".mp3";
         }
-        self.mediaLoader?.downloadAudio(toFile: self.tempFile, from: self.urlToLoad!);
+        self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: self.urlToLoad!);
     }
     
     func playAudioVideo() {

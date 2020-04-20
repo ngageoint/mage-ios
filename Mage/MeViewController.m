@@ -351,10 +351,6 @@
     AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
     [self.childCoordinators addObject:attachmentCoordinator];
     [attachmentCoordinator start];
-    
-//    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-//    [attachmentVC setTitle:@"Attachment"];
-//    [self.navigationController pushViewController:attachmentVC animated:YES];
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -365,9 +361,10 @@
             
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
-
-//            AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-//            [self.navigationController pushViewController:attachmentVC animated:YES];
+            
+            AttachmentViewCoordinator *coordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController url:avatarUrl delegate:self];
+            [self.childCoordinators addObject:coordinator];
+            [coordinator start];
         }
         return;
     }
@@ -381,8 +378,9 @@
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
         
-//        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-//        [self.navigationController pushViewController:attachmentVC animated:YES];
+        AttachmentViewCoordinator *coordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController url:avatarUrl delegate:self];
+        [self.childCoordinators addObject:coordinator];
+        [coordinator start];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

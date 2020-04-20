@@ -283,6 +283,7 @@
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
 		F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CC45D62440DC690054C8E1 /* MediaLoader.m */; };
+		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
@@ -811,6 +812,7 @@
 		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
 		F7CC45D52440DC690054C8E1 /* MediaLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaLoader.h; sourceTree = "<group>"; };
 		F7CC45D62440DC690054C8E1 /* MediaLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaLoader.m; sourceTree = "<group>"; };
+		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
@@ -1577,6 +1579,7 @@
 			children = (
 				F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */,
 				F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */,
+				F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */,
 			);
 			path = ImageUtilities;
 			sourceTree = "<group>";
@@ -2428,6 +2431,7 @@
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
+				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,

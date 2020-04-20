@@ -20,7 +20,8 @@ extension PlaceholderImage: Placeholder {}
     @IBOutlet weak var downloadProgressBar: UIProgressView?
     @IBOutlet weak var downloadingLabel: UILabel!
     
-    var attachment: Attachment!
+    var attachment: Attachment? = nil;
+    var url: URL? = nil;
     var imageSize: Int!
     
     struct MyIndicator: Indicator {
@@ -48,22 +49,32 @@ extension PlaceholderImage: Placeholder {}
         self.attachment = attachment;
     }
     
+    @objc public convenience init(url: URL) {
+        self.init(nibName: "AttachmentView", bundle: nil);
+        self.imageSize = 0;
+        self.url = url;
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
-        self.showAttachment()
-        { result in
-            switch result {
-            case .success(let value):
-                // TODO handle the case where if the downloaded image is the actual full size one (image thumbnailing is off) we should store the image in the cache
-                // with the base url as the key
+        if (self.attachment != nil) {
+            self.showAttachment()
+            { result in
+                switch result {
+                case .success(let value):
+                    // TODO handle the case where if the downloaded image is the actual full size one (image thumbnailing is off) we should store the image in the cache
+                    // with the base url as the key
 
-                // if the thumbnail is not cached, cache it now
-                if(!ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment.url!))) {
-                    ImageCache.default.store(value.image, forKey: String(format: "%@_thumbnail", self.attachment.url!));
+                    // if the thumbnail is not cached, cache it now
+                    if(!ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment!.url!))) {
+                        ImageCache.default.store(value.image, forKey: String(format: "%@_thumbnail", self.attachment!.url!));
+                    }
+                case .failure(_): break
                 }
-            case .failure(_): break
-            }
-        };
+            };
+        } else if (self.url != nil) {
+            self.showImage();
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,13 +89,24 @@ extension PlaceholderImage: Placeholder {}
                 let image: UIImage = value.image;
                 var data: Data?;
                 var fileName: String!;
-                if ((self.attachment.contentType?.starts(with: "image/jpeg")) == true) {
-                    data = image.jpegData(compressionQuality: 0.8);
-                    fileName = "attachment.jpeg";
-                } else {
-                    // Convert the image into png image data
-                    data = image.pngData();
-                    fileName = "attachment.png";
+                if let theAttachment = self.attachment {
+                    if ((theAttachment.contentType?.starts(with: "image/jpeg")) == true) {
+                        data = image.jpegData(compressionQuality: 0.8);
+                        fileName = "attachment.jpeg";
+                    } else {
+                        // Convert the image into png image data
+                        data = image.pngData();
+                        fileName = "attachment.png";
+                    }
+                } else if let theUrl = self.url?.absoluteString {
+                    if (theUrl.lowercased().hasSuffix(".png")) {
+                        data = image.pngData();
+                        fileName = "image.png";
+                    } else {
+                        data = image.jpegData(compressionQuality: 0.8);
+                        fileName = "image.jpeg";
+                    }
+                    
                 }
                 let filePath = self.getDocumentsDirectory().appendingPathComponent(fileName)
                 
@@ -114,20 +136,22 @@ extension PlaceholderImage: Placeholder {}
             self.presentShareSheet(url: url);
         }))
         
-        if (!self.isFullSizeCached()) {
-            let attachmentMbs: Double = ((self.attachment.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
+        if (self.attachment != nil && !self.isFullSizeCached()) {
+            let attachmentMbs: Double = ((self.attachment!.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
             alert.addAction(UIAlertAction(title: String.init(format: "Download and Save Full Size Image %.2F MBs", attachmentMbs), style: .default , handler:{ (UIAlertAction)in
                 print("Go Download Full size")
                 self.showAttachment(fullSize: true)
                 { result in
                     switch result {
                     case .success(_):
-                        self.presentShareSheet(url: URL(string: self.attachment.url!)!)
+                        self.presentShareSheet(url: URL(string: self.attachment!.url!)!)
                     case .failure(let error):
                         print(error);
                     }
                 };
             }))
+        } else if (self.url != nil) {
+            self.presentShareSheet(url: self.url!);
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -135,22 +159,22 @@ extension PlaceholderImage: Placeholder {}
     }
     
     func getAttachmentUrl(size: Int) -> URL {
-        if (self.attachment.localPath != nil && FileManager.default.fileExists(atPath: self.attachment.localPath!)) {
-            return URL(fileURLWithPath: self.attachment.localPath!);
+        if (self.attachment?.localPath != nil && FileManager.default.fileExists(atPath: self.attachment!.localPath!)) {
+            return URL(fileURLWithPath: self.attachment!.localPath!);
         } else {
-            return URL(string: String(format: "%@?size=%ld", self.attachment.url!, size))!;
+            return URL(string: String(format: "%@?size=%ld", self.attachment!.url!, size))!;
         }
     }
     
     func isFullSizeCached() -> Bool {
-        return ImageCache.default.isCached(forKey: self.attachment.url!);
+        return ImageCache.default.isCached(forKey: self.attachment!.url!);
     }
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.progressView?.isHidden = true;
         let i = MyIndicator(parent: self);
 
-        self.imageView?.setAttachment(attachment: self.attachment);
+        self.imageView?.setAttachment(attachment: self.attachment!);
         self.imageView?.showImage(
             fullSize: fullSize,
             indicator: i,
@@ -160,6 +184,20 @@ extension PlaceholderImage: Placeholder {}
                 i.setProgress(progress: percentage);
             },
             completionHandler: completionHandler);
+    }
+    
+    func showImage() {
+        self.progressView?.isHidden = true;
+        let i = MyIndicator(parent: self);
+        
+        self.imageView?.setURL(url: self.url);
+        self.imageView?.showImage(
+            indicator: i,
+            progressBlock: {
+                receivedSize, totalSize in
+                let percentage = (Float(receivedSize) / Float(totalSize))
+                i.setProgress(progress: percentage);
+        });
     }
     
     func getDocumentsDirectory() -> NSString {

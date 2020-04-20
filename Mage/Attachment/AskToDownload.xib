@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -42,7 +42,7 @@
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <state key="normal" title="DOWNLOAD"/>
                             <connections>
-                                <action selector="downloadAttachment:" destination="-1" eventType="touchUpInside" id="Oe1-lt-03R"/>
+                                <action selector="downloadApproved:" destination="-1" eventType="touchUpInside" id="pbe-Fs-26v"/>
                             </connections>
                         </button>
                     </subviews>

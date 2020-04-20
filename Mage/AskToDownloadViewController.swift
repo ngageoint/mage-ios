@@ -10,13 +10,14 @@ import Foundation
 import Kingfisher
 
 @objc protocol AskToDownloadDelegate {
-    @objc func downloadAttachment()
+    @objc func downloadApproved()
 }
 
 @objc class AskToDownloadViewController: UIViewController {
     
     var attachment: Attachment!
     var delegate: AskToDownloadDelegate?
+    var url: URL?
     @IBOutlet weak var thumbnail: AttachmentUIImageView?
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var downloadBlock: UIView!
@@ -25,6 +26,12 @@ import Kingfisher
     @objc public convenience init(attachment: Attachment, delegate: AskToDownloadDelegate?) {
         self.init(nibName: "AskToDownload", bundle: nil);
         self.attachment = attachment;
+        self.delegate = delegate;
+    }
+    
+    @objc public convenience init(url: URL, delegate: AskToDownloadDelegate?) {
+        self.init(nibName: "AskToDownload", bundle: nil);
+        self.url = url;
         self.delegate = delegate;
     }
     
@@ -41,15 +48,16 @@ import Kingfisher
         self.showAttachment();
     }
     
-    @IBAction func downloadAttachment(_ sender: Any) {
-        self.delegate?.downloadAttachment();
+    @IBAction func downloadApproved(_ sender: Any) {
+        self.delegate?.downloadApproved();
     }
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.thumbnail?.useDownloadPlaceholder = false;
+        self.thumbnail?.setURL(url: self.url);
         self.thumbnail?.setAttachment(attachment: self.attachment);
         if (self.thumbnail?.isLargeSizeCached() == true) {
-            self.delegate?.downloadAttachment();
+            self.delegate?.downloadApproved();
         } else {
             self.downloadBlock.isHidden = false;
             self.thumbnail?.showImage(cacheOnly: true);
