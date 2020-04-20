@@ -93,7 +93,16 @@ extension UIImage {
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         
-        let thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!;
+        if (url.isFileURL) {
+            let provider = LocalFileImageDataProvider(fileURL: url)
+            self.kf.setImage(with: provider)
+            return;
+        }
+        
+        var thumbUrl = url;
+        if (self.attachment?.url != nil) {
+            thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!
+        }
         
         if (indicator != nil) {
             self.kf.indicatorType = .custom(indicator: indicator!);
@@ -121,9 +130,10 @@ extension UIImage {
             if (self.useDownloadPlaceholder) {
                 placeholder.image = UIImage.init(named: "download_thumbnail");
             }
-            let resource = ImageResource(downloadURL: url, cacheKey: String(format: "%@_thumbnail", self.attachment!.url!))
+            let resource = ImageResource(downloadURL: url, cacheKey: thumbUrl.absoluteString)
             self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
                              completionHandler: completionHandler);
+            return;
         }
         // if they have the original sized image, show that
         else if (self.isFullSizeCached() || fullSize) {
