@@ -9,11 +9,11 @@
 #import "MediaLoader.h"
 #import "MageSessionManager.h"
 
-@interface MediaLoader()
+@interface MediaLoader() <NSURLSessionTaskDelegate>
 
 @property (strong, nonatomic) NSMutableArray *pendingRequests;
 @property (strong, nonatomic) NSURLConnection *connection;
-@property (nonatomic, strong) NSHTTPURLResponse *response;
+@property (nonatomic, strong) NSURLResponse *response;
 @property (strong, nonatomic) NSString *tempFile;
 @property (nonatomic, assign) NSUInteger fullAudioDataLength;
 @property (nonatomic, strong) NSURL *urlToLoad;
@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSString *mimeExtension;
 @property (strong, nonatomic) NSString *finalFile;
 @property (nonatomic) BOOL localFile;
+
+@property (strong, nonatomic) NSURLSessionDataTask *task;
 
 @end
 
@@ -104,30 +106,12 @@
     
     AVURLAsset *asset = [AVURLAsset assetWithURL:components.URL];
     [asset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
+    AVPlayerItem *item = [AVPlayerItem playerItemWithAsset:asset];
     
-    return [AVPlayerItem playerItemWithAsset:asset];
+    return item;
 }
 
-#pragma mark - NSURLConnection delegate
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    self.fullAudioDataLength = 0;
-    self.response = (NSHTTPURLResponse *)response;
-    
-    [self processPendingRequests];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    self.fullAudioDataLength += data.length;
-    if (!self.localFile) [self appendDataToTempFile: data];
-    
-    [self processPendingRequests];
-}
-
-- (void)appendDataToTempFile:(NSData *)data
-{
+- (void)appendDataToTempFile:(NSData *)data {
     if(![[NSFileManager defaultManager] fileExistsAtPath:self.finalFile]) {
         NSLog(@"write to file %@", self.finalFile);
 
@@ -139,31 +123,17 @@
     }
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSLog(@"finished loading the media file");
-    [self processPendingRequests];
-    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:!self.localFile];
-}
-
-- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"Failed with error %@", error);
-}
-
 #pragma mark - AVURLAsset resource loading
 
-- (void)processPendingRequests
-{
+- (void)processPendingRequests {
     NSMutableArray *requestsCompleted = [NSMutableArray array];
     
-    for (AVAssetResourceLoadingRequest *loadingRequest in self.pendingRequests)
-    {
+    for (AVAssetResourceLoadingRequest *loadingRequest in self.pendingRequests) {
         [self fillInContentInformation:loadingRequest.contentInformationRequest];
         
         BOOL didRespondCompletely = [self respondWithDataForRequest:loadingRequest.dataRequest];
         
-        if (didRespondCompletely)
-        {
+        if (didRespondCompletely) {
             [requestsCompleted addObject:loadingRequest];
             
             [loadingRequest finishLoading];
@@ -173,10 +143,8 @@
     [self.pendingRequests removeObjectsInArray:requestsCompleted];
 }
 
-- (void)fillInContentInformation:(AVAssetResourceLoadingContentInformationRequest *)contentInformationRequest
-{
-    if (contentInformationRequest == nil || self.response == nil)
-    {
+- (void)fillInContentInformation:(AVAssetResourceLoadingContentInformationRequest *)contentInformationRequest {
+    if (contentInformationRequest == nil || self.response == nil) {
         return;
     }
     
@@ -193,17 +161,14 @@
     contentInformationRequest.contentLength = [self.response expectedContentLength];
 }
 
-- (BOOL)respondWithDataForRequest:(AVAssetResourceLoadingDataRequest *)dataRequest
-{
+- (BOOL)respondWithDataForRequest:(AVAssetResourceLoadingDataRequest *)dataRequest {
     long long startOffset = dataRequest.requestedOffset;
-    if (dataRequest.currentOffset != 0)
-    {
+    if (dataRequest.currentOffset != 0) {
         startOffset = dataRequest.currentOffset;
     }
     
     // Don't have any data at all for this request
-    if (self.fullAudioDataLength < startOffset)
-    {
+    if (self.fullAudioDataLength < startOffset) {
         return NO;
     }
     
@@ -223,29 +188,15 @@
     return didRespondFully;
 }
 
-- (NSData *)dataFromFileInRange:(NSRange)range
-{
+- (NSData *)dataFromFileInRange:(NSRange)range {
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.finalFile];;
     [fileHandle seekToFileOffset:range.location];
     return [fileHandle readDataOfLength:range.length];
 }
 
 
-- (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest
-{
-    if (self.connection == nil)
-    {
-        NSURL *interceptedURL = [loadingRequest.request URL];
-        NSURLComponents *actualURLComponents = [[NSURLComponents alloc] initWithURL:interceptedURL resolvingAgainstBaseURL:NO];
-        NSURLComponents *loadingComponents = [[NSURLComponents alloc] initWithURL:self.urlToLoad resolvingAgainstBaseURL:NO];
-        actualURLComponents.scheme = loadingComponents.scheme;
-        
-        NSURLRequest *request = [NSURLRequest requestWithURL:[actualURLComponents URL]];
-        self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-        [self.connection setDelegateQueue:[NSOperationQueue mainQueue]];
-        
-        [self.connection start];
-    }
+- (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest {
+    [self startSessionTask:loadingRequest];
     
     [self.pendingRequests addObject:loadingRequest];
     [self processPendingRequests];
@@ -253,9 +204,88 @@
     return YES;
 }
 
-- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest
-{
+- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest {
     [self.pendingRequests removeObject:loadingRequest];
+}
+
+- (void) startSessionTask: (AVAssetResourceLoadingRequest *) loadingRequest {
+    if (self.task == nil) {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        configuration.HTTPMaximumConnectionsPerHost = MAGE_HTTPMaximumConnectionsPerHost;
+        configuration.URLCache = nil;
+        configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:queue];
+        MageSessionManager *manager = [MageSessionManager manager];
+
+        NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
+
+        self.task = [session dataTaskWithRequest:request];
+        
+        NSError *error;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[self.finalFile stringByDeletingLastPathComponent]]) {
+            NSLog(@"Creating directory %@", [self.finalFile stringByDeletingLastPathComponent]);
+            [[NSFileManager defaultManager] createDirectoryAtPath:[self.finalFile stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+        
+        [self.task resume];
+    }
+}
+
+#pragma mark - NSURLSessionDownload delegate
+
+- (void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
+    NSLog(@"finished loading the media file");
+    [self processPendingRequests];
+    if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:!self.localFile];
+}
+
+- (void) URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+    self.response = downloadTask.response;
+    self.fullAudioDataLength += bytesWritten;
+    [self processPendingRequests];
+}
+
+- (void) URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes {
+    
+}
+
+#pragma mark - NSURLSessionTask delegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    NSLog(@"finished loading the media file");
+    [self processPendingRequests];
+    
+    if(!error){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([[NSFileManager defaultManager] fileExistsAtPath:self.finalFile]){
+                if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:!self.localFile];
+            }
+        });
+    } else {
+        NSLog(@"Error: %@", error);
+        //delete the file
+        NSError *deleteError;
+        [[NSFileManager defaultManager] removeItemAtPath:self.finalFile error:&deleteError];
+    }
+}
+
+#pragma mark - NSURLSessionData delegate
+
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
+    self.fullAudioDataLength = 0;
+    self.response = (NSHTTPURLResponse *)response;
+    
+    [self processPendingRequests];
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    self.fullAudioDataLength += data.length;
+    if (!self.localFile) [self appendDataToTempFile: data];
+    
+    [self processPendingRequests];
 }
 
 @end

@@ -21,8 +21,8 @@ import MagicalRecord;
     var navigationControllerObserver: NavigationControllerObserver
     var tempFile: String?
     
-    var player: AVPlayer!
     var playerViewController: AVPlayerViewController?
+    var player: AVPlayer?
     var imageViewController: ImageAttachmentViewController?
     var observer: NSKeyValueObservation?
     
@@ -114,11 +114,11 @@ import MagicalRecord;
         print("playing audio:", String.init(format: "%@", self.attachment.url!));
         self.urlToLoad = URL(string: String.init(format: "%@", self.attachment.url!));
         if (attachment.name != nil) {
-            self.tempFile = self.tempFile ?? "" + "_" + attachment.name!;
+            self.tempFile = (self.tempFile ?? "") + "_" + attachment.name!;
         } else if let ext = (UTTypeCopyPreferredTagWithClass(attachment.contentType! as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
-            self.tempFile = self.tempFile ?? "" + "." + String(ext);
+            self.tempFile = (self.tempFile ?? "") + "." + String(ext);
         } else {
-            self.tempFile = self.tempFile ?? "" + ".mp3";
+            self.tempFile = (self.tempFile ?? "") + ".mp3";
         }
         self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: self.urlToLoad!);
     }
@@ -129,15 +129,16 @@ import MagicalRecord;
             self.urlToLoad = URL(fileURLWithPath: attachment.localPath!);
         } else {
             print("Playing from link");
-            self.urlToLoad = URL(string: String.init(format: "%@?access_token=%@", self.attachment.url!, StoredPassword.retrieveStoredToken()));
+            self.urlToLoad = URL(string: self.attachment.url!);
         }
         
         let playerItem = self.mediaLoader?.createPlayerItem(from: self.urlToLoad!, toFile: self.tempFile);
+        playerItem?.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
         
         self.player = AVPlayer(playerItem: playerItem);
         
-        self.player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
-        self.player?.play();
+        self.player?.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
+        self.player?.automaticallyWaitsToMinimizeStalling = false;
 
         self.playerViewController = AVPlayerViewController();
         self.playerViewController?.player = self.player;
@@ -155,8 +156,12 @@ import MagicalRecord;
         if keyPath == "timeControlStatus", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int, let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int {
             let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
             let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
-            if newStatus != oldStatus {
-                DispatchQueue.main.async {[weak self] in
+            DispatchQueue.main.async {[weak self] in
+
+                if (newStatus == .waitingToPlayAtSpecifiedRate && !self!.activityIndicator.isAnimating) {
+                    self!.activityIndicator.startAnimating();
+                }
+                if newStatus != oldStatus {
                     if newStatus == .playing || newStatus == .paused {
                         self!.activityIndicator.stopAnimating()
                     } else {
@@ -164,17 +169,38 @@ import MagicalRecord;
                     }
                 }
             }
-        } else if keyPath == "videoBounds" {
-            if (!self.playerViewController!.contentOverlayView!.center.equalTo(CGPoint(x: 0, y: 0))) {
-                self.activityIndicator.center = self.playerViewController!.contentOverlayView!.center;
-                self.playerViewController?.view.addSubview(self.activityIndicator);
-                self.playerViewController?.view.bringSubviewToFront(self.activityIndicator);
-                self.activityIndicator.startAnimating();
+        } else if keyPath == "videoBounds" && !self.playerViewController!.view.center.equalTo(CGPoint(x: 0, y: 0)) {
+            self.activityIndicator.center = self.playerViewController!.view.center;
+            self.playerViewController?.view.addSubview(self.activityIndicator);
+            self.playerViewController?.view.bringSubviewToFront(self.activityIndicator);
+            self.activityIndicator.startAnimating();
+        } else if keyPath == #keyPath(AVPlayerItem.status) {
+            let status: AVPlayerItem.Status
+            if let statusNumber = change?[.newKey] as? NSNumber {
+                status = AVPlayerItem.Status(rawValue: statusNumber.intValue)!
+            } else {
+                status = .unknown
+            }
+            
+            // Switch over status value
+            switch status {
+            case .readyToPlay:
+                // Player item is ready to play.
+                player?.play()
+            case .failed:
+                // Player item failed. See error.
+                print("Fail")
+            case .unknown:
+                // Player item is not yet ready.
+                print("unknown")
             }
         }
     }
     
     func navigationControllerObserver(_ observer: NavigationControllerObserver, didObservePopTransitionFor viewController: UIViewController) {
+        if let player = self.playerViewController?.player {
+            player.pause();
+        }
         self.delegate?.doneViewing(coordinator: self);
     }
     
@@ -183,11 +209,9 @@ import MagicalRecord;
         print("Media load complete");
         if (withNewFile) {
             MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
-                print("saving the attachment");
                 let localAttachment = self.attachment.mr_(in: localContext);
                 localAttachment?.localPath = filePath;
             }) { (success, error) in
-                print("In the complete of magical record")
                 if (self.attachment.contentType?.hasPrefix("audio") == true) {
                     self.playAudioVideo();
                 }
