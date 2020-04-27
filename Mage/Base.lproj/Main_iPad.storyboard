@@ -221,6 +221,9 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
                                             <state key="normal" title="New"/>
+                                            <connections>
+                                                <action selector="createNewObservation:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="hEx-Ea-bgZ"/>
+                                            </connections>
                                         </button>
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="hV1-bV-0oa">
