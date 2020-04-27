@@ -87,46 +87,50 @@
 
 - (id) init {
     if (self = [super init]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults addObserver:self
-                   forKeyPath:@"mapType"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
-        [defaults addObserver:self
-                   forKeyPath:kCurrentEventIdKey
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
-        if (!self.hideStaticLayers) {
-            [defaults addObserver:self
-                       forKeyPath:@"selectedStaticLayers"
-                          options:NSKeyValueObservingOptionNew
-                          context:NULL];
-        }
-        
-        [defaults addObserver:self
-                   forKeyPath:@"selectedOnlineLayers"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
-        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
-        [[CacheOverlays getInstance] registerListener:self];
-        self.cacheOverlayUpdate = nil;
-        self.cacheOverlayUpdateLock = [[NSObject alloc] init];
-        self.updatingCacheOverlays = false;
-        self.waitingCacheOverlaysUpdate = false;
-        GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
-        self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
-        
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.delegate = self;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
-        self.darkMode = false;
+        [self setupListeners];
     }
     
     return self;
+}
+
+- (void) setupListeners {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults addObserver:self
+               forKeyPath:@"mapType"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kCurrentEventIdKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    if (!self.hideStaticLayers) {
+        [defaults addObserver:self
+                   forKeyPath:@"selectedStaticLayers"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+    }
+    
+    [defaults addObserver:self
+               forKeyPath:@"selectedOnlineLayers"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    [[CacheOverlays getInstance] registerListener:self];
+    self.cacheOverlayUpdate = nil;
+    self.cacheOverlayUpdateLock = [[NSObject alloc] init];
+    self.updatingCacheOverlays = false;
+    self.waitingCacheOverlaysUpdate = false;
+    GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
+    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
+    self.darkMode = false;
 }
 
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
