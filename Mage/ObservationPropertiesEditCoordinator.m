@@ -338,7 +338,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         NSString *moviePath = [videoUrl path];
         
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+            if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+                UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+            }
             [picker dismissViewControllerAnimated:YES completion:NULL];
             
             NSString *videoQuality = [self videoUploadQuality];
@@ -381,7 +383,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        }
         
         NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.jpeg", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];
