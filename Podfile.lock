@@ -17,7 +17,7 @@ PODS:
   - DateTools (2.0.0)
   - EDSunriseSet (1.0)
   - FastImageCache (1.5.1)
-  - geopackage-ios (3.3.0):
+  - geopackage-ios (4.0.1):
     - ogc-api-features-json-ios (~> 1.0.0)
     - sf-proj-ios (~> 2.0.3)
     - sf-wkb-ios (~> 2.0.3)
@@ -38,10 +38,10 @@ PODS:
   - HexColors (2.2.1)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.15)
-  - mage-ios-sdk (3.0.5):
+  - mage-ios-sdk (3.0.6):
     - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0.0)
-    - geopackage-ios (~> 3.3.0)
+    - geopackage-ios (~> 4.0.1)
     - MagicalRecord (~> 2.3.2)
     - SSZipArchive (~> 2.2.2)
   - MagicalRecord (2.3.2):
@@ -88,7 +88,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.5`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -129,27 +129,21 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.5
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-    :tag: 3.0.5
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
-  geopackage-ios: 647019626ba341ffc7ec8e79db8b919fb74032c9
+  geopackage-ios: 43f401e530b9db603f603c214ce3d1e5e005444c
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  mage-ios-sdk: 08947305b2b6c83ae57ad50a6bf1cd3c742557e9
+  mage-ios-sdk: a06731d10feb7f528c890acc8a437918f67ab77c
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   OCMock: 4ab4577fc941af31f4a0398f6e7e230cf21fc72a
@@ -167,6 +161,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: ceff4396b2eab24b3111bb07c03dd107e8543678
+PODFILE CHECKSUM: 9d87241d00720f7e9eeb5e6fcf2fd514a2890b90
 
 COCOAPODS: 1.8.4

@@ -8,8 +8,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Release Notes
 
 ##### Features
+* Upgraded to GeoPackage-iOS 4.0.1
 
 ##### Bug Fixes
+* Fix bug causing offline map layer to appear above the GeoPackage layers
 
 ## 2.0.15 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.15)
 

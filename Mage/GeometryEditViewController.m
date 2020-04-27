@@ -168,10 +168,10 @@ static float paddingPercentage = .1;
 
 - (void) createBackgroundOverlay {
     if (self.backgroundOverlay) return;
-    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
     GPKGGeoPackage * geoPackage = [manager open:@"countries"];
 
-    GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
     
     // If indexed, add as a tile overlay
     GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
@@ -185,7 +185,7 @@ static float paddingPercentage = .1;
     
     GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
 
-    GPKGFeatureDao * darkFeatureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
     
     // If indexed, add as a tile overlay
     GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
@@ -268,7 +268,7 @@ static float paddingPercentage = .1;
     double expandedHeight = size.height + (2 * (size.height * paddingPercentage));
     double expandedWidth = size.width + (2 * (size.width * paddingPercentage));
     
-    CLLocationCoordinate2D center = [bbox getCenter];
+    CLLocationCoordinate2D center = [bbox center];
     MKCoordinateRegion expandedRegion = MKCoordinateRegionMakeWithDistance(center, expandedHeight, expandedWidth);
     
     double latitudeRange = expandedRegion.span.latitudeDelta / 2.0;
@@ -1372,7 +1372,7 @@ static float paddingPercentage = .1;
     GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
     NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
     if (shapePoints != nil && shapePoints != NULL && ![shapePoints isEqual:[NSNull null]]) {
-        return [shapePoints getPoints];
+        return [shapePoints points];
     }
     return [[NSArray alloc] init];
 }

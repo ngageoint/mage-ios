@@ -619,7 +619,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 -(void) deleteGeoPackageCacheOverlay: (GeoPackageCacheOverlay *) geoPackageCacheOverlay{
     
-    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
     if(![manager delete:[geoPackageCacheOverlay getName]]){
         NSLog(@"Error deleting GeoPackage cache file: %@", [geoPackageCacheOverlay getName]);
     }
