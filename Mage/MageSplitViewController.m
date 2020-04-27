@@ -23,6 +23,7 @@
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
     @property(nonatomic, strong) NSArray *mapCalloutDelegates;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (strong, nonatomic) AttachmentViewCoordinator *attachmentCoordinator;
 
 @end
 
@@ -131,23 +132,18 @@
 
 - (void) doneViewingWithCoordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
+    self.attachmentCoordinator = nil;
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    UIViewController *visibleViewController = [self.mapViewController.navigationController visibleViewController];
-//    if ([visibleViewController isKindOfClass:[AttachmentViewController class]]) {
-//        // ImageViewer already preset lets just update its content
-//        [((AttachmentViewController *) visibleViewController) setContent:attachment];
-//    } else {
-        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController attachment:attachment delegate:self];
-        [self.childCoordinators addObject:attachmentCoordinator];
-        [attachmentCoordinator start];
-        
-//        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-//        [attachmentVC setTitle:@"Attachment"];
-//        [self.mapViewController.navigationController pushViewController:attachmentVC animated:YES];
-//    }
+    if (self.attachmentCoordinator) {
+        [self.attachmentCoordinator setAttachmentWithAttachment:attachment];
+    } else {
+        self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController attachment:attachment delegate:self];
+        [self.childCoordinators addObject:self.attachmentCoordinator];
+        [self.attachmentCoordinator start];
+    }
 }
 
 @end

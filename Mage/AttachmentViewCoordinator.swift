@@ -31,6 +31,8 @@ import MagicalRecord;
     
     var mediaLoader: MediaLoader?;
     var activityIndicator: UIActivityIndicatorView!
+    var hasPushedViewController: Bool = false;
+    var ignoreNextDelegateCall: Bool = false;
     
     @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?) {
         self.rootViewController = rootViewController;
@@ -53,25 +55,41 @@ import MagicalRecord;
     }
     
     @objc public func start() {
+        self.start(true);
+    }
+    
+    @objc public func start(_ animated: Bool = true) {
         if let theAttachment = self.attachment {
             if ((theAttachment.localPath != nil
                 && FileManager.default.fileExists(atPath: theAttachment.localPath!) == true)
                 || DataConnectionUtilities.shouldFetchAttachments()) {
-                return self.showAttachment(animated: true);
+                return self.showAttachment(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(attachment: theAttachment, delegate: self);
-                self.rootViewController.pushViewController(vc, animated: true);
+                self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
+                self.hasPushedViewController = true;
             }
         } else {
             if (self.urlToLoad?.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars()) {
-                return self.loadURL(animated: true);
+                return self.loadURL(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(url: self.urlToLoad!, delegate: self);
-                self.rootViewController.pushViewController(vc, animated: true);
+                self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
+                self.hasPushedViewController = true;
             }
         }
+    }
+    
+    @objc public func setAttachment(attachment: Attachment) {
+        self.attachment = attachment;
+        if (hasPushedViewController) {
+            self.ignoreNextDelegateCall = true;
+            FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view);
+            self.rootViewController.popViewController(animated: false);
+        }
+        start(false);
     }
     
     func loadURL(animated: Bool = false) {
@@ -79,6 +97,7 @@ import MagicalRecord;
         self.imageViewController?.view.backgroundColor = UIColor.black;
         self.rootViewController.pushViewController(self.imageViewController!, animated: animated);
         self.navigationControllerObserver.observePopTransition(of: self.imageViewController!, delegate: self);
+        self.hasPushedViewController = true;
     }
     
     func showAttachment(animated: Bool = false) {
@@ -88,6 +107,7 @@ import MagicalRecord;
             self.imageViewController?.view.backgroundColor = UIColor.black;
             self.rootViewController.pushViewController(self.imageViewController!, animated: animated);
             self.navigationControllerObserver.observePopTransition(of: self.imageViewController!, delegate: self);
+            self.hasPushedViewController = true;
         } else if (self.attachment.contentType!.hasPrefix("video")) {
             self.playAudioVideo();
         } else if (self.attachment.contentType!.hasPrefix("audio")) {
@@ -98,6 +118,7 @@ import MagicalRecord;
     func downloadApproved() {
         print("Download the attachment")
         FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view);
+        self.ignoreNextDelegateCall = true;
         self.rootViewController.popViewController(animated: false);
         if (self.attachment != nil) {
             self.showAttachment();
@@ -150,6 +171,7 @@ import MagicalRecord;
 
         self.rootViewController.pushViewController(self.playerViewController!, animated: false);
         self.navigationControllerObserver.observePopTransition(of: self.playerViewController!, delegate: self);
+        self.hasPushedViewController = true;
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -201,7 +223,10 @@ import MagicalRecord;
         if let player = self.playerViewController?.player {
             player.pause();
         }
-        self.delegate?.doneViewing(coordinator: self);
+        if (!self.ignoreNextDelegateCall) {
+            self.delegate?.doneViewing(coordinator: self);
+        }
+        self.ignoreNextDelegateCall = false;
     }
     
     // MARK: MediaLoadDelegate
