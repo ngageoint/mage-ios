@@ -92,9 +92,11 @@ BOOL signingIn = YES;
     NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
-        
+        NSString *isActive = [response objectForKey:@"active"];
+        NSString *msg = isActive.boolValue ? @"Your account is now active." : @"An administrator must approve your account before you can login";
+      
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
-                                                                       message:[NSString stringWithFormat:@"%@ (%@) has been successfully created.  An administrator must approve your account before you can login", displayName, username]
+                                                                       message:[NSString stringWithFormat:@"%@ (%@) has been successfully created. %@", displayName, username, msg]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

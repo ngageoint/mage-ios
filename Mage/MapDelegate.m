@@ -429,7 +429,7 @@
 }
 
 - (void) updateTheme {
-    [self addBackgroundMap];
+    [self ensureMapLayout];
 }
 
 - (void) ensureMapLayout {
@@ -451,7 +451,7 @@
                        change:(NSDictionary *)change
                       context:(void *)context {
     if ([@"mapType" isEqualToString:keyPath] && self.mapView) {
-        [self setupMapType:object];
+        [self ensureMapLayout];
     } else if ([@"selectedStaticLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateStaticLayers: [object objectForKey:keyPath]];
     } else if ([@"selectedOnlineLayers" isEqualToString:keyPath] && self.mapView) {
@@ -695,7 +695,7 @@
         if(tableCacheOverlay.enabled || YES){
             
             // Get and open if needed the GeoPackage
-            GPKGGeoPackage * geoPackage = [self.geoPackageCache geoPackageOpenName:[geoPackageCacheOverlay getName]];
+            GPKGGeoPackage * geoPackage = [self.geoPackageCache geoPackageOpenName: [geoPackageCacheOverlay getName]];
             [enabledGeoPackages addObject:geoPackage.name];
             
             // Handle tile and feature tables
@@ -839,10 +839,10 @@
 - (void) addBackgroundMap {
     if ([UIColor darkMap]) {
         [self.mapView removeOverlay:self.backgroundOverlay];
-        [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+        [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
         [self.mapView removeOverlay:self.darkBackgroundOverlay];
-        [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+        [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveRoads];
     }
 }
 
