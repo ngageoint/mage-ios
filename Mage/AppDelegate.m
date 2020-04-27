@@ -394,7 +394,7 @@
     NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
     
     // Add the GeoPackage caches
-    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
     @try {
         [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
     }
@@ -445,10 +445,10 @@
         
         // GeoPackage tile tables, build a mapping between table name and the created cache overlays
         NSMutableDictionary<NSString *, GeoPackageTileTableCacheOverlay *> * tileCacheOverlays = [[NSMutableDictionary alloc] init];
-        NSArray * tileTables = [geoPackage getTileTables];
+        NSArray * tileTables = [geoPackage tileTables];
         for(NSString * tileTable in tileTables){
             NSString * tableCacheName = [CacheOverlay buildChildCacheNameWithName:name andChildName:tileTable];
-            GPKGTileDao * tileDao = [geoPackage getTileDaoWithTableName:tileTable];
+            GPKGTileDao * tileDao = [geoPackage tileDaoWithTableName:tileTable];
             int count = [tileDao count];
             int minZoom = tileDao.minZoom;
             int maxZoom = tileDao.maxZoom;
@@ -463,17 +463,17 @@
         NSMutableDictionary<NSString *, GeoPackageTileTableCacheOverlay *> * linkedTileCacheOverlays = [[NSMutableDictionary alloc] init];
         
         // GeoPackage feature tables
-        NSArray * featureTables = [geoPackage getFeatureTables];
+        NSArray * featureTables = [geoPackage featureTables];
         for(NSString * featureTable in featureTables){
             NSString * tableCacheName = [CacheOverlay buildChildCacheNameWithName:name andChildName:featureTable];
-            GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:featureTable];
+            GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:featureTable];
             int count = [featureDao count];
-            enum SFGeometryType geometryType = [featureDao getGeometryType];
+            enum SFGeometryType geometryType = [featureDao geometryType];
             GPKGFeatureIndexManager * indexer = [[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
             BOOL indexed = [indexer isIndexed];
             int minZoom = 0;
             if(indexed){
-                minZoom = [featureDao getZoomLevel] + (int)[defaults integerForKey:@"geopackage_feature_tiles_min_zoom_offset"];
+                minZoom = [featureDao zoomLevel] + (int)[defaults integerForKey:@"geopackage_feature_tiles_min_zoom_offset"];
                 minZoom = MAX(minZoom, 0);
                 minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }
@@ -481,7 +481,7 @@
             
             // If indexed, check for linked tile tables
             if(indexed){
-                NSArray<NSString *> * linkedTileTables = [linker getTileTablesForFeatureTable:featureTable];
+                NSArray<NSString *> * linkedTileTables = [linker tileTablesForFeatureTable:featureTable];
                 for(NSString * linkedTileTable in linkedTileTables){
                     // Get the tile table cache overlay
                     GeoPackageTileTableCacheOverlay * tileCacheOverlay = [tileCacheOverlays objectForKey:linkedTileTable];
@@ -594,7 +594,7 @@
 -(BOOL) importGeoPackageFile: (NSString *) path {
     // Import the GeoPackage file
     BOOL imported = false;
-    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
     @try {
         imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
         NSLog(@"Imported local Geopackage");
@@ -625,7 +625,7 @@
 -(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId {
     // Import the GeoPackage file
     BOOL imported = false;
-    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
     @try {
         NSArray *alreadyImported = [manager databasesLike:[[path lastPathComponent] stringByDeletingPathExtension]];
         if ([alreadyImported count] == 1) {

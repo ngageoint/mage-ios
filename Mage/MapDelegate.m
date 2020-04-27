@@ -116,7 +116,7 @@
         self.cacheOverlayUpdateLock = [[NSObject alloc] init];
         self.updatingCacheOverlays = false;
         self.waitingCacheOverlaysUpdate = false;
-        GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory getManager];
+        GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
         self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
         
         self.locationManager = [[CLLocationManager alloc] init];
@@ -582,7 +582,7 @@
                 [cacheOverlay.replacedCacheOverlay removeFromMap:self.mapView];
             });
             if([cacheOverlay getType] == GEOPACKAGE){
-                [self.geoPackageCache close:[cacheOverlay getName]];
+                [self.geoPackageCache closeByName:[cacheOverlay getName]];
             }
         }
         
@@ -624,7 +624,7 @@
     if(self.addedCacheBoundingBox != nil){
         
         struct GPKGBoundingBoxSize size = [self.addedCacheBoundingBox sizeInMeters];
-        CLLocationCoordinate2D center = [self.addedCacheBoundingBox getCenter];
+        CLLocationCoordinate2D center = [self.addedCacheBoundingBox center];
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(center, size.height, size.width);
         
         [self.mapView setRegion:region animated:true];
@@ -695,7 +695,7 @@
         if(tableCacheOverlay.enabled || YES){
             
             // Get and open if needed the GeoPackage
-            GPKGGeoPackage * geoPackage = [self.geoPackageCache getOrOpen:[geoPackageCacheOverlay getName]];
+            GPKGGeoPackage * geoPackage = [self.geoPackageCache geoPackageOpenName: [geoPackageCacheOverlay getName]];
             [enabledGeoPackages addObject:geoPackage.name];
             
             // Handle tile and feature tables
@@ -713,10 +713,10 @@
             // If a newly added cache, update the bounding box for zooming
             if(geoPackageCacheOverlay.added){
                 
-                GPKGContentsDao * contentsDao = [geoPackage getContentsDao];
+                GPKGContentsDao * contentsDao = [geoPackage contentsDao];
                 GPKGContents * contents = (GPKGContents *)[contentsDao queryForIdObject:[tableCacheOverlay getName]];
-                GPKGBoundingBox * contentsBoundingBox = [contents getBoundingBox];
-                SFPProjection * projection = [contentsDao getProjection:contents];
+                GPKGBoundingBox * contentsBoundingBox = [contents boundingBox];
+                SFPProjection * projection = [contentsDao projection:contents];
                 
                 SFPProjectionTransform * transform = [[SFPProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
                 GPKGBoundingBox * boundingBox = [contentsBoundingBox transform:transform];
@@ -757,7 +757,7 @@
         }
         if(cacheOverlay == nil){
             // Create a new GeoPackage tile provider and add to the map
-            GPKGTileDao * tileDao = [geoPackage getTileDaoWithTableName:[tileTableCacheOverlay getName]];
+            GPKGTileDao * tileDao = [geoPackage tileDaoWithTableName:[tileTableCacheOverlay getName]];
             geoPackageTileOverlay = [GPKGOverlayFactory boundedOverlay:tileDao];
             geoPackageTileOverlay.canReplaceMapContent = false;
             [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
@@ -765,7 +765,7 @@
             // Check for linked feature tables
             [tileTableCacheOverlay.featureOverlayQueries removeAllObjects];
             GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
-            NSArray<GPKGFeatureDao *> * featureDaos = [linker getFeatureDaosForTileTable:tileDao.tableName];
+            NSArray<GPKGFeatureDao *> * featureDaos = [linker featureDaosForTileTable:tileDao.tableName];
             for(GPKGFeatureDao * featureDao in featureDaos){
                 
                  // Create the feature tiles
@@ -806,10 +806,10 @@
 
 - (void) createBackgroundOverlay {
     if (self.backgroundOverlay) return;
-    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory getManager];
+    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
     GPKGGeoPackage * geoPackage = [manager open:@"countries"];
 
-    GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
     
     // If indexed, add as a tile overlay
     GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
@@ -823,7 +823,7 @@
     
     GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
 
-    GPKGFeatureDao * darkFeatureDao = [geoPackage getFeatureDaoWithTableName:@"countries"];
+    GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
     
     // If indexed, add as a tile overlay
     GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
@@ -881,7 +881,7 @@
         }
         if(cacheOverlay == nil){
             // Add the features to the map
-            GPKGFeatureDao * featureDao = [geoPackage getFeatureDaoWithTableName:[featureTableCacheOverlay getName]];
+            GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:[featureTableCacheOverlay getName]];
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             
@@ -889,7 +889,7 @@
             if([featureTableCacheOverlay getIndexed]){
                 GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
                 int maxFeaturesPerTile = 0;
-                if([featureDao getGeometryType] == SF_POINT){
+                if([featureDao geometryType] == SF_POINT){
                     maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
                 }else{
                     maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
@@ -906,7 +906,7 @@
                 [featureOverlay setMinZoom:[NSNumber numberWithInt:[featureTableCacheOverlay getMinZoom]]];
                 
                 GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
-                NSArray<GPKGTileDao *> * tileDaos = [linker getTileDaosForFeatureTable:featureDao.tableName];
+                NSArray<GPKGTileDao *> * tileDaos = [linker tileDaosForFeatureTable:featureDao.tableName];
                 [featureOverlay ignoreTileDaos:tileDaos];
                 
                 GPKGFeatureOverlayQuery * featureOverlayQuery = [[GPKGFeatureOverlayQuery alloc] initWithFeatureOverlay:featureOverlay];
@@ -923,7 +923,7 @@
             // Not indexed, add the features to the map
             else {
                 int maxFeaturesPerTable = 0;
-                if([featureDao getGeometryType] == SF_POINT){
+                if([featureDao geometryType] == SF_POINT){
                     maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
                 }else{
                     maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
@@ -943,14 +943,14 @@
                             });
                             break;
                         }
-                        GPKGFeatureRow * featureRow = [featureDao getFeatureRow:resultSet];
-                        GPKGGeometryData * geometryData = [featureRow getGeometry];
+                        GPKGFeatureRow * featureRow = [featureDao featureRow:resultSet];
+                        GPKGGeometryData * geometryData = [featureRow geometry];
                         if(geometryData != nil && !geometryData.empty){
                             SFGeometry * geometry = geometryData.geometry;
                             if(geometry != nil){
                                 @try {
                                     GPKGMapShape * shape = [shapeConverter toShapeWithGeometry:geometry];
-                                    [featureTableCacheOverlay addShapeWithId:[featureRow getId] andShape:shape];
+                                    [featureTableCacheOverlay addShapeWithId:[featureRow id] andShape:shape];
                                     dispatch_sync(dispatch_get_main_queue(), ^{
                                         [GPKGMapShapeConverter addMapShape:shape toMapView:self.mapView];
                                     });

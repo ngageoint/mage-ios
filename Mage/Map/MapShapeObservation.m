@@ -68,7 +68,7 @@ static float paddingPercentage = .1;
     double expandedHeight = size.height + (2 * (size.height * paddingPercentage));
     double expandedWidth = size.width + (2 * (size.width * paddingPercentage));
 
-    CLLocationCoordinate2D center = [bbox getCenter];
+    CLLocationCoordinate2D center = [bbox center];
     MKCoordinateRegion expandedRegion = MKCoordinateRegionMakeWithDistance(center, expandedHeight, expandedWidth);
 
     double latitudeRange = expandedRegion.span.latitudeDelta / 2.0;
