@@ -17,7 +17,7 @@
 #import "MAGE-Swift.h"
 #import "Mage.h"
 
-@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
+@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
     @property(nonatomic, weak) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
@@ -127,6 +127,10 @@
             [viewController.view setNeedsLayout];
         }
     }
+}
+
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
