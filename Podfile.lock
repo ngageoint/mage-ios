@@ -92,7 +92,7 @@ DEPENDENCIES:
   - Kingfisher (~> 5.0)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `../mage-ios-sdk`)
+  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, tag `3.0.7`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -134,7 +134,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :path: "../mage-ios-sdk"
+    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.7
+
+CHECKOUT OPTIONS:
+  mage-ios-sdk:
+    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :tag: 3.0.7
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -167,6 +173,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 9530bbde4f03aa944d71810645a5e416e777a075
+PODFILE CHECKSUM: 5631aaba59c73663c9b6a0b14a7ec1f897051cbc
 
 COCOAPODS: 1.8.4

@@ -15,7 +15,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * iPad filter button works again
 * The gallery was being launched from a background thread the first time the app was launched
 
-## 2.0.16 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.16)
+## 2.0.16 (TBD)
 
 ##### Release Notes
 
