@@ -10,6 +10,7 @@
 #import "Form.h"
 #import "MageSessionManager.h"
 #import "UserUtility.h"
+#import "DataConnectionUtilities.h"
 
 NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
@@ -54,8 +55,9 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) scheduleTimer {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        _observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+        weakSelf.observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:NO];
     });
 }
 
@@ -66,38 +68,47 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) pullInitialObservations {
-    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullInitialObservationsWithSuccess:^{
-        if (![[UserUtility singleton] isTokenExpired]) {
-            [self scheduleTimer];
-        }
-    } failure:^(NSError* error) {
-        if (![[UserUtility singleton] isTokenExpired]) {
-            [self scheduleTimer];
-        }
-    }];
-    
-    [[MageSessionManager manager] addTask:observationFetchTask];
+    if ([DataConnectionUtilities shouldFetchObservations]) {
+        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullInitialObservationsWithSuccess:^{
+            if (![[UserUtility singleton] isTokenExpired]) {
+                [self scheduleTimer];
+            }
+        } failure:^(NSError* error) {
+            if (![[UserUtility singleton] isTokenExpired]) {
+                [self scheduleTimer];
+            }
+        }];
+        
+        [[MageSessionManager manager] addTask:observationFetchTask];
+    } else {
+        [self scheduleTimer];
+    }
 }
 
 - (void) pullObservations {
-    NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
-        if (![[UserUtility singleton] isTokenExpired]) {
-            [self scheduleTimer];
-        }
-    } failure:^(NSError* error) {
-        if (![[UserUtility singleton] isTokenExpired]) {
-            [self scheduleTimer];
-        }
-    }];
-    
-    [[MageSessionManager manager] addTask:observationFetchTask];
+    if ([DataConnectionUtilities shouldFetchObservations]) {
+        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
+            if (![[UserUtility singleton] isTokenExpired]) {
+                [self scheduleTimer];
+            }
+        } failure:^(NSError* error) {
+            if (![[UserUtility singleton] isTokenExpired]) {
+                [self scheduleTimer];
+            }
+        }];
+        
+        [[MageSessionManager manager] addTask:observationFetchTask];
+    } else {
+        [self scheduleTimer];
+    }
 }
 
 - (void) stop {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_observationFetchTimer isValid]) {
-            [_observationFetchTimer invalidate];
-            _observationFetchTimer = nil;
+        if ([weakSelf.observationFetchTimer isValid]) {
+            [weakSelf.observationFetchTimer invalidate];
+            weakSelf.observationFetchTimer = nil;
         }
     });
 }

@@ -10,6 +10,7 @@
 #import "Event.h"
 #import "Server.h"
 #import "MageSessionManager.h"
+#import "DataConnectionUtilities.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSDistanceFilterKey = @"gpsDistanceFilter";
@@ -96,7 +97,8 @@ NSInteger const kLocationPushLimit = 100;
     if (!_reportLocation) return;
     
     __block NSTimeInterval interval;
-    
+    __weak typeof(self) weakSelf = self;
+
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         if ([[Event getCurrentEventInContext:localContext] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
             NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
@@ -105,21 +107,21 @@ NSInteger const kLocationPushLimit = 100;
             }
             
             CLLocation *location = [locations firstObject];
-            interval = [[location timestamp] timeIntervalSinceDate:_oldestLocationTime];
-            if (self.oldestLocationTime == nil) {
-                self.oldestLocationTime = [location timestamp];
+            interval = [[location timestamp] timeIntervalSinceDate:weakSelf.oldestLocationTime];
+            if (weakSelf.oldestLocationTime == nil) {
+                weakSelf.oldestLocationTime = [location timestamp];
             }
         }
     } completion:^(BOOL contextDidSave, NSError *error) {
-        if (interval > self.locationPushInterval) {
-            [self pushLocations];
-            self.oldestLocationTime = nil;
+        if (interval > weakSelf.locationPushInterval) {
+            [weakSelf pushLocations];
+            weakSelf.oldestLocationTime = nil;
         }
     }];
 }
 
 - (void) pushLocations {
-    if (!self.isPushingLocations) {
+    if (!self.isPushingLocations && [DataConnectionUtilities shouldPushLocations]) {
         
         //TODO, submit in pages
         NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];

@@ -11,6 +11,7 @@
 #import "ObservationImportant.h"
 #import "Attachment.h"
 #import "UserUtility.h"
+#import "DataConnectionUtilities.h"
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
@@ -69,17 +70,13 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                              groupBy:nil
                                                             delegate:self
                                                            inContext:context];
-    
-    [self pushObservations:self.fetchedResultsController.fetchedObjects];
-    
+        
     self.favoritesFetchedResultsController = [ObservationFavorite MR_fetchAllSortedBy:@"observation.timestamp"
                                                            ascending:NO
                                                        withPredicate:[NSPredicate predicateWithFormat:@"dirty == YES"]
                                                              groupBy:nil
                                                             delegate:self
                                                            inContext:context];
-    
-    [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
     
     self.importantFetchedResultsController = [ObservationImportant MR_fetchAllSortedBy:@"observation.timestamp"
                                                                             ascending:NO
@@ -88,24 +85,24 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                                                                              delegate:self
                                                                             inContext:context];
     
-    [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
-
-    
+    [self onTimerFire];
     [self scheduleTimer];
 }
 
+
 - (void) scheduleTimer {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_observationPushTimer isValid]) {
-            [_observationPushTimer invalidate];
-            _observationPushTimer = nil;
+        if ([weakSelf.observationPushTimer isValid]) {
+            [weakSelf.observationPushTimer invalidate];
+            weakSelf.observationPushTimer = nil;
         }
-        self.observationPushTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
+        weakSelf.observationPushTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
     });
 }
 
 - (void) onTimerFire {
-    if (![[UserUtility singleton] isTokenExpired]) {
+    if (![[UserUtility singleton] isTokenExpired] && [DataConnectionUtilities shouldPushObservations]) {
         [self pushObservations:self.fetchedResultsController.fetchedObjects];
         [self pushFavorites:self.favoritesFetchedResultsController.fetchedObjects];
         [self pushImportant:self.importantFetchedResultsController.fetchedObjects];
@@ -173,6 +170,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) pushObservations:(NSArray *) observations {
+    if (![DataConnectionUtilities shouldPushObservations]) return;
     NSLog(@"currently still pushing %lu observations", (unsigned long) self.pushingObservations.count);
 
     // only push observations that haven't already been told to be pushed
@@ -253,6 +251,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) pushFavorites:(NSArray *) favorites {
+    if (![DataConnectionUtilities shouldPushObservations]) return;
     NSLog(@"currently still pushing %lu favorites", (unsigned long) self.pushingFavorites.count);
     
     // only push favorites that haven't already been told to be pushed
@@ -286,6 +285,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 }
 
 - (void) pushImportant:(NSArray *) importants {
+    if (![DataConnectionUtilities shouldPushObservations]) return;
     NSLog(@"currently still pushing %lu important changes", (unsigned long) self.pushingImportant.count);
     
     // only push important changes that haven't already been told to be pushed

@@ -10,6 +10,7 @@
 #import "UserUtility.h"
 #import "NSDate+Iso8601.h"
 #import "StoredPassword.h"
+#import "DataConnectionUtilities.h"
 
 NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.background.attachment";
@@ -114,6 +115,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 }
 
 - (void) pushAttachments:(NSArray *) attachments {
+    if (![DataConnectionUtilities shouldPushAttachments]) return;
     [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [StoredPassword retrieveStoredToken]] forHTTPHeaderField:@"Authorization"];
 
     for (Attachment *attachment in attachments) {

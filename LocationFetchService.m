@@ -8,6 +8,7 @@
 #import "Location.h"
 #import "MageSessionManager.h"
 #import "UserUtility.h"
+#import "DataConnectionUtilities.h"
 
 NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
@@ -49,8 +50,9 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) scheduleTimer {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        _locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+        weakSelf.locationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:NO];
     });
 }
 
@@ -62,26 +64,31 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 - (void) pullLocations{
-    NSURLSessionDataTask *locationFetchTask = [Location operationToPullLocationsWithSuccess: ^{
-        if (![[UserUtility singleton] isTokenExpired]) {
-            NSLog(@"Scheduling the location fetch timer");
+    if ([DataConnectionUtilities shouldFetchLocations]) {
+        NSURLSessionDataTask *locationFetchTask = [Location operationToPullLocationsWithSuccess: ^{
+            if (![[UserUtility singleton] isTokenExpired]) {
+                NSLog(@"Scheduling the location fetch timer");
+                [self scheduleTimer];
+            }
+        } failure:^(NSError* error) {
+            NSLog(@"Failed to pull locations, scheduling the timer again");
             [self scheduleTimer];
-        }
-    } failure:^(NSError* error) {
-        NSLog(@"Failed to pull locations, scheduling the timer again");
+        }];
+        
+        NSLog(@"pulling locations");
+        [[MageSessionManager manager] addTask:locationFetchTask];
+    } else {
         [self scheduleTimer];
-    }];
-    
-    NSLog(@"pulling locations");
-    [[MageSessionManager manager] addTask:locationFetchTask];
+    }
 }
 
 -(void) stop {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_locationFetchTimer isValid]) {
+        if ([weakSelf.locationFetchTimer isValid]) {
             NSLog(@"Stopping the location fetch timer");
-            [_locationFetchTimer invalidate];
-            _locationFetchTimer = nil;
+            [weakSelf.locationFetchTimer invalidate];
+            weakSelf.locationFetchTimer = nil;
         }
     });
 }

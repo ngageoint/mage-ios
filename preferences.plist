@@ -136,6 +136,18 @@
 		<key>preferenceKey</key>
 		<string>imageUploadSize</string>
 	</dict>
+	<key>observationPushNetworkOption</key>
+	<integer>0</integer>
+	<key>observationFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentPushNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>userPushNetworkOption</key>
+	<integer>0</integer>
+	<key>userFetchNetworkOption</key>
+	<integer>0</integer>
 	<key>videoUploadQualities</key>
 	<dict>
 		<key>title</key>
@@ -184,7 +196,28 @@
 	</dict>
 	<key>dataFetchEnabled</key>
 	<true/>
+	<key>wifiNetworkRestrictionType</key>
+	<integer>0</integer>
 	<key>locationServiceEnabled</key>
 	<false/>
+	<key>networkSyncOptions</key>
+	<dict>
+		<key>title</key>
+		<string>Network Sync Options</string>
+		<key>section</key>
+		<string>Network</string>
+		<key>labels</key>
+		<array>
+			<string>All</string>
+			<string>WiFi Only</string>
+			<string>None</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>0</integer>
+			<integer>1</integer>
+			<integer>2</integer>
+		</array>
+	</dict>
 </dict>
 </plist>
