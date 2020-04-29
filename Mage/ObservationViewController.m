@@ -19,15 +19,15 @@
 #import "ObservationEditViewController.h"
 #import "UserTableViewController.h"
 #import "MapDelegate.h"
-#import "AttachmentViewController.h"
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "MAGE-Swift.h"
 
-@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
+@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate, AttachmentViewDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (nonatomic, assign) BOOL manualSync;
@@ -379,10 +379,16 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
-    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-    [attachmentVC setTitle:@"Attachment"];
-    [self.navigationController pushViewController:attachmentVC animated:YES];
+    AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+    [self.childCoordinators addObject:attachmentCoordinator];
+    [attachmentCoordinator start];
 }
+
+- (void)doneViewingWithCoordinator:(NSObject *)coordinator {
+    // done viewing the attachment
+    [self.childCoordinators removeObject:coordinator];
+}
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 

@@ -34,16 +34,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    if (@available(iOS 11.0, *)) {
-        self.profileBadgeLeadingSpacer.width = 1;
-        self.profileBadgeTrailingSpacer.width = 8;
-    } else {
-        self.profileBadgeLeadingSpacer.width = -8;
-        self.profileBadgeTrailingSpacer.width = -2;
-        self.moreSpacer.width = 0;
-    }
-
+    self.profileBadgeTrailingSpacer.width = 8;
 }
 
 - (void) viewWillAppear:(BOOL)animated {

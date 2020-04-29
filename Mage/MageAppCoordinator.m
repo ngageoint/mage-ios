@@ -7,24 +7,23 @@
 //
 
 #import "MageAppCoordinator.h"
-#import "Attachment+Thumbnail.h"
-#import "UIImage+Thumbnail.h"
+
 #import "AuthenticationCoordinator.h"
 #import "EventChooserCoordinator.h"
 #import "Event.h"
 
 #import <UserNotifications/UserNotifications.h>
-#import "FICImageCache.h"
-#import <AVFoundation/AVFoundation.h>
 #import "UserUtility.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MageServer.h"
+#import "MAGE-Swift.h"
 
-@interface MageAppCoordinator() <UNUserNotificationCenterDelegate, FICImageCacheDelegate, AuthenticationDelegate, EventChooserDelegate>
+@interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
 
 @end
 
@@ -38,7 +37,7 @@
     _navigationController = navigationController;
 
     [self setupPushNotificationsForApplication:application];
-    [self setupFastImageCache];
+    self.imageCacheProvider = ImageCacheProvider.shared;
     
     return self;
 }
@@ -62,6 +61,10 @@
 - (void) authenticationSuccessful {
     [_childCoordinators removeLastObject];
     [self startEventChooser];
+}
+
+- (void) couldNotAuthenticate {
+    // TODO figure out what to do here
 }
 
 - (void) startEventChooser {
@@ -114,92 +117,6 @@
     [center setDelegate:self];
     
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge + UNAuthorizationOptionAlert + UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-    }];
-}
-
-- (void) setupFastImageCache {
-    FICImageFormat *thumbnailImageFormat = [[FICImageFormat alloc] init];
-    thumbnailImageFormat.name = AttachmentSmallSquare;
-    thumbnailImageFormat.family = AttachmentFamily;
-    thumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
-    thumbnailImageFormat.imageSize = AttachmentSquareImageSize;
-    thumbnailImageFormat.maximumCount = 250;
-    thumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
-    thumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    FICImageFormat *ipadThumbnailImageFormat = [[FICImageFormat alloc] init];
-    ipadThumbnailImageFormat.name = AttachmentMediumSquare;
-    ipadThumbnailImageFormat.family = AttachmentFamily;
-    ipadThumbnailImageFormat.style = FICImageFormatStyle32BitBGR;
-    ipadThumbnailImageFormat.imageSize = AttachmentiPadSquareImageSize;
-    ipadThumbnailImageFormat.maximumCount = 250;
-    ipadThumbnailImageFormat.devices = FICImageFormatDevicePad;
-    ipadThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[thumbnailImageFormat, ipadThumbnailImageFormat];
-    
-    FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
-    sharedImageCache.delegate = self;
-    sharedImageCache.formats = imageFormats;
-}
-
-- (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock {
-    Attachment *attachment = (Attachment *) entity;
-    [attachment.managedObjectContext obtainPermanentIDsForObjects:@[attachment] error:nil];
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:attachment.managedObjectContext];
-    
-    [localContext performBlock:^{
-        Attachment *localAttachment = [(Attachment *) entity MR_inContext:localContext];
-        
-        // Fetch the desired source image by making a network request
-        UIImage *sourceImage = nil;
-        NSLog(@"content type %@", localAttachment.contentType);
-        if ([localAttachment.contentType hasPrefix:@"image"]) {
-            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
-            sourceImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        } else if ([localAttachment.contentType hasPrefix:@"video"]) {
-            NSURL *url = [localAttachment sourceImageURLWithFormatName:formatName];
-            AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
-            AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-            generator.appliesPreferredTrackTransform = YES;
-            CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
-            
-            AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
-                if (result != AVAssetImageGeneratorSucceeded) {
-                    NSLog(@"couldn't generate thumbnail, error:%@", error);
-                }
-                
-                CGSize thumbnailSize = [AttachmentSmallSquare isEqualToString:formatName] ? AttachmentSquareImageSize : AttachmentiPadSquareImageSize;
-                UIImage *sourceImage = [UIImage imageWithCGImage:image];
-                UIImage *thumbnail = [sourceImage thumbnailWithSize:thumbnailSize];
-                UIImage *playOverlay = [UIImage imageNamed:@"play_overlay"];
-                
-                UIGraphicsBeginImageContextWithOptions(thumbnail.size, NO, 0.0);
-                [thumbnail drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
-                [playOverlay drawInRect:CGRectMake(0, 0, thumbnail.size.width, thumbnail.size.height)];
-                UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock(newImage);
-                });
-            };
-            
-            [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
-        } else if ([localAttachment.contentType hasPrefix:@"audio"]) {
-            sourceImage = [UIImage imageNamed:@"audio_thumbnail"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        } else {
-            sourceImage = [UIImage imageNamed:@"paperclip_thumbnail"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(sourceImage);
-            });
-        }
     }];
 }
 

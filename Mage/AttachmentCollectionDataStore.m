@@ -5,15 +5,15 @@
 //
 
 #import "AttachmentCollectionDataStore.h"
-#import "AttachmentCell.h"
 #import "AppDelegate.h"
+#import "MAGE-Swift.h"
 
 @implementation AttachmentCollectionDataStore
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     AttachmentCell *cell = [self.attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
     Attachment *attachment = [self attachmentAtIndex:[indexPath row]];
-    [cell setImageForAttachament:attachment withFormatName:self.attachmentFormatName];
+    [cell setImageWithAttachment:attachment formatName:self.attachmentFormatName];
 
     return cell;
 }

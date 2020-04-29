@@ -36,12 +36,10 @@
 		2F1069DF221C93DE009F661A /* SettingsMasterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069DE221C93DE009F661A /* SettingsMasterView.xib */; };
 		2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069E0221C9547009F661A /* SettingsDetailView.xib */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
-		2F142430220A6B4D0070EB46 /* LocationServicesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */; };
 		2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
 		2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4172221227CB00F082B5 /* ValuePicker.xib */; };
-		2F1E4175221230AF00F082B5 /* LocationServices.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4174221230AF00F082B5 /* LocationServices.xib */; };
 		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
@@ -62,7 +60,6 @@
 		2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */; };
 		2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */; };
 		2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */; };
-		2F4E10B6220E3309001C9F12 /* DataFetchingServices.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */; };
 		2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */; };
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
@@ -135,8 +132,9 @@
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
-		F70EAF3B199BF31300909C8A /* AttachmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70EAF3A199BF31300909C8A /* AttachmentViewController.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
+		F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */; };
+		F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3824003C6B00F9F879 /* ImageCacheTests.m */; };
 		F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5EF1A5C832F00B096A7 /* MediaViewController.m */; };
 		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
@@ -158,6 +156,7 @@
 		F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D82034CC3700C2600D /* TestingAppDelegate.h */; };
 		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F73129FA19F5BE320063DB6A /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73129F919F5BE320063DB6A /* MeViewController.m */; };
+		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
 		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
@@ -182,6 +181,7 @@
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFC191010A600CA084C /* ObservationTableViewController.m */; };
 		F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */; };
+		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
 		F75A10E2204856E4002F9906 /* DayTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E1204856E4002F9906 /* DayTheme.m */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E6204881F6002F9906 /* DarkTheme.m */; };
@@ -192,6 +192,11 @@
 		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
+		F760910023FDA5E5000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
+		F760910223FDA78F000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
+		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
+		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
+		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
 		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
@@ -205,18 +210,23 @@
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
 		F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */; };
+		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */; };
 		F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */; };
 		F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
+		F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
 		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
 		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
+		F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */; };
+		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
+		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
 		F798FAB219A4E5200010B052 /* ObservationEditSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAB119A4E5200010B052 /* ObservationEditSelectTableViewCell.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.m */; };
@@ -229,7 +239,6 @@
 		F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6B18AD9CB000CB9EE0 /* CoreGraphics.framework */; };
 		F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */; };
 		F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */; };
-		F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */; };
 		F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */; };
 		F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */; };
@@ -273,6 +282,8 @@
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
+		F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CC45D62440DC690054C8E1 /* MediaLoader.m */; };
+		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
 		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
@@ -281,6 +292,8 @@
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */; };
 		F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */; };
+		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
+		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
 		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
@@ -289,7 +302,7 @@
 		F7DCCC271F46473800E4C616 /* AttachmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC261F46473800E4C616 /* AttachmentCell.xib */; };
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
-		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
+		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */; };
 		F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -324,6 +337,7 @@
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
+		F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -397,7 +411,6 @@
 		2F1069E0221C9547009F661A /* SettingsDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsDetailView.xib; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
-		2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationServicesHeader.xib; sourceTree = "<group>"; };
 		2F142431220A6B610070EB46 /* LocationServicesHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationServicesHeaderView.h; sourceTree = "<group>"; };
 		2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationServicesHeaderView.m; sourceTree = "<group>"; };
 		2F14288F199AB9A400C64A98 /* UINextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINextField.h; sourceTree = "<group>"; };
@@ -405,7 +418,6 @@
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
 		2F1E4172221227CB00F082B5 /* ValuePicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValuePicker.xib; sourceTree = "<group>"; };
-		2F1E4174221230AF00F082B5 /* LocationServices.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationServices.xib; sourceTree = "<group>"; };
 		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
 		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -438,7 +450,6 @@
 		2F4E10B0220E1A52001C9F12 /* DisplaySettingsHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplaySettingsHeader.h; sourceTree = "<group>"; };
 		2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplaySettingsHeader.m; sourceTree = "<group>"; };
 		2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimeDisplay.xib; sourceTree = "<group>"; };
-		2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DataFetchingServices.xib; sourceTree = "<group>"; };
 		2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightDetailSubtitleTableViewCell.h; sourceTree = "<group>"; };
 		2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightDetailSubtitleTableViewCell.m; sourceTree = "<group>"; };
 		2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailSubtitleCell.xib; sourceTree = "<group>"; };
@@ -571,9 +582,9 @@
 		F70E432F19C3A1B10066E808 /* ObservationDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDataStore.m; sourceTree = "<group>"; };
 		F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewCell.h; sourceTree = "<group>"; };
 		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
-		F70EAF39199BF31300909C8A /* AttachmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentViewController.h; sourceTree = "<group>"; };
-		F70EAF3A199BF31300909C8A /* AttachmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentViewController.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheProvider.swift; sourceTree = "<group>"; };
+		F7148D3824003C6B00F9F879 /* ImageCacheTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageCacheTests.m; sourceTree = "<group>"; };
 		F714D5EE1A5C832F00B096A7 /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
 		F714D5EF1A5C832F00B096A7 /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
 		F714D5F31A5C8CAA00B096A7 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
@@ -611,6 +622,8 @@
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F73129F819F5BE320063DB6A /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		F73129F919F5BE320063DB6A /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
+		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
+		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
 		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
 		F73C3BF51A608EBD007A734E /* mageTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mageTest.js; sourceTree = "<group>"; };
@@ -643,6 +656,7 @@
 		F7531EFC191010A600CA084C /* ObservationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewController.m; sourceTree = "<group>"; };
 		F7531EFE1910131C00CA084C /* ObservationViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPad.h; sourceTree = "<group>"; };
 		F7531EFF1910131C00CA084C /* ObservationViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPad.m; sourceTree = "<group>"; };
+		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
 		F75A10E0204856E4002F9906 /* DayTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DayTheme.h; sourceTree = "<group>"; };
 		F75A10E1204856E4002F9906 /* DayTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DayTheme.m; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
@@ -661,6 +675,9 @@
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
 		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
+		F76090FF23FDA5E5000233A6 /* signinSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signinSuccess.json; sourceTree = "<group>"; };
+		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
+		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
 		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
@@ -688,6 +705,7 @@
 		F77822492146C8B400850815 /* LocationDisplayTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationDisplayTableViewController.h; sourceTree = "<group>"; };
 		F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationDisplayTableViewController.m; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
+		F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoImageProvider.swift; sourceTree = "<group>"; };
 		F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
@@ -700,6 +718,7 @@
 		F7859742206BD50800C68A23 /* AutoSunriseSunsetTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutoSunriseSunsetTheme.m; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUIImageView.swift; sourceTree = "<group>"; };
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
 		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
@@ -711,6 +730,9 @@
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
 		F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewDataStore.m; sourceTree = "<group>"; };
+		F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewCoordinator.swift; sourceTree = "<group>"; };
+		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
+		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
 		F798FAAD19A4E4580010B052 /* ObservationDatePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDatePickerTableViewCell.h; sourceTree = "<group>"; };
 		F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDatePickerTableViewCell.m; sourceTree = "<group>"; };
 		F798FAB019A4E5200010B052 /* ObservationEditSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditSelectTableViewCell.h; sourceTree = "<group>"; };
@@ -733,7 +755,6 @@
 		F7A94D6D18AD9CB000CB9EE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F7A94D6F18AD9CB000CB9EE0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAGE-Info.plist"; sourceTree = "<group>"; };
-		F7A94D7518AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F7A94D7718AD9CB000CB9EE0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F7A94D7918AD9CB000CB9EE0 /* MAGE-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Prefix.pch"; sourceTree = "<group>"; };
 		F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -741,7 +762,6 @@
 		F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F7A94D8718AD9CB000CB9EE0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAGETests-Info.plist"; sourceTree = "<group>"; };
-		F7A94D9218AD9CB000CB9EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F7A94D9418AD9CB000CB9EE0 /* MageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageTests.m; sourceTree = "<group>"; };
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -790,6 +810,9 @@
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
 		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		F7CC45D52440DC690054C8E1 /* MediaLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaLoader.h; sourceTree = "<group>"; };
+		F7CC45D62440DC690054C8E1 /* MediaLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaLoader.m; sourceTree = "<group>"; };
+		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
@@ -805,6 +828,10 @@
 		F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSignUpViewController.h; sourceTree = "<group>"; };
 		F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSignUpViewController.m; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
+		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
+		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedWiFiTableViewController.h; sourceTree = "<group>"; };
+		F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvancedWiFiTableViewController.m; sourceTree = "<group>"; };
 		F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
 		F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
 		F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
@@ -818,8 +845,7 @@
 		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
-		F7E0380A1992948A007CCF6C /* AttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCell.h; sourceTree = "<group>"; };
-		F7E0380B1992948A007CCF6C /* AttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCell.m; sourceTree = "<group>"; };
+		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E148B21A001F5500A31A32 /* GPSLocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocationAnnotation.h; sourceTree = "<group>"; };
 		F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocationAnnotation.m; sourceTree = "<group>"; };
 		F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPhone.h; sourceTree = "<group>"; };
@@ -876,6 +902,8 @@
 		F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolyline.m; sourceTree = "<group>"; };
 		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
 		F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaAnnotation.m; sourceTree = "<group>"; };
+		F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSynchronizationSettingsTableViewController.h; sourceTree = "<group>"; };
+		F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataSynchronizationSettingsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -968,6 +996,7 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F796E44B24193C9A005CA09C /* Attachment */,
 				F7ED5D0F1FFD7F88007BD768 /* Settings */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
 				F7C5C89E1F546649002C78D3 /* ViewCells */,
@@ -983,7 +1012,6 @@
 				F71B34B81F43978B001D120A /* ObservationEditView.xib */,
 				F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */,
 				F7DCCC261F46473800E4C616 /* AttachmentCell.xib */,
-				F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */,
 				F7C5C89A1F506627002C78D3 /* ObservationCell.xib */,
 				F7C5C89C1F506D76002C78D3 /* PersonCell.xib */,
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
@@ -1267,6 +1295,12 @@
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
 				2F1069DB221C9005009F661A /* SettingsCoordinator.h */,
 				2F1069DC221C9005009F661A /* SettingsCoordinator.m */,
+				F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */,
+				F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */,
+				F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */,
+				F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */,
+				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
+				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1274,17 +1308,15 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F796E4472417E146005CA09C /* Attachment */,
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
 				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
 				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
-				F7E0380A1992948A007CCF6C /* AttachmentCell.h */,
-				F7E0380B1992948A007CCF6C /* AttachmentCell.m */,
+				F7E0380B1992948A007CCF6C /* AttachmentCell.swift */,
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
 				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
-				F70EAF39199BF31300909C8A /* AttachmentViewController.h */,
-				F70EAF3A199BF31300909C8A /* AttachmentViewController.m */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
 				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
@@ -1494,6 +1526,8 @@
 				F70039452006CB0700E6E660 /* apiFail.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
+				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
+				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1540,6 +1574,16 @@
 			name = Constraints;
 			sourceTree = "<group>";
 		};
+		F77ECB6C242E53220030EE73 /* ImageUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */,
+				F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */,
+				F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */,
+			);
+			path = ImageUtilities;
+			sourceTree = "<group>";
+		};
 		F7929C6E23C4E64E00396D11 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -1547,6 +1591,28 @@
 				F7929C6F23C4E69600396D11 /* countries.gpkg */,
 			);
 			path = Maps;
+			sourceTree = "<group>";
+		};
+		F796E4472417E146005CA09C /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
+				F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */,
+				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
+				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
+				F7CC45D52440DC690054C8E1 /* MediaLoader.h */,
+				F7CC45D62440DC690054C8E1 /* MediaLoader.m */,
+			);
+			name = Attachment;
+			sourceTree = "<group>";
+		};
+		F796E44B24193C9A005CA09C /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */,
+				F796E44C24193D00005CA09C /* AskToDownload.xib */,
+			);
+			path = Attachment;
 			sourceTree = "<group>";
 		};
 		F7A292291FC3938F00DE5463 /* Authentication */ = {
@@ -1616,6 +1682,8 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F77ECB6C242E53220030EE73 /* ImageUtilities */,
+				F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */,
 				F75A10DF204856C7002F9906 /* Theme */,
 				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
@@ -1655,6 +1723,7 @@
 				F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */,
 				F73CD0831F7E941E00B4124D /* TransitionViewController.h */,
 				F73CD0841F7E941E00B4124D /* TransitionViewController.m */,
+				F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -1664,7 +1733,6 @@
 			children = (
 				2FD37EC71DF0AC1700429653 /* MAGE.entitlements */,
 				F7A94D7318AD9CB000CB9EE0 /* MAGE-Info.plist */,
-				F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */,
 				F7A94D7718AD9CB000CB9EE0 /* main.m */,
 				F7A94D7918AD9CB000CB9EE0 /* MAGE-Prefix.pch */,
 				F7DEF91C1912A6940026B9D0 /* preferences.plist */,
@@ -1687,6 +1755,8 @@
 				F73C3BF51A608EBD007A734E /* mageTest.js */,
 				F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */,
 				F75A10E320486489002F9906 /* StoredPasswordTests.m */,
+				F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */,
+				F7148D3824003C6B00F9F879 /* ImageCacheTests.m */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -1695,7 +1765,6 @@
 			isa = PBXGroup;
 			children = (
 				F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */,
-				F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1754,15 +1823,12 @@
 			children = (
 				2F4E1099220CA195001C9F12 /* AttributionCell.xib */,
 				2F4E10AA220E0D51001C9F12 /* Attributions.xib */,
-				2F4E10B5220E3309001C9F12 /* DataFetchingServices.xib */,
 				2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
 				2F8A2C26220235B2007FE473 /* FormDefaults.xib */,
 				2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */,
 				2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */,
-				2F1E4174221230AF00F082B5 /* LocationServices.xib */,
-				2F14242F220A6B4D0070EB46 /* LocationServicesHeader.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
 				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
@@ -1869,6 +1935,7 @@
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
 						DevelopmentTeam = ZL8G5D9G2H;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
@@ -1899,7 +1966,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
-				en,
 				Base,
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
@@ -1955,15 +2021,14 @@
 				F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				4C3A806118B6F67B00B1BA12 /* Main_iPhone.storyboard in Resources */,
-				2F4E10B6220E3309001C9F12 /* DataFetchingServices.xib in Resources */,
 				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
 				2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */,
 				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
-				2F1E4175221230AF00F082B5 /* LocationServices.xib in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
+				F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */,
 				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,
@@ -1991,6 +2056,7 @@
 				F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */,
 				2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
+				F760910223FDA78F000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
@@ -2004,12 +2070,10 @@
 				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
 				F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */,
 				F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */,
-				2F142430220A6B4D0070EB46 /* LocationServicesHeader.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
 				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
-				F7A94D7618AD9CB000CB9EE0 /* InfoPlist.strings in Resources */,
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
 				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
@@ -2021,6 +2085,7 @@
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
 				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
+				F760910023FDA5E5000233A6 /* signinSuccess.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2028,6 +2093,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
+				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
@@ -2048,11 +2115,11 @@
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
 				"${BUILT_PRODUCTS_DIR}/EDSunriseSet/EDSunriseSet.framework",
-				"${BUILT_PRODUCTS_DIR}/FastImageCache/FastImageCache.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/HexColors/HexColors.framework",
 				"${BUILT_PRODUCTS_DIR}/KTCenterFlowLayout/KTCenterFlowLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MagicalRecord/MagicalRecord.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
@@ -2074,11 +2141,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EDSunriseSet.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FastImageCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HexColors.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KTCenterFlowLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MagicalRecord.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
@@ -2130,7 +2197,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = $SRCROOT/Scripts/set_build_number.sh;
+			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2158,23 +2225,23 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2266,6 +2333,7 @@
 				F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
+				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
@@ -2294,6 +2362,7 @@
 				F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
+				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				2FD3076A1B47538900ACFE68 /* PeopleContainerViewController.m in Sources */,
 				2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
@@ -2310,24 +2379,27 @@
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
-				F70EAF3B199BF31300909C8A /* AttachmentViewController.m in Sources */,
+				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
-				F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */,
+				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
+				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
+				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
+				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
@@ -2357,6 +2429,7 @@
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
+				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
@@ -2372,6 +2445,7 @@
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
+				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
@@ -2386,6 +2460,7 @@
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
+				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
@@ -2403,10 +2478,12 @@
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
+				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
 				2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
+				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
@@ -2445,6 +2522,7 @@
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
+				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
@@ -2464,7 +2542,9 @@
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
+				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
+				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2502,22 +2582,6 @@
 				4C3A806018B6F67B00B1BA12 /* Base */,
 			);
 			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		F7A94D7418AD9CB000CB9EE0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7A94D7518AD9CB000CB9EE0 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		F7A94D9118AD9CB000CB9EE0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7A94D9218AD9CB000CB9EE0 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2620,6 +2684,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2636,6 +2701,9 @@
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2650,6 +2718,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2666,6 +2735,8 @@
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -2674,6 +2745,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -2708,6 +2780,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MAGE.app/MAGE";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
