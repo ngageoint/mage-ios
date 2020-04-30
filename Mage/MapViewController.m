@@ -120,9 +120,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.mapDelegate setupListeners];
-    
+        
     if (self.mapDelegate.locations != nil) {
         [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
         NSError *error;

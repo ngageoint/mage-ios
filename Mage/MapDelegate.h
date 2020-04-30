@@ -63,6 +63,5 @@
 - (void) cleanup;
 - (void) ensureMapLayout;
 - (void) updateTheme;
-- (void) setupListeners;
 
 @end

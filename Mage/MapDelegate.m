@@ -87,50 +87,46 @@
 
 - (id) init {
     if (self = [super init]) {
-        [self setupListeners];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults addObserver:self
+                   forKeyPath:@"mapType"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+        
+        [defaults addObserver:self
+                   forKeyPath:kCurrentEventIdKey
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+        
+        if (!self.hideStaticLayers) {
+            [defaults addObserver:self
+                       forKeyPath:@"selectedStaticLayers"
+                          options:NSKeyValueObservingOptionNew
+                          context:NULL];
+        }
+        
+        [defaults addObserver:self
+                   forKeyPath:@"selectedOnlineLayers"
+                      options:NSKeyValueObservingOptionNew
+                      context:NULL];
+        
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+        [[CacheOverlays getInstance] registerListener:self];
+        self.cacheOverlayUpdate = nil;
+        self.cacheOverlayUpdateLock = [[NSObject alloc] init];
+        self.updatingCacheOverlays = false;
+        self.waitingCacheOverlaysUpdate = false;
+        GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
+        self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
+        
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
+        self.darkMode = false;
     }
     
     return self;
-}
-
-- (void) setupListeners {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults addObserver:self
-               forKeyPath:@"mapType"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kCurrentEventIdKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    if (!self.hideStaticLayers) {
-        [defaults addObserver:self
-                   forKeyPath:@"selectedStaticLayers"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-    }
-    
-    [defaults addObserver:self
-               forKeyPath:@"selectedOnlineLayers"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
-    [[CacheOverlays getInstance] registerListener:self];
-    self.cacheOverlayUpdate = nil;
-    self.cacheOverlayUpdateLock = [[NSObject alloc] init];
-    self.updatingCacheOverlays = false;
-    self.waitingCacheOverlaysUpdate = false;
-    GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
-    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
-    self.darkMode = false;
 }
 
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
@@ -1176,9 +1172,9 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-	
+    
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
-		LocationAnnotation *locationAnnotation = annotation;
+        LocationAnnotation *locationAnnotation = annotation;
         MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
         annotationView.layer.zPosition = [locationAnnotation.timestamp timeIntervalSinceReferenceDate];
         annotationView.canShowCallout = self.canShowUserCallout;
@@ -1285,17 +1281,17 @@
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
 
-	if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == mapView.userLocation) {
+    if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == mapView.userLocation) {
         if (self.mapCalloutDelegate) {
             LocationAnnotation *annotation = view.annotation;
             [self.mapCalloutDelegate calloutTapped:annotation.location.user];
         }
-	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
+    } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         if (self.mapCalloutDelegate) {
             ObservationAnnotation *annotation = view.annotation;
             [self.mapCalloutDelegate calloutTapped:annotation.observation];
         }
-	}
+    }
 }
 
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
