@@ -3,7 +3,26 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.16 (TBD)
+## 2.0.18 (TBD)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+
+## 2.0.17 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.17)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Fixed bug that could cause app crash when selecting a new event.
+* Fixed possible race condition where the token could be marked as invalid
+  immediately after the user has completed signin.
+
+## 2.0.16 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.16)
 
 ##### Release Notes
 
