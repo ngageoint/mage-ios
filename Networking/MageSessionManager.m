@@ -114,7 +114,10 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
         
-        if ([[request.URL path] safeContainsString:@"login"] || [[request.URL path] safeContainsString:@"devices"] || [[request.URL path] safeContainsString:@"password"]) {
+        if ([[request.URL path] safeContainsString:@"signin"] ||
+            [[request.URL path] safeContainsString:@"authorize"] ||
+            [[request.URL path] safeContainsString:@"devices"] ||
+            [[request.URL path] safeContainsString:@"password"]) {
             return;
         }
         
