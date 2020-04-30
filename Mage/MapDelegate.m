@@ -87,7 +87,7 @@
 
 - (id) init {
     if (self = [super init]) {
-        [self setupListeners];
+//        [self setupListeners];
     }
     
     return self;
@@ -431,11 +431,11 @@
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
-    [self ensureMapLayout];
+//    [self ensureMapLayout];
 }
 
 - (void) updateTheme {
-    [self ensureMapLayout];
+//    [self ensureMapLayout];
 }
 
 - (void) ensureMapLayout {
