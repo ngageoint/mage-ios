@@ -76,6 +76,7 @@
     self.mapDelegate = [[MapDelegate alloc] init];
     [self.mapDelegate setMapView: self.mapView];
     self.mapView.delegate = self.mapDelegate;
+    [self.mapDelegate setupListeners];
     
     Observations *observations = [Observations observationsForObservation:observation];
     self.mapDelegate.hideStaticLayers = YES;

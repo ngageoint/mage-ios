@@ -119,7 +119,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self.mapDelegate setupListeners];
     self.name.text = self.user.name;
     
     self.phoneNumber.text = self.user.phone;
