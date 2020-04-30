@@ -85,14 +85,6 @@
 
 @implementation MapDelegate
 
-- (id) init {
-    if (self = [super init]) {
-//        [self setupListeners];
-    }
-    
-    return self;
-}
-
 - (void) setupListeners {
     if (self.mapView) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -431,11 +423,9 @@
 
 - (void) setMapView:(MKMapView *)mapView {
     _mapView = mapView;
-//    [self ensureMapLayout];
 }
 
 - (void) updateTheme {
-//    [self ensureMapLayout];
 }
 
 - (void) ensureMapLayout {
