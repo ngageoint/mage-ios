@@ -124,6 +124,15 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
         self.darkMode = false;
     }
+    
+    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    [[CacheOverlays getInstance] registerListener:self];
+    self.cacheOverlayUpdate = nil;
+    self.cacheOverlayUpdateLock = [[NSObject alloc] init];
+    self.updatingCacheOverlays = false;
+    self.waitingCacheOverlaysUpdate = false;
+    GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
+    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
 }
 
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
@@ -430,21 +439,14 @@
 }
 
 - (void) ensureMapLayout {
+    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
         
     BOOL showTraffic = [defaults boolForKey:@"mapShowTraffic"];
     self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite && self.mapView.mapType != 3;
-    
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
-    [[CacheOverlays getInstance] registerListener:self];
-    self.cacheOverlayUpdate = nil;
-    self.cacheOverlayUpdateLock = [[NSObject alloc] init];
-    self.updatingCacheOverlays = false;
-    self.waitingCacheOverlaysUpdate = false;
-    GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
-    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
