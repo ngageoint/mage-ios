@@ -57,9 +57,9 @@
            @"text": [self string:@"This product includes software licensed under the MIT license." withLink:@"https://raw.githubusercontent.com/MatthewYork/DateTools/master/LICENSE" forText:@"MIT license"]
           },
          @{
-           @"title": @"Fast Image Cache",
-           @"copyright": @"Copyright (c) 2013 Path, Inc.",
-           @"text": [self string:@"This product includes software licensed under the MIT license." withLink:@"https://raw.githubusercontent.com/path/FastImageCache/master/LICENSE" forText:@"MIT license"]
+           @"title": @"Kngfisher",
+           @"copyright": @"Copyright (c) 2019 Wei Wang",
+           @"text": [self string:@"This product includes software licensed under the MIT license." withLink:@"https://raw.githubusercontent.com/onevcat/Kingfisher/master/LICENSE" forText:@"MIT license"]
          },
          @{
            @"title": @"Objective-zip",

@@ -18,7 +18,6 @@
 #import "MapDelegate.h"
 #import "Location.h"
 #import "ObservationDataStore.h"
-#import "AttachmentViewController.h"
 #import "MageServer.h"
 #import "MageSessionManager.h"
 #import "LocationAnnotation.h"
@@ -29,10 +28,11 @@
 #import "Theme+UIResponder.h"
 #import <HexColors/HexColor.h>
 #import <mgrs/MGRS.h>
+#import "MAGE-Swift.h"
 
 @import PhotosUI;
 
-@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate>
+@interface MeViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AttachmentSelectionDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
@@ -52,6 +52,7 @@
 @property (assign, nonatomic) BOOL currentUserIsMe;
 @property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) CLLocation *userLastLocation;
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
 
 @end
 
@@ -84,6 +85,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     if (@available(iOS 11.0, *)) {
         [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
@@ -340,11 +342,15 @@
     [headerView setFrame:frame];    
 }
 
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-    [attachmentVC setTitle:@"Attachment"];
-    [self.navigationController pushViewController:attachmentVC animated:YES];
+    AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+    [self.childCoordinators addObject:attachmentCoordinator];
+    [attachmentCoordinator start];
 }
 
 - (IBAction)portraitClick:(id)sender {
@@ -355,9 +361,10 @@
             
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
-
-            AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-            [self.navigationController pushViewController:attachmentVC animated:YES];
+            
+            AttachmentViewCoordinator *coordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController url:avatarUrl delegate:self];
+            [self.childCoordinators addObject:coordinator];
+            [coordinator start];
         }
         return;
     }
@@ -371,8 +378,9 @@
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         NSURL *avatarUrl = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.user.avatarUrl]];
         
-        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithMediaURL:avatarUrl andContentType:@"image" andTitle:@"Avatar"];
-        [self.navigationController pushViewController:attachmentVC animated:YES];
+        AttachmentViewCoordinator *coordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController url:avatarUrl delegate:self];
+        [self.childCoordinators addObject:coordinator];
+        [coordinator start];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"New Avatar Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -480,11 +488,13 @@
         }
         case PHAuthorizationStatusNotDetermined: {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
-                    complete(YES);
-                } else {
-                    complete(NO);
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        complete(YES);
+                    } else {
+                        complete(NO);
+                    }
+                });
             }];
             
             break;

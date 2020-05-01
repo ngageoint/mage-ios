@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UISwitch *reportLocationSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *userReportingFrequencyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gpsSensitivityLabel;
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UILabel *reportLocationlabel;
 @property (weak, nonatomic) IBOutlet UILabel *reportLocationDescription;
 @property (weak, nonatomic) IBOutlet UILabel *timeIntervalLabel;
@@ -30,8 +29,18 @@
 
 @implementation LocationServicesSettingsTableViewController
 
-static NSInteger TIME_INTERVAL_CELL_ROW = 0;
-static NSInteger GPS_DISTANCE_CELL_ROW = 1;
+static NSInteger USER_PULL_INTERVAL_SECTION = 1;
+static NSInteger LOCATION_REPORTING_INTERVAL_SECTION = 0;
+
+static NSInteger REPORT_LOCATION_CELL = 0;
+static NSInteger TIME_INTERVAL_CELL_ROW = 1;
+static NSInteger GPS_DISTANCE_CELL_ROW = 2;
+
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    self.title = @"Location Sync";
+    return self;
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -42,26 +51,20 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
     self.tableView.estimatedRowHeight = 100;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(applicationIsActive:)
+        name:UIApplicationDidBecomeActiveNotification
+        object:nil];
+}
+
+- (void)applicationIsActive:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self registerForThemeChanges];
-}
-
-- (void) setupHeader {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    if (authorizationStatus == kCLAuthorizationStatusDenied) {
-        LocationServicesHeaderView *header = [[NSBundle mainBundle] loadNibNamed:@"LocationServicesHeader" owner:self options:nil][0];
-        self.tableView.tableHeaderView = header;
-        header.delegate = self;
-    } else {
-        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, CGFLOAT_MIN)];
-    }
 }
 
 - (void) themeDidChange:(MageTheme)theme {
@@ -73,12 +76,12 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 - (void) reportLocationChanged:(id)sender {
     BOOL on = [sender isOn];
     self.locationServicesEnabled = on;
-    NSIndexSet *sections = [NSIndexSet indexSetWithIndex:1];
-
+    NSArray *rows = [[NSArray alloc] initWithObjects:[NSIndexPath indexPathForRow:TIME_INTERVAL_CELL_ROW inSection:LOCATION_REPORTING_INTERVAL_SECTION], [NSIndexPath indexPathForRow:GPS_DISTANCE_CELL_ROW inSection:LOCATION_REPORTING_INTERVAL_SECTION], nil];
     if (on) {
-        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
     } else {
-        [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -87,13 +90,17 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
+    [self setPreferenceDisplayLabel:label forPreference:prefValuesKey withKey:NULL];
+}
+
+- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey withKey: (nullable NSString *) preferencesKey {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
     NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
     NSArray *values = [frequencyDictionary valueForKey:@"values"];
     
-    NSNumber *frequency = [defaults valueForKey:[frequencyDictionary valueForKey:@"preferenceKey"]];
+    NSNumber *frequency = [defaults valueForKey:preferencesKey ? preferencesKey : [frequencyDictionary valueForKey:@"preferenceKey"]];
     
     for (int i = 0; i < values.count; i++) {
         if ([frequency integerValue] == [[values objectAtIndex:i] integerValue]) {
@@ -106,44 +113,58 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        return self.locationServicesEnabled ? 2 : 1;
-    }
-    
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return section == 0 ? 1 : 2;
+    if (section == LOCATION_REPORTING_INTERVAL_SECTION) {
+        if (![CLLocationManager locationServicesEnabled]) {
+            return 0;
+        } else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied && [CLLocationManager locationServicesEnabled]) {
+            return 1;
+        }
+        return self.locationServicesEnabled ? 3 : 1;
+    }
+    if (section == USER_PULL_INTERVAL_SECTION) {
+        return 1;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-        cell.textLabel.text =  @"Report Location";
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.backgroundColor = [UIColor background];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        UISwitch *toggle = [[UISwitch alloc] init];
-        toggle.onTintColor = [UIColor themedButton];
-        cell.accessoryView = toggle;
-        
-        [toggle setOn:self.locationServicesEnabled animated:NO];
-        [toggle addTarget:self action:@selector(reportLocationChanged:) forControlEvents:UIControlEventValueChanged];
-        
-        return cell;
-    } else {
+    if (indexPath.section == LOCATION_REPORTING_INTERVAL_SECTION) {
         RightDetailSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rightDetailSubtitleCell"];
         
-        if (indexPath.row == TIME_INTERVAL_CELL_ROW) {
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            cell.textLabel.text =  @"Open Settings Application";
+            cell.textLabel.textColor = [UIColor primaryText];
+            cell.backgroundColor = [UIColor background];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
+        } else if (indexPath.row == TIME_INTERVAL_CELL_ROW) {
             cell.title.text = @"Time Interval";
             cell.subtitle.text = @"Minimum time interval between location reports to the server. Smaller intervals will report your location to the server more often.";
             [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
-        } else {
+        } else if (indexPath.row == GPS_DISTANCE_CELL_ROW) {
             cell.title.text = @"GPS Distance Filter";
             cell.subtitle.text = @"Minimum distance between location updates. Smaller distances will give a more precise location at the cost of battery drain.";
             [self setPreferenceDisplayLabel:cell.detail forPreference:@"gpsSensitivities"];
+        } else if (indexPath.row == REPORT_LOCATION_CELL) {
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            cell.textLabel.text =  @"Report Your Location";
+            cell.textLabel.textColor = [UIColor primaryText];
+            cell.backgroundColor = [UIColor background];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *toggle = [[UISwitch alloc] init];
+            toggle.onTintColor = [UIColor themedButton];
+            cell.accessoryView = toggle;
+    
+            [toggle setOn:self.locationServicesEnabled animated:NO];
+            [toggle addTarget:self action:@selector(reportLocationChanged:) forControlEvents:UIControlEventValueChanged];
+    
+            return cell;
         }
         
         cell.title.textColor = [UIColor primaryText];
@@ -153,33 +174,75 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
         
         return cell;
     }
+    if (indexPath.section == USER_PULL_INTERVAL_SECTION) {
+        RightDetailSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rightDetailSubtitleCell"];
+        
+        cell.title.text = @"Time Interval";
+        cell.subtitle.text = @"User pull";
+        [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
+        
+        cell.title.textColor = [UIColor primaryText];
+        cell.subtitle.textColor = [UIColor secondaryText];
+        cell.detail.textColor = [UIColor primaryText];
+        cell.backgroundColor = [UIColor background];
+        
+        return cell;
+    }
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return;
+    if (indexPath.section == LOCATION_REPORTING_INTERVAL_SECTION) {
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+            [self openSettingsTapped];
+            return;
+        }
+        if (indexPath.row == REPORT_LOCATION_CELL) {
+            return;
+        }
+        
+        NSString *key = indexPath.row == TIME_INTERVAL_CELL_ROW ? @"userReporting" : @"gpsSensitivities";
+
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
+
+        ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+
+        viewController.title = [fetchPreferences valueForKey:@"title"];
+        viewController.section = [fetchPreferences valueForKey:@"section"];
+        viewController.labels = [fetchPreferences valueForKey:@"labels"];
+        viewController.values = [fetchPreferences valueForKey:@"values"];
+        viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
+        [self.navigationController pushViewController:viewController animated:YES];
+
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
-    NSString *key = indexPath.row == TIME_INTERVAL_CELL_ROW ? @"userReporting" : @"gpsSensitivities";
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
-    
-    ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
-    
-    viewController.title = [fetchPreferences valueForKey:@"title"];
-    viewController.section = [fetchPreferences valueForKey:@"section"];
-    viewController.labels = [fetchPreferences valueForKey:@"labels"];
-    viewController.values = [fetchPreferences valueForKey:@"values"];
-    viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
-    [self.navigationController pushViewController:viewController animated:YES];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == USER_PULL_INTERVAL_SECTION) {
+        NSString *key = @"userReporting";
+
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
+
+        ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+
+        viewController.title = [fetchPreferences valueForKey:@"title"];
+        viewController.section = [fetchPreferences valueForKey:@"section"];
+        viewController.labels = [fetchPreferences valueForKey:@"labels"];
+        viewController.values = [fetchPreferences valueForKey:@"values"];
+        viewController.preferenceKey = [fetchPreferences valueForKey:@"preferenceKey"];
+        [self.navigationController pushViewController:viewController animated:YES];
+
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 1) {
-        return @"Location Time/Distance Sensitivity";
+    if (section == LOCATION_REPORTING_INTERVAL_SECTION) {
+        return @"Location Reporting Time/Distance Sensitivity";
+    }
+    if (section == USER_PULL_INTERVAL_SECTION) {
+        return @"User Pull Frequency";
     }
     
     return nil;
@@ -196,10 +259,20 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 1;
     }
 }
 
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    [self setupHeader];
-    
-    [self.tableView reloadData];
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == LOCATION_REPORTING_INTERVAL_SECTION && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied && [CLLocationManager locationServicesEnabled]) {
+        return @"Allow MAGE to access your location.  MAGE uses Location Services to report your location to the server.";
+    } else if (section == LOCATION_REPORTING_INTERVAL_SECTION && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied && ![CLLocationManager locationServicesEnabled]) {
+        return @"Location Services is disabled on your device.  Please Open iPhone settings, tap Privacy, tap Location Services, set Location Services to On and set MAGE to While Using.";
+    }
+    return nil;
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = [UIColor brand];
+    }
 }
 
 - (void)openSettingsTapped {

@@ -29,7 +29,7 @@
 @implementation SettingsDataSource
 
 static const NSInteger CONNECTION_SECTION = 0;
-static const NSInteger SERVICES_SECION = 1;
+static const NSInteger SERVICES_SECTION = 1;
 static const NSInteger CURRENT_EVENT_SECTION = 2;
 static const NSInteger CHANGE_EVENT_SECTION = 3;
 static const NSInteger DISPLAY_SECTION = 4;
@@ -177,7 +177,7 @@ static const NSInteger LEGAL_SECTION = 8;
     NSMutableArray *sections = [[NSMutableArray alloc] initWithCapacity:self.sections.count];
     
     [sections setObject:[self offlineSection] atIndexedSubscript:CONNECTION_SECTION];
-    [sections setObject:[self servicesSection] atIndexedSubscript:SERVICES_SECION];
+    [sections setObject:[self servicesSection] atIndexedSubscript:SERVICES_SECTION];
     [sections setObject:[self currentEventSection] atIndexedSubscript:CURRENT_EVENT_SECTION];
     [sections setObject:[self changeEventSection] atIndexedSubscript:CHANGE_EVENT_SECTION];
     [sections setObject:[self displaySection] atIndexedSubscript:DISPLAY_SECTION];
@@ -239,23 +239,47 @@ static const NSInteger LEGAL_SECTION = 8;
     }
 
     return [@{
-      @"header": @"Services",
+      @"header": @"Data Synchronization",
       @"rows": @[@{
                      @"type": [NSNumber numberWithInteger:kLocationServices],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-                     @"image": @"location_tracking_on",
-                     @"textLabel": @"Location Services",
+                     @"image": @"people",
+                     @"textLabel": @"Locations",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
-                     @"detailTextLabel": locationServicesLabel
+//                     @"detailTextLabel": locationServicesLabel
                      },
                  @{
-                     @"type": [NSNumber numberWithInteger:kDataFetching],
+                     @"type": [NSNumber numberWithInteger:kObservationServices],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-                     @"image": @"cached",
-                     @"textLabel": @"Data Fetching",
-                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
-                     @"detailTextLabel": [defaults boolForKey:@"dataFetchEnabled"] ? @"On" : @"Off"
-                     }]
+                     @"image": @"observations",
+                     @"textLabel": @"Observations",
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     },
+                 @{
+                     @"type": [NSNumber numberWithInteger:kDataSynchronization],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+                     @"image": @"wifi",
+                     @"textLabel": @"Network Sync Settings",
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     }
+//                 ,
+//                 @{
+//                     @"type": [NSNumber numberWithInteger:kDataFetching],
+//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+//                     @"image": @"cached",
+//                     @"textLabel": @"Data Fetching",
+//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
+//                     @"detailTextLabel": [defaults boolForKey:@"dataFetchEnabled"] ? @"On" : @"Off"
+//                     },
+//                 @{
+//                     @"type": [NSNumber numberWithInteger:kDataPushing],
+//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
+//                     @"image": @"cached",
+//                     @"textLabel": @"Data Pushing",
+//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
+//                     @"detailTextLabel": [defaults boolForKey:@"dataPushEnabled"] ? @"On" : @"Off"
+//                     }
+      ]
       } mutableCopy];
 }
 
@@ -315,7 +339,7 @@ static const NSInteger LEGAL_SECTION = 8;
                    @{
                        @"type": [NSNumber numberWithInteger:kLocationDisplay],
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                       @"image": @"observations",
+                       @"image": @"location_arrow_on",
                        @"textLabel": @"Location",
                        @"detailTextLabel": [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude",
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]

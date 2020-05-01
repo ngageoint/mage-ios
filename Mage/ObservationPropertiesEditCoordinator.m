@@ -19,13 +19,13 @@
 #import "SelectEditViewController.h"
 #import "GeometryEditViewController.h"
 #import "ExternalDevice.h"
-#import "AttachmentViewController.h"
 #import "MapUtils.h"
 #import "SFLineString.h"
 #import "GeometryEditCoordinator.h"
 #import "ObservationImage.h"
+#import "MAGE-Swift.h"
 
-@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate>
+@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate, AttachmentViewDelegate>
 
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (weak, nonatomic) Observation *observation;
@@ -160,10 +160,13 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 }
 
 - (void) attachmentSelected:(Attachment *)attachment {
-    AttachmentViewController *vc = [[AttachmentViewController alloc] init];
-    [vc setAttachment:attachment];
-    [vc setTitle:@"Attachment"];
-    [self.navigationController pushViewController:vc animated:YES];
+    AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+    [self.childCoordinators addObject:attachmentCoordinator];
+    [attachmentCoordinator start];
+}
+
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
 }
 
 - (void) fieldEditDone {
@@ -270,7 +273,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         case PHAuthorizationStatusNotDetermined: {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
                 if (status == PHAuthorizationStatusAuthorized) {
-                    [self presentGallery];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self presentGallery];
+                    });
                 }
             }];
             
@@ -341,7 +346,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         NSString *moviePath = [videoUrl path];
         
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+            if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+                UISaveVideoAtPathToSavedPhotosAlbum (moviePath, nil, nil, nil);
+            }
             [picker dismissViewControllerAnimated:YES completion:NULL];
             
             NSString *videoQuality = [self videoUploadQuality];
@@ -384,7 +391,9 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         }
     } else {
         UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+        }
         
         NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.jpeg", [dateFormatter stringFromDate: [NSDate date]]]];
         NSFileManager *manager = [NSFileManager defaultManager];

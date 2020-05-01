@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="GondolaMage-Regular.otf">
             <string>GondolaMageRegular</string>
-        </array>
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue-BoldItalic</string>
         </array>
         <array key="fontawesome-webfont.ttf">
             <string>FontAwesome</string>
@@ -41,18 +35,18 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tPP-7r-4NH">
-                    <rect key="frame" x="16" y="60" width="343" height="55"/>
+                    <rect key="frame" x="16" y="40" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L4d-cz-Gnz">
                             <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOf-hT-cka" customClass="BrandLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOf-hT-cka">
                                     <rect key="frame" x="55.5" y="0.0" width="161" height="100"/>
                                     <fontDescription key="fontDescription" name="GondolaMageRegular" family="GondolaMage" pointSize="52"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJf-Dh-Tqk" customClass="BrandLabel">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJf-Dh-Tqk">
                                     <rect key="frame" x="0.0" y="0.0" width="47.5" height="55"/>
                                     <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="50"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -80,13 +74,13 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set MAGE Server URL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y9t-tn-QQl">
-                    <rect key="frame" x="18" y="135" width="337" height="21"/>
+                    <rect key="frame" x="18" y="115" width="337" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://" placeholder="Server URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtk-kb-2jR" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                    <rect key="frame" x="20" y="176" width="335" height="45"/>
+                    <rect key="frame" x="20" y="156" width="335" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="tLy-Pa-VWd"/>
                     </constraints>
@@ -97,7 +91,7 @@
                     </connections>
                 </textField>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3v-ds-Sff">
-                    <rect key="frame" x="20" y="241" width="159" height="40"/>
+                    <rect key="frame" x="20" y="221" width="159" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -116,7 +110,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SwE-a6-n1N">
-                    <rect key="frame" x="196" y="241" width="159" height="40"/>
+                    <rect key="frame" x="196" y="221" width="159" height="40"/>
                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                     <constraints>
@@ -135,14 +129,14 @@
                     </connections>
                 </button>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Y76-wt-WvA">
-                    <rect key="frame" x="327" y="251" width="20" height="20"/>
+                    <rect key="frame" x="327" y="231" width="20" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="9zz-D9-XKa"/>
                         <constraint firstAttribute="height" constant="20" id="ZSa-Xw-RIZ"/>
                     </constraints>
                 </activityIndicatorView>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRm-i7-6lH">
-                    <rect key="frame" x="20" y="301" width="24" height="24"/>
+                    <rect key="frame" x="20" y="281" width="24" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="24" id="hPO-sS-haU"/>
                         <constraint firstAttribute="height" constant="24" id="qe5-E7-Ip7"/>
@@ -152,7 +146,7 @@
                     </state>
                 </button>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkG-8a-rWv">
-                    <rect key="frame" x="40" y="301" width="310" height="108"/>
+                    <rect key="frame" x="40" y="281" width="310" height="108"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Login Status"/>
                     <constraints>

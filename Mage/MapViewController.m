@@ -25,7 +25,6 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationViewController_iPad.h"
-#import "AttachmentViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"
@@ -35,12 +34,13 @@
 #import "Layer.h"
 #import "Server.h"
 #import "MageConstants.h"
+#import "MAGE-Swift.h"
 
 #import "ObservationEditCoordinator.h"
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -391,6 +391,10 @@
     [edit start];
 }
 
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
 		MeViewController *destinationViewController = segue.destinationViewController;
@@ -400,10 +404,9 @@
 		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
 		[destinationViewController setObservation:sender];
     } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        // Get reference to the destination view controller
-        AttachmentViewController *vc = [segue destinationViewController];
-        [vc setAttachment:sender];
-        [vc setTitle:@"Attachment"];
+        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:sender delegate:nil];
+        [self.childCoordinators addObject:attachmentCoordinator];
+        [attachmentCoordinator start];
     }
 }
 

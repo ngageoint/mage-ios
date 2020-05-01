@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.0.17 (TBD)
+
+##### Release Notes
+
+##### Features
+* Image caching is now handled by KingFisher, this affects all attachment views
+
+##### Bug Fixes
+* Images and videos selected from the gallery are no longer re-saved to the gallery
+* iPad filter button works again
+* The gallery was being launched from a background thread the first time the app was launched
+
 ## 2.0.16 (TBD)
 
 ##### Release Notes

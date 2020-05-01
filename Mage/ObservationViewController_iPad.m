@@ -14,8 +14,6 @@
 #import "ObservationPropertyTableViewCell.h"
 #import "User.h"
 #import "Role.h"
-#import "AttachmentCell.h"
-#import "AttachmentViewController.h"
 #import "ObservationEditViewController.h"
 #import "Server.h"
 #import "MapDelegate.h"
@@ -24,6 +22,7 @@
 #import "NSDate+display.h"
 #import "Attachment+Thumbnail.h"
 #import "ObservationFields.h"
+#import "MAGE-Swift.h"
 
 @interface ObservationViewController_iPad ()<NSFetchedResultsControllerDelegate>
 

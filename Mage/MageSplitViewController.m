@@ -14,20 +14,24 @@
 #import "LocationTableViewController.h"
 #import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
-#import "AttachmentViewController.h"
+#import "MAGE-Swift.h"
 #import "Mage.h"
 
-@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate>
+@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate>
     @property(nonatomic, weak) MageTabBarController *tabBarController;
     @property(nonatomic, weak) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
     @property(nonatomic, strong) NSArray *mapCalloutDelegates;
+@property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (strong, nonatomic) AttachmentViewCoordinator *attachmentCoordinator;
+
 @end
 
 @implementation MageSplitViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.childCoordinators = [[NSMutableArray alloc] init];
     
     [[Mage singleton] startServicesAsInitial:YES];
     
@@ -126,16 +130,19 @@
     }
 }
 
+- (void) doneViewingWithCoordinator:(NSObject *)coordinator {
+    [self.childCoordinators removeObject:coordinator];
+    self.attachmentCoordinator = nil;
+}
+
 - (void) selectedAttachment:(Attachment *)attachment {
     NSLog(@"attachment selected");
-    UIViewController *visibleViewController = [self.mapViewController.navigationController visibleViewController];
-    if ([visibleViewController isKindOfClass:[AttachmentViewController class]]) {
-        // ImageViewer already preset lets just update its content
-        [((AttachmentViewController *) visibleViewController) setContent:attachment];
+    if (self.attachmentCoordinator) {
+        [self.attachmentCoordinator setAttachmentWithAttachment:attachment];
     } else {
-        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-        [attachmentVC setTitle:@"Attachment"];
-        [self.mapViewController.navigationController pushViewController:attachmentVC animated:YES];
+        self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController attachment:attachment delegate:self];
+        [self.childCoordinators addObject:self.attachmentCoordinator];
+        [self.attachmentCoordinator start];
     }
 }
 

@@ -17,7 +17,6 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "AudioRecordingDelegate.h"
 #import "MediaViewController.h"
-#import "AttachmentViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Server.h"
 #import "Event.h"
