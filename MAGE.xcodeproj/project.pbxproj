@@ -312,7 +312,6 @@
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
-		F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */; };
 		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
@@ -861,8 +860,6 @@
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
 		F7E457661F61E2380082F527 /* EventChooserCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserCoordinator.m; sourceTree = "<group>"; };
-		F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+Thumbnail.h"; sourceTree = "<group>"; };
-		F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+Thumbnail.m"; sourceTree = "<group>"; };
 		F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
 		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
@@ -1311,8 +1308,6 @@
 				F796E4472417E146005CA09C /* Attachment */,
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
-				F7E8AFD11993E1D9008756A7 /* Attachment+Thumbnail.h */,
-				F7E8AFD21993E1D9008756A7 /* Attachment+Thumbnail.m */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.swift */,
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
 				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
@@ -2197,7 +2192,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2225,23 +2220,23 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2526,7 +2521,6 @@
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
-				F7E8AFD31993E1D9008756A7 /* Attachment+Thumbnail.m in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,

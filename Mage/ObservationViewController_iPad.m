@@ -20,7 +20,6 @@
 #import "ObservationDataStore.h"
 #import "Event.h"
 #import "NSDate+display.h"
-#import "Attachment+Thumbnail.h"
 #import "ObservationFields.h"
 #import "MAGE-Swift.h"
 
@@ -48,7 +47,6 @@
     self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:.54];
     self.favoriteHighlightColor = [UIColor colorWithRed:126/255.0 green:211/255.0 blue:33/255.0 alpha:1.0];
     
-    self.attachmentCollectionDataStore.attachmentFormatName = AttachmentMediumSquare;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
