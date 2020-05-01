@@ -14,7 +14,6 @@
 #import "Server.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Event.h"
-#import "Attachment+Thumbnail.h"
 #import "MageEnums.h"
 #import "ObservationShapeStyleParser.h"
 #import "Theme+UIResponder.h"
@@ -115,7 +114,6 @@
     self.userField.text = observation.user.name;
     
     self.ads = [[AttachmentCollectionDataStore alloc] init];
-    self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;

@@ -12,7 +12,6 @@
 #import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Attachment.h"
-#import "Attachment+Thumbnail.h"
 #import "UIImage+Thumbnail.h"
 
 #import "MageInitialViewController.h"
