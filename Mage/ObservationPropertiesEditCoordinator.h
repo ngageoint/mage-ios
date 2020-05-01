@@ -14,6 +14,7 @@
 - (void) propertiesEditCanceled;
 - (void) propertiesEditComplete;
 - (void) deleteObservation;
+- (void) addForm;
 
 @end
 
@@ -21,5 +22,6 @@
 
 - (instancetype) initWithObservation: (Observation *) observation  andNewObservation: (BOOL) newObservation andNavigationController: (UINavigationController *) navigationController andDelegate: (id<ObservationPropertiesEditDelegate>) delegate;
 - (void) start;
+- (void) formAdded;
 
 @end

@@ -53,6 +53,10 @@
     [self initConstraints];
 }
 
+- (IBAction)addForm:(id)sender {
+    [self.delegate addForm];
+}
+
 - (void)initConstraints {
     if (!self.didSetConstraints) {
         self.didSetConstraints = YES;

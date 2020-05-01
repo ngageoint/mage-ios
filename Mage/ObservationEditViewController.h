@@ -18,6 +18,7 @@
 - (void) deleteObservation;
 - (void) fieldSelected: (NSDictionary *) field;
 - (void) attachmentSelected: (Attachment *) attachment;
+- (void) addForm;
 
 @end
 

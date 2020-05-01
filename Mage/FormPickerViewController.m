@@ -7,176 +7,83 @@
 //
 
 #import "FormPickerViewController.h"
-#import "FormCollectionViewCell.h"
-#import <MapKit/MapKit.h>
-#import "GeometryUtility.h"
-#import "KTCenterFlowLayout.h"
 #import "Theme+UIResponder.h"
+#import <HexColor.h>
 
 @interface FormPickerViewController ()
 
 @property (strong, nonatomic) id<FormPickedDelegate> delegate;
 @property (strong, nonatomic) NSArray *forms;
-@property (strong, nonatomic) SFGeometry *location;
-@property (nonatomic) BOOL newObservation;
-@property (nonatomic) BOOL invalidatedLayout;
-@property (weak, nonatomic) IBOutlet UIView *blurView;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
 
 @end
 
 @implementation FormPickerViewController
 
-static NSString *CellIdentifier = @"FormCell";
-
 - (void) themeDidChange:(MageTheme)theme {
-    self.blurView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.6];
-    self.closeButton.backgroundColor = [UIColor dialog];
-    self.closeButton.layer.sublayers = nil;
-    [self.closeButton.layer addSublayer:[self createInnerLineWithColor:[UIColor brand]]];
-    
-    [UIColor themeMap:self.mapView];
-    self.headerLabel.textColor = [UIColor brand];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    [self.tableView reloadData];
 }
 
-- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (SFGeometry *) location andNewObservation: (BOOL) newObservation {
+- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms {
     self = [super init];
     if (!self) return nil;
     
     _delegate = delegate;
     _forms = forms;
-    _location = location;
-    _newObservation = newObservation;
     
     return self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self drawCloseButton];
-    [self setupMapBackground];
-    
     [self registerForThemeChanges];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.newObservation) {
-        _headerLabel.text = @"What type of observation would you like to create?";
-    } else {
-        _headerLabel.text = @"What type of form would you like to add to this observation?";
-    }
-    [self setupCollectionView];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.invalidatedLayout = true;
-}
-
-- (void) viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    if (!self.invalidatedLayout) {
-        [self.collectionView.collectionViewLayout invalidateLayout];
-    }
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [self.collectionView.collectionViewLayout invalidateLayout];
-}
-
-- (void) drawCloseButton {
-    self.closeButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.0f];
-    
-    self.closeButton.layer.cornerRadius = self.closeButton.frame.size.width / 2;
-    self.closeButton.layer.borderWidth = 1;
-    self.closeButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-}
-
-- (CALayer *) createInnerLineWithColor: (UIColor *) color {
-    CALayer *borderLayer = [[CALayer alloc] init];
-    borderLayer.frame = CGRectMake(3, 3, 44, 44);
-    borderLayer.backgroundColor = [UIColor clearColor].CGColor;
-    borderLayer.cornerRadius = borderLayer.frame.size.width / 2;
-    borderLayer.borderColor = color.CGColor;
-    borderLayer.borderWidth = 1.5;
-    
-    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 15) toPointB:CGPointMake(29, 29) withColor:color];
-    [self makeLineLayer:borderLayer lineFromPointA:CGPointMake(15, 29) toPointB:CGPointMake(29, 15) withColor:color];
-    
-    return borderLayer;
-}
-
--(void) makeLineLayer: (CALayer *) layer lineFromPointA: (CGPoint) pointA toPointB: (CGPoint) pointB withColor: (UIColor *) color {
-    CAShapeLayer *line = [CAShapeLayer layer];
-    UIBezierPath *linePath=[UIBezierPath bezierPath];
-    [linePath moveToPoint: pointA];
-    [linePath addLineToPoint:pointB];
-    line.path=linePath.CGPath;
-    line.fillColor = nil;
-    line.opacity = 1.0;
-    line.lineWidth = 1.5;
-    line.strokeColor = color.CGColor;
-    [layer addSublayer:line];
-}
-
-- (void) setupCollectionView {
-    [self.collectionView setDelegate:self];
-    [self.collectionView setDataSource:self];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"FormCell" bundle:nil] forCellWithReuseIdentifier:CellIdentifier];
-    
-    KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
-    layout.minimumLineSpacing = 10.f;
-    layout.minimumInteritemSpacing = 25.f;
-    layout.estimatedItemSize = CGSizeMake(90.f, 120.f);
-    
-    [self.collectionView setCollectionViewLayout:layout];
-}
-
-- (void) setupMapBackground {
-    if (self.location != nil) {
-        SFPoint *point = [GeometryUtility centroidOfGeometry:self.location];
-        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
-        MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
-        [self.mapView setRegion:viewRegion animated:NO];
-    }
-    
-    
-    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
-        self.blurView.backgroundColor = [UIColor clearColor];
-        
-        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        blurEffectView.frame = self.blurView.bounds;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = .95;
-        
-        [self.blurView addSubview:blurEffectView];
-    } else {
-        self.blurView.backgroundColor = [UIColor dialog];
-    }
+    self.title = @"Add A Form";
+    self.navigationItem.title = @"Add A Form";
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (IBAction)closeButtonTapped:(id)sender {
     [self.delegate cancelSelection];
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+
+#pragma mark - Table view data source
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.forms count];
 }
 
-- (FormCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    FormCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    [cell configureCellForForm:[self.forms objectAtIndex:[indexPath row]]];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [_delegate formPicked: [self.forms objectAtIndex:[indexPath row]]];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *form = [self.forms objectAtIndex:[indexPath row]];
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    
+    cell.textLabel.text = [form objectForKey:@"name"];
+    cell.detailTextLabel.text = [form objectForKey:@"description"];
+    cell.imageView.image = [UIImage imageNamed:@"form"];
+    cell.imageView.tintColor = [UIColor colorWithHexString:[form objectForKey:@"color"]];
+    NSLog(@"%@", form);
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor background];
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    [_delegate formPicked: [self.forms objectAtIndex:[indexPath row]]];
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] init];
 }
 
 @end

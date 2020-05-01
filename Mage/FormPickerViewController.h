@@ -16,10 +16,8 @@
 
 @end
 
-@interface FormPickerViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface FormPickerViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
-- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms andLocation: (SFGeometry *) location andNewObservation: (BOOL) newObservation;
+- (instancetype) initWithDelegate: (id<FormPickedDelegate>) delegate andForms: (NSArray *) forms;
 
 @end

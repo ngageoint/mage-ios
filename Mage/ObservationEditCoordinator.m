@@ -10,7 +10,6 @@
 #import "Event.h"
 #import "User.h"
 #import "Attachment.h"
-#import "ObservationEditTableViewController.h"
 #import "ObservationPropertiesEditCoordinator.h"
 #import "FormDefaults.h"
 
@@ -32,6 +31,7 @@
 @property (nonatomic) CLLocationAccuracy accuracy;
 @property (strong, nonatomic) NSString *provider;
 @property (nonatomic) double delta;
+@property (strong, nonatomic) ObservationPropertiesEditCoordinator *propertiesEditCoordinator;
 
 @end
 
@@ -130,32 +130,34 @@
         [self.rootViewController presentViewController:self.navigationController animated:YES completion:^{
 
         }];
+        [self startEditObservationFields];
         if (self.newObservation) {
             if ([self.event.nonArchivedForms count] > 1) {
                 [self startFormPicker];
             } else if ([self.event.nonArchivedForms count] == 1) {
                 [self addFormToObservation:[self.event.nonArchivedForms objectAtIndex:0]];
-                [self startEditObservationFields];
-            } else {
-                [self startEditObservationFields];
             }
-        } else {
-            [self startEditObservationFields];
         }
     }
 }
 
+- (void) addForm {
+    [self startFormPicker];
+}
+
 - (void) startFormPicker {
-    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.nonArchivedForms andLocation: self.location andNewObservation:self.newObservation];
+    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.nonArchivedForms];
     
-    [self.navigationController setNavigationBarHidden:YES];
-    [self.navigationController pushViewController:self.formController animated:NO];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.formController];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
+    [[self.formController navigationItem] setLeftBarButtonItem:backBarButtonItem];
+    [[self navigationController] presentViewController:nav animated:true completion:nil];
 }
 
 - (void) startEditObservationFields {
-    ObservationPropertiesEditCoordinator *propertiesEditCoordinator = [[ObservationPropertiesEditCoordinator alloc] initWithObservation: self.observation andNewObservation: self.newObservation andNavigationController: self.navigationController andDelegate:self];
-    [_childCoordinators addObject:propertiesEditCoordinator];
-    [propertiesEditCoordinator start];
+    self.propertiesEditCoordinator = [[ObservationPropertiesEditCoordinator alloc] initWithObservation: self.observation andNewObservation: self.newObservation andNavigationController: self.navigationController andDelegate:self];
+    [_childCoordinators addObject:self.propertiesEditCoordinator];
+    [self.propertiesEditCoordinator start];
 }
 
 - (void) addFormToObservation: (NSDictionary *) form {
@@ -195,14 +197,15 @@
     
     [newProperties setObject:observationForms forKey:@"forms"];
     self.observation.properties = newProperties;
+    [self.propertiesEditCoordinator formAdded];
 }
 
 #pragma mark - FormPickedDelegate methods
 - (void) formPicked:(NSDictionary *)form {
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"Form Picked %@", [form objectForKey:@"name"]);
     [self addFormToObservation:form];
-    [self startEditObservationFields];
+//    [self startEditObservationFields];
 }
 
 - (void) cancelSelection {

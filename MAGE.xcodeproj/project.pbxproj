@@ -315,11 +315,7 @@
 		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
 		F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7951A65887A00E7F224 /* navigation.js */; };
 		F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD79B1A658A8800E7F224 /* testsToRun.js */; };
-		F7FC591D1F3CB1F50010351A /* FormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC591C1F3CB1F50010351A /* FormsViewController.m */; };
-		F7FC59201F3CBA0A0010351A /* FormCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC591F1F3CBA0A0010351A /* FormCollectionViewCell.m */; };
-		F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7FC59211F3CE2280010351A /* FormPickerView.xib */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.m */; };
-		F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7FC59261F3CED5A0010351A /* FormCell.xib */; };
 		F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
@@ -860,14 +856,8 @@
 		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
 		F7FAD7951A65887A00E7F224 /* navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = navigation.js; sourceTree = "<group>"; };
 		F7FAD79B1A658A8800E7F224 /* testsToRun.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = testsToRun.js; sourceTree = "<group>"; };
-		F7FC591B1F3CB1F50010351A /* FormsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormsViewController.h; sourceTree = "<group>"; };
-		F7FC591C1F3CB1F50010351A /* FormsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormsViewController.m; sourceTree = "<group>"; };
-		F7FC591E1F3CBA0A0010351A /* FormCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormCollectionViewCell.h; sourceTree = "<group>"; };
-		F7FC591F1F3CBA0A0010351A /* FormCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormCollectionViewCell.m; sourceTree = "<group>"; };
-		F7FC59211F3CE2280010351A /* FormPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FormPickerView.xib; sourceTree = "<group>"; };
 		F7FC59231F3CEBF80010351A /* FormPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormPickerViewController.h; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormPickerViewController.m; sourceTree = "<group>"; };
-		F7FC59261F3CED5A0010351A /* FormCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FormCell.xib; sourceTree = "<group>"; };
 		F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditCoordinator.h; sourceTree = "<group>"; };
 		F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditCoordinator.m; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
@@ -978,8 +968,6 @@
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
-				F7FC59211F3CE2280010351A /* FormPickerView.xib */,
-				F7FC59261F3CED5A0010351A /* FormCell.xib */,
 				F71B34B81F43978B001D120A /* ObservationEditView.xib */,
 				F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */,
 				F7DCCC261F46473800E4C616 /* AttachmentCell.xib */,
@@ -1804,10 +1792,6 @@
 		F7FC59281F3CEDEB0010351A /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				F7FC591B1F3CB1F50010351A /* FormsViewController.h */,
-				F7FC591C1F3CB1F50010351A /* FormsViewController.m */,
-				F7FC591E1F3CBA0A0010351A /* FormCollectionViewCell.h */,
-				F7FC591F1F3CBA0A0010351A /* FormCollectionViewCell.m */,
 				F7FC59231F3CEBF80010351A /* FormPickerViewController.h */,
 				F7FC59241F3CEBF80010351A /* FormPickerViewController.m */,
 			);
@@ -1938,7 +1922,6 @@
 				F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */,
 				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
 				2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */,
-				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
 				2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */,
 				4C3A806218B6F67B00B1BA12 /* Main_iPad.storyboard in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
@@ -2019,7 +2002,6 @@
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
-				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
 				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2299,7 +2281,6 @@
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
-				F7FC59201F3CBA0A0010351A /* FormCollectionViewCell.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
@@ -2394,7 +2375,6 @@
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				F7531F001910131C00CA084C /* ObservationViewController_iPad.m in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
-				F7FC591D1F3CB1F50010351A /* FormsViewController.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,

@@ -100,6 +100,10 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 
 }
 
+- (void) formAdded {
+    [self.editController refreshObservation];
+}
+
 #pragma mark - PropertyEditDelegate
 
 - (void) setValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {
@@ -112,6 +116,10 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 #pragma
 
 #pragma mark - ObservationEditViewControllerDelegate methods
+
+- (void) addForm {
+    [self.delegate addForm];
+}
 
 - (void) fieldSelected:(NSDictionary *)field {
     self.currentEditField = field;
