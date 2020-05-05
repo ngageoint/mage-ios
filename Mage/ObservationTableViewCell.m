@@ -70,10 +70,8 @@
 - (void) populateCellWithObservation:(Observation *) observation {
     // TODO if we are reusing this cell, we should probably cancel all of the image cache requests
     self.observation = observation;
-    NSString *primaryText = [observation primaryFieldText];
-    NSString *variantText = [observation secondaryFieldText];
-//    NSString *primaryText = [observation primaryFeedFieldText];
-//    NSString *variantText = [observation secondaryFeedFieldText];
+    NSString *primaryText = [observation primaryFeedFieldText];
+    NSString *variantText = [observation secondaryFeedFieldText];
     
     if (primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryField.text = primaryText;
