@@ -78,7 +78,6 @@
     self.mapSettingsButton.backgroundColor = [UIColor dialog];
     self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
     [UIColor themeMap:self.mapView];
-    [self.mapDelegate updateTheme];
     [self setNavBarTitle];
 }
 
@@ -119,9 +118,8 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.mapDelegate setupListeners];
-    
+        
     if (self.mapDelegate.locations != nil) {
         [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
         NSError *error;

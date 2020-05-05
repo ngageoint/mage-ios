@@ -33,6 +33,7 @@
     }
     [self.mapDelegate setMapView: self.map];
     self.map.delegate = self.mapDelegate;
+    [self.mapDelegate setupListeners];
     
     [self.map removeAnnotations:self.map.annotations];
     [self.map removeOverlays:self.map.overlays];
