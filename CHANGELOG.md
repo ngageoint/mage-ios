@@ -9,6 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
 * Image caching is now handled by KingFisher, this affects all attachment views
+* Observation feed display is now separate from the map marker display
 
 ##### Bug Fixes
 * Images and videos selected from the gallery are no longer re-saved to the gallery

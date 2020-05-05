@@ -36,7 +36,7 @@
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     
-    NSString *primaryFieldText = [observation primaryFieldText];
+    NSString *primaryFieldText = [observation primaryFeedFieldText];
     
     if (primaryFieldText != nil && [primaryFieldText length] > 0) {
         self.primaryFieldLabel.text = primaryFieldText;
@@ -45,7 +45,7 @@
         self.primaryFieldLabel.hidden = YES;
     }
     
-    NSString *variantText = [observation secondaryFieldText];
+    NSString *variantText = [observation secondaryFeedFieldText];
     if (variantText != nil && [variantText length] > 0) {
         self.variantFieldLabel.hidden = NO;
         self.variantFieldLabel.text = variantText;
