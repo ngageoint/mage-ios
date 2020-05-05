@@ -54,6 +54,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) getSecondaryField;
 - (NSString *) primaryFieldText;
 - (NSString *) secondaryFieldText;
+- (NSString *) getPrimaryFeedField;
+- (NSString *) getSecondaryFeedField;
+- (NSString *) primaryFeedFieldText;
+- (NSString *) secondaryFeedFieldText;
 
 - (void) toggleFavoriteWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion;
 - (NSDictionary *) getFavoritesMap;

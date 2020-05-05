@@ -126,6 +126,43 @@ Event *_event;
     return nil;
 }
 
+- (NSString *) getPrimaryFeedField {
+    NSDictionary *form = [self getPrimaryForm];
+    if (form != nil) {
+        return [form objectForKey:@"primaryFeedField"];
+    }
+    return nil;
+}
+
+- (NSString *) primaryFeedFieldText {
+    NSString *primaryFeedField = [self getPrimaryFeedField];
+    NSArray *observationForms = [self.properties objectForKey:@"forms"];
+    
+    if (primaryFeedField != nil && [observationForms count] > 0) {
+        return [[observationForms objectAtIndex:0] objectForKey:primaryFeedField];
+    }
+    return nil;
+}
+
+- (NSString *) getSecondaryFeedField {
+    NSDictionary *form = [self getPrimaryForm];
+    if (form != nil) {
+        return [form objectForKey:@"secondaryFeedField"];
+    }
+    return nil;
+}
+
+- (NSString *) secondaryFeedFieldText {
+    
+    NSString *secondaryFeedField = [self getSecondaryFeedField];
+    NSArray *observationForms = [self.properties objectForKey:@"forms"];
+    
+    if (secondaryFeedField != nil && [observationForms count] > 0) {
+        return [[observationForms objectAtIndex:0] objectForKey:secondaryFeedField];
+    }
+    return nil;
+}
+
 - (NSMutableArray *)transientAttachments {
     if (_transientAttachments != nil) {
         return _transientAttachments;
