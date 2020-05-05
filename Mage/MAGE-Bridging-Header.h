@@ -6,5 +6,6 @@
 #import "DataConnectionUtilities.h"
 #import "StoredPassword.h"
 #import "Attachment.h"
+#import "Event.h"
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"

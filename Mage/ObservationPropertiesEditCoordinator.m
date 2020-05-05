@@ -25,13 +25,14 @@
 #import "ObservationImage.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate, AttachmentViewDelegate>
+@interface ObservationPropertiesEditCoordinator() <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservationEditViewControllerDelegate, AudioRecordingDelegate, PropertyEditDelegate, ObservationEditFieldDelegate, GeometryEditDelegate, AttachmentViewDelegate, ObservationEditCardDelegate>
 
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (weak, nonatomic) Observation *observation;
 @property (nonatomic) BOOL newObservation;
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) ObservationEditViewController *editController;
+@property (strong, nonatomic) ObservationEditCardCollectionViewController *editCardController;
 @property (strong, nonatomic) NSDictionary *currentEditField;
 @property (strong, nonatomic) id currentEditValue;
 @property (strong, nonatomic) id<ObservationPropertiesEditDelegate> delegate;
@@ -65,16 +66,22 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(editCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
-    self.editController = [[ObservationEditViewController alloc] initWithDelegate:self andObservation:self.observation andNew:self.newObservation];
+    
+    self.editCardController = [[ObservationEditCardCollectionViewController alloc] init];
+    [self.editCardController setDelegateWithDelegate:self observation:self.observation newObservation:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
+    
+//    self.editController = [[ObservationEditViewController alloc] initWithDelegate:self andObservation:self.observation andNew:self.newObservation];
+//    [self.editController.navigationItem setLeftBarButtonItem:back];
+//    [self.editController.navigationItem setRightBarButtonItem:doneButton];
     
     CATransition *transition = [CATransition animation];
     transition.duration = .3f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = kCATransitionFade;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [self.navigationController pushViewController:self.editController animated:NO];
+    [self.navigationController pushViewController:self.editCardController animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
@@ -310,6 +317,16 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         }
     }
 }
+
+- (void)attachmentSelectedWithAttachment:(Attachment * _Nonnull)attachment {
+    [self attachmentSelected:attachment];
+}
+
+
+- (void)fieldSelectedWithField:(NSDictionary * _Nonnull)field {
+    [self fieldSelected:field];
+}
+
 
 #pragma
 

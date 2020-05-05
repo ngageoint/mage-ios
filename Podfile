@@ -22,6 +22,8 @@ target 'MAGE' do
     pod 'DateTools', '~> 2.0.0'
     pod 'EDSunriseSet', '~> 1.0'
     pod 'Kingfisher', '~> 5.0'
+    pod 'MaterialComponents'
+    pod 'PureLayout', '~> 3.1.6'
     target 'MAGETests' do
         inherit! :search_paths
         pod 'OCMock'

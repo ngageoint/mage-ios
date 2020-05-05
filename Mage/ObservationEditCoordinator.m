@@ -12,6 +12,7 @@
 #import "Attachment.h"
 #import "ObservationPropertiesEditCoordinator.h"
 #import "FormDefaults.h"
+#import "MAGE-Swift.h"
 
 @interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate>
 
