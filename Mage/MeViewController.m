@@ -205,7 +205,7 @@
     NSDictionary *accuracyAttributes = @{NSFontAttributeName:accuracyFont, NSForegroundColorAttributeName:[UIColor secondaryText]};
     NSMutableAttributedString *locationText = [[NSMutableAttributedString alloc] init];
     [locationText appendAttributedString:[[NSAttributedString alloc] initWithString:location attributes:locationAttributes]];
-    [locationText appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  GPS +/- %f", self.userLastLocation.horizontalAccuracy] attributes:accuracyAttributes]];
+    [locationText appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  GPS +/- %.02fm", self.userLastLocation.horizontalAccuracy] attributes:accuracyAttributes]];
     [self.location setAttributedText:locationText];
 }
 
