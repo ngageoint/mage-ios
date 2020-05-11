@@ -256,7 +256,7 @@
     } else if ([annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *locationAnnotation = (LocationAnnotation *) annotation;
         MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
-        previewController.user = locationAnnotation.location.user;
+        previewController.user = locationAnnotation.user;
         return previewController;
     }
     return nil;

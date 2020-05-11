@@ -22,6 +22,7 @@
 #import "MageServer.h"
 #import "MageSessionManager.h"
 #import "LocationAnnotation.h"
+#import "LocationAccuracy.h"
 #import "GPSLocation.h"
 #import "AttachmentSelectionDelegate.h"
 #import "SFGeometryUtils.h"
@@ -149,23 +150,34 @@
     }
     
     if (self.currentUserIsMe) {
-        NSArray *lastLocation = [GPSLocation fetchLastXGPSLocations:1];
-        if (lastLocation.count != 0) {
-            GPSLocation *gpsLocation = [lastLocation objectAtIndex:0];
-            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[gpsLocation getGeometry]];
-            self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
-            [self.mapDelegate updateGPSLocation:gpsLocation forUser:self.user andCenter:NO];
+        NSArray *locations = [GPSLocation fetchLastXGPSLocations:1];
+        if (locations.count != 0) {
+            GPSLocation *location = [locations objectAtIndex:0];
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[location getGeometry]];
+            self.userLastLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])
+                                                                  altitude:[[location.properties valueForKey:@"altitude"] doubleValue]
+                                                        horizontalAccuracy:[[location.properties valueForKey:@"accuracy"] doubleValue]
+                                                          verticalAccuracy:[[location.properties valueForKey:@"verticalAccuracy"] doubleValue]
+                                                                 timestamp:location.timestamp];
+            
+            [self.mapDelegate updateGPSLocation:location forUser:self.user];
         }
     }
     
     if (!self.userLastLocation) {
         NSArray *locations = [self.mapDelegate.locations.fetchedResultsController fetchedObjects];
         if ([locations count]) {
-            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[[locations objectAtIndex:0] getGeometry]];
-            self.userLastLocation = [[CLLocation alloc] initWithLatitude:[centroid.y doubleValue] longitude:[centroid.x doubleValue]];
+            Location *location = [locations objectAtIndex:0];
+            self.userLastLocation = [[CLLocation alloc] initWithCoordinate:location.location.coordinate
+                                                                  altitude:[[location.properties valueForKey:@"altitude"] doubleValue]
+                                                        horizontalAccuracy:[[location.properties valueForKey:@"accuracy"] doubleValue]
+                                                          verticalAccuracy:[[location.properties valueForKey:@"verticalAccuracy"] doubleValue]
+                                                                 timestamp:location.timestamp];
         }
         [self.mapDelegate.locations.fetchedResultsController setDelegate:self];
     }
+    
+
     
     if (self.userLastLocation) {
         [self zoomAndCenterMapOnLocation:self.userLastLocation];
@@ -180,11 +192,21 @@
 }
 
 - (void) setLocationText {
+    NSString *location = nil;
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
-        self.location.text = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
+        location = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
     } else {
-        self.location.text = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
+        location = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
     }
+        
+    UIFont *locationFont = [UIFont systemFontOfSize:14.0f];
+    UIFont *accuracyFont = [UIFont systemFontOfSize:11.0f];
+    NSDictionary *locationAttributes = @{NSFontAttributeName:locationFont, NSForegroundColorAttributeName:[UIColor mageBlue]};
+    NSDictionary *accuracyAttributes = @{NSFontAttributeName:accuracyFont, NSForegroundColorAttributeName:[UIColor secondaryText]};
+    NSMutableAttributedString *locationText = [[NSMutableAttributedString alloc] init];
+    [locationText appendAttributedString:[[NSAttributedString alloc] initWithString:location attributes:locationAttributes]];
+    [locationText appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  GPS +/- %f", self.userLastLocation.horizontalAccuracy] attributes:accuracyAttributes]];
+    [self.location setAttributedText:locationText];
 }
 
 - (void) locationSingleTap: (id) sender {
@@ -299,15 +321,12 @@
 
 
 - (void) zoomAndCenterMapOnLocation: (CLLocation *) location {
-    CLLocationDistance latitudeMeters = 500;
-    CLLocationDistance longitudeMeters = 500;
     double accuracy = location.horizontalAccuracy;
-    latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-    longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+    CLLocationDistance latitudeMeters = accuracy * 2.5;  // double the radius w/ padding
+    CLLocationDistance longitudeMeters = accuracy * 2.5; // double the radius w/ padding
     
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters);
-    MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-    [self.mapDelegate selectedUser:self.user region:viewRegion];
+    MKCoordinateRegion region = [self.map regionThatFits:MKCoordinateRegionMakeWithDistance(location.coordinate, latitudeMeters, longitudeMeters)];
+    [self.mapDelegate selectedUser:self.user region:region];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {

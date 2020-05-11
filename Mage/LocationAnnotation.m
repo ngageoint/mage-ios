@@ -16,23 +16,47 @@
 
 -(id) initWithLocation:(Location *) location {
 	if ((self = [super init])) {
-		_location = location;
-		
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[location getGeometry]];
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
-        [self setCoordinate:coordinate];
+        _location = [[CLLocation alloc] initWithCoordinate:location.location.coordinate
+                                                  altitude:[[location.properties valueForKey:@"altitude"] doubleValue]
+                                        horizontalAccuracy:[[location.properties valueForKey:@"accuracy"] doubleValue]
+                                          verticalAccuracy:[[location.properties valueForKey:@"verticalAccuracy"] doubleValue]
+                                                    course:[[location.properties valueForKey:@"course"] doubleValue]
+                                                     speed:[[location.properties valueForKey:@"speed"] doubleValue]
+                                                 timestamp:location.timestamp];
+        
+        [self setCoordinate:_location.coordinate];
+        
 		_timestamp = location.timestamp;
 		
-		User *user = location.user;
-        [self setTitle:user.name];
+        _user = location.user;
+        [self setTitle:location.user.name];
         [self setSubtitle:location.timestamp.timeAgoSinceNow];
     }
 		
     return self;
 }
 
--(void) setLocation:(Location *)location {
-    _location = location;
+-(id) initWithGPSLocation: (GPSLocation *) gpsLocation user: (User *) user {
+    if ((self = [super init])) {
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[gpsLocation getGeometry]];
+        _location = [[CLLocation alloc] initWithCoordinate:(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]))
+                                                  altitude:[[gpsLocation.properties valueForKey:@"altitude"] doubleValue]
+                                        horizontalAccuracy:[[gpsLocation.properties valueForKey:@"accuracy"] doubleValue]
+                                          verticalAccuracy:[[gpsLocation.properties valueForKey:@"verticalAccuracy"] doubleValue]
+                                                    course:[[gpsLocation.properties valueForKey:@"course"] doubleValue]
+                                                     speed:[[gpsLocation.properties valueForKey:@"speed"] doubleValue]
+                                                 timestamp:gpsLocation.timestamp];
+        
+        [self setCoordinate:_location.coordinate];
+        
+        _timestamp = gpsLocation.timestamp;
+        
+        _user = user;
+        [self setTitle:user.name];
+        [self setSubtitle:gpsLocation.timestamp.timeAgoSinceNow];
+    }
+    
+    return self;
 }
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
@@ -48,7 +72,7 @@
         annotationView.annotation = self;
     }
     
-    [annotationView setImageForUser:self.location.user];
+    [annotationView setImageForUser:self.user];
     
     annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
     return annotationView;

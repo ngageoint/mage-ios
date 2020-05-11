@@ -72,8 +72,6 @@
     self.observation = observation;
     NSString *primaryText = [observation primaryFieldText];
     NSString *variantText = [observation secondaryFieldText];
-//    NSString *primaryText = [observation primaryFeedFieldText];
-//    NSString *variantText = [observation secondaryFeedFieldText];
     
     if (primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryField.text = primaryText;
@@ -150,7 +148,7 @@
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
-        self.favoriteButton.imageView.tintColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
+        self.favoriteButton.imageView.tintColor = self.favoriteHighlightColor;
         self.favoriteNumber.textColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
     } else {
         self.favoriteButton.imageView.tintColor = [UIColor inactiveIcon];

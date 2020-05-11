@@ -8,6 +8,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Release Notes
 
 ##### Features
+* Add observation accuracy.  Accuracy circle displayed on map for annotation click, observation view, 
+  and edit. Accuracy info is also displayed textually in observation view and edit.
+* Show location accuracy circle in user profile map.
 
 ##### Bug Fixes
 

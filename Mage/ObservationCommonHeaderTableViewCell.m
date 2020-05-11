@@ -56,11 +56,6 @@
     
     self.userLabel.text = observation.user.name;
     self.dateLabel.text = [observation.timestamp formattedDisplayDate];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
-        self.locationLabel.text = [MGRS MGRSfromCoordinate:observation.location.coordinate];
-    } else {
-        self.locationLabel.text = [NSString stringWithFormat:@"%.05f, %.05f", observation.location.coordinate.latitude, observation.location.coordinate.longitude];
-    }
     
     [self setupMapForObservation:observation];
     [self setupAttachmentsForObservation:observation];

@@ -31,6 +31,12 @@
 		04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96561EBB60AC00B6AD8D /* MapUtils.m */; };
 		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */; };
+		2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */; };
+		2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323A72463666700D2866B /* ObservationAccuracy.m */; };
+		2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323AD246366B800D2866B /* LocationAccuracy.m */; };
+		2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */; };
+		2F0323B32466002D00D2866B /* ObservationLocationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */; };
+		2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */; };
 		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
 		2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1069DC221C9005009F661A /* SettingsCoordinator.m */; };
 		2F1069DF221C93DE009F661A /* SettingsMasterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069DE221C93DE009F661A /* SettingsMasterView.xib */; };
@@ -91,7 +97,6 @@
 		2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FB41CDE1DC79436005C18F9 /* Filter.storyboard */; };
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
 		2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */; };
-		2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4A09F1D999F6F00797C18 /* ObservationFavoritesTableViewCell.m */; };
 		2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4A0A21D999FEE00797C18 /* ObservationActionsTableViewCell.m */; };
 		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
@@ -254,7 +259,6 @@
 		F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */; };
 		F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */; };
 		F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */; };
-		F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */; };
 		F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */; };
 		F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */; };
 		F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */; };
@@ -290,7 +294,6 @@
 		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.m */; };
-		F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */; };
 		F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */; };
@@ -388,6 +391,17 @@
 		04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapShapePointAnnotationView.m; path = Map/MapShapePointAnnotationView.m; sourceTree = "<group>"; };
 		04F834011ED71B4A00B5FE1E /* AnnotationDragCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnnotationDragCallback.h; path = Map/AnnotationDragCallback.h; sourceTree = "<group>"; };
 		0BD6F42A705BBE383C185A99 /* Pods_MAGE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObservationAccuracyRenderer.m; path = Map/Overlay/ObservationAccuracyRenderer.m; sourceTree = "<group>"; };
+		2F0323A72463666700D2866B /* ObservationAccuracy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObservationAccuracy.m; path = Map/Overlay/ObservationAccuracy.m; sourceTree = "<group>"; };
+		2F0323A82463666700D2866B /* ObservationAccuracyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObservationAccuracyRenderer.h; path = Map/Overlay/ObservationAccuracyRenderer.h; sourceTree = "<group>"; };
+		2F0323A92463666700D2866B /* ObservationAccuracy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObservationAccuracy.h; path = Map/Overlay/ObservationAccuracy.h; sourceTree = "<group>"; };
+		2F0323AC246366B800D2866B /* LocationAccuracy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationAccuracy.h; path = Map/Overlay/LocationAccuracy.h; sourceTree = "<group>"; };
+		2F0323AD246366B800D2866B /* LocationAccuracy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationAccuracy.m; path = Map/Overlay/LocationAccuracy.m; sourceTree = "<group>"; };
+		2F0323AF246366CF00D2866B /* LocationAccuracyRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationAccuracyRenderer.h; path = Map/Overlay/LocationAccuracyRenderer.h; sourceTree = "<group>"; };
+		2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationAccuracyRenderer.m; path = Map/Overlay/LocationAccuracyRenderer.m; sourceTree = "<group>"; };
+		2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ObservationLocationTableViewCell.xib; sourceTree = "<group>"; };
+		2F0323B42466017900D2866B /* ObservationLocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationLocationTableViewCell.h; sourceTree = "<group>"; };
+		2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationLocationTableViewCell.m; sourceTree = "<group>"; };
 		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate.h; sourceTree = "<group>"; };
 		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
 		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
@@ -491,8 +505,6 @@
 		2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFilterTableViewController.m; sourceTree = "<group>"; };
 		2FB46F991D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationMultiSelectTableViewCell.h; sourceTree = "<group>"; };
 		2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationMultiSelectTableViewCell.m; sourceTree = "<group>"; };
-		2FB4A09E1D999F6F00797C18 /* ObservationFavoritesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavoritesTableViewCell.h; sourceTree = "<group>"; };
-		2FB4A09F1D999F6F00797C18 /* ObservationFavoritesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavoritesTableViewCell.m; sourceTree = "<group>"; };
 		2FB4A0A11D999FEE00797C18 /* ObservationActionsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsTableViewCell.h; sourceTree = "<group>"; };
 		2FB4A0A21D999FEE00797C18 /* ObservationActionsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationActionsTableViewCell.m; sourceTree = "<group>"; };
 		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
@@ -770,7 +782,6 @@
 		F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPhoneHeaderCell.xib; sourceTree = "<group>"; };
 		F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationMapTableViewCell.xib; sourceTree = "<group>"; };
 		F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationActionsTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationFavoritesTableViewCell.xib; sourceTree = "<group>"; };
 		F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationImportantTableViewCell.xib; sourceTree = "<group>"; };
 		F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAddImportantTableViewCell.xib; sourceTree = "<group>"; };
 		F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPropertyTableViewCell.xib; sourceTree = "<group>"; };
@@ -820,8 +831,6 @@
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380A1992948A007CCF6C /* AttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCell.h; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCell.m; sourceTree = "<group>"; };
-		F7E148B21A001F5500A31A32 /* GPSLocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocationAnnotation.h; sourceTree = "<group>"; };
-		F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocationAnnotation.m; sourceTree = "<group>"; };
 		F7E297071A8C0AB3000F62C6 /* ObservationViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController_iPhone.h; sourceTree = "<group>"; };
 		F7E297081A8C0AB3000F62C6 /* ObservationViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController_iPhone.m; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -952,6 +961,21 @@
 				85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		2F0323A5246364C500D2866B /* Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				2F0323A92463666700D2866B /* ObservationAccuracy.h */,
+				2F0323A72463666700D2866B /* ObservationAccuracy.m */,
+				2F0323A82463666700D2866B /* ObservationAccuracyRenderer.h */,
+				2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */,
+				2F0323AC246366B800D2866B /* LocationAccuracy.h */,
+				2F0323AD246366B800D2866B /* LocationAccuracy.m */,
+				2F0323AF246366CF00D2866B /* LocationAccuracyRenderer.h */,
+				2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */,
+			);
+			name = Overlays;
 			sourceTree = "<group>";
 		};
 		2F2287D921F0EADE0058E527 /* Feature */ = {
@@ -1168,6 +1192,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				2F0323A5246364C500D2866B /* Overlays */,
 				2F2287D921F0EADE0058E527 /* Feature */,
 				043FF11D1C22F571000CA07F /* Cache */,
 				2F5F2E9819DDE87D005BA157 /* iPhone */,
@@ -1185,8 +1210,6 @@
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
 				2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */,
 				2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */,
-				F7E148B21A001F5500A31A32 /* GPSLocationAnnotation.h */,
-				F7E148B31A001F5500A31A32 /* GPSLocationAnnotation.m */,
 				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
@@ -1457,14 +1480,14 @@
 				2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */,
 				2FB4A0A11D999FEE00797C18 /* ObservationActionsTableViewCell.h */,
 				2FB4A0A21D999FEE00797C18 /* ObservationActionsTableViewCell.m */,
+				2F0323B42466017900D2866B /* ObservationLocationTableViewCell.h */,
+				2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */,
 				F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */,
 				F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */,
 				F76A15CB1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.h */,
 				F76A15CC1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m */,
 				F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */,
 				F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */,
-				2FB4A09E1D999F6F00797C18 /* ObservationFavoritesTableViewCell.h */,
-				2FB4A09F1D999F6F00797C18 /* ObservationFavoritesTableViewCell.m */,
 				F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */,
 				F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */,
 				F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */,
@@ -1704,11 +1727,11 @@
 			isa = PBXGroup;
 			children = (
 				F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */,
+				2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */,
 				F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */,
 				F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */,
 				F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */,
 				F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */,
-				F7C5C8B11F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib */,
 				F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */,
 				F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */,
 				F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */,
@@ -1960,6 +1983,7 @@
 				2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */,
 				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
+				2F0323B32466002D00D2866B /* ObservationLocationTableViewCell.xib in Resources */,
 				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
 				2F1E4175221230AF00F082B5 /* LocationServices.xib in Resources */,
 				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
@@ -2020,7 +2044,6 @@
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
-				F7C5C8B21F5EE39E002C78D3 /* ObservationFavoritesTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2130,7 +2153,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2267,7 +2290,6 @@
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
-				F7E148B41A001F5500A31A32 /* GPSLocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
@@ -2298,9 +2320,11 @@
 				2F32FAE41B474D47009603D3 /* ObservationContainerViewController.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F7FC59201F3CBA0A0010351A /* FormCollectionViewCell.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
+				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
@@ -2324,6 +2348,7 @@
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
 				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
+				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
@@ -2350,12 +2375,12 @@
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
+				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
-				2FB4A0A01D999F6F00797C18 /* ObservationFavoritesTableViewCell.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
@@ -2434,6 +2459,7 @@
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				2F8A2C2F2202590A007FE473 /* FormDefaultsTableViewController.m in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
+				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
@@ -2630,7 +2656,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0.17;
+				MARKETING_VERSION = 2.0.18;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -2660,7 +2686,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0.17;
+				MARKETING_VERSION = 2.0.18;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;

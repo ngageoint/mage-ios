@@ -52,48 +52,13 @@
     self.attachmentCollectionDataStore.attachmentFormatName = AttachmentMediumSquare;
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self updateFavorites];
-}
-
 - (void) registerCellTypes {
     [super registerCellTypes];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPadHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
 }
 
 - (NSMutableArray *) getHeaderSection {
-    NSMutableArray *headerSection = [[NSMutableArray alloc] initWithObjects:@"header", @"actions", nil];
-    
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    if ([favorites count]) {
-        [headerSection insertObject:@"favorites" atIndex:2];
-    };
-    
-    return headerSection;
-}
-
-- (void) updateFavorites {
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    
-    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:2];
-    
-    NSInteger favoritesCount = [favorites count];
-    
-    if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
-        [headerSection removeObjectAtIndex:2];
-        [self.propertyTable beginUpdates];
-        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.propertyTable endUpdates];
-    } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
-        [headerSection insertObject:@"favorites" atIndex:2];
-        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    } else if ([headerSection containsObject:@"favorites"]) {
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+   return [[NSMutableArray alloc] initWithObjects:@"header", @"location", @"actions", nil];
 }
 
 @end

@@ -26,6 +26,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "ObservationLocationTableViewCell.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
@@ -95,7 +96,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void) registerCellTypes {
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationActionsTableViewCell" bundle:nil] forCellReuseIdentifier:@"actions"];
-    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationFavoritesTableViewCell" bundle:nil] forCellReuseIdentifier:@"favorites"];
+    [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationLocationTableViewCell" bundle:nil] forCellReuseIdentifier:@"location"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"updateImportant"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationAddImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"addImportant"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationMapTableViewCell" bundle:nil] forCellReuseIdentifier:@"map"];
@@ -307,9 +308,17 @@ static NSInteger const IMPORTANT_SECTION = 4;
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SYNC_SECTION] withRowAnimation:UITableViewRowAnimationNone];
 
         [[ObservationPushService singleton] pushObservations:@[self.observation]];
-    } else if (indexPath.section == HEADER_SECTION && indexPath.row == [[self.tableLayout objectAtIndex:HEADER_SECTION] indexOfObject:@"favorites"]) {
-        NSLog(@"Favorites");
-        [self performSegueWithIdentifier:@"FavoriteUsersSegue" sender:self];
+    } else if (indexPath.section == HEADER_SECTION && indexPath.row == [[self getHeaderSection] indexOfObject:@"location"]) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        ObservationLocationTableViewCell *cell = [self.propertyTable cellForRowAtIndexPath:indexPath];
+        pasteboard.string = [cell getLocationText:self.observation];
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Location Copied to Clipboard"
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+                  
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -432,6 +441,10 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.observation toggleFavoriteWithCompletion:nil];
 }
 
+- (IBAction) observationFavoriteInfoTapped:(id)sender {
+    [self performSegueWithIdentifier:@"FavoriteUsersSegue" sender:self];
+}
+
 - (void)observationDirectionsTapped:(id)sender {
     
     NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFieldText]];
@@ -506,10 +519,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
             NSLog(@"An Error occured: %@, %@", error.localizedDescription, error.localizedFailureReason);
         }
     };
-}
-
-- (void) updateFavorites {
-
 }
 
 -(IBAction) observationShareTapped:(id)sender {
@@ -589,7 +598,9 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [[NSManagedObjectContext MR_defaultContext] refreshObject:self.observation mergeChanges:YES];
 
     if ([anObject isKindOfClass:[ObservationFavorite class]]) {
-        [self updateFavorites];
+        NSArray *sections = [self getHeaderSection];
+        NSUInteger actionsRow = [sections indexOfObject:@"actions"];
+        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:actionsRow inSection:HEADER_SECTION]] withRowAnimation:UITableViewRowAnimationNone];
     } else if ([anObject isKindOfClass:[ObservationImportant class]]) {
         [self updateImportant];
     }
