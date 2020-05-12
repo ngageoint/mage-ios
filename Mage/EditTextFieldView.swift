@@ -144,8 +144,8 @@ extension EditTextFieldView: UITextFieldDelegate {
 extension EditTextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if (value != textField.text) {
-            value = textField.text;
+        if (value != textView.text) {
+            value = textView.text;
             self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
         }
     }

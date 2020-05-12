@@ -15,10 +15,10 @@ import Nimble_Snapshots
 
 class MockStartPresenterDelegate: NSObject, ObservationEditListener {
     var fieldChangedCalled = false;
-    var newValue: Any? = nil;
+    var newValue: String? = nil;
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
         fieldChangedCalled = true;
-        newValue = value;
+        newValue = value as? String;
     }
 }
 
@@ -114,8 +114,14 @@ class EditTextFieldViewTests: QuickSpec {
             it("test delegate") {
                 let delegate = MockStartPresenterDelegate();
                 textFieldView = EditTextFieldView(field: field, delegate: delegate);
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.textField.text = "new value";
                 textFieldView.textFieldDidEndEditing(textFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
+                expect(delegate.newValue) == "new value";
+                expect(view) == snapshot();
             }
         }
         
@@ -171,8 +177,13 @@ class EditTextFieldViewTests: QuickSpec {
             it("test delegate") {
                 let delegate = MockStartPresenterDelegate();
                 textFieldView = EditTextFieldView(field: field, multiline: true, delegate: delegate);
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                textFieldView.multilineTextField.text = "this is a new value";
                 textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
                 expect(delegate.fieldChangedCalled) == true;
+                expect(delegate.newValue) == "this is a new value";
+                expect(view) == snapshot();
             }
         }
     }
