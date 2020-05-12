@@ -10,14 +10,13 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class EditDateView : UIView, UITextFieldDelegate {
-    private var controller: MDCTextInputControllerUnderline?;
-    private var field: NSDictionary?;
-    private var textField: MDCTextField?;
+    private var controller: MDCTextInputControllerUnderline = MDCTextInputControllerUnderline();
+    private var field: NSDictionary!;
     private var date: Date?;
     private var value: Date?;
     private var delegate: ObservationEditListener?;
     
-    private lazy var datePicker: UIDatePicker = {
+    internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker();
         if (NSDate.isDisplayGMT()) {
             datePicker.timeZone = TimeZone(secondsFromGMT: 0);
@@ -54,45 +53,36 @@ class EditDateView : UIView, UITextFieldDelegate {
         return toolbar;
     }()
     
+    lazy var textField: MDCTextField = {
+        let textField = MDCTextField(forAutoLayout: ());
+        textField.delegate = self;
+        controller.textInput = textField;
+        self.addSubview(textField);
+        textField.sizeToFit();
+        textField.autoPinEdgesToSuperviewEdges();
+        return textField;
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.translatesAutoresizingMaskIntoConstraints = false;
+        self.configureForAutoLayout();
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, value: Any?, delegate: ObservationEditListener) {
+    convenience init(field: NSDictionary, value: String? = nil, delegate: ObservationEditListener? = nil) {
         self.init(frame: CGRect.zero)
         self.field = field;
-        controller = MDCTextInputControllerUnderline()
-        textField = createTextField(value);
-        textField?.sizeToFit();
-        textField?.autoPinEdgesToSuperviewEdges();
-        controller?.placeholderText = field.object(forKey: "title") as? String
-        //        controller?.setErrorText("error text", errorAccessibilityValue: nil);
-        //        controller?.helperText = "Helper text";
-    }
-    
-    func createTextField(_ value: Any?) -> MDCTextField {
+        self.delegate = delegate;
         date = nil;
-        let textField = MDCTextField(forAutoLayout: ());
-        
-        controller?.textInput = textField;
-        self.addSubview(textField);
-        if (value != nil) {
-            
-            self.value = formatter.date(from: (value as? String)!);
-            datePicker.date = self.value!;
-            textField.text = (datePicker.date as NSDate).formattedDisplay();
-        } else {
-            self.value = nil;
-            datePicker.date = Date();
-        }
+        setValue(value);
         setupInputView(textField: textField);
-        textField.delegate = self;
-        return textField;
+        controller.placeholderText = field.object(forKey: "title") as? String
+        if ((field.object(forKey: "required") as? Bool) == true) {
+            controller.placeholderText = (controller.placeholderText ?? "") + " *"
+        }
     }
     
     func setupInputView(textField: MDCTextField) {
@@ -102,25 +92,25 @@ class EditDateView : UIView, UITextFieldDelegate {
     
     func setTextFieldValue() {
         if (self.value != nil) {
-            textField?.text = (datePicker.date as NSDate).formattedDisplay();
+            textField.text = (datePicker.date as NSDate).formattedDisplay();
         } else {
-            textField?.text = nil;
+            textField.text = nil;
         }
     }
     
     @objc func dateChanged() {
         date = datePicker.date;
-        textField?.text = (datePicker.date as NSDate).formattedDisplay();
+        textField.text = (datePicker.date as NSDate).formattedDisplay();
     }
     
     @objc func doneButtonPressed() {
-        textField?.resignFirstResponder();
+        textField.resignFirstResponder();
     }
     
     @objc func cancelButtonPressed() {
         date = value;
         setTextFieldValue();
-        textField?.resignFirstResponder();
+        textField.resignFirstResponder();
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
@@ -143,5 +133,35 @@ class EditDateView : UIView, UITextFieldDelegate {
         } else {
             datePicker.date = Date()
         }
+    }
+    
+    func isEmpty() -> Bool{
+        return (textField.text ?? "").count == 0
+    }
+    
+    func setValue(_ value: String?) {
+        if (value != nil) {
+            self.value = formatter.date(from: value!);
+            datePicker.date = self.value!;
+            textField.text = (datePicker.date as NSDate).formattedDisplay();
+        } else {
+            self.value = nil;
+            datePicker.date = Date();
+        }
+    }
+    
+    func setValid(_ valid: Bool) {
+        if (valid) {
+            controller.setErrorText(nil, errorAccessibilityValue: nil);
+        } else {
+            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+        }
+    }
+    
+    func isValid(enforceRequired: Bool = false) -> Bool {
+        if ((field.object(forKey: "required") as? Bool) == true && enforceRequired && isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

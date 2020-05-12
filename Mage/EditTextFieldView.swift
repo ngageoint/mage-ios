@@ -59,7 +59,6 @@ class EditTextFieldView : UIView {
     
     convenience init(field: NSDictionary, value: Any? = nil, multiline: Bool = false, delegate: ObservationEditListener? = nil) {
         self.init(frame: CGRect.zero);
-        self.configureForAutoLayout();
         self.field = field;
         self.multiline = multiline;
         self.value = value as? String;

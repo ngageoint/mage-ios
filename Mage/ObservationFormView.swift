@@ -67,7 +67,7 @@ class ObservationFormView: UIStackView {
             case "textarea":
                 fieldView = EditTextFieldView(field: fieldDictionary, value: value, multiline: true);
             case "date":
-                fieldView = EditDateView(field: fieldDictionary, value: value, delegate: self);
+                fieldView = EditDateView(field: fieldDictionary, value: value as? String, delegate: self);
 //            case "geometry":
 //                fieldView = EditGeometryView(field: fieldDictionary, value: value, delegate: self);
             default:

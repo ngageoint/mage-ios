@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class MockStartPresenterDelegate: NSObject, ObservationEditListener {
+class MockTextFieldDelegate: NSObject, ObservationEditListener {
     var fieldChangedCalled = false;
     var newValue: String? = nil;
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
@@ -112,7 +112,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("test delegate") {
-                let delegate = MockStartPresenterDelegate();
+                let delegate = MockTextFieldDelegate();
                 textFieldView = EditTextFieldView(field: field, delegate: delegate);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -129,7 +129,7 @@ class EditTextFieldViewTests: QuickSpec {
             
             var textFieldView: EditTextFieldView!
             var view: UIView!
-            var field: NSDictionary!
+            var field: NSMutableDictionary!
             
             beforeEach {
                 field = ["title": "Multi Line Field Title"];
@@ -174,8 +174,55 @@ class EditTextFieldViewTests: QuickSpec {
                 expect(view) == snapshot();
             }
             
+            it("set valid false") {
+                textFieldView = EditTextFieldView(field: field, multiline: true);
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.setValid(false);
+                expect(view) == snapshot();
+            }
+            
+            it("set valid true after being invalid") {
+                textFieldView = EditTextFieldView(field: field, multiline: true);
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.setValid(false);
+                textFieldView.setValid(true);
+                expect(view) == snapshot();
+            }
+            
+            it("required field is invalid if empty") {
+                field.setValue(true, forKey: "required");
+                textFieldView = EditTextFieldView(field: field, multiline: true);
+                
+                expect(textFieldView.isEmpty()) == true;
+                expect(textFieldView.isValid(enforceRequired: true)) == false;
+            }
+            
+            it("required field is valid if not empty") {
+                field.setValue(true, forKey: "required");
+                textFieldView = EditTextFieldView(field: field, value: "valid", multiline: true);
+                
+                expect(textFieldView.isEmpty()) == false;
+                expect(textFieldView.isValid(enforceRequired: true)) == true;
+            }
+            
+            it("required field has title which indicates required") {
+                field.setValue(true, forKey: "required");
+                textFieldView = EditTextFieldView(field: field, multiline: true);
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(view) == snapshot();
+            }
+            
             it("test delegate") {
-                let delegate = MockStartPresenterDelegate();
+                let delegate = MockTextFieldDelegate();
                 textFieldView = EditTextFieldView(field: field, multiline: true, delegate: delegate);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
