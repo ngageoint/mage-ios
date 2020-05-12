@@ -65,7 +65,7 @@
     [super tearDown];
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [OHHTTPStubs removeAllStubs];
+    [HTTPStubs removeAllStubs];
 }
 
 - (void) skipped_testLoginWithRegisteredDeviceAndRandomToken {
@@ -97,37 +97,37 @@
         [apiResponseArrived fulfill];
     });
     
-    id apiStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    id apiStub = [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         NSLog(@"URL is %@", request.URL.absoluteString);
         NSLog(@"does it match /api? %@", request.URL.path);
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    id apiSigninStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    id apiSigninStub = [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         NSLog(@"does it match /auth/local/signin? %@", request.URL.path);
         NSLog(@"is it? %d", [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"]);
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"signinSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    id apiAuthorizeStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    id apiAuthorizeStub = [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         NSLog(@"does it match /auth/local/authorize? %@", request.URL.path);
 
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/authorize"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"authorizeLocalSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
 
-    id myselfStub = [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    id myselfStub = [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         NSLog(@"does it match /api/users/myself? %@", request.URL.path);
         NSString *authorizationHeader = [request.allHTTPHeaderFields valueForKey:@"Authorization"];
         NSLog(@"Authorization Header is %@", authorizationHeader);
@@ -135,8 +135,8 @@
             XCTAssertTrue([authorizationHeader isEqualToString:@"Bearer TOKEN"]);
         }
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/users/myself"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:[[NSDictionary alloc] init] statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+        return [HTTPStubsResponse responseWithJSONObject:[[NSDictionary alloc] init] statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
     [coordinator start];
@@ -220,11 +220,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -243,20 +243,20 @@
                                     @"5.0.0", @"appVersion",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-            OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+            HTTPStubsResponse *response = [[HTTPStubsResponse alloc] init];
             response.statusCode = 401;
             
             return response;
         }];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/devices"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSString* fixture = OHPathForFile(@"registrationSuccess.json", self.class);
-            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+            return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                     statusCode:200 headers:@{@"Content-Type":@"application/json"}];
         }];
         
@@ -310,12 +310,12 @@
         [apiResponseArrived fulfill];
     });
 
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSLog(@"api request recieved and handled");
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
 
@@ -336,11 +336,11 @@
                                     @"5.0.0", @"appVersion",
                                     nil];
 
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSString* fixture = OHPathForFile(@"loginSuccess.json", self.class);
-            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+            return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                     statusCode:200 headers:@{@"Content-Type":@"application/json"}];
         }];
 
@@ -401,11 +401,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -425,11 +425,11 @@
                                     @"5.0.0", @"appVersion",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSString* fixture = OHPathForFile(@"signinSuccess.json", self.class);
-            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+            return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                     statusCode:200 headers:@{@"Content-Type":@"application/json"}];
         }];
         
@@ -487,11 +487,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -511,11 +511,11 @@
                                     @"strategy",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSString* fixture = OHPathForFile(@"signinSuccess.json", self.class);
-            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+            return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                     statusCode:200 headers:@{@"Content-Type":@"application/json"}];
         }];
         
@@ -569,11 +569,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -591,20 +591,20 @@
                                     @"strategy",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-            OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+            HTTPStubsResponse *response = [[HTTPStubsResponse alloc] init];
             response.statusCode = 401;
             
             return response;
         }];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/devices"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSString* fixture = OHPathForFile(@"apiFail.json", self.class);
-            return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+            return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                     statusCode:401 headers:@{@"Content-Type":@"application/json"}];
         }];
         
@@ -654,11 +654,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -679,11 +679,11 @@
                                     @"strategy",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-            return [OHHTTPStubsResponse responseWithError:notConnectedError];
+            return [HTTPStubsResponse responseWithError:notConnectedError];
         }];
         
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /auth/local/signin complete"];
@@ -749,11 +749,11 @@
         [apiResponseArrived fulfill];
     });
 
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
 
@@ -772,11 +772,11 @@
                                     @"strategy",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-            return [OHHTTPStubsResponse responseWithError:notConnectedError];
+            return [HTTPStubsResponse responseWithError:notConnectedError];
         }];
         
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /auth/local/signin complete"];
@@ -841,11 +841,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -864,11 +864,11 @@
                                     @"strategy",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-            return [OHHTTPStubsResponse responseWithError:notConnectedError];
+            return [HTTPStubsResponse responseWithError:notConnectedError];
         }];
         
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /auth/local/signin complete"];
@@ -913,11 +913,11 @@
         [responseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -943,9 +943,9 @@
         [responseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         XCTFail(@"No network requests should be made when the cancel action is taken after setting the server url");
         return nil;
     }];
@@ -976,15 +976,15 @@
     
     [coordinator start];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         serverUrlControllerMock = OCMPartialMock(coordinator.urlController);
         OCMExpect([serverUrlControllerMock showError:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
             [responseArrived fulfill];
         });
         NSString* fixture = OHPathForFile(@"apiFail.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
         
@@ -1024,11 +1024,11 @@
         [responseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiFail.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     

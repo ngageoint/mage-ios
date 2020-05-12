@@ -20,6 +20,16 @@ class ExpandableCard: MDCCard {
     private var showExpanded: Bool = true;
     private var cell: ObservationFormCardCell?;
     
+    override init(frame: CGRect) {
+        super.init(frame: frame);
+        self.translatesAutoresizingMaskIntoConstraints = false;
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder);
+        self.translatesAutoresizingMaskIntoConstraints = false;
+    }
+    
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(forAutoLayout: ());
         stackView.alignment = UIStackView.Alignment.fill;
@@ -105,7 +115,7 @@ class ExpandableCard: MDCCard {
     
     func apply(containerScheme: MDCContainerScheming, typographyScheme: MDCTypographyScheming) {
         self.applyTheme(withScheme: containerScheme)
-        self.headerText.font = typographyScheme.subtitle1
+        self.headerText.font = typographyScheme.headline6
         self.subhead.font = typographyScheme.subtitle2
     }
     
@@ -164,7 +174,7 @@ class ExpandableCard: MDCCard {
     }
     
     private func addConstraints() {
-        self.autoPinEdgesToSuperviewEdges();
+//        self.autoPinEdgesToSuperviewEdges();
         setStackViewConstraints();
         setHeaderAreaConstraints();
         setThumbnailConstraints();

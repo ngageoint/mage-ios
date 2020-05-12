@@ -67,8 +67,8 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(editCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
     
-    self.editCardController = [[ObservationEditCardCollectionViewController alloc] init];
-    [self.editCardController setDelegateWithDelegate:self observation:self.observation newObservation:self.newObservation];
+    self.editCardController = [[ObservationEditCardCollectionViewController alloc] initWithDelegate:self observation:self.observation newObservation:self.newObservation];
+//    [self.editCardController setDelegateWithDelegate:self observation:self.observation newObservation:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];
     
@@ -81,6 +81,10 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = kCATransitionFade;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+//    UIViewController *vc = [[UIViewController alloc] init];
+//    vc.view = self.editCardController;
+    
     [self.navigationController pushViewController:self.editCardController animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }

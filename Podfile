@@ -28,6 +28,9 @@ target 'MAGE' do
         inherit! :search_paths
         pod 'OCMock'
         pod 'OHHTTPStubs'
+    	pod 'Nimble'
+        pod 'Quick'
+        pod 'Nimble-Snapshots'
     end
 end
 

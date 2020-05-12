@@ -15,7 +15,41 @@ import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import PureLayout
 
-class ObservationFormCardCell: MDCCardCollectionCell {
+class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControllerDelegate {
+    func addVoiceAttachment() {
+        
+    }
+    
+    func addVideoAttachment() {
+        
+    }
+    
+    func addCameraAttachment() {
+        
+    }
+    
+    func addGalleryAttachment() {
+        
+    }
+    
+    func deleteObservation() {
+        
+    }
+    
+    func fieldSelected(_ field: [AnyHashable : Any]!) {
+        
+    }
+    
+    func attachmentSelected(_ attachment: Attachment!) {
+        
+    }
+    
+    func addForm() {
+        
+    }
+    
+    
+    private var editController: ObservationEditViewController?;
     
     private lazy var card: ExpandableCard = {
         let card = ExpandableCard(frame: CGRect.zero);
@@ -24,7 +58,7 @@ class ObservationFormCardCell: MDCCardCollectionCell {
         return card;
     }()
 
-    func configure(observationForm: NSDictionary, eventForm: NSDictionary, width: CGFloat) {
+    func configure(observationForm: NSDictionary, eventForm: NSDictionary, width: CGFloat, observation: Observation) {
         var formPrimaryValue = "";
         var formSecondaryValue = "";
         if let primaryField = eventForm.object(forKey: "primaryFeedField") as! NSString? {
@@ -44,9 +78,9 @@ class ObservationFormCardCell: MDCCardCollectionCell {
 //        NSLog("Event form secondary key %@", secondaryField);
         
         card.setWidth(width: width);
-        let label = UILabel();
-        label.text = "EXPANDO";
-        card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: label, cell: self);
+        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm);
+        
+        card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: self);
     }
 
     func apply(containerScheme: MDCContainerScheming, typographyScheme: MDCTypographyScheming) {
