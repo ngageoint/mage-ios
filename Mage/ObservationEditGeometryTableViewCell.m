@@ -70,6 +70,7 @@
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     self.locationHelperView.hidden = YES;
+    self.locationHelperLabel.text = nil;
 
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {

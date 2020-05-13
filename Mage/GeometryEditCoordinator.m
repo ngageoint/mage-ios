@@ -75,7 +75,7 @@
         return;
     }
     
-    [self.delegate geometryEditComplete:self.currentGeometry coordinator:self];
+    [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
