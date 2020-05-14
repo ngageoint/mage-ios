@@ -11,7 +11,7 @@
 
 @protocol GeometryEditDelegate
 
-- (void) geometryEditComplete:(SFGeometry *) geometry coordinator:(id) coordinator;
+- (void) geometryEditComplete:(SFGeometry *) geometry fieldDefintion:(NSDictionary *) field coordinator:(id) coordinator;
 - (void) geometryEditCancel:(id) coordinator;
 
 @end

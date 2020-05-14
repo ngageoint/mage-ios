@@ -9,14 +9,7 @@
 @implementation ObservationViewController_iPhone
 
 - (NSMutableArray *) getHeaderSection {
-    NSMutableArray *headerSection = [[NSMutableArray alloc] initWithObjects:@"header", @"map", @"actions", nil];
-    
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-    if ([favorites count]) {
-        [headerSection insertObject:@"favorites" atIndex:3];
-    };
-    
-    return headerSection;
+    return [[NSMutableArray alloc] initWithObjects:@"header", @"map", @"location", @"actions", nil];
 }
 
 - (void) registerCellTypes {
@@ -32,28 +25,6 @@
     }
     
     return attachmentsSection;
-}
-
-- (void) updateFavorites {
-    NSSet *favorites = [self.observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
-
-    NSMutableArray *headerSection = [self.tableLayout objectAtIndex:2];
-    
-    NSInteger favoritesCount = [favorites count];
-    
-    if ([headerSection containsObject:@"favorites"] && favoritesCount == 0) {
-        [headerSection removeObjectAtIndex:3];
-        [self.propertyTable beginUpdates];
-        [self.propertyTable deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.propertyTable endUpdates];
-    } else if (![headerSection containsObject:@"favorites"] && favoritesCount > 0) {
-        [headerSection insertObject:@"favorites" atIndex:3];
-        [self.propertyTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    } else if ([headerSection containsObject:@"favorites"]) {
-        [self.propertyTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:2], [NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
-    }
 }
 
 @end

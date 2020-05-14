@@ -7,6 +7,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Release Notes
 
 ##### Features
+* Add observation accuracy.  Accuracy circle displayed on map for annotation click, observation view, 
+  and edit. Accuracy info is also displayed textually in observation view and edit.
+* Show location accuracy circle in user profile map.
 * Image caching is now handled by KingFisher, this affects all attachment views
 * Observation feed display is now separate from the map marker display
 

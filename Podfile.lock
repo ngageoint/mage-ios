@@ -35,9 +35,9 @@ PODS:
   - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
   - GTMSessionFetcher/Core (1.4.0)
   - HexColors (2.2.1)
-  - Kingfisher (5.13.4):
-    - Kingfisher/Core (= 5.13.4)
-  - Kingfisher/Core (5.13.4)
+  - Kingfisher (5.14.0):
+    - Kingfisher/Core (= 5.14.0)
+  - Kingfisher/Core (5.14.0)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.15)
   - mage-ios-sdk (3.0.8):
@@ -148,7 +148,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
-  Kingfisher: d2279a7abece3c7f25a80cd2b7f363ca5cf3f44c
+  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   mage-ios-sdk: 7b0c6b2d07958711f3ee8421106db7d77a8ff53f

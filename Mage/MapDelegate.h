@@ -56,7 +56,7 @@
 - (void) updateObservations:(NSArray *) observations;
 - (void) setObservations:(Observations *)observations withCompletion: (void (^)(void)) complete;
 - (void) updateObservationPredicates: (NSMutableArray *) predicates;
-- (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user andCenter: (BOOL) shouldCenter;
+- (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user;
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
 - (void) mapClickAtPoint: (CGPoint) point;

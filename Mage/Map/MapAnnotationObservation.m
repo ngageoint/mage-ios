@@ -48,15 +48,12 @@
     id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
     if (accuracyProperty != nil) {
         double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy > latitudeMeters ? accuracy * 2.5 : latitudeMeters;
-        longitudeMeters = accuracy > longitudeMeters ? accuracy * 2.5 : longitudeMeters;
+        latitudeMeters = accuracy * 2.5;  // double the radius w/ padding
+        longitudeMeters = accuracy * 2.5; // double the radius w/ padding
     }
     
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(_annotation.coordinate, latitudeMeters, longitudeMeters);
-    
-    MKCoordinateRegion viewRegion = [mapView regionThatFits:region];
-    
-    return viewRegion;
+    return [mapView regionThatFits:region];
 }
 
 @end

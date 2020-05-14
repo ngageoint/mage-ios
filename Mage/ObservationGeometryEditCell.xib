@@ -1,57 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="188" id="NPm-cy-E6f" customClass="ObservationEditGeometryTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="190"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="geometry" rowHeight="215" id="NPm-cy-E6f" customClass="ObservationEditGeometryTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="217"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NPm-cy-E6f" id="UUi-dG-znd">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="189.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="217"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="GUP-hg-zlz">
-                        <rect key="frame" x="16" y="64" width="343" height="119"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="95" id="2iI-R1-iAa"/>
-                        </constraints>
-                    </mapView>
-                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AEe-hS-t3X" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                        <rect key="frame" x="16" y="11" width="343" height="45"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="45" id="Nl6-TI-LrC"/>
-                        </constraints>
-                        <nil key="textColor"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NTL-ir-qD2">
+                        <rect key="frame" x="16" y="8" width="343" height="201"/>
+                        <subviews>
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AEe-hS-t3X" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Nl6-TI-LrC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aXZ-qt-OTi">
+                                <rect key="frame" x="0.0" y="45" width="343" height="20"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HNi-O9-Ge2">
+                                        <rect key="frame" x="4" y="2" width="339" height="13.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="HNi-O9-Ge2" firstAttribute="top" secondItem="aXZ-qt-OTi" secondAttribute="top" constant="2" id="2Ca-dI-ujj"/>
+                                    <constraint firstAttribute="trailing" secondItem="HNi-O9-Ge2" secondAttribute="trailing" id="O8N-r7-7Dl"/>
+                                    <constraint firstItem="HNi-O9-Ge2" firstAttribute="leading" secondItem="aXZ-qt-OTi" secondAttribute="leading" constant="4" id="U3P-9M-7ft"/>
+                                    <constraint firstAttribute="height" constant="20" id="wOQ-2I-EXX"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o50-qs-NZA">
+                                <rect key="frame" x="0.0" y="65" width="343" height="136"/>
+                                <subviews>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="GUP-hg-zlz">
+                                        <rect key="frame" x="0.0" y="8" width="343" height="120"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="120" id="LmA-5X-p7V"/>
+                                        </constraints>
+                                    </mapView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="GUP-hg-zlz" firstAttribute="top" secondItem="o50-qs-NZA" secondAttribute="top" constant="8" id="aa5-cH-4rP"/>
+                                    <constraint firstItem="GUP-hg-zlz" firstAttribute="leading" secondItem="o50-qs-NZA" secondAttribute="leading" id="mwq-5c-7SK"/>
+                                    <constraint firstAttribute="trailing" secondItem="GUP-hg-zlz" secondAttribute="trailing" id="yC7-yO-qkC"/>
+                                    <constraint firstAttribute="bottom" secondItem="GUP-hg-zlz" secondAttribute="bottom" constant="8" id="ybm-xu-hSI"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="AEe-hS-t3X" firstAttribute="leading" secondItem="UUi-dG-znd" secondAttribute="leadingMargin" id="13P-uo-z4d"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="AEe-hS-t3X" secondAttribute="trailing" id="5gt-ym-NeD"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="GUP-hg-zlz" secondAttribute="bottom" constant="-4" id="88u-TQ-8bu"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="GUP-hg-zlz" secondAttribute="trailing" id="DjY-ae-eEk"/>
-                    <constraint firstItem="AEe-hS-t3X" firstAttribute="top" secondItem="UUi-dG-znd" secondAttribute="top" constant="11" id="KW5-S1-Paa"/>
-                    <constraint firstItem="GUP-hg-zlz" firstAttribute="top" secondItem="AEe-hS-t3X" secondAttribute="bottom" constant="8" id="Lxi-TJ-Odi"/>
-                    <constraint firstItem="GUP-hg-zlz" firstAttribute="leading" secondItem="UUi-dG-znd" secondAttribute="leadingMargin" id="bbv-DP-xK8"/>
+                    <constraint firstAttribute="trailing" secondItem="NTL-ir-qD2" secondAttribute="trailing" constant="16" id="GwK-DK-4if"/>
+                    <constraint firstItem="NTL-ir-qD2" firstAttribute="top" secondItem="UUi-dG-znd" secondAttribute="top" constant="8" id="Qju-ZE-zaL"/>
+                    <constraint firstAttribute="bottom" secondItem="NTL-ir-qD2" secondAttribute="bottom" constant="8" id="sRP-Sj-3HH"/>
+                    <constraint firstItem="NTL-ir-qD2" firstAttribute="leading" secondItem="UUi-dG-znd" secondAttribute="leading" constant="16" id="whz-hh-9fW"/>
                 </constraints>
             </tableViewCellContentView>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="locationField" destination="AEe-hS-t3X" id="Qa4-o7-97R"/>
+                <outlet property="locationHelperLabel" destination="HNi-O9-Ge2" id="A1T-oz-hAZ"/>
+                <outlet property="locationHelperView" destination="aXZ-qt-OTi" id="cf8-ZE-zJh"/>
                 <outlet property="mapView" destination="GUP-hg-zlz" id="1Kb-jg-OSC"/>
             </connections>
-            <point key="canvasLocation" x="17.5" y="36"/>
+            <point key="canvasLocation" x="13.6" y="54.422788605697157"/>
         </tableViewCell>
     </objects>
 </document>
