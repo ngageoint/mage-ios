@@ -16,3 +16,5 @@
 #import "NSDate+display.h"
 #import "ObservationEditListener.h"
 #import "ObservationEditGeometryTableViewCell.h"
+#import "MapDelegate.h"
+#import <mgrs/MGRS.h>

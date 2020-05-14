@@ -9,139 +9,153 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditGeometryView : UIView, UITextFieldDelegate {
-    private var controller: MDCTextInputControllerUnderline?;
-    private var field: NSDictionary?;
-    private var textField: MDCTextField?;
-    private var date: Date?;
-    private var value: Date?;
-    private var delegate: ObservationEditListener?;
+class EditGeometryView : BaseFieldView {
+    private var accuracy: Double?;
+    private var provider: String?;
     
-    private lazy var datePicker: UIDatePicker = {
-        let datePicker = UIDatePicker();
-        if (NSDate.isDisplayGMT()) {
-            datePicker.timeZone = TimeZone(secondsFromGMT: 0);
-        } else {
-            datePicker.timeZone = TimeZone.current;
-        }
-        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
-        return datePicker;
+    private var mapDelegate: MapDelegate = MapDelegate();
+    
+    lazy var textField: MDCTextField = {
+        let textField = MDCTextField(forAutoLayout: ());
+        controller.textInput = textField;
+        return textField;
     }()
     
-    private lazy var timeZoneLabel: UILabel = {
-        let label = UILabel(forAutoLayout: ());
-        label.text = datePicker.timeZone?.identifier;
-        label.sizeToFit();
-        return label;
+    lazy var mapView: MKMapView = {
+        let mapView = MKMapView(forAutoLayout: ());
+        mapView.autoSetDimension(.height, toSize: 95);
+        mapDelegate.setMapView(mapView);
+        mapView.delegate = mapDelegate;
+        mapDelegate.setupListeners();
+        mapDelegate.hideStaticLayers = true;
+        return mapView;
     }()
-    
-    private lazy var formatter: DateFormatter = {
-        let formatter = DateFormatter();
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-        formatter.locale = Locale(identifier: "en_US_POSIX");
-        return formatter;
-    }()
-    
-    private lazy var dateAccessoryView: UIToolbar = {
-        let toolbar = UIToolbar(forAutoLayout: ());
-        toolbar.autoSetDimension(.height, toSize: 44);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, UIBarButtonItem(customView: timeZoneLabel), flexSpace, doneBarButton];
-        return toolbar;
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.translatesAutoresizingMaskIntoConstraints = false;
-    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, value: Any?, delegate: ObservationEditListener) {
-        self.init(frame: CGRect.zero)
-        self.field = field;
-        controller = MDCTextInputControllerUnderline()
-        textField = createTextField(value);
-        textField?.sizeToFit();
-        textField?.autoPinEdgesToSuperviewEdges();
-        controller?.placeholderText = field.object(forKey: "title") as? String
-        //        controller?.setErrorText("error text", errorAccessibilityValue: nil);
-        //        controller?.helperText = "Helper text";
+    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
+        self.init(field: field, delegate: delegate, value: nil);
     }
     
-    func createTextField(_ value: Any?) -> MDCTextField {
-        date = nil;
-        let textField = MDCTextField(forAutoLayout: ());
+    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
+        super.init(field: field, delegate: delegate, value: value);
+        setValue(value);
+
+        buildView();
+        setValue(value);
+
+        setAccuracy(accuracy, provider: provider);
         
-        controller?.textInput = textField;
-        self.addSubview(textField);
-        if (value != nil) {
-            
-            self.value = formatter.date(from: (value as? String)!);
-            datePicker.date = self.value!;
-            textField.text = (datePicker.date as NSDate).formattedDisplay();
+        setupController();
+        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (MGRS)";
         } else {
-            self.value = nil;
-            datePicker.date = Date();
+            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (Lat, Long)";
         }
-        setupInputView(textField: textField);
-        textField.delegate = self;
-        return textField;
-    }
-    
-    func setTextFieldValue() {
-        if (self.value != nil) {
-            textField?.text = (datePicker.date as NSDate).formattedDisplay();
-        } else {
-            textField?.text = nil;
+        
+        if ((field.object(forKey: "required") as? Bool) == true) {
+            controller.placeholderText = (controller.placeholderText ?? "") + " *"
         }
     }
     
-    func setupInputView(textField: MDCTextField) {
-        textField.inputView = datePicker;
-        textField.inputAccessoryView = dateAccessoryView;
+    deinit {
+        self.mapDelegate.cleanup();
     }
     
-    @objc func dateChanged() {
-        date = datePicker.date;
-        textField?.text = (datePicker.date as NSDate).formattedDisplay();
+    override func setupController() {
+        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (MGRS)";
+        } else {
+            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (Lat, Long)";
+        }
+        
+        if ((field.object(forKey: "required") as? Bool) == true) {
+            controller.placeholderText = (controller.placeholderText ?? "") + " *"
+        }
     }
     
-    @objc func doneButtonPressed() {
-        textField?.resignFirstResponder();
+    func buildView() {
+        let wrapper = UIView(forAutoLayout: ());
+        self.addSubview(wrapper);
+        wrapper.autoPinEdgesToSuperviewEdges();
+        wrapper.addSubview(textField);
+        textField.sizeToFit();
+        textField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+        wrapper.addSubview(mapView);
+        mapView.autoPinEdge(.top, to: .bottom, of: textField, withOffset: 8);
+        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .top);
+        
+        mapDelegate.ensureMapLayout();
+        
+        addTapRecognizer();
     }
     
-    @objc func cancelButtonPressed() {
-        date = value;
-        setTextFieldValue();
-        textField?.resignFirstResponder();
+    override func isEmpty() -> Bool{
+        return self.value == nil;
     }
     
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        self.date = nil;
-        return true;
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        date = datePicker.date;
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let newDate = self.date {
-            if (self.value != newDate) {
-                self.value = newDate;
-                self.dateChanged();
-                self.delegate?.observationField(self.field, valueChangedTo: formatter.string(from: newDate), reloadCell: false);
+    func setAccuracy(_ accuracy: Double?, provider: String?) {
+        self.accuracy = accuracy;
+        self.provider = provider;
+        if (accuracy != nil) {
+            if (self.provider != "manual") {
+                var formattedProvider: String = "";
+                if (self.provider == "gps") {
+                    formattedProvider = provider!.uppercased();
+                } else if (provider != nil) {
+                    formattedProvider = provider!.capitalized;
+                }
+                
+                controller.helperText = String(format: "%@ Location Accuracy +/- %.02fm", formattedProvider, accuracy!);
             }
-            datePicker.date = newDate;
+        }
+        //            double accuracy = [accuracyProperty doubleValue];
+        //
+        //            ObservationAccuracy *overlay = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
+        //            [self.mapView addOverlay:overlay];
+        //
+        //            NSString *provider = [observation.properties objectForKey:@"provider"];
+        //            if (![provider isEqualToString:@"manual"]) {
+        //                self.locationHelperView.hidden = NO;
+        //
+        //                if ([provider isEqualToString:@"gps"]) {
+        //                    provider = [provider uppercaseString];
+        //                } else if (provider != nil) {
+        //                    provider = [provider capitalizedString];
+        //                }
+        //
+        //                NSString *accuracy = @"";
+        //                id accuracyProperty = [observation.properties valueForKey:@"accuracy"];
+        //                if (accuracyProperty != nil) {
+        //                    accuracy = [NSString stringWithFormat:@" +/- %.02fm", [accuracyProperty floatValue]];
+        //                }
+        //
+        //                self.locationHelperLabel.text = [NSString stringWithFormat:@"%@ Location Accuracy %@", provider ?: @"", accuracy];
+        //            }
+    }
+    
+    func setValue(_ value: SFGeometry?) {
+        self.value = value;
+        if (value != nil) {
+            if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
+                if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+                    textField.text = MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees));
+                } else {
+                    textField.text = String(format: "%.6f, %.6f", point.y.doubleValue, point.x.doubleValue);
+                }
+            }
         } else {
-            datePicker.date = Date()
+            textField.text = nil;
+        }
+    }
+    
+    override func setValid(_ valid: Bool) {
+        if (valid) {
+            controller.setErrorText(nil, errorAccessibilityValue: nil);
+        } else {
+            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
         }
     }
 }

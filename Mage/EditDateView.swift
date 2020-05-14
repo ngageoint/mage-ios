@@ -9,12 +9,8 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditDateView : UIView, UITextFieldDelegate {
-    private var controller: MDCTextInputControllerUnderline = MDCTextInputControllerUnderline();
-    private var field: NSDictionary!;
+class EditDateView : BaseFieldView {
     private var date: Date?;
-    private var value: Date?;
-    private var delegate: ObservationEditListener?;
     
     internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker();
@@ -63,26 +59,20 @@ class EditDateView : UIView, UITextFieldDelegate {
         return textField;
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.configureForAutoLayout();
-    }
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, value: String? = nil, delegate: ObservationEditListener? = nil) {
-        self.init(frame: CGRect.zero)
-        self.field = field;
-        self.delegate = delegate;
+    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
+        self.init(field: field, delegate: delegate, value: nil);
+    }
+    
+    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: String?) {
+        super.init(field: field, delegate: delegate, value: value);
         date = nil;
         setValue(value);
         setupInputView(textField: textField);
-        controller.placeholderText = field.object(forKey: "title") as? String
-        if ((field.object(forKey: "required") as? Bool) == true) {
-            controller.placeholderText = (controller.placeholderText ?? "") + " *"
-        }
+        setupController();
     }
     
     func setupInputView(textField: MDCTextField) {
@@ -108,11 +98,36 @@ class EditDateView : UIView, UITextFieldDelegate {
     }
     
     @objc func cancelButtonPressed() {
-        date = value;
+        date = value as? Date;
         setTextFieldValue();
         textField.resignFirstResponder();
     }
     
+    override func isEmpty() -> Bool{
+        return (textField.text ?? "").count == 0
+    }
+    
+    func setValue(_ value: String?) {
+        if (value != nil) {
+            self.value = formatter.date(from: value!);
+            datePicker.date = (self.value as? Date)!;
+            textField.text = (datePicker.date as NSDate).formattedDisplay();
+        } else {
+            self.value = nil;
+            datePicker.date = Date();
+        }
+    }
+    
+    override func setValid(_ valid: Bool) {
+        if (valid) {
+            controller.setErrorText(nil, errorAccessibilityValue: nil);
+        } else {
+            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+        }
+    }
+}
+
+extension EditDateView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
         return true;
@@ -124,7 +139,7 @@ class EditDateView : UIView, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let newDate = self.date {
-            if (self.value != newDate) {
+            if (self.value as? Date != newDate) {
                 self.value = newDate;
                 self.dateChanged();
                 self.delegate?.observationField(self.field, valueChangedTo: formatter.string(from: newDate), reloadCell: false);
@@ -133,35 +148,5 @@ class EditDateView : UIView, UITextFieldDelegate {
         } else {
             datePicker.date = Date()
         }
-    }
-    
-    func isEmpty() -> Bool{
-        return (textField.text ?? "").count == 0
-    }
-    
-    func setValue(_ value: String?) {
-        if (value != nil) {
-            self.value = formatter.date(from: value!);
-            datePicker.date = self.value!;
-            textField.text = (datePicker.date as NSDate).formattedDisplay();
-        } else {
-            self.value = nil;
-            datePicker.date = Date();
-        }
-    }
-    
-    func setValid(_ valid: Bool) {
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
-        }
-    }
-    
-    func isValid(enforceRequired: Bool = false) -> Bool {
-        if ((field.object(forKey: "required") as? Bool) == true && enforceRequired && isEmpty()) {
-            return false;
-        }
-        return true;
     }
 }

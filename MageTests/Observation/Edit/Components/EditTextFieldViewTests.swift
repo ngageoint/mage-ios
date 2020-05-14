@@ -223,7 +223,7 @@ class EditTextFieldViewTests: QuickSpec {
             
             it("test delegate") {
                 let delegate = MockTextFieldDelegate();
-                textFieldView = EditTextFieldView(field: field, multiline: true, delegate: delegate);
+                textFieldView = EditTextFieldView(field: field, delegate: delegate, multiline: true);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 textFieldView.multilineTextField.text = "this is a new value";

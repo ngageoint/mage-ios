@@ -123,7 +123,7 @@ class EditDateViewTests: QuickSpec {
                 formatter.locale = Locale(identifier: "en_US_POSIX");
                 
                 let delegate = MockDateFieldDelegate()
-                dateFieldView = EditDateView(field: field, value: "2013-06-22T08:18:20.000Z", delegate: delegate);
+                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 let newDate = Date(timeIntervalSince1970: 10000000);

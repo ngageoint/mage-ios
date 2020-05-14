@@ -62,14 +62,13 @@ class ObservationFormView: UIStackView {
             var fieldView: UIView;
             switch type {
             case "textfield":
-                fieldView = EditTextFieldView(field: fieldDictionary, value: value);
-                print("Field view is", fieldView)
+                fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String);
             case "textarea":
-                fieldView = EditTextFieldView(field: fieldDictionary, value: value, multiline: true);
+                fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String, multiline: true);
             case "date":
-                fieldView = EditDateView(field: fieldDictionary, value: value as? String, delegate: self);
-//            case "geometry":
-//                fieldView = EditGeometryView(field: fieldDictionary, value: value, delegate: self);
+                fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
+            case "geometry":
+                fieldView = EditGeometryView(field: fieldDictionary, delegate: self, value: value as? SFGeometry);
             default:
                 let label = UILabel(forAutoLayout: ());
                 label.text = type;
@@ -99,6 +98,10 @@ class ObservationFormView: UIStackView {
 }
 
 extension ObservationFormView: ObservationEditListener {
+    func fieldSelected(_ field: Any!) {
+        print("Field was selected", field);
+    }
+    
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
         let fieldDictionary = field as! NSDictionary;
         let fieldKey = fieldDictionary.object(forKey: "name") as! String;

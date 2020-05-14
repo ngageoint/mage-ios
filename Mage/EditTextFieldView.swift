@@ -9,19 +9,15 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditTextFieldView : UIView {
-    private var controller: MDCTextInputControllerUnderline = MDCTextInputControllerUnderline();
-    private var field: NSDictionary!;
+class EditTextFieldView : BaseFieldView {
     private var multiline: Bool = false;
-    private var value: String?;
-    private var delegate: ObservationEditListener?;
     
     lazy var multilineTextField: MDCMultilineTextField = {
         let multilineTextField = MDCMultilineTextField(forAutoLayout: ());
         multilineTextField.textView?.delegate = self;
         controller.textInput = multilineTextField;
         if (value != nil) {
-            multilineTextField.text = value;
+            multilineTextField.text = value as? String;
         }
         return multilineTextField;
     }()
@@ -31,7 +27,7 @@ class EditTextFieldView : UIView {
         textField.delegate = self;
         controller.textInput = textField;
         if (value != nil) {
-            textField.text = value;
+            textField.text = value as? String;
         }
         return textField;
     }()
@@ -48,21 +44,26 @@ class EditTextFieldView : UIView {
         return toolbar;
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.configureForAutoLayout();
-    }
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, value: Any? = nil, multiline: Bool = false, delegate: ObservationEditListener? = nil) {
-        self.init(frame: CGRect.zero);
-        self.field = field;
+    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
+        self.init(field: field, delegate: delegate, value: nil, multiline: false);
+    }
+    
+    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil, multiline: Bool) {
+        self.init(field: field, delegate: delegate, value: nil, multiline: multiline);
+    }
+    
+    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: String?, multiline: Bool = false) {
+        super.init(field: field, delegate: delegate, value: value);
         self.multiline = multiline;
-        self.value = value as? String;
-        self.delegate = delegate;
+        self.addFieldView();
+        setupController();
+    }
+    
+    func addFieldView() {
         if (multiline) {
             self.addSubview(multilineTextField);
             multilineTextField.autoPinEdgesToSuperviewEdges();
@@ -70,23 +71,17 @@ class EditTextFieldView : UIView {
             self.addSubview(textField);
             textField.autoPinEdgesToSuperviewEdges();
         }
-        controller.placeholderText = field.object(forKey: "title") as? String
-        if ((field.object(forKey: "required") as? Bool) == true) {
-            controller.placeholderText = (controller.placeholderText ?? "") + " *"
-        }
-//        controller?.setErrorText("error text", errorAccessibilityValue: nil);
-//        controller?.helperText = "Helper text";
     }
     
-    func setValue(_ value: Any?) {
+    func setValue(_ value: String?) {
         if (self.multiline) {
-            multilineTextField.text = value as? String;
+            multilineTextField.text = value;
         } else {
-            textField.text = value as? String;
+            textField.text = value;
         }
     }
     
-    func isEmpty() -> Bool {
+    override func isEmpty() -> Bool {
         if (self.multiline) {
             return (multilineTextField.text ?? "").count == 0;
         } else {
@@ -94,19 +89,12 @@ class EditTextFieldView : UIView {
         }
     }
     
-    func setValid(_ valid: Bool) {
+    override func setValid(_ valid: Bool) {
         if (valid) {
             controller.setErrorText(nil, errorAccessibilityValue: nil);
         } else {
             controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
         }
-    }
-    
-    func isValid(enforceRequired: Bool = false) -> Bool {
-        if ((field.object(forKey: "required") as? Bool) == true && enforceRequired && isEmpty()) {
-            return false;
-        }
-        return true;
     }
 }
 
@@ -125,7 +113,7 @@ extension EditTextFieldView {
     }
     
     @objc func cancelButtonPressed() {
-        setValue(self.value ?? nil);
+        setValue(self.value as? String ?? nil);
         self.resignFieldFirstResponder();
     }
 }
@@ -133,7 +121,7 @@ extension EditTextFieldView {
 extension EditTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if (value != textField.text) {
+        if (value as? String != textField.text) {
             value = textField.text;
             self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
         }
@@ -143,7 +131,7 @@ extension EditTextFieldView: UITextFieldDelegate {
 extension EditTextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if (value != textView.text) {
+        if (value as? String != textView.text) {
             value = textView.text;
             self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
         }
