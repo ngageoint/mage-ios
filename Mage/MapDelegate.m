@@ -9,7 +9,6 @@
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import "GPSLocationAnnotation.h"
 #import "ObservationImage.h"
 #import "User.h"
 #import "Location.h"
@@ -48,6 +47,10 @@
 #import "Form.h"
 #import "Observation.h"
 #import "MapUtils.h"
+#import "ObservationAccuracy.h"
+#import "ObservationAccuracyRenderer.h"
+#import "LocationAccuracy.h"
+#import "LocationAccuracyRenderer.h"
 #import "WMSTileOverlay.h"
 #import "XYZTileOverlay.h"
 #import "TMSTileOverlay.h"
@@ -57,8 +60,9 @@
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
-    @property (nonatomic, strong) User *selectedUser;
-    @property (nonatomic, strong) MKCircle *selectedUserCircle;
+    @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
+    @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
+
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
     @property (nonatomic, strong) GPKGBoundingBox * addedCacheBoundingBox;
     @property (nonatomic, strong) CacheOverlayUpdate * cacheOverlayUpdate;
@@ -1191,12 +1195,8 @@
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
         return annotationView;
-    } else if ([annotation isKindOfClass:[GPSLocationAnnotation class]]) {
-        GPSLocationAnnotation *gpsAnnotation = annotation;
-        MKAnnotationView *annotationView = [gpsAnnotation viewForAnnotationOnMapView:self.mapView];
-        annotationView.canShowCallout = self.canShowObservationCallout;
-        return annotationView;
-    } else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
+    }
+    else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *staticAnnotation = annotation;
         return [staticAnnotation viewForAnnotationOnMapView:self.mapView];
     } else if ([annotation isKindOfClass:[AreaAnnotation class]]) {
@@ -1227,43 +1227,48 @@
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *annotation = view.annotation;
-        self.selectedUser = annotation.location.user;
+        User *user = annotation.user;
         
-        if ([self.selectedUser avatarUrl] != nil) {
+        if ([user avatarUrl] != nil) {
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, self.selectedUser.avatarUrl]]];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]]];
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
             view.leftCalloutAccessoryView = imageView;
             
             [imageView setImage:image];
         }
         
-        if (self.selectedUserCircle != nil) {
-            [_mapView removeOverlay:self.selectedUserCircle];
-        }
+        double accuracy = annotation.location.horizontalAccuracy;
+        self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
+        [self.mapView addOverlay:self.selectedUserAccuracy];
+    } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
+        ObservationAnnotation *annotation = view.annotation;
+        Observation *observation = annotation.observation;
         
-        NSDictionary *properties = self.selectedUser.location.properties;
-        id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
+        id accuracyProperty = [observation.properties valueForKeyPath:@"accuracy"];
         if (accuracyProperty != nil) {
             double accuracy = [accuracyProperty doubleValue];
-            
-            self.selectedUserCircle = [MKCircle circleWithCenterCoordinate:self.selectedUser.location.location.coordinate radius:accuracy];
-            [self.mapView addOverlay:self.selectedUserCircle];
+            self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
+            [self.mapView addOverlay:self.selectedObservationAccuracy];
         }
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
         NSString *clickMessage = [annotation detailTextForAnnotation];
         [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
-
-//        view.detailCalloutAccessoryView = [annotation detailViewForAnnotation];
     } else {
         NSLog(@"Annotation is a %@", [view class]);
     }
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
-    if (self.selectedUserCircle != nil) {
-        [_mapView removeOverlay:self.selectedUserCircle];
+    if (self.selectedUserAccuracy != nil) {
+        [_mapView removeOverlay:self.selectedUserAccuracy];
+        self.selectedUserAccuracy = nil;
+    }
+    
+    if (self.selectedObservationAccuracy != nil) {
+        [_mapView removeOverlay:self.selectedObservationAccuracy];
+        self.selectedObservationAccuracy = nil;
     }
     
     if (_areaAnnotation != nil && view.annotation == _areaAnnotation) {
@@ -1282,7 +1287,7 @@
 	if ([view.annotation isKindOfClass:[LocationAnnotation class]] || view.annotation == mapView.userLocation) {
         if (self.mapCalloutDelegate) {
             LocationAnnotation *annotation = view.annotation;
-            [self.mapCalloutDelegate calloutTapped:annotation.location.user];
+            [self.mapCalloutDelegate calloutTapped:annotation.user];
         }
 	} else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         if (self.mapCalloutDelegate) {
@@ -1295,23 +1300,10 @@
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
     if ([overlay isKindOfClass:[MKTileOverlay class]]) {
         return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
-    } else if ([overlay isKindOfClass:[MKCircle class]]) {
-        MKCircleRenderer *renderer = [[MKCircleRenderer alloc] initWithCircle:overlay];
-        renderer.lineWidth = 1.0f;
-        
-        NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.selectedUser.location.timestamp];
-        if (interval <= 600) {
-            renderer.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
-            renderer.strokeColor = [UIColor blueColor];
-        } else if (interval <= 1200) {
-            renderer.fillColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:.1f];
-            renderer.strokeColor = [UIColor yellowColor];
-        } else {
-            renderer.fillColor = [UIColor colorWithRed:1 green:.5 blue:0 alpha:.1f];
-            renderer.strokeColor = [UIColor orangeColor];
-        }
-        
-        return renderer;
+    } else if ([overlay isKindOfClass:[ObservationAccuracy class]]) {
+        return [[ObservationAccuracyRenderer alloc] initWithOverlay:overlay];
+    } else if ([overlay isKindOfClass:[LocationAccuracy class]]) {
+        return [[LocationAccuracyRenderer alloc] initWithOverlay:overlay];
     } else if ([overlay isKindOfClass:[MKPolygon class]]) {
         MKPolygon *polygon = (MKPolygon *) overlay;
         MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
@@ -1320,7 +1312,7 @@
             renderer.fillColor = styledPolygon.fillColor;
             renderer.strokeColor = styledPolygon.lineColor;
             renderer.lineWidth = styledPolygon.lineWidth;
-        }else{
+        } else {
             renderer.strokeColor = [UIColor blackColor];
             renderer.lineWidth = 1;
         }
@@ -1456,14 +1448,14 @@
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         annotationView.layer.zPosition = [location.timestamp timeIntervalSinceReferenceDate];
         [annotation setCoordinate:[location location].coordinate];
-        [annotationView setImageForUser:annotation.location.user];
+        [annotationView setImageForUser:annotation.user];
     }
 }
 
-- (void) updateGPSLocation:(GPSLocation *)location forUser:(User *)user andCenter: (BOOL) shouldCenter {
-    GPSLocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
+- (void) updateGPSLocation:(GPSLocation *) location forUser:(User *) user {
+    LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     if (annotation == nil) {
-        annotation = [[GPSLocationAnnotation alloc] initWithGPSLocation:location andUser:user];
+        annotation = [[LocationAnnotation alloc] initWithGPSLocation:location user:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
         SFGeometry * geometry = [location getGeometry];
@@ -1475,10 +1467,6 @@
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [annotation setCoordinate:coordinate];
-        if (shouldCenter) {
-            [self.mapView setCenterCoordinate:coordinate];
-        }
-        
         [annotationView setImageForUser:user];
     }
 }
@@ -1498,7 +1486,7 @@
     [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
     
-    [self.mapView setCenterCoordinate:[annotation.location location].coordinate];
+    [self.mapView setCenterCoordinate:annotation.location.coordinate];
 }
 
 - (void)selectedUser:(User *) user region:(MKCoordinateRegion) region {

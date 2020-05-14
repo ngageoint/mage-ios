@@ -9,6 +9,7 @@
 #import "ObservationDataStore.h"
 #import "MapDelegate.h"
 #import "Event.h"
+#import "ObservationAccuracy.h"
 #import "Theme+UIResponder.h"
 
 @interface ObservationMapTableViewCell ()
@@ -44,6 +45,15 @@
             MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
             MKCoordinateRegion viewRegion = [mapObservation viewRegionOfMapView:weakSelf.mapView];
             [weakSelf.mapDelegate selectedObservation:observation region:viewRegion];
+
+            // Set up accuracy circle
+            id accuracyProperty = [observation.properties valueForKey:@"accuracy"];
+            if (accuracyProperty != nil) {
+                double accuracy = [accuracyProperty doubleValue];
+                
+                ObservationAccuracy *overlay = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
+                [weakSelf.mapView addOverlay:overlay];
+            }
         });
     }];
     

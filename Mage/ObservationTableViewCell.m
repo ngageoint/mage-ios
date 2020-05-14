@@ -147,7 +147,7 @@
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
-        self.favoriteButton.imageView.tintColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
+        self.favoriteButton.imageView.tintColor = self.favoriteHighlightColor;
         self.favoriteNumber.textColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
     } else {
         self.favoriteButton.imageView.tintColor = [UIColor inactiveIcon];

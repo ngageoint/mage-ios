@@ -9,6 +9,7 @@
 #import "Observation.h"
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
+#import "ObservationAccuracy.h"
 #import "GeometryUtility.h"
 #import "MapObservationManager.h"
 #import "MapAnnotationObservation.h"
@@ -24,6 +25,8 @@
 @interface ObservationEditGeometryTableViewCell()
 
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *locationField;
+@property (weak, nonatomic) IBOutlet UIView *locationHelperView;
+@property (weak, nonatomic) IBOutlet UILabel *locationHelperLabel;
 @property (strong, nonatomic) MapDelegate *mapDelegate;
 @property (strong, nonatomic) MapObservation *mapObservation;
 @property (strong, nonatomic) MapObservationManager *observationManager;
@@ -59,12 +62,16 @@
     self.locationField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.locationField.iconText = @"\U0000f0ac";
     self.locationField.iconColor = [UIColor secondaryText];
+    self.locationHelperLabel.textColor = [UIColor secondaryText];
     
     [UIColor themeMap:self.mapView];
     [self.mapDelegate updateTheme];
 }
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
+    self.locationHelperView.hidden = YES;
+    self.locationHelperLabel.text = nil;
+
     // special case if it is the actual observation geometry and not a field
     if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
         self.geometry = [value objectForKey:@"geometry"];
@@ -98,9 +105,39 @@
     if (self.geometry) {
         if (self.isGeometryField) {
             self.observationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:[value objectForKey:@"forms"]];
-            self.mapObservation = [self.observationManager addToMapWithObservation:[value objectForKey:@"observation"]];
+            Observation *observation = [value objectForKey:@"observation"];
+            self.mapObservation = [self.observationManager addToMapWithObservation:observation];
             MKCoordinateRegion viewRegion = [self.mapObservation viewRegionOfMapView:self.mapView];
-            [self.mapView setRegion:viewRegion animated:NO];
+            [self.mapView setRegion:viewRegion animated:YES];
+            
+            // Set up accuracy circle
+            id accuracyProperty = [observation.properties valueForKey:@"accuracy"];
+            if (accuracyProperty != nil) {
+                double accuracy = [accuracyProperty doubleValue];
+                
+                ObservationAccuracy *overlay = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
+                [self.mapView addOverlay:overlay];
+                
+                NSString *provider = [observation.properties objectForKey:@"provider"];
+                if (![provider isEqualToString:@"manual"]) {
+                    self.locationHelperView.hidden = NO;
+                    
+                    if ([provider isEqualToString:@"gps"]) {
+                        provider = [provider uppercaseString];
+                    } else if (provider != nil) {
+                        provider = [provider capitalizedString];
+                    }
+                    
+                    NSString *accuracy = @"";
+                    id accuracyProperty = [observation.properties valueForKey:@"accuracy"];
+                    if (accuracyProperty != nil) {
+                        accuracy = [NSString stringWithFormat:@" +/- %.02fm", [accuracyProperty floatValue]];
+                    }
+                    
+                    self.locationHelperLabel.text = [NSString stringWithFormat:@"%@ Location Accuracy %@", provider ?: @"", accuracy];
+                }
+            }
+
         }
         
         SFPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];

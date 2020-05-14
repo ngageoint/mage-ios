@@ -160,10 +160,17 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     }
 }
 
-- (void) geometryEditComplete:(SFGeometry *)geometry coordinator:(id)coordinator {
+- (void)geometryEditComplete:(SFGeometry *)geometry fieldDefintion:(NSDictionary *)field coordinator:(id)coordinator {
     self.currentEditValue = geometry;
     [self fieldEditDone:NO];
     [self.childCoordinators removeObject:coordinator];
+    
+    if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
+        NSMutableDictionary *properties = [self.observation.properties mutableCopy];
+        properties[@"provider"] = @"manual";
+        properties[@"accuracy"] = [NSNumber numberWithDouble:0.0];
+        self.observation.properties = [properties copy];
+    }
 }
 
 - (void) geometryEditCancel:(id)coordinator {
