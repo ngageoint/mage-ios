@@ -2164,7 +2164,6 @@
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
-				F7FC59271F3CED5A0010351A /* FormCell.xib in Resources */,
 				F760910023FDA5E5000233A6 /* signinSuccess.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

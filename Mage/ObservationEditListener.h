@@ -9,8 +9,9 @@
 @protocol ObservationEditListener <NSObject>
 
 @required
-
 - (void) observationField: (id) field valueChangedTo: (id) value reloadCell: (BOOL) reload;
+
+@optional
 - (void) fieldSelected: (id) field;
 
 @end

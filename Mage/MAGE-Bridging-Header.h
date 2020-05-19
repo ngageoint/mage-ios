@@ -18,3 +18,4 @@
 #import "ObservationEditGeometryTableViewCell.h"
 #import "MapDelegate.h"
 #import <mgrs/MGRS.h>
+#import "ObservationAccuracy.h"

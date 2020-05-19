@@ -68,7 +68,7 @@ class ObservationFormView: UIStackView {
             case "date":
                 fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
             case "geometry":
-                fieldView = EditGeometryView(field: fieldDictionary, delegate: self, value: value as? SFGeometry);
+                fieldView = EditGeometryView(field: fieldDictionary, delegate: self, value: value as? SFGeometry, accuracy: 1.487235, provider: "gps");
             default:
                 let label = UILabel(forAutoLayout: ());
                 label.text = type;

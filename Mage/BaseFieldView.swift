@@ -64,6 +64,6 @@ class BaseFieldView : UIView {
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
-        delegate?.fieldSelected(field);
+        delegate?.fieldSelected?(field);
     }
 }

@@ -22,6 +22,39 @@ class MockGeometryFieldDelegate: NSObject, ObservationEditListener {
     }
 }
 
+class MockMapViewDelegate: NSObject, MKMapViewDelegate {
+    var mapDidStartLoadingMapClosure: ((MKMapView) -> Void)?
+    var mapDidFinishLoadingClosure: ((MKMapView) -> Void)?
+    var mapDidFinishRenderingClosure: ((MKMapView, Bool) -> Void)?
+    var mapDidAddOverlayViewsClosure: ((MKMapView) -> Void)?
+    
+    func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
+        mapDidStartLoadingMapClosure?(mapView);
+    }
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        //loading done
+        mapDidFinishLoadingClosure?(mapView)
+    }
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        // rendering done
+        mapDidFinishRenderingClosure?(mapView, fullyRendered);
+    }
+    
+    func mapView(_ mapView: MKMapView, didAddOverlayViews overlayViews: [Any]) {
+        // added overlay views
+        mapDidAddOverlayViewsClosure?(mapView);
+    }
+}
+
+class ContainingUIViewController: UIViewController {
+    var viewDidLoadClosure: (() -> Void)?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewDidLoadClosure?();
+    }
+}
+
 class EditGeometryViewTests: QuickSpec {
     
     override func spec() {
@@ -31,28 +64,93 @@ class EditGeometryViewTests: QuickSpec {
             var geometryFieldView: EditGeometryView!
             var view: UIView!
             var field: NSMutableDictionary!
+            var controller: ContainingUIViewController!
+            var window: UIWindow!;
+            
+            let recordSnapshots = false;
+            
+            func maybeRecordSnapshot(recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
+                if (recordSnapshots || recordThisSnapshot) {
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        Thread.sleep(forTimeInterval: 5.0);
+                        DispatchQueue.main.async {
+                            expect(view) == recordSnapshot();
+                        }
+                    }
+                } else {
+                        doneClosure?();
+                }
+            }
             
             beforeEach {
-                field = ["title": "Field Title"];
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 300);
+                
+                controller = ContainingUIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                window.makeKeyAndVisible();
+
+                field = ["title": "Field Title"];
             }
             
             it("no initial value") {
-                geometryFieldView = EditGeometryView(field: field);
+                var completeTest = false;
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
-            }
-            
-            it("initial value set as a point") {
-                let point = SFPoint(x: 40.008483, andY: -105.267755);
-                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 1.487235, provider: "gps");
+                let mockMapDelegate = MockMapViewDelegate()
 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(doneClosure: {
+                        completeTest = true;
+                    })
+                }
+
+                controller.viewDidLoadClosure = {
+                    geometryFieldView = EditGeometryView(field: field);
+                    geometryFieldView.mapView.delegate = mockMapDelegate;
+
+                    view.addSubview(geometryFieldView)
+                    geometryFieldView.autoPinEdgesToSuperviewEdges();
+                }
+
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+        
+            it("initial value set as a point") {
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(doneClosure: {
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+
+                controller.viewDidLoadClosure = {
+                    geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps");
+                    geometryFieldView.mapView.delegate = mockMapDelegate;
+
+                    view.addSubview(geometryFieldView)
+                    geometryFieldView.autoPinEdgesToSuperviewEdges();
+                }
+
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
             }
 
 //

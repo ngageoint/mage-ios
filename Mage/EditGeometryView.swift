@@ -23,6 +23,7 @@ class EditGeometryView : BaseFieldView {
     
     lazy var mapView: MKMapView = {
         let mapView = MKMapView(forAutoLayout: ());
+        mapView.mapType = .standard;
         mapView.autoSetDimension(.height, toSize: 95);
         mapDelegate.setMapView(mapView);
         mapView.delegate = mapDelegate;
@@ -47,6 +48,7 @@ class EditGeometryView : BaseFieldView {
         setValue(value);
 
         setAccuracy(accuracy, provider: provider);
+        setMapRegion();
         
         setupController();
         if (UserDefaults.standard.bool(forKey: "showMGRS")) {
@@ -62,6 +64,13 @@ class EditGeometryView : BaseFieldView {
     
     deinit {
         self.mapDelegate.cleanup();
+    }
+    
+    func setMapRegion() {
+        if let centroid = (self.value as? SFGeometry)?.centroid() {
+            let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), span: MKCoordinateSpan(latitudeDelta: 0.03125, longitudeDelta: 0.03125));
+            self.mapView.setRegion(region, animated: false);
+        }
     }
     
     override func setupController() {
@@ -109,6 +118,10 @@ class EditGeometryView : BaseFieldView {
                 }
                 
                 controller.helperText = String(format: "%@ Location Accuracy +/- %.02fm", formattedProvider, accuracy!);
+                if let centroid = (self.value as? SFGeometry)!.centroid() {
+                    let overlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
+                    self.mapView.addOverlay(overlay);
+                }
             }
         }
         //            double accuracy = [accuracyProperty doubleValue];
