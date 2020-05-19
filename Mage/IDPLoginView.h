@@ -1,5 +1,5 @@
 //
-//  OauthLoginView.h
+//  IDPButtonDelegate.h
 //  MAGE
 //
 //  Created by Dan Barela on 3/30/18.
@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OAuthButtonDelegate <NSObject>
+@protocol IDPButtonDelegate <NSObject>
 
 - (void) signinForStrategy: (NSDictionary *) strategy;
 
 @end
 
-@interface OAuthLoginView : UIStackView
+@interface IDPLoginView : UIStackView
 
 @property (strong, nonatomic) NSDictionary *strategy;
-@property (strong, nonatomic) id<OAuthButtonDelegate> delegate;
+@property (strong, nonatomic) id<IDPButtonDelegate> delegate;
 
 @end

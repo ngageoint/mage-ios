@@ -21,19 +21,6 @@ PODS:
     - sf-proj-ios (~> 2.0.3)
     - sf-wkb-ios (~> 2.0.3)
     - tiff-ios (~> 1.1.2)
-  - GoogleSignIn (4.4.0):
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
-    - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.2):
-    - GoogleToolboxForMac/Defines (= 2.2.2)
-  - GoogleToolboxForMac/Defines (2.2.2)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.2)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.2)
-    - GoogleToolboxForMac/Defines (= 2.2.2)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.2)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
-  - GTMSessionFetcher/Core (1.4.0)
   - HexColors (2.2.1)
   - Kingfisher (5.14.0):
     - Kingfisher/Core (= 5.14.0)
@@ -85,12 +72,11 @@ PODS:
 DEPENDENCIES:
   - DateTools (~> 2.0.0)
   - EDSunriseSet (~> 1.0)
-  - GoogleSignIn (~> 4.4.0)
   - HexColors (~> 2.2.1)
   - Kingfisher (~> 5.0)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, branch `develop`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
@@ -105,9 +91,6 @@ SPEC REPOS:
     - DateTools
     - EDSunriseSet
     - geopackage-ios
-    - GoogleSignIn
-    - GoogleToolboxForMac
-    - GTMSessionFetcher
     - HexColors
     - Kingfisher
     - KTCenterFlowLayout
@@ -131,22 +114,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :branch: develop
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :commit: 75aca0fa18075175b66bf6fc302a705da7eb18da
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   geopackage-ios: 43f401e530b9db603f603c214ce3d1e5e005444c
-  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
@@ -169,6 +143,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 1b1792eddd23f07d386e9c95dc1d4f838fc33d96
+PODFILE CHECKSUM: 4d1692a6541e7f6af934d528d439cb70f1ffc737
 
 COCOAPODS: 1.8.4
