@@ -68,9 +68,6 @@ class EditGeometryViewTests: QuickSpec {
             var controller: ContainingUIViewController!
             var window: UIWindow!;
             
-            var jsonDictionaryObservation: [String:Any] = [:];
-            var jsonDictionaryEvent: [String:Any] = [:];
-            
             func maybeRecordSnapshot(_ view: UIView, doneClosure: (() -> Void)?) {
                 if (recordSnapshots) {
                     DispatchQueue.global(qos: .userInitiated).async {
@@ -97,46 +94,6 @@ class EditGeometryViewTests: QuickSpec {
                 
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.synchronize();
-                
-                guard let pathString = Bundle(for: type(of: self)).path(forResource: "event", ofType: "json") else {
-                    fatalError("UnitTestData.json not found")
-                }
-                
-                guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-                    fatalError("Unable to convert UnitTestData.json to String")
-                }
-                
-                print("The JSON string is: \(jsonString)")
-                
-                guard let jsonData = jsonString.data(using: .utf8) else {
-                    fatalError("Unable to convert UnitTestData.json to Data")
-                }
-
-                do {
-                    jsonDictionaryEvent = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
-                } catch _ as NSError {
-                    fatalError("Unable to convert UnitTestData.json to JSON dictionary")
-                }
-                
-                guard let pathStringObservation = Bundle(for: type(of: self)).path(forResource: "observation", ofType: "json") else {
-                    fatalError("UnitTestData.json not found")
-                }
-                
-                guard let jsonStringObservation = try? String(contentsOfFile: pathStringObservation, encoding: .utf8) else {
-                    fatalError("Unable to convert UnitTestData.json to String")
-                }
-                
-                print("The JSON string is: \(jsonString)")
-                
-                guard let jsonDataObservation = jsonStringObservation.data(using: .utf8) else {
-                    fatalError("Unable to convert UnitTestData.json to Data")
-                }
-                
-                do {
-                    jsonDictionaryObservation = try JSONSerialization.jsonObject(with: jsonDataObservation, options: .allowFragments) as! [String:Any]
-                } catch _ as NSError {
-                    fatalError("Unable to convert UnitTestData.json to JSON dictionary")
-                }
             }
             
             pending("no initial value") {
@@ -199,7 +156,8 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createPointObservation(jsonFileName: "observation");
-                
+                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
@@ -213,7 +171,7 @@ class EditGeometryViewTests: QuickSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -230,6 +188,7 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createLineObservation();
+                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -244,7 +203,7 @@ class EditGeometryViewTests: QuickSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -257,10 +216,12 @@ class EditGeometryViewTests: QuickSpec {
                 }
             }
             
-            pending("initial value set wtih observation polygon") {
+            it("initial value set wtih observation polygon") {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createPolygonObservation();
+                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
@@ -274,7 +235,7 @@ class EditGeometryViewTests: QuickSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();

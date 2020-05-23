@@ -215,6 +215,8 @@
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
 		F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */; };
+		F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77B7D7924797AD500C51953 /* FormBuilder.swift */; };
+		F77B7D7E24797B9900C51953 /* allFieldTypesForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */; };
 		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F7813A8124621237003666ED /* ObservationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8024621237003666ED /* ObservationFormView.swift */; };
@@ -265,8 +267,6 @@
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015D1A659B4D00902B4F /* setupTests.js */; };
 		F7C001601A659B5800902B4F /* tearDownTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015F1A659B5800902B4F /* tearDownTests.js */; };
-		F7C2A24A24785AC00051DAD8 /* event.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C2A24824785A8D0051DAD8 /* event.json */; };
-		F7C2A24D24785E870051DAD8 /* observation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C2A24B24785E760051DAD8 /* observation.json */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
 		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
@@ -726,6 +726,8 @@
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
 		F77822492146C8B400850815 /* LocationDisplayTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationDisplayTableViewController.h; sourceTree = "<group>"; };
 		F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationDisplayTableViewController.m; sourceTree = "<group>"; };
+		F77B7D7924797AD500C51953 /* FormBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormBuilder.swift; sourceTree = "<group>"; };
+		F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allFieldTypesForm.json; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
 		F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoImageProvider.swift; sourceTree = "<group>"; };
 		F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
@@ -807,8 +809,6 @@
 		F7C0015F1A659B5800902B4F /* tearDownTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tearDownTests.js; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
-		F7C2A24824785A8D0051DAD8 /* event.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = event.json; sourceTree = "<group>"; };
-		F7C2A24B24785E760051DAD8 /* observation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = observation.json; sourceTree = "<group>"; };
 		F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBuilder.swift; sourceTree = "<group>"; };
 		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
 		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
@@ -1572,8 +1572,6 @@
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
 				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
-				F7C2A24824785A8D0051DAD8 /* event.json */,
-				F7C2A24B24785E760051DAD8 /* observation.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1618,6 +1616,15 @@
 				F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */,
 			);
 			name = Constraints;
+			sourceTree = "<group>";
+		};
+		F77B7D7C24797B0400C51953 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				F77B7D7924797AD500C51953 /* FormBuilder.swift */,
+				F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */,
+			);
+			path = Form;
 			sourceTree = "<group>";
 		};
 		F77ECB6C242E53220030EE73 /* ImageUtilities */ = {
@@ -1802,6 +1809,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F77B7D7C24797B0400C51953 /* Form */,
 				F7BE036A2466093700D2F7C3 /* Observation */,
 				F75FEE612035E76F00577DA4 /* MageServerTests.m */,
 				F729E9D82034CC3700C2600D /* TestingAppDelegate.h */,
@@ -2170,11 +2178,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7C2A24D24785E870051DAD8 /* observation.json in Resources */,
-				F7C2A24A24785AC00051DAD8 /* event.json in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
+				F77B7D7E24797B9900C51953 /* allFieldTypesForm.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
@@ -2646,6 +2653,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */,
