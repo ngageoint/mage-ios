@@ -85,6 +85,7 @@
 
     @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
+@property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 @end
 
 @implementation MapDelegate
@@ -130,6 +131,27 @@
     GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
     self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
 }
+
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate {
+    self.mapEventDelegate = mapEventDelegate;
+}
+
+- (void) mapViewDidFinishLoadingMap:(MKMapView *)mapView {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapViewDidFinishLoadingMap:mapView];
+}
+
+- (void) mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered: (BOOL) fullyRendered {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapViewDidFinishRenderingMap:mapView fullyRendered:fullyRendered];
+}
+
+- (void) mapViewWillStartLoadingMap:(MKMapView *)mapView {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapViewWillStartLoadingMap:mapView];
+}
+
+- (void) mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayViews:overlayViews];
+}
+
 
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
@@ -839,6 +861,7 @@
 }
 
 - (void) addBackgroundMap {
+    NSLog(@"ADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAP");
     if ([UIColor darkMap]) {
         [self.mapView removeOverlay:self.backgroundOverlay];
         [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];

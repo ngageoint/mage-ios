@@ -60,17 +60,19 @@ class EditGeometryViewTests: QuickSpec {
     override func spec() {
         
         describe("EditGeometryView") {
+            var field: NSMutableDictionary!
+            let recordSnapshots = true;
             
             var geometryFieldView: EditGeometryView!
             var view: UIView!
-            var field: NSMutableDictionary!
             var controller: ContainingUIViewController!
             var window: UIWindow!;
             
-            let recordSnapshots = false;
+            var jsonDictionaryObservation: [String:Any] = [:];
+            var jsonDictionaryEvent: [String:Any] = [:];
             
-            func maybeRecordSnapshot(recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
+            func maybeRecordSnapshot(_ view: UIView, doneClosure: (() -> Void)?) {
+                if (recordSnapshots) {
                     DispatchQueue.global(qos: .userInitiated).async {
                         Thread.sleep(forTimeInterval: 5.0);
                         DispatchQueue.main.async {
@@ -78,36 +80,78 @@ class EditGeometryViewTests: QuickSpec {
                         }
                     }
                 } else {
-                        doneClosure?();
+                    doneClosure?();
                 }
             }
             
             beforeEach {
                 window = UIWindow(forAutoLayout: ());
                 window.autoSetDimension(.width, toSize: 300);
-                
+
                 controller = ContainingUIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 window.makeKeyAndVisible();
 
                 field = ["title": "Field Title"];
+                
+                UserDefaults.standard.set(0, forKey: "mapType");
+                UserDefaults.standard.synchronize();
+                
+                guard let pathString = Bundle(for: type(of: self)).path(forResource: "event", ofType: "json") else {
+                    fatalError("UnitTestData.json not found")
+                }
+                
+                guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+                    fatalError("Unable to convert UnitTestData.json to String")
+                }
+                
+                print("The JSON string is: \(jsonString)")
+                
+                guard let jsonData = jsonString.data(using: .utf8) else {
+                    fatalError("Unable to convert UnitTestData.json to Data")
+                }
+
+                do {
+                    jsonDictionaryEvent = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+                } catch _ as NSError {
+                    fatalError("Unable to convert UnitTestData.json to JSON dictionary")
+                }
+                
+                guard let pathStringObservation = Bundle(for: type(of: self)).path(forResource: "observation", ofType: "json") else {
+                    fatalError("UnitTestData.json not found")
+                }
+                
+                guard let jsonStringObservation = try? String(contentsOfFile: pathStringObservation, encoding: .utf8) else {
+                    fatalError("Unable to convert UnitTestData.json to String")
+                }
+                
+                print("The JSON string is: \(jsonString)")
+                
+                guard let jsonDataObservation = jsonStringObservation.data(using: .utf8) else {
+                    fatalError("Unable to convert UnitTestData.json to Data")
+                }
+                
+                do {
+                    jsonDictionaryObservation = try JSONSerialization.jsonObject(with: jsonDataObservation, options: .allowFragments) as! [String:Any]
+                } catch _ as NSError {
+                    fatalError("Unable to convert UnitTestData.json to JSON dictionary")
+                }
             }
             
-            it("no initial value") {
+            pending("no initial value") {
                 var completeTest = false;
-                
+
                 let mockMapDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-                    maybeRecordSnapshot(doneClosure: {
+                    maybeRecordSnapshot(view, doneClosure: {
                         completeTest = true;
                     })
                 }
 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field);
-                    geometryFieldView.mapView.delegate = mockMapDelegate;
+                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
 
                     view.addSubview(geometryFieldView)
                     geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -121,15 +165,137 @@ class EditGeometryViewTests: QuickSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
                 }
             }
-        
-            it("initial value set as a point") {
+
+            pending("initial value set as a point") {
                 var completeTest = false;
-                
+
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    maybeRecordSnapshot(doneClosure: {
+                    maybeRecordSnapshot(view, doneClosure: {
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            pending("initial value set wtih observation") {
+                var completeTest = false;
+                
+                let observation: Observation = ObservationBuilder.createPointObservation(jsonFileName: "observation");
+                
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        let point: SFPoint = observation.getGeometry().centroid();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            pending("initial value set wtih observation line") {
+                var completeTest = false;
+                
+                let observation: Observation = ObservationBuilder.createLineObservation();
+
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        let point: SFPoint = observation.getGeometry().centroid();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            pending("initial value set wtih observation polygon") {
+                var completeTest = false;
+                
+                let observation: Observation = ObservationBuilder.createPolygonObservation();
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        let point: SFPoint = observation.getGeometry().centroid();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: jsonDictionaryEvent["forms"] as? [NSDictionary] , mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            pending("set value later") {
+                
+                var completeTest = false;
+
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
                         expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
                         expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
                         completeTest = true;
@@ -137,11 +303,12 @@ class EditGeometryViewTests: QuickSpec {
                 }
 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps");
-                    geometryFieldView.mapView.delegate = mockMapDelegate;
+                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
 
                     view.addSubview(geometryFieldView)
                     geometryFieldView.autoPinEdgesToSuperviewEdges();
+
+                    geometryFieldView.setValue(point);
                 }
 
                 window.rootViewController = controller;
@@ -152,17 +319,70 @@ class EditGeometryViewTests: QuickSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
                 }
             }
-
-//
-//            it("set value later") {
-//                textFieldView = EditTextFieldView(field: field);
-//
-//                view.addSubview(textFieldView)
-//                textFieldView.autoPinEdgesToSuperviewEdges();
-//
-//                textFieldView.setValue("Hi")
-//                expect(view) == snapshot();
-//            }
+            
+            pending("set value later with accuracy") {
+                
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
+                controller.viewDidLoadClosure = {
+                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView.setValue(point, accuracy: 100.487235, provider: "gps");
+                    
+                    view.addSubview(geometryFieldView)
+                    geometryFieldView.autoPinEdgesToSuperviewEdges();
+                }
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 5, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            pending("set value later with accuracy and no provider") {
+                
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
+                controller.viewDidLoadClosure = {
+                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView.setValue(point, accuracy: 100.487235);
+                    
+                    view.addSubview(geometryFieldView)
+                    geometryFieldView.autoPinEdgesToSuperviewEdges();
+                }
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 5, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
 //
 //            it("set valid false") {
 //                textFieldView = EditTextFieldView(field: field);

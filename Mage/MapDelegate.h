@@ -64,5 +64,6 @@
 - (void) ensureMapLayout;
 - (void) updateTheme;
 - (void) setupListeners;
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
 
 @end

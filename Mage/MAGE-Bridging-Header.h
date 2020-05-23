@@ -19,3 +19,8 @@
 #import "MapDelegate.h"
 #import <mgrs/MGRS.h>
 #import "ObservationAccuracy.h"
+#import "MapObservation.h"
+#import "MapObservationManager.h"
+
+// Not sure why this isn't getting added via the geopackage pod...
+#import "GPKGMapShapeConverter.h"
