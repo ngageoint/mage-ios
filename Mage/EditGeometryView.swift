@@ -94,16 +94,18 @@ class EditGeometryView : BaseFieldView {
     }
     
     func addToMap() {
-        let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter();
-        let shape: GPKGMapShape = shapeConverter.toShape(with: (self.value as? SFGeometry));
-        var options: GPKGMapPointOptions? = nil;
-        if ((self.value as? SFGeometry)?.geometryType != SF_POINT) {
-            options = GPKGMapPointOptions();
-            options!.image = UIImage();
+        if (self.value != nil) {
+            let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter();
+            let shape: GPKGMapShape = shapeConverter.toShape(with: (self.value as? SFGeometry));
+            var options: GPKGMapPointOptions? = nil;
+            if ((self.value as? SFGeometry)?.geometryType != SF_POINT) {
+                options = GPKGMapPointOptions();
+                options!.image = UIImage();
+            }
+            
+            shapeConverter.add(shape, asPointsTo: self.mapView, with: options, andPolylinePointOptions: options, andPolygonPointOptions: options, andPolygonPointHoleOptions: options, andPolylineOptions: nil, andPolygonOptions: nil);
+            setMapRegion();
         }
-        
-        shapeConverter.add(shape, asPointsTo: self.mapView, with: options, andPolylinePointOptions: options, andPolygonPointOptions: options, andPolygonPointHoleOptions: options, andPolylineOptions: nil, andPolygonOptions: nil);
-        setMapRegion();
     }
 
     func setMapRegion() {
@@ -165,29 +167,6 @@ class EditGeometryView : BaseFieldView {
                 }
             }
         }
-        //            double accuracy = [accuracyProperty doubleValue];
-        //
-        //            ObservationAccuracy *overlay = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
-        //            [self.mapView addOverlay:overlay];
-        //
-        //            NSString *provider = [observation.properties objectForKey:@"provider"];
-        //            if (![provider isEqualToString:@"manual"]) {
-        //                self.locationHelperView.hidden = NO;
-        //
-        //                if ([provider isEqualToString:@"gps"]) {
-        //                    provider = [provider uppercaseString];
-        //                } else if (provider != nil) {
-        //                    provider = [provider capitalizedString];
-        //                }
-        //
-        //                NSString *accuracy = @"";
-        //                id accuracyProperty = [observation.properties valueForKey:@"accuracy"];
-        //                if (accuracyProperty != nil) {
-        //                    accuracy = [NSString stringWithFormat:@" +/- %.02fm", [accuracyProperty floatValue]];
-        //                }
-        //
-        //                self.locationHelperLabel.text = [NSString stringWithFormat:@"%@ Location Accuracy %@", provider ?: @"", accuracy];
-        //            }
     }
     
     func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
@@ -201,6 +180,7 @@ class EditGeometryView : BaseFieldView {
                 }
             }
             setAccuracy(accuracy, provider: provider);
+            addToMap();
         } else {
             textField.text = nil;
         }

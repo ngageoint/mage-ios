@@ -212,6 +212,10 @@
 		F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15CC1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m */; };
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
+		F76EB1DE247C0EAA0089F3AC /* FormKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DD247C0EAA0089F3AC /* FormKey.swift */; };
+		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
+		F76EB1E2247D83EC0089F3AC /* EditNumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */; };
+		F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
 		F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */; };
@@ -720,6 +724,10 @@
 		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
 		F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderAttachmentTableViewCell.h; sourceTree = "<group>"; };
 		F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderAttachmentTableViewCell.m; sourceTree = "<group>"; };
+		F76EB1DD247C0EAA0089F3AC /* FormKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormKey.swift; sourceTree = "<group>"; };
+		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
+		F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldView.swift; sourceTree = "<group>"; };
+		F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnlineMapTableViewController.h; sourceTree = "<group>"; };
 		F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlineMapTableViewController.m; sourceTree = "<group>"; };
@@ -1605,6 +1613,8 @@
 				2F8A2C3E220895AC007FE473 /* FormDefaultsSectionHeader.m */,
 				2F8A2C2D2202590A007FE473 /* FormDefaultsTableViewController.h */,
 				2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */,
+				F76EB1DD247C0EAA0089F3AC /* FormKey.swift */,
+				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -1645,6 +1655,7 @@
 				F7813A8724647C62003666ED /* EditDateView.swift */,
 				F7813A892466037B003666ED /* EditGeometryView.swift */,
 				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
+				F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1860,6 +1871,7 @@
 				F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */,
 				F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */,
 				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
+				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2531,6 +2543,7 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
+				F76EB1E2247D83EC0089F3AC /* EditNumberFieldView.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
@@ -2538,6 +2551,7 @@
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
+				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F7813A8324632E9A003666ED /* EditTextFieldView.swift in Sources */,
@@ -2589,6 +2603,7 @@
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
+				F76EB1DE247C0EAA0089F3AC /* FormKey.swift in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
 				2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
@@ -2653,6 +2668,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,

@@ -36,6 +36,10 @@ class BaseFieldView : UIView {
         }
     }
     
+    func getValue() -> Any? {
+        return value;
+    }
+    
     func isEmpty() -> Bool {
         return false;
     }

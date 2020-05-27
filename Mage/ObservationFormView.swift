@@ -16,6 +16,7 @@ class ObservationFormView: UIStackView {
     private var observation: Observation?;
     private var eventForm: NSDictionary?;
     private var form: NSDictionary?;
+    private var formIndex: Int!;
     private let containerScheme = MDCContainerScheme()
     
     private let nameController = MDCTextInputControllerUnderline();
@@ -35,7 +36,7 @@ class ObservationFormView: UIStackView {
         self.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
     }
     
-    convenience init(observation: Observation, form: NSDictionary, eventForm: NSDictionary) {
+    convenience init(observation: Observation, form: NSDictionary, eventForm: NSDictionary, formIndex: Int) {
         self.init(frame: CGRect.zero)
         self.observation = observation;
         self.form = form;
@@ -61,6 +62,8 @@ class ObservationFormView: UIStackView {
             }
             var fieldView: UIView;
             switch type {
+            case "numberfield":
+                fieldView = EditNumberFieldView(field: fieldDictionary, delegate: self, value: value as? String);
             case "textfield":
                 fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String);
             case "textarea":
@@ -106,8 +109,8 @@ extension ObservationFormView: ObservationEditListener {
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
         let fieldDictionary = field as! NSDictionary;
         let fieldKey = fieldDictionary.object(forKey: "name") as! String;
-        let number = fieldDictionary.object(forKey: "formIndex") as! NSNumber;
-        let formIndex = number.intValue;
+//        let number = fieldDictionary.object(forKey: "formIndex") as! NSNumber;
+//        let formIndex = number.intValue;
         let newProperties = (self.observation?.properties as! NSDictionary).mutableCopy() as! NSMutableDictionary;
         let forms = (newProperties.object(forKey: "forms") as! NSDictionary).mutableCopy() as! NSMutableArray;
         let newFormProperties = ((forms[formIndex] as! NSDictionary).mutableCopy() as! NSMutableDictionary);

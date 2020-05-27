@@ -32,7 +32,7 @@ class FormBuilder {
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }
-        
+        jsonDictionary[FormKey.secondaryField.key] = "purple";
         return jsonDictionary;
     }
     

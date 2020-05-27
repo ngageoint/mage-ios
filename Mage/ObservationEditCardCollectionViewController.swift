@@ -115,9 +115,9 @@ import MaterialComponents.MaterialTypographyScheme
     
     func addFormViews(stackView: UIStackView) {
       
-        let forms = ((self.observation?.properties as! NSDictionary).object(forKey: "forms") as! NSArray);
+        let forms: NSArray = ((self.observation?.properties as! NSDictionary).object(forKey: "forms") as! NSArray);
 
-        for form in forms {
+        for (index, form) in forms.enumerated() {
             let observationForm = form as! NSDictionary;
             let predicate: NSPredicate = NSPredicate(format: "SELF.id = %@", argumentArray: [observationForm.object(forKey: "formId")!]);
             let eventForm: NSDictionary = self.eventForms.filtered(using: predicate).first as! NSDictionary;
@@ -133,7 +133,7 @@ import MaterialComponents.MaterialTypographyScheme
                     formSecondaryValue = obsfield;
                 }
             }
-            let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm);
+            let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index);
             let card = ExpandableCard(forAutoLayout: ());
             card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: nil);
             stackView.addArrangedSubview(card);

@@ -50,6 +50,7 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
     
     
     private var editController: ObservationEditViewController?;
+    private var formIndex: Int?;
     
     private lazy var card: ExpandableCard = {
         let card = ExpandableCard(frame: CGRect.zero);
@@ -58,7 +59,8 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
         return card;
     }()
 
-    func configure(observationForm: NSDictionary, eventForm: NSDictionary, width: CGFloat, observation: Observation) {
+    func configure(observationForm: NSDictionary, eventForm: NSDictionary, width: CGFloat, observation: Observation, formIndex: Int) {
+        self.formIndex = formIndex;
         var formPrimaryValue = "";
         var formSecondaryValue = "";
         if let primaryField = eventForm.object(forKey: "primaryFeedField") as! NSString? {
@@ -78,7 +80,7 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
 //        NSLog("Event form secondary key %@", secondaryField);
         
         card.setWidth(width: width);
-        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm);
+        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm, formIndex: formIndex);
         
         card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: self);
     }

@@ -14,6 +14,8 @@ class ObservationBuilder {
     static func createBaseObservation(_ eventId: NSNumber = 1) -> Observation {
         let observation: Observation = Observation(context: NSManagedObjectContext.mr_default());
         observation.eventId = eventId;
+        let observationProperties: [String:Any] = [:]
+        observation.properties = observationProperties;
         return observation
     }
     
@@ -70,5 +72,17 @@ class ObservationBuilder {
         let line: SFLineString = SFLineString(points: points);
         let poly: SFPolygon = SFPolygon(ring: line);
         return createGeometryObservation(jsonFileName: jsonFileName, geometry: poly);
+    }
+    
+    static func addObservationProperty(observation: Observation, key: String, value: Any) {
+        var observationProperties: [String:Any];
+        if (observation.properties == nil) {
+            observationProperties = [:]
+        } else {
+            observationProperties = observation.properties as! [String : Any];
+        }
+        
+        observationProperties.updateValue(value, forKey: key);
+        observation.properties = observationProperties;
     }
 }
