@@ -69,9 +69,9 @@ class EditGeometryViewTests: QuickSpec {
             var controller: ContainingUIViewController!
             var window: UIWindow!;
             
-            func maybeRecordSnapshot(_ view: UIView, doneClosure: (() -> Void)?) {
+            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
                 print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots) {
+                if (recordSnapshots || recordThisSnapshot) {
                     DispatchQueue.global(qos: .userInitiated).async {
                         Thread.sleep(forTimeInterval: 5.0);
                         DispatchQueue.main.async {
@@ -140,6 +140,37 @@ class EditGeometryViewTests: QuickSpec {
                     })
                 }
 
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            it("initial value set as a point MGRS") {
+                UserDefaults.standard.set(true, forKey: "showMGRS");
+                UserDefaults.standard.synchronize();
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        completeTest = true;
+                    })
+                }
+                
                 window.rootViewController = controller;
                 
                 geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
