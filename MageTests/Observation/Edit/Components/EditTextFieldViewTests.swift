@@ -123,6 +123,29 @@ class EditTextFieldViewTests: QuickSpec {
                 expect(delegate.newValue) == "new value";
                 expect(view) == snapshot();
             }
+            
+            it("done button should change text") {
+                textFieldView = EditTextFieldView(field: field, value: "old value");
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.textField.text = "new value";
+                textFieldView.doneButtonPressed();
+                textFieldView.textFieldDidEndEditing(textFieldView.textField);
+                expect(textFieldView.textField.text) == "new value";
+                expect(textFieldView.value as? String) == "new value";
+            }
+            
+            it("cancel button should not change text") {
+                textFieldView = EditTextFieldView(field: field, value: "old value");
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.textField.text = "new value";
+                textFieldView.cancelButtonPressed();
+                expect(textFieldView.textField.text) == "old value";
+                expect(textFieldView.value as? String) == "old value";
+            }
         }
         
         describe("EditTextFieldView Multi Line") {
@@ -231,6 +254,29 @@ class EditTextFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue) == "this is a new value";
                 expect(view) == snapshot();
+            }
+            
+            it("done button should change text") {
+                textFieldView = EditTextFieldView(field: field, value: "old value", multiline: true);
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.multilineTextField.text = "new value";
+                textFieldView.doneButtonPressed();
+                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
+                expect(textFieldView.multilineTextField.text) == "new value";
+                expect(textFieldView.value as? String) == "new value";
+            }
+            
+            it("cancel button should not change text") {
+                textFieldView = EditTextFieldView(field: field, value: "old value", multiline: true);
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.multilineTextField.text = "new value";
+                textFieldView.cancelButtonPressed();
+                expect(textFieldView.multilineTextField.text) == "old value";
+                expect(textFieldView.value as? String) == "old value";
             }
         }
     }

@@ -67,9 +67,11 @@ class EditTextFieldView : BaseFieldView {
         if (multiline) {
             self.addSubview(multilineTextField);
             multilineTextField.autoPinEdgesToSuperviewEdges();
+            multilineTextField.textView?.inputAccessoryView = accessoryView;
         } else {
             self.addSubview(textField);
             textField.autoPinEdgesToSuperviewEdges();
+            textField.inputAccessoryView = accessoryView;
         }
     }
     

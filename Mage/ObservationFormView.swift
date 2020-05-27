@@ -14,7 +14,7 @@ import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
 class ObservationFormView: UIStackView {
     
     private var observation: Observation?;
-    private var eventForm: NSDictionary?;
+    private var eventForm: [String:Any]?;
     private var form: NSDictionary?;
     private var formIndex: Int!;
     private let containerScheme = MDCContainerScheme()
@@ -24,7 +24,7 @@ class ObservationFormView: UIStackView {
     private lazy var formFields: NSArray = {
         let predicate = NSPredicate(format: "archived = %@ AND hidden = %@ AND type IN %@", argumentArray: [nil, nil, ObservationFields.fields()]);
         let sortDescriptor = NSSortDescriptor(key: "id", ascending: true);
-        return ((self.eventForm?.object(forKey: "fields") as! NSArray).filtered(using: predicate) as! NSArray).sortedArray(using: [sortDescriptor]) as! NSArray;
+        return ((self.eventForm?["fields"] as! NSArray).filtered(using: predicate) as! NSArray).sortedArray(using: [sortDescriptor]) as! NSArray;
     }()
     
     override init(frame: CGRect) {
@@ -36,11 +36,12 @@ class ObservationFormView: UIStackView {
         self.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
     }
     
-    convenience init(observation: Observation, form: NSDictionary, eventForm: NSDictionary, formIndex: Int) {
+    convenience init(observation: Observation, form: NSDictionary, eventForm: [String:Any], formIndex: Int) {
         self.init(frame: CGRect.zero)
         self.observation = observation;
         self.form = form;
         self.eventForm = eventForm;
+//        print("Event form", eventForm);
 
         constructView();
     }
@@ -50,7 +51,7 @@ class ObservationFormView: UIStackView {
     }
     
     func constructView() {
-        print("Add all the behavior here %@", self.formFields)
+//        print("Add all the behavior here %@", self.formFields)
         
         for field in self.formFields {
             let fieldDictionary = (field as! NSDictionary);

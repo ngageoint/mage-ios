@@ -80,7 +80,7 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
 //        NSLog("Event form secondary key %@", secondaryField);
         
         card.setWidth(width: width);
-        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm, formIndex: formIndex);
+        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm as! [String : Any], formIndex: formIndex);
         
         card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: self);
     }

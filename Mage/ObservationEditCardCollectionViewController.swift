@@ -133,7 +133,7 @@ import MaterialComponents.MaterialTypographyScheme
                     formSecondaryValue = obsfield;
                 }
             }
-            let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index);
+            let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm as! [String: Any], formIndex: index);
             let card = ExpandableCard(forAutoLayout: ());
             card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: nil);
             stackView.addArrangedSubview(card);
