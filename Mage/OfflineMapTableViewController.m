@@ -287,7 +287,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         }
         return 58.0f;
     } else if (section == MY_MAPS_SECTION) {
-        CacheOverlay *cacheOverlay = [self.cacheOverlays getByCacheName:layer.name]; //[[self.cacheOverlays getLocallyLoadedOverlays] objectAtIndex:indexPath.row];
+        CacheOverlay *cacheOverlay = [self.cacheOverlays getByCacheName:layer.name];
         if (cacheOverlay.expanded) {
             return 58.0f + (58.0f * [cacheOverlay getChildren].count);
         }
@@ -306,6 +306,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         cell.backgroundColor = [UIColor dialog];
         cell.imageView.tintColor = [UIColor brand];
     }
+    
+    [cell.imageView setImage:nil];
+    cell.accessoryView = nil;
 
     Layer *layer = [self layerFromIndexPath:indexPath];
     NSUInteger section = [self getSectionFromLayer:layer];

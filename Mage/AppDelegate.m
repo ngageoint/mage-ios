@@ -125,30 +125,65 @@
         return NO;
     }
     
-    NSLog(@"URL %@", url);
+    NSLog(@"Application Open URL %@", url);
     if ([[url scheme] hasPrefix:@"com.googleusercontent.apps"]) {
         return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
     } else if (url.isFileURL) {
-        NSString * fileUrl = [url path];
+        NSString * filePath = [url path];
         
         // Handle GeoPackage files
-        if([GPKGGeoPackageValidate hasGeoPackageExtension:fileUrl]){
+        if([GPKGGeoPackageValidate hasGeoPackageExtension:filePath]){
             
-            // Import the GeoPackage file
-            if([self importGeoPackageFile:fileUrl]){
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
-                NSString * name = [[fileUrl lastPathComponent] stringByDeletingPathExtension];
-                [selectedCaches addObject:name];
-                [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
-                [defaults synchronize];
-                self.addedCacheOverlay = name;
+            if ([self isGeoPackageAlreadyImported:[[filePath lastPathComponent] stringByDeletingPathExtension]]) {
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Overwrite Existing GeoPackage?"
+                                                                               message:[NSString stringWithFormat:@"A GeoPackage with the name %@ already exists.  You can import it as a new GeoPackage, or overwrite the existing GeoPackage.", [[filePath lastPathComponent] stringByDeletingPathExtension]]
+                                                                        preferredStyle:UIAlertControllerStyleActionSheet];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"Import As New" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    // rename it and import
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
+                    NSLocale *posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+                    [formatter setLocale:posix];
+                    
+                    [self importGeoPackageFile:filePath withName:[NSString stringWithFormat:@"%@_%@", [[filePath lastPathComponent] stringByDeletingPathExtension], [formatter stringFromDate:[NSDate date]]] andOverwrite:NO];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Overwrite Existing GeoPackage" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                    [self importGeoPackageFile: filePath andOverwrite:YES];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:@"Do Not Import" style:UIAlertActionStyleCancel handler:nil]];
+                
+                [[AppDelegate topMostController] presentViewController:alert animated:YES completion:nil];
+            } else {
+                // Import the GeoPackage file
+                [self importGeoPackageFile: filePath andOverwrite:NO];
             }
         }
     }
     return YES;
+}
+
++ (UIViewController*) topMostController
+{
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
+}
+
+-(void) updateSelectedCaches: (NSString *) name {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableSet * selectedCaches = [NSMutableSet setWithArray:[defaults objectForKey:MAGE_SELECTED_CACHES]];
+    [selectedCaches addObject:name];
+    [defaults setObject:[selectedCaches allObjects] forKey:MAGE_SELECTED_CACHES];
+    [defaults synchronize];
+    self.addedCacheOverlay = name;
 }
 
 - (void) createLoadingView {
@@ -341,7 +376,7 @@
     for(NSString * geoPackageFile in geoPackageFiles){
         // Import the GeoPackage file
         NSString * geoPackagePath = [documentsDirectory stringByAppendingPathComponent:geoPackageFile];
-        [self importGeoPackageFile:geoPackagePath];
+        [self importGeoPackageFile:geoPackagePath andOverwrite:NO];
     }
     
     // Add the GeoPackage cache overlays
@@ -591,20 +626,29 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path {
+-(BOOL) isGeoPackageAlreadyImported: (NSString *) name {
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
+    return [[manager databasesLike:name] count] != 0;
+}
+
+-(BOOL) importGeoPackageFile: (NSString *) path withName: (NSString *) name andOverwrite: (BOOL) overwrite {
     // Import the GeoPackage file
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
     @try {
-        imported = [manager importGeoPackageFromPath:path andOverride:true andMove:true];
-        NSLog(@"Imported local Geopackage");
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            Layer *l = [Layer MR_createEntityInContext:localContext];
-            l.name = [[path lastPathComponent] stringByDeletingPathExtension];
-            l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
-            l.type = @"GeoPackage";
-            l.eventId = [NSNumber numberWithInt:-1];
-        }];
+        BOOL alreadyImported = [self isGeoPackageAlreadyImported:name];
+        imported = [manager importGeoPackageFromPath:path withName:name andOverride:overwrite andMove:true];
+        NSLog(@"Imported local Geopackage %d", imported);
+        if (imported && !alreadyImported) {
+            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+                Layer *l = [Layer MR_createEntityInContext:localContext];
+                l.name = name;
+                l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                l.type = @"GeoPackage";
+                l.eventId = [NSNumber numberWithInt:-1];
+                [self updateSelectedCaches:name];
+            }];
+        }
     }
     @catch (NSException *exception) {
         NSLog(@"Failed to import GeoPackage %@", exception);
@@ -620,6 +664,14 @@
     }
     
     return imported;
+}
+
+-(BOOL) importGeoPackageFile: (NSString *) path andOverwrite: (BOOL) overwrite{
+    return [self importGeoPackageFile:path withName:[[path lastPathComponent] stringByDeletingPathExtension] andOverwrite:overwrite];
+}
+
+-(BOOL) importGeoPackageFile: (NSString *) path {
+    return [self importGeoPackageFile:path andOverwrite:YES];
 }
 
 -(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId {
