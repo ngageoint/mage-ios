@@ -120,8 +120,9 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
         self.darkMode = false;
     }
-    
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    if (!self.mapCacheOverlays) {
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    }
     [[CacheOverlays getInstance] registerListener:self];
     self.cacheOverlayUpdate = nil;
     self.cacheOverlayUpdateLock = [[NSObject alloc] init];
@@ -433,7 +434,9 @@
 }
 
 - (void) ensureMapLayout {
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    if (!self.mapCacheOverlays) {
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    }
 
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -506,7 +509,7 @@
  *  @param cacheOverlays cache overlays
  */
 - (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
-    
+    NSLog(@"Update Cache Overlays Synchronized %@", cacheOverlays);
     @synchronized(self.cacheOverlayUpdateLock){
         
         // Set the cache overlays to update, including wiping out an update that hasn't processed
@@ -670,6 +673,7 @@
         tileOverlay.maximumZ = xyzDirectoryCacheOverlay.maxZoom;
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
         dispatch_sync(dispatch_get_main_queue(), ^{
+            NSLog(@"Adding xyz cache");
             [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveRoads];
         });
         
@@ -754,6 +758,10 @@
             [self.mapCacheOverlays removeObjectForKey:cacheName];
             // If the existing cache overlay is being replaced, create a new cache overlay
             if(tileTableCacheOverlay.parent.replacedCacheOverlay != nil){
+                cacheOverlay = nil;
+            } else {
+                // remove the old one and it will be re-added to preserve layer order
+                [self.mapView removeOverlay:tileTableCacheOverlay.tileOverlay];
                 cacheOverlay = nil;
             }
         }
@@ -843,6 +851,7 @@
         [self.mapView removeOverlay:self.backgroundOverlay];
         [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
+        NSLog(@"Adding the background map");
         [self.mapView removeOverlay:self.darkBackgroundOverlay];
         [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveRoads];
     }
@@ -917,6 +926,7 @@
                 [featureTableCacheOverlay setTileOverlay:featureOverlay];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSLog(@"Adding feature overlay");
                     [self.mapView addOverlay:featureOverlay level:MKOverlayLevelAboveLabels];
                 });
                 
