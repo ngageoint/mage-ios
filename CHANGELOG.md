@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.18 (TBD)
+## 2.0.19 ()
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported
+
+## 2.0.18 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.18)
 
 ##### Release Notes
 
