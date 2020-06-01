@@ -63,11 +63,11 @@ class EditDateView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: String?) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?) {
         super.init(field: field, delegate: delegate, value: value);
         date = nil;
         setValue(value);
@@ -122,7 +122,7 @@ class EditDateView : BaseFieldView {
         if (valid) {
             controller.setErrorText(nil, errorAccessibilityValue: nil);
         } else {
-            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
         }
     }
 }

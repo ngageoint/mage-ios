@@ -13,15 +13,6 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class MockDateFieldDelegate: NSObject, ObservationEditListener {
-    var fieldChangedCalled = false;
-    var newValue: String? = nil;
-    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-        fieldChangedCalled = true;
-        newValue = value as? String;
-    }
-}
-
 extension EditDateView {
     func getDatePicker() -> UIDatePicker {
         return datePicker;
@@ -36,7 +27,7 @@ class EditDateViewTests: QuickSpec {
             
             var dateFieldView: EditDateView!
             var view: UIView!
-            var field: NSMutableDictionary!
+            var field: [String: Any]!
             
             beforeEach {
                 field = ["title": "Date Field"];
@@ -92,7 +83,7 @@ class EditDateViewTests: QuickSpec {
             }
 
             it("required field is invalid if empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 dateFieldView = EditDateView(field: field);
 
                 expect(dateFieldView.isEmpty()) == true;
@@ -100,7 +91,7 @@ class EditDateViewTests: QuickSpec {
             }
 
             it("required field is valid if not empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 dateFieldView = EditDateView(field: field, value: "2013-06-22T08:18:20.000Z");
 
                 expect(dateFieldView.isEmpty()) == false;
@@ -108,7 +99,7 @@ class EditDateViewTests: QuickSpec {
             }
 
             it("required field has title which indicates required") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 dateFieldView = EditDateView(field: field);
 
                 view.addSubview(dateFieldView)
@@ -122,7 +113,7 @@ class EditDateViewTests: QuickSpec {
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
                 formatter.locale = Locale(identifier: "en_US_POSIX");
                 
-                let delegate = MockDateFieldDelegate()
+                let delegate = MockFieldDelegate()
                 dateFieldView = EditDateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -132,7 +123,7 @@ class EditDateViewTests: QuickSpec {
                 dateFieldView.dateChanged();
                 dateFieldView.textFieldDidEndEditing(dateFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
-                expect(delegate.newValue) == formatter.string(from: newDate);
+                expect(delegate.newValue as? String) == formatter.string(from: newDate);
                 expect(view) == snapshot();
             }
         }

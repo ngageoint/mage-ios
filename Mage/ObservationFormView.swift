@@ -33,6 +33,7 @@ class ObservationFormView: UIStackView {
         self.distribution = UIStackView.Distribution.equalSpacing;
         self.axis = NSLayoutConstraint.Axis.vertical;
         self.isLayoutMarginsRelativeArrangement = true
+        self.spacing = 4;
         self.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
     }
     
@@ -41,8 +42,6 @@ class ObservationFormView: UIStackView {
         self.observation = observation;
         self.form = form;
         self.eventForm = eventForm;
-//        print("Event form", eventForm);
-
         constructView();
     }
     
@@ -51,13 +50,11 @@ class ObservationFormView: UIStackView {
     }
     
     func constructView() {
-//        print("Add all the behavior here %@", self.formFields)
-        
         for field in self.formFields {
-            let fieldDictionary = (field as! NSDictionary);
-            let value = self.form?.object(forKey: fieldDictionary.object(forKey: "name") as! String)
+            let fieldDictionary = (field as! [String: Any]);
+            let value = self.form?.object(forKey: fieldDictionary[FieldKey.name.key] as! String)
             
-            var type = fieldDictionary.object(forKey: "type") as! String;
+            var type = fieldDictionary[FieldKey.type.key] as! String;
             if (type == "radio" || type == "multiselectdropdown") {
                 type = "dropdown";
             }
@@ -69,8 +66,21 @@ class ObservationFormView: UIStackView {
                 fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String);
             case "textarea":
                 fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String, multiline: true);
+            case "email":
+                fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String, keyboardType: .emailAddress);
+            case "password":
+                fieldView = EditTextFieldView(field: fieldDictionary, value: value as? String);
             case "date":
                 fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
+            case "checkbox":
+                fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
+            case "dropdown":
+                if let stringValue = value as? String {
+                    fieldView = EditDropdownFieldView(field: fieldDictionary, delegate: self, value: stringValue)
+                }
+                else {
+                    fieldView = EditDropdownFieldView(field: fieldDictionary, delegate: self, value: value as? [String])
+                }
             case "geometry":
                 fieldView = EditGeometryView(field: fieldDictionary, delegate: self);
                 (fieldView as! EditGeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")

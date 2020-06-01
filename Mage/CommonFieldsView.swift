@@ -20,7 +20,6 @@ class CommonFieldsView: MDCCard {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder);
-        self.translatesAutoresizingMaskIntoConstraints = false;
+        fatalError("This class does not support NSCoding")
     }
 }

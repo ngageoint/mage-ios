@@ -65,15 +65,15 @@ class EditNumberFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: String?) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?) {
         super.init(field: field, delegate: delegate, value: value);
         
-        self.min = self.field.value(forKey: FieldKey.min.key) as? NSNumber;
-        self.max = self.field.value(forKey: FieldKey.max.key) as? NSNumber;
+        self.min = self.field[FieldKey.min.key] as? NSNumber;
+        self.max = self.field[FieldKey.max.key] as? NSNumber;
         
         setValue(value);
         setupInputView(textField: textField);

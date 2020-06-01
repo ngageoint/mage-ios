@@ -13,15 +13,6 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class MockTextFieldDelegate: NSObject, ObservationEditListener {
-    var fieldChangedCalled = false;
-    var newValue: String? = nil;
-    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-        fieldChangedCalled = true;
-        newValue = value as? String;
-    }
-}
-
 class EditTextFieldViewTests: QuickSpec {
     
     override func spec() {
@@ -30,12 +21,17 @@ class EditTextFieldViewTests: QuickSpec {
             
             var textFieldView: EditTextFieldView!
             var view: UIView!
-            var field: NSMutableDictionary!
+            var field: [String: Any]!
             
             beforeEach {
                 field = ["title": "Field Title"];
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+            }
+            
+            it("email field") {
+                textFieldView = EditTextFieldView(field: field, keyboardType: .emailAddress);
+                expect(textFieldView.textField.keyboardType) == .emailAddress;
             }
             
             it("no initial value") {
@@ -86,7 +82,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field is invalid if empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field);
                 
                 expect(textFieldView.isEmpty()) == true;
@@ -94,7 +90,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field is valid if not empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field, value: "valid");
                 
                 expect(textFieldView.isEmpty()) == false;
@@ -102,7 +98,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field has title which indicates required") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field);
                 
                 view.addSubview(textFieldView)
@@ -112,7 +108,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("test delegate") {
-                let delegate = MockTextFieldDelegate();
+                let delegate = MockFieldDelegate();
                 textFieldView = EditTextFieldView(field: field, delegate: delegate);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -120,7 +116,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.textField.text = "new value";
                 textFieldView.textFieldDidEndEditing(textFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
-                expect(delegate.newValue) == "new value";
+                expect(delegate.newValue as? String) == "new value";
                 expect(view) == snapshot();
             }
             
@@ -152,7 +148,7 @@ class EditTextFieldViewTests: QuickSpec {
             
             var textFieldView: EditTextFieldView!
             var view: UIView!
-            var field: NSMutableDictionary!
+            var field: [String: Any]!
             
             beforeEach {
                 field = ["title": "Multi Line Field Title"];
@@ -219,7 +215,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field is invalid if empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field, multiline: true);
                 
                 expect(textFieldView.isEmpty()) == true;
@@ -227,7 +223,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field is valid if not empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field, value: "valid", multiline: true);
                 
                 expect(textFieldView.isEmpty()) == false;
@@ -235,7 +231,7 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("required field has title which indicates required") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 textFieldView = EditTextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
@@ -245,14 +241,14 @@ class EditTextFieldViewTests: QuickSpec {
             }
             
             it("test delegate") {
-                let delegate = MockTextFieldDelegate();
+                let delegate = MockFieldDelegate();
                 textFieldView = EditTextFieldView(field: field, delegate: delegate, multiline: true);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 textFieldView.multilineTextField.text = "this is a new value";
                 textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
                 expect(delegate.fieldChangedCalled) == true;
-                expect(delegate.newValue) == "this is a new value";
+                expect(delegate.newValue as? String) == "this is a new value";
                 expect(view) == snapshot();
             }
             

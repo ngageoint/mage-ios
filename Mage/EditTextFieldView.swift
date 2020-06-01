@@ -11,10 +11,13 @@ import MaterialComponents.MDCTextField;
 
 class EditTextFieldView : BaseFieldView {
     private var multiline: Bool = false;
+    private var keyboardType: UIKeyboardType = .default;
     
     lazy var multilineTextField: MDCMultilineTextField = {
         let multilineTextField = MDCMultilineTextField(forAutoLayout: ());
         multilineTextField.textView?.delegate = self;
+        multilineTextField.textView?.inputAccessoryView = accessoryView;
+        multilineTextField.textView?.keyboardType = keyboardType;
         controller.textInput = multilineTextField;
         if (value != nil) {
             multilineTextField.text = value as? String;
@@ -25,6 +28,8 @@ class EditTextFieldView : BaseFieldView {
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
         textField.delegate = self;
+        textField.inputAccessoryView = accessoryView;
+        textField.keyboardType = keyboardType;
         controller.textInput = textField;
         if (value != nil) {
             textField.text = value as? String;
@@ -48,17 +53,18 @@ class EditTextFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil) {
-        self.init(field: field, delegate: delegate, value: nil, multiline: false);
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, keyboardType: UIKeyboardType = .default) {
+        self.init(field: field, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType);
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil, multiline: Bool) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, delegate: delegate, value: nil, multiline: multiline);
     }
     
-    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: String?, multiline: Bool = false) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
         super.init(field: field, delegate: delegate, value: value);
         self.multiline = multiline;
+        self.keyboardType = keyboardType;
         self.addFieldView();
         setupController();
     }
@@ -67,11 +73,9 @@ class EditTextFieldView : BaseFieldView {
         if (multiline) {
             self.addSubview(multilineTextField);
             multilineTextField.autoPinEdgesToSuperviewEdges();
-            multilineTextField.textView?.inputAccessoryView = accessoryView;
         } else {
             self.addSubview(textField);
             textField.autoPinEdgesToSuperviewEdges();
-            textField.inputAccessoryView = accessoryView;
         }
     }
     
@@ -95,7 +99,7 @@ class EditTextFieldView : BaseFieldView {
         if (valid) {
             controller.setErrorText(nil, errorAccessibilityValue: nil);
         } else {
-            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
         }
     }
 }

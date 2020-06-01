@@ -94,6 +94,8 @@ import MaterialComponents.MaterialTypographyScheme
         scrollView.addSubview(stackView)
         addStackViewConstraints();
         
+        addCommonFields(stackView: stackView);
+        
         addFormViews(stackView: stackView);
         self.registerForThemeChanges();
     }
@@ -111,6 +113,25 @@ import MaterialComponents.MaterialTypographyScheme
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+    
+    func addCommonFields(stackView: UIStackView) {
+        
+//        if ([indexPath row] == 0) {
+//            [field setObject:@"Date" forKey:@"title"];
+//            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
+//            [field setObject:@"timestamp" forKey:@"name"];
+//            [field setObject:@"date" forKey:@"type"];
+//        } else if ([indexPath row] == 1) {
+//            [field setObject:@"Location" forKey:@"title"];
+//            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
+//            [field setObject:@"geometry" forKey:@"name"];
+//            [field setObject:@"geometry" forKey:@"type"];
+//        }
+        var dateField: [String: Any] = [:];
+        dateField[FieldKey.required.key] = true;
+        
+        let dateFieldView = EditDateView(field: dateField);
     }
     
     func addFormViews(stackView: UIStackView) {

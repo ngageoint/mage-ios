@@ -33,7 +33,7 @@ class ObservationFormViewTests: QuickSpec {
     override func spec() {
         
         describe("ObservationFormView") {
-            let recordSnapshots = false;
+            let recordSnapshots = true;
             var completeTest = false;
 
             var controller: UIViewController!

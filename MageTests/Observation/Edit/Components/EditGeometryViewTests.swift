@@ -13,40 +13,6 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class MockGeometryFieldDelegate: NSObject, ObservationEditListener {
-    var fieldChangedCalled = false;
-    var newValue: String? = nil;
-    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-        fieldChangedCalled = true;
-        newValue = value as? String;
-    }
-}
-
-class MockMapViewDelegate: NSObject, MKMapViewDelegate {
-    var mapDidStartLoadingMapClosure: ((MKMapView) -> Void)?
-    var mapDidFinishLoadingClosure: ((MKMapView) -> Void)?
-    var mapDidFinishRenderingClosure: ((MKMapView, Bool) -> Void)?
-    var mapDidAddOverlayViewsClosure: ((MKMapView) -> Void)?
-    
-    func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
-        mapDidStartLoadingMapClosure?(mapView);
-    }
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        //loading done
-        mapDidFinishLoadingClosure?(mapView)
-    }
-    
-    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
-        // rendering done
-        mapDidFinishRenderingClosure?(mapView, fullyRendered);
-    }
-    
-    func mapView(_ mapView: MKMapView, didAddOverlayViews overlayViews: [Any]) {
-        // added overlay views
-        mapDidAddOverlayViewsClosure?(mapView);
-    }
-}
-
 class ContainingUIViewController: UIViewController {
     var viewDidLoadClosure: (() -> Void)?
     
@@ -60,7 +26,7 @@ class EditGeometryViewTests: QuickSpec {
     override func spec() {
         
         describe("EditGeometryView") {
-            var field: NSMutableDictionary!
+            var field: [String: Any]!
             let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
@@ -96,13 +62,14 @@ class EditGeometryViewTests: QuickSpec {
                 field = ["title": "Field Title"];
                 
                 UserDefaults.standard.set(0, forKey: "mapType");
+                UserDefaults.standard.set(false, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
             }
             
             it("no initial value") {
                 var completeTest = false;
 
-                let mockMapDelegate = MockMapViewDelegate()
+                let mockMapDelegate: MockMapViewDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
                     maybeRecordSnapshot(view, doneClosure: {
@@ -189,7 +156,7 @@ class EditGeometryViewTests: QuickSpec {
             it("initial value set wtih observation") {
                 var completeTest = false;
                 let observation: Observation = ObservationBuilder.createPointObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -221,7 +188,7 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
-                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -254,7 +221,7 @@ class EditGeometryViewTests: QuickSpec {
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
                 ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
-                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -286,7 +253,7 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createLineObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -318,7 +285,7 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createPolygonObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createFormWithAllFieldTypes()] as [NSDictionary];
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
                 print("EventFOrms", eventForms);
 
                 let mockMapDelegate = MockMapViewDelegate()
@@ -502,7 +469,7 @@ class EditGeometryViewTests: QuickSpec {
             }
 
             it("required field is invalid if empty") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 
                 geometryFieldView = EditGeometryView(field: field);
 
@@ -512,7 +479,7 @@ class EditGeometryViewTests: QuickSpec {
 
             it("required field is valid if not empty") {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 
                 geometryFieldView = EditGeometryView(field: field, value: point);
                 
@@ -521,7 +488,7 @@ class EditGeometryViewTests: QuickSpec {
             }
 
             it("required field has title which indicates required") {
-                field.setValue(true, forKey: "required");
+                field[FieldKey.required.key] = true;
                 var completeTest = false;
                 
                 let mockMapDelegate = MockMapViewDelegate()

@@ -46,17 +46,17 @@ class EditGeometryView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
         self.init(field: field, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
     }
     
-    convenience init(field: NSDictionary, delegate: ObservationEditListener? = nil, observation: Observation?, eventForms: [NSDictionary]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, observation: Observation?, eventForms: [NSDictionary]?, mapEventDelegate: MKMapViewDelegate? = nil) {
         let accuracy = ((observation?.properties as? NSDictionary)?.value(forKey: "accuracy") as? Double);
         let provider = ((observation?.properties as? NSDictionary)?.value(forKey: "provider") as? String);
         self.init(field: field, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
     }
     
-    init(field: NSDictionary, delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [NSDictionary]? = nil) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [NSDictionary]? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.observation = observation;
         self.eventForms = eventForms;
@@ -73,12 +73,12 @@ class EditGeometryView : BaseFieldView {
 
         setupController();
         if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (MGRS)";
+            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
         } else {
-            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (Lat, Long)";
+            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
         }
         
-        if ((field.object(forKey: "required") as? Bool) == true) {
+        if ((field[FieldKey.required.key] as? Bool) == true) {
             controller.placeholderText = (controller.placeholderText ?? "") + " *"
         }
     }
@@ -118,12 +118,12 @@ class EditGeometryView : BaseFieldView {
     
     override func setupController() {
         if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (MGRS)";
+            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
         } else {
-            controller.placeholderText = (field.object(forKey: "title") as? String ?? "") + " (Lat, Long)";
+            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
         }
         
-        if ((field.object(forKey: "required") as? Bool) == true) {
+        if ((field[FieldKey.required.key] as? Bool) == true) {
             controller.placeholderText = (controller.placeholderText ?? "") + " *"
         }
     }
@@ -137,7 +137,7 @@ class EditGeometryView : BaseFieldView {
         textField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
         wrapper.addSubview(mapView);
         mapView.autoPinEdge(.top, to: .bottom, of: textField, withOffset: 8);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .top);
+        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 24, right: 0), excludingEdge: .top);
         
         mapDelegate.ensureMapLayout();
         
@@ -190,7 +190,7 @@ class EditGeometryView : BaseFieldView {
         if (valid) {
             controller.setErrorText(nil, errorAccessibilityValue: nil);
         } else {
-            controller.setErrorText(((field.object(forKey: "title") as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
         }
     }
 }

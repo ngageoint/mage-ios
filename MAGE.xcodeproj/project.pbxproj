@@ -235,6 +235,9 @@
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
+		F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */; };
+		F791E22D2485486E00CCC6BA /* MockFIeldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */; };
+		F791E22F24854A0A00CCC6BA /* MockMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22E24854A0A00CCC6BA /* MockMapViewDelegate.swift */; };
 		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
 		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
@@ -341,6 +344,11 @@
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
+		F7F91220247EFA4100C068B6 /* EditDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */; };
+		F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */; };
+		F7F9122524803F5500C068B6 /* EditCheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */; };
+		F7F9122724804D2100C068B6 /* EditCheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldView.swift */; };
+		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
 		F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7931A65887A00E7F224 /* loginTest.js */; };
 		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
@@ -760,6 +768,9 @@
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
 		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
+		F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsViewTests.swift; sourceTree = "<group>"; };
+		F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFIeldDelegate.swift; sourceTree = "<group>"; };
+		F791E22E24854A0A00CCC6BA /* MockMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMapViewDelegate.swift; sourceTree = "<group>"; };
 		F7929C6F23C4E69600396D11 /* countries.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries.gpkg; sourceTree = "<group>"; };
 		F7929C7423C66CD000396D11 /* BaseMapOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseMapOverlay.h; sourceTree = "<group>"; };
 		F7929C7523C66CD000396D11 /* BaseMapOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseMapOverlay.m; sourceTree = "<group>"; };
@@ -919,6 +930,11 @@
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
+		F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldView.swift; sourceTree = "<group>"; };
+		F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldViewTests.swift; sourceTree = "<group>"; };
+		F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldView.swift; sourceTree = "<group>"; };
+		F7F9122624804D2100C068B6 /* EditCheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldView.swift; sourceTree = "<group>"; };
+		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
 		F7FAD7931A65887A00E7F224 /* loginTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginTest.js; sourceTree = "<group>"; };
 		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
@@ -1635,6 +1651,7 @@
 			children = (
 				F77B7D7924797AD500C51953 /* FormBuilder.swift */,
 				F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */,
+				F7F9122824819D5D00C068B6 /* emptyForm.json */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -1658,6 +1675,8 @@
 				F7813A892466037B003666ED /* EditGeometryView.swift */,
 				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
 				F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */,
+				F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */,
+				F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1864,6 +1883,8 @@
 			children = (
 				F7BE036C2466095500D2F7C3 /* Components */,
 				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
+				F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */,
+				F791E22E24854A0A00CCC6BA /* MockMapViewDelegate.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -1875,6 +1896,9 @@
 				F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */,
 				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
 				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
+				F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */,
+				F7F9122624804D2100C068B6 /* EditCheckboxFieldView.swift */,
+				F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2194,6 +2218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
+				F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
 				F77B7D7E24797B9900C51953 /* allFieldTypesForm.json in Resources */,
@@ -2449,6 +2474,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7F9122524803F5500C068B6 /* EditCheckboxFieldView.swift in Sources */,
 				2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */,
@@ -2649,6 +2675,7 @@
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
 				F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */,
+				F7F91220247EFA4100C068B6 /* EditDropdownFieldView.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
@@ -2671,12 +2698,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
+				F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */,
+				F7F9122724804D2100C068B6 /* EditCheckboxFieldView.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */,
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
@@ -2684,7 +2714,9 @@
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
+				F791E22D2485486E00CCC6BA /* MockFIeldDelegate.swift in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
+				F791E22F24854A0A00CCC6BA /* MockMapViewDelegate.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,8 +10,8 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class BaseFieldView : UIView {
-    internal var controller: MDCTextInputControllerOutlined = MDCTextInputControllerOutlined();
-    internal var field: NSDictionary!;
+    internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
+    internal var field: [String: Any]!;
     internal var delegate: ObservationEditListener?;
     internal var fieldValueValid: Bool! = false;
     internal var value: Any?;
@@ -20,7 +20,7 @@ class BaseFieldView : UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: NSDictionary, delegate: ObservationEditListener?, value: Any?) {
+    init(field: [String: Any], delegate: ObservationEditListener?, value: Any?) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         
@@ -30,8 +30,8 @@ class BaseFieldView : UIView {
     }
     
     func setupController() {
-        controller.placeholderText = field.object(forKey: "title") as? String
-        if ((field.object(forKey: "required") as? Bool) == true) {
+        controller.placeholderText = field[FieldKey.title.key] as? String
+        if ((field[FieldKey.required.key] as? Bool) == true) {
             controller.placeholderText = (controller.placeholderText ?? "") + " *"
         }
     }
@@ -53,7 +53,7 @@ class BaseFieldView : UIView {
     }
 
     func isValid(enforceRequired: Bool = false) -> Bool {
-        if ((field.object(forKey: "required") as? Bool) == true && enforceRequired && isEmpty()) {
+        if ((field[FieldKey.required.key] as? Bool) == true && enforceRequired && isEmpty()) {
             return false;
         }
         return true;

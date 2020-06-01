@@ -32,7 +32,29 @@ class FormBuilder {
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }
-        jsonDictionary[FormKey.secondaryField.key] = "purple";
+        return jsonDictionary;
+    }
+    
+    static func createEmptyForm() -> [String:Any] {
+        guard let pathString = Bundle(for: FormBuilder.self).path(forResource: "emptyForm", ofType: "json") else {
+            fatalError("jsonFileName not found")
+        }
+        
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert pathString to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert jsonFileName to Data")
+        }
+        
+        var jsonDictionary: [String:Any] = [:];
+        
+        do {
+            jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+        } catch {
+            fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
+        }
         return jsonDictionary;
     }
     
