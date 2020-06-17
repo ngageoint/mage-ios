@@ -14,6 +14,8 @@
 #import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
+#import "FeedItem.h"
+#import "MAGE-Swift.h"
 
 @protocol UserTrackingModeChanged <NSObject>
 
@@ -34,8 +36,7 @@
 - (void) onCacheOverlayTapped:(NSString *) message;
 @end
 
-
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener, FeedItemDelegate>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;

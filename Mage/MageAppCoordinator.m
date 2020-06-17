@@ -76,6 +76,7 @@
 - (void) eventChoosen:(Event *)event {
     [_childCoordinators removeLastObject];
     [Event sendRecentEvent];
+    [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         UIStoryboard *ipadStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
         UIViewController *vc = [ipadStoryboard instantiateInitialViewController];

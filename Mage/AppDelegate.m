@@ -40,6 +40,7 @@
 #import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "MageConstants.h"
+#import "MageInitializer.h"
 #import <SSZipArchive/SSZipArchive.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate, SSZipArchiveDelegate>
@@ -96,18 +97,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:GeoPackageDownloaded object:nil];
-    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
-    NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
     
-    NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
-    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
-    
-    NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
-    [allPreferences addEntriesFromDictionary:defaultPreferences];
-    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
-    
-    [MagicalRecord setupMageCoreDataStack];
-    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
+    [MageInitializer initializePreferences];
+    [MageInitializer setupCoreData];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {

@@ -42,7 +42,7 @@
     [super tearDown];
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [OHHTTPStubs removeAllStubs];
+    [HTTPStubs removeAllStubs];
 }
 
 - (void) testLoginDisconnectedThenRegainConnection {
@@ -72,11 +72,11 @@
         [apiResponseArrived fulfill];
     });
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -98,11 +98,11 @@
                                     @"5.0.0", @"appVersion",
                                     nil];
         
-        [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
             return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
-        } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
             NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-            return [OHHTTPStubsResponse responseWithError:notConnectedError];
+            return [HTTPStubsResponse responseWithError:notConnectedError];
         }];
         
         XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /auth/local/signin complete"];
@@ -142,10 +142,10 @@
             
             XCTestExpectation* eventResponseArrived = [self expectationWithDescription:@"response of /api/events complete"];
             
-            [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+            [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
                 return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/events"];
-            } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-                OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+            } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+                HTTPStubsResponse *response = [[HTTPStubsResponse alloc] init];
                 response.statusCode = 401;
                 
                 return response;

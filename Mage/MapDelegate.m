@@ -130,6 +130,7 @@
     self.waitingCacheOverlaysUpdate = false;
     GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
     self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
+    [self addFeeds];
 }
 
 // map annotation drop code from: https://stackoverflow.com/questions/6808876/how-do-i-animate-mkannotationview-drop
@@ -295,6 +296,18 @@
     self.observations = nil;
     self.locations.fetchedResultsController.delegate = nil;
     self.locations = nil;
+}
+
+- (void) addFeeds {
+    NSArray<FeedItemRetriever *> *retrievers = [FeedItemRetriever createFeedItemRetrieversWithDelegate:self];
+    for (FeedItemRetriever *retriever in retrievers) {
+        NSArray<FeedItem*> *items = [retriever startRetriever];
+        for (FeedItem *item in items) {
+            if (item.isMappable) {
+                [self.mapView addAnnotation:item];
+            }
+        }
+    }
 }
 
 - (NSMutableDictionary *) staticLayers {
@@ -1229,6 +1242,18 @@
             
             return mapPointImageView;
         }
+    } else if ([annotation isKindOfClass:[FeedItem class]]) {
+        FeedItem *item = (FeedItem *)annotation;
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"MyPin"];
+        if (!annotationView) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MyPin"];
+            annotationView.canShowCallout = YES;
+            annotationView.animatesDrop = YES;
+        }
+        [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
+        annotationView.annotation = annotation;
+        
+        return annotationView;
     }
     
     return nil;
@@ -1558,6 +1583,14 @@
     if (!self.hideStaticLayers) {
         [self mapTap:point];
     }
+}
+
+- (void) addFeedItem:(FeedItem *)feedItem {
+    [self.mapView addAnnotation:feedItem];
+}
+
+- (void) removeFeedItem:(FeedItem *)feedItem {
+    [self.mapView removeAnnotation:feedItem];
 }
 
 @end

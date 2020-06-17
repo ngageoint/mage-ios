@@ -35,6 +35,14 @@ PODS:
   - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
   - GTMSessionFetcher/Core (1.4.0)
   - HexColors (2.2.1)
+  - iOSSnapshotTestCase (6.2.0):
+    - iOSSnapshotTestCase/SwiftSupport (= 6.2.0)
+  - iOSSnapshotTestCase/Core (6.2.0)
+  - iOSSnapshotTestCase/SwiftSupport (6.2.0):
+    - iOSSnapshotTestCase/Core
+  - KIF (3.7.9):
+    - KIF/Core (= 3.7.9)
+  - KIF/Core (3.7.9)
   - Kingfisher (5.14.0):
     - Kingfisher/Core (= 5.14.0)
   - Kingfisher/Core (5.14.0)
@@ -50,6 +58,12 @@ PODS:
     - MagicalRecord/Core (= 2.3.2)
   - MagicalRecord/Core (2.3.2)
   - mgrs (0.1.0)
+  - Nimble (8.0.9)
+  - Nimble-Snapshots (8.2.0):
+    - Nimble-Snapshots/Core (= 8.2.0)
+  - Nimble-Snapshots/Core (8.2.0):
+    - iOSSnapshotTestCase (~> 6.0)
+    - Nimble (~> 8.0)
   - OCMock (3.6)
   - ogc-api-features-json-ios (1.0.0):
     - sf-geojson-ios (~> 1.0.0)
@@ -67,6 +81,8 @@ PODS:
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (9.0.0)
   - proj4-ios (4.9.3)
+  - PureLayout (3.1.6)
+  - Quick (2.2.0)
   - sf-geojson-ios (1.0.0):
     - sf-ios (~> 2.0.3)
   - sf-ios (2.0.3)
@@ -87,13 +103,18 @@ DEPENDENCIES:
   - EDSunriseSet (~> 1.0)
   - GoogleSignIn (~> 4.4.0)
   - HexColors (~> 2.2.1)
-  - Kingfisher (~> 5.0)
+  - KIF
+  - Kingfisher (~> 5)
   - KTCenterFlowLayout
   - libPhoneNumber-iOS (~> 0.8)
-  - mage-ios-sdk (from `https://github.com/ngageoint/mage-ios-sdk.git`, branch `develop`)
+  - mage-ios-sdk (from `../mage-ios-sdk`)
   - mgrs (~> 0.1.0)
+  - Nimble
+  - Nimble-Snapshots
   - OCMock
   - OHHTTPStubs
+  - PureLayout
+  - Quick
   - SkyFloatingLabelTextField (~> 3.6.0)
   - tuneup_js
   - UIImage-Categories (~> 0.0.1)
@@ -109,15 +130,21 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GTMSessionFetcher
     - HexColors
+    - iOSSnapshotTestCase
+    - KIF
     - Kingfisher
     - KTCenterFlowLayout
     - libPhoneNumber-iOS
     - MagicalRecord
     - mgrs
+    - Nimble
+    - Nimble-Snapshots
     - OCMock
     - ogc-api-features-json-ios
     - OHHTTPStubs
     - proj4-ios
+    - PureLayout
+    - Quick
     - sf-geojson-ios
     - sf-ios
     - sf-proj-ios
@@ -131,13 +158,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   mage-ios-sdk:
-    :branch: develop
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
-
-CHECKOUT OPTIONS:
-  mage-ios-sdk:
-    :commit: 75aca0fa18075175b66bf6fc302a705da7eb18da
-    :git: https://github.com/ngageoint/mage-ios-sdk.git
+    :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -148,16 +169,22 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
+  iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
+  KIF: 350f96fb4205972a10e4c1a45774d48b2d8482d8
   Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   mage-ios-sdk: 7b0c6b2d07958711f3ee8421106db7d77a8ff53f
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
+  Nimble: 98b888285a615fd34f20e61753cf58ea1402bde4
+  Nimble-Snapshots: 7a1133b2dcce853ecdf1026f0a17fedf03bc41c9
   OCMock: 5ea90566be239f179ba766fd9fbae5885040b992
   ogc-api-features-json-ios: 2f733b450d22a73517a5e86fd9241747e039ccb0
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
+  PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
+  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   sf-geojson-ios: ef76082c7fac4e594b35e1016113d0dbe164b730
   sf-ios: 4ca0618351be80afac4e0961860d632dd85ab739
   sf-proj-ios: 9f33d6b85d63de2a7d7624cc41254e111ff6fb78
@@ -169,6 +196,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 1b1792eddd23f07d386e9c95dc1d4f838fc33d96
+PODFILE CHECKSUM: 644d0bdd140863652677ef206d6147b91d239634
 
 COCOAPODS: 1.8.4
