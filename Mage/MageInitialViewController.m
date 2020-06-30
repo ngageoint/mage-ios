@@ -7,7 +7,6 @@
 #import "MageInitialViewController.h"
 #import "UserUtility.h"
 #import "MageSessionManager.h"
-#import "MageRootViewController.h"
 #import "DeviceUUID.h"
 #import "LocationService.h"
 #import "Mage.h"

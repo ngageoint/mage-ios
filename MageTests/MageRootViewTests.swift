@@ -21,7 +21,7 @@ class MageRootViewTests: KIFSpec {
         
         describe("MageRootView") {
             let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.005);
+            Nimble_Snapshots.setNimbleTolerance(0.01);
             
             var controller: MageRootViewController!
             var window: UIWindow!;

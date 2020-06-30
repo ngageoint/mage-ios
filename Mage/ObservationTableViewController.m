@@ -9,7 +9,6 @@
 #import "TimeFilter.h"
 #import "ObservationTableViewCell.h"
 #import "Observation.h"
-#import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
 #import "User.h"

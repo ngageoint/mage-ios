@@ -1,8 +1,8 @@
 //
-//  FeedItemTableViewCell.swift
+//  FeedItemTemporalTableViewCell.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 6/12/20.
+//  Created by Daniel Barela on 6/29/20.
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -10,10 +10,10 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-class FeedItemTableViewCell : UITableViewCell {
+class FeedItemTemporalTableViewCell : UITableViewCell {
     
     private lazy var feedItemView: FeedItemSummaryView = {
-        let view = FeedItemSummaryView(temporal: false);
+        let view = FeedItemSummaryView(temporal: true);
         
         return view;
     }()
@@ -31,4 +31,5 @@ class FeedItemTableViewCell : UITableViewCell {
     func populate(feedItem: FeedItem) {
         feedItemView.populate(feedItem: feedItem);
     }
+
 }

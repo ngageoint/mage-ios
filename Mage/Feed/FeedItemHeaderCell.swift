@@ -12,6 +12,41 @@ import Kingfisher
 
 class FeedItemHeaderCell : UITableViewCell {
     
+    private lazy var stack: UIStackView = {
+        let stack = UIStackView(forAutoLayout: ());
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = 0
+        stack.distribution = .fill
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        stack.isLayoutMarginsRelativeArrangement = true;
+        stack.translatesAutoresizingMaskIntoConstraints = false;
+        stack.addArrangedSubview(itemInfoView);
+        stack.addArrangedSubview(mapView);
+        stack.addArrangedSubview(locationTextView);
+        return stack;
+    }()
+    
+    private lazy var itemInfoView: UIView = {
+        let view = UIView(forAutoLayout: ());
+        view.addSubview(itemImage);
+        view.addSubview(primaryField);
+        view.addSubview(secondaryField);
+        
+        // do this to stop the automatically created constraint from throwing errors
+        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
+            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+        };
+        itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        primaryField.autoPinEdge(.bottom, to: .top, of: view, withOffset: 32);
+        primaryField.autoPinEdge(.left, to: .right, of: itemImage, withOffset: 16);
+        primaryField.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        secondaryField.autoPinEdge(.bottom, to: .bottom, of: primaryField, withOffset: 20);
+        secondaryField.autoPinEdge(.left, to: .right, of: itemImage, withOffset: 16);
+        secondaryField.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        return view;
+    }()
+    
     private lazy var itemImage: UIImageView = {
         let itemImage = UIImageView(forAutoLayout: ());
         itemImage.contentMode = .scaleAspectFit;
@@ -38,23 +73,31 @@ class FeedItemHeaderCell : UITableViewCell {
         return mapView;
     }()
     
+    private lazy var locationTextView: UIView = {
+        let view = UIView(forAutoLayout: ());
+        let image = UIImageView(image: UIImage(named: "location_tracking_on"));
+        image.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        image.tintColor = UIColor.mageBlue();
+        view.addSubview(image);
+        view.addSubview(locationLabel);
+        image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+        locationLabel.autoAlignAxis(.horizontal, toSameAxisOf: image);
+        locationLabel.autoPinEdge(.left, to: .right, of: image, withOffset: 16);
+        locationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        return view;
+    }()
+    
+    private lazy var locationLabel: UILabel = {
+        let label = UILabel(forAutoLayout: ());
+        label.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
+        label.textColor = UIColor.black.withAlphaComponent(0.87);
+        return label;
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(itemImage);
-        self.contentView.addSubview(primaryField);
-        self.contentView.addSubview(secondaryField);
-        self.contentView.addSubview(mapView);
-        itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        itemImage.autoPinEdge(toSuperviewEdge: .leading, withInset: 16);
-        itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
-        primaryField.autoPinEdge(.bottom, to: .top, of: contentView, withOffset: 32);
-        primaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        primaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        secondaryField.autoPinEdge(.bottom, to: .bottom, of: primaryField, withOffset: 20);
-        secondaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        secondaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0), excludingEdge: .top);
-        mapView.autoPinEdge(.top, to: .bottom, of: itemImage, withOffset: 16);
+        self.contentView.addSubview(stack);
+        stack.autoPinEdgesToSuperviewEdges();
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -87,10 +130,30 @@ class FeedItemHeaderCell : UITableViewCell {
                 print("Job failed: \(error.localizedDescription)")
             }
         }
-        primaryField.text = feedItem.primaryValue;
-        secondaryField.text = feedItem.secondaryValue;
-        
-        self.mapView.addAnnotation(feedItem);
-        self.mapView.setCenter(feedItem.coordinate, animated: true);
+        if (feedItem.primaryValue != nil || feedItem.secondaryValue != nil) {
+            primaryField.text = feedItem.primaryValue;
+            secondaryField.text = feedItem.secondaryValue;
+            itemInfoView.isHidden = false;
+        } else {
+            itemInfoView.isHidden = true;
+        }
+        if (feedItem.isMappable) {
+            self.mapView.isHidden = false;
+            self.locationTextView.isHidden = false;
+            self.mapView.addAnnotation(feedItem);
+            self.mapView.setCenter(feedItem.coordinate, animated: true);
+            self.locationLabel.text = getLocationText(feedItem: feedItem);
+        } else {
+            self.mapView.isHidden = true;
+            self.locationTextView.isHidden = true;
+        }
+    }
+    
+    func getLocationText(feedItem: FeedItem) -> String {
+        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+            return MGRS.mgrSfromCoordinate(feedItem.coordinate);
+        } else {
+            return String(format: "%.05f, %.05f", feedItem.coordinate.latitude, feedItem.coordinate.longitude);
+        }
     }
 }

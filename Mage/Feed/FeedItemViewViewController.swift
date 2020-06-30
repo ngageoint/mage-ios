@@ -13,6 +13,7 @@ import Foundation
     let PROPERTIES_SECTION = 1;
     
     let cellReuseIdentifier = "propertyCell"
+    let temporalCellReuseIdentifer = "temporalCell";
     let headerCellIdentifier = "headerCell"
     
     let feedItem : FeedItem

@@ -8,9 +8,14 @@
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
 #import "MageServer.h"
-#import "MageRootViewController.h"
+#import "Mage.h"
 #import "MageInitializer.h"
 #import "Server.h"
+#import <MGRS.h>
+#import "UIColor+Mage.h"
+#import "MageOfflineObservationManager.h"
+#import "SettingsTableViewController.h"
+#import "Theme+UIResponder.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

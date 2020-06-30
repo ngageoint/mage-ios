@@ -57,6 +57,7 @@
 #import "ImageryLayer.h"
 #import "BaseMapOverlay.h"
 #import "UIColor+Mage.h"
+#import <PureLayout.h>
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -1244,15 +1245,13 @@
         }
     } else if ([annotation isKindOfClass:[FeedItem class]]) {
         FeedItem *item = (FeedItem *)annotation;
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"MyPin"];
+        MKAnnotationView *annotationView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"feedItem"];
         if (!annotationView) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MyPin"];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"feedItem"];
             annotationView.canShowCallout = YES;
-            annotationView.animatesDrop = YES;
         }
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
-        
         return annotationView;
     }
     

@@ -15,6 +15,11 @@ class FeedItemPropertyCell : UITableViewCell {
         let primaryField = UILabel(forAutoLayout: ());
         primaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
         primaryField.textColor = UIColor.black.withAlphaComponent(0.87);
+//        primaryField.layer.shadowColor = UIColor.black.cgColor
+//        primaryField.layer.shadowRadius = 1.0
+//        primaryField.layer.shadowOpacity = 0.1
+//        primaryField.layer.shadowOffset = CGSize(width: -1, height: 1)
+//        primaryField.layer.masksToBounds = false
         return primaryField;
     }()
     
@@ -34,7 +39,12 @@ class FeedItemPropertyCell : UITableViewCell {
         keyField.autoPinEdge(toSuperviewEdge: .leading, withInset: 16);
         keyField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
         valueField.autoPinEdge(.bottom, to: .bottom, of: keyField, withOffset: 20);
-        valueField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
+        
+        // do this to stop the automatically created constraint from throwing errors
+        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
+            valueField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
+        };
+        
     }
     
     required init(coder aDecoder: NSCoder) {

@@ -19,7 +19,6 @@
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "Observations.h"
-#import "MageRootViewController.h"
 #import "MapDelegate.h"
 #import "ObservationEditViewController.h"
 #import "FormsViewController.h"

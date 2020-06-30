@@ -1,0 +1,2 @@
+
+[{"id":0,"geometry":{"type":"Point","coordinates":[125.6,10.1]},"properties":{"Property 1":"Property 1 Value","Property 2":"Property 2 Value"}},{"id":"2","geometry":null,"properties":{"Property 1":"Property 1 Value","Property 2":"Property 2 Value"}},{"id":"3","geometry":{"type":"Point","coordinates":[125.6,10.1]},"properties":null},{"id":"4","geometry":null,"properties":null}]
