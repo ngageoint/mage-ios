@@ -16,6 +16,7 @@
 #import "MageOfflineObservationManager.h"
 #import "SettingsTableViewController.h"
 #import "Theme+UIResponder.h"
+#import "NSDate+display.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

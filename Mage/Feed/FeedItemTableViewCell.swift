@@ -13,8 +13,7 @@ import Kingfisher
 class FeedItemTableViewCell : UITableViewCell {
     
     private lazy var feedItemView: FeedItemSummaryView = {
-        let view = FeedItemSummaryView(temporal: false);
-        
+        let view = FeedItemSummaryView();
         return view;
     }()
     

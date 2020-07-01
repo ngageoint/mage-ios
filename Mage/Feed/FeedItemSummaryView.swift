@@ -12,6 +12,21 @@ import Kingfisher
 
 class FeedItemSummaryView : UIView {
     
+    private lazy var stack: UIStackView = {
+        let stack = UIStackView(forAutoLayout: ());
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = 0
+        stack.distribution = .fill
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        stack.isLayoutMarginsRelativeArrangement = true;
+        stack.translatesAutoresizingMaskIntoConstraints = false;
+        stack.addArrangedSubview(timestamp);
+        stack.addArrangedSubview(primaryField);
+        stack.addArrangedSubview(secondaryField);
+        return stack;
+    }()
+    
     private lazy var formatter: DateFormatter = {
         let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -66,14 +81,10 @@ class FeedItemSummaryView : UIView {
         return view;
     }()
     
-    @objc public convenience init(temporal: Bool) {
+    @objc public convenience init() {
         self.init(frame: CGRect.zero);
         self.configureForAutoLayout();
-        if (temporal) {
-            layoutTemporalView();
-        } else {
-            layoutView();
-        }
+        layoutView();
     }
     
     @objc public func populate(feedItem: FeedItem) {
@@ -110,51 +121,31 @@ class FeedItemSummaryView : UIView {
         noContentView.isHidden = true;
         primaryField.text = feedItem.primaryValue;
         secondaryField.text = feedItem.secondaryValue;
-        if let itemDate = feedItem.timestamp {
-            timestamp.text = formatter.string(from: itemDate);
+        if (feedItem.feed?.itemTemporalProperty == nil) {
+            timestamp.isHidden = true;
+            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
         } else {
-            timestamp.text = nil;
+            if let itemDate: NSDate = feedItem.timestamp as NSDate? {
+                timestamp.text = itemDate.formattedDisplay();
+            } else {
+                timestamp.text = " ";
+            }
+            timestamp.isHidden = false;
+            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 32, right: 0), excludingEdge: .right);
         }
     }
     
     func layoutView() {
         self.addSubview(itemImage);
-        self.addSubview(primaryField);
-        self.addSubview(secondaryField);
+        self.addSubview(stack);
         self.addSubview(noContentView);
         noContentView.autoPinEdgesToSuperviewEdges();
         NSLayoutConstraint.autoSetPriority(.defaultHigh) {
             itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
             itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
         }
-        primaryField.autoPinEdge(.top, to: .top, of: self, withOffset: 16);
-        primaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        primaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        secondaryField.autoPinEdge(.top, to: .bottom, of: primaryField);
-        secondaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        secondaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-    }
-    
-    func layoutTemporalView() {
-        self.addSubview(itemImage);
-        self.addSubview(timestamp);
-        self.addSubview(primaryField);
-        self.addSubview(secondaryField);
-        self.addSubview(noContentView);
-        noContentView.autoPinEdgesToSuperviewEdges();
-        // do this to stop the automatically created constraint from throwing errors
-        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-            itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
-            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 32, right: 0), excludingEdge: .right);
-        };
-        timestamp.autoPinEdge(.top, to: .top, of: self, withOffset: 16);
-        timestamp.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        timestamp.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        primaryField.autoPinEdge(.top, to: .bottom, of: timestamp);
-        primaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        primaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        secondaryField.autoPinEdge(.top, to: .bottom, of: primaryField);
-        secondaryField.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        secondaryField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
+        stack.autoPinEdge(.top, to: .top, of: self, withOffset: 16);
+        stack.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
+        stack.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
     }
 }

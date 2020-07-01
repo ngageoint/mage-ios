@@ -27,44 +27,9 @@ class FeedItemHeaderCell : UITableViewCell {
         return stack;
     }()
     
-    private lazy var itemInfoView: UIView = {
-        let view = UIView(forAutoLayout: ());
-        view.addSubview(itemImage);
-        view.addSubview(primaryField);
-        view.addSubview(secondaryField);
-        
-        // do this to stop the automatically created constraint from throwing errors
-        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-        };
-        itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        primaryField.autoPinEdge(.bottom, to: .top, of: view, withOffset: 32);
-        primaryField.autoPinEdge(.left, to: .right, of: itemImage, withOffset: 16);
-        primaryField.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        secondaryField.autoPinEdge(.bottom, to: .bottom, of: primaryField, withOffset: 20);
-        secondaryField.autoPinEdge(.left, to: .right, of: itemImage, withOffset: 16);
-        secondaryField.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+    private lazy var itemInfoView: FeedItemSummaryView = {
+        let view = FeedItemSummaryView();
         return view;
-    }()
-    
-    private lazy var itemImage: UIImageView = {
-        let itemImage = UIImageView(forAutoLayout: ());
-        itemImage.contentMode = .scaleAspectFit;
-        return itemImage;
-    }()
-    
-    private lazy var primaryField: UILabel = {
-        let primaryField = UILabel(forAutoLayout: ());
-        primaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
-        primaryField.textColor = UIColor.black.withAlphaComponent(0.87);
-        return primaryField;
-    }()
-    
-    private lazy var secondaryField: UILabel = {
-        let secondaryField = UILabel(forAutoLayout: ());
-        secondaryField.font = UIFont.systemFont(ofSize: 14.0, weight: .regular);
-        secondaryField.textColor = UIColor.black.withAlphaComponent(0.60);
-        return secondaryField;
     }()
     
     private lazy var mapView: MKMapView = {
@@ -105,34 +70,8 @@ class FeedItemHeaderCell : UITableViewCell {
     }
     
     func populate(feedItem: FeedItem) {
-        let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
-        itemImage.tintColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0);
-        let image = UIImage(named: "observations");
-        let iconUrl = feedItem.iconURL;
-        itemImage.kf.indicatorType = .activity
-        itemImage.kf.setImage(
-            with: iconUrl,
-            placeholder: image,
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ])
-        {
-            result in
-            
-            switch result {
-            case .success(let value):
-                self.setNeedsLayout()
-                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("Job failed: \(error.localizedDescription)")
-            }
-        }
         if (feedItem.primaryValue != nil || feedItem.secondaryValue != nil) {
-            primaryField.text = feedItem.primaryValue;
-            secondaryField.text = feedItem.secondaryValue;
+            itemInfoView.populate(feedItem: feedItem);
             itemInfoView.isHidden = false;
         } else {
             itemInfoView.isHidden = true;

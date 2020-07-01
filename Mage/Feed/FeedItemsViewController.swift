@@ -29,7 +29,6 @@ import Kingfisher
     }()
     
     let cellReuseIdentifier = "cell";
-//    let temporalCellReuseIdentifer = "temporalCell";
     
     let feed : Feed
     required init(coder aDecoder: NSCoder) {
@@ -42,11 +41,7 @@ import Kingfisher
         self.title = feed.title;
         tableView.delegate = self
         tableView.dataSource = self
-        if (self.feed.itemTemporalProperty != nil) {
-            tableView.register(FeedItemTemporalTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier);
-        } else {
-            tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        }
+        tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
 
     override func viewDidLoad() {
@@ -83,19 +78,11 @@ import Kingfisher
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell;
-        if (self.feed.itemTemporalProperty != nil) {
-            let feedCell: FeedItemTemporalTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTemporalTableViewCell;
-
-            let feedItem = fetchedResultsController.object(at: indexPath)
-            feedCell.populate(feedItem: feedItem);
-            cell = feedCell;
-        } else {
-            let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
-            
-            let feedItem = fetchedResultsController.object(at: indexPath)
-            feedCell.populate(feedItem: feedItem);
-            cell = feedCell;
-        }
+        let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
+        
+        let feedItem = fetchedResultsController.object(at: indexPath)
+        feedCell.populate(feedItem: feedItem);
+        cell = feedCell;
         
         return cell
     }
