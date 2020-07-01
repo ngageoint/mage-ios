@@ -27,13 +27,6 @@ class FeedItemSummaryView : UIView {
         return stack;
     }()
     
-    private lazy var formatter: DateFormatter = {
-        let formatter = DateFormatter();
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-        formatter.locale = Locale(identifier: "en_US_POSIX");
-        return formatter;
-    }()
-    
     private lazy var timestamp: UILabel = {
         let timestamp = UILabel(forAutoLayout: ());
         let systemFont = UIFont.systemFont(ofSize: 12.0, weight: .light)
