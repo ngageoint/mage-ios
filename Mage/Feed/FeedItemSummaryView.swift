@@ -99,9 +99,8 @@ class FeedItemSummaryView : UIView {
             result in
             
             switch result {
-            case .success(let value):
+            case .success(_):
                 self.setNeedsLayout()
-                print("Task done for: \(value.source.url?.absoluteString ?? "")")
             case .failure(let error):
                 print("Job failed: \(error.localizedDescription)")
             }

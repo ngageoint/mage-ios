@@ -36,8 +36,8 @@ class MageCoreDataFixtures {
                 f.eventId = eventId;
                 f.id = id;
                 f.summary = "Feed Summary";
-                f.primaryProperty = primaryProperty;
-                f.secondaryProperty = secondaryProperty;
+                f.itemPrimaryProperty = primaryProperty;
+                f.itemSecondaryProperty = secondaryProperty;
                 f.style = style;
             }
         }, completion: completion)

@@ -54,6 +54,20 @@ import Kingfisher
         }
         return feedRetrievers;
     }
+    
+    @objc public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+        var feedRetrievers: [FeedItemRetriever] = [];
+        if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
+            
+            for feed: Feed in feeds {
+                if (feed.itemsHaveSpatialDimension) {
+                    let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
+                    feedRetrievers.append(retriever);
+                }
+            }
+        }
+        return feedRetrievers;
+    }
 
     let feed: Feed;
     let delegate: FeedItemDelegate;

@@ -300,7 +300,7 @@
 }
 
 - (void) addFeeds {
-    NSArray<FeedItemRetriever *> *retrievers = [FeedItemRetriever createFeedItemRetrieversWithDelegate:self];
+    NSArray<FeedItemRetriever *> *retrievers = [FeedItemRetriever createMappableFeedItemRetrieversWithDelegate:self];
     for (FeedItemRetriever *retriever in retrievers) {
         NSArray<FeedItem*> *items = [retriever startRetriever];
         for (FeedItem *item in items) {

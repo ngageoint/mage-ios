@@ -22,7 +22,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("FeedItemViewViewController") {
-            let recordSnapshots = false;
+            let recordSnapshots = true;
             Nimble_Snapshots.setNimbleTolerance(0.1);
 
             var controller: FeedItemViewViewController!
