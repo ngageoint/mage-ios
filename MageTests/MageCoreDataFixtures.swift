@@ -28,8 +28,7 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
-    public static func addFeedToEvent(eventId: NSNumber = 1, id: NSNumber = 1, title: String = "Test Feed", primaryProperty: String = "primary", secondaryProperty: String = "secondary", style: [String: Any] = [:], completion: MRSaveCompletionHandler?) {
-        print("adding feed");
+    public static func addFeedToEvent(eventId: NSNumber = 1, id: NSNumber = 1, title: String = "Test Feed", primaryProperty: String = "primary", secondaryProperty: String = "secondary", timestampProperty: String? = nil, style: [String: Any] = [:], completion: MRSaveCompletionHandler?) {
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             if let f: Feed = Feed.mr_createEntity(in: localContext) {
                 f.title = title;
@@ -38,6 +37,9 @@ class MageCoreDataFixtures {
                 f.summary = "Feed Summary";
                 f.itemPrimaryProperty = primaryProperty;
                 f.itemSecondaryProperty = secondaryProperty;
+                f.itemTemporalProperty = timestampProperty;
+                f.updateFrequency = 1.0;
+                f.itemsHaveIdentity = true;
                 f.style = style;
             }
         }, completion: completion)

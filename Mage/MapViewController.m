@@ -225,6 +225,28 @@
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
     [self.mapDelegate ensureMapLayout];
+    [self updateFilterButtonPosition];
+}
+
+- (void) updateFilterButtonPosition {
+    
+    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
+    if (self != self.navigationController.viewControllers[0]) {
+        if (self.navigationItem.rightBarButtonItems.count != 2) {
+            NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+            [rightItems addObject:self.navigationItem.leftBarButtonItem];
+            self.navigationItem.rightBarButtonItems = rightItems;
+            self.navigationItem.leftBarButtonItems = nil;
+        }
+    } else if (self.navigationItem.rightBarButtonItems.count == 2) {
+        // if the view was in the more controller and is now it's own tab
+        UIBarButtonItem *filterButton = [self.navigationItem.rightBarButtonItems lastObject];
+        
+        NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        [rightItems removeLastObject];
+        self.navigationItem.rightBarButtonItems = rightItems;
+        self.navigationItem.leftBarButtonItem = filterButton;
+    }
 }
 
 - (BOOL)isForceTouchAvailable {
@@ -405,6 +427,8 @@
         AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:sender delegate:nil];
         [self.childCoordinators addObject:attachmentCoordinator];
         [attachmentCoordinator start];
+    } else if ([segue.identifier isEqualToString:@"DisplayFeedItemSegue"]) {
+        NSLog(@"Display feed item segue");
     }
 }
 

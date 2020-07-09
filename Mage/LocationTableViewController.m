@@ -84,6 +84,20 @@
                   context:NULL];
     
     [self startUpdateTimer];
+    [self updateFilterButtonPosition];
+}
+
+- (void) updateFilterButtonPosition {
+    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
+    if (self != self.navigationController.viewControllers[0]) {
+        if (self.navigationItem.rightBarButtonItem == nil) {
+            self.navigationItem.rightBarButtonItem = self.navigationItem.leftBarButtonItem;
+            self.navigationItem.leftBarButtonItem = nil;
+        }
+    } else if (self.navigationItem.rightBarButtonItem != nil) {
+        self.navigationItem.leftBarButtonItem = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

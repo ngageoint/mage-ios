@@ -43,6 +43,8 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"Settings";
+    
     self.dataSource = [[SettingsDataSource alloc] init];
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
@@ -55,7 +57,6 @@
     self.versionCellSelectionCount = 0;
     
     if (self.dismissable) {
-//        UINavigationController *masterController = [self.viewControllers firstObject];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
     }
     
@@ -80,7 +81,8 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.view.backgroundColor = [UIColor tableBackground];
     self.tableView.backgroundColor = [UIColor tableBackground];
-    
+    self.view.backgroundColor = [UIColor tableBackground];
+
     [self.tableView reloadData];
 }
 

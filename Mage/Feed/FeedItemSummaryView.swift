@@ -111,7 +111,7 @@ class FeedItemSummaryView : UIView {
             return;
         }
         noContentView.isHidden = true;
-        primaryField.text = feedItem.primaryValue;
+        primaryField.text = feedItem.primaryValue ?? " ";
         secondaryField.text = feedItem.secondaryValue;
         if (feedItem.feed?.itemTemporalProperty == nil) {
             timestamp.isHidden = true;

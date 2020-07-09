@@ -12,6 +12,7 @@
 
 @property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *userMapCalloutTappedDelegate;
 @property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *observationMapCalloutTappedDelegate;
+@property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *feedItemMapCalloutTappedDelegate;
 @property (nonatomic, assign) id<MAGEMasterSelectionDelegate> masterSelectionDelegate;
 
 @end

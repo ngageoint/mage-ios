@@ -8,6 +8,15 @@
 
 import Foundation
 
+infix operator ???: NilCoalescingPrecedence
+
+public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> String {
+    switch optional {
+    case let value?: return String(describing: value)
+    case nil: return defaultValue()
+    }
+}
+
 @objc class FeedItemViewViewController : UITableViewController {
     let HEADER_SECTION = 0;
     let PROPERTIES_SECTION = 1;
@@ -70,7 +79,15 @@ import Foundation
         let value = properties?[key];
         
         cell.keyField.text = key;
-        cell.valueField.text = value as? String;
+        if (feedItem.feed?.itemTemporalProperty == key) {
+            if let itemDate: NSDate = feedItem.timestamp as NSDate? {
+                cell.valueField.text = itemDate.formattedDisplay();
+            }
+        } else if (value is Date) {
+            cell.valueField.text = (value as? NSDate)!.formattedDisplay();
+        } else {
+            cell.valueField.text = value ??? " "
+        }
         
         return cell
     }

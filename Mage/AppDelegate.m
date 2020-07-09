@@ -88,8 +88,17 @@
     } else {
         [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor whiteColor]];
     }
-    
+
+    [self registerForThemeChanges];
 	return YES;
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    [self.window setTintColor:[UIColor primary]];
+    [[UINavigationBar appearance] setTintColor:[UIColor navBarPrimaryText]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor primary]];
+    [[UINavigationBar appearance] setOpaque:YES];
+    [[UINavigationBar appearance] setTranslucent:NO];
 }
 
 - (void) setupMageApplication: (UIApplication *) application {

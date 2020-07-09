@@ -120,6 +120,8 @@
         [self userDetailSelected:(User *) calloutItem];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
         [self observationDetailSelected:(Observation *) calloutItem];
+    } else if ([calloutItem isKindOfClass:[FeedItem class]]) {
+        NSLog(@"Feed item tapped");
     }
 }
 

@@ -373,6 +373,7 @@
                 </customObject>
                 <customObject id="MvY-yA-75O" userLabel="Map Callout Tapped Delegate" customClass="MapCalloutTappedDelegate_iPhone">
                     <connections>
+                        <outlet property="feedItemMapCalloutTappedDelegate" destination="Yhz-DO-apf" id="FVO-dY-n9G"/>
                         <outlet property="observationMapCalloutTappedDelegate" destination="iTK-6C-CvG" id="DwH-09-yeq"/>
                         <outlet property="userMapCalloutTappedDelegate" destination="WnG-Na-oji" id="XiJ-Gc-8PK"/>
                     </connections>
@@ -390,6 +391,14 @@
                         <outlet property="viewController" destination="FWQ-JY-o6g" id="3yl-0W-akI"/>
                     </connections>
                 </customObject>
+                <customObject id="Yhz-DO-apf" userLabel="User Map Callout Tapped Segue Delegate" customClass="MapCalloutTappedSegueDelegate">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="segueIdentifier" value="DisplayFeedItemSegue"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="viewController" destination="FWQ-JY-o6g" id="cBm-a0-gfb"/>
+                    </connections>
+                </customObject>
                 <customObject id="iTK-6C-CvG" userLabel="Observation Map Callout Tapped Segue Delegate" customClass="MapCalloutTappedSegueDelegate">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="segueIdentifier" value="DisplayObservationSegue"/>
@@ -405,7 +414,7 @@
         <scene sceneID="5qZ-yo-Je8">
             <objects>
                 <navigationController definesPresentationContext="YES" id="BEj-Ik-6TY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Observations" image="observations" id="VMp-ah-9ay"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Observations" image="observations" id="VMp-ah-9ay"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Wys-E9-8Ks">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -467,7 +476,7 @@
         <scene sceneID="Zwl-BP-sWR">
             <objects>
                 <navigationController definesPresentationContext="YES" id="ebu-M3-ht6" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="People" image="people" id="l7S-b8-jEg"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="People" image="people" id="l7S-b8-jEg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="w8s-07-A7p">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -913,8 +922,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="77U-TW-S4M"/>
-        <segue reference="2y0-bF-fmy"/>
+        <segue reference="kER-Hr-0Bf"/>
+        <segue reference="bfz-Rz-QoD"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="layers" width="22" height="22"/>

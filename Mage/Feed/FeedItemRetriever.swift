@@ -55,6 +55,15 @@ import Kingfisher
         return feedRetrievers;
     }
     
+    @objc public static func getMappableFeedRetriever(feedId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        if let feed: Feed = Feed.mr_findFirst(byAttribute: "id", withValue: feedId) {
+            if (feed.itemsHaveSpatialDimension) {
+                return FeedItemRetriever(feed: feed, delegate: delegate);
+            }
+        }
+        return nil;
+    }
+    
     @objc public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
@@ -69,7 +78,7 @@ import Kingfisher
         return feedRetrievers;
     }
 
-    let feed: Feed;
+    @objc public let feed: Feed;
     let delegate: FeedItemDelegate;
     
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {

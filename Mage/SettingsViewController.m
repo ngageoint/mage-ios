@@ -23,6 +23,7 @@
 #import "ObservationServicesSettingsTableViewController.h"
 #import "Server.h"
 #import "AppDelegate.h"
+#import "Theme+UIResponder.h"
 
 @interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
@@ -66,6 +67,13 @@
                                              selector:@selector(userDefaultsChanged:)
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
+    
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.view.backgroundColor = [UIColor tableBackground];
+    self.view.backgroundColor = [UIColor tableBackground];
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {

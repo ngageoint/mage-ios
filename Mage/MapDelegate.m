@@ -75,6 +75,7 @@
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
     @property (nonatomic, strong) NSMutableDictionary *onlineLayers;
+    @property (nonatomic, strong) NSMutableArray *currentFeeds;
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
     @property (nonatomic) BOOL isTrackingAnimation;
@@ -114,6 +115,8 @@
                    forKeyPath:@"selectedOnlineLayers"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
+        
+        [defaults addObserver:self forKeyPath:@"selectedFeeds" options:NSKeyValueObservingOptionNew context:NULL];
         
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -279,6 +282,7 @@
         [defaults removeObserver:self forKeyPath:@"mapType"];
         [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
         [defaults removeObserver:self forKeyPath:@"selectedOnlineLayers"];
+        [defaults removeObserver:self forKeyPath:@"selectedFeeds"];
         [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
     }
     @catch (id exception) {
@@ -300,8 +304,22 @@
 }
 
 - (void) addFeeds {
-    NSArray<FeedItemRetriever *> *retrievers = [FeedItemRetriever createMappableFeedItemRetrieversWithDelegate:self];
-    for (FeedItemRetriever *retriever in retrievers) {
+    NSDictionary *selectedFeedsPerEvent = [NSUserDefaults.standardUserDefaults objectForKey:@"selectedFeeds"];
+    NSArray *feedIdsInEvent = [selectedFeedsPerEvent objectForKey:[[Server currentEventId] stringValue]];
+    
+    // remove any feeds that are no longer selected
+    [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
+    for (NSNumber *feedId in self.currentFeeds) {
+        NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId];
+        for (FeedItem *item in items) {
+            if (item.isMappable) {
+                [self.mapView removeAnnotation:item];
+            }
+        }
+    }
+    
+    for (NSNumber *feedId in feedIdsInEvent) {
+        FeedItemRetriever *retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
         NSArray<FeedItem*> *items = [retriever startRetriever];
         for (FeedItem *item in items) {
             if (item.isMappable) {
@@ -309,6 +327,7 @@
             }
         }
     }
+    [self.currentFeeds addObjectsFromArray:feedIdsInEvent];
 }
 
 - (NSMutableDictionary *) staticLayers {
@@ -324,6 +343,13 @@
         _onlineLayers = [[NSMutableDictionary alloc] init];
     }
     return _onlineLayers;
+}
+
+- (NSMutableArray *) currentFeeds {
+    if (_currentFeeds == nil) {
+        _currentFeeds = [[NSMutableArray alloc] init];
+    }
+    return _currentFeeds;
 }
 
 - (void) setLocations:(Locations *) locations {
@@ -477,6 +503,8 @@
         [self updateOnlineLayers: [object objectForKey:keyPath]];
     } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
         [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
+    } else if ([@"selectedFeeds" isEqualToString:keyPath] && self.mapView) {
+        
     }
 }
 
@@ -1250,6 +1278,9 @@
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"feedItem"];
             annotationView.canShowCallout = YES;
         }
+        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        rightButton.tintColor = [UIColor mageBlue];
+        annotationView.rightCalloutAccessoryView = rightButton;
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
         return annotationView;
@@ -1328,7 +1359,11 @@
             ObservationAnnotation *annotation = view.annotation;
             [self.mapCalloutDelegate calloutTapped:annotation.observation];
         }
-	}
+    } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
+        if (self.mapCalloutDelegate) {
+            [self.mapCalloutDelegate calloutTapped:view.annotation];
+        }
+    }
 }
 
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {

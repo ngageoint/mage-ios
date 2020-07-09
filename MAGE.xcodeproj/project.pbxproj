@@ -140,6 +140,8 @@
 		F7098F2A2497C75F00313703 /* FeedItemViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F292497C75F00313703 /* FeedItemViewViewController.swift */; };
 		F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */; };
 		F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2D24980DD000313703 /* FeedItemRetriever.swift */; };
+		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
+		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -611,6 +613,8 @@
 		F7098F292497C75F00313703 /* FeedItemViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewViewController.swift; sourceTree = "<group>"; };
 		F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemPropertyCell.swift; sourceTree = "<group>"; };
 		F7098F2D24980DD000313703 /* FeedItemRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetriever.swift; sourceTree = "<group>"; };
+		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
+		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
 		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
@@ -1371,6 +1375,7 @@
 				F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */,
 				F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */,
 				F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */,
+				F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1590,6 +1595,7 @@
 		F7614DA820068FF300676366 /* responses */ = {
 			isa = PBXGroup;
 			children = (
+				F70B47B324B5F7AF00D0BFE5 /* feeds.json */,
 				F71446F0249BB5BC005A5EC1 /* icon27.png */,
 				F7098F252492C36700313703 /* test_marker.png */,
 				F7614DA92006902000676366 /* apiSuccess.json */,
@@ -2192,6 +2198,7 @@
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
+				F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feed1Items.json in Resources */,
@@ -2661,6 +2668,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
+				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,

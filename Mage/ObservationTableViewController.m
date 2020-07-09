@@ -38,10 +38,11 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
     self.tableView.backgroundColor = [UIColor background];
-    self.refreshControl.backgroundColor = [UIColor background];
+    self.refreshControl.backgroundColor = [UIColor primary];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.navigationController.navigationBar.prefersLargeTitles = YES;
     [self setNavBarTitle];
 }
 
@@ -117,6 +118,27 @@
     [self startUpdateTimer];
     
     [self registerForThemeChanges];
+    [self updateFilterButtonPosition];
+}
+
+- (void) updateFilterButtonPosition {
+    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
+    if (self != self.navigationController.viewControllers[0]) {
+        if (self.navigationItem.rightBarButtonItems.count != 2) {
+            NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+            [rightItems addObject:self.navigationItem.leftBarButtonItem];
+            self.navigationItem.rightBarButtonItems = rightItems;
+            self.navigationItem.leftBarButtonItems = nil;
+        }
+    } else if (self.navigationItem.rightBarButtonItems.count == 2) {
+        // if the view was in the more controller and is now it's own tab
+        UIBarButtonItem *filterButton = [self.navigationItem.rightBarButtonItems lastObject];
+        
+        NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        [rightItems removeLastObject];
+        self.navigationItem.rightBarButtonItems = rightItems;
+        self.navigationItem.leftBarButtonItem = filterButton;
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -201,7 +223,7 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
+    [self.navigationItem setTitle:@"Observations" subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {

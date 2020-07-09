@@ -43,6 +43,11 @@ import Kingfisher
         tableView.dataSource = self
         tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
+    
+    override func themeDidChange(_ theme: MageTheme) {
+        self.navigationController?.navigationBar.barTintColor = UIColor.primary();
+        self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +66,7 @@ import Kingfisher
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
+        self.registerForThemeChanges();
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

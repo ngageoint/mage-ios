@@ -13,20 +13,24 @@ class FeedItemPropertyCell : UITableViewCell {
 
     public lazy var keyField: UILabel = {
         let primaryField = UILabel(forAutoLayout: ());
-        primaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
-        primaryField.textColor = UIColor.black.withAlphaComponent(0.87);
-//        primaryField.layer.shadowColor = UIColor.black.cgColor
-//        primaryField.layer.shadowRadius = 1.0
-//        primaryField.layer.shadowOpacity = 0.1
-//        primaryField.layer.shadowOffset = CGSize(width: -1, height: 1)
-//        primaryField.layer.masksToBounds = false
+        let systemFont = UIFont.systemFont(ofSize: 12.0, weight: .light)
+        let smallCapsDesc = systemFont.fontDescriptor.addingAttributes([
+            UIFontDescriptor.AttributeName.featureSettings: [
+                [
+                    UIFontDescriptor.FeatureKey.featureIdentifier: kUpperCaseType,
+                    UIFontDescriptor.FeatureKey.typeIdentifier: kUpperCaseSmallCapsSelector
+                ]
+            ]
+        ])
+        let font = UIFont(descriptor: smallCapsDesc, size: systemFont.pointSize)
+        primaryField.font = font;
         return primaryField;
     }()
     
     public lazy var valueField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
-        secondaryField.font = UIFont.systemFont(ofSize: 14.0, weight: .regular);
-        secondaryField.textColor = UIColor.black.withAlphaComponent(0.60);
+        secondaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
+        secondaryField.textColor = UIColor.black.withAlphaComponent(0.87);
         return secondaryField;
     }()
     
