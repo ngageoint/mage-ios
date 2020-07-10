@@ -194,12 +194,7 @@
 }
 
 - (void) setLocationText {
-    NSString *location = nil;
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
-        location = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
-    } else {
-        location = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
-    }
+    NSString *location = [CoordinateDisplay displayFromCoordinateWithCoordinate:self.userLastLocation.coordinate];
         
     UIFont *locationFont = [UIFont systemFontOfSize:14.0f];
     UIFont *accuracyFont = [UIFont systemFontOfSize:11.0f];
@@ -251,11 +246,7 @@
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     [alert addAction:[UIAlertAction actionWithTitle:@"Copy To Clipboard" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
-            pasteboard.string = [MGRS MGRSfromCoordinate:self.userLastLocation.coordinate];
-        } else {
-            pasteboard.string = [NSString stringWithFormat:@"%.05f, %.05f", self.userLastLocation.coordinate.latitude, self.userLastLocation.coordinate.longitude];
-        }
+        pasteboard.string = [CoordinateDisplay displayFromCoordinateWithCoordinate:self.userLastLocation.coordinate];
     }]];
     for (NSString *app in urlMap) {
         [alert addAction:[UIAlertAction actionWithTitle:app style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

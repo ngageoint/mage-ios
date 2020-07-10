@@ -252,6 +252,7 @@
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
+		F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */; };
 		F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */; };
 		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
@@ -789,6 +790,7 @@
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
 		F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewDataStore.m; sourceTree = "<group>"; };
 		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
+		F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateDisplay.swift; sourceTree = "<group>"; };
 		F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewCoordinator.swift; sourceTree = "<group>"; };
 		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
@@ -1228,6 +1230,7 @@
 				2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */,
 				F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */,
 				F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */,
+				F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -2544,6 +2547,7 @@
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
+				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				F7E297091A8C0AB3000F62C6 /* ObservationViewController_iPhone.m in Sources */,
 				2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */,

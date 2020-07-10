@@ -18,6 +18,7 @@
 #import "MapShapePointsObservation.h"
 #import "Theme+UIResponder.h"
 #import <mgrs/MGRS.h>
+#import "Mage-Swift.h"
 
 @import SkyFloatingLabelTextField;
 @import HexColors;
@@ -141,12 +142,7 @@
         }
         
         SFPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"showMGRS"]) {
-            self.locationField.text = [MGRS MGRSfromCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
-        } else {
-            self.locationField.text = [NSString stringWithFormat:@"%.6f, %.6f", [point.y doubleValue], [point.x doubleValue]];
-        }
-
+        self.locationField.text = [CoordinateDisplay displayFromCoordinateWithCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
         if (!self.isGeometryField) {
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
             if (self.geometry.geometryType == SF_POINT) {

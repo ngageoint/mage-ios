@@ -80,7 +80,7 @@ class FeedItemHeaderCell : UITableViewCell {
         } else {
             itemInfoView.isHidden = true;
         }
-        if (feedItem.isMappable) {
+        if (feedItem.isMappable && feedItem.feed?.itemsHaveSpatialDimension == true) {
             self.mapView.isHidden = false;
             self.locationTextView.isHidden = false;
             self.mapView.addAnnotation(feedItem);
@@ -93,10 +93,6 @@ class FeedItemHeaderCell : UITableViewCell {
     }
     
     func getLocationText(feedItem: FeedItem) -> String {
-        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            return MGRS.mgrSfromCoordinate(feedItem.coordinate);
-        } else {
-            return String(format: "%.05f, %.05f", feedItem.coordinate.latitude, feedItem.coordinate.longitude);
-        }
+        return CoordinateDisplay.displayFromCoordinate(coordinate: feedItem.coordinate);
     }
 }
