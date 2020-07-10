@@ -41,11 +41,15 @@ class FeedItemHeaderCell : UITableViewCell {
     private lazy var locationTextView: UIView = {
         let view = UIView(forAutoLayout: ());
         let image = UIImageView(image: UIImage(named: "location_tracking_on"));
-        image.autoSetDimensions(to: CGSize(width: 24, height: 24));
         image.tintColor = UIColor.mageBlue();
         view.addSubview(image);
         view.addSubview(locationLabel);
-        image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+        
+        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
+            image.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+        }
+        
         locationLabel.autoAlignAxis(.horizontal, toSameAxisOf: image);
         locationLabel.autoPinEdge(.left, to: .right, of: image, withOffset: 16);
         locationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 16);

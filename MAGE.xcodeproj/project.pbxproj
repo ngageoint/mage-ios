@@ -142,6 +142,7 @@
 		F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2D24980DD000313703 /* FeedItemRetriever.swift */; };
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
+		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
 		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
 		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
@@ -250,6 +251,7 @@
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
+		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */; };
 		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
@@ -615,6 +617,7 @@
 		F7098F2D24980DD000313703 /* FeedItemRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetriever.swift; sourceTree = "<group>"; };
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
+		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
 		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
 		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
 		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
@@ -785,6 +788,7 @@
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
 		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
 		F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewDataStore.m; sourceTree = "<group>"; };
+		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
 		F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewCoordinator.swift; sourceTree = "<group>"; };
 		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
@@ -1376,6 +1380,7 @@
 				F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */,
 				F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */,
 				F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */,
+				F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1843,6 +1848,7 @@
 				F74020B524917F8400B5A8BA /* MAGETests-Bridging-Header.h */,
 				F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */,
 				F74020B82491904200B5A8BA /* TestHelpers.swift */,
+				F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -2677,7 +2683,9 @@
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
 				F7911623249125230043A529 /* MageRootViewTests.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
+				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
+				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
 				F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */,

@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import Nimble_Snapshots
 import PureLayout
+import OHHTTPStubs
 
 @testable import MAGE
 
@@ -41,6 +42,46 @@ class MageRootViewTests: KIFSpec {
                 }
             }
             
+            func loadFeedsJson() -> NSArray {
+                guard let pathString = Bundle(for: type(of: self)).path(forResource: "feeds", ofType: "json") else {
+                    fatalError("feeds.json not found")
+                }
+                
+                guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+                    fatalError("Unable to convert feeds.json to String")
+                }
+                
+                guard let jsonData = jsonString.data(using: .utf8) else {
+                    fatalError("Unable to convert feeds.json to Data")
+                }
+                
+                guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
+                    fatalError("Unable to convert feeds.json to JSON dictionary")
+                }
+                
+                return jsonDictionary;
+            }
+            
+            func loadFeedItemsJson() -> NSArray {
+                guard let pathString = Bundle(for: type(of: self)).path(forResource: "feed1Items", ofType: "json") else {
+                    fatalError("feed1Items.json not found")
+                }
+                
+                guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+                    fatalError("Unable to convert feed1Items.json to String")
+                }
+                
+                guard let jsonData = jsonString.data(using: .utf8) else {
+                    fatalError("Unable to convert feed1Items.json to Data")
+                }
+                
+                guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
+                    fatalError("Unable to convert feed1Items.json to JSON dictionary")
+                }
+                
+                return jsonDictionary;
+            }
+            
             func clearAndSetUpStack() {
                 MageInitializer.initializePreferences();
                 MageInitializer.clearAndSetupCoreData();
@@ -50,12 +91,13 @@ class MageRootViewTests: KIFSpec {
                 waitUntil { done in
                     clearAndSetUpStack();
                     
+                    MockMageServer.initializeHttpStubs();
                     window = UIWindow(forAutoLayout: ());
                     window.autoSetDimension(.width, toSize: 414);
                     window.autoSetDimension(.height, toSize: 896);
                     
                     window.makeKeyAndVisible();
-                    
+                    UserDefaults.standard.set(nil, forKey: "selectedFeeds");
                     UserDefaults.standard.set(0, forKey: "mapType");
                     UserDefaults.standard.set(false, forKey: "showMGRS");
                     UserDefaults.standard.synchronize();
@@ -70,6 +112,7 @@ class MageRootViewTests: KIFSpec {
             
             afterEach {
                 clearAndSetUpStack();
+                HTTPStubs.removeAllStubs();
             }
             
             it("no feeds") {
@@ -107,6 +150,100 @@ class MageRootViewTests: KIFSpec {
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;
                 })
+                
+                window.rootViewController = controller;
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            it("two mappable feeds and two non mappable") {
+                var completeTest = false;
+                
+                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
+                controller = iphoneStoryboard.instantiateInitialViewController();
+                
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 2) { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                
+                window.rootViewController = controller;
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            it("two mappable feeds and two non mappable one selected") {
+                var completeTest = false;
+                
+                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
+                controller = iphoneStoryboard.instantiateInitialViewController();
+                
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 1) { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                
+                UserDefaults.standard.set(["1":[0]], forKey: "selectedFeeds");
+                UserDefaults.standard.synchronize();
+                
+                
+                window.rootViewController = controller;
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            it("two mappable feeds and two non mappable other one selected") {
+                var completeTest = false;
+                
+                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
+                controller = iphoneStoryboard.instantiateInitialViewController();
+                
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 1) { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                
+                UserDefaults.standard.set(["1":[1]], forKey: "selectedFeeds");
+                UserDefaults.standard.synchronize();
                 
                 window.rootViewController = controller;
                 if (recordSnapshots) {

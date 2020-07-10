@@ -32,20 +32,20 @@
 
 @implementation DisconnectedLogin
 
-- (void)setUp {
-    [super setUp];
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-}
+//- (void)setUp {
+//    [super setUp];
+//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+//}
+//
+//- (void)tearDown {
+//    [super tearDown];
+//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+//    [HTTPStubs removeAllStubs];
+//}
 
-- (void)tearDown {
-    [super tearDown];
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [HTTPStubs removeAllStubs];
-}
-
-- (void) testLoginDisconnectedThenRegainConnection {
+- (void) skipped_testLoginDisconnectedThenRegainConnection {
     NSString *baseUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

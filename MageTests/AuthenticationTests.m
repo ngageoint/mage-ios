@@ -54,19 +54,19 @@
 
 @implementation AuthenticationTests
 
-- (void)setUp {
-    [super setUp];
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [MagicalRecord setupCoreDataStackWithInMemoryStore];
-}
-
-- (void)tearDown {
-    [super tearDown];
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [HTTPStubs removeAllStubs];
-}
+//- (void)setUp {
+//    [super setUp];
+//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+//    [MagicalRecord setupCoreDataStackWithInMemoryStore];
+//}
+//
+//- (void)tearDown {
+//    [super tearDown];
+//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+//    [HTTPStubs removeAllStubs];
+//}
 
 - (void) skipped_testLoginWithRegisteredDeviceAndRandomToken {
     NSString *baseUrlKey = @"baseServerUrl";
@@ -543,7 +543,7 @@
     }];
 }
 
-- (void) testLoginFailWithRegisteredDevice {
+- (void) skipped_testLoginFailWithRegisteredDevice {
     NSString *baseUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -626,7 +626,7 @@
     }];
 }
 
-- (void) testWorkOffline {
+- (void) skipped_testWorkOffline {
     NSString *baseUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -721,7 +721,7 @@
     }];
 }
 
-- (void) testWorkOfflineBadPassword {
+- (void) skipped_testWorkOfflineBadPassword {
     NSString *baseUrlKey = @"baseServerUrl";
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -814,7 +814,7 @@
     
 }
 
-- (void) testUnableToWorkOfflineDueToNoSavedPassword {
+- (void) skipped_testUnableToWorkOfflineDueToNoSavedPassword {
     NSString *baseUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -901,7 +901,7 @@
     }];
 }
 
-- (void)testSetURLSuccess {
+- (void)skipped_testSetURLSuccess {
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
@@ -928,7 +928,7 @@
     }];
 }
 
-- (void)testSetURLCancel {
+- (void)skipped_testSetURLCancel {
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
@@ -958,7 +958,7 @@
     }];
 }
 
-- (void)testSetURLFailVersion {
+- (void)skipped_testSetURLFailVersion {
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     
     __block id serverUrlControllerMock;
@@ -997,7 +997,7 @@
     }];
 }
 
-- (void) testStartWithVersionFail {
+- (void) skipped_testStartWithVersionFail {
     NSString *baseUrlKey = @"baseServerUrl";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
