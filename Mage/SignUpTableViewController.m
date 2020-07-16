@@ -158,7 +158,7 @@
     __weak typeof(self) weakSelf = self;
     NSString *url = [NSString stringWithFormat:@"%@/%@", baseUrl, @"api/users"];
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];

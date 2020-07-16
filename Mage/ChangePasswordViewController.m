@@ -316,7 +316,7 @@
 - (void) changePasswordWithParameters:(NSDictionary *)parameters atURL:(NSURL *)url {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager PUT_TASK:[url absoluteString] parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Password Has Been Changed"
                                                                        message:@"Your password has successfully been changed.  For security purposes you will now be redirected to the login page to log back in with your new password."

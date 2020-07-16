@@ -43,6 +43,9 @@ import Kingfisher
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
         allTabs.append(createSettingsTabItem());
+        allTabs.append(createMeTabItem());
+        allTabs.append(createLocationsTab());
+        allTabs.append(createObservationsTab());
         
         for feed in Feed.mr_findAll()! as! [Feed] {
             allTabs.append(createFeedViewController(feed: feed));
@@ -70,6 +73,29 @@ import Kingfisher
         let nc = UINavigationController(rootViewController: svc);
         setNavigationControllerAppearance(nc: nc);
         nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);
+        return nc;
+    }
+    
+    func createLocationsTab() -> UINavigationController {
+        let locationTableViewController: LocationTableViewController = LocationTableViewController();
+        let nc = UINavigationController(rootViewController: locationTableViewController);
+        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(named: "people"), tag: 2);
+        return nc;
+    }
+    
+    func createObservationsTab() -> UINavigationController {
+        let observationTableViewController: ObservationTableViewController = ObservationTableViewController();
+        let nc = UINavigationController(rootViewController: observationTableViewController);
+        nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
+        return nc;
+    }
+    
+    func createMeTabItem() -> UINavigationController {
+        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
+        let uvc = UserViewController(user: user);
+        let nc = UINavigationController(rootViewController: uvc);
+        setNavigationControllerAppearance(nc: nc);
+        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
         return nc;
     }
     
@@ -116,21 +142,21 @@ import Kingfisher
         nc.navigationBar.isTranslucent = false;
         nc.navigationBar.barTintColor = UIColor.primary();
         nc.navigationBar.tintColor = UIColor.navBarPrimaryText();
-        nc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText()!,
-                                                                           NSAttributedString.Key.backgroundColor : UIColor.primary()!];
-        nc.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText()!,
-                                                                                NSAttributedString.Key.backgroundColor : UIColor.primary()!];
+        nc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText(),
+                                                                           NSAttributedString.Key.backgroundColor : UIColor.primary()];
+        nc.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText(),
+                                                                                NSAttributedString.Key.backgroundColor : UIColor.primary()];
         
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground();
             appearance.titleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText()!,
-                NSAttributedString.Key.backgroundColor: UIColor.primary()!
+                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText(),
+                NSAttributedString.Key.backgroundColor: UIColor.primary()
             ];
             appearance.largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText()!,
-                NSAttributedString.Key.backgroundColor: UIColor.primary()!
+                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText(),
+                NSAttributedString.Key.backgroundColor: UIColor.primary()
             ];
             
             nc.navigationBar.standardAppearance = appearance;
@@ -167,6 +193,7 @@ extension MageRootViewController: UITabBarControllerDelegate {
         
         if changed {
             for (i, viewController) in viewControllers!.enumerated() {
+                
                 UserDefaults.standard.set(i, forKey: "rootViewTabPosition\(viewController.tabBarItem.tag)")
             }
         }

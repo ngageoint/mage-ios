@@ -58,6 +58,7 @@
 #import "BaseMapOverlay.h"
 #import "UIColor+Mage.h"
 #import <PureLayout.h>
+#import "MAGE-Swift.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;

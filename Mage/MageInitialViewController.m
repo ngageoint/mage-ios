@@ -31,7 +31,7 @@
         return;
     }
 
-    [MageSessionManager manager].token = [StoredPassword retrieveStoredToken];
+    [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
     
     [self performSegueWithIdentifier:@"DisplayEventViewSegue" sender:nil];
 }

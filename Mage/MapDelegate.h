@@ -15,7 +15,8 @@
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 #import "FeedItem.h"
-#import "MAGE-Swift.h"
+
+@protocol FeedItemDelegate;
 
 @protocol UserTrackingModeChanged <NSObject>
 

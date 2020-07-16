@@ -8,6 +8,7 @@
 
 #import "UserTableViewController.h"
 #import "MeViewController.h"
+#import "MAGE-Swift.h"
 
 @interface UserTableViewController () <UserSelectionDelegate>
 
@@ -17,6 +18,12 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (!self.userDataStore) {
+        self.userDataStore = [[UserDataStore alloc] init];
+        self.userDataStore.tableView = self.tableView;
+        self.tableView.dataSource = self.userDataStore;
+        self.tableView.delegate = self.userDataStore;
+    }
     self.userDataStore.userSelectionDelegate = self;
     [self.userDataStore startFetchControllerForUserIds:self.userIds];
     
@@ -34,15 +41,21 @@
 }
 
 - (void) userDetailSelected:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 

@@ -77,7 +77,6 @@
     self.locationIcon.textColor = [UIColor secondaryText];
     self.locationIcon.font = [UIFont fontWithName:@"FontAwesome" size:15];
     self.locationIcon.text = @"\U0000f0ac";
-    self.location.textColor = [UIColor flatButton];
     self.email.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     self.phoneNumber.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
     self.location.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor flatButton]};
@@ -557,7 +556,7 @@
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/myself"];
     
     NSMutableURLRequest *request = [[manager httpRequestSerializer] multipartFormRequestWithMethod:@"PUT" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -588,15 +587,24 @@
 }
 
 - (void) selectedObservation:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 @end

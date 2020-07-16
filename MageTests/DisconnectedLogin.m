@@ -164,7 +164,7 @@
                 [eventResponseArrived fulfill];
             }];
             
-            [[MageSessionManager manager] addTask:eventFetchTask];
+            [[MageSessionManager sharedManager] addTask:eventFetchTask];
 
             [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
                 OCMVerifyAll(userUtilityMock);

@@ -17,6 +17,7 @@
 #import "MageOfflineObservationManager.h"
 #import "AppDelegate.h"
 #import "MapSettingsCoordinator.h"
+#import "ObservationViewController_iPhone.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate, MapSettingsCoordinatorDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButton;
@@ -135,7 +136,10 @@
 
 - (void)observationDetailSelected:(Observation *)observation {
     [self.mapDelegate observationDetailSelected:observation];
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
 }
 
 - (void) selectedUser:(User *) user {

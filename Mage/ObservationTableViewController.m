@@ -24,7 +24,7 @@
 #import "ObservationTableViewCell.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate, AttachmentSelectionDelegate>
 
 @property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
@@ -46,8 +46,24 @@
     [self setNavBarTitle];
 }
 
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
+    
+    if (!self.observationDataStore) {
+        self.observationDataStore = [[ObservationDataStore alloc] init];
+        self.tableView.dataSource = self.observationDataStore;
+        self.tableView.delegate = self.observationDataStore;
+        self.observationDataStore.tableView = self.tableView;
+        self.observationDataStore.attachmentSelectionDelegate = self;
+    }
     
     self.tableView.backgroundView = nil;
     
@@ -104,6 +120,32 @@
     }
 }
 
+- (IBAction)createNewObservation:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+    [self startCreateNewObservationAtLocation:location andProvider:@"gps"];
+}
+
+- (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
+    ObservationEditCoordinator *edit;
+    SFPoint *point;
+    
+    CLLocationAccuracy accuracy = 0;
+    double delta = 0;
+    if (location) {
+        if (location.altitude != 0) {
+            point = [[SFPoint alloc] initWithHasZ:YES andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble: location.coordinate.longitude] andY:[[NSDecimalNumber alloc] initWithDouble:location.coordinate.latitude]];
+            [point setZValue:location.altitude];
+        } else {
+            point = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        }
+        accuracy = location.horizontalAccuracy;
+        delta = [location.timestamp timeIntervalSinceNow] * -1000;
+    }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    [self.childCoordinators addObject:edit];
+    [edit start];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -149,6 +191,12 @@
 
 - (void) dealloc {
     self.observationDataStore.observations.delegate = nil;
+}
+
+- (void) filterButtonPressed {
+    UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
+    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"observationFilter"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (BOOL)isForceTouchAvailable {
@@ -235,15 +283,28 @@
 }
 
 - (void) selectedObservation:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+//    let ovc: ObservationViewController_iPhone = ObservationViewController_iPhone();
+//    ovc.observation = observation;
+//    self.navigationController?.pushViewController(ovc, animated: true);
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (IBAction)newButtonTapped:(id)sender {
@@ -279,7 +340,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [[MageSessionManager manager] addTask:observationFetchTask];
+    [[MageSessionManager sharedManager] addTask:observationFetchTask];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

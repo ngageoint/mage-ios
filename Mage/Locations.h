@@ -7,14 +7,15 @@
 #import <CoreData/CoreData.h>
 #import "ManagedObjectContextHolder.h"
 #import "User.h"
+#import "Location.h"
 
 @interface Locations : NSObject
 
 @property (nonatomic, weak) id<NSFetchedResultsControllerDelegate> delegate;
-@property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
+@property(nonatomic, strong)  NSFetchedResultsController <Location *> *fetchedResultsController;
 
-+ (id) locationsForAllUsers;
-+ (id) locationsForUser:(User *) user;
++ (Locations *) locationsForAllUsers;
++ (Locations *) locationsForUser:(User *) user;
 
 + (NSMutableArray *) getPredicatesForLocations;
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;

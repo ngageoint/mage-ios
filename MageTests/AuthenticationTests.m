@@ -71,7 +71,7 @@
 - (void) skipped_testLoginWithRegisteredDeviceAndRandomToken {
     NSString *baseUrlKey = @"baseServerUrl";
     
-    [[MageSessionManager manager] setToken:@"oldtoken"];
+    [[MageSessionManager sharedManager] setToken:@"oldtoken"];
     [StoredPassword persistTokenToKeyChain:@"oldtoken"];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -168,7 +168,7 @@
             // login complete
             XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
             NSString *token = [StoredPassword retrieveStoredToken];
-            NSString *mageSessionToken = [[MageSessionManager manager] getToken];
+            NSString *mageSessionToken = [[MageSessionManager sharedManager] getToken];
             XCTAssertTrue([token isEqualToString:@"TOKEN"]);
             XCTAssertTrue([token isEqualToString:mageSessionToken]);
 
@@ -185,7 +185,7 @@
                 [myselfResponseArrived fulfill];
             }];
             
-            [[MageSessionManager manager] addTask:task];
+            [[MageSessionManager sharedManager] addTask:task];
 
             [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
                 OCMVerifyAll(navControllerPartialMock);

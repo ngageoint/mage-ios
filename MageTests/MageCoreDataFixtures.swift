@@ -20,12 +20,119 @@ class MageCoreDataFixtures {
         MagicalRecord.setLoggingLevel(.warn);
     }
     
+    public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler?) {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "locationsabc", ofType: "json") else {
+            fatalError("locationsabc.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert locationsabc.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert locationsabc.json to Data")
+        }
+        
+        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSArray else {
+            fatalError("Unable to convert locationsabc.json to JSON dictionary")
+        }
+        
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let userJson: [String: Any] = jsonDictionary[0] as! [String: Any];
+            let userId: String = userJson["id"] as! String;
+            let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
+            let user: User = User.mr_findFirst(in: localContext)!;
+            if let location: Location = user.location {
+                location.populateLocation(fromJson: locations);
+            } else {
+                let location: Location = Location.mr_createEntity(in: localContext)!;
+                location.populateLocation(fromJson: locations);
+                user.location = location;
+            }
+            
+        }, completion: completion)
+    }
+    
+    public static func addGPSLocation(userId: String = "userabc", completion: MRSaveCompletionHandler?) {
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
+            
+            let gpsLocation = GPSLocation(for: location, in: localContext);
+        }, completion: completion)
+    }
+    
+    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler?) {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "userabc", ofType: "json") else {
+            fatalError("userabc.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert userabc.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert userabc.json to Data")
+        }
+        
+        guard let jsonDictionary: NSDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSDictionary else {
+            fatalError("Unable to convert userabc.json to JSON dictionary")
+        }
+        
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let u: User = User.insert(forJson: jsonDictionary as! [AnyHashable : Any], in: localContext)
+            u.remoteId = userId;
+            
+        }, completion: completion)
+    }
+    
+    public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler?) {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
+            fatalError("observations.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert observations.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert observations.json to Data")
+        }
+        
+        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSArray else {
+            fatalError("Unable to convert observations.json to JSON dictionary")
+        }
+        
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
+            if let o: Observation = Observation.mr_createEntity(in: localContext) {
+                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                o.eventId = eventId;
+                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: o.userId, in: localContext)!;
+                o.user = user;
+            }
+        }, completion: completion)
+    }
+    
     public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", completion: MRSaveCompletionHandler?) {
+        
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "forms", ofType: "json") else {
+            fatalError("forms.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert forms.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert forms.json to Data")
+        }
+        
+        guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
+            fatalError("Unable to convert forms.json to JSON dictionary")
+        }
+        
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             if let e: Event = Event.mr_createEntity(in: localContext) {
                 e.name = name;
                 e.remoteId = remoteId;
                 e.eventDescription = "Test event description";
+                e.forms = jsonDictionary;
             }
         }, completion: completion)
     }

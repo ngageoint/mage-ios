@@ -15,8 +15,15 @@
 -(void) calloutTapped:(id) calloutItem {
     if ([calloutItem isKindOfClass:[FeedItem class]]) {
         [self.viewController.navigationController pushViewController:[[FeedItemViewViewController alloc] initWithFeedItem:calloutItem] animated:true];
-    } else {
-        [self.viewController performSegueWithIdentifier:self.segueIdentifier sender:calloutItem];
+    } else if ([calloutItem isKindOfClass:[User class]]) {
+        UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem];
+        [self.viewController.navigationController pushViewController:uvc animated:YES];
+//        [self.userMapCalloutTappedDelegate calloutTapped:calloutItem];
+    } else if ([calloutItem isKindOfClass:[Observation class]]) {
+        ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+        ovc.observation = calloutItem;
+        [self.viewController.navigationController pushViewController:ovc animated:YES];
+//        [self.observationMapCalloutTappedDelegate calloutTapped:calloutItem];
     }
 }
 

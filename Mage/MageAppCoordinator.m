@@ -53,7 +53,7 @@
         [_childCoordinators addObject:authCoordinator];
         [authCoordinator start];
     } else {
-        [MageSessionManager manager].token = [StoredPassword retrieveStoredToken];
+        [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
         [self startEventChooser];
     }
 }

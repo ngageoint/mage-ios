@@ -12,5 +12,6 @@
 
 + (void) checkCameraPermissionsForViewController: (UIViewController *) viewController withCompletion:(void (^)(BOOL granted)) complete;
 + (void) checkMicrophonePermissionsForViewController: (UIViewController *) viewController withCompletion:(void (^)(BOOL granted)) complete;
++ (void) checkGalleryPermissionsForViewController: (UIViewController *) viewController withCompletion:(void (^)(BOOL granted)) complete;
 
 @end

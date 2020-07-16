@@ -11,29 +11,29 @@
 
 @interface UIColor (Mage)
 
-+ (UIColor *) mageBlue;
-+ (UIColor *) primaryText;
-+ (UIColor *) secondaryText;
-+ (UIColor *) background;
-+ (UIColor *) tableBackground;
-+ (UIColor *) dialog;
-+ (UIColor *) brand;
-+ (UIColor *) primary;
-+ (UIColor *) secondary;
-+ (UIColor *) themedButton;
-+ (UIColor *) themedWhite;
-+ (UIColor *) flatButton;
-+ (UIColor *) brightButton;
-+ (UIColor *) inactiveIcon;
-+ (UIColor *) inactiveIconWithColor: (UIColor *) color;
-+ (UIColor *) activeIcon;
-+ (UIColor *) activeIconWithColor: (UIColor *) color;
-+ (UIColor *) activeTabIcon;
-+ (UIColor *) inactiveTabIcon;
-+ (UIColor *) tabBarTint;
-+ (UIColor *) navBarPrimaryText;
-+ (UIColor *) navBarSecondaryText;
-+ (void) themeMap: (MKMapView *) map;
++ (UIColor * _Nonnull) mageBlue;
++ (UIColor * _Nonnull) primaryText;
++ (UIColor * _Nonnull) secondaryText;
++ (UIColor * _Nonnull) background;
++ (UIColor * _Nonnull) tableBackground;
++ (UIColor * _Nonnull) dialog;
++ (UIColor * _Nonnull) brand;
++ (UIColor * _Nonnull) primary;
++ (UIColor * _Nonnull) secondary;
++ (UIColor * _Nonnull) themedButton;
++ (UIColor * _Nonnull) themedWhite;
++ (UIColor * _Nonnull) flatButton;
++ (UIColor * _Nonnull) brightButton;
++ (UIColor * _Nonnull) inactiveIcon;
++ (UIColor * _Nonnull) inactiveIconWithColor: (UIColor * _Nonnull) color;
++ (UIColor * _Nonnull) activeIcon;
++ (UIColor * _Nonnull) activeIconWithColor: (UIColor * _Nonnull) color;
++ (UIColor * _Nonnull) activeTabIcon;
++ (UIColor * _Nonnull) inactiveTabIcon;
++ (UIColor * _Nonnull) tabBarTint;
++ (UIColor * _Nonnull) navBarPrimaryText;
++ (UIColor * _Nonnull) navBarSecondaryText;
++ (void) themeMap: (MKMapView * _Nonnull) map;
 + (BOOL) darkMap;
 + (UIKeyboardAppearance) keyboardAppearance;
 

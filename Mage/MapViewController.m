@@ -271,13 +271,12 @@
     
     if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotation;
-        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
+        ObservationViewController *previewController = [[ObservationViewController_iPhone alloc] init];
         previewController.observation = observationAnnotation.observation;
         return previewController;
     } else if ([annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *locationAnnotation = (LocationAnnotation *) annotation;
-        MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
-        previewController.user = locationAnnotation.user;
+        UserViewController *previewController = [[UserViewController alloc] initWithUser:locationAnnotation.user];
         return previewController;
     }
     return nil;

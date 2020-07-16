@@ -61,7 +61,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return predicates;
 }
 
-+ (id) observations {
++ (Observations *) observations {
     NSMutableArray *predicates = [Observations getPredicatesForObservations];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -72,7 +72,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) observationsForMap {
++ (Observations *) observationsForMap {
     NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:YES withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -83,7 +83,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) hideObservations {
++ (Observations *) hideObservations {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithValue:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
@@ -93,7 +93,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) observationsForUser:(User *) user {
++ (Observations *) observationsForUser:(User *) user {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
@@ -104,7 +104,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) observationsForObservation:(Observation *) observation {
++ (Observations *) observationsForObservation:(Observation *) observation {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]

@@ -13,6 +13,7 @@
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
 #import "Theme+UIResponder.h"
+#import "MAGE-Swift.h"
 
 @interface LocationTableViewController() <UserSelectionDelegate, UIViewControllerPreviewingDelegate>
 
@@ -25,7 +26,7 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
     self.refreshControl.backgroundColor = [UIColor background];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
@@ -33,8 +34,22 @@
     [self setNavBarTitle];
 }
 
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStylePlain];
+    return self;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
+    
+    if (!self.locationDataStore) {
+        self.locationDataStore = [[LocationDataStore alloc] init];
+        self.tableView.dataSource = self.locationDataStore;
+        self.tableView.delegate = self.locationDataStore;
+        self.locationDataStore.tableView = self.tableView;
+    }
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
     // ths is different on the ipad and the iphone so make the check here
@@ -85,6 +100,12 @@
     
     [self startUpdateTimer];
     [self updateFilterButtonPosition];
+}
+
+- (void) filterButtonPressed {
+    UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
+    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"locationFilter"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) updateFilterButtonPosition {
@@ -195,15 +216,21 @@
 }
 
 - (void) userDetailSelected:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
+//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void)refreshPeople {
@@ -215,7 +242,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [[MageSessionManager manager] addTask:userFetchTask];
+    [[MageSessionManager sharedManager] addTask:userFetchTask];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath
