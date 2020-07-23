@@ -80,7 +80,7 @@ class FeedItemSummaryView : UIView {
         layoutView();
     }
     
-    @objc public func populate(feedItem: FeedItem) {
+    @objc public func populate(feedItem: FeedItem, showNoContent: Bool = true) {
         let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
         itemImage.tintColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0);
         let image = UIImage(named: "observations");
@@ -106,7 +106,7 @@ class FeedItemSummaryView : UIView {
             }
         }
         
-        if (!feedItem.hasContent()) {
+        if (!feedItem.hasContent() && showNoContent) {
             noContentView.isHidden = false;
             return;
         }

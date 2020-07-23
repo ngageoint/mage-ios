@@ -23,7 +23,7 @@
 #import "Observations.h"
 #import "SFGeometryUtils.h"
 #import "ObservationTableViewController.h"
-#import "ObservationViewController_iPhone.h"
+#import "ObservationViewController.h"
 #import "ExternalDevice.h"
 #import "MageSessionManager.h"
 #import "LocationTableViewController.h"

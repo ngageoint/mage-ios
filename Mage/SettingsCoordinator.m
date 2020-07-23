@@ -21,7 +21,8 @@
     // create a uisplitviewcontroller
     self.splitViewController = [[UISplitViewController alloc] init];
     
-    SettingsTableViewController *masterViewController = [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
+    SettingsTableViewController *masterViewController = [[SettingsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    //[[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
     UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
     self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
 }

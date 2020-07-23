@@ -18,12 +18,10 @@
     } else if ([calloutItem isKindOfClass:[User class]]) {
         UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem];
         [self.viewController.navigationController pushViewController:uvc animated:YES];
-//        [self.userMapCalloutTappedDelegate calloutTapped:calloutItem];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
-        ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+        ObservationViewController *ovc = [[ObservationViewController alloc] init];
         ovc.observation = calloutItem;
         [self.viewController.navigationController pushViewController:ovc animated:YES];
-//        [self.observationMapCalloutTappedDelegate calloutTapped:calloutItem];
     }
 }
 

@@ -15,7 +15,6 @@
 #import "ObservationAnnotation.h"
 #import "Observation.h"
 #import "ObservationImage.h"
-#import "MeViewController.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "Observations.h"
@@ -24,7 +23,7 @@
 #import "FormsViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import "ObservationViewController_iPad.h"
+#import "ObservationViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"
@@ -40,7 +39,7 @@
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -52,7 +51,6 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -97,10 +95,6 @@
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
-    if ([self isForceTouchAvailable]) {
-        // don't do this for now.  The previewing context is choosing the annotation that is pressed even if it is below a callout bubble
-        //self.mapDelegate.previewDelegate = self;
-    }
     
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
                                                  initWithTarget:self action:@selector(singleTapGesture:)];
@@ -249,43 +243,6 @@
     }
 }
 
-- (BOOL)isForceTouchAvailable {
-    BOOL isForceTouchAvailable = NO;
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
-    }
-    return isForceTouchAvailable;
-}
-
-- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>) previewingContext viewControllerForLocation:(CGPoint)location {
-    MKAnnotationView *annotationView = (MKAnnotationView *)previewingContext.sourceView;
-    if (self.presentedViewController) {
-        return nil;
-    }
-    
-    // this will preview whatever annotation was clicked even if the callout bubble for a different annotation is shown
-    // maybe only preview for the annotation which is selected.  Need to figure out how to determine if the annotation callout
-    // bubble was pressed
-    
-    id<MKAnnotation> annotation = annotationView.annotation;
-    
-    if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
-        ObservationAnnotation *observationAnnotation = (ObservationAnnotation *) annotation;
-        ObservationViewController *previewController = [[ObservationViewController_iPhone alloc] init];
-        previewController.observation = observationAnnotation.observation;
-        return previewController;
-    } else if ([annotation isKindOfClass:[LocationAnnotation class]]) {
-        LocationAnnotation *locationAnnotation = (LocationAnnotation *) annotation;
-        UserViewController *previewController = [[UserViewController alloc] initWithUser:locationAnnotation.user];
-        return previewController;
-    }
-    return nil;
-}
-
-- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
-    [self.navigationController showViewController:viewControllerToCommit sender:nil];
-}
-
 - (void) setNavBarTitle {
     if ([[Filter getFilterString] length] != 0 || [[Filter getLocationFilterString] length] != 0) {
         [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
@@ -412,23 +369,6 @@
 
 - (void) doneViewingWithCoordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:@"DisplayPersonSegue"]) {
-		MeViewController *destinationViewController = segue.destinationViewController;
-		[destinationViewController setUser:sender];
-    } else if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
-        // TODO fix me, this only works because both iPad and iPhone class respond to setObservation
-		ObservationViewController_iPad *destinationViewController = segue.destinationViewController;
-		[destinationViewController setObservation:sender];
-    } else if ([segue.identifier isEqualToString:@"viewImageSegue"]) {
-        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:sender delegate:nil];
-        [self.childCoordinators addObject:attachmentCoordinator];
-        [attachmentCoordinator start];
-    } else if ([segue.identifier isEqualToString:@"DisplayFeedItemSegue"]) {
-        NSLog(@"Display feed item segue");
-    }
 }
 
 - (IBAction) onReportLocationButtonPressed:(id)sender {

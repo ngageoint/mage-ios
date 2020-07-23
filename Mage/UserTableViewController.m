@@ -7,7 +7,6 @@
 //
 
 #import "UserTableViewController.h"
-#import "MeViewController.h"
 #import "MAGE-Swift.h"
 
 @interface UserTableViewController () <UserSelectionDelegate>
@@ -32,30 +31,19 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:@"ShowUserSegue"]) {
-        id destination = [segue destinationViewController];        
-        User *user = (User *)sender;
-        [destination setUser:user];
-    }
-}
-
 - (void) userDetailSelected:(User *)user {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 

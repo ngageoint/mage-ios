@@ -9,10 +9,8 @@
 #import "MAGEMasterSelectionDelegate.h"
 #import "UserSelectionDelegate.h"
 #import "ObservationSelectionDelegate.h"
+#import "MAGE-Swift.h"
 
-@interface MapViewController_iPad : MapViewController <UISplitViewControllerDelegate, MapCalloutTapped, ObservationSelectionDelegate, UserSelectionDelegate>
-
-@property(nonatomic, weak) IBOutlet UIToolbar *toolbar;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *eventNameItem;
+@interface MapViewController_iPad : MapViewController <UISplitViewControllerDelegate, MapCalloutTapped, ObservationSelectionDelegate, UserSelectionDelegate, FeedItemSelectionDelegate>
 
 @end

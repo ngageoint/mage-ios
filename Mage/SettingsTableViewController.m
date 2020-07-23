@@ -48,6 +48,7 @@
     self.dataSource = [[SettingsDataSource alloc] init];
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
+    self.tableView.estimatedSectionFooterHeight = 45;
     self.clearsSelectionOnViewWillAppear = NO;
     
     self.dataSource.showDisclosureIndicator = YES;

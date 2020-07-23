@@ -9,6 +9,10 @@
 import Foundation
 import Kingfisher
 
+@objc public protocol FeedItemSelectionDelegate {
+    @objc func feedItemSelected(feedItem: FeedItem);
+}
+
 @objc class FeedItemsViewController : UITableViewController {
     
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
@@ -31,12 +35,15 @@ import Kingfisher
     let cellReuseIdentifier = "cell";
     
     let feed : Feed
+    var selectionDelegate: FeedItemSelectionDelegate?
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(feed:Feed) {
+    @objc public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil) {
         self.feed = feed
+        self.selectionDelegate = selectionDelegate;
         super.init(style: .grouped)
         self.title = feed.title;
         tableView.delegate = self
@@ -95,8 +102,12 @@ import Kingfisher
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let feedItem = fetchedResultsController.object(at: indexPath)
-        let feedItemViewController: FeedItemViewViewController = FeedItemViewViewController(feedItem: feedItem);
-        self.navigationController?.pushViewController(feedItemViewController, animated: true);
+        if (selectionDelegate != nil) {
+            self.selectionDelegate?.feedItemSelected(feedItem: feedItem);
+        } else {
+            let feedItemViewController: FeedItemViewViewController = FeedItemViewViewController(feedItem: feedItem);
+            self.navigationController?.pushViewController(feedItemViewController, animated: true);
+        }
     }
 }
 

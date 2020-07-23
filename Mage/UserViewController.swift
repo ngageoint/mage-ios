@@ -77,19 +77,19 @@ extension UITableView {
 
 extension UserViewController : ObservationSelectionDelegate {
     func selectedObservation(_ observation: Observation!) {
-        let ovc: ObservationViewController_iPhone = ObservationViewController_iPhone();
+        let ovc: ObservationViewController = ObservationViewController();
         ovc.observation = observation;
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
     func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let ovc: ObservationViewController_iPhone = ObservationViewController_iPhone();
+        let ovc: ObservationViewController = ObservationViewController();
         ovc.observation = observation;
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
     func observationDetailSelected(_ observation: Observation!) {
-        let ovc: ObservationViewController_iPhone = ObservationViewController_iPhone();
+        let ovc: ObservationViewController = ObservationViewController();
         ovc.observation = observation;
         self.navigationController?.pushViewController(ovc, animated: true);
     }

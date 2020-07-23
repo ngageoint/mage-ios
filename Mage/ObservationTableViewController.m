@@ -24,9 +24,8 @@
 #import "ObservationTableViewCell.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate, AttachmentSelectionDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, AttachmentViewDelegate, AttachmentSelectionDelegate>
 
-@property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
@@ -37,12 +36,12 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
     self.refreshControl.backgroundColor = [UIColor primary];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
-    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
     [self setNavBarTitle];
 }
 
@@ -62,7 +61,14 @@
         self.tableView.dataSource = self.observationDataStore;
         self.tableView.delegate = self.observationDataStore;
         self.observationDataStore.tableView = self.tableView;
-        self.observationDataStore.attachmentSelectionDelegate = self;
+        if (self.attachmentDelegate) {
+            self.observationDataStore.attachmentSelectionDelegate = self.attachmentDelegate;
+        } else {
+            self.observationDataStore.attachmentSelectionDelegate = self;
+        }
+        if (self.observationSelectionDelegate) {
+            self.observationDataStore.observationSelectionDelegate = self.observationSelectionDelegate;
+        }
     }
     
     self.tableView.backgroundView = nil;
@@ -114,10 +120,6 @@
     self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
-    
-    if ([self isForceTouchAvailable]) {
-        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-    }
 }
 
 - (IBAction)createNewObservation:(id)sender {
@@ -199,50 +201,6 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (BOOL)isForceTouchAvailable {
-    BOOL isForceTouchAvailable = NO;
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
-    }
-    return isForceTouchAvailable;
-}
-
-- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
-    if ([self.presentedViewController isKindOfClass:[ObservationViewController class]]) {
-        return nil;
-    }
-    
-    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
-    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
-    
-    if (path) {
-        ObservationTableViewCell *tableCell = (ObservationTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
-
-        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
-        previewController.observation = tableCell.observation;
-        return previewController;
-    }
-    return nil;
-}
-
-- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
-    [self.navigationController showViewController:viewControllerToCommit sender:nil];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    if ([self isForceTouchAvailable]) {
-        if (!self.previewingContext) {
-            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-        }
-    } else {
-        if (self.previewingContext) {
-            [self unregisterForPreviewingWithContext:self.previewingContext];
-            self.previewingContext = nil;
-        }
-    }
-}
-
 - (void) applicationWillResignActive {
     [self stopUpdateTimer];
 }
@@ -274,35 +232,20 @@
     [self.navigationItem setTitle:@"Observations" subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
-        id destination = [segue destinationViewController];
-		Observation *observation = (Observation *) sender;
-		[destination setObservation:observation];
-    }
-}
-
 - (void) selectedObservation:(Observation *)observation {
-//    let ovc: ObservationViewController_iPhone = ObservationViewController_iPhone();
-//    ovc.observation = observation;
-//    self.navigationController?.pushViewController(ovc, animated: true);
-//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
-    
-    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
     ovc.observation = observation;
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
-    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
     ovc.observation = observation;
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-//    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
-    ObservationViewController_iPhone *ovc = [[ObservationViewController_iPhone alloc] init];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
     ovc.observation = observation;
     [self.navigationController pushViewController:ovc animated:YES];
 }

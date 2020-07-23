@@ -69,7 +69,7 @@ import Kingfisher
     }
     
     func createSettingsTabItem() -> UINavigationController {
-        let svc = SettingsTableViewController();
+        let svc = SettingsTableViewController(style: .grouped);
         let nc = UINavigationController(rootViewController: svc);
         setNavigationControllerAppearance(nc: nc);
         nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);

@@ -6,7 +6,6 @@
 
 #import "LocationTableViewController.h"
 #import "Location.h"
-#import "MeViewController.h"
 #import "Event.h"
 #import "MageSessionManager.h"
 #import "TimeFilter.h"
@@ -15,10 +14,9 @@
 #import "Theme+UIResponder.h"
 #import "MAGE-Swift.h"
 
-@interface LocationTableViewController() <UserSelectionDelegate, UIViewControllerPreviewingDelegate>
+@interface LocationTableViewController() <UserSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
-@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -49,6 +47,9 @@
         self.tableView.dataSource = self.locationDataStore;
         self.tableView.delegate = self.locationDataStore;
         self.locationDataStore.tableView = self.tableView;
+        if (self.delegate) {
+            self.locationDataStore.personSelectionDelegate = self.delegate;
+        }
     }
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
@@ -68,10 +69,6 @@
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 72;
-    
-    if ([self isForceTouchAvailable]) {
-        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-    }
     
     [self registerForThemeChanges];
 }
@@ -132,50 +129,6 @@
     [self stopUpdateTimer];
 }
 
-- (BOOL)isForceTouchAvailable {
-    BOOL isForceTouchAvailable = NO;
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
-    }
-    return isForceTouchAvailable;
-}
-
-- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
-    if ([self.presentedViewController isKindOfClass:[MeViewController class]]) {
-        return nil;
-    }
-    
-    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
-    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
-    
-    if (path) {
-        PersonTableViewCell *tableCell = (PersonTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
-        
-        MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
-        previewController.user = tableCell.user;
-        return previewController;
-    }
-    return nil;
-}
-
-- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
-    [self.navigationController showViewController:viewControllerToCommit sender:nil];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    if ([self isForceTouchAvailable]) {
-        if (!self.previewingContext) {
-            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-        }
-    } else {
-        if (self.previewingContext) {
-            [self unregisterForPreviewingWithContext:self.previewingContext];
-            self.previewingContext = nil;
-        }
-    }
-}
-
 - (void) applicationWillResignActive {
     [self stopUpdateTimer];
 }
@@ -207,30 +160,19 @@
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"ShowUserSegue"]) {
-        MeViewController *destination = (MeViewController *)[segue destinationViewController];
-        User *user = (User *) sender;
-		[destination setUser:user];
-    }
-}
-
 - (void) userDetailSelected:(User *)user {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
     UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
     [self.navigationController pushViewController:uvc animated:YES];
-//    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
 }
 
 - (void)refreshPeople {

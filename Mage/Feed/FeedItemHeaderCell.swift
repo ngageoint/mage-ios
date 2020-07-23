@@ -74,12 +74,7 @@ class FeedItemHeaderCell : UITableViewCell {
     }
     
     func populate(feedItem: FeedItem) {
-        if (feedItem.primaryValue != nil || feedItem.secondaryValue != nil) {
-            itemInfoView.populate(feedItem: feedItem);
-            itemInfoView.isHidden = false;
-        } else {
-            itemInfoView.isHidden = true;
-        }
+        itemInfoView.populate(feedItem: feedItem, showNoContent: false);
         if (feedItem.isMappable && feedItem.feed?.itemsHaveSpatialDimension == true) {
             self.mapView.isHidden = false;
             self.locationTextView.isHidden = false;

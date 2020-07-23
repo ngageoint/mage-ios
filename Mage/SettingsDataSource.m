@@ -149,20 +149,6 @@ static const NSInteger LEGAL_SECTION = 8;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = [UIColor brand];
-        
-        UIFont *systemFont = [UIFont systemFontOfSize:14];
-        NSDictionary *const fontSettings = @{
-            UIFontDescriptorFeatureSettingsAttribute:@[
-                    @{
-                        
-                        UIFontFeatureTypeIdentifierKey: @(kLowerCaseType),
-                        UIFontFeatureSelectorIdentifierKey:@(kUpperCaseSmallCapsSelector)
-                    }]
-        };
-        UIFontDescriptor *fd = [systemFont.fontDescriptor fontDescriptorByAddingAttributes:fontSettings];
-        
-        header.textLabel.font = [UIFont fontWithDescriptor:fd size:[systemFont pointSize]];
-        header.backgroundColor = [UIColor tableBackground];
     }
 }
 

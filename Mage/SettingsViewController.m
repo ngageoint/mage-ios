@@ -35,17 +35,29 @@
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.childCoordinators = [NSMutableArray array];
-        
-        self.settingsTableViewController = [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
-        self.settingsTableViewController.dataSource.delegate = self;
-        UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
-        
-        UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
-        self.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
+        [self initialize];
     }
     
     return self;
+}
+
+- (instancetype) init {
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void) initialize {
+    self.childCoordinators = [NSMutableArray array];
+    
+    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
+    self.settingsTableViewController.dataSource.delegate = self;
+    UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
+    
+    UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
+    self.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
 }
 
 -(void) viewDidLoad {
