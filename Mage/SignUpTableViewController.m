@@ -28,9 +28,8 @@
     [super viewDidLoad];
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
-        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.password.placeholder = [NSString stringWithFormat:@"Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-        self.passwordConfirm.placeholder = [NSString stringWithFormat:@"Confirm Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+        self.password.placeholder = [NSString stringWithFormat:@"Password"];
+        self.passwordConfirm.placeholder = [NSString stringWithFormat:@"Confirm Password"];
     }
     
     self.tableView.alwaysBounceVertical = NO;
