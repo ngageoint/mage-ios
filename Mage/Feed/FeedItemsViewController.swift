@@ -9,10 +9,6 @@
 import Foundation
 import Kingfisher
 
-@objc public protocol FeedItemSelectionDelegate {
-    @objc func feedItemSelected(feedItem: FeedItem);
-}
-
 @objc class FeedItemsViewController : UITableViewController {
     
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
@@ -21,7 +17,7 @@ import Kingfisher
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
         
         // Configure Fetch Request
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
         
         // Create Fetched Results Controller
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
@@ -103,7 +99,7 @@ import Kingfisher
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let feedItem = fetchedResultsController.object(at: indexPath)
         if (selectionDelegate != nil) {
-            self.selectionDelegate?.feedItemSelected(feedItem: feedItem);
+            self.selectionDelegate?.feedItemSelected(feedItem);
         } else {
             let feedItemViewController: FeedItemViewViewController = FeedItemViewViewController(feedItem: feedItem);
             self.navigationController?.pushViewController(feedItemViewController, animated: true);

@@ -11,6 +11,7 @@
 #import "MapSettingsCoordinator.h"
 #import "ObservationViewController.h"
 #import <PureLayout.h>
+#import "Mage-Swift.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate, MapSettingsCoordinatorDelegate>
 @property (strong, nonatomic) UIButton *profileButton;
@@ -22,7 +23,6 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
     self.badge = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     self.badge.translatesAutoresizingMaskIntoConstraints = false;
     self.badge.layer.cornerRadius = self.badge.bounds.size.height / 2;
@@ -31,17 +31,19 @@
     self.badge.textColor = [UIColor whiteColor];
     [self.badge setFont:[UIFont boldSystemFontOfSize:14]];
     [self.badge setBackgroundColor:[UIColor redColor]];
-        
+}
+
+- (void) setupNavigationBar {
     self.profileButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [self.profileButton setTitle:@"Profile" forState:UIControlStateNormal];
     [self.profileButton addTarget:self action:@selector(profileButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *profileButton2 = [[UIBarButtonItem alloc] initWithCustomView:self.profileButton];
-    UIBarButtonItem *filterButton2 = [[UIBarButtonItem alloc] initWithTitle:@"Filter"  style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
-    UIBarButtonItem *moreButton2 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreTapped:)];
-    UIBarButtonItem *newButton2 = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
-
-    [self.navigationItem setRightBarButtonItems: [NSArray arrayWithObjects: moreButton2, [self createSeparator], profileButton2, [self createSeparator], filterButton2, [self createSeparator], newButton2, nil]];
+    UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Filter"  style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
+    UIBarButtonItem *moreButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreTapped:)];
+    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
+    
+    [self.navigationItem setRightBarButtonItems: [NSArray arrayWithObjects: moreButton, [self createSeparator], profileButton2, [self createSeparator], filterButton, [self createSeparator], newButton, nil]];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -78,50 +80,6 @@
     [settingsCoordinator start];
 }
 
--(void) calloutTapped:(id) calloutItem {
-    if ([calloutItem isKindOfClass:[User class]]) {
-        [self userDetailSelected:(User *) calloutItem];
-    } else if ([calloutItem isKindOfClass:[Observation class]]) {
-        [self observationDetailSelected:(Observation *) calloutItem];
-    } else if ([calloutItem isKindOfClass:[FeedItem class]]) {
-        [self feedItemSelectedWithFeedItem:(FeedItem *) calloutItem];
-    }
-}
-
-- (void)selectedObservation:(Observation *) observation {
-    [self.mapDelegate selectedObservation:observation];
-}
-
-- (void)selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region {
-    [self.mapDelegate selectedObservation:observation region:region];
-}
-
-- (void)observationDetailSelected:(Observation *)observation {
-    [self.mapDelegate observationDetailSelected:observation];
-    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-    ovc.observation = observation;
-    [self.navigationController pushViewController:ovc animated:YES];
-}
-
-- (void) selectedUser:(User *) user {
-    [self.mapDelegate selectedUser:user];
-}
-
-- (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    [self.mapDelegate selectedUser:user region:region];
-}
-
-- (void) userDetailSelected:(User *) user {
-    [self.mapDelegate selectedUser:user];
-    UserViewController *uc = [[UserViewController alloc] initWithUser:user];
-    [self.navigationController pushViewController:uc animated:YES];
-}
-
-- (void) feedItemSelectedWithFeedItem:(FeedItem *)feedItem {
-    FeedItemViewViewController *fivc = [[FeedItemViewViewController alloc] initWithFeedItem:feedItem];
-    [self.navigationController pushViewController:fivc animated:YES];
-}
-
 - (IBAction)moreTapped:(id)sender {
     __weak typeof(self) weakSelf = self;
 
@@ -143,14 +101,6 @@
     alert.popoverPresentationController.barButtonItem = sender;
 
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)filterTapped:(id)sender {
-    UIStoryboard *filterStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
-    UIViewController *vc = [filterStoryboard instantiateInitialViewController];
-    vc.modalPresentationStyle = UIModalPresentationPopover;
-    vc.popoverPresentationController.barButtonItem = sender;
-    [self presentViewController:vc animated:YES completion:nil];
 }
 
 -(void) offlineObservationsDidChangeCount:(NSInteger) count {

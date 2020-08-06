@@ -9,6 +9,7 @@
 #import "MageSessionManager.h"
 #import "MapViewController_iPad.h"
 #import "ObservationTableViewController.h"
+#import "FeedItemSelectionDelegate.h"
 #import "LocationTableViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "MAGE-Swift.h"
@@ -18,7 +19,7 @@
 @interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate, FeedItemSelectionDelegate>
 @property(nonatomic, strong) UINavigationController *masterViewController;
 @property(nonatomic, strong) MageSideBarController *sideBarController;
-    @property(nonatomic, weak) MapViewController_iPad *mapViewController;
+    @property(nonatomic, strong) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
     @property(nonatomic, strong) NSArray *mapCalloutDelegates;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
@@ -52,11 +53,11 @@
     self.sideBarController.delegate = self;
     self.masterViewController = [[UINavigationController alloc] initWithRootViewController:self.sideBarController];
     
-    self.viewControllers = [NSArray arrayWithObjects:self.masterViewController, self.viewControllers.firstObject, nil];
+    self.mapViewController = [[MapViewController_iPad alloc] init];
+    UINavigationController *detailViewController = [[UINavigationController alloc] initWithRootViewController:self.mapViewController];
+    
+    self.viewControllers = [NSArray arrayWithObjects:self.masterViewController, detailViewController, nil];
 
-    UINavigationController *detailViewController = [self.viewControllers lastObject];
-     
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
     self.view.backgroundColor = [UIColor mageBlue];
@@ -100,9 +101,9 @@
     [self.mapViewController observationDetailSelected:observation];
 }
 
-- (void) feedItemSelectedWithFeedItem:(FeedItem *)feedItem {
+- (void) feedItemSelected:(FeedItem *)feedItem {
     [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
-    [self.mapViewController feedItemSelectedWithFeedItem:feedItem];
+    [self.mapViewController feedItemSelected:feedItem];
 }
 
 - (void) ensureButtonVisible {

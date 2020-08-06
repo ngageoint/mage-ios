@@ -80,9 +80,6 @@
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
     @property (nonatomic) BOOL isTrackingAnimation;
-    @property (nonatomic) BOOL canShowUserCallout;
-    @property (nonatomic) BOOL canShowObservationCallout;
-    @property (nonatomic) BOOL canShowGpsLocationCallout;
 
     @property (nonatomic) BOOL darkMode;
 
@@ -117,7 +114,7 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
         
-        [defaults addObserver:self forKeyPath:@"selectedFeeds" options:NSKeyValueObservingOptionNew context:NULL];
+        [defaults addObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]] options:NSKeyValueObservingOptionNew context:NULL];
         
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -283,7 +280,7 @@
         [defaults removeObserver:self forKeyPath:@"mapType"];
         [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
         [defaults removeObserver:self forKeyPath:@"selectedOnlineLayers"];
-        [defaults removeObserver:self forKeyPath:@"selectedFeeds"];
+        [defaults removeObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
         [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
     }
     @catch (id exception) {
@@ -305,8 +302,7 @@
 }
 
 - (void) addFeeds {
-    NSDictionary *selectedFeedsPerEvent = [NSUserDefaults.standardUserDefaults objectForKey:@"selectedFeeds"];
-    NSArray *feedIdsInEvent = [selectedFeedsPerEvent objectForKey:[[Server currentEventId] stringValue]];
+    NSArray *feedIdsInEvent = [[NSUserDefaults standardUserDefaults] arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     
     // remove any feeds that are no longer selected
     [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
@@ -319,7 +315,7 @@
         }
     }
     
-    for (NSNumber *feedId in feedIdsInEvent) {
+    for (NSString *feedId in feedIdsInEvent) {
         FeedItemRetriever *retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
         NSArray<FeedItem*> *items = [retriever startRetriever];
         for (FeedItem *item in items) {

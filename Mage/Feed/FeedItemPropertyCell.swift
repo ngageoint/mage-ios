@@ -29,6 +29,8 @@ class FeedItemPropertyCell : UITableViewCell {
     
     public lazy var valueField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
+        secondaryField.numberOfLines = 10;
+        secondaryField.lineBreakMode = .byWordWrapping;
         secondaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
         secondaryField.textColor = UIColor.black.withAlphaComponent(0.87);
         return secondaryField;
@@ -42,12 +44,9 @@ class FeedItemPropertyCell : UITableViewCell {
         keyField.autoPinEdge(.bottom, to: .top, of: contentView, withOffset: 32);
         keyField.autoPinEdge(toSuperviewEdge: .leading, withInset: 16);
         keyField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
-        valueField.autoPinEdge(.bottom, to: .bottom, of: keyField, withOffset: 20);
-        
-        // do this to stop the automatically created constraint from throwing errors
-        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-            valueField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
-        };
+
+        valueField.autoPinEdge(.top, to: .bottom, of: keyField, withOffset: 8);
+        valueField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
         
     }
     

@@ -34,20 +34,18 @@
 #import "Server.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
+#import <PureLayout.h>
 
 #import "ObservationEditCoordinator.h"
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate>
-    @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
-    @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
-    @property (weak, nonatomic) IBOutlet UIView *toastView;
-    @property (weak, nonatomic) IBOutlet UILabel *toastText;
-    @property (weak, nonatomic) IBOutlet UIButton *showPeopleButton;
-    @property (weak, nonatomic) IBOutlet UIButton *showObservationsButton;
-    @property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
-
+    @property (strong, nonatomic) UIButton *trackingButton;
+    @property (strong, nonatomic) UIButton *reportLocationButton;
+    @property (strong, nonatomic) UIView *toastView;
+    @property (strong, nonatomic) UILabel *toastText;
+    @property (strong, nonatomic) UIButton *mapSettingsButton;
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
@@ -73,6 +71,7 @@
     self.trackingButton.backgroundColor = [UIColor dialog];
     self.trackingButton.tintColor = [UIColor activeTabIcon];
     self.reportLocationButton.backgroundColor = [UIColor dialog];
+    self.reportLocationButton.tintColor = [UIColor activeTabIcon];
     self.mapSettingsButton.backgroundColor = [UIColor dialog];
     self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
     [UIColor themeMap:self.mapView];
@@ -82,19 +81,27 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self registerForThemeChanges];
+    self.mapView = [[MKMapView alloc] initForAutoLayout];
+    [self.view addSubview:self.mapView];
+    [self.mapView autoPinEdgesToSuperviewEdges];
     
-    if (@available(iOS 11.0, *)) {
-        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
-    } else {
-        // Fallback on earlier versions
-    }
+    [self addMapButtons];
+    [self setupToastView];
+
+    [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
     
     self.childCoordinators = [[NSMutableArray alloc] init];
-    
+    self.mapDelegate = [[MapDelegate alloc] init];
+    self.mapDelegate.mapCalloutDelegate = self;
+
+    [self.mapDelegate setMapView:self.mapView];
+    [self.mapView setDelegate:self.mapDelegate];
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
+    self.mapDelegate.canShowUserCallout = YES;
+    self.mapDelegate.canShowObservationCallout = YES;
+    self.mapDelegate.canShowGpsLocationCallout = YES;
     
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
                                                  initWithTarget:self action:@selector(singleTapGesture:)];
@@ -106,8 +113,10 @@
     [self.mapView addGestureRecognizer:doubleTapGesture];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
-    self.showPeopleButton.hidden = YES;
-    self.showObservationsButton.hidden = YES;
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(mapLongPress:)];
+    [self.mapView addGestureRecognizer:longPressGestureRecognizer];
+    
+    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -165,8 +174,6 @@
     
     Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
-    [self setupShowObservationButtonWithState:![[defaults objectForKey:@"hideObservations"] boolValue]];
-    [self setupShowPeopleButtonWithState:![[defaults objectForKey:@"hidePeople"] boolValue]];
     [self setupMapSettingsButton];
     
     [defaults addObserver:self
@@ -219,27 +226,91 @@
     
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
     [self.mapDelegate ensureMapLayout];
-    [self updateFilterButtonPosition];
+    [self setupNavigationBar];
 }
 
-- (void) updateFilterButtonPosition {
+- (void) setupToastView {
+    self.toastView = [[UIView alloc] initForAutoLayout];
+    [self.view insertSubview:self.toastView aboveSubview:self.mapView];
+
+    [self.toastView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(0, 0, 0, 0) excludingEdge:ALEdgeTop];
+    
+    self.toastText = [[UILabel alloc] initForAutoLayout];
+    self.toastText.font = [UIFont boldSystemFontOfSize:14];
+    self.toastText.textColor = [UIColor whiteColor];
+    self.toastText.textAlignment = NSTextAlignmentCenter;
+    [self.toastView addSubview:self.toastText];
+    
+    [self.toastText autoPinEdgesToSuperviewEdges];
+    [self.toastText autoSetDimension:ALDimensionHeight toSize:17];
+}
+
+- (void) addMapButtons {
+    UIStackView *buttonStack = [[UIStackView alloc] initForAutoLayout];
+    buttonStack.alignment = UIStackViewAlignmentFill;
+    buttonStack.distribution = UIStackViewDistributionFill;
+    buttonStack.spacing = 10;
+    buttonStack.axis = UILayoutConstraintAxisVertical;
+    buttonStack.backgroundColor = [UIColor redColor];
+    [self.view insertSubview:buttonStack aboveSubview:self.mapView];
+    
+    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.view withOffset:25];
+    [buttonStack autoPinEdge:ALEdgeLeft toEdge:ALEdgeLeft ofView:self.view withOffset:10];
+    
+    self.mapSettingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.mapSettingsButton setImage:[UIImage imageNamed:@"layers"] forState:UIControlStateNormal];
+    [self.mapSettingsButton addTarget:self action:@selector(mapSettingsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mapSettingsButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
+    self.mapSettingsButton.layer.cornerRadius = 3;
+    self.mapSettingsButton.layer.shadowOpacity = 1;
+    self.mapSettingsButton.layer.shadowOffset = CGSizeMake(0, 1);
+    self.mapSettingsButton.layer.shadowRadius = 1;
+    self.mapSettingsButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
+    
+    self.trackingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off"] forState:UIControlStateNormal];
+    [self.trackingButton addTarget:self action:@selector(onTrackingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.trackingButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
+    self.trackingButton.layer.cornerRadius = 3;
+    self.trackingButton.layer.shadowOpacity = 1;
+    self.trackingButton.layer.shadowOffset = CGSizeMake(0, 1);
+    self.trackingButton.layer.shadowRadius = 1;
+    self.trackingButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
+    
+    self.reportLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
+    [self.reportLocationButton addTarget:self action:@selector(onReportLocationButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.reportLocationButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
+    self.reportLocationButton.layer.cornerRadius = 3;
+    self.reportLocationButton.layer.shadowOpacity = 1;
+    self.reportLocationButton.layer.shadowOffset = CGSizeMake(0, 1);
+    self.reportLocationButton.layer.shadowRadius = 1;
+    self.reportLocationButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
+    
+    [buttonStack addArrangedSubview:self.mapSettingsButton];
+    [buttonStack addArrangedSubview:self.trackingButton];
+    [buttonStack addArrangedSubview:self.reportLocationButton];
+}
+
+- (IBAction)filterTapped:(id)sender {
+    UIStoryboard *filterStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
+    UIViewController *vc = [filterStoryboard instantiateInitialViewController];
+    vc.modalPresentationStyle = UIModalPresentationPopover;
+    vc.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void) setupNavigationBar {
+    UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
+    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
     
     // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
     if (self != self.navigationController.viewControllers[0]) {
-        if (self.navigationItem.rightBarButtonItems.count != 2) {
-            NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
-            [rightItems addObject:self.navigationItem.leftBarButtonItem];
-            self.navigationItem.rightBarButtonItems = rightItems;
-            self.navigationItem.leftBarButtonItems = nil;
-        }
-    } else if (self.navigationItem.rightBarButtonItems.count == 2) {
-        // if the view was in the more controller and is now it's own tab
-        UIBarButtonItem *filterButton = [self.navigationItem.rightBarButtonItems lastObject];
-        
-        NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
-        [rightItems removeLastObject];
-        self.navigationItem.rightBarButtonItems = rightItems;
-        self.navigationItem.leftBarButtonItem = filterButton;
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.rightBarButtonItems = @[newButton, filterButton];
+    } else {
+        self.navigationItem.leftBarButtonItems = @[filterButton];
+        self.navigationItem.rightBarButtonItems = @[newButton];
     }
 }
 
@@ -313,10 +384,8 @@
                        context:(void *)context {
     if ([@"hideObservations" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideObservations = [object boolForKey:keyPath];
-        [self setupShowObservationButtonWithState:![object boolForKey:keyPath]];
     } else if ([@"hidePeople" isEqualToString:keyPath] && self.mapView) {
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
-        [self setupShowPeopleButtonWithState:![object boolForKey:keyPath]];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
         [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
@@ -398,22 +467,6 @@
     [self displayToast];
 }
 
-- (IBAction)onShowPeopleButtonPressed:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL newState =![[defaults objectForKey:@"hidePeople"] boolValue];
-    [self setupShowPeopleButtonWithState:!newState];
-    [defaults setBool:newState forKey:@"hidePeople"];
-    [defaults synchronize];
-}
-
-- (IBAction)onShowObservationsButtonPressed:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL newState =![[defaults objectForKey:@"hideObservations"] boolValue];
-    [self setupShowObservationButtonWithState:!newState];
-    [defaults setBool:newState forKey:@"hideObservations"];
-    [defaults synchronize];
-}
-
 - (void) displayToast {
     [self.toastView setHidden:NO];
     self.toastView.alpha = 0.0f;
@@ -436,22 +489,6 @@
     } else {
         [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
         [self.reportLocationButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
-    }
-}
-
-- (void) setupShowObservationButtonWithState: (BOOL) showObservations {
-    if (showObservations) {
-        [self.showObservationsButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
-    } else {
-        [self.showObservationsButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
-    }
-}
-
-- (void) setupShowPeopleButtonWithState: (BOOL) showPeople {
-    if (showPeople) {
-        [self.showPeopleButton setTintColor:[UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0]];
-    } else {
-        [self.showPeopleButton setTintColor:[UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0]];
     }
 }
 
@@ -572,6 +609,36 @@
 
 - (void) mapSettingsComplete:(NSObject *) coordinator {
     [self.childCoordinators removeObject:coordinator];
+}
+
+
+#pragma mark - Map Callout Tapped
+-(void) calloutTapped:(id) calloutItem {
+    if ([calloutItem isKindOfClass:[User class]]) {
+        [self userDetailSelected:(User *) calloutItem];
+    } else if ([calloutItem isKindOfClass:[Observation class]]) {
+        [self observationDetailSelected:(Observation *) calloutItem];
+    } else if ([calloutItem isKindOfClass:[FeedItem class]]) {
+        [self feedItemSelected:(FeedItem *) calloutItem];
+    }
+}
+
+- (void) userDetailSelected:(User *) user {
+    [self.mapDelegate selectedUser:user];
+    UserViewController *uc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uc animated:YES];
+}
+
+- (void)observationDetailSelected:(Observation *)observation {
+    [self.mapDelegate observationDetailSelected:observation];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
+}
+
+- (void) feedItemSelected:(FeedItem *)feedItem {
+    FeedItemViewViewController *fivc = [[FeedItemViewViewController alloc] initWithFeedItem:feedItem];
+    [self.navigationController pushViewController:fivc animated:YES];
 }
 
 @end

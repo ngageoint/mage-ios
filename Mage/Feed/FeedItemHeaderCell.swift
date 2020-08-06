@@ -35,6 +35,7 @@ class FeedItemHeaderCell : UITableViewCell {
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.autoSetDimension(.height, toSize: 120);
+        mapView.delegate = self;
         return mapView;
     }()
     
@@ -45,10 +46,8 @@ class FeedItemHeaderCell : UITableViewCell {
         view.addSubview(image);
         view.addSubview(locationLabel);
         
-        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-            image.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-        }
+        image.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
         
         locationLabel.autoAlignAxis(.horizontal, toSameAxisOf: image);
         locationLabel.autoPinEdge(.left, to: .right, of: image, withOffset: 16);
@@ -90,4 +89,18 @@ class FeedItemHeaderCell : UITableViewCell {
     func getLocationText(feedItem: FeedItem) -> String {
         return CoordinateDisplay.displayFromCoordinate(coordinate: feedItem.coordinate);
     }
+}
+
+extension FeedItemHeaderCell : MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let item: FeedItem = annotation as? FeedItem {
+            let annotationView: MKAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "feedItem") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "feedItem");
+            annotationView.canShowCallout = false;
+            FeedItemRetriever.setAnnotationImage(feedItem: item, annotationView: annotationView);
+            annotationView.annotation = item;
+            return annotationView;
+        }
+        return nil;
+    }
+    
 }

@@ -20,13 +20,6 @@ import Kingfisher
         Mage.singleton()?.startServices(asInitial: true);
         super.viewDidLoad();
         
-        for viewController in self.viewControllers! {
-            if (viewController.tabBarItem.tag == 3) {
-                self.profileTabBarItem = viewController.tabBarItem;
-            } else if (viewController.tabBarItem.tag == 4) {
-                self.moreTabBarItem = viewController.tabBarItem;
-            }
-        }
         createOrderedTabs();
         registerForThemeChanges();
         
@@ -42,6 +35,7 @@ import Kingfisher
     
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
+        allTabs.append(createMapTab());
         allTabs.append(createSettingsTabItem());
         allTabs.append(createMeTabItem());
         allTabs.append(createLocationsTab());
@@ -90,6 +84,13 @@ import Kingfisher
         return nc;
     }
     
+    func createMapTab() -> UINavigationController {
+        let mapViewController: MapViewController = MapViewController();
+        let nc = UINavigationController(rootViewController: mapViewController);
+        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
+        return nc;
+    }
+    
     func createMeTabItem() -> UINavigationController {
         let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
         let uvc = UserViewController(user: user);
@@ -104,7 +105,7 @@ import Kingfisher
         let fvc = FeedItemsViewController(feed: feed);
         let nc = UINavigationController(rootViewController: fvc);
         setNavigationControllerAppearance(nc: nc);
-        nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.id!.intValue + 5);
+        nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "marker")?.aspectResize(to: CGSize(width: size, height: size));
 
         if let url: URL = feed.iconURL() {

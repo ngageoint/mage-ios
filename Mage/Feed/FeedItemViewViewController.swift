@@ -91,4 +91,8 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension;
+    }
 }

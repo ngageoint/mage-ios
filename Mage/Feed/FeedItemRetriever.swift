@@ -9,6 +9,24 @@
 import Foundation
 import Kingfisher
 
+extension UIImage {
+    
+    func colorized(color : UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height);
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0);
+        let context = UIGraphicsGetCurrentContext();
+        context!.translateBy(x: 0, y: self.size.height);
+        context!.scaleBy(x: 1.0, y: -1.0);
+        context!.draw(self.cgImage!, in: rect);
+        context!.clip(to: rect, mask: self.cgImage!);
+        context?.setFillColor(color.cgColor);
+        context?.fill(rect);
+        let colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return colorizedImage!;
+    }
+}
+
 @objc protocol FeedItemDelegate {
 
     @objc func addFeedItem(feedItem: FeedItem);
@@ -39,7 +57,7 @@ import Kingfisher
                 }
             }
         } else {
-            annotationView.image = nil;
+            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
         }
     }
     
@@ -55,8 +73,15 @@ import Kingfisher
         return feedRetrievers;
     }
     
-    @objc public static func getMappableFeedRetriever(feedId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        if let feed: Feed = Feed.mr_findFirst(byAttribute: "id", withValue: feedId) {
+    @objc public static func getMappableFeedRetriever(feedTag: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag) {
+            return getMappableFeedRetriever(feedId: feed.remoteId!, delegate: delegate);
+        }
+        return nil;
+    }
+    
+    @objc public static func getMappableFeedRetriever(feedId: String, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        if let feed: Feed = Feed.mr_findFirst(byAttribute: "remoteId", withValue: feedId) {
             if (feed.itemsHaveSpatialDimension) {
                 return FeedItemRetriever(feed: feed, delegate: delegate);
             }
@@ -87,7 +112,7 @@ import Kingfisher
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
         
         // Configure Fetch Request
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
         
         // Create Fetched Results Controller
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)

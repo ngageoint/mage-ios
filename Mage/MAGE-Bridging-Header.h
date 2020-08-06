@@ -27,6 +27,8 @@
 #import "ExternalDevice.h"
 #import "MageSessionManager.h"
 #import "LocationTableViewController.h"
+#import "MapViewController.h"
+#import "FeedItemSelectionDelegate.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

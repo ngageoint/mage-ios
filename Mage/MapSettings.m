@@ -186,7 +186,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             return cell;
         }
     } else if (indexPath.section == FEED_SECTION) {
-        NSArray *selectedFeeds = [[defaults dictionaryForKey:@"selectedFeeds"] mutableArrayValueForKey:[Server currentEventId].stringValue];
+        NSArray *selectedFeeds = [defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
         Feed *feed = [_feeds objectAtIndex:indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
         if (!cell) {
@@ -195,8 +195,8 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         cell.textLabel.text = feed.title;
         cell.detailTextLabel.text = feed.summary;
         UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-        observationSwitch.on = [selectedFeeds containsObject:feed.id];
-        observationSwitch.tag = feed.id.integerValue;
+        observationSwitch.on = [selectedFeeds containsObject:feed.remoteId];
+        observationSwitch.tag = feed.tag.integerValue;
         observationSwitch.onTintColor = [UIColor themedButton];
         [observationSwitch addTarget:self action:@selector(feedSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = observationSwitch;
@@ -293,16 +293,15 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) feedSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary *selectedFeeds = [[defaults dictionaryForKey:@"selectedFeeds"] mutableCopy];
     
-    NSMutableArray *selectedFeedsForEvent = [selectedFeeds mutableArrayValueForKey:[Server currentEventId].stringValue];
+    Feed* feed = (Feed *)[Feed MR_findByAttribute:@"tag" withValue:[NSNumber numberWithInteger: sender.tag]];
+    NSMutableArray *selectedFeedsForEvent = [[defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]] mutableCopy];
     if (sender.on) {
-        [selectedFeedsForEvent addObject:[NSNumber numberWithInteger: sender.tag]];
+        [selectedFeedsForEvent addObject:feed.remoteId];
     } else {
-        [selectedFeedsForEvent removeObject:[NSNumber numberWithInteger: sender.tag]];
+        [selectedFeedsForEvent removeObject:feed.remoteId];
     }
-    [selectedFeeds setObject:[NSArray arrayWithArray:selectedFeedsForEvent] forKey:[Server currentEventId].stringValue];
-    [defaults setObject:selectedFeeds forKey:@"selectedFeeds"];
+    [defaults setObject:selectedFeedsForEvent forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     [defaults synchronize];
 }
 

@@ -49,6 +49,9 @@
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
 @property (nonatomic) BOOL hideStaticLayers;
+@property (nonatomic) BOOL canShowUserCallout;
+@property (nonatomic) BOOL canShowObservationCallout;
+@property (nonatomic) BOOL canShowGpsLocationCallout;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
 @property (nonatomic, strong) MapObservations *mapObservations;
 
