@@ -106,7 +106,7 @@ import Kingfisher
         let nc = UINavigationController(rootViewController: fvc);
         setNavigationControllerAppearance(nc: nc);
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
-        nc.tabBarItem.image = UIImage(named: "marker")?.aspectResize(to: CGSize(width: size, height: size));
+        nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
         if let url: URL = feed.iconURL() {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
