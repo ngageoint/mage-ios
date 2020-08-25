@@ -79,7 +79,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                     
                     waitUntil { done in
                         MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
                                 done();
                             }
                         }
@@ -109,7 +109,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 it("one feed item with primary value") {
                     waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -134,7 +134,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 it("one feed item with secondary value") {
                     waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "Secondary Value for item"]) { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -159,7 +159,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 it("one feed item with primary and secondary value") {
                     waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -184,8 +184,8 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 it("one feed item with primary and secondary value and icon") {
                     waitUntil { done in
-                        MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
                                 done();
                             }
                         }
@@ -211,7 +211,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 it("one feed item no content") {
                     waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -278,7 +278,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp") { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -308,7 +308,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item with primary value") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
@@ -333,7 +333,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item with secondary value") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "Secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
@@ -358,7 +358,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item with primary and secondary value") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
@@ -383,8 +383,8 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item with primary and secondary value and icon") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -410,8 +410,8 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item with primary and secondary value and icon without timestamp") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -437,7 +437,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             
             it("one feed item no content") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }

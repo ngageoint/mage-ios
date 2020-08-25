@@ -12,6 +12,7 @@ import Nimble
 import Nimble_Snapshots
 import PureLayout
 import OHHTTPStubs
+import XCTest
 
 @testable import MAGE
 
@@ -97,10 +98,10 @@ class MageRootViewTests: KIFSpec {
                     window.autoSetDimension(.height, toSize: 896);
                     
                     window.makeKeyAndVisible();
-                    UserDefaults.standard.set(nil, forKey: "selectedFeeds");
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
                     
                     Server.setCurrentEventId(1);
                     
@@ -117,16 +118,235 @@ class MageRootViewTests: KIFSpec {
             
             it("no feeds") {
                 var completeTest = false;
+
+                let mapDelegate: MockMapViewDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(0, 0), animated: false)
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("one feed") {
+                var completeTest = false;
+
+                waitUntil { done in
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
+                        done();
+                    }
+                }
+
+                let mapDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(0, 0), animated: false)
+
+                window.rootViewController = controller;
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("two mappable feeds and two non mappable") {
+                var completeTest = false;
                 
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+
+                let mapDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("two mappable feeds and two non mappable one selected") {
+                var completeTest = false;
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+                
+                let mapDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+                
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+
+                UserDefaults.standard.set(["1":[0]], forKey: "selectedFeeds");
+                UserDefaults.standard.synchronize();
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("two mappable feeds and two non mappable other one selected") {
+                var completeTest = false;
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+                
+                let mapDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+                
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+
+                UserDefaults.standard.set(["1":[1]], forKey: "selectedFeeds");
+                UserDefaults.standard.synchronize();
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("tap observations button one feed") {
+                var completeTest = false;
+
+                waitUntil { done in
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
+                        done();
+                    }
+                }
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+                
+                let mapDelegate = MockMapViewDelegate()
+                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
+                    maybeRecordSnapshot(controller.view, doneClosure: {
+                        completeTest = true;
+                    })
+                }
+                
+                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
+                mapViewController?.beginAppearanceTransition(true, animated: false)
+                mapViewController?.endAppearanceTransition()
+                mapViewController?.mapView?.delegate = mapDelegate
+                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+
+            it("tap more button one feed") {
+                var completeTest = false;
+
+                waitUntil { done in
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
+                        done();
+                    }
+                }
+
+                controller = MageRootViewController()
+                window.rootViewController = controller;
+
+                tester().tapView(withAccessibilityLabel: "More");
+//                tester().tapScreen(at: CGPoint(x: 310, y: 740));
+                TestHelpers.printAllAccessibilityLabelsInWindows()
 
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;
                 })
-            
-                
-                window.rootViewController = controller;
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
                 } else {
@@ -134,206 +354,29 @@ class MageRootViewTests: KIFSpec {
                     expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
                 }
             }
-            
-            it("one feed") {
-                var completeTest = false;
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                window.rootViewController = controller;
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("two mappable feeds and two non mappable") {
-                var completeTest = false;
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 2) { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
-                
-                window.rootViewController = controller;
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("two mappable feeds and two non mappable one selected") {
-                var completeTest = false;
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 1) { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
-                
-                UserDefaults.standard.set(["1":[0]], forKey: "selectedFeeds");
-                UserDefaults.standard.synchronize();
-                
-                
-                window.rootViewController = controller;
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("two mappable feeds and two non mappable other one selected") {
-                var completeTest = false;
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 0) { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: 1) { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
-                
-                UserDefaults.standard.set(["1":[1]], forKey: "selectedFeeds");
-                UserDefaults.standard.synchronize();
-                
-                window.rootViewController = controller;
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("tap observations button one feed") {
-                var completeTest = false;
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                controller.selectedIndex = 1;
-                
-                window.rootViewController = controller;
-                
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("tap more button one feed") {
-                var completeTest = false;
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
-                window.rootViewController = controller;
-                
-                tester().tapView(withAccessibilityLabel: "More");
-//                tester().tapScreen(at: CGPoint(x: 310, y: 740));
-                TestHelpers.printAllAccessibilityLabelsInWindows()
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
+
             it("tap more button two feeds") {
                 var completeTest = false;
-                
+
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 2, title: "My Second Feed") { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Second Feed") { (success: Bool, error: Error?) in
                             done();
                         }
                     }
                 }
-                
-                let iphoneStoryboard = UIStoryboard(name: "Main_iPhone", bundle: nil);
-                controller = iphoneStoryboard.instantiateInitialViewController();
+
+                controller = MageRootViewController()
                 window.rootViewController = controller;
-                
+
                 tester().tapView(withAccessibilityLabel: "More");
                 //                tester().tapScreen(at: CGPoint(x: 310, y: 740));
                 TestHelpers.printAllAccessibilityLabelsInWindows()
-                
+
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;
                 })
-                
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
                 } else {

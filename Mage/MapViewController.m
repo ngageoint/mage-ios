@@ -96,6 +96,7 @@
 
     [self.mapDelegate setMapView:self.mapView];
     [self.mapView setDelegate:self.mapDelegate];
+        
     self.mapDelegate.cacheOverlayDelegate = self;
     self.mapDelegate.userTrackingModeDelegate = self;
     self.mapDelegate.locationAuthorizationChangedDelegate = self;
@@ -637,7 +638,7 @@
 }
 
 - (void) feedItemSelected:(FeedItem *)feedItem {
-    FeedItemViewViewController *fivc = [[FeedItemViewViewController alloc] initWithFeedItem:feedItem];
+    FeedItemViewController *fivc = [[FeedItemViewController alloc] initWithFeedItem:feedItem];
     [self.navigationController pushViewController:fivc animated:YES];
 }
 

@@ -24,6 +24,7 @@
 #import "Server.h"
 #import "AppDelegate.h"
 #import "Theme+UIResponder.h"
+#import "MAGE-swift.h"
 
 @interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
@@ -247,12 +248,10 @@
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    NSString *storyboardName = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? @"Main_iPad" : @"Main_iPhone";
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    UIViewController *initialViewController = [storyboard instantiateInitialViewController];
-    initialViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    initialViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:initialViewController animated:YES completion:NULL];
+    MageRootViewController *vc = [[MageRootViewController alloc] init];
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:vc animated:YES completion:NULL];
 }
 
 - (void) onLogout {

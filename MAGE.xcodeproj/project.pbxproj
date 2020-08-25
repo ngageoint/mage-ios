@@ -47,6 +47,7 @@
 		2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4172221227CB00F082B5 /* ValuePicker.xib */; };
 		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
+		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
@@ -132,7 +133,7 @@
 		F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */; };
 		F7098F262492C36700313703 /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F27249401E500313703 /* FeedItemTableViewCell.swift */; };
-		F7098F2A2497C75F00313703 /* FeedItemViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F292497C75F00313703 /* FeedItemViewViewController.swift */; };
+		F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F292497C75F00313703 /* FeedItemViewController.swift */; };
 		F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */; };
 		F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2D24980DD000313703 /* FeedItemRetriever.swift */; };
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
@@ -143,18 +144,17 @@
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
-		F71446ED249928AD005A5EC1 /* FeedItemHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemHeaderCell.swift */; };
+		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
 		F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */; };
-		F71446F524A3FAF5005A5EC1 /* feed1Items.json in Resources */ = {isa = PBXBuildFile; fileRef = F71446F424A3FAF5005A5EC1 /* feed1Items.json */; };
+		F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */ = {isa = PBXBuildFile; fileRef = F71446F424A3FAF5005A5EC1 /* feedContent.json */; };
 		F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */; };
 		F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3824003C6B00F9F879 /* ImageCacheTests.m */; };
 		F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5EF1A5C832F00B096A7 /* MediaViewController.m */; };
 		F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5F41A5C8CAA00B096A7 /* Recording.m */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
-		F7186D3424AA7EA80051965F /* FeedItemSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7186D3324AA7EA80051965F /* FeedItemSummaryView.swift */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
 		F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B81F43978B001D120A /* ObservationEditView.xib */; };
@@ -459,6 +459,7 @@
 		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
 		2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditNumberFieldTableViewCell.m; sourceTree = "<group>"; };
+		2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummary.swift; sourceTree = "<group>"; };
 		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
 		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
 		2F320B6B1BEABF0200C7F66C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -606,7 +607,7 @@
 		F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsViewControllerTests.swift; sourceTree = "<group>"; };
 		F7098F252492C36700313703 /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F7098F27249401E500313703 /* FeedItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTableViewCell.swift; sourceTree = "<group>"; };
-		F7098F292497C75F00313703 /* FeedItemViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewViewController.swift; sourceTree = "<group>"; };
+		F7098F292497C75F00313703 /* FeedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewController.swift; sourceTree = "<group>"; };
 		F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemPropertyCell.swift; sourceTree = "<group>"; };
 		F7098F2D24980DD000313703 /* FeedItemRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetriever.swift; sourceTree = "<group>"; };
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
@@ -621,11 +622,11 @@
 		F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewCell.h; sourceTree = "<group>"; };
 		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		F71446EC249928AD005A5EC1 /* FeedItemHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemHeaderCell.swift; sourceTree = "<group>"; };
+		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
 		F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewViewControllerTests.swift; sourceTree = "<group>"; };
-		F71446F424A3FAF5005A5EC1 /* feed1Items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feed1Items.json; sourceTree = "<group>"; };
+		F71446F424A3FAF5005A5EC1 /* feedContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feedContent.json; sourceTree = "<group>"; };
 		F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheProvider.swift; sourceTree = "<group>"; };
 		F7148D3824003C6B00F9F879 /* ImageCacheTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageCacheTests.m; sourceTree = "<group>"; };
 		F714D5EE1A5C832F00B096A7 /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
@@ -635,7 +636,6 @@
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
-		F7186D3324AA7EA80051965F /* FeedItemSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummaryView.swift; sourceTree = "<group>"; };
 		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
@@ -1599,7 +1599,7 @@
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
 				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
-				F71446F424A3FAF5005A5EC1 /* feed1Items.json */,
+				F71446F424A3FAF5005A5EC1 /* feedContent.json */,
 				F795ED1124BD04730028FBFC /* forms.json */,
 				F795ED1324BD061C0028FBFC /* observations.json */,
 				F795ED1524BD0B9A0028FBFC /* userabc.json */,
@@ -1912,11 +1912,11 @@
 				F7012B9B248E96E8002BBDE8 /* FeedService.swift */,
 				F74020BA2492767900B5A8BA /* FeedItemsViewController.swift */,
 				F7098F27249401E500313703 /* FeedItemTableViewCell.swift */,
-				F7098F292497C75F00313703 /* FeedItemViewViewController.swift */,
+				F7098F292497C75F00313703 /* FeedItemViewController.swift */,
 				F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */,
 				F7098F2D24980DD000313703 /* FeedItemRetriever.swift */,
-				F71446EC249928AD005A5EC1 /* FeedItemHeaderCell.swift */,
-				F7186D3324AA7EA80051965F /* FeedItemSummaryView.swift */,
+				F71446EC249928AD005A5EC1 /* FeedItemCard.swift */,
+				2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -2210,7 +2210,7 @@
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F795ED1224BD04730028FBFC /* forms.json in Resources */,
-				F71446F524A3FAF5005A5EC1 /* feed1Items.json in Resources */,
+				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
 				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
@@ -2464,7 +2464,7 @@
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
-				F7098F2A2497C75F00313703 /* FeedItemViewViewController.swift in Sources */,
+				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
@@ -2510,7 +2510,6 @@
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F7531EFD191010A600CA084C /* ObservationTableViewController.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
-				F7186D3424AA7EA80051965F /* FeedItemSummaryView.swift in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
@@ -2572,7 +2571,7 @@
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
-				F71446ED249928AD005A5EC1 /* FeedItemHeaderCell.swift in Sources */,
+				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
@@ -2591,6 +2590,7 @@
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
+				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,

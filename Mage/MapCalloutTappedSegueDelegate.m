@@ -14,7 +14,7 @@
 
 -(void) calloutTapped:(id) calloutItem {
     if ([calloutItem isKindOfClass:[FeedItem class]]) {
-        [self.viewController.navigationController pushViewController:[[FeedItemViewViewController alloc] initWithFeedItem:calloutItem] animated:true];
+        [self.viewController.navigationController pushViewController:[[FeedItemViewController alloc] initWithFeedItem:calloutItem] animated:true];
     } else if ([calloutItem isKindOfClass:[User class]]) {
         UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem];
         [self.viewController.navigationController pushViewController:uvc animated:YES];

@@ -12,8 +12,8 @@ import Kingfisher
 
 class FeedItemTableViewCell : UITableViewCell {
     
-    private lazy var feedItemView: FeedItemSummaryView = {
-        let view = FeedItemSummaryView();
+    private lazy var feedItemView: FeedItemSummary = {
+        let view = FeedItemSummary();
         return view;
     }()
     

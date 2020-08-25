@@ -101,7 +101,7 @@ import Kingfisher
         if (selectionDelegate != nil) {
             self.selectionDelegate?.feedItemSelected(feedItem);
         } else {
-            let feedItemViewController: FeedItemViewViewController = FeedItemViewViewController(feedItem: feedItem);
+            let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem);
             self.navigationController?.pushViewController(feedItemViewController, animated: true);
         }
     }

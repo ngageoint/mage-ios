@@ -56,7 +56,7 @@ class FeedServiceTests: KIFSpec {
             
             it("should request feed items") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
                         done();
                     }
                 }
@@ -64,12 +64,12 @@ class FeedServiceTests: KIFSpec {
                 var feedItemsServerCallCount = 0;
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                     print("pass test request", request);
-                    print("does it pass?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/items"));
-                    return request.url == URL(string: "https://magetest/api/events/1/feeds/1/items");
+                    print("does it pass?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/content"));
+                    return request.url == URL(string: "https://magetest/api/events/1/feeds/1/content");
                 }) { (request) -> HTTPStubsResponse in
                     feedItemsServerCallCount += 1;
 
-                    let stubPath = OHPathForFile("feed1Items.json", type(of: self))
+                    let stubPath = OHPathForFile("feedContent.json", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };
 
@@ -82,18 +82,18 @@ class FeedServiceTests: KIFSpec {
                 var feedItemsServerCallCount = 0;
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                     print("pass test request2", request);
-                    print("does it pass2?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/items"));
-                    return request.url == URL(string: "https://magetest/api/events/1/feeds/1/items");
+                    print("does it pass2?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/content"));
+                    return request.url == URL(string: "https://magetest/api/events/1/feeds/1/content");
                 }) { (request) -> HTTPStubsResponse in
                     
                     feedItemsServerCallCount += 1;
                     
-                    let stubPath = OHPathForFile("feed1Items.json", type(of: self))
+                    let stubPath = OHPathForFile("feedContent.json", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };
                 FeedService.shared.start();
                 
-                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
                     print("Added the feed");
                 }
                 expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: 10, pollInterval: 1, description: "Feed Items Pulled");

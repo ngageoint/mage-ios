@@ -21,11 +21,11 @@ class FeedItemViewViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedItemViewViewController no timestamp") {
+        describe("FeedItemViewController no timestamp") {
             let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
 
-            var controller: FeedItemViewViewController!
+            var controller: FeedItemViewController!
             var window: UIWindow!;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
@@ -81,7 +81,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     Server.setCurrentEventId(1);
                     
                     MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -93,16 +93,41 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 clearAndSetUpStack();
             }
             
-            it("one feed item with no value non mappable") {
+            it("feed item with no value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: [:]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: [:]) { (success: Bool, error: Error?) in
                         done();
+                    }
+                }
+                var completeTest = false;
+
+                if let feedItem: FeedItem = FeedItem.mr_findFirst() {
+                    controller = FeedItemViewController(feedItem: feedItem)
+                    window.rootViewController = controller;
+                }
+
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }                
+            }
+            
+            it("feed item with no value mappable") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: [:]) { (success: Bool, error: Error?) in
+                            done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -118,43 +143,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with no value mappable") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: [: ]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
-                var completeTest = false;
-                
-                if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
-                    window.rootViewController = controller;
-                }
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
-                }
-            }
-            
-            it("one feed item with no value mappable mgrs") {
+            it("feed item with no value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["otherkey": "other value"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -170,16 +170,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value non mappable") {
+            it("feed item with primary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -195,16 +195,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value mappable") {
+            it("feed item with primary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -220,18 +220,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value mappable mgrs") {
+            it("feed item with primary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -247,16 +247,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value non mappable") {
+            it("feed item with secondary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                      MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                          done();
+                      }
+                  }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -272,16 +272,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value mappable") {
+            it("feed item with secondary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -297,18 +297,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value mappable mgrs") {
+            it("feed item with secondary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -324,16 +324,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value non mappable") {
+            it("feed item with primary and secondary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -349,16 +349,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value mappable") {
+            it("feed item with primary and secondary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -374,18 +374,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value mappable mgrs") {
+            it("feed item with primary and secondary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -401,10 +401,10 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon non mappable") {
+            it("feed item with primary and secondary value and icon non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -412,7 +412,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -428,10 +428,10 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon mappable") {
+            it("feed item with primary and secondary value and icon mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -439,7 +439,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -455,12 +455,12 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon mappable mgrs") {
+            it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -468,7 +468,34 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
+                    window.rootViewController = controller;
+                }
+                
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
+            
+            it("feed item with primary and long secondary value and icon mappable") {
+                waitUntil { done in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo."]) { (success: Bool, error: Error?) in
+                            done();
+                        }
+                    }
+                }
+                var completeTest = false;
+                
+                if let feedItem: FeedItem = FeedItem.mr_findFirst() {
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -485,11 +512,11 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
         }
         
-        describe("FeedItemViewViewController with timestamp") {
+        describe("FeedItemViewController with timestamp") {
             let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
-            var controller: FeedItemViewViewController!
+            var controller: FeedItemViewController!
             var window: UIWindow!;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
@@ -545,7 +572,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     Server.setCurrentEventId(1);
                     
                     MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: 1, title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp") { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -557,16 +584,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 clearAndSetUpStack();
             }
             
-            it("one feed item with no value non mappable") {
+            it("feed item with no value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -582,16 +609,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with no value mappable") {
+            it("feed item with no value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -607,18 +634,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with no value mappable mgrs") {
+            it("feed item with no value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["otherkey": "other value", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -634,16 +661,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value non mappable") {
+            it("feed item with primary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -659,16 +686,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value mappable") {
+            it("feed item with primary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -684,18 +711,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary value mappable mgrs") {
+            it("feed item with primary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -711,16 +738,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value non mappable") {
+            it("feed item with secondary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -736,16 +763,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value mappable") {
+            it("feed item with secondary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -761,18 +788,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with secondary value mappable mgrs") {
+            it("feed item with secondary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -788,16 +815,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value non mappable") {
+            it("feed item with primary and secondary value non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -813,16 +840,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value mappable") {
+            it("feed item with primary and secondary value mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -838,18 +865,18 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value mappable mgrs") {
+            it("feed item with primary and secondary value mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
                     }
                 }
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -865,10 +892,10 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon non mappable") {
+            it("feed item with primary and secondary value and icon non mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -876,7 +903,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -892,10 +919,10 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon mappable") {
+            it("feed item with primary and secondary value and icon mappable") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -903,7 +930,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -919,12 +946,12 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon mappable mgrs") {
+            it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -932,7 +959,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 
@@ -948,10 +975,10 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("one feed item with primary and secondary value and icon without timestamp") {
+            it("feed item with primary and secondary value and icon without timestamp") {
                 waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: 1, style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: 1, properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
                             done();
                         }
                     }
@@ -959,7 +986,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem)
                     window.rootViewController = controller;
                 }
                 

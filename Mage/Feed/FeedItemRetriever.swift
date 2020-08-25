@@ -52,8 +52,8 @@ extension UIImage {
                     
                     let image: UIImage = value.image.resized(to: CGSize(width: size, height: size));
                     annotationView.image = image;
-                case .failure(let error):
-                    print(error);
+                case .failure(_):
+                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
                 }
             }
         } else {

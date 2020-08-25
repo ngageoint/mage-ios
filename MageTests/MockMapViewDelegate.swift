@@ -9,27 +9,32 @@
 import Foundation
 import MapKit
 
-class MockMapViewDelegate: NSObject, MKMapViewDelegate {
+class MockMapViewDelegate: MapDelegate {
     var mapDidStartLoadingMapClosure: ((MKMapView) -> Void)?
     var mapDidFinishLoadingClosure: ((MKMapView) -> Void)?
     var mapDidFinishRenderingClosure: ((MKMapView, Bool) -> Void)?
     var mapDidAddOverlayViewsClosure: ((MKMapView) -> Void)?
-    
-    func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
+    var regionDidChangeAnimatedClosure: ((MKMapView) -> Void)?
+
+    override func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
         mapDidStartLoadingMapClosure?(mapView);
     }
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+    override func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         //loading done
         mapDidFinishLoadingClosure?(mapView)
     }
     
-    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+    override func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
         // rendering done
         mapDidFinishRenderingClosure?(mapView, fullyRendered);
     }
     
-    func mapView(_ mapView: MKMapView, didAddOverlayViews overlayViews: [Any]) {
+    override func mapView(_ mapView: MKMapView, didAddOverlayViews overlayViews: [Any]) {
         // added overlay views
         mapDidAddOverlayViewsClosure?(mapView);
+    }
+    
+    override func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        regionDidChangeAnimatedClosure?(mapView)
     }
 }
