@@ -1001,6 +1001,33 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
                 }
             }
+            
+            it("feed item with primary and long secondary value and icon mappable") {
+                waitUntil { done in
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo.", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
+                            done();
+                        }
+                    }
+                }
+                var completeTest = false;
+                
+                if let feedItem: FeedItem = FeedItem.mr_findFirst() {
+                    controller = FeedItemViewController(feedItem: feedItem)
+                    window.rootViewController = controller;
+                }
+                
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                } else {
+                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                }
+            }
         }
     }
 }

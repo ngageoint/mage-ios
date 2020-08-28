@@ -25,6 +25,7 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
     self.tableView.backgroundColor = [UIColor tableBackground];
+    self.tableView.separatorColor = [UIColor tableSeparator];
     self.refreshControl.backgroundColor = [UIColor background];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];

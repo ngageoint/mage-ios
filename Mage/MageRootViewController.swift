@@ -10,6 +10,7 @@ import Kingfisher
     
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
+    var moreTableViewDelegate: UITableViewDelegate?;
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
         let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
@@ -24,6 +25,17 @@ import Kingfisher
         registerForThemeChanges();
         
         self.delegate = self;
+        
+        if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
+            if let proxyDelegate = moreTableView.delegate {
+                moreTableViewDelegate = MoreTableViewDelegate.init(proxyDelegate: proxyDelegate)
+                moreTableView.delegate = moreTableViewDelegate
+                
+                moreTableView.tintColor = UIColor.activeIcon()
+                moreTableView.backgroundColor = UIColor.tableBackground()
+                moreTableView.separatorColor = UIColor.tableSeparator()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -179,7 +191,9 @@ import Kingfisher
         
         if let topViewController = self.moreNavigationController.topViewController {
             if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = UIColor.primary();
+                tableView.tintColor = UIColor.activeIcon()
+                tableView.backgroundColor = UIColor.tableBackground()
+                tableView.separatorColor = UIColor.tableSeparator()
             }
         }
     }
@@ -191,10 +205,8 @@ import Kingfisher
 
 extension MageRootViewController: UITabBarControllerDelegate {
     override func tabBar(_ tabBar: UITabBar, didEndCustomizing items: [UITabBarItem], changed: Bool) {
-        
         if changed {
             for (i, viewController) in viewControllers!.enumerated() {
-                
                 UserDefaults.standard.set(i, forKey: "rootViewTabPosition\(viewController.tabBarItem.tag)")
             }
         }

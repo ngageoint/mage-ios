@@ -82,8 +82,9 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.view.backgroundColor = [UIColor tableBackground];
-    self.tableView.backgroundColor = [UIColor tableBackground];
     self.view.backgroundColor = [UIColor tableBackground];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.tableView.separatorColor = [UIColor tableSeparator];
 
     [self.tableView reloadData];
 }

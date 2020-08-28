@@ -48,9 +48,16 @@ class FeedItemPropertyCell : UITableViewCell {
         valueField.autoPinEdge(.top, to: .bottom, of: keyField, withOffset: 8);
         valueField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
         
+        self.registerForThemeChanges()
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func themeDidChange(_ theme: MageTheme) {
+        self.backgroundColor = UIColor.background()
+        self.keyField.textColor = UIColor.secondaryText()
+        self.valueField.textColor = UIColor.primaryText()
     }
 }

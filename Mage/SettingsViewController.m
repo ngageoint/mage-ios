@@ -87,6 +87,7 @@
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.view.backgroundColor = [UIColor tableBackground];
     self.view.backgroundColor = [UIColor tableBackground];
+    
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {

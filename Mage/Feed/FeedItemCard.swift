@@ -152,18 +152,23 @@ class FeedItemCard : UITableViewCell {
         return mapView;
     }()
     
+    private lazy var locationIcon: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "location_tracking_on"))
+        image.tintColor = UIColor.mageBlue()
+        
+        return image
+    }()
+    
     private lazy var locationTextView: UIView = {
-        let view = UIView(forAutoLayout: ());
-        let image = UIImageView(image: UIImage(named: "location_tracking_on"));
-        image.tintColor = UIColor.mageBlue();
-        view.addSubview(image);
+        let view = UIView(forAutoLayout: ())
+        view.addSubview(locationIcon);
         view.addSubview(locationLabel);
         
-        image.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        image.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+        locationIcon.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        locationIcon.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
         
-        locationLabel.autoAlignAxis(.horizontal, toSameAxisOf: image);
-        locationLabel.autoPinEdge(.left, to: .right, of: image, withOffset: 16);
+        locationLabel.autoAlignAxis(.horizontal, toSameAxisOf: locationIcon);
+        locationLabel.autoPinEdge(.left, to: .right, of: locationIcon, withOffset: 16);
         locationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
         return view;
     }()
@@ -183,6 +188,14 @@ class FeedItemCard : UITableViewCell {
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func themeDidChange(_ theme: MageTheme) {
+        self.backgroundColor = UIColor.background()
+        self.timestamp.textColor = UIColor.primaryText()
+        self.primaryField.textColor = UIColor.primaryText()
+        self.secondaryField.textColor = UIColor.secondaryText()
+        self.locationLabel.textColor = UIColor.primaryText()
     }
     
     func bind(feedItem: FeedItem) {
@@ -242,6 +255,8 @@ class FeedItemCard : UITableViewCell {
             self.mapView.isHidden = true;
             self.locationTextView.isHidden = true;
         }
+        
+        self.registerForThemeChanges()
     }
     
     private func isEmpty(feedItem: FeedItem) -> Bool {

@@ -42,6 +42,14 @@
     return [UIColor colorWithHexString:@"212121"];
 }
 
+- (UIColor *) tableSeparator {
+    return [UIColor colorWithRed:1 green:1 blue:1 alpha:.2];
+}
+
+- (UIColor *) tableCellDisclosure {
+    return [UIColor colorWithWhite:1 alpha:.23];
+}
+
 - (UIColor *) dialog {
     return [UIColor colorWithHexString:@"424242"];
 }

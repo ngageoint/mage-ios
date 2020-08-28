@@ -50,6 +50,9 @@ import Kingfisher
     override func themeDidChange(_ theme: MageTheme) {
         self.navigationController?.navigationBar.barTintColor = UIColor.primary();
         self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
+        self.view.backgroundColor = UIColor.background();
+        self.tableView.backgroundColor = UIColor.tableBackground()
+        self.tableView.separatorColor = UIColor.tableSeparator()
     }
 
     override func viewDidLoad() {

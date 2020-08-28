@@ -57,6 +57,7 @@ extension UITableView {
     override func themeDidChange(_ theme: MageTheme) {
         self.navigationController?.navigationBar.barTintColor = UIColor.primary();
         self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
+        self.view.backgroundColor = UIColor.tableBackground()
     }
     
     override func viewDidLoad() {

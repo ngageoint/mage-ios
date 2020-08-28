@@ -116,6 +116,14 @@
     return [[self autoTheme] tableBackground];
 }
 
+- (UIColor *) tableSeparator {
+    return [[self autoTheme] tableSeparator];
+}
+
+- (UIColor *) tableCellDisclosure {
+    return [[self autoTheme] tableCellDisclosure];
+}
+
 - (UIColor *) dialog {
     return [[self autoTheme] dialog];
 }

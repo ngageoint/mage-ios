@@ -16,6 +16,8 @@
 + (UIColor * _Nonnull) secondaryText;
 + (UIColor * _Nonnull) background;
 + (UIColor * _Nonnull) tableBackground;
++ (UIColor * _Nonnull) tableSeparator;
++ (UIColor * _Nonnull) tableCellDisclosure;
 + (UIColor * _Nonnull) dialog;
 + (UIColor * _Nonnull) brand;
 + (UIColor * _Nonnull) primary;
