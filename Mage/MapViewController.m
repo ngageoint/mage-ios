@@ -252,7 +252,6 @@
     buttonStack.distribution = UIStackViewDistributionFill;
     buttonStack.spacing = 10;
     buttonStack.axis = UILayoutConstraintAxisVertical;
-    buttonStack.backgroundColor = [UIColor redColor];
     [self.view insertSubview:buttonStack aboveSubview:self.mapView];
     
     [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.view withOffset:25];
@@ -496,7 +495,7 @@
 - (void) setupMapSettingsButton {
     NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
     if (count > 0) {
-        UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(self.mapSettingsButton.frame.size.width-10, -10, 20, 20)];
+        UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(25, -10, 20, 20)];
         circle.tag = 998;
         circle.layer.cornerRadius = 10;
         circle.layer.borderWidth = .5;
