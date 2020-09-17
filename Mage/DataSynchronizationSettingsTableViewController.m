@@ -168,7 +168,7 @@ static NSInteger PUSH_CELL_ROW = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == ADVANCED_WIFI_SETTINGS_SECTION) {
         AdvancedWiFiTableViewController *viewController = [[AdvancedWiFiTableViewController alloc] init];
-        [self showDetailViewController:viewController sender:nil];
+        [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
