@@ -19,7 +19,11 @@ extension UITableView {
         frame.size.height = height
         header.frame = frame
         self.tableHeaderView = header
-        header.autoSetDimension(.width, toSize: bounds.size.width)
+        if #available(iOS 14, *) {
+            self.tableHeaderView?.autoMatch(.width, to: .width, of: self);
+        } else {
+            header.autoSetDimension(.width, toSize: bounds.size.width)
+        }
     }
 }
 
