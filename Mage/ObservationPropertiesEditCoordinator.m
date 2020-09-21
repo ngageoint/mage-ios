@@ -332,6 +332,24 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
 
 #pragma
 
+- (void) ensureDirectoryExistsForFile:(NSString *) fileToWriteTo {
+    NSString *attachmentsDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0] stringByAppendingPathComponent:@"/attachments"];
+
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL isDirectory;
+    if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
+        NSError *error = nil;
+        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                         forKey:NSFileProtectionKey];
+        [manager createDirectoryAtPath:attachmentsDirectory
+           withIntermediateDirectories:YES
+                            attributes:attr
+                                 error:&error];
+        if (error)
+            NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+    }
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
     
@@ -356,6 +374,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
             if ([compatiblePresets containsObject:videoQuality]) {
                 AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:videoQuality];
                 NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.mp4", [dateFormatter stringFromDate: [NSDate date]]]];
+                [self ensureDirectoryExistsForFile:fileToWriteTo];
 
                 exportSession.outputURL = [NSURL fileURLWithPath:fileToWriteTo];
                 exportSession.outputFileType = AVFileTypeMPEG4;
@@ -395,19 +414,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
         }
         
         NSString *fileToWriteTo = [attachmentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"MAGE_%@.jpeg", [dateFormatter stringFromDate: [NSDate date]]]];
-        NSFileManager *manager = [NSFileManager defaultManager];
-        BOOL isDirectory;
-        if (![manager fileExistsAtPath:attachmentsDirectory isDirectory:&isDirectory] || !isDirectory) {
-            NSError *error = nil;
-            NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                             forKey:NSFileProtectionKey];
-            [manager createDirectoryAtPath:attachmentsDirectory
-               withIntermediateDirectories:YES
-                                attributes:attr
-                                     error:&error];
-            if (error)
-                NSLog(@"Error creating directory path: %@", [error localizedDescription]);
-        }
+        [self ensureDirectoryExistsForFile:fileToWriteTo];
         
         NSData *imageData = [self jpegFromImage:chosenImage withMetaData:info[UIImagePickerControllerMediaMetadata]];
         BOOL success = [imageData writeToFile:fileToWriteTo atomically:NO];
