@@ -73,7 +73,7 @@ PODS:
     - sf-ios (~> 2.0.3)
   - sf-wkb-ios (2.0.3):
     - sf-ios (~> 2.0.3)
-  - SkyFloatingLabelTextField (3.6.0)
+  - SkyFloatingLabelTextField (3.7.0)
   - SSZipArchive (2.2.2)
   - tiff-ios (1.1.2)
   - tuneup_js (1.2.3)
@@ -92,7 +92,7 @@ DEPENDENCIES:
   - mgrs (~> 0.1.0)
   - OCMock
   - OHHTTPStubs
-  - SkyFloatingLabelTextField (~> 3.6.0)
+  - SkyFloatingLabelTextField (~> 3.7.0)
   - tuneup_js
   - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
@@ -160,13 +160,13 @@ SPEC CHECKSUMS:
   sf-ios: 4ca0618351be80afac4e0961860d632dd85ab739
   sf-proj-ios: 9f33d6b85d63de2a7d7624cc41254e111ff6fb78
   sf-wkb-ios: 083ded71420534d4fe0aef28060441b7bbf2e724
-  SkyFloatingLabelTextField: 38164979b79512f9ff9288ad8acfc4bbf5d843e3
+  SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   tiff-ios: f8a47e6aa20fc0d5833041ba5e39b1ab6e187f2e
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 9a62dbb3b7da8ac059d002f30c06de062910e8c4
+PODFILE CHECKSUM: de6770fdc1d8c3f56df7bc3a5f3f28c7e57498e8
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

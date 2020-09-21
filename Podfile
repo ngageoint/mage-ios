@@ -19,7 +19,7 @@ target 'MAGE' do
     pod 'tuneup_js'
     pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
-    pod 'SkyFloatingLabelTextField', '~> 3.6.0'
+    pod 'SkyFloatingLabelTextField', '~> 3.7.0'
     pod 'DateTools', '~> 2.0.0'
     pod 'EDSunriseSet', '~> 1.0'
     target 'MAGETests' do
