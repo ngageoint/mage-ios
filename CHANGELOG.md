@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.19 ()
+## 2.0.20
 
 ##### Release Notes
 
@@ -11,6 +11,16 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 * Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported
+
+## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported.
+* Fix bug where video will not attach to observation when photo has not been attached first.
 
 ## 2.0.18 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.18)
 
