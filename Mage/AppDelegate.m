@@ -124,7 +124,7 @@
     
     NSLog(@"Application Open URL %@", url);
     if (url.isFileURL) {
-        NSString * fileUrl = [url path];
+        NSString * filePath = [url path];
         
         // Handle GeoPackage files
         if([GPKGGeoPackageValidate hasGeoPackageExtension:filePath]){
