@@ -1,22 +1,22 @@
 //
-//  OauthLoginView.m
+//  IDPButtonDelegate.m
 //  MAGE
 //
 //  Created by Dan Barela on 3/30/18.
 //  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "OAuthLoginView.h"
+#import "IDPLoginView.h"
 #import "Theme+UIResponder.h"
 #import "AuthenticationButton.h"
 
 @import HexColors;
 
-@interface OAuthLoginView()<AuthenticationButtonDelegate>
+@interface IDPLoginView()<AuthenticationButtonDelegate>
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @end
 
-@implementation OAuthLoginView
+@implementation IDPLoginView
 
 - (void) themeDidChange:(MageTheme)theme {
     

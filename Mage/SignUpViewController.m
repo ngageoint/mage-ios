@@ -13,11 +13,9 @@
 #import "UINextField.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
-#import "OAuthViewController.h"
 #import "IdpAuthentication.h"
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"
-#import <GoogleSignIn/GoogleSignIn.h>
 #import "Theme+UIResponder.h"
 #import "DBZxcvbn.h"
 
@@ -29,13 +27,10 @@
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
-@property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
-@property (weak, nonatomic) IBOutlet UIView *googleDividerView;
 @property (strong, nonatomic) MageServer *server;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (strong, nonatomic) id<SignUpDelegate> delegate;
@@ -122,8 +117,6 @@
     
     self.password.delegate = self;
     
-    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
-
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
         self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
@@ -303,11 +296,7 @@
 
 - (void) setupAuthentication {
     BOOL localAuthentication = [self.server serverHasLocalAuthenticationStrategy];
-    BOOL googleAuthentication = [self.server serverHasGoogleAuthenticationStrategy];
-    
-    self.googleView.hidden = self.googleDividerView.hidden = !googleAuthentication;
     self.signupView.hidden = !localAuthentication;
-    self.dividerView.hidden = !(googleAuthentication && localAuthentication);
 }
 
 
