@@ -75,6 +75,7 @@
 
 - (void) authorize:(NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     // authentication succeeded, authorize with the mage server
+    NSString *token = [self.response valueForKey:@"token"];
     NSDictionary *user = [self.response objectForKey:@"user"];
     
     // check if the user is active and if not but they have a user tell them to talk to a MAGE admin
@@ -94,43 +95,42 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     MageSessionManager *manager = [MageSessionManager manager];
-    NSString *url = [NSString stringWithFormat:@"%@/auth/%@/authorize", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
-    
-    NSURL *URL = [NSURL URLWithString:url];
-    
-    NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:authorizeParameters progress:nil success:^(NSURLSessionTask *task, id response) {
-        NSDictionary *api = [response objectForKey:@"api"];
+    NSString *url = [NSString stringWithFormat:@"%@/auth/token", [[MageServer baseURL] absoluteString]];
+        
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:authorizeParameters error:nil];
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    NSURLSessionDataTask *task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (error) {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+
+            // if the error was a network error try to login with the local auth module
+            if ([error.domain isEqualToString:NSURLErrorDomain]&& (error.code == NSURLErrorCannotConnectToHost|| error.code == NSURLErrorNotConnectedToInternet)) {
+                NSLog(@"Unable to authenticate, probably due to no connection.  Error: %@", error);
+                // at this point, we might not have a connection to the server.
+                complete(UNABLE_TO_AUTHENTICATE, error.localizedDescription);
+            } else if (httpResponse.statusCode == 403) {
+                NSLog(@"Error authorizing device uid in: %@", error);
+                [defaults setBool:NO forKey:@"deviceRegistered"];
+                NSString* message = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                complete(REGISTRATION_SUCCESS, message);
+            } else {
+                NSString* message = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                complete(AUTHENTICATION_ERROR, message);
+            }
+            
+            return;
+        }
+        
+        NSDictionary *api = [responseObject objectForKey:@"api"];
         BOOL serverCompatible = [MageServer checkServerCompatibility:api];
         if (!serverCompatible) {
             NSError *error = [MageServer generateServerCompatibilityError:api];
             return complete(AUTHENTICATION_ERROR, error.localizedDescription);
         }
         self.loginParameters = parameters;
-        self.response = response;
+        self.response = responseObject;
         
         complete(AUTHENTICATION_SUCCESS, nil);
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        // if the error was a network error try to login with the local auth module
-        if ([error.domain isEqualToString:NSURLErrorDomain]
-            && (error.code == NSURLErrorCannotConnectToHost
-                || error.code == NSURLErrorNotConnectedToInternet
-                )) {
-                NSLog(@"Unable to authenticate, probably due to no connection.  Error: %@", error);
-                // at this point, we might not have a connection to the server.
-                complete(UNABLE_TO_AUTHENTICATE, error.localizedDescription);
-            } else {
-                NSLog(@"Error logging in: %@", error);
-                // try to register again
-                [defaults setBool:NO forKey:@"deviceRegistered"];
-                [self registerDevice:authorizeParameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-                    if (authenticationStatus == AUTHENTICATION_ERROR) {
-                        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-                        complete(authenticationStatus, errResponse);
-                    } else {
-                        complete(authenticationStatus, errorString);
-                    }
-                }];
-            }
     }];
     
     [manager addTask:task];

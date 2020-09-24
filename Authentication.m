@@ -7,7 +7,6 @@
 #import "Authentication.h"
 #import "LocalAuthentication.h"
 #import "ServerAuthentication.h"
-#import "GoogleAuthentication.h"
 #import "IdpAuthentication.h"
 #import "LdapAuthentication.h"
 
@@ -25,11 +24,7 @@
         case SERVER: {
             return [[ServerAuthentication alloc] init];
         }
-        case GOOGLE: {
-            return [[GoogleAuthentication alloc] init];
-        }
-        case OAUTH2:
-        case SAML: {
+        case IDP: {
             return [[IdpAuthentication alloc] init];
         }
         case LDAP: {
@@ -39,7 +34,6 @@
 			return nil;
 		}
 	}
-	
 }
 
 + (AuthenticationType) authenticationTypeFromString: (NSString *) value {
@@ -57,9 +51,9 @@
         dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                       [NSNumber numberWithInteger:LOCAL], @"local",
                       [NSNumber numberWithInteger:SERVER], @"server",
-                      [NSNumber numberWithInteger:GOOGLE], @"google",
-                      [NSNumber numberWithInteger:OAUTH2], @"oauth2",
-                      [NSNumber numberWithInteger:SAML], @"saml",
+                      [NSNumber numberWithInteger:IDP], @"google",
+                      [NSNumber numberWithInteger:IDP], @"oauth2",
+                      [NSNumber numberWithInteger:IDP], @"saml",
                       [NSNumber numberWithInteger:LDAP], @"ldap",
                       nil];
     });
@@ -74,9 +68,9 @@
         dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                       @"local", [NSNumber numberWithInteger:LOCAL],
                       @"server", [NSNumber numberWithInteger:SERVER],
-                      @"google", [NSNumber numberWithInteger:GOOGLE],
-                      @"oauth2", [NSNumber numberWithInteger:OAUTH2],
-                      @"saml", [NSNumber numberWithInteger:SAML],
+                      @"google", [NSNumber numberWithInteger:IDP],
+                      @"oauth2", [NSNumber numberWithInteger:IDP],
+                      @"saml", [NSNumber numberWithInteger:IDP],
                       @"ldap", [NSNumber numberWithInteger:LDAP],
                       nil];
     });

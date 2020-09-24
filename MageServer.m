@@ -36,15 +36,15 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             for (NSString *authenticationType in authenticationStrategies) {
                 NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
                 if ([authenticationType isEqualToString:@"google"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
                 } else if ([authenticationType isEqualToString:@"local"]) {
                     [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
                 } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"oauth"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"saml"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SAML]];
+                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
                 } else if ([[authParams objectForKey:@"type"] isEqualToString:@"ldap"]) {
                     [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
                 }
@@ -74,12 +74,6 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
     return [strategies objectForKey:@"local"] != nil;
-}
-
-- (BOOL) serverHasGoogleAuthenticationStrategy {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
-    return [strategies objectForKey:@"google"] != nil;
 }
 
 - (NSArray *) getStrategies {
@@ -123,7 +117,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
 }
 
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
-    return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
+    return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.  Please contact your MAGE administrator for more information.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
 }
 
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
@@ -156,13 +150,13 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         for (NSString *authenticationType in authenticationStrategies) {
             NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
             if ([authenticationType isEqualToString:@"google"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:GOOGLE]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
             } else if ([authenticationType isEqualToString:@"local"]) {
                 [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
             } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
             } else if ([authenticationType isEqualToString:@"oauth"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:OAUTH2]];
+                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
             } else if ([authenticationType isEqualToString:@"ldap"]) {
                 [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
             }

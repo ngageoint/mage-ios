@@ -9,9 +9,7 @@
 typedef NS_ENUM(NSInteger, AuthenticationType) {
 	LOCAL,
     SERVER,
-    GOOGLE,
-    OAUTH2,
-    SAML,
+    IDP,
     LDAP
 };
 

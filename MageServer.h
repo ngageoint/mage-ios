@@ -15,7 +15,6 @@
 - (instancetype) initWithURL: (NSURL *) url;
 + (NSURL *) baseURL;
 - (BOOL) serverHasLocalAuthenticationStrategy;
-- (BOOL) serverHasGoogleAuthenticationStrategy;
 - (NSArray *) getOauthStrategies;
 - (NSArray *) getStrategies;
 
