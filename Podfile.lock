@@ -136,13 +136,13 @@ SPEC CHECKSUMS:
   sf-ios: 4ca0618351be80afac4e0961860d632dd85ab739
   sf-proj-ios: 9f33d6b85d63de2a7d7624cc41254e111ff6fb78
   sf-wkb-ios: 083ded71420534d4fe0aef28060441b7bbf2e724
-  SkyFloatingLabelTextField: 38164979b79512f9ff9288ad8acfc4bbf5d843e3
+  SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   tiff-ios: f8a47e6aa20fc0d5833041ba5e39b1ab6e187f2e
   tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 358ac019942390dfdb656cb7c067d881c71dbe1b
+PODFILE CHECKSUM: 5dcac9872cc5b266ae6941bb37f1a7bfaf1e00c7
 
 COCOAPODS: 1.9.3
