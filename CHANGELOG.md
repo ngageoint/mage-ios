@@ -10,7 +10,6 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 
 ##### Bug Fixes
-* Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported
 
 ## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
 
@@ -30,8 +29,13 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Add observation accuracy.  Accuracy circle displayed on map for annotation click, observation view, 
   and edit. Accuracy info is also displayed textually in observation view and edit.
 * Show location accuracy circle in user profile map.
+* Image caching is now handled by KingFisher, this affects all attachment views
+* Observation feed display is now separate from the map marker display
 
 ##### Bug Fixes
+* Images and videos selected from the gallery are no longer re-saved to the gallery
+* iPad filter button works again
+* The gallery was being launched from a background thread the first time the app was launched
 
 ## 2.0.17 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.17)
 
@@ -42,7 +46,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Bug Fixes
 * Fixed bug that could cause app crash when selecting a new event.
 * Fixed possible race condition where the token could be marked as invalid
-  immediately after the user has completed signin.
+immediately after the user has completed signin.
 
 ## 2.0.16 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.16)
 

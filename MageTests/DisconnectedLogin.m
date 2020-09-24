@@ -92,16 +92,20 @@
                                     @"test", @"username",
                                     @"goodpassword", @"password",
                                     @"uuid", @"uid",
+                                    [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"local", @"identifier", nil],
+                                    @"strategy",
+                                    @"5.0.0", @"appVersion",
                                     nil];
         
         [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api/login"];
+            return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/auth/local/signin"];
         } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
             NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
             return [OHHTTPStubsResponse responseWithError:notConnectedError];
         }];
         
-        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /api/login complete"];
+        XCTestExpectation* loginResponseArrived = [self expectationWithDescription:@"response of /auth/local/signin complete"];
         id coordinatorMock = OCMPartialMock(coordinator);
         OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
             [loginResponseArrived fulfill];

@@ -5,7 +5,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FICImageCache.h"
 #import "LocationService.h"
 #import "LocationFetchService.h"
 #import "ObservationFetchService.h"

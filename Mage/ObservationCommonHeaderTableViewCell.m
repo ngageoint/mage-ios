@@ -12,7 +12,6 @@
 #import "MapDelegate.h"
 #import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
-#import "Attachment+Thumbnail.h"
 #import "Theme+UIResponder.h"
 #import <mgrs/MGRS.h>
 
@@ -37,7 +36,7 @@
 
 - (void) configureCellForObservation: (Observation *) observation withForms:(NSArray *)forms {
     
-    NSString *primaryFieldText = [observation primaryFieldText];
+    NSString *primaryFieldText = [observation primaryFeedFieldText];
     
     if (primaryFieldText != nil && [primaryFieldText length] > 0) {
         self.primaryFieldLabel.text = primaryFieldText;
@@ -46,7 +45,7 @@
         self.primaryFieldLabel.hidden = YES;
     }
     
-    NSString *variantText = [observation secondaryFieldText];
+    NSString *variantText = [observation secondaryFeedFieldText];
     if (variantText != nil && [variantText length] > 0) {
         self.variantFieldLabel.hidden = NO;
         self.variantFieldLabel.text = variantText;
@@ -95,7 +94,6 @@
     [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
 
     self.ads = [[AttachmentCollectionDataStore alloc] init];
-    self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;

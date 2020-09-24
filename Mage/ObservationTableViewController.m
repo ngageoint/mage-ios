@@ -11,7 +11,6 @@
 #import "Observation.h"
 #import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
-#import "AttachmentViewController.h"
 #import "Event.h"
 #import "User.h"
 #import "ObservationEditViewController.h"
@@ -24,8 +23,9 @@
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
+#import "MAGE-Swift.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
 
 @property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
@@ -265,9 +265,9 @@
     if (self.attachmentDelegate != nil) {
         [self.attachmentDelegate selectedAttachment:attachment];
     } else {
-        AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-        [attachmentVC setTitle:@"Attachment"];
-        [self.navigationController pushViewController:attachmentVC animated:YES];
+        AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+        [self.childCoordinators addObject:attachmentCoordinator];
+        [attachmentCoordinator start];
     }
 }
 
@@ -295,5 +295,11 @@
 - (void) observationDeleted:(Observation *)observation coordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
 }
+
+- (void)doneViewingWithCoordinator:(NSObject *)coordinator {
+    // done viewing the attachment
+    [self.childCoordinators removeObject:coordinator];
+}
+
 
 @end

@@ -3,7 +3,7 @@
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -215,41 +215,59 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ZGQ-sg-NbB"/>
                                     <barButtonItem title="Event" style="plain" id="Fy8-4Q-999"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zsw-DC-sCE"/>
-                                    <barButtonItem title="New" id="cWe-q3-xJI">
-                                        <connections>
-                                            <action selector="createNewObservation:" destination="UfL-Xp-Rx3" id="VgS-bB-pVt"/>
-                                        </connections>
+                                    <barButtonItem style="plain" id="Cgt-0G-EJk">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LvM-by-7N8">
+                                            <rect key="frame" x="494" y="10" width="46" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                                            <state key="normal" title="New"/>
+                                            <connections>
+                                                <action selector="createNewObservation:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="hEx-Ea-bgZ"/>
+                                            </connections>
+                                        </button>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" id="ahM-PM-NK8">
-                                        <view key="customView" contentMode="scaleToFill" id="bkc-Su-aHP">
-                                            <rect key="frame" x="505.5" y="10" width="1" height="30"/>
+                                    <barButtonItem style="plain" id="hV1-bV-0oa">
+                                        <view key="customView" contentMode="scaleToFill" id="A3q-Jb-w44">
+                                            <rect key="frame" x="540" y="10" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </view>
                                     </barButtonItem>
-                                    <barButtonItem title="Filter" id="jnl-jA-BUu">
-                                        <connections>
-                                            <segue destination="UKE-aK-Use" kind="popover" identifier="FilterSegue" popoverAnchorBarButtonItem="jnl-jA-BUu" id="FzZ-bB-SHh">
-                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                            </segue>
-                                        </connections>
+                                    <barButtonItem style="plain" id="ji3-qs-Ab0">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hJ1-QT-brO">
+                                            <rect key="frame" x="541" y="10" width="51" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <accessibility key="accessibilityConfiguration" label="Filter"/>
+                                            <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
+                                            <state key="normal" title="Filter"/>
+                                            <connections>
+                                                <segue destination="UKE-aK-Use" kind="popover" identifier="FilterSegue" popoverAnchorView="hJ1-QT-brO" id="v2w-f4-1xT">
+                                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                                </segue>
+                                            </connections>
+                                        </button>
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="fcx-ek-Bm1">
                                         <view key="customView" contentMode="scaleToFill" id="v8q-3J-0Xk">
-                                            <rect key="frame" x="564" y="10" width="1" height="30"/>
+                                            <rect key="frame" x="592" y="10" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </view>
                                     </barButtonItem>
-                                    <barButtonItem title="Profile" id="joL-fY-jEC">
-                                        <connections>
-                                            <segue destination="NQp-Sm-cVJ" kind="push" identifier="DisplayProfileSegue" id="YzF-MW-CoD"/>
-                                        </connections>
+                                    <barButtonItem style="plain" id="WsL-TY-0Jz">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6St-GQ-AkH">
+                                            <rect key="frame" x="593" y="10" width="60" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="-8" maxY="0.0"/>
+                                            <state key="normal" title="Profile"/>
+                                            <connections>
+                                                <segue destination="NQp-Sm-cVJ" kind="push" id="BrG-KU-Dit"/>
+                                            </connections>
+                                        </button>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="fixedSpace" id="dJ6-xB-3uz"/>
                                     <barButtonItem width="30" style="plain" id="hMZ-VM-sQp">
                                         <view key="customView" contentMode="scaleToFill" id="Lr0-KE-IlO">
-                                            <rect key="frame" x="633" y="10" width="30" height="30"/>
+                                            <rect key="frame" x="653" y="10" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="9+" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ao9-LI-Ony">
@@ -277,7 +295,7 @@
                                     <barButtonItem style="plain" systemItem="fixedSpace" id="a0q-XZ-tLX"/>
                                     <barButtonItem style="plain" id="2y0-zg-Mnw">
                                         <view key="customView" contentMode="scaleToFill" id="yQJ-wt-eFB">
-                                            <rect key="frame" x="663" y="10" width="1" height="30"/>
+                                            <rect key="frame" x="683" y="10" width="1" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         </view>
@@ -285,20 +303,13 @@
                                     <barButtonItem width="12" style="plain" systemItem="fixedSpace" id="jXd-kp-Tuo"/>
                                     <barButtonItem style="plain" id="KQr-9r-Wi1">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dr2-Yh-vFN">
-                                            <rect key="frame" x="676" y="3" width="72" height="44"/>
+                                            <rect key="frame" x="696" y="3" width="52" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="more"/>
                                             <connections>
                                                 <action selector="moreTapped:" destination="UfL-Xp-Rx3" eventType="touchUpInside" id="x7s-7N-Y5H"/>
                                             </connections>
                                         </button>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="fixedSpace" id="Yso-7P-DDq">
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="width">
-                                                <integer key="value" value="-8"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </barButtonItem>
                                 </items>
                                 <color key="tintColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -334,15 +345,14 @@
                     <connections>
                         <outlet property="badgeCount" destination="Ao9-LI-Ony" id="dDE-Wt-NfC"/>
                         <outlet property="eventNameItem" destination="Fy8-4Q-999" id="QS5-50-86z"/>
-                        <outlet property="filterButton" destination="jnl-jA-BUu" id="tvW-cp-gqY"/>
+                        <outlet property="filterButton" destination="ji3-qs-Ab0" id="ekG-es-FYK"/>
                         <outlet property="mapDelegate" destination="MIU-fq-xaT" id="Id3-HZ-c6S"/>
                         <outlet property="mapView" destination="rz7-vu-mdR" id="YOi-pW-Nl2"/>
                         <outlet property="moreButton" destination="KQr-9r-Wi1" id="Aqy-oq-HO5"/>
                         <outlet property="moreSpacer" destination="jXd-kp-Tuo" id="mcv-Dl-sZU"/>
                         <outlet property="profileBadge" destination="hMZ-VM-sQp" id="B2s-xT-GKf"/>
-                        <outlet property="profileBadgeLeadingSpacer" destination="dJ6-xB-3uz" id="2tU-XM-SXK"/>
                         <outlet property="profileBadgeTrailingSpacer" destination="a0q-XZ-tLX" id="ioC-26-a5y"/>
-                        <outlet property="profileButton" destination="joL-fY-jEC" id="MKg-3r-F1k"/>
+                        <outlet property="profileButton" destination="WsL-TY-0Jz" id="p5p-ji-oGB"/>
                         <outlet property="reportLocationButton" destination="wdu-qy-wn8" id="H4c-4P-z35"/>
                         <outlet property="showObservationsButton" destination="FhY-BG-Mnp" id="nag-yJ-C3i"/>
                         <outlet property="showPeopleButton" destination="Cae-Bw-Fmt" id="hbb-jE-BHk"/>
@@ -653,7 +663,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="clr-Kh-b1A"/>
                                     <barButtonItem style="plain" id="iNa-9L-Fep">
                                         <view key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="Qd6-qf-lSK">
-                                            <rect key="frame" x="19" y="13" width="283" height="24"/>
+                                            <rect key="frame" x="18.5" y="13" width="283" height="24"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="Kv0-fN-bdn">
@@ -711,7 +721,7 @@
             <objects>
                 <tableViewController id="Y4R-vw-5cO" customClass="LocationTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nJY-W7-1XH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="904"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="924"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <connections>
@@ -807,7 +817,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="8h7-eV-Pof"/>
                                     <barButtonItem style="plain" id="zyv-tD-wEl">
                                         <view key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="X76-oh-sZZ">
-                                            <rect key="frame" x="19" y="13" width="283" height="24"/>
+                                            <rect key="frame" x="18.5" y="13" width="283" height="24"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mage_logo" translatesAutoresizingMaskIntoConstraints="NO" id="fcr-hg-QUZ">

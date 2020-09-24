@@ -14,7 +14,6 @@
 #import "Server.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Event.h"
-#import "Attachment+Thumbnail.h"
 #import "MageEnums.h"
 #import "ObservationShapeStyleParser.h"
 #import "Theme+UIResponder.h"
@@ -69,9 +68,10 @@
 }
 
 - (void) populateCellWithObservation:(Observation *) observation {
+    // TODO if we are reusing this cell, we should probably cancel all of the image cache requests
     self.observation = observation;
-    NSString *primaryText = [observation primaryFieldText];
-    NSString *variantText = [observation secondaryFieldText];
+    NSString *primaryText = [observation primaryFeedFieldText];
+    NSString *variantText = [observation secondaryFeedFieldText];
     
     if (primaryText != nil && [primaryText isKindOfClass:[NSString class]] && [primaryText length] > 0) {
         self.primaryField.text = primaryText;
@@ -112,7 +112,6 @@
     self.userField.text = observation.user.name;
     
     self.ads = [[AttachmentCollectionDataStore alloc] init];
-    self.ads.attachmentFormatName = AttachmentSmallSquare;
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;

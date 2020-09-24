@@ -74,6 +74,11 @@
     if(cell == nil) {
        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cacheOverlayCell"];
     }
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor dialog];
+    cell.imageView.tintColor = [UIColor brand];
+    
     if ([self.overlay getChildren].count != 1  && indexPath.row == 0) {
         cell.textLabel.textColor = [UIColor primaryText];
         cell.detailTextLabel.textColor = [UIColor secondaryText];
@@ -87,7 +92,7 @@
         cell.textLabel.text = self.mageLayer ? self.mageLayer.name : [self.overlay getName];
         cell.detailTextLabel.text = [NSString stringWithFormat: @"%lu layer%@", (unsigned long)[self.overlay getChildren].count, [self.overlay getChildren].count == 1 ? @"" : @"s"];
         [cell.imageView setImage:[UIImage imageNamed:@"folder"]];
-        cell.imageView.tintColor = [UIColor brand];
+        
     } else {
         CacheOverlay *cacheOverlay = [self.overlay.getChildren objectAtIndex:[self.overlay getChildren].count == 1 ? indexPath.row : indexPath.row - 1];
         UIImage * cellImage = nil;
@@ -97,11 +102,9 @@
         }
         cell.textLabel.text = [self.overlay getChildren].count == 1 ? self.mageLayer ? self.mageLayer.name : [self.overlay getName] : [cacheOverlay getName];
         cell.detailTextLabel.text = [cacheOverlay getInfo];
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.detailTextLabel.textColor = [UIColor secondaryText];
+        
         if (cellImage != nil) {
             [cell.imageView setImage:cellImage];
-            cell.imageView.tintColor = [UIColor brand];
         }
 
         CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];

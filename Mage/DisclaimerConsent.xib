@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="GondolaMage-Regular.otf">
             <string>GondolaMageRegular</string>
-        </array>
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue-Medium</string>
         </array>
         <array key="fontawesome-webfont.ttf">
             <string>FontAwesome</string>
@@ -34,12 +27,12 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="Xl0-lr-m6g" customClass="BackgroundView">
+        <view contentMode="scaleToFill" id="Xl0-lr-m6g">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="scrollableAxes" editable="NO" text="Disclaimer text" translatesAutoresizingMaskIntoConstraints="NO" id="tRL-lw-Syp">
-                    <rect key="frame" x="16" y="170" width="343" height="429"/>
+                    <rect key="frame" x="16" y="150" width="343" height="449"/>
                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -87,7 +80,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQ5-p5-HPI">
-                    <rect key="frame" x="16" y="60" width="343" height="55"/>
+                    <rect key="frame" x="16" y="40" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dKo-Mt-4P2">
                             <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
@@ -126,7 +119,7 @@
                     </constraints>
                 </view>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Disclaimer Title" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9p1-TA-FSC">
-                    <rect key="frame" x="16" y="123" width="343" height="42"/>
+                    <rect key="frame" x="16" y="103" width="343" height="42"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="42" id="WfI-kK-TEt"/>
                     </constraints>
@@ -158,6 +151,7 @@
                 <constraint firstItem="6Fd-IC-Rgp" firstAttribute="top" secondItem="tRL-lw-Syp" secondAttribute="bottom" constant="8" id="wNe-tj-jY2"/>
                 <constraint firstItem="9p1-TA-FSC" firstAttribute="leading" secondItem="Xl0-lr-m6g" secondAttribute="leading" constant="16" id="yCF-mk-SCd"/>
             </constraints>
+            <point key="canvasLocation" x="138" y="150"/>
         </view>
     </objects>
 </document>

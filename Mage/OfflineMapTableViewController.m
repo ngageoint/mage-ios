@@ -301,12 +301,12 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"onlineLayerCell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.detailTextLabel.textColor = [UIColor secondaryText];
-        cell.backgroundColor = [UIColor dialog];
-        cell.imageView.tintColor = [UIColor brand];
     }
     
+    cell.textLabel.textColor = [UIColor primaryText];
+    cell.detailTextLabel.textColor = [UIColor secondaryText];
+    cell.backgroundColor = [UIColor dialog];
+    cell.imageView.tintColor = [UIColor brand];
     [cell.imageView setImage:nil];
     cell.accessoryView = nil;
 
@@ -351,6 +351,8 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             
             [cell.imageView setImage:[UIImage imageNamed:@"marker_outline"]];
             
+            cell.backgroundColor = [UIColor dialog];
+            
             UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             cacheSwitch.on = [self.selectedStaticLayers containsObject:layer.remoteId];
             cacheSwitch.onTintColor = [UIColor themedButton];
@@ -362,6 +364,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             if (!gpCell) {
                 gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell"];
             }
+            gpCell.backgroundColor = [UIColor dialog];
             
             CacheOverlay * cacheOverlay = [self findOverlayByRemoteId:layer.remoteId];
             gpCell.overlay = cacheOverlay;

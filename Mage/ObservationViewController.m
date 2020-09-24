@@ -19,7 +19,6 @@
 #import "ObservationEditViewController.h"
 #import "UserTableViewController.h"
 #import "MapDelegate.h"
-#import "AttachmentViewController.h"
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
@@ -27,8 +26,9 @@
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "ObservationLocationTableViewCell.h"
+#import "MAGE-Swift.h"
 
-@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate>
+@interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate, AttachmentViewDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (nonatomic, assign) BOOL manualSync;
@@ -139,7 +139,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self setupEditButton];
     [self setupNonPropertySections];
     
-    NSString *primaryText = [self.observation primaryFieldText];
+    NSString *primaryText = [self.observation primaryFeedFieldText];
     if (primaryText != nil && [primaryText length] > 0) {
         self.navigationItem.title = primaryText;
     }
@@ -388,10 +388,16 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
-    AttachmentViewController *attachmentVC = [[AttachmentViewController alloc] initWithAttachment:attachment];
-    [attachmentVC setTitle:@"Attachment"];
-    [self.navigationController pushViewController:attachmentVC animated:YES];
+    AttachmentViewCoordinator *attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.navigationController attachment:attachment delegate:self];
+    [self.childCoordinators addObject:attachmentCoordinator];
+    [attachmentCoordinator start];
 }
+
+- (void)doneViewingWithCoordinator:(NSObject *)coordinator {
+    // done viewing the attachment
+    [self.childCoordinators removeObject:coordinator];
+}
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
@@ -447,7 +453,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void)observationDirectionsTapped:(id)sender {
     
-    NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFieldText]];
+    NSString *appleMapsQueryString = [NSString stringWithFormat:@"ll=%f,%f&q=%@", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude, [self.observation primaryFeedFieldText]];
     NSString *appleMapsQueryStringEncoded = [appleMapsQueryString stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *appleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?%@", appleMapsQueryStringEncoded]];
     NSURL *googleMapsUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.com/maps/dir/?api=1&destination=%f,%f", self.observation.location.coordinate.latitude, self.observation.location.coordinate.longitude]];

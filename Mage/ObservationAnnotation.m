@@ -38,7 +38,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
-        [self setTitle:[observation primaryFieldText]];
+        [self setTitle:[observation primaryFeedFieldText]];
         
         if (self.title == nil) {
             [self setTitle:@"Observation"];
