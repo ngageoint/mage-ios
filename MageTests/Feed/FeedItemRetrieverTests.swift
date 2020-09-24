@@ -94,7 +94,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 
                 let feedItemRetrievers: [FeedItemRetriever] = FeedItemRetriever.createFeedItemRetrievers(delegate: feedItemDelegate);
                 for retriever in feedItemRetrievers {
-                    expect(feedIds).to(contain(retriever.feed.remoteId));
+                    expect(feedIds as NMBContainer).to(contain(retriever.feed.remoteId));
                     feedIds.remove(at: feedIds.lastIndex(of: retriever.feed.remoteId!)!);
                 }
                 expect(feedIds.isEmpty) == true;
@@ -115,7 +115,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 
                 let feedItemRetrievers: [FeedItemRetriever] = FeedItemRetriever.createFeedItemRetrievers(delegate: feedItemDelegate);
                 for retriever in feedItemRetrievers {
-                    expect(feedIds).to(contain(retriever.feed.remoteId));
+                    expect(feedIds as NMBContainer).to(contain(retriever.feed.remoteId));
                     feedIds.remove(at: feedIds.lastIndex(of: retriever.feed.remoteId!)!);
                 }
                 expect(feedIds.isEmpty) == true;
@@ -123,7 +123,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 var mappableFeedIds: [String] = ["0","1"];
                 let mappableFeedItemRetrievers: [FeedItemRetriever] = FeedItemRetriever.createMappableFeedItemRetrievers(delegate: feedItemDelegate);
                 for retriever in mappableFeedItemRetrievers {
-                    expect(mappableFeedIds).to(contain(retriever.feed.remoteId));
+                    expect(mappableFeedIds as NMBContainer).to(contain(retriever.feed.remoteId));
                     mappableFeedIds.remove(at: mappableFeedIds.lastIndex(of: retriever.feed.remoteId!)!);
                 }
                 expect(mappableFeedIds.isEmpty) == true;

@@ -198,7 +198,7 @@ class FeedTests: KIFSpec {
                 }
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {
-                    expect(feedItemIds).to(contain(feedItem.remoteId));
+                    expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }
 
@@ -226,7 +226,7 @@ class FeedTests: KIFSpec {
                 }
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {
-                    expect(feedItemIds).to(contain(feedItem.remoteId));
+                    expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }
 
@@ -246,7 +246,7 @@ class FeedTests: KIFSpec {
                 var feedItemIds: [String] = ["1","2"];
 
                 for feedItem: FeedItem in FeedItem.getFeedItems(forFeed: 1) {
-                    expect(feedItemIds).to(contain(feedItem.remoteId));
+                    expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }
 

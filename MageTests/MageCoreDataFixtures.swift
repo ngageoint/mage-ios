@@ -138,7 +138,9 @@ class MageCoreDataFixtures {
     }
     
     public static func addFeedToEvent(eventId: NSNumber = 1, id: String = "1", title: String = "Test Feed", primaryProperty: String = "primary", secondaryProperty: String = "secondary", timestampProperty: String? = nil, style: [String: Any] = [:], completion: MRSaveCompletionHandler?) {
+        var count = Feed.mr_countOfEntities();
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            count = count + 1;
             if let f: Feed = Feed.mr_createEntity(in: localContext) {
                 f.title = title;
                 f.eventId = eventId;
@@ -151,6 +153,7 @@ class MageCoreDataFixtures {
                 f.updateFrequency = 1.0;
                 f.itemsHaveIdentity = true;
                 f.mapStyle = style
+                f.tag = NSNumber(value: count);
             }
         }, completion: completion)
     }
