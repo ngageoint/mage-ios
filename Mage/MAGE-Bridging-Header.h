@@ -29,6 +29,7 @@
 #import "LocationTableViewController.h"
 #import "MapViewController.h"
 #import "FeedItemSelectionDelegate.h"
+#import "MapSettings.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

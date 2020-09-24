@@ -163,6 +163,7 @@
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
+		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
 		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */; };
 		F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.m */; };
@@ -650,6 +651,7 @@
 		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
 		F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
 		F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTableViewCell.m; sourceTree = "<group>"; };
+		F723232B251CE92800AD168A /* MapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsTests.swift; sourceTree = "<group>"; };
 		F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertyTableViewCell.h; sourceTree = "<group>"; };
 		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
 		F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator.h; sourceTree = "<group>"; };
@@ -1426,6 +1428,22 @@
 			name = AudioRecorder;
 			sourceTree = "<group>";
 		};
+		F7232329251CE90C00AD168A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F723232A251CE91300AD168A /* Map */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		F723232A251CE91300AD168A /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F723232B251CE92800AD168A /* MapSettingsTests.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
@@ -1834,6 +1852,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F7232329251CE90C00AD168A /* Settings */,
 				F795ED0A24B8FC680028FBFC /* People */,
 				F7098F2024928E6300313703 /* Feed */,
 				F75FEE612035E76F00577DA4 /* MageServerTests.m */,
@@ -2697,6 +2716,7 @@
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
+				F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */,
 				F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F795ED0E24B8FDE20028FBFC /* MockMapViewDelegate.swift in Sources */,

@@ -53,7 +53,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
+    self.tableView.accessibilityIdentifier = @"settings";
     [self registerForThemeChanges];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
@@ -197,8 +197,9 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         observationSwitch.on = [selectedFeeds containsObject:feed.remoteId];
         observationSwitch.tag = feed.tag.integerValue;
+        observationSwitch.accessibilityLabel = [NSString stringWithFormat:@"feed-switch-%@", feed.tag];;
         observationSwitch.onTintColor = [UIColor themedButton];
-        [observationSwitch addTarget:self action:@selector(feedSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
+        [observationSwitch addTarget:self action:@selector(feedSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         cell.accessoryView = observationSwitch;
         
         return cell;
@@ -294,7 +295,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 - (void) feedSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    Feed* feed = (Feed *)[Feed MR_findByAttribute:@"tag" withValue:[NSNumber numberWithInteger: sender.tag]];
+    Feed* feed = (Feed *)[Feed MR_findFirstByAttribute:@"tag" withValue:[NSNumber numberWithInteger: sender.tag]];
     NSMutableArray *selectedFeedsForEvent = [[defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]] mutableCopy];
     if (sender.on) {
         [selectedFeedsForEvent addObject:feed.remoteId];
