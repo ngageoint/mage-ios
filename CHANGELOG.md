@@ -7,11 +7,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Release Notes
 
-* Save on data costs by customizing data synchronization options to sync only on specific networks, ie Cell or Wi-Fi. See below for more information.
+* Save on data usage by customizing data synchronization options to sync only on specific networks, ie cell or wi-fi. See below for more information.
 
 ##### Features
 * Users can now further customize data synchronization in "Settings -> Network Sync Settings". Includes separate synchronization options for
-  observations, attachments and user locations. Users have the option to sync over all networks (default), Wi-Fi only, specific Wi-Fi networks (inclusive or exclusive) or never.
+  observations, attachments and user locations. Users have the option to sync over all networks (default), wi-fi only, specific wi-fi networks (inclusive or exclusive) or never.
 * Google authentication support is back. This includes updates for all third party authentication strategies to align with Apple guidelines.
 
 ##### Bug Fixes
