@@ -1,18 +1,18 @@
 PODS:
-  - AFNetworking (3.2.1):
-    - AFNetworking/NSURLSession (= 3.2.1)
-    - AFNetworking/Reachability (= 3.2.1)
-    - AFNetworking/Security (= 3.2.1)
-    - AFNetworking/Serialization (= 3.2.1)
-    - AFNetworking/UIKit (= 3.2.1)
-  - AFNetworking/NSURLSession (3.2.1):
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.1)
-  - AFNetworking/Security (3.2.1)
-  - AFNetworking/Serialization (3.2.1)
-  - AFNetworking/UIKit (3.2.1):
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - DateTools (2.0.0)
   - EDSunriseSet (1.0)
@@ -28,7 +28,7 @@ PODS:
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.15)
   - mage-ios-sdk (3.1.0):
-    - AFNetworking (~> 3.2.1)
+    - AFNetworking (~> 4.0.1)
     - DateTools (~> 2.0.0)
     - geopackage-ios (~> 4.0.1)
     - MagicalRecord (~> 2.3.2)
@@ -117,7 +117,7 @@ EXTERNAL SOURCES:
     :path: "../mage-ios-sdk"
 
 SPEC CHECKSUMS:
-  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   geopackage-ios: 43f401e530b9db603f603c214ce3d1e5e005444c
@@ -125,7 +125,7 @@ SPEC CHECKSUMS:
   Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  mage-ios-sdk: 2d01b567282a3077ccf97548c92f17a1233a37e1
+  mage-ios-sdk: 4c23776e4893d486334be3e2345370bcf2c27111
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   OCMock: 5ea90566be239f179ba766fd9fbae5885040b992
