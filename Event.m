@@ -17,31 +17,6 @@
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
-static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
-    if ([JSONObject isKindOfClass:[NSArray class]]) {
-        NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:[(NSArray *)JSONObject count]];
-        for (id value in (NSArray *)JSONObject) {
-            [mutableArray addObject:AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions)];
-        }
-        
-        return (readingOptions & NSJSONReadingMutableContainers) ? mutableArray : [NSArray arrayWithArray:mutableArray];
-    } else if ([JSONObject isKindOfClass:[NSDictionary class]]) {
-        NSMutableDictionary *mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:JSONObject];
-        for (id <NSCopying> key in [(NSDictionary *)JSONObject allKeys]) {
-            id value = [(NSDictionary *)JSONObject objectForKey:key];
-            if (!value || [value isEqual:[NSNull null]]) {
-                [mutableDictionary removeObjectForKey:key];
-            } else if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSDictionary class]]) {
-                [mutableDictionary setObject:AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions) forKey:key];
-            }
-        }
-        
-        return (readingOptions & NSJSONReadingMutableContainers) ? mutableDictionary : [NSDictionary dictionaryWithDictionary:mutableDictionary];
-    }
-    
-    return JSONObject;
-}
-
 @implementation Event
 
 + (Event *) insertEventForJson: (NSDictionary *) json inManagedObjectContext:(NSManagedObjectContext *) context {
