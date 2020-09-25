@@ -15,6 +15,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Google authentication support is back. This includes updates for all third party authentication strategies to align with Apple guidelines.
 
 ##### Bug Fixes
+* Fix GeoPackage layer selection on iOS 14.
 
 ## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
 
