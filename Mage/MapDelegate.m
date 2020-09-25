@@ -670,8 +670,9 @@
         struct GPKGBoundingBoxSize size = [self.addedCacheBoundingBox sizeInMeters];
         CLLocationCoordinate2D center = [self.addedCacheBoundingBox center];
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(center, size.height, size.width);
-        
-        [self.mapView setRegion:region animated:true];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView setRegion:region animated:true];
+        });
     }
 }
 
