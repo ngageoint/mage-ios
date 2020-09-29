@@ -122,6 +122,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.mapDelegate setupListeners];
         
     if (self.mapDelegate.locations != nil) {
@@ -329,20 +330,24 @@
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObserver:self forKeyPath:@"hideObservations"];
-    [defaults removeObserver:self forKeyPath:@"hidePeople"];
-    [defaults removeObserver:self forKeyPath:kReportLocationKey];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
-    [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
-    [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
-    [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
-    [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
-    [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
-    [defaults removeObserver:self forKeyPath:kImportantFilterKey];
-    [defaults removeObserver:self forKeyPath:GeoPackageImported];
-    
+    @try {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObserver:self forKeyPath:@"hideObservations"];
+        [defaults removeObserver:self forKeyPath:@"hidePeople"];
+        [defaults removeObserver:self forKeyPath:kReportLocationKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
+        [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
+        [defaults removeObserver:self forKeyPath:kImportantFilterKey];
+        [defaults removeObserver:self forKeyPath:GeoPackageImported];
+    }
+    @catch (id exception) {
+        NSLog(@"Exception removing observers %@", exception);
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
