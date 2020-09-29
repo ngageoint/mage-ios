@@ -137,25 +137,27 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
-    public static func addFeedToEvent(eventId: NSNumber = 1, id: String = "1", title: String = "Test Feed", primaryProperty: String = "primary", secondaryProperty: String = "secondary", timestampProperty: String? = nil, style: [String: Any] = [:], completion: MRSaveCompletionHandler?) {
-        var count = Feed.mr_countOfEntities();
+    public static func addFeedToEvent(eventId: NSNumber = 1, id: String = "1", title: String = "Test Feed", primaryProperty: String = "primary", secondaryProperty: String = "secondary", timestampProperty: String? = nil, mapStyle: [String: Any] = [:], completion: MRSaveCompletionHandler?) {
+        
+        var feedJson: [String: Any] = [
+            "title": title,
+            "id": id,
+            "mapStyle": mapStyle,
+            "itemPrimaryProperty": primaryProperty,
+            "itemSecondaryProperty": secondaryProperty,
+            "itemsHaveSpatialDimension": true,
+            "updateFrequency": ["seconds": 1.0],
+            "itemsHaveIdentity": true
+        ];
+        if (timestampProperty != nil) {
+            feedJson["itemTemporalProperty"] = timestampProperty;
+        }
+        
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-            count = count + 1;
-            if let f: Feed = Feed.mr_createEntity(in: localContext) {
-                f.title = title;
-                f.eventId = eventId;
-                f.remoteId = id;
-                f.summary = "Feed Summary";
-                f.itemsHaveSpatialDimension = true;
-                f.itemPrimaryProperty = primaryProperty;
-                f.itemSecondaryProperty = secondaryProperty;
-                f.itemTemporalProperty = timestampProperty;
-                f.updateFrequency = 1.0;
-                f.itemsHaveIdentity = true;
-                f.mapStyle = style
-                f.tag = NSNumber(value: count);
-            }
-        }, completion: completion)
+            let remoteId: String = Feed.add(fromJson: feedJson, inEventId: eventId, in: localContext)
+            print("saved feed \(id)")
+            expect(remoteId) == id;
+        }, completion: completion);
     }
     
     public static func updateStyleForFeed(eventId: NSNumber = 1, id: String = "1", style: [String: Any] = [:], completion: MRSaveCompletionHandler?) {

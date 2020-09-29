@@ -68,10 +68,9 @@ class MapSettingsTests: KIFSpec {
                 }
                 
                 UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
-                
                 mapSettings = MapSettings();
                 window.rootViewController = mapSettings;
-                
+                tester().waitForView(withAccessibilityLabel: "feed-switch-1");
                 tester().setOn(false, forSwitchWithAccessibilityLabel: "feed-switch-1");
                 tester().waitForAnimationsToFinish();
                 let selected = UserDefaults.standard.array(forKey: "selectedFeeds-1");

@@ -53,12 +53,10 @@ import Foundation
                 self.scheduleTimerToPullFeedItems(feedId: feed.remoteId!, eventId: feed.eventId!, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
 
             }
-//            scheduleTimerToPullFeedItems(feedId: feed.remoteId!, eventId: feed.eventId!, pullFrequency: feed.pullFrequency ?? defaultPullFrequency);
         }
     }
     
     func scheduleTimerToPullFeedItems(feedId: String, eventId: NSNumber, pullFrequency: NSNumber) {
-        print("Scheduling timer for feed", feedId);
         let context = ["feedId": feedId, "eventId": eventId] as [String : Any];
         let timer = Timer.scheduledTimer(timeInterval: TimeInterval(exactly: pullFrequency)!, target: self, selector: #selector(fireTimer), userInfo: context, repeats: false)
         feedTimers[feedId] = timer;

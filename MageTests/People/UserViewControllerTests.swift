@@ -25,7 +25,7 @@ class UserViewControllerTests: QuickSpec {
                 MageInitializer.clearAndSetupCoreData();
             }
             
-            let recordSnapshots = true;
+            let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var userTableHeaderView: UserTableHeaderView!

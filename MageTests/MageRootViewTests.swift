@@ -177,34 +177,39 @@ class MageRootViewTests: KIFSpec {
                 }
             }
 
-            it("two mappable feeds and two non mappable") {
+            // when brand new feeds are added, they are automatically enabled
+            it("two mappable feeds and two non mappable brand new") {
                 var completeTest = false;
+
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
+                                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
+                                    MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3") { (success: Bool, error: Error?) in
+                                        done();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 controller = MageRootViewController()
                 window.rootViewController = controller;
-
+                
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
                     maybeRecordSnapshot(controller.view, doneClosure: {
                         completeTest = true;
                     })
                 }
-
+                
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
                 mapViewController?.beginAppearanceTransition(true, animated: false)
                 mapViewController?.endAppearanceTransition()
                 mapViewController?.mapView?.delegate = mapDelegate
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
-
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
 
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
@@ -216,7 +221,24 @@ class MageRootViewTests: KIFSpec {
 
             it("two mappable feeds and two non mappable one selected") {
                 var completeTest = false;
-
+                
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
+                                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
+                                    MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3") { (success: Bool, error: Error?) in
+                                        done();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                                
+                UserDefaults.standard.set(["0"], forKey: "selectedFeeds-1");
+                UserDefaults.standard.synchronize();
+                
                 controller = MageRootViewController()
                 window.rootViewController = controller;
                 
@@ -232,19 +254,6 @@ class MageRootViewTests: KIFSpec {
                 mapViewController?.endAppearanceTransition()
                 mapViewController?.mapView?.delegate = mapDelegate
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
-
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
-
-                UserDefaults.standard.set(["1":[0]], forKey: "selectedFeeds");
-                UserDefaults.standard.synchronize();
 
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
@@ -257,6 +266,16 @@ class MageRootViewTests: KIFSpec {
             it("two mappable feeds and two non mappable other one selected") {
                 var completeTest = false;
 
+                waitUntil { done in
+                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                
                 controller = MageRootViewController()
                 window.rootViewController = controller;
                 
@@ -272,18 +291,9 @@ class MageRootViewTests: KIFSpec {
                 mapViewController?.endAppearanceTransition()
                 mapViewController?.mapView?.delegate = mapDelegate
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+                
 
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
-
-                UserDefaults.standard.set(["1":[1]], forKey: "selectedFeeds");
+                UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
                 UserDefaults.standard.synchronize();
 
                 if (recordSnapshots) {
@@ -304,20 +314,13 @@ class MageRootViewTests: KIFSpec {
                 }
 
                 controller = MageRootViewController()
+                controller.selectedIndex = 1;
+
                 window.rootViewController = controller;
                 
-                let mapDelegate = MockMapViewDelegate()
-                mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-                    maybeRecordSnapshot(controller.view, doneClosure: {
-                        completeTest = true;
-                    })
-                }
-                
-                let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
-                mapViewController?.beginAppearanceTransition(true, animated: false)
-                mapViewController?.endAppearanceTransition()
-                mapViewController?.mapView?.delegate = mapDelegate
-                mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
+                maybeRecordSnapshot(controller.view, doneClosure: {
+                    completeTest = true;
+                })
 
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
@@ -340,7 +343,6 @@ class MageRootViewTests: KIFSpec {
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-//                tester().tapScreen(at: CGPoint(x: 310, y: 740));
                 TestHelpers.printAllAccessibilityLabelsInWindows()
 
                 maybeRecordSnapshot(controller.view, doneClosure: {
@@ -361,6 +363,8 @@ class MageRootViewTests: KIFSpec {
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
                         MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Second Feed") { (success: Bool, error: Error?) in
+                            let feeds = Feed.mr_findAll();
+                            print("Feeds \(feeds)")
                             done();
                         }
                     }
@@ -370,7 +374,6 @@ class MageRootViewTests: KIFSpec {
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-                //                tester().tapScreen(at: CGPoint(x: 310, y: 740));
                 TestHelpers.printAllAccessibilityLabelsInWindows()
 
                 maybeRecordSnapshot(controller.view, doneClosure: {

@@ -68,7 +68,7 @@ class FeedServiceTests: KIFSpec {
                     return request.url == URL(string: "https://magetest/api/events/1/feeds/1/content");
                 }) { (request) -> HTTPStubsResponse in
                     feedItemsServerCallCount += 1;
-
+                    print("SERVICE CALL COUNT INCREASE")
                     let stubPath = OHPathForFile("feedContent.json", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };

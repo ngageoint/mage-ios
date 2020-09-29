@@ -147,6 +147,8 @@ class FeedTests: KIFSpec {
                         }
                     }
                 }
+                
+                UserDefaults.standard.setValue([], forKey: "selectedFeeds-1");
 
                 waitUntil { done in
                     let feeds = loadFeedsJson();
