@@ -41,7 +41,7 @@ class FeedItemRetrieverTests: KIFSpec {
             beforeEach {
                 
                 waitUntil { done in
-                    clearAndSetUpStack();
+                    TestHelpers.clearAndSetUpStack();
                     MageCoreDataFixtures.quietLogging();
                     UserDefaults.standard.set(nil, forKey: "selectedFeeds");
                     UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl");
@@ -56,7 +56,7 @@ class FeedItemRetrieverTests: KIFSpec {
             }
             
             afterEach {
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
             }
             
             func loadFeedsJson() -> NSArray {

@@ -80,6 +80,8 @@ PODS:
   - OHHTTPStubs/NSURLSession (9.0.0):
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (9.0.0)
+  - OHHTTPStubs/Swift (9.0.0):
+    - OHHTTPStubs/Default
   - proj4-ios (4.9.3)
   - PureLayout (3.1.6)
   - Quick (3.0.0)
@@ -113,6 +115,7 @@ DEPENDENCIES:
   - Nimble-Snapshots
   - OCMock
   - OHHTTPStubs
+  - OHHTTPStubs/Swift
   - PureLayout
   - Quick
   - SkyFloatingLabelTextField (~> 3.6.0)
@@ -196,6 +199,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 644d0bdd140863652677ef206d6147b91d239634
+PODFILE CHECKSUM: 9eaf95b6088de7c22badc2438f2c156dca5fa3c6
 
 COCOAPODS: 1.8.4

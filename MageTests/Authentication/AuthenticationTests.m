@@ -54,19 +54,19 @@
 
 @implementation AuthenticationTests
 
-//- (void)setUp {
-//    [super setUp];
-//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-//    [MagicalRecord setupCoreDataStackWithInMemoryStore];
-//}
-//
-//- (void)tearDown {
-//    [super tearDown];
-//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-//    [HTTPStubs removeAllStubs];
-//}
+- (void)setUp {
+    [super setUp];
+    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+    [MagicalRecord setupCoreDataStackWithInMemoryStore];
+}
+
+- (void)tearDown {
+    [super tearDown];
+    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+    [HTTPStubs removeAllStubs];
+}
 
 - (void) skipped_testLoginWithRegisteredDeviceAndRandomToken {
     NSString *baseUrlKey = @"baseServerUrl";
@@ -75,7 +75,7 @@
     [StoredPassword persistTokenToKeyChain:@"oldtoken"];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:@"https://mage.geointservices.io" forKey:baseUrlKey];
+    [defaults setObject:@"https://magetest" forKey:baseUrlKey];
     [defaults setBool:YES forKey:@"deviceRegistered"];
     
     UINavigationController *navigationController = [[UINavigationController alloc]init];

@@ -30,6 +30,10 @@
 #import "MapViewController.h"
 #import "FeedItemSelectionDelegate.h"
 #import "MapSettings.h"
+#import "MageSessionManager.h"
+#import "AuthenticationCoordinator.h"
+#import "LoginViewController.h"
+#import "DisclaimerViewController.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

@@ -83,14 +83,21 @@ class MageRootViewTests: KIFSpec {
                 return jsonDictionary;
             }
             
-            func clearAndSetUpStack() {
-                MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
-            }
+//            func clearAndSetUpStack() {
+//                MageInitializer.initializePreferences();
+//                MageInitializer.clearAndSetupCoreData();
+//            }
             
             beforeEach {
                 waitUntil { done in
-                    clearAndSetUpStack();
+                    TestHelpers.clearAndSetUpStack();
+                    UserDefaults.MageServer.set("https://magetest", forKey: .baseServerUrl);
+                    
+                    stub(condition: isHost("magetest")) { (request) -> HTTPStubsResponse in
+                        return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil);
+                    };
+
+//                    clearAndSetUpStack();
                     
                     MockMageServer.initializeHttpStubs();
                     window = UIWindow(forAutoLayout: ());
@@ -103,16 +110,15 @@ class MageRootViewTests: KIFSpec {
                     UserDefaults.standard.removePersistentDomain(forName: domain)
                     UserDefaults.standard.synchronize()
                     
-                    Server.setCurrentEventId(1);
-                    
                     MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
+                        Server.setCurrentEventId(1);
                         done();
                     }
                 }
             }
             
             afterEach {
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -343,7 +349,6 @@ class MageRootViewTests: KIFSpec {
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-                TestHelpers.printAllAccessibilityLabelsInWindows()
 
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;
@@ -374,7 +379,6 @@ class MageRootViewTests: KIFSpec {
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-                TestHelpers.printAllAccessibilityLabelsInWindows()
 
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;

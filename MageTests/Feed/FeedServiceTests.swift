@@ -62,13 +62,11 @@ class FeedServiceTests: KIFSpec {
                 }
 
                 var feedItemsServerCallCount = 0;
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/events/1/feeds/1/content", filePath: "feedContent.json")
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-                    print("pass test request", request);
-                    print("does it pass?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/content"));
                     return request.url == URL(string: "https://magetest/api/events/1/feeds/1/content");
                 }) { (request) -> HTTPStubsResponse in
                     feedItemsServerCallCount += 1;
-                    print("SERVICE CALL COUNT INCREASE")
                     let stubPath = OHPathForFile("feedContent.json", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };
@@ -81,8 +79,6 @@ class FeedServiceTests: KIFSpec {
                 
                 var feedItemsServerCallCount = 0;
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-                    print("pass test request2", request);
-                    print("does it pass2?", request.url == URL(string: "https://magetest/api/events/1/feeds/1/content"));
                     return request.url == URL(string: "https://magetest/api/events/1/feeds/1/content");
                 }) { (request) -> HTTPStubsResponse in
                     

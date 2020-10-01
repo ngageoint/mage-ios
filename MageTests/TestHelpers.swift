@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MagicalRecord
 
 class TestHelpers {
 
@@ -35,6 +36,13 @@ class TestHelpers {
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
         print("labelArray = \(labelArray)")
+    }
+    
+    public static func clearAndSetUpStack() {
+        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
+        MageInitializer.initializePreferences();
+        MagicalRecord.cleanUp();
+        MagicalRecord.setupCoreDataStackWithInMemoryStore();
     }
 
 }
