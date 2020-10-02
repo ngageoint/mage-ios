@@ -42,7 +42,7 @@ import Kingfisher
         super.viewWillAppear(animated);
         offlineObservationManager.start()
         setServerConnectionStatus();
-        UserDefaults.standard.addObserver(self, forKeyPath: "loginType", options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: UserDefaults.Authentication.AuthenticationDefaultKey.loginType.rawValue, options: .new, context: nil);
     }
     
     func createOrderedTabs() {
@@ -142,7 +142,7 @@ import Kingfisher
     
     func setServerConnectionStatus() {
         if (Authentication.authenticationType(toString: .LOCAL) ==
-            UserDefaults.standard.string(forKey: "loginType")) {
+                UserDefaults.Authentication.string(forKey: .loginType)) {
             moreTabBarItem?.badgeValue = "!";
             moreTabBarItem?.badgeColor = UIColor.orange;
         } else {

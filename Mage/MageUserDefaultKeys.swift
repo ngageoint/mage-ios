@@ -15,7 +15,45 @@ extension UserDefaults {
         
         enum MageServerDefaultKey: String {
             case baseServerUrl
-            case lastName
+            case currentUserId
+            case currentEventId
+            case gpsDistanceFilter
+            case gpsSensitivities
+            case disclaimerText
+            case disclaimerTitle
+            case loginParameters
+            case tokenExpirationLength
+            case deviceRegistered
+            case loginType
+            case showDisclaimer
+            case authenticationStrategies
+            case serverAuthenticationStrategies
+            case serverMajorVersion
+            case serverMinorVersion
+        }
+    }
+    
+    struct Preferences: PreferencesDefaultable {
+        private init() { }
+        
+        enum PreferencesDefaultKey: String {
+            case imageUploadSizes
+            case videoUploadQualities
+            case showDisclaimer
+            case gmtTimeZone
+            case networkSyncOptions
+            case attachmentFetchEnabled
+            case dataFetchEnabled
+            case userReportingFrequency
+            case userReporting
+            case reportLocation
+            case wifiNetworkRestrictionType
+            case wifiWhitelist
+            case wifiBlacklist
+            case attachmentPushFrequency
+            case userFetchFrequency
+            case observationFetchFrequency
+            case observationPushFrequency
         }
     }
     
@@ -23,8 +61,21 @@ extension UserDefaults {
         private init() { }
         
         enum MapDefaultKey: String {
-            case mapType
-            case showMGRS
+            case map
+            case selectedCaches
+            case selectedStaticLayers
+            case selectedOnlineLayers
+            case fill_default_line_width
+            case line_default_color
+            case line_default_color_alpha
+            case fill_default_color
+            case fill_default_color_alpha
+            case geopackage_feature_tiles_max_points_per_tile
+            case geopackage_feature_tiles_max_features_per_tile
+            case geopackage_features_max_points_per_table
+            case geopackage_features_max_features_per_table
+            case shape_screen_click_percentage
+            case geopackage_feature_tiles_min_zoom_offset
         }
     }
     
@@ -33,6 +84,36 @@ extension UserDefaults {
         
         enum AuthenticationDefaultKey: String {
             case deviceRegistered
+            case loginType
+            case showDisclaimer
+        }
+    }
+    
+    struct Display: DisplayDefaultable {
+        private init() { }
+        
+        enum DisplayDefaultKey: String {
+            case theme
+            case mapType
+            case mapShowTraffic
+            case showMGRS
+            case hideObservations
+            case hidePeople
+        }
+    }
+    
+    struct Filter: FilterDefaultable {
+        private init() { }
+        
+        enum FilterDefaultKey: String {
+            case timeFilterKey
+            case timeFilterUnitKey
+            case timeFilterNumberKey
+            case locationtimeFilterKey
+            case locationtimeFilterUnitKey
+            case locationtimeFilterNumberKey
+            case importantFilterKey
+            case favortiesFilterKey
         }
     }
 }
@@ -46,6 +127,83 @@ extension KeyNamespaceable {
     
     static func namespace<T: RawRepresentable>(_ key: T) -> String where T.RawValue == String {
         return namespace(key.rawValue)
+    }
+}
+
+protocol DisplayDefaultable: KeyNamespaceable {
+    associatedtype DisplayDefaultKey: RawRepresentable
+}
+
+extension DisplayDefaultable where DisplayDefaultKey.RawValue == String {
+    
+    static func set(_ string: String, forKey key: DisplayDefaultKey) {
+        UserDefaults.standard.set(string, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func string(forKey key: DisplayDefaultKey) -> String? {
+        return UserDefaults.standard.string(forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func set(_ integer: Int, forKey key: DisplayDefaultKey) {
+        UserDefaults.standard.set(integer, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func integer(forKey key: DisplayDefaultKey) -> Int {
+        return UserDefaults.standard.integer(forKey: key.rawValue);//namespace(key))
+    }
+}
+
+protocol PreferencesDefaultable: KeyNamespaceable {
+    associatedtype PreferencesDefaultKey: RawRepresentable
+}
+
+extension PreferencesDefaultable where PreferencesDefaultKey.RawValue == String {
+    
+    static func set(_ string: String, forKey key: PreferencesDefaultKey) {
+        UserDefaults.standard.set(string, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func string(forKey key: PreferencesDefaultKey) -> String? {
+        return UserDefaults.standard.string(forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func set(_ integer: Int, forKey key: PreferencesDefaultKey) {
+        UserDefaults.standard.set(integer, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func integer(forKey key: PreferencesDefaultKey) -> Int {
+        return UserDefaults.standard.integer(forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func set(_ dictionary: Dictionary<String, Any>, forKey key: PreferencesDefaultKey) {
+        UserDefaults.standard.set(integer, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func dictionary(forKey key: PreferencesDefaultKey) -> [String : Any]? {
+        return UserDefaults.standard.dictionary(forKey: key.rawValue);//namespace(key))
+    }
+}
+
+protocol FilterDefaultable: KeyNamespaceable {
+    associatedtype FilterDefaultKey: RawRepresentable
+}
+
+extension FilterDefaultable where FilterDefaultKey.RawValue == String {
+    
+    static func set(_ string: String, forKey key: FilterDefaultKey) {
+        UserDefaults.standard.set(string, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func string(forKey key: FilterDefaultKey) -> String? {
+        return UserDefaults.standard.string(forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func set(_ integer: Int, forKey key: FilterDefaultKey) {
+        UserDefaults.standard.set(integer, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func integer(forKey key: FilterDefaultKey) -> Int {
+        return UserDefaults.standard.integer(forKey: key.rawValue);//namespace(key))
     }
 }
 
