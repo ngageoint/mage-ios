@@ -35,7 +35,6 @@
 #import "MageOfflineObservationManager.h"
 #import "Server.h"
 #import "MageAppCoordinator.h"
-#import <GoogleSignIn/GoogleSignIn.h>
 #import "TransitionViewController.h"
 #import "Theme+UIResponder.h"
 #import "Layer.h"
@@ -125,11 +124,7 @@
     }
     
     NSLog(@"Application Open URL %@", url);
-    if ([[url scheme] hasPrefix:@"com.googleusercontent.apps"]) {
-        return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-    } else if (url.isFileURL) {
+    if (url.isFileURL) {
         NSString * filePath = [url path];
         
         // Handle GeoPackage files
@@ -161,7 +156,11 @@
                 [self importGeoPackageFile: filePath andOverwrite:NO];
             }
         }
+    } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
+    
+    
     return YES;
 }
 

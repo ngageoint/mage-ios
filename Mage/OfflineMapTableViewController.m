@@ -371,6 +371,8 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             gpCell.mageLayer = layer;
             gpCell.mainTable = self.tableView;
             [gpCell configure];
+            [gpCell bringSubviewToFront:gpCell.tableView];
+
             return gpCell;
         }
     } else if (section == MY_MAPS_SECTION) {
@@ -383,6 +385,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             gpCell.overlay = localOverlay;
             gpCell.mainTable = self.tableView;
             [gpCell configure];
+            [gpCell bringSubviewToFront:gpCell.tableView];
             return gpCell;
         } else {
             cell.textLabel.text = [localOverlay getCacheName];

@@ -63,7 +63,7 @@
     self.serverURL.placeholderColor = [UIColor secondaryText];
     self.serverURL.lineColor = [UIColor secondaryText];
     self.serverURL.titleColor = [UIColor secondaryText];
-    self.serverURL.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.serverURL.errorColor = [UIColor secondaryText];
     self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.serverURL.iconText = @"\U0000f0ac";
 }

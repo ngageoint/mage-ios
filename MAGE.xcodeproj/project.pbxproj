@@ -67,6 +67,7 @@
 		2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */; };
 		2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */; };
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
+		2F52827224732B740023E974 /* IDPCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F52827124732B740023E974 /* IDPCoordinator.m */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
 		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
@@ -111,7 +112,6 @@
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
-		2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */; };
 		2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF74A4C1BEBFAD900416090 /* WebKit.framework */; };
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
@@ -121,7 +121,6 @@
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
-		4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */; };
 		95042B4740351FC09E2E45E9 /* Pods_MAGETests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE778253022F0646EF1D1D52 /* Pods_MAGETests.framework */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -185,7 +184,6 @@
 		F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020BA2492767900B5A8BA /* FeedItemsViewController.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
-		F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B7D209A419E00EABA63 /* google-authView.xib */; };
 		F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */; };
 		F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */; };
 		F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */; };
@@ -280,8 +278,8 @@
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
-		F7AA6AF9206EA810004F9437 /* oauth-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* oauth-authView.xib */; };
-		F7AA6AFC206EA9F7004F9437 /* OAuthLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7AA6AFB206EA9F7004F9437 /* OAuthLoginView.m */; };
+		F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* idp-authView.xib */; };
+		F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
@@ -324,8 +322,6 @@
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
-		F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */; };
-		F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */; };
 		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
 		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
@@ -493,6 +489,8 @@
 		2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightDetailSubtitleTableViewCell.h; sourceTree = "<group>"; };
 		2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightDetailSubtitleTableViewCell.m; sourceTree = "<group>"; };
 		2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailSubtitleCell.xib; sourceTree = "<group>"; };
+		2F52827024732B740023E974 /* IDPCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPCoordinator.h; sourceTree = "<group>"; };
+		2F52827124732B740023E974 /* IDPCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPCoordinator.m; sourceTree = "<group>"; };
 		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
 		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotationView.m; sourceTree = "<group>"; };
 		2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationChangedDelegate.h; sourceTree = "<group>"; };
@@ -575,8 +573,6 @@
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
 		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineMapTableViewController.m; sourceTree = "<group>"; };
-		2FF74A491BEBF88B00416090 /* OAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthViewController.h; sourceTree = "<group>"; };
-		2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthViewController.m; sourceTree = "<group>"; };
 		2FF74A4C1BEBFAD900416090 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController_iPad.h; sourceTree = "<group>"; };
 		2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController_iPad.m; sourceTree = "<group>"; };
@@ -595,8 +591,6 @@
 		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
 		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
-		4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpTableViewController.h; sourceTree = "<group>"; };
-		4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpTableViewController.m; sourceTree = "<group>"; };
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -687,7 +681,6 @@
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
 		F7467B7B209A2F0B00EABA63 /* OrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrView.m; sourceTree = "<group>"; };
-		F7467B7D209A419E00EABA63 /* google-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "google-authView.xib"; sourceTree = "<group>"; };
 		F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditCell.xib; sourceTree = "<group>"; };
 		F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDateEditCell.xib; sourceTree = "<group>"; };
 		F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationGeometryEditCell.xib; sourceTree = "<group>"; };
@@ -833,9 +826,9 @@
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		F7AA6AF8206EA810004F9437 /* oauth-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "oauth-authView.xib"; sourceTree = "<group>"; };
-		F7AA6AFA206EA9F7004F9437 /* OAuthLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuthLoginView.h; sourceTree = "<group>"; };
-		F7AA6AFB206EA9F7004F9437 /* OAuthLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAuthLoginView.m; sourceTree = "<group>"; };
+		F7AA6AF8206EA810004F9437 /* idp-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "idp-authView.xib"; sourceTree = "<group>"; };
+		F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPLoginView.h; sourceTree = "<group>"; };
+		F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPLoginView.m; sourceTree = "<group>"; };
 		F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerViewController.h; sourceTree = "<group>"; };
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
@@ -890,9 +883,6 @@
 		F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDateTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
-		F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GoogleSignUpView.xib; sourceTree = "<group>"; };
-		F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSignUpViewController.h; sourceTree = "<group>"; };
-		F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSignUpViewController.m; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
 		F7D9B82A248E7FB4008DC568 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -1154,25 +1144,21 @@
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
-				F7D6EFB11F6AC9FD000D5BDA /* GoogleSignUpViewController.h */,
-				F7D6EFB21F6AC9FD000D5BDA /* GoogleSignUpViewController.m */,
 				2F38DF1522B942C800485DA4 /* LdapLoginView.h */,
 				2F38DF1622B942C800485DA4 /* LdapLoginView.m */,
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
-				F7AA6AFA206EA9F7004F9437 /* OAuthLoginView.h */,
-				F7AA6AFB206EA9F7004F9437 /* OAuthLoginView.m */,
-				2FF74A491BEBF88B00416090 /* OAuthViewController.h */,
-				2FF74A4A1BEBF88B00416090 /* OAuthViewController.m */,
+				2F52827024732B740023E974 /* IDPCoordinator.h */,
+				2F52827124732B740023E974 /* IDPCoordinator.m */,
+				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
+				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
 				F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */,
-				4CFA2F691993DB4D004155B3 /* SignUpTableViewController.h */,
-				4CFA2F6A1993DB4D004155B3 /* SignUpTableViewController.m */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
 			);
@@ -1739,12 +1725,10 @@
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */,
-				F7467B7D209A419E00EABA63 /* google-authView.xib */,
-				F7D6EFAF1F6AC97C000D5BDA /* GoogleSignUpView.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
+				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
-				F7AA6AF8206EA810004F9437 /* oauth-authView.xib */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
 				F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
@@ -2143,7 +2127,6 @@
 				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
 				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
 				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
-				F7D6EFB01F6AC97C000D5BDA /* GoogleSignUpView.xib in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
 				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
@@ -2165,7 +2148,6 @@
 				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
 				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
 				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
-				F7467B7E209A419E00EABA63 /* google-authView.xib in Resources */,
 				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
 				2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */,
@@ -2223,7 +2205,7 @@
 				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
 				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
-				F7AA6AF9206EA810004F9437 /* oauth-authView.xib in Resources */,
+				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,
 				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
@@ -2268,8 +2250,6 @@
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
 				"${BUILT_PRODUCTS_DIR}/EDSunriseSet/EDSunriseSet.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/HexColors/HexColors.framework",
 				"${BUILT_PRODUCTS_DIR}/KTCenterFlowLayout/KTCenterFlowLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -2295,8 +2275,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EDSunriseSet.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HexColors.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KTCenterFlowLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -2379,7 +2357,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
@@ -2416,7 +2393,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
@@ -2514,7 +2490,6 @@
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
 				F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */,
-				F7D6EFB31F6AC9FD000D5BDA /* GoogleSignUpViewController.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
@@ -2524,7 +2499,6 @@
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
-				4CFA2F6B1993DB4D004155B3 /* SignUpTableViewController.m in Sources */,
 				F76A15CD1A962FC500F2BDF1 /* ObservationCommonHeaderTableViewCell.m in Sources */,
 				F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
@@ -2617,9 +2591,10 @@
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
+				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
+				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
-				2FF74A4B1BEBF88B00416090 /* OAuthViewController.m in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
@@ -2667,7 +2642,7 @@
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
-				F7AA6AFC206EA9F7004F9437 /* OAuthLoginView.m in Sources */,
+				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.m in Sources */,

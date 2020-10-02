@@ -1307,6 +1307,8 @@
         ObservationAnnotation *annotation = view.annotation;
         Observation *observation = annotation.observation;
         
+        [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
+        
         id accuracyProperty = [observation.properties valueForKeyPath:@"accuracy"];
         if (accuracyProperty != nil) {
             double accuracy = [accuracyProperty doubleValue];

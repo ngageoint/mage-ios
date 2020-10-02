@@ -19,6 +19,7 @@
 @property (strong, nonatomic) CacheOverlay *overlay;
 @property (strong, nonatomic) Layer *mageLayer;
 @property (strong, nonatomic) UITableView *mainTable;
+@property (strong, nonatomic) UITableView *tableView;
 
 - (void) configure;
 
