@@ -19,6 +19,7 @@ import MagicalRecord
 @available(iOS 13.0, *)
 
 class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
+    
     var authenticationSuccessfulCalled = false;
     var couldNotAuthenticateCalled = false;
     func authenticationSuccessful() {
@@ -30,80 +31,83 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     }
 }
 
+class Delegate: MockMageServerDelegate {
+    var urls: [URL?] = [];
+    
+    func urlCalled(_ url: URL?, method: String?) {
+        urls.append(url);
+    }
+}
+
 class AuthenticationCoordinatorTests: KIFSpec {
     
     override func spec() {
         
         describe("AuthenticationCoordinatorTests") {
             
-            var window: UIWindow!;
+            var window: UIWindow?;
+            var coordinator: AuthenticationCoordinator?;
+            var delegate: MockAuthenticationCoordinatorDelegate?;
+            var navigationController: UINavigationController?;
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-//                HTTPStubs.onStubMissing { (request) in
-//                    expect(true).to(beFalse(), description: "URL Request \(request.url) was not mocked");
-//                }
-//
                 window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window?.autoSetDimension(.width, toSize: 414);
+                window?.autoSetDimension(.height, toSize: 896);
                 
                 UserDefaults.MageServer.set("https://magetest", forKey: .baseServerUrl);
-                UserDefaults.Map.set(0, forKey: .mapType);
-                UserDefaults.Map.set(false, forKey: .showMGRS);
+                UserDefaults.Display.set(0, forKey: .mapType);
+                UserDefaults.Display.set(false, forKey: .showMGRS);
+                
+                waitUntil { done in
+                    MageCoreDataFixtures.addEvent { (_, _) in
+                        done();
+                    }
+                }
                 
                 Server.setCurrentEventId(1);
+                
+                delegate = MockAuthenticationCoordinatorDelegate();
+                navigationController = UINavigationController();
+                window?.rootViewController = navigationController;
+                window?.makeKeyAndVisible();
+                
+                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate);
             }
             
             afterEach {
+                navigationController?.viewControllers = [];
+                window?.rootViewController?.dismiss(animated: false, completion: nil);
+                navigationController = nil;
+                coordinator = nil;
+                delegate = nil;
+                window?.resignKey();
+                window = nil;
                 HTTPStubs.removeAllStubs();
-//                HTTPStubs.onStubMissing(nil);
                 TestHelpers.clearAndSetUpStack();
+                tester().waitForAnimationsToFinish();
             }
             
             it("should load the LoginViewController") {
                 MageSessionManager.shared()?.setToken("oldToken");
                 StoredPassword.persistToken(toKeyChain: "oldToken");
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                
-                class Delegate: MockMageServerDelegate {
-                    var urls: [URL?] = [];
 
-                    func urlCalled(_ url: URL?, method: String?) {
-                        urls.append(url);
-                    }
-                }
-                
                 let serverDelegate: Delegate = Delegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
+                print("load loginview \(delegate)")
                 
-                let navigationController = UINavigationController();
-                let delegate = MockAuthenticationCoordinatorDelegate();
-                
-                let coordinator: AuthenticationCoordinator = AuthenticationCoordinator.init(navigationController: navigationController, andDelegate: delegate);
-                
-                coordinator.start();
+                coordinator?.start();
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: 10, pollInterval: 1, description: "API request did not happened")
-                expect(navigationController.viewControllers[0]).toEventually(beAnInstanceOf(LoginViewController.self));
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
             
             it("should login with registered device") {
-                MageSessionManager.shared()?.setToken("oldToken");
-                StoredPassword.persistToken(toKeyChain: "oldToken");
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                
-                class Delegate: MockMageServerDelegate {
-                    var urls: [URL?] = [];
-                    
-                    func urlCalled(_ url: URL?, method: String?) {
-                        urls.append(url);
-                    }
-                }
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
@@ -114,15 +118,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/authorize", filePath: "authorizeLocalSuccess.json", delegate: serverDelegate);
-                
-                let navigationController = UINavigationController();
-                window.rootViewController = navigationController;
-                let delegate = MockAuthenticationCoordinatorDelegate();
-                
-                let coordinator: AuthenticationCoordinator = AuthenticationCoordinator.init(navigationController: navigationController, andDelegate: delegate);
-                
-                coordinator.start();
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                                
+                coordinator?.start();
                 
                 tester().waitForView(withAccessibilityLabel: "Log In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -131,9 +129,659 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Log In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/authorize")), timeout: 10, pollInterval: 1, description: "Local Authorize request was not made")
-                expect(navigationController.topViewController).toEventually(beAnInstanceOf(DisclaimerViewController.self), timeout: 10, pollInterval: 1, description: "Disclaimer screen was not shown");
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForView(withAccessibilityLabel: "Agree");
+                tester().tapView(withAccessibilityLabel: "Agree");
+                
+                expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should login with an inactive user") {
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForView(withAccessibilityLabel: "Agree");
+                tester().tapView(withAccessibilityLabel: "Agree");
+                
+                expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should login with registered device and skip the disclaimer screen") {
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccessNoDisclaimer.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccessNoDisclaimer.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should login as a different user") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
+                            done();
+                        }
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Loss of Unsaved Data"));
+                tester().tapView(withAccessibilityLabel: "Continue");
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                tester().waitForView(withAccessibilityLabel: "Agree");
+                tester().tapView(withAccessibilityLabel: "Agree");
+                
+                expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should stop logging in as a different user") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
+                            done();
+                        }
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Loss of Unsaved Data"));
+                tester().tapView(withAccessibilityLabel: "Cancel");
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
+            }
+            
+            it("should log in with an inactive user") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccessInactiveUser.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "MAGE Account Created");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("MAGE Account Created"));
+                expect(alert.message).to(equal("Account created, please contact your MAGE administrator to activate your account."));
+                tester().tapView(withAccessibilityLabel: "OK");
+            }
+            
+            it("should fail to get a token") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                stub(condition: isHost("magetest") && isPath("/auth/token")) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(data: String("Failed to get a token").data(using: .utf8)!, statusCode: 401, headers: nil);
+                }
+                
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Login Failed");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Login Failed"));
+                expect(alert.message).to(equal("Failed to get a token"));
+                tester().tapView(withAccessibilityLabel: "OK");
+            }
+            
+            it("should not be able to log in offline with no stored password") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(error: NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil));
+                }
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Unable to Login");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Unable to Login"));
+                expect(alert.message).to(equal("We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."));
+                tester().tapView(withAccessibilityLabel: "OK");
+            }
+            
+            it("should log in offline with stored password") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServer.set([
+                    "serverUrl": "https://magetest",
+                    "username": "username"
+                ], forKey: .loginParameters);
+                StoredPassword.persistPassword(toKeyChain: "password");
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(error: NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil));
+                }
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Disconnected Login"));
+                expect(alert.message).to(equal("We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"));
+                tester().tapView(withAccessibilityLabel: "OK, Work Offline");
+                
+                tester().waitForView(withAccessibilityLabel: "Agree");
+                tester().tapView(withAccessibilityLabel: "Agree");
+                
+                expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should log in offline again with stored password") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                UserDefaults.MageServer.set("local", forKey: .loginType);
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServer.set([
+                    "serverUrl": "https://magetest",
+                    "username": "username"
+                ], forKey: .loginParameters);
+                StoredPassword.persistPassword(toKeyChain: "password");
+                
+                expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(error: NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil));
+                }
+                
+                coordinator?.startLoginOnly();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Disconnected Login"));
+                expect(alert.message).to(equal("We are still unable to connect to the server to log you in. You will continue to work offline."));
+                tester().tapView(withAccessibilityLabel: "OK");
+                
+                expect(delegate?.couldNotAuthenticateCalled).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Authentication Successful was never called");
+            }
+            
+            it("should initialize the login view with a user") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addUser { (_, _) in
+                        done();
+                    }
+                }
+                
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.startLoginOnly();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                let view: UITextField = (viewTester().usingLabel("Username")?.view as! UITextField);
+                expect(view.isEnabled).to(beFalse());
+                tester().expect(view, toContainText: "userabc");
+            }
+            
+            it("should login with an unregistered device") {
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                stub(condition: isHost("magetest") && isPath("/auth/token")) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(data: String("device was registered").data(using: .utf8)!, statusCode: 403, headers: nil);
+                }
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Registration Sent");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Registration Sent"));
+                expect(alert.message).to(contain("Your device has been registered.  \nAn administrator has been notified to approve this device."));
+                tester().tapView(withAccessibilityLabel: "OK");
+                
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+            }
+            
+            it("should login with registered device and disagree to the disclaimer") {
+                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                
+                tester().tapView(withAccessibilityLabel: "Log In");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
+                
+                tester().waitForView(withAccessibilityLabel: "Disagree");
+                tester().tapView(withAccessibilityLabel: "Disagree");
+                
+                expect((UIApplication.shared.delegate as! TestingAppDelegate).logoutCalled).to(beTrue());
+            }
+            
+            it("should create an account") {
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
+                tester().tapView(withAccessibilityLabel: "Sign Up Here");
+                
+                tester().waitForView(withAccessibilityLabel: "Display Name");
 
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+
+                tester().waitForView(withAccessibilityLabel: "Sign Up");
+                tester().tapView(withAccessibilityLabel: "Sign Up");
+
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: 10, pollInterval: 1, description: "Sign Up request made")
+
+                tester().waitForTappableView(withAccessibilityLabel: "Account Created");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Account Created"));
+                expect(alert.message).to(contain("Your account is now active."));
+                tester().tapView(withAccessibilityLabel: "OK");
+
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+            }
+            
+            it("should create an inactive account") {
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccessInactive.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
+                tester().tapView(withAccessibilityLabel: "Sign Up Here");
+                
+                tester().waitForView(withAccessibilityLabel: "Display Name");
+                
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                
+                tester().waitForView(withAccessibilityLabel: "Sign Up");
+                tester().tapView(withAccessibilityLabel: "Sign Up");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: 10, pollInterval: 1, description: "Sign Up request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Account Created");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Account Created"));
+                expect(alert.message).to(contain("An administrator must approve your account before you can login"));
+                tester().tapView(withAccessibilityLabel: "OK");
+                
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+            }
+            
+            it("should fail to create an account") {
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                let serverDelegate: Delegate = Delegate();
+                
+                stub(condition: isHost("magetest") && isPath("/api/users") ) { request in
+                    serverDelegate.urlCalled(request.url, method: request.httpMethod);
+                    return HTTPStubsResponse(data: String("error message").data(using: .utf8)!, statusCode: 503, headers: nil);
+                }
+                
+                coordinator?.start();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
+                tester().tapView(withAccessibilityLabel: "Sign Up Here");
+                
+                tester().waitForView(withAccessibilityLabel: "Display Name");
+                
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                
+                tester().waitForView(withAccessibilityLabel: "Sign Up");
+                tester().tapView(withAccessibilityLabel: "Sign Up");
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: 10, pollInterval: 1, description: "Sign Up request made")
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Error Creating Account");
+                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                expect(alert.title).to(equal("Error Creating Account"));
+                expect(alert.message).to(equal("error message"));
+                tester().tapView(withAccessibilityLabel: "OK");
+                
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(SignUpViewController.self));
+            }
+            
+            it("should cancel creating an account") {
+                
+                stub(condition: isHost("magetest") && isPath("/api") ) { _ in
+                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+                }
+                
+                coordinator?.start();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
+                tester().tapView(withAccessibilityLabel: "Sign Up Here");
+                
+                tester().waitForView(withAccessibilityLabel: "Display Name");
+                
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                
+                tester().waitForView(withAccessibilityLabel: "Cancel");
+                tester().tapView(withAccessibilityLabel: "Cancel");
+                
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+            }
+            
+            it("should show the change server url view") {
+                UserDefaults.standard.removeObject(forKey: UserDefaults.MageServer.MageServerDefaultKey.baseServerUrl.rawValue);
+                
+                let serverDelegate: Delegate = Delegate();
+
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "ServerURLView")
+
+                tester().setText("https://magetest", intoViewWithAccessibilityLabel: "Server URL");
+                tester().tapView(withAccessibilityLabel: "OK");
+
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: 10, pollInterval: 1, description: "API request not made")
+                expect(UserDefaults.MageServer.string(forKey: .baseServerUrl)).toEventually(equal("https://magetest"));
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+            }
+            
+            it("should show the change server url view and then cancel") {
+                let serverDelegate: Delegate = Delegate();
+                
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
+                
+                coordinator?.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Server URL");
+                tester().tapView(withAccessibilityLabel: "Server URL");
+                
+                tester().waitForView(withAccessibilityLabel: "ServerURLView")
+                
+                tester().setText("https://magetestcancel", intoViewWithAccessibilityLabel: "Server URL");
+                tester().tapView(withAccessibilityLabel: "Cancel");
+                
+                expect(UserDefaults.MageServer.string(forKey: .baseServerUrl)).to(equal("https://magetest"));
+                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
         }
     }

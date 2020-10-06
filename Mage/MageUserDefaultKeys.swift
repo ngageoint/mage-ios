@@ -176,7 +176,7 @@ extension PreferencesDefaultable where PreferencesDefaultKey.RawValue == String 
     }
     
     static func set(_ dictionary: Dictionary<String, Any>, forKey key: PreferencesDefaultKey) {
-        UserDefaults.standard.set(integer, forKey: key.rawValue);//namespace(key))
+        UserDefaults.standard.set(dictionary, forKey: key.rawValue);//namespace(key))
     }
     
     static func dictionary(forKey key: PreferencesDefaultKey) -> [String : Any]? {
@@ -227,6 +227,14 @@ extension MageServerDefaultable where MageServerDefaultKey.RawValue == String {
     
     static func integer(forKey key: MageServerDefaultKey) -> Int {
         return UserDefaults.standard.integer(forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func set(_ dictionary: Dictionary<String, Any>, forKey key: MageServerDefaultKey) {
+        UserDefaults.standard.set(dictionary, forKey: key.rawValue);//namespace(key))
+    }
+    
+    static func dictionary(forKey key: MageServerDefaultKey) -> [String : Any]? {
+        return UserDefaults.standard.dictionary(forKey: key.rawValue);//namespace(key))
     }
 }
 

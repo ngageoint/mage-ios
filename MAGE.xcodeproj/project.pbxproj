@@ -228,6 +228,12 @@
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
+		F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
+		F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF9252B541A00B88BD4 /* signupSuccess.json */; };
+		F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */; };
+		F777B00A252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B009252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json */; };
+		F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */; };
+		F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B011252D049400B88BD4 /* signinSuccessInactiveUser.json */; };
 		F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */; };
 		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
@@ -747,6 +753,12 @@
 		F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnlineMapTableViewController.h; sourceTree = "<group>"; };
 		F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlineMapTableViewController.m; sourceTree = "<group>"; };
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
+		F777AFF52527D05200B88BD4 /* tokenSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenSuccess.json; sourceTree = "<group>"; };
+		F777AFF9252B541A00B88BD4 /* signupSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccess.json; sourceTree = "<group>"; };
+		F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccessInactive.json; sourceTree = "<group>"; };
+		F777B009252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoDisclaimer.json; sourceTree = "<group>"; };
+		F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenSuccessNoDisclaimer.json; sourceTree = "<group>"; };
+		F777B011252D049400B88BD4 /* signinSuccessInactiveUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signinSuccessInactiveUser.json; sourceTree = "<group>"; };
 		F77822492146C8B400850815 /* LocationDisplayTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationDisplayTableViewController.h; sourceTree = "<group>"; };
 		F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationDisplayTableViewController.m; sourceTree = "<group>"; };
 		F77AF8DD24DC5AF9003997D8 /* FeedItemSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemSelectionDelegate.h; sourceTree = "<group>"; };
@@ -1613,16 +1625,22 @@
 				F71446F0249BB5BC005A5EC1 /* icon27.png */,
 				F7098F252492C36700313703 /* test_marker.png */,
 				F7614DA92006902000676366 /* apiSuccess.json */,
+				F777B009252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json */,
 				F70039452006CB0700E6E660 /* apiFail.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
 				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
+				F777B011252D049400B88BD4 /* signinSuccessInactiveUser.json */,
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 				F71446F424A3FAF5005A5EC1 /* feedContent.json */,
 				F795ED1124BD04730028FBFC /* forms.json */,
 				F795ED1324BD061C0028FBFC /* observations.json */,
 				F795ED1524BD0B9A0028FBFC /* userabc.json */,
 				F795ED1724BF36DD0028FBFC /* locationsabc.json */,
+				F777AFF52527D05200B88BD4 /* tokenSuccess.json */,
+				F777AFF9252B541A00B88BD4 /* signupSuccess.json */,
+				F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */,
+				F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2220,19 +2238,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
+				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F795ED1824BF36DD0028FBFC /* locationsabc.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
 				F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
+				F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F795ED1224BD04730028FBFC /* forms.json in Resources */,
+				F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */,
+				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
 				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
 				F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */,
+				F777B00A252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json in Resources */,
 				F795ED1624BD0B9A0028FBFC /* userabc.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2591,7 +2615,7 @@
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
-				2FFDDB0919D5D7530012C6A7 /* MageTabBarController.m in Sources */,
+				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
@@ -2986,10 +3010,6 @@
 					"-framework",
 					"\"Foundation\"",
 					"-framework",
-					"\"GTMSessionFetcher\"",
-					"-framework",
-					"\"GoogleToolboxForMac\"",
-					"-framework",
 					"\"HexColors\"",
 					"-framework",
 					"\"IOKit\"",
@@ -3128,10 +3148,6 @@
 					"\"FBSnapshotTestCase\"",
 					"-framework",
 					"\"Foundation\"",
-					"-framework",
-					"\"GTMSessionFetcher\"",
-					"-framework",
-					"\"GoogleToolboxForMac\"",
 					"-framework",
 					"\"HexColors\"",
 					"-framework",

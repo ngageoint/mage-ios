@@ -100,7 +100,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a5e-Zq-EP3">
                                     <rect key="frame" x="248" y="16" width="107" height="20"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <accessibility key="accessibilityConfiguration" label="Sign Up"/>
+                                    <accessibility key="accessibilityConfiguration" label="Sign Up Here"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="vmK-hi-Jim"/>
                                     </constraints>

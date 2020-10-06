@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -47,16 +47,16 @@
                     <rect key="frame" x="16" y="40" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRc-G2-cIA">
-                            <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
+                            <rect key="frame" x="69" y="0.0" width="205" height="55"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uHb-bD-cFd">
-                                    <rect key="frame" x="55.5" y="0.0" width="161" height="100"/>
+                                    <rect key="frame" x="54.5" y="0.0" width="150.5" height="100"/>
                                     <fontDescription key="fontDescription" name="GondolaMageRegular" family="GondolaMage" pointSize="52"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Hf-nf-jvj">
-                                    <rect key="frame" x="0.0" y="0.0" width="47.5" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="46.5" height="55"/>
                                     <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="50"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -82,7 +82,7 @@
                         <constraint firstItem="cRc-G2-cIA" firstAttribute="centerY" secondItem="sso-gG-3z7" secondAttribute="centerY" id="xdx-bk-DKb"/>
                     </constraints>
                 </view>
-                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
                     <rect key="frame" x="0.0" y="617" width="375" height="30"/>
                     <accessibility key="accessibilityConfiguration">
                         <accessibilityTraits key="traits" notEnabled="YES"/>
@@ -131,7 +131,7 @@
                                         <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Display Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BRG-7p-IkC" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
                                             <rect key="frame" x="20" y="57" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <accessibility key="accessibilityConfiguration" hint="" label="Username"/>
+                                            <accessibility key="accessibilityConfiguration" hint="" label="Display Name"/>
                                             <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="45" id="AwW-PA-RMN"/>
@@ -149,7 +149,7 @@
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppn-lM-Kd3" userLabel="email" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
                                             <rect key="frame" x="20" y="114" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <accessibility key="accessibilityConfiguration" label="Password"/>
+                                            <accessibility key="accessibilityConfiguration" label="Email"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="45" id="Wbw-m2-5nE"/>
                                             </constraints>
@@ -166,6 +166,7 @@
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QbZ-cp-HSy" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
                                             <rect key="frame" x="20" y="171" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <accessibility key="accessibilityConfiguration" label="Phone"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="45" id="kwp-kx-bia"/>
                                             </constraints>
@@ -199,7 +200,7 @@
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
                                             <rect key="frame" x="20" y="285" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <accessibility key="accessibilityConfiguration" label="Password"/>
+                                            <accessibility key="accessibilityConfiguration" label="Password Confirm"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="45" id="ian-2b-uhx"/>
                                             </constraints>
@@ -272,7 +273,7 @@
                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mQc-Hw-40O">
                                             <rect key="frame" x="20" y="425" width="159" height="40"/>
                                             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <accessibility key="accessibilityConfiguration" label="Log In"/>
+                                            <accessibility key="accessibilityConfiguration" label="Cancel"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="qHf-zx-St5"/>
                                             </constraints>
@@ -352,6 +353,7 @@
                 </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <accessibility key="accessibilityConfiguration" label="Signup View"/>
             <constraints>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="K8Z-Q4-kKA"/>
                 <constraint firstAttribute="trailing" secondItem="8fH-La-tFM" secondAttribute="trailing" id="RxY-T6-ToG"/>
@@ -369,4 +371,24 @@
             <point key="canvasLocation" x="35.5" y="53.5"/>
         </view>
     </objects>
+    <designables>
+        <designable name="BRG-7p-IkC">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+        <designable name="Ppn-lM-Kd3">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+        <designable name="QbZ-cp-HSy">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+        <designable name="Tkk-eU-cI7">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+        <designable name="XX4-h8-cXB">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+        <designable name="sfe-cM-xS2">
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
+        </designable>
+    </designables>
 </document>

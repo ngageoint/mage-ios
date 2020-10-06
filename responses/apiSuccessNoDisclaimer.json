@@ -1,3 +1,4 @@
+
 {
     "provision": {
         "strategy":"uid"
@@ -15,8 +16,6 @@
     "description":"Geospatial situation awareness application",
     "name":"MAGE",
     "disclaimer":{
-        "text":"Disclaimer text",
-        "title":"Consent to Monitoring",
-        "show":true
+        "show":false
     }
 }

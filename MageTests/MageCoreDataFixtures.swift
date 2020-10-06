@@ -110,6 +110,37 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
+    public static func addUnsyncedObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler?) {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
+            fatalError("observations.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert observations.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert observations.json to Data")
+        }
+        
+        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSArray else {
+            fatalError("Unable to convert observations.json to JSON dictionary")
+        }
+        
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
+            if let o: Observation = Observation.mr_createEntity(in: localContext) {
+                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                o.eventId = eventId;
+                o.error = [
+                    "errorStatusCode" : 503,
+                    "errorMessage": "failed"
+                ];
+                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: o.userId, in: localContext)!;
+                o.user = user;
+            }
+        }, completion: completion)
+    }
+    
     public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", completion: MRSaveCompletionHandler?) {
         
         guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "forms", ofType: "json") else {

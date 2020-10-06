@@ -11,7 +11,6 @@
 
 @implementation TestingAppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 //    
@@ -29,6 +28,10 @@
 //    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
     return YES;
+}
+
+- (void) logout {
+    self.logoutCalled = YES;
 }
 
 @end
