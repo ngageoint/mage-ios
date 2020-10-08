@@ -33,14 +33,6 @@ class MockSignUpDelegate: NSObject, SignUpDelegate {
         signupCanceledCalled = true;
     }
 }
-//
-//class Delegate: MockMageServerDelegate {
-//    var urls: [URL?] = [];
-//
-//    func urlCalled(_ url: URL?, method: String?) {
-//        urls.append(url);
-//    }
-//}
 
 class SignUpViewControllerTests: KIFSpec {
     
