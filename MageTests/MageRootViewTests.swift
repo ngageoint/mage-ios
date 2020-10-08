@@ -91,7 +91,7 @@ class MageRootViewTests: KIFSpec {
             beforeEach {
                 waitUntil { done in
                     TestHelpers.clearAndSetUpStack();
-                    UserDefaults.MageServer.set("https://magetest", forKey: .baseServerUrl);
+                    UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
                     
                     stub(condition: isHost("magetest")) { (request) -> HTTPStubsResponse in
                         return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil);

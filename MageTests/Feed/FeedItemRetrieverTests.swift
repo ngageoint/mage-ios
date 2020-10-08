@@ -44,7 +44,7 @@ class FeedItemRetrieverTests: KIFSpec {
                     TestHelpers.clearAndSetUpStack();
                     MageCoreDataFixtures.quietLogging();
                     UserDefaults.standard.set(nil, forKey: "selectedFeeds");
-                    UserDefaults.MageServer.set("https://magetest", forKey: .baseServerUrl);
+                    UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
                     UserDefaults.standard.synchronize();
                     
                     Server.setCurrentEventId(1);

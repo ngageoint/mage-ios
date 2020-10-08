@@ -9,9 +9,15 @@
 import Foundation
 import OHHTTPStubs
 
-protocol MockMageServerDelegate {
-    func urlCalled(_ url: URL?, method: String?);
+class MockMageServerDelegate {
+    var urls: [URL?] = [];
+
+    func urlCalled(_ url: URL?, method: String?) {
+        urls.append(url);
+    }
 }
+
+
 
 class MockMageServer: NSObject {
     

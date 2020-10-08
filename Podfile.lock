@@ -83,7 +83,6 @@ PODS:
   - SkyFloatingLabelTextField (3.7.0)
   - SSZipArchive (2.2.3)
   - tiff-ios (1.1.2)
-  - tuneup_js (1.2.3)
   - UIImage-Categories (0.0.1)
   - zxcvbn-ios (1.0.4)
 
@@ -105,7 +104,6 @@ DEPENDENCIES:
   - PureLayout
   - Quick
   - SkyFloatingLabelTextField (~> 3.7.0)
-  - tuneup_js
   - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
 
@@ -138,7 +136,6 @@ SPEC REPOS:
     - SkyFloatingLabelTextField
     - SSZipArchive
     - tiff-ios
-    - tuneup_js
     - UIImage-Categories
     - zxcvbn-ios
 
@@ -175,10 +172,9 @@ SPEC CHECKSUMS:
   SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   tiff-ios: f8a47e6aa20fc0d5833041ba5e39b1ab6e187f2e
-  tuneup_js: bb9bd3060b8a115501bdf2b668f6497a806d5df3
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: ba5c50677eccb15e57e54e7605309e6d34b7f6ae
+PODFILE CHECKSUM: 961ef0b0c7368df2cf315c405152d506a3fe9487
 
 COCOAPODS: 1.8.4

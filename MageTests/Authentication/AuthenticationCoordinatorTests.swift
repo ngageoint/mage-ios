@@ -31,14 +31,6 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     }
 }
 
-class Delegate: MockMageServerDelegate {
-    var urls: [URL?] = [];
-    
-    func urlCalled(_ url: URL?, method: String?) {
-        urls.append(url);
-    }
-}
-
 class AuthenticationCoordinatorTests: KIFSpec {
     
     override func spec() {
@@ -57,7 +49,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 window?.autoSetDimension(.width, toSize: 414);
                 window?.autoSetDimension(.height, toSize: 896);
                 
-                UserDefaults.MageServer.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
                 UserDefaults.Display.set(0, forKey: .mapType);
                 UserDefaults.Display.set(false, forKey: .showMGRS);
                 
@@ -95,10 +87,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 StoredPassword.persistToken(toKeyChain: "oldToken");
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                print("load loginview \(delegate)")
                 
                 coordinator?.start();
                 
@@ -114,7 +105,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -145,7 +136,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -176,7 +167,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -206,7 +197,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
@@ -215,7 +206,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -255,7 +246,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
@@ -264,7 +255,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -297,7 +288,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -306,7 +297,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccessInactiveUser.json", delegate: serverDelegate);
                 
@@ -335,7 +326,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -344,7 +335,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -381,7 +372,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -390,7 +381,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
                     serverDelegate.urlCalled(request.url, method: request.httpMethod);
@@ -422,8 +413,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
-                UserDefaults.MageServer.set([
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set([
                     "serverUrl": "https://magetest",
                     "username": "username"
                 ], forKey: .loginParameters);
@@ -436,7 +427,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
                     serverDelegate.urlCalled(request.url, method: request.httpMethod);
@@ -471,10 +462,10 @@ class AuthenticationCoordinatorTests: KIFSpec {
                         done();
                     }
                 }
-                UserDefaults.MageServer.set("local", forKey: .loginType);
+                UserDefaults.MageServerDefaults.set("local", forKey: .loginType);
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
-                UserDefaults.MageServer.set([
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set([
                     "serverUrl": "https://magetest",
                     "username": "username"
                 ], forKey: .loginParameters);
@@ -487,7 +478,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 stub(condition: isHost("magetest") && isPath("/auth/local/signin")) { request in
                     serverDelegate.urlCalled(request.url, method: request.httpMethod);
@@ -520,14 +511,14 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 }
                 
                 UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServer.set("userabc", forKey: .currentUserId);
+                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
                                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -547,7 +538,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -584,7 +575,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
                 
@@ -614,7 +605,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccess.json", delegate: serverDelegate);
                 
@@ -651,7 +642,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccessInactive.json", delegate: serverDelegate);
                 
@@ -688,7 +679,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 stub(condition: isHost("magetest") && isPath("/api/users") ) { request in
                     serverDelegate.urlCalled(request.url, method: request.httpMethod);
@@ -747,9 +738,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should show the change server url view") {
-                UserDefaults.standard.removeObject(forKey: UserDefaults.MageServer.MageServerDefaultKey.baseServerUrl.rawValue);
+                UserDefaults.standard.removeObject(forKey: UserDefaults.MageServerDefaults.MageServerDefaultKey.baseServerUrl.rawValue);
                 
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
@@ -761,12 +752,12 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "OK");
 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: 10, pollInterval: 1, description: "API request not made")
-                expect(UserDefaults.MageServer.string(forKey: .baseServerUrl)).toEventually(equal("https://magetest"));
+                expect(UserDefaults.MageServerDefaults.string(forKey: .baseServerUrl)).toEventually(equal("https://magetest"));
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
             
             it("should show the change server url view and then cancel") {
-                let serverDelegate: Delegate = Delegate();
+                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
@@ -780,7 +771,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("https://magetestcancel", intoViewWithAccessibilityLabel: "Server URL");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
-                expect(UserDefaults.MageServer.string(forKey: .baseServerUrl)).to(equal("https://magetest"));
+                expect(UserDefaults.MageServerDefaults.string(forKey: .baseServerUrl)).to(equal("https://magetest"));
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
         }

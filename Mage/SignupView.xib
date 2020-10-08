@@ -47,16 +47,16 @@
                     <rect key="frame" x="16" y="40" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRc-G2-cIA">
-                            <rect key="frame" x="69" y="0.0" width="205" height="55"/>
+                            <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAGE" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uHb-bD-cFd">
-                                    <rect key="frame" x="54.5" y="0.0" width="150.5" height="100"/>
+                                    <rect key="frame" x="55.5" y="0.0" width="161" height="100"/>
                                     <fontDescription key="fontDescription" name="GondolaMageRegular" family="GondolaMage" pointSize="52"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Hf-nf-jvj">
-                                    <rect key="frame" x="0.0" y="0.0" width="46.5" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="47.5" height="55"/>
                                     <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="50"/>
                                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -84,7 +84,7 @@
                 </view>
                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
                     <rect key="frame" x="0.0" y="617" width="375" height="30"/>
-                    <accessibility key="accessibilityConfiguration">
+                    <accessibility key="accessibilityConfiguration" label="Server URL">
                         <accessibilityTraits key="traits" notEnabled="YES"/>
                     </accessibility>
                     <state key="normal" title="&lt;mage server url&gt;">
@@ -93,6 +93,7 @@
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jub-3d-HY1">
                     <rect key="frame" x="27.5" y="646" width="320" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="Version"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="Fd4-hg-Hc5"/>
                         <constraint firstAttribute="width" constant="320" id="Jgi-9a-cIq"/>
@@ -235,6 +236,7 @@
                                         </switch>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uhq-eM-MfT">
                                             <rect key="frame" x="141.5" y="393" width="0.0" height="0.0"/>
+                                            <accessibility key="accessibilityConfiguration" label="Password Strength Label"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -247,6 +249,7 @@
                                         </label>
                                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z1z-Nc-TYh">
                                             <rect key="frame" x="20" y="405" width="335" height="8"/>
+                                            <accessibility key="accessibilityConfiguration" label="Password Strength"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="8" id="Rht-U7-gS6"/>
                                             </constraints>

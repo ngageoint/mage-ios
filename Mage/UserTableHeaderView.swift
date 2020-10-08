@@ -226,7 +226,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     @objc public func populate(user: User) {
         self.user = user;
-        currentUserIsMe = UserDefaults.MageServer.string(forKey: .currentUserId) == user.remoteId;
+        currentUserIsMe = UserDefaults.MageServerDefaults.string(forKey: .currentUserId) == user.remoteId;
         
         nameField.text = user.name;
         

@@ -14,7 +14,6 @@ target 'MAGE' do
     pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'mgrs', '~>0.1.0'
     pod 'libPhoneNumber-iOS', '~> 0.8'
-    pod 'tuneup_js'
     pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
     pod 'SkyFloatingLabelTextField', '~> 3.7.0'
@@ -32,14 +31,6 @@ target 'MAGE' do
         pod 'Nimble-Snapshots'
         pod 'KIF'
     end
-end
-
-pre_install do |installer|
-  installer.analysis_result.specifications.each do |s|
-    if s.name == 'SkyFloatingLabelTextField'
-      s.swift_version = '4.2'
-    end
-  end
 end
 
 post_install do |installer|

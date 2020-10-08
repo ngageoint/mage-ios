@@ -172,7 +172,6 @@
                 // fair
                 self.passwordStrengthLabel.text = @"Fair";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
-                
                 break;
             case 2:
                 // good
@@ -180,19 +179,16 @@
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
                 
                 break;
-                
             case 3:
                 // strong
                 self.passwordStrengthLabel.text = @"Strong";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
                 
                 break;
-                
             case 4:
                 // excell
                 self.passwordStrengthLabel.text = @"Excellent";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
-                
                 break;
         }
     }

@@ -176,7 +176,6 @@
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
-		F73C3BF61A608EBD007A734E /* mageTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F73C3BF51A608EBD007A734E /* mageTest.js */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
 		F73E29DB20597737001B9307 /* Pods_MAGE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73E29DC20597737001B9307 /* Pods_MAGE.framework */; };
 		F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
@@ -266,6 +265,7 @@
 		F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */; };
 		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
+		F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */; };
 		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
 		F798FAB219A4E5200010B052 /* ObservationEditSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAB119A4E5200010B052 /* ObservationEditSelectTableViewCell.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */; };
@@ -289,8 +289,6 @@
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
-		F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015D1A659B4D00902B4F /* setupTests.js */; };
-		F7C001601A659B5800902B4F /* tearDownTests.js in Resources */ = {isa = PBXBuildFile; fileRef = F7C0015F1A659B5800902B4F /* tearDownTests.js */; };
 		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
@@ -356,11 +354,6 @@
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
-		F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7911A65887A00E7F224 /* disclaimerTest.js */; };
-		F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7931A65887A00E7F224 /* loginTest.js */; };
-		F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7941A65887A00E7F224 /* mapTest.js */; };
-		F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD7951A65887A00E7F224 /* navigation.js */; };
-		F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */ = {isa = PBXBuildFile; fileRef = F7FAD79B1A658A8800E7F224 /* testsToRun.js */; };
 		F7FC591D1F3CB1F50010351A /* FormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC591C1F3CB1F50010351A /* FormsViewController.m */; };
 		F7FC59201F3CBA0A0010351A /* FormCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC591F1F3CBA0A0010351A /* FormCollectionViewCell.m */; };
 		F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7FC59211F3CE2280010351A /* FormPickerView.xib */; };
@@ -676,7 +669,6 @@
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
 		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
-		F73C3BF51A608EBD007A734E /* mageTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mageTest.js; sourceTree = "<group>"; };
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
 		F73CD0841F7E941E00B4124D /* TransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransitionViewController.m; sourceTree = "<group>"; };
 		F73E29DC20597737001B9307 /* Pods_MAGE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -806,6 +798,7 @@
 		F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewCoordinator.swift; sourceTree = "<group>"; };
 		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
+		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
 		F798FAAD19A4E4580010B052 /* ObservationDatePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDatePickerTableViewCell.h; sourceTree = "<group>"; };
 		F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDatePickerTableViewCell.m; sourceTree = "<group>"; };
 		F798FAB019A4E5200010B052 /* ObservationEditSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditSelectTableViewCell.h; sourceTree = "<group>"; };
@@ -845,8 +838,6 @@
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
-		F7C0015D1A659B4D00902B4F /* setupTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = setupTests.js; sourceTree = "<group>"; };
-		F7C0015F1A659B5800902B4F /* tearDownTests.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tearDownTests.js; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
 		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
@@ -944,11 +935,6 @@
 		F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFilterTableViewController.m; sourceTree = "<group>"; };
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
-		F7FAD7911A65887A00E7F224 /* disclaimerTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = disclaimerTest.js; sourceTree = "<group>"; };
-		F7FAD7931A65887A00E7F224 /* loginTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = loginTest.js; sourceTree = "<group>"; };
-		F7FAD7941A65887A00E7F224 /* mapTest.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mapTest.js; sourceTree = "<group>"; };
-		F7FAD7951A65887A00E7F224 /* navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = navigation.js; sourceTree = "<group>"; };
-		F7FAD79B1A658A8800E7F224 /* testsToRun.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = testsToRun.js; sourceTree = "<group>"; };
 		F7FC591B1F3CB1F50010351A /* FormsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormsViewController.h; sourceTree = "<group>"; };
 		F7FC591C1F3CB1F50010351A /* FormsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormsViewController.m; sourceTree = "<group>"; };
 		F7FC591E1F3CBA0A0010351A /* FormCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormCollectionViewCell.h; sourceTree = "<group>"; };
@@ -1462,6 +1448,7 @@
 			children = (
 				F7ED5D2E20052248007BD768 /* AuthenticationTests.m */,
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
+				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -1877,10 +1864,8 @@
 				F729E9D92034CC3700C2600D /* TestingAppDelegate.m */,
 				F7ED5D2820052161007BD768 /* Info.plist */,
 				F7614DA820068FF300676366 /* responses */,
-				F7FAD7901A65887A00E7F224 /* viewTests */,
 				F7A94D9418AD9CB000CB9EE0 /* MageTests.m */,
 				F7A94D8F18AD9CB000CB9EE0 /* Supporting Files */,
-				F73C3BF51A608EBD007A734E /* mageTest.js */,
 				F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */,
 				F75A10E320486489002F9906 /* StoredPasswordTests.m */,
 				F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */,
@@ -2000,20 +1985,6 @@
 				F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */,
 			);
 			name = Map;
-			sourceTree = "<group>";
-		};
-		F7FAD7901A65887A00E7F224 /* viewTests */ = {
-			isa = PBXGroup;
-			children = (
-				F7FAD7911A65887A00E7F224 /* disclaimerTest.js */,
-				F7FAD7931A65887A00E7F224 /* loginTest.js */,
-				F7FAD7941A65887A00E7F224 /* mapTest.js */,
-				F7FAD7951A65887A00E7F224 /* navigation.js */,
-				F7FAD79B1A658A8800E7F224 /* testsToRun.js */,
-				F7C0015D1A659B4D00902B4F /* setupTests.js */,
-				F7C0015F1A659B5800902B4F /* tearDownTests.js */,
-			);
-			path = viewTests;
 			sourceTree = "<group>";
 		};
 		F7FC59281F3CEDEB0010351A /* Form */ = {
@@ -2144,7 +2115,6 @@
 				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
 				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
-				F7FAD7991A65887A00E7F224 /* mapTest.js in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
 				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
@@ -2156,7 +2126,6 @@
 				F7FC59221F3CE2280010351A /* FormPickerView.xib in Resources */,
 				2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
-				F7FAD7961A65887A00E7F224 /* disclaimerTest.js in Resources */,
 				F7003948200D3FFA00E6E660 /* loginSuccess.json in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
@@ -2173,7 +2142,6 @@
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				2F0323B32466002D00D2866B /* ObservationLocationTableViewCell.xib in Resources */,
 				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
-				F7FAD79A1A65887A00E7F224 /* navigation.js in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */,
 				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
@@ -2205,7 +2173,6 @@
 				F760910223FDA78F000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
-				F7FAD79C1A658A8800E7F224 /* testsToRun.js in Resources */,
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
 				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
 				F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */,
@@ -2213,19 +2180,15 @@
 				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
 				F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
-				F7C001601A659B5800902B4F /* tearDownTests.js in Resources */,
 				F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */,
 				F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
-				F7C0015E1A659B4D00902B4F /* setupTests.js in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
-				F7FAD7981A65887A00E7F224 /* loginTest.js in Resources */,
 				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,
-				F73C3BF61A608EBD007A734E /* mageTest.js in Resources */,
 				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
@@ -2399,21 +2362,6 @@
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
-				"${PODS_ROOT}/tuneup_js/assertions.js",
-				"${PODS_ROOT}/tuneup_js/image_assertion.js",
-				"${PODS_ROOT}/tuneup_js/lang-ext.js",
-				"${PODS_ROOT}/tuneup_js/screen.js",
-				"${PODS_ROOT}/tuneup_js/test.js",
-				"${PODS_ROOT}/tuneup_js/tuneup.js",
-				"${PODS_ROOT}/tuneup_js/uiautomation-ext.js",
-				"${PODS_ROOT}/tuneup_js/image_asserter",
-				"${PODS_ROOT}/tuneup_js/image_assertion.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/abbreviated_console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/colored_console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/console_output.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/preprocessor.rb",
-				"${PODS_ROOT}/tuneup_js/test_runner/run",
-				"${PODS_ROOT}/tuneup_js/test_runner/xunit_output.rb",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -2435,21 +2383,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assertions.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lang-ext.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/screen.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/test.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tuneup.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uiautomation-ext.js",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_asserter",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/image_assertion.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/abbreviated_console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/colored_console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/console_output.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/preprocessor.rb",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/run",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/xunit_output.rb",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2715,6 +2648,7 @@
 			files = (
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
+				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,

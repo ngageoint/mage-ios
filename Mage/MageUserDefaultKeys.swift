@@ -10,7 +10,7 @@ import Foundation
 
 extension UserDefaults {
     
-    struct MageServer: MageServerDefaultable {
+    struct MageServerDefaults: MageServerDefaultable {
         private init() { }
         
         enum MageServerDefaultKey: String {
