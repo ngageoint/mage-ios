@@ -146,9 +146,7 @@
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
         
-        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@" " withString:@""];
-        rawString = [rawString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        
+        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [textFieldString length])];
         NBAsYouTypeFormatter *aFormatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:[[NSLocale currentLocale] countryCode]];
         NSString *formattedString = [aFormatter inputString:rawString];
         
@@ -236,7 +234,7 @@
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
                                      preferredStyle:UIAlertControllerStyleAlert];
-        
+        alert.accessibilityLabel = @"Passwords Do Not Match";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
@@ -289,7 +287,7 @@
                                  alertControllerWithTitle:[NSString stringWithFormat:@"Missing Required Fields"]
                                  message:[NSString stringWithFormat:@"Please fill out the required fields: '%@'", [fields componentsJoinedByString:@", "]]
                                  preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Missing Required Fields";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
