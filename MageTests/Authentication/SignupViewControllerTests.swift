@@ -9,10 +9,8 @@
 import Foundation
 import Quick
 import Nimble
-import PureLayout
 import OHHTTPStubs
 import Kingfisher
-import MagicalRecord
 
 @testable import MAGE
 

@@ -36,6 +36,7 @@
 #import "DisclaimerViewController.h"
 #import "ServerURLController.h"
 #import "SignUpViewController.h"
+#import "ChangePasswordViewController.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

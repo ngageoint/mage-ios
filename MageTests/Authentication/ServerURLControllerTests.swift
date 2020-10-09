@@ -10,7 +10,6 @@ import Foundation
 import Quick
 import Nimble
 import Kingfisher
-import MagicalRecord
 
 @testable import MAGE
 
@@ -34,7 +33,7 @@ class ServerURLControllerTests: KIFSpec {
     
     override func spec() {
         
-        fdescribe("ServerURLControllerTests") {
+        describe("ServerURLControllerTests") {
             
             var window: UIWindow?;
             var view: ServerURLController?;
