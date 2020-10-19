@@ -59,7 +59,7 @@ BOOL signingIn = YES;
 - (void) signUpWithParameters:(NSDictionary *)parameters atURL:(NSURL *)url {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
@@ -69,6 +69,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
                                                                        message:[NSString stringWithFormat:@"%@ (%@) has been successfully created. %@", displayName, username, msg]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Account Created";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf.navigationController popToViewController:self.loginView animated:NO];
@@ -82,6 +83,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
                                                                        message:errResponse
                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Error Creating Account";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         
@@ -204,7 +206,7 @@ BOOL signingIn = YES;
                     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
                                                                                    message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
                                                                             preferredStyle:UIAlertControllerStyleAlert];
-                    
+                    alert.accessibilityLabel = @"Loss of Unsaved Data";
                     [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                         [MagicalRecord deleteAndSetupMageCoreDataStack];
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
@@ -243,7 +245,7 @@ BOOL signingIn = YES;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"MAGE Account Created"
                                                                    message:@"Account created, please contact your MAGE administrator to activate your account."
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"MAGE Account Created";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     
     [self.navigationController presentViewController:alert animated:YES completion:nil];
@@ -254,7 +256,7 @@ BOOL signingIn = YES;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Login Failed"
                                                                    message:error
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Login Failed";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
 
     
@@ -287,7 +289,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
                                                                        message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-
+        alert.accessibilityLabel = @"Disconnected Login";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf workOffline: parameters complete:complete];
         }]];
@@ -300,6 +302,7 @@ BOOL signingIn = YES;
         // there is no stored password for this server
         UIAlertController *alert = [UIAlertController
                                     alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Unable to Login";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf returnToLogin: complete];
         }]];
@@ -356,6 +359,7 @@ BOOL signingIn = YES;
                                  alertControllerWithTitle:@"Registration Sent"
                                  message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
                                  preferredStyle:UIAlertControllerStyleAlert];
+    alert.accessibilityLabel = @"Registration Sent";
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {

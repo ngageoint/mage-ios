@@ -23,11 +23,11 @@ extern NSString * const kFavortiesFilterKey;
 + (void) setFavoritesFilter:(BOOL) filter;
 
 
-+ (id) observations;
-+ (id) observationsForMap;
-+ (id) hideObservations;
-+ (id) observationsForUser:(User *) user;
-+ (id) observationsForObservation:(Observation *) observation;
++ (Observations *) observations;
++ (Observations *) observationsForMap;
++ (Observations *) hideObservations;
++ (Observations *) observationsForUser:(User *) user;
++ (Observations *) observationsForObservation:(Observation *) observation;
 
 + (NSMutableArray *) getPredicatesForObservations;
 + (NSMutableArray *) getPredicatesForObservationsForMap;

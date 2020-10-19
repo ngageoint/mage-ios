@@ -17,6 +17,7 @@
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MageServer.h"
+#import "MageSplitViewController.h"
 #import "MAGE-Swift.h"
 
 @interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate>
@@ -53,7 +54,7 @@
         [_childCoordinators addObject:authCoordinator];
         [authCoordinator start];
     } else {
-        [MageSessionManager manager].token = [StoredPassword retrieveStoredToken];
+        [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
         [self startEventChooser];
     }
 }
@@ -76,15 +77,14 @@
 - (void) eventChoosen:(Event *)event {
     [_childCoordinators removeLastObject];
     [Event sendRecentEvent];
+    [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        UIStoryboard *ipadStoryboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
-        UIViewController *vc = [ipadStoryboard instantiateInitialViewController];
-        vc.modalPresentationStyle = UIModalPresentationFullScreen;
-        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentViewController:vc animated:YES completion:NULL];
+        MageSplitViewController *svc = [[MageSplitViewController alloc] init];
+        svc.modalPresentationStyle = UIModalPresentationFullScreen;
+        svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self.navigationController presentViewController:svc animated:YES completion:NULL];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        UIViewController *vc = [iphoneStoryboard instantiateInitialViewController];
+        MageRootViewController *vc = [[MageRootViewController alloc] init];
         vc.modalPresentationStyle = UIModalPresentationFullScreen;
         vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:NO completion:^{

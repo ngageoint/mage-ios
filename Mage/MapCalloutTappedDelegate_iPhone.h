@@ -11,5 +11,7 @@
 
 @property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *userMapCalloutTappedDelegate;
 @property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *observationMapCalloutTappedDelegate;
+@property(nonatomic, weak) IBOutlet MapCalloutTappedSegueDelegate *feedItemMapCalloutTappedDelegate;
+
 
 @end

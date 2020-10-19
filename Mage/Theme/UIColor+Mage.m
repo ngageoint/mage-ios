@@ -55,6 +55,14 @@
     return [[[ThemeManager sharedManager] curentThemeDefinition] tableBackground];
 }
 
++ (UIColor *) tableSeparator {
+    return [[[ThemeManager sharedManager] curentThemeDefinition] tableSeparator];
+}
+
++ (UIColor *) tableCellDisclosure {
+    return [[[ThemeManager sharedManager] curentThemeDefinition] tableCellDisclosure];
+}
+
 + (UIColor *) dialog {
     return [[[ThemeManager sharedManager] curentThemeDefinition] dialog];
 }

@@ -42,6 +42,14 @@
     return [UIColor colorWithRed:.92 green:.92 blue:.95 alpha:1.0];
 }
 
+- (UIColor *) tableSeparator {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:.2];
+}
+
+- (UIColor *) tableCellDisclosure {
+    return [UIColor colorWithWhite:0 alpha:.23];
+}
+
 - (UIColor *) dialog {
     return [UIColor whiteColor];
 }

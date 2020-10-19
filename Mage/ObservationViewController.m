@@ -29,7 +29,7 @@
 #import "MAGE-Swift.h"
 
 @interface ObservationViewController ()<NSFetchedResultsControllerDelegate, ObservationPushDelegate, ObservationEditDelegate, AttachmentViewDelegate>
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (nonatomic, assign) BOOL manualSync;
 
@@ -74,6 +74,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (!self.propertyTable) {
+        self.propertyTable = self.tableView;
+        self.editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editObservationTapped:)];
+        self.navigationItem.rightBarButtonItem = self.editButton;
+    }
     
     if (@available(iOS 11.0, *)) {
         [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAlways];
@@ -95,6 +100,11 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) registerCellTypes {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPhoneHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
+    } else {
+        [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationViewIPadHeaderCell" bundle:nil] forCellReuseIdentifier:@"header"];
+    }
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationActionsTableViewCell" bundle:nil] forCellReuseIdentifier:@"actions"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationLocationTableViewCell" bundle:nil] forCellReuseIdentifier:@"location"];
     [self.propertyTable registerNib:[UINib nibWithNibName:@"ObservationImportantTableViewCell" bundle:nil] forCellReuseIdentifier:@"updateImportant"];
@@ -214,11 +224,25 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (NSMutableArray *) getHeaderSection {
-    return [[NSMutableArray alloc] init];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        return [[NSMutableArray alloc] initWithObjects:@"header", @"map", @"location", @"actions", nil];
+    } else {
+        return [[NSMutableArray alloc] initWithObjects:@"header", @"location", @"actions", nil];
+    }
 }
 
 - (NSMutableArray *) getAttachmentsSection {
-    return [[NSMutableArray alloc] init];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        NSMutableArray *attachmentsSection = [[NSMutableArray alloc] init];
+        
+        if (self.observation.attachments.count != 0) {
+            [attachmentsSection addObject:@"attachments"];
+        }
+        
+        return attachmentsSection;
+    } else {
+        return [[NSMutableArray alloc] init];
+    }
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *) tableView {
@@ -398,20 +422,6 @@ static NSInteger const IMPORTANT_SECTION = 4;
     [self.childCoordinators removeObject:coordinator];
 }
 
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    if ([segue.identifier isEqualToString:@"FavoriteUsersSegue"]) {
-        NSMutableArray *userIds = [[NSMutableArray alloc] init];
-        [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {
-            [userIds addObject:favorite.userId];
-        }];
-
-        UserTableViewController *vc = [segue destinationViewController];
-        vc.userIds = userIds;
-    }
-}
-
 - (NSArray *) formFields {
     if (_formFields != nil) {
         return _formFields;
@@ -448,7 +458,15 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (IBAction) observationFavoriteInfoTapped:(id)sender {
-    [self performSegueWithIdentifier:@"FavoriteUsersSegue" sender:self];
+    NSMutableArray *userIds = [[NSMutableArray alloc] init];
+    [self.observation.favorites enumerateObjectsUsingBlock:^(ObservationFavorite * _Nonnull favorite, BOOL * _Nonnull stop) {
+        [userIds addObject:favorite.userId];
+    }];
+    
+    UserTableViewController *vc = [[UserTableViewController alloc] init];
+    vc.userIds = userIds;
+    vc.title = @"Favorited By";
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)observationDirectionsTapped:(id)sender {

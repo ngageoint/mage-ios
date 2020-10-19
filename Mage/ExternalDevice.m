@@ -9,6 +9,8 @@
 #import "ExternalDevice.h"
 #import <AVFoundation/AVFoundation.h>
 
+@import PhotosUI;
+
 @implementation ExternalDevice
 
 + (void) checkCameraPermissionsForViewController: (UIViewController *) viewController withCompletion:(void (^)(BOOL granted)) complete {
@@ -124,6 +126,58 @@
         }
     }
     
+}
+
++ (void) checkGalleryPermissionsForViewController: (UIViewController *) viewController withCompletion:(void (^)(BOOL granted)) complete {
+    PHAuthorizationStatus authorizationStatus = [PHPhotoLibrary authorizationStatus];
+    switch (authorizationStatus) {
+        case PHAuthorizationStatusAuthorized: {
+            complete(YES);
+            break;
+        }
+        case PHAuthorizationStatusNotDetermined: {
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        complete(YES);
+                    } else {
+                        complete(NO);
+                    }
+                });
+            }];
+            
+            break;
+        }
+        case PHAuthorizationStatusRestricted: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"You've been restricted from using the gallery on this device. Please contact the device owner so they can give you access."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [viewController presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+        default: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Access Gallery"
+                                                                           message:@"MAGE has been denied access to the gallery.  Please open Settings, and allow access to the gallery."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [viewController presentViewController:alert animated:YES completion:nil];
+            
+            complete(NO);
+            break;
+        }
+    }
 }
 
 

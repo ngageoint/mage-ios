@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet LocationDataStore *locationDataStore;
 @property (nonatomic, assign) IBOutlet id<MAGEMasterSelectionDelegate> masterSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+@property (strong, nonatomic) id<UserSelectionDelegate> delegate;
 
 @end

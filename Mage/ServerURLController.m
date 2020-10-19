@@ -96,9 +96,15 @@
 
 - (IBAction)onOk:(id)sender {
     NSURL *url = [NSURL URLWithString:self.serverURL.text];
-
-    [self.activityIndicator startAnimating];
-    [self.delegate setServerURL: url];
+    
+    if (url && [url scheme] && [url host]) {
+        [self.activityIndicator startAnimating];
+        self.errorStatus.hidden = YES;
+        self.errorButton.hidden = YES;
+        [self.delegate setServerURL: url];
+    } else {
+        [self showError:@"Invalid URL"];
+    }
 }
 
 - (IBAction)onCancel:(id)sender {

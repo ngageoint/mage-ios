@@ -8,18 +8,21 @@
 #import "MapTypeTableViewCell.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "Feed.h"
+#import "Server.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
+@property (strong) NSArray *feeds;
 @end
 
 @implementation MapSettings
 
-static const NSInteger TOTAL_SECTIONS = 2;
+static const NSInteger TOTAL_SECTIONS = 3;
 
 static const NSInteger LAYERS_SECTION = 0;
 static const NSInteger MAGE_SECTION = 1;
-static const NSInteger EXTERNAL_SECTION = 2;
+static const NSInteger FEED_SECTION = 2;
 
 static const NSInteger LAYERS_ROW_MAP_TYPE = 0;
 static const NSInteger LAYERS_ROW_TRAFFIC = 1;
@@ -31,7 +34,7 @@ static const NSInteger MAGE_ROW_PEOPLE = 1;
 
 static NSString *LAYERS_SECTION_NAME = @"Layers";
 static NSString *MAGE_SECTION_NAME = @"MAGE";
-static NSString *EXTERNAL_SECTION_NAME = @"External Data";
+static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) themeDidChange:(MageTheme)theme {
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
@@ -50,10 +53,15 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
+    self.tableView.accessibilityIdentifier = @"settings";
     [self registerForThemeChanges];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    _feeds = [Feed getMappableFeeds:[Server currentEventId]];
 }
 
 - (void) setMapsToDownloadCount:(NSUInteger)mapsToDownloadCount {
@@ -72,8 +80,8 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
         return [self isTrafficAvailable] ? 4 : 3;
     } else if (section == MAGE_SECTION) {
         return 2;
-    } else if (section == EXTERNAL_SECTION) {
-        return 0;
+    } else if (section == FEED_SECTION) {
+        return [_feeds count];
     }
     
     return 0;
@@ -177,8 +185,25 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
             
             return cell;
         }
-    } else if (indexPath.section == EXTERNAL_SECTION) {
-        return 0;
+    } else if (indexPath.section == FEED_SECTION) {
+        NSArray *selectedFeeds = [defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
+        Feed *feed = [_feeds objectAtIndex:indexPath.row];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CellWithSwitch"];
+        }
+        cell.textLabel.text = feed.title;
+        cell.detailTextLabel.text = feed.summary;
+        UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        observationSwitch.on = [selectedFeeds containsObject:feed.remoteId];
+        observationSwitch.tag = feed.tag.integerValue;
+        observationSwitch.accessibilityLabel = [NSString stringWithFormat:@"feed-switch-%@", feed.remoteId];
+        NSLog(@"added switch called feed-switch-%@", feed.remoteId);
+        observationSwitch.onTintColor = [UIColor themedButton];
+        [observationSwitch addTarget:self action:@selector(feedSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.accessoryView = observationSwitch;
+        
+        return cell;
     }
 
     return nil;
@@ -189,8 +214,8 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
         return LAYERS_SECTION_NAME;
     } else if (section == MAGE_SECTION) {
         return MAGE_SECTION_NAME;
-    } else if (section == EXTERNAL_SECTION) {
-        return EXTERNAL_SECTION_NAME;
+    } else if (section == FEED_SECTION) {
+        return FEED_SECTION_NAME;
     }
     
     return @"";
@@ -265,6 +290,20 @@ static NSString *EXTERNAL_SECTION_NAME = @"External Data";
 - (void) peopleSwitchChanged: (UISwitch *) sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:!sender.on forKey:@"hidePeople"];
+    [defaults synchronize];
+}
+
+- (void) feedSwitchChanged:(UISwitch *)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    Feed* feed = (Feed *)[Feed MR_findFirstByAttribute:@"tag" withValue:[NSNumber numberWithInteger: sender.tag]];
+    NSMutableArray *selectedFeedsForEvent = [[defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]] mutableCopy];
+    if (sender.on) {
+        [selectedFeedsForEvent addObject:feed.remoteId];
+    } else {
+        [selectedFeedsForEvent removeObject:feed.remoteId];
+    }
+    [defaults setObject:selectedFeedsForEvent forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     [defaults synchronize];
 }
 

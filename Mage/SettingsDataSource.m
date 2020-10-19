@@ -16,6 +16,7 @@
 #import "NSDate+display.h"
 #import "Theme+UIResponder.h"
 #import "UITableViewCell+Setting.h"
+#import <CoreText/CoreText.h>
 
 @interface SettingsDataSource ()
 

@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) IBOutlet ObservationDataStore *observationDataStore;
 @property (weak, nonatomic) id<AttachmentSelectionDelegate> attachmentDelegate;
+@property (weak, nonatomic) id<ObservationSelectionDelegate> observationSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
 @end

@@ -10,7 +10,7 @@
 #import "MageServer.h"
 #import "User.h"
 
-@protocol LoginDelegate <NSObject>
+@protocol LoginDelegate
 
 - (void) loginWithParameters: (NSDictionary *) parameters withAuthenticationType: (AuthenticationType) authenticationType complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
 - (void) changeServerURL;

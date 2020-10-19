@@ -29,7 +29,7 @@
     [super tearDown];
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [OHHTTPStubs removeAllStubs];
+    [HTTPStubs removeAllStubs];
 }
 
 - (void)testSetURLThatHasAlreadyBeenSetWithoutStoredPasswordOrAPIRetrievedAndNoConnectionShouldHaveNoLoginModules {
@@ -39,11 +39,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-        return [OHHTTPStubsResponse responseWithError:notConnectedError];
+        return [HTTPStubsResponse responseWithError:notConnectedError];
     }];
 
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
@@ -77,11 +77,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSError* notConnectedError = [NSError errorWithDomain:NSURLErrorDomain code:kCFURLErrorNotConnectedToInternet userInfo:nil];
-        return [OHHTTPStubsResponse responseWithError:notConnectedError];
+        return [HTTPStubsResponse responseWithError:notConnectedError];
     }];
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
@@ -115,11 +115,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -159,11 +159,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -193,11 +193,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
@@ -227,10 +227,10 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        OHHTTPStubsResponse *response = [[OHHTTPStubsResponse alloc] init];
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+        HTTPStubsResponse *response = [[HTTPStubsResponse alloc] init];
         response.statusCode = 503;
         
         return response;
@@ -263,11 +263,11 @@
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
-    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"] && [request.URL.path isEqualToString:@"/api"];
-    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
         NSString* fixture = OHPathForFile(@"apiSuccess.json", self.class);
-        return [OHHTTPStubsResponse responseWithFileAtPath:fixture
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     

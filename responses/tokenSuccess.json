@@ -1,0 +1,69 @@
+{
+  "token": "itsanothertoken",
+  "expirationDate": "2020-10-03T05:13:36.183Z",
+  "user": {
+    "username":"test",
+    "active":true,
+    "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36",
+    "displayName":"Firstname Lastname",
+    "createdAt":"2014-09-18T14:40:46.000Z",
+    "lastUpdated":"2020-02-19T17:19:45.575Z",
+    "email":"test@test.com",
+    "authentication":{
+        "type":"local"
+    },
+    "recentEventIds":[15,1,91,56,67],
+    "enabled":true,
+    "icon":{
+        "size":1764,
+        "contentType":"image/png",
+        "color":"#ff5500",
+        "text":"FL",
+        "type":"create"
+    },
+    "phones":[{
+        "type":"Main",
+        "number":"303-111-2222"
+    }],
+    "id":"1a",
+    "role":{
+        "name":"ADMIN_ROLE",
+        "description":"Administrative role, full acces to entire MAGE API.",
+        "permissions":[
+            "CREATE_DEVICE","READ_DEVICE","UPDATE_DEVICE","DELETE_DEVICE","CREATE_USER","READ_USER","UPDATE_USER","DELETE_USER","CREATE_ROLE","READ_ROLE","UPDATE_ROLE","DELETE_ROLE","CREATE_EVENT","READ_EVENT_ALL","UPDATE_EVENT","DELETE_EVENT","CREATE_LAYER","READ_LAYER_ALL","UPDATE_LAYER","DELETE_LAYER","CREATE_OBSERVATION","READ_OBSERVATION_ALL","UPDATE_OBSERVATION_ALL","DELETE_OBSERVATION","CREATE_LOCATION","READ_LOCATION_ALL","UPDATE_LOCATION_ALL","DELETE_LOCATION","CREATE_TEAM","READ_TEAM","UPDATE_TEAM","DELETE_TEAM","READ_SETTINGS","UPDATE_SETTINGS","UPDATE_USER_ROLE"
+        ],
+        "id":"2a"
+    },
+    "avatarUrl":"https://magetest/api/users/1a/avatar",
+    "iconUrl":"https://magetest/api/users/1a/icon"
+  },
+  "device": {
+    "uid": "uid",
+    "name": "Initial Device",
+    "description": "Device description",
+    "appVersion": "Web Client",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15",
+    "userId": "1a",
+    "registered": true,
+    "id": "device1"
+  },
+  "api": {
+    "name": "mage-server",
+    "description": "Geospatial situation awareness application.",
+    "version": {
+      "major": 5,
+      "minor": 4,
+      "micro": 0
+    },
+    "authenticationStrategies": {
+      "local": {
+        "passwordMinLength": 14
+      }
+    },
+    "disclaimer":{
+      "text":"Disclaimer text",
+      "title":"Consent to Monitoring",
+      "show":true
+    }
+  }
+}

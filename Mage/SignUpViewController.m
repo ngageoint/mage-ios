@@ -146,9 +146,7 @@
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
         
-        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@" " withString:@""];
-        rawString = [rawString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        
+        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [textFieldString length])];
         NBAsYouTypeFormatter *aFormatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:[[NSLocale currentLocale] countryCode]];
         NSString *formattedString = [aFormatter inputString:rawString];
         
@@ -174,7 +172,6 @@
                 // fair
                 self.passwordStrengthLabel.text = @"Fair";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
-                
                 break;
             case 2:
                 // good
@@ -182,19 +179,16 @@
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
                 
                 break;
-                
             case 3:
                 // strong
                 self.passwordStrengthLabel.text = @"Strong";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
                 
                 break;
-                
             case 4:
                 // excell
                 self.passwordStrengthLabel.text = @"Excellent";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
-                
                 break;
         }
     }
@@ -236,7 +230,7 @@
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
                                      preferredStyle:UIAlertControllerStyleAlert];
-        
+        alert.accessibilityLabel = @"Passwords Do Not Match";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
@@ -289,7 +283,7 @@
                                  alertControllerWithTitle:[NSString stringWithFormat:@"Missing Required Fields"]
                                  message:[NSString stringWithFormat:@"Please fill out the required fields: '%@'", [fields componentsJoinedByString:@", "]]
                                  preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Missing Required Fields";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }

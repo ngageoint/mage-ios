@@ -8,18 +8,18 @@
 #import "UserUtility.h"
 #import "MageSessionManager.h"
 #import "MapViewController_iPad.h"
-#import "MageTabBarController.h"
 #import "ObservationTableViewController.h"
-#import "ObservationContainerViewController.h"
+#import "FeedItemSelectionDelegate.h"
 #import "LocationTableViewController.h"
-#import "PeopleContainerViewController.h"
 #import "MapCalloutTappedSegueDelegate.h"
 #import "MAGE-Swift.h"
 #import "Mage.h"
+#import "MAGE-Swift.h"
 
-@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate>
-    @property(nonatomic, weak) MageTabBarController *tabBarController;
-    @property(nonatomic, weak) MapViewController_iPad *mapViewController;
+@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate, FeedItemSelectionDelegate>
+@property(nonatomic, strong) UINavigationController *masterViewController;
+@property(nonatomic, strong) MageSideBarController *sideBarController;
+    @property(nonatomic, strong) MapViewController_iPad *mapViewController;
     @property(nonatomic, weak) UIBarButtonItem *masterViewButton;
     @property(nonatomic, strong) NSArray *mapCalloutDelegates;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
@@ -29,44 +29,50 @@
 
 @implementation MageSplitViewController
 
+- (void) themeDidChange:(MageTheme)theme {
+    self.masterViewController.navigationBar.barTintColor = [UIColor primary];
+    self.masterViewController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    [self.masterViewController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor navBarPrimaryText]}];
+
+    self.masterViewController.navigationBar.prefersLargeTitles = NO;
+    self.masterViewController.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setMaximumPrimaryColumnWidth:376];
+    [self setPreferredPrimaryColumnWidthFraction:1.0];
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     [[Mage singleton] startServicesAsInitial:YES];
     
     self.delegate = self;
+        
+    self.sideBarController = [[MageSideBarController alloc] init];
+    self.sideBarController.delegate = self;
+    self.masterViewController = [[UINavigationController alloc] initWithRootViewController:self.sideBarController];
     
-    self.tabBarController = (MageTabBarController *) [self.viewControllers firstObject];
+    self.mapViewController = [[MapViewController_iPad alloc] init];
+    UINavigationController *detailViewController = [[UINavigationController alloc] initWithRootViewController:self.mapViewController];
+    
+    self.viewControllers = [NSArray arrayWithObjects:self.masterViewController, detailViewController, nil];
 
-    UINavigationController *detailViewController = [self.viewControllers lastObject];
-     
-    self.mapViewController = (MapViewController_iPad *) detailViewController.topViewController;
     self.mapViewController.mapDelegate.mapCalloutDelegate = self.mapViewController;
     
-    ObservationContainerViewController *observationViewController = (ObservationContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:0];
-    observationViewController.delegate = self;
-    
-    PeopleContainerViewController *peopleViewController = (PeopleContainerViewController *) [self.tabBarController.viewControllers objectAtIndex:1];
-    peopleViewController.delegate = self;
+    self.view.backgroundColor = [UIColor mageBlue];
+    [self registerForThemeChanges];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
-        self.masterViewButton = self.displayModeButtonItem;
-    }
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    self.masterViewButton = self.displayModeButtonItem;
     
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
         [self ensureButtonVisible];
     }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)userDetailSelected:(User *) user {
@@ -95,38 +101,26 @@
     [self.mapViewController observationDetailSelected:observation];
 }
 
+- (void) feedItemSelected:(FeedItem *)feedItem {
+    [[UIApplication sharedApplication] sendAction:self.masterViewButton.action to:self.masterViewButton.target from:nil forEvent:nil];
+    [self.mapViewController feedItemSelected:feedItem];
+}
+
 - (void) ensureButtonVisible {
-    self.masterViewButton.title = @"List";
+    self.masterViewButton.title = self.sideBarController.title;
     self.masterViewButton.style = UIBarButtonItemStylePlain;
     
-    NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
-    if (!items) {
-        items = [NSMutableArray arrayWithObject:self.masterViewButton];
-    } else if ([items objectAtIndex:0] != self.masterViewButton) {
-        [items insertObject:self.masterViewButton atIndex:0];
-    }
-    
-    [self.mapViewController.toolbar setItems:items];
+    self.mapViewController.navigationItem.leftBarButtonItem = self.masterViewButton;
 }
 
 - (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
-    NSLog(@"will change to display mode");
-    
     self.masterViewButton = svc.displayModeButtonItem;
     if (displayMode == UISplitViewControllerDisplayModePrimaryOverlay) {
         [self ensureButtonVisible];
     } else if (displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
         [self ensureButtonVisible];
     } else if (displayMode == UISplitViewControllerDisplayModeAllVisible) {
-        NSMutableArray *items = [self.mapViewController.toolbar.items mutableCopy];
-        [items removeObject:self.masterViewButton];
-        [self.mapViewController.toolbar setItems:items];
-        
-        self.masterViewButton = nil;
-        
-        for (UIViewController *viewController in self.tabBarController.viewControllers) {
-            [viewController.view setNeedsLayout];
-        }
+        self.mapViewController.navigationItem.leftBarButtonItem = nil;
     }
 }
 
@@ -136,7 +130,6 @@
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {
-    NSLog(@"attachment selected");
     if (self.attachmentCoordinator) {
         [self.attachmentCoordinator setAttachmentWithAttachment:attachment];
     } else {

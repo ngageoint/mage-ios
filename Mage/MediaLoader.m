@@ -49,7 +49,7 @@
 - (void) downloadAudioToFile: (NSString *) file fromURL: (NSURL *) url {
     self.urlToLoad = url;
     self.finalFile = file;
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
 
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * downloadProgress){
@@ -217,7 +217,7 @@
         NSOperationQueue *queue = [[NSOperationQueue alloc] init];
         
         NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:queue];
-        MageSessionManager *manager = [MageSessionManager manager];
+        MageSessionManager *manager = [MageSessionManager sharedManager];
 
         NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:self.urlToLoad.absoluteString parameters: nil error: nil];
 

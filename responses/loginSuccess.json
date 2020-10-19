@@ -39,7 +39,7 @@
         "description":"Geospatial situation awareness application",
         "version":{
             "major":5,
-            "minor":0,
+            "minor":4,
             "micro":0
         },
         "authenticationStrategies":{
