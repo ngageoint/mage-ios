@@ -9,6 +9,7 @@
 #import "Event.h"
 #import "Team.h"
 #import "User.h"
+#import "Feed.h"
 #import "Server.h"
 #import "StaticLayer.h"
 
@@ -67,6 +68,8 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
         }
     }
     [Layer populateLayersFromJson:[json objectForKey:@"layers"] inEventId: self.remoteId inContext:context];
+    [Feed refreshFeedsForEvent:self.remoteId];
+//    [Feed populateFeedsFromJson:[json objectForKey:@"feeds"] inEventId: self.remoteId inContext: context];
 }
 
 - (BOOL) isUserInEvent: (User *) user {
@@ -109,7 +112,7 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
     NSLog(@"Pulling events from the server %@", url);
     
     NSURL *URL = [NSURL URLWithString:url];
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager GET_TASK:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             User *localUser = [User fetchCurrentUserInManagedObjectContext:localContext];
@@ -152,7 +155,7 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
     NSString *url = [NSString stringWithFormat:@"%@/api/users/%@/events/%@/recent", [MageServer baseURL], u.remoteId, [Server currentEventId]];
     
     NSURL *URL = [NSURL URLWithString:url];
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id events) {
         
     } failure:^(NSURLSessionTask *operation, NSError *error) {

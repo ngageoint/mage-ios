@@ -52,7 +52,7 @@ NSString * const kCurrentEventIdKey = @"currentEventId";
         if (eventTasks != nil) {
             NSArray<NSNumber *> *tasks = [eventTasks objectForKey:eventId];
             if (tasks != nil) {
-                MageSessionManager *manager = [MageSessionManager manager];
+                MageSessionManager *manager = [MageSessionManager sharedManager];
                 for (NSNumber *taskIdentifier in tasks) {
                     [manager readdTaskWithIdentifier:[taskIdentifier unsignedIntegerValue] withPriority:NSURLSessionTaskPriorityHigh];
                 }

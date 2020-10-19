@@ -26,7 +26,7 @@ extern NSInteger const MAGE_MaxConcurrentEvents;
  *
  * @return MAGE Session Manager
  */
-+ (MageSessionManager *) manager;
++ (MageSessionManager *) sharedManager;
 
 /**
  * Set the MAGE token for request authentication

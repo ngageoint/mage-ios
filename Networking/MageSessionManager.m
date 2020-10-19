@@ -35,7 +35,7 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
 
 @implementation MageSessionManager
 
-+(MageSessionManager *)manager
++(MageSessionManager *)sharedManager
 {
     static MageSessionManager *managerSingleton = nil;
     static dispatch_once_t pred;

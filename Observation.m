@@ -398,7 +398,7 @@ Event *_event;
 
 + (NSURLSessionDataTask *) operationToDeleteObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to delete observation %@", observation.url);
-    NSURLSessionDataTask *task = [[MageSessionManager manager] POST_TASK:[NSString stringWithFormat:@"%@/states", observation.url] parameters: @{@"name":@"archive"} progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSURLSessionDataTask *task = [[MageSessionManager sharedManager] POST_TASK:[NSString stringWithFormat:@"%@/states", observation.url] parameters: @{@"name":@"archive"} progress:^(NSProgress * _Nonnull uploadProgress) {
         NSLog(@"progress");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"success");
@@ -427,7 +427,7 @@ Event *_event;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], observation.eventId];
     NSLog(@"Trying to create observation %@", url);
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSLog(@"Successfully created location for observation resource");
 
@@ -467,7 +467,7 @@ Event *_event;
 + (NSURLSessionDataTask *) operationToUpdateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to update observation %@", observation.url);
     Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
-    NSURLSessionDataTask *task = [[MageSessionManager manager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [[MageSessionManager sharedManager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
         if (success) {
             success(response);
         }
@@ -483,7 +483,7 @@ Event *_event;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], favorite.observation.eventId, favorite.observation.remoteId];
     NSLog(@"Trying to push favorite to server %@", url);
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
 
     NSURLSessionDataTask *task = nil;
 
@@ -517,7 +517,7 @@ Event *_event;
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], important.observation.eventId, important.observation.remoteId];
     NSLog(@"Trying to push important to server %@", url);
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
 
     NSURLSessionDataTask *task = nil;
 
@@ -568,7 +568,7 @@ Event *_event;
         [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
     }
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     __block BOOL sendBulkNotification = initialPull;
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable features) {
@@ -785,7 +785,7 @@ Event *_event;
     [alert.view addConstraints:@[topConstraint, leftConstraint, rightConstraint]];
 
     // download the attachments (if we don't have them)
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
 
     dispatch_group_t group = dispatch_group_create();
 

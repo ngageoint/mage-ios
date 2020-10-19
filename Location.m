@@ -85,7 +85,7 @@
         [parameters setObject:[lastLocationDate iso8601String] forKey:@"startDate"];
     }
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id allUserLocations) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {

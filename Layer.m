@@ -42,7 +42,7 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
 }
 
 + (void) refreshLayersForEvent:(NSNumber *)eventId {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [Layer operationToPullLayersForEvent:eventId success:^{
     } failure:^(NSError *error) {
     }];
@@ -50,7 +50,7 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
 }
 
 + (void) cancelGeoPackageDownload: (Layer *) layer {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     for (NSURLSessionDownloadTask *task in manager.downloadTasks) {
         if ([task.taskDescription isEqualToString: [NSString stringWithFormat: @"geopackage_download_%@", layer.remoteId]]) {
             [task cancel];
@@ -66,7 +66,7 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
 + (void) downloadGeoPackage: (Layer *) layer success: (void (^)(void)) success failure: (void (^)(NSError *)) failure {
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers/%@", [MageServer baseURL], [Server currentEventId], [layer remoteId]];
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSString *stringPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"/geopackages/%@/%@", layer.remoteId, [layer.file valueForKey:@"name"]]];
     
     stringPath = [NSString stringWithFormat:@"%@_%@_%@.gpkg", [[stringPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[stringPath lastPathComponent] stringByDeletingPathExtension]], layer.remoteId, @"from_server"];
@@ -166,7 +166,7 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
     
     NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/layers", [MageServer baseURL], eventId];
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSMutableArray *layerRemoteIds = [Layer populateLayersFromJson:responseObject inEventId: eventId inContext:localContext];

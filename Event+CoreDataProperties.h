@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *recentSortOrder;
 @property (nullable, nonatomic, retain) NSNumber *remoteId;
 @property (nullable, nonatomic, retain) NSSet<Team *> *teams;
+@property (nullable, nonatomic, retain) NSSet<Feed *> *feeds;
 @property (nullable, nonatomic, retain) NSDictionary *acl;
 
 @end
@@ -31,6 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeTeamsObject:(Team *)value;
 - (void)addTeams:(NSSet<Team *> *)values;
 - (void)removeTeams:(NSSet<Team *> *)values;
+- (void)addFeedsObject:(Team *)value;
+- (void)removeFeedsObject:(Team *)value;
+- (void)addFeeds:(NSSet<Team *> *)values;
+- (void)removeFeeds:(NSSet<Team *> *)values;
 
 @end
 

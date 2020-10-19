@@ -79,7 +79,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
             }
         }];
         
-        [[MageSessionManager manager] addTask:observationFetchTask];
+        [[MageSessionManager sharedManager] addTask:observationFetchTask];
     } else {
         [self scheduleTimer];
     }
@@ -97,7 +97,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
             }
         }];
         
-        [[MageSessionManager manager] addTask:observationFetchTask];
+        [[MageSessionManager sharedManager] addTask:observationFetchTask];
     } else {
         [self scheduleTimer];
     }

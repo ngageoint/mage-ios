@@ -12,6 +12,7 @@
 
 @class User;
 @class Team;
+@class Feed;
 
 NS_ASSUME_NONNULL_BEGIN
 

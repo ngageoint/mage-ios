@@ -128,13 +128,12 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     }
     
     MageServer *server = [[MageServer alloc] initWithURL: url];
-    
     if ([url.absoluteString isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
         success(server);
         return;
     }
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSString *apiURL = [NSString stringWithFormat:@"%@/%@", [url absoluteString], @"api"];
     NSURLSessionDataTask *task = [manager GET_TASK:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

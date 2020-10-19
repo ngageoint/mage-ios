@@ -90,11 +90,11 @@
     return gpsLocation;
 }
 
-+ (NSArray *) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context {
++ (NSArray <GPSLocation *>*) fetchGPSLocationsInManagedObjectContext:(NSManagedObjectContext *) context {
     return [GPSLocation MR_findAllSortedBy:@"timestamp" ascending:YES inContext:context];
 }
 
-+ (NSArray *) fetchLastXGPSLocations: (NSUInteger) limit {
++ (NSArray <GPSLocation *>*) fetchLastXGPSLocations: (NSUInteger) limit {
     NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllSortedBy:@"timestamp" ascending:YES];
     fetchRequest.fetchLimit = limit;
     
@@ -106,7 +106,7 @@
     NSLog(@"Pushing locations to server %@", url);
     
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
         SFGeometry *point = [location getGeometry];

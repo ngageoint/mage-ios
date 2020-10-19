@@ -54,7 +54,7 @@
     // Add the operations to the queue
     NSArray<NSURLSessionTask *> *tasks = [[NSArray alloc] initWithObjects:rolesPullTask, usersPullTask, nil];
     SessionTask *sessionTask = [[SessionTask alloc] initWithTasks:tasks andMaxConcurrentTasks:1];
-    [[MageSessionManager manager] addSessionTask:sessionTask];
+    [[MageSessionManager sharedManager] addSessionTask:sessionTask];
 
     [MageSessionManager setEventTasks:nil];
 }
@@ -67,7 +67,7 @@
 }
 
 - (void) fetchEvents {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^{
         
         NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
@@ -89,7 +89,7 @@
 }
 
 - (void) fetchFormAndStaticLayerForEvents: (NSArray *) events {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     SessionTask *task = [[SessionTask alloc] initWithMaxConcurrentTasks:(int)MAGE_MaxConcurrentEvents];
     
     NSMutableDictionary<NSNumber *, NSMutableArray<NSNumber *> *> * eventTasks = [[NSMutableDictionary alloc] init];

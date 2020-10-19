@@ -74,7 +74,7 @@
     [defaults synchronize];
     [[UserUtility singleton] resetExpiration];
     
-    [MageSessionManager manager].token = [oldLoginParameters objectForKey:@"token"];
+    [MageSessionManager sharedManager].token = [oldLoginParameters objectForKey:@"token"];
     complete(AUTHENTICATION_SUCCESS, nil);
 }
 

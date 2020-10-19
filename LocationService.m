@@ -155,7 +155,7 @@ NSInteger const kLocationPushLimit = 100;
             self.isPushingLocations = NO;
         }];
         
-        [[MageSessionManager manager] addTask:locationTask];
+        [[MageSessionManager sharedManager] addTask:locationTask];
     }
 }
 

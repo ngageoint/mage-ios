@@ -123,6 +123,8 @@ static int defaultMaxConcurrentTasks = 1;
  */
 -(void) insertTask: (NSURLSessionTask *) task{
     NSNumber *taskId = [NSNumber numberWithUnsignedInteger:task.taskIdentifier];
+    NSLog(@"Insert task id %@", taskId);
+    NSLog(@"task %@", task);
     if(_tasks.count == 0){
         // Add the first task and set priority to the task priority
         _priority = task.priority;
@@ -139,6 +141,9 @@ static int defaultMaxConcurrentTasks = 1;
             }
             return result;
         }];
+        NSLog(@"tasks %lu", (unsigned long)_tasks.count );
+        NSLog(@"taskids %lu", (unsigned long)_taskIds.count);
+        NSLog(@"insertLocation %lu", (unsigned long)insertLocation);
         [_tasks insertObject:task atIndex:insertLocation];
         [_taskIds insertObject:taskId atIndex:insertLocation];
         _multi = YES;
@@ -164,8 +169,11 @@ static int defaultMaxConcurrentTasks = 1;
 
 -(NSURLSessionTask *) removeTaskAtIndex: (NSUInteger) index{
     NSURLSessionTask *task = [_tasks objectAtIndex:index];
+    @synchronized(self) {
+    NSLog(@"remove task at index %lu", index);
     [_tasks removeObjectAtIndex:index];
     [_taskIds removeObjectAtIndex:index];
+    }
     return task;
 }
 

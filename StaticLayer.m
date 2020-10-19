@@ -38,13 +38,13 @@ NSString * const StaticLayerLoaded = @"mil.nga.giat.mage.static.layer.loaded";
 }
 
 + (void) fetchStaticLayerData: (NSNumber *)eventId layer: (StaticLayer *) staticLayer {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *fetchFeaturesTask = [StaticLayer operationToFetchStaticLayerData:staticLayer];
     [manager addTask:fetchFeaturesTask];
 }
 
 + (NSURLSessionDataTask *) operationToFetchStaticLayerData: (StaticLayer *) layer {
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     __block NSNumber *layerId = layer.remoteId;
     __block NSNumber *eventId = layer.eventId;
     

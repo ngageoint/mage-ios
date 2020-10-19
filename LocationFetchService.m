@@ -76,7 +76,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
         }];
         
         NSLog(@"pulling locations");
-        [[MageSessionManager manager] addTask:locationFetchTask];
+        [[MageSessionManager sharedManager] addTask:locationFetchTask];
     } else {
         [self scheduleTimer];
     }

@@ -187,7 +187,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     
     NSLog(@"about to push an additional %lu observations", (unsigned long) observationsToPush.count);
     __weak typeof(self) weakSelf = self;
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     for (Observation *observation in [observationsToPush allValues]) {
         NSLog(@"submitting observation %@", observation.remoteId);
         NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservation:observation success:^(id response) {
@@ -265,7 +265,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     
     NSLog(@"about to push an additional %lu favorites", (unsigned long) favoritesToPush.count);
     __weak typeof(self) weakSelf = self;
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     for (ObservationFavorite *favorite in [favoritesToPush allValues]) {
         NSURLSessionDataTask *favoritePushTask = [Observation operationToPushFavorite:favorite success:^(id response) {
             NSLog(@"Successfully submitted favorite");
@@ -299,7 +299,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     
     NSLog(@"about to push an additional %lu importants", (unsigned long) importantsToPush.count);
     __weak typeof(self) weakSelf = self;
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     for (ObservationImportant *important in [importantsToPush allValues]) {
         NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportant:important success:^(id response) {
             NSLog(@"Successfully submitted important");

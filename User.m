@@ -58,7 +58,7 @@ static User *currentUser = nil;
     NSString *userIconRelativePath = [NSString stringWithFormat:@"userIcons/%@", user.remoteId];
     NSString *userIconPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userIconRelativePath];
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:user.iconUrl parameters: nil error: nil];
     
@@ -95,7 +95,7 @@ static User *currentUser = nil;
     NSString *userAvatarRelativePath = [NSString stringWithFormat:@"userAvatars/%@", user.remoteId];
     NSString *userAvatarPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, userAvatarRelativePath];
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"GET" URLString:user.avatarUrl parameters: nil error: nil];
     
@@ -134,7 +134,7 @@ static User *currentUser = nil;
     
     NSLog(@"Trying to fetch users from server %@", url);
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id users) {
         
@@ -223,7 +223,7 @@ static User *currentUser = nil;
     
     NSLog(@"Fetching myself from server %@", url);
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id myself) {
         

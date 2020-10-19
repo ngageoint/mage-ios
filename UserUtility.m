@@ -78,7 +78,7 @@
     [loginParameters removeObjectForKey:@"tokenExpirationDate"];
     [loginParameters removeObjectForKey:@"acceptedConsent"];
     
-    [[MageSessionManager manager] clearToken];
+    [[MageSessionManager sharedManager] clearToken];
     
     [defaults setObject:loginParameters forKey:@"loginParameters"];
     
@@ -91,7 +91,7 @@
 - (void) logoutWithCompletion: (void (^)(void)) completion {
     NSString *url = [NSString stringWithFormat:@"%@/api/logout", [MageServer baseURL]];
 
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     __weak typeof(self) weakSelf = self;
 
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
