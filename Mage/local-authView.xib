@@ -123,6 +123,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
+                            <accessibility key="accessibilityConfiguration" label="Signup Container"/>
                             <constraints>
                                 <constraint firstItem="phf-Vy-Niu" firstAttribute="top" secondItem="1Uw-e5-yJ1" secondAttribute="top" constant="16" id="29L-KX-ufP"/>
                                 <constraint firstItem="phf-Vy-Niu" firstAttribute="leading" secondItem="1Uw-e5-yJ1" secondAttribute="leading" constant="20" symbolic="YES" id="HK3-mY-pa2"/>
