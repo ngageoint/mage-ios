@@ -37,6 +37,8 @@
 #import "ServerURLController.h"
 #import "SignUpViewController.h"
 #import "ChangePasswordViewController.h"
+#import "LocalLoginView.h"
+#import "DeviceUUID.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

@@ -72,7 +72,7 @@
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YOc-FB-DT3">
                             <rect key="frame" x="20" y="157" width="335" height="40"/>
                             <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" label="Log In"/>
+                            <accessibility key="accessibilityConfiguration" label="Sign In"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="3xZ-hI-PRX"/>
                             </constraints>
@@ -133,6 +133,7 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <accessibility key="accessibilityConfiguration" label="Local Login View"/>
                     <constraints>
                         <constraint firstItem="Bjf-hp-DFx" firstAttribute="leading" secondItem="Q8A-73-ehK" secondAttribute="trailing" constant="8" id="0jL-xo-6wJ"/>
                         <constraint firstAttribute="trailing" secondItem="qOJ-dM-0H4" secondAttribute="trailing" constant="20" symbolic="YES" id="1FC-ZE-KtI"/>

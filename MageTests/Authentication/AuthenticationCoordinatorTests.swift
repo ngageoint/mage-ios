@@ -113,11 +113,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -144,11 +144,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -175,11 +175,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -214,11 +214,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -263,11 +263,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -303,11 +303,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 
@@ -347,11 +347,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 
@@ -390,11 +390,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 
@@ -436,11 +436,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 
@@ -487,10 +487,10 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.startLoginOnly();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 
@@ -526,7 +526,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.startLoginOnly();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 let view: UITextField = (viewTester().usingLabel("Username")?.view as! UITextField);
                 expect(view.isEnabled).to(beFalse());
                 tester().expect(view, toContainText: "userabc");
@@ -549,11 +549,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
@@ -583,11 +583,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 coordinator?.start();
                 
-                tester().waitForView(withAccessibilityLabel: "Log In")
+                tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 
-                tester().tapView(withAccessibilityLabel: "Log In");
+                tester().tapView(withAccessibilityLabel: "Sign In");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: 10, pollInterval: 1, description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: 10, pollInterval: 1, description: "Token request was not made")
