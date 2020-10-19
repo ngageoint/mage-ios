@@ -9,9 +9,8 @@
 #import "AuthenticationCoordinator.h"
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
-#import "GoogleSignUpViewController.h"
-#import "OAuthLoginView.h"
-#import "OAuthViewController.h"
+#import "IDPLoginView.h"
+#import "IDPCoordinator.h"
 #import "DisclaimerViewController.h"
 #import "MageServer.h"
 #import "Server.h"
@@ -20,20 +19,19 @@
 #import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "ServerURLController.h"
-#import <GoogleSignIn/GoogleSignIn.h>
-#import "GoogleAuthentication.h"
 #import "MageSessionManager.h"
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, GIDSignInDelegate, SignUpDelegate, OAuthButtonDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, SignUpDelegate, IDPButtonDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
 @property (strong, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) ServerURLController *urlController;
+@property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 
 @end
 
@@ -51,44 +49,17 @@ BOOL signingIn = YES;
     return self;
 }
 
-/**
- In order to use Google sign in, you must download a GoogleService-Info plist file and add the url scheme to the app.
- Follow the instructions here: https://developers.google.com/identity/sign-in/ios/start-integrating
- 
- After this is done, add the client id to your server google configuration
- "google": {
- "clientID":[<web client ID>, <iOS clientID>, <Android client ID>],
- "webClientID": "<client ID for the web client>"
- }
- */
-- (void) setupGoogleSignIn {
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"GoogleService-Info" ofType: @"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    
-    [GIDSignIn sharedInstance].clientID = [dict objectForKey: @"CLIENT_ID"];
-    [GIDSignIn sharedInstance].delegate = self;
-}
-
 - (void) createAccount {
-    [[GIDSignIn sharedInstance] signOut];
     signingIn = NO;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
     [self.navigationController pushViewController:signupView animated:NO];
 }
 
-- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error {
-    if (signingIn) {
-        [self completeGoogleSigninWithUser:user];
-    } else {
-        [self completeGoogleSignUpWithUser:user];
-    }
-}
-
 - (void) signUpWithParameters:(NSDictionary *)parameters atURL:(NSURL *)url {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
         NSString *displayName = [response objectForKey:@"displayName"];
@@ -98,6 +69,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
                                                                        message:[NSString stringWithFormat:@"%@ (%@) has been successfully created. %@", displayName, username, msg]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Account Created";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf.navigationController popToViewController:self.loginView animated:NO];
@@ -111,6 +83,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
                                                                        message:errResponse
                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Error Creating Account";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         
@@ -129,53 +102,17 @@ BOOL signingIn = YES;
     [self.navigationController popToViewController:self.loginView animated:NO];
 }
 
-- (void) completeGoogleSignUpWithUser: (GIDGoogleUser *) user {
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    GoogleSignUpViewController *signupView = [[GoogleSignUpViewController alloc] initWithServer:self.server andGoogleUser:user andDelegate:self];
-    [self.navigationController pushViewController:signupView animated:NO];
-}
-
-- (void) completeGoogleSigninWithUser: (GIDGoogleUser *) user {
-    NSUUID *deviceUUID = [DeviceUUID retrieveDeviceUUID];
-    NSString *uidString = deviceUUID.UUIDString;
-    NSMutableDictionary *userDictionary = [[NSMutableDictionary alloc] init];
-    [userDictionary setObject:user.authentication.idToken forKey:@"token"];
-    [userDictionary setObject:user.userID forKey:@"userID"];
-    [userDictionary setObject:user.profile.name forKey:@"displayName"];
-    [userDictionary setObject:user.profile.email forKey:@"email"];
-    [userDictionary setObject:uidString forKey:@"uid"];
-    id<Authentication> authentication = [Authentication authenticationModuleForType:GOOGLE];
-    NSDictionary* parameters = @{
-                                 @"user": userDictionary
-                                 };
-    
-    __weak typeof(self) weakSelf = self;
-    [authentication loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-        if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessfulWithModule:authentication];
-        } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-            [weakSelf registrationWasSuccessful];
-            [[GIDSignIn sharedInstance] signOut];
-        } else {
-            [[GIDSignIn sharedInstance] signOut];
-        }
-    }];
-}
-
 - (void) signinForStrategy:(NSDictionary *)strategy {
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
     
-    OAuthViewController *ovc = [[OAuthViewController alloc] initWithUrl:url andAuthenticationType:OAUTH2 andRequestType:SIGNIN andStrategy: strategy andLoginDelegate: self];
-    [self.navigationController pushViewController:ovc animated:YES];
+    self.idpCoordinator = [[IDPCoordinator alloc] initWithViewController:self.navigationController url:url strategy:strategy delegate:self];
+    [self.idpCoordinator start];
 }
 
 - (void) startLoginOnly {
     NSURL *url = [MageServer baseURL];
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-        if (mageServer.serverHasGoogleAuthenticationStrategy) {
-            [self setupGoogleSignIn];
-        }
         [weakSelf showLoginViewForCurrentUserForServer:mageServer];
     } failure:^(NSError *error) {
         NSLog(@"failed to contact server");
@@ -190,9 +127,6 @@ BOOL signingIn = YES;
     } else {
         __weak __typeof__(self) weakSelf = self;
         [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-            if (mageServer.serverHasGoogleAuthenticationStrategy) {
-                [self setupGoogleSignIn];
-            }
             [weakSelf showLoginViewForServer:mageServer];
         } failure:^(NSError *error) {
             [weakSelf changeServerURLWithError: error.localizedDescription];
@@ -211,7 +145,6 @@ BOOL signingIn = YES;
 - (void) showLoginViewForServer: (MageServer *) mageServer {
     signingIn = YES;
     self.server = mageServer;
-    [[GIDSignIn sharedInstance] signOut];
     // If the user is logging in, force them to pick the event again
     [Server removeCurrentEventId];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -273,7 +206,7 @@ BOOL signingIn = YES;
                     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Loss of Unsaved Data"
                                                                                    message:@"The previously logged in user has unsaved observations.  Continuing with a new user will remove all previous data, including unsaved observations. Continue?"
                                                                             preferredStyle:UIAlertControllerStyleAlert];
-                    
+                    alert.accessibilityLabel = @"Loss of Unsaved Data";
                     [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                         [MagicalRecord deleteAndSetupMageCoreDataStack];
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
@@ -312,7 +245,7 @@ BOOL signingIn = YES;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"MAGE Account Created"
                                                                    message:@"Account created, please contact your MAGE administrator to activate your account."
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"MAGE Account Created";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     
     [self.navigationController presentViewController:alert animated:YES completion:nil];
@@ -323,7 +256,7 @@ BOOL signingIn = YES;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Login Failed"
                                                                    message:error
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Login Failed";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
 
     
@@ -356,7 +289,7 @@ BOOL signingIn = YES;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
                                                                        message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-
+        alert.accessibilityLabel = @"Disconnected Login";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK, Work Offline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf workOffline: parameters complete:complete];
         }]];
@@ -369,6 +302,7 @@ BOOL signingIn = YES;
         // there is no stored password for this server
         UIAlertController *alert = [UIAlertController
                                     alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        alert.accessibilityLabel = @"Unable to Login";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf returnToLogin: complete];
         }]];
@@ -425,6 +359,7 @@ BOOL signingIn = YES;
                                  alertControllerWithTitle:@"Registration Sent"
                                  message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
                                  preferredStyle:UIAlertControllerStyleAlert];
+    alert.accessibilityLabel = @"Registration Sent";
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {

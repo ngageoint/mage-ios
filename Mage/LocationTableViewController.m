@@ -6,18 +6,17 @@
 
 #import "LocationTableViewController.h"
 #import "Location.h"
-#import "MeViewController.h"
 #import "Event.h"
 #import "MageSessionManager.h"
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
 #import "Theme+UIResponder.h"
+#import "MAGE-Swift.h"
 
-@interface LocationTableViewController() <UserSelectionDelegate, UIViewControllerPreviewingDelegate>
+@interface LocationTableViewController() <UserSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
-@property (nonatomic, strong) id previewingContext;
 
 @end
 
@@ -25,7 +24,8 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.tableView.separatorColor = [UIColor tableSeparator];
     self.refreshControl.backgroundColor = [UIColor background];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
@@ -33,8 +33,25 @@
     [self setNavBarTitle];
 }
 
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStylePlain];
+    return self;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
+    
+    if (!self.locationDataStore) {
+        self.locationDataStore = [[LocationDataStore alloc] init];
+        self.tableView.dataSource = self.locationDataStore;
+        self.tableView.delegate = self.locationDataStore;
+        self.locationDataStore.tableView = self.tableView;
+        if (self.delegate) {
+            self.locationDataStore.personSelectionDelegate = self.delegate;
+        }
+    }
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"personCell"];
     // ths is different on the ipad and the iphone so make the check here
@@ -53,10 +70,6 @@
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 72;
-    
-    if ([self isForceTouchAvailable]) {
-        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-    }
     
     [self registerForThemeChanges];
 }
@@ -84,6 +97,26 @@
                   context:NULL];
     
     [self startUpdateTimer];
+    [self updateFilterButtonPosition];
+}
+
+- (void) filterButtonPressed {
+    UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
+    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"locationFilter"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void) updateFilterButtonPosition {
+    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
+    if (self != self.navigationController.viewControllers[0]) {
+        if (self.navigationItem.rightBarButtonItem == nil) {
+            self.navigationItem.rightBarButtonItem = self.navigationItem.leftBarButtonItem;
+            self.navigationItem.leftBarButtonItem = nil;
+        }
+    } else if (self.navigationItem.rightBarButtonItem != nil) {
+        self.navigationItem.leftBarButtonItem = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -95,50 +128,6 @@
     [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
     
     [self stopUpdateTimer];
-}
-
-- (BOOL)isForceTouchAvailable {
-    BOOL isForceTouchAvailable = NO;
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
-    }
-    return isForceTouchAvailable;
-}
-
-- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
-    if ([self.presentedViewController isKindOfClass:[MeViewController class]]) {
-        return nil;
-    }
-    
-    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
-    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
-    
-    if (path) {
-        PersonTableViewCell *tableCell = (PersonTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
-        
-        MeViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MeViewController"];
-        previewController.user = tableCell.user;
-        return previewController;
-    }
-    return nil;
-}
-
-- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
-    [self.navigationController showViewController:viewControllerToCommit sender:nil];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    if ([self isForceTouchAvailable]) {
-        if (!self.previewingContext) {
-            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-        }
-    } else {
-        if (self.previewingContext) {
-            [self unregisterForPreviewingWithContext:self.previewingContext];
-            self.previewingContext = nil;
-        }
-    }
 }
 
 - (void) applicationWillResignActive {
@@ -172,24 +161,19 @@
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([[segue identifier] isEqualToString:@"ShowUserSegue"]) {
-        MeViewController *destination = (MeViewController *)[segue destinationViewController];
-        User *user = (User *) sender;
-		[destination setUser:user];
-    }
-}
-
 - (void) userDetailSelected:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"ShowUserSegue" sender:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void)refreshPeople {
@@ -201,7 +185,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [[MageSessionManager manager] addTask:userFetchTask];
+    [[MageSessionManager sharedManager] addTask:userFetchTask];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath

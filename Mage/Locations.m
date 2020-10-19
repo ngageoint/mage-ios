@@ -25,7 +25,7 @@
     return predicates;
 }
 
-+ (id) locationsForAllUsers {
++ (Locations *) locationsForAllUsers {
     
     
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
@@ -39,7 +39,7 @@
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (id) locationsForUser:(User *) user {
++ (Locations *) locationsForUser:(User *) user {
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                                                                                ascending:NO
                                                                            withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]]

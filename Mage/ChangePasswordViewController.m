@@ -44,7 +44,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthNameLabel;
 
-@property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loggedIn;
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
@@ -113,12 +112,6 @@
     self.wandLabel.text = @"\U0000f0d0";
     
     self.passwordField.delegate = self;
-    
-    if ([self.server serverHasLocalAuthenticationStrategy]) {
-        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.passwordField.placeholder = [NSString stringWithFormat:@"New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-        self.confirmPasswordField.placeholder = [NSString stringWithFormat:@"Confirm New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-    }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -130,46 +123,47 @@
         [[textField nextField] becomeFirstResponder];
     }
     
+    if (textField == self.confirmPasswordField) {
+        [self changeButtonTapped:_changeButton];
+    }
+    
     return YES;
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *password = [self.passwordField.text stringByReplacingCharactersInRange:range withString:string];
-    NSArray *userInputs = @[self.usernameField.text, self.currentPasswordField.text];
-    DBResult *passwordStrength = [self.zxcvbn passwordStrength:password userInputs:userInputs];
-    [self.passwordStrengthBar setProgress:(1+passwordStrength.score)/5.0];
-    switch (passwordStrength.score) {
-        case 0:
-            // weak
-            self.passwordStrengthLabel.text = @"Weak";
-            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(244.0/255.0) green:(67.0/255.0) blue:(54.0/255.0) alpha:1];
-            break;
-        case 1:
-            // fair
-            self.passwordStrengthLabel.text = @"Fair";
-            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
-            
-            break;
-        case 2:
-            // good
-            self.passwordStrengthLabel.text = @"Good";
-            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
-            
-            break;
-            
-        case 3:
-            // strong
-            self.passwordStrengthLabel.text = @"Strong";
-            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
-            
-            break;
-            
-        case 4:
-            // excell
-            self.passwordStrengthLabel.text = @"Excellent";
-            self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
-            
-            break;
+    if (textField == _passwordField) {
+        NSString *password = [self.passwordField.text stringByReplacingCharactersInRange:range withString:string];
+        NSArray *userInputs = @[self.usernameField.text, self.currentPasswordField.text];
+        DBResult *passwordStrength = [self.zxcvbn passwordStrength:password userInputs:userInputs];
+        [self.passwordStrengthBar setProgress:(1+passwordStrength.score)/5.0];
+        switch (passwordStrength.score) {
+            case 0:
+                // weak
+                self.passwordStrengthLabel.text = @"Weak";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(244.0/255.0) green:(67.0/255.0) blue:(54.0/255.0) alpha:1];
+                break;
+            case 1:
+                // fair
+                self.passwordStrengthLabel.text = @"Fair";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
+                break;
+            case 2:
+                // good
+                self.passwordStrengthLabel.text = @"Good";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
+                break;
+            case 3:
+                // strong
+                self.passwordStrengthLabel.text = @"Strong";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
+                break;
+            case 4:
+                // excell
+                self.passwordStrengthLabel.text = @"Excellent";
+                self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
+                
+                break;
+        }
     }
     return YES;
 }
@@ -192,6 +186,12 @@
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
         weakSelf.informationView.hidden = YES;
+        
+        if ([mageServer serverHasLocalAuthenticationStrategy]) {
+            ServerAuthentication *server = [mageServer.authenticationModules objectForKey:@"server"];
+            weakSelf.passwordField.placeholder = [NSString stringWithFormat:@"New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+            weakSelf.confirmPasswordField.placeholder = [NSString stringWithFormat:@"Confirm New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+        }
     } failure:^(NSError *error) {
         NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to contact the MAGE server"
@@ -248,7 +248,7 @@
                                  alertControllerWithTitle:[NSString stringWithFormat:@"Missing Required Fields"]
                                  message:[NSString stringWithFormat:@"Please fill out the required fields: '%@'", [fields componentsJoinedByString:@", "]]
                                  preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Missing Required Fields";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
@@ -282,7 +282,7 @@
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
                                      preferredStyle:UIAlertControllerStyleAlert];
-        
+        alert.accessibilityLabel = @"Passwords Do Not Match";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }  else if ([self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
@@ -290,7 +290,7 @@
                                      alertControllerWithTitle:@"Password cannot be the same as the current password"
                                      message:@"Please choose a new password."
                                      preferredStyle:UIAlertControllerStyleAlert];
-        
+        alert.accessibilityLabel = @"Password cannot be the same as the current password";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
@@ -316,7 +316,7 @@
 - (void) changePasswordWithParameters:(NSDictionary *)parameters atURL:(NSURL *)url {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager PUT_TASK:[url absoluteString] parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Password Has Been Changed"
                                                                        message:@"Your password has successfully been changed.  For security purposes you will now be redirected to the login page to log back in with your new password."

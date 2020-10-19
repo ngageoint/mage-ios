@@ -2,7 +2,32 @@
 All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.0.18 (TBD)
+---
+## 2.1.0
+
+##### Release Notes
+
+* Save on data usage by customizing data synchronization options to sync only on specific networks, ie cell or wi-fi. See below for more information.
+
+##### Features
+* Users can now further customize data synchronization in "Settings -> Network Sync Settings". Includes separate synchronization options for
+  observations, attachments and user locations. Users have the option to sync over all networks (default), wi-fi only, specific wi-fi networks (inclusive or exclusive) or never.
+* Google authentication support is back. This includes updates for all third party authentication strategies to align with Apple guidelines.
+
+##### Bug Fixes
+* Fix GeoPackage layer selection on iOS 14.
+
+## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported.
+* Fix bug where video will not attach to observation when photo has not been attached first.
+
+## 2.0.18 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.18)
 
 ##### Release Notes
 

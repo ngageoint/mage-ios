@@ -18,7 +18,7 @@
 #import "ObservationTableHeaderView.h"
 
 @interface ObservationDataStore ()
-@property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
+
 @property (nonatomic) NSDateFormatter *dateFormatter;
 @property (nonatomic) NSDateFormatter *dateFormatterToDate;
 @end
@@ -54,6 +54,9 @@
 }
 
 - (void) startFetchControllerWithObservations: (Observations *) observations {
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
     self.observations = observations;
     self.observations.delegate = self;
     
@@ -67,6 +70,8 @@
 }
 
 - (void) startFetchController {
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     self.observations = [Observations observations];
     self.observations.delegate = self;
 
@@ -113,7 +118,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id  sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
+    id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
 }
 

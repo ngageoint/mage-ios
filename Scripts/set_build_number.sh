@@ -5,11 +5,12 @@
 #  MAGE
 #
 
-BRANCH=${1:-'master'}
+BRANCH=${1:-'feeds'}
 APP_BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
 
 rm -rf .mage-sdk && mkdir .mage-sdk
 git clone -n https://github.com/ngageoint/mage-ios-sdk.git .mage-sdk
+git -C .mage-sdk checkout $BRANCH
 if [ ! $? -eq 0 ]; then
 echo " git clone mage sdk error, with exit status $?"
 exit 1

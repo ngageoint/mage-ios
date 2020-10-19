@@ -1,0 +1,47 @@
+{
+    "id": "string",
+    "username": "string",
+    "displayName": "string",
+    "status": "string",
+    "email": "user@example.com",
+    "createdAt": "2020-10-05T13:13:44.410Z",
+    "lastUpdated": "2020-10-05T13:13:44.410Z",
+    "active": true,
+    "enabled": true,
+    "avatarUrl": "string",
+    "iconUrl": "string",
+    "authentication": {
+        "type": "string",
+        "security": {
+            "locked": true,
+            "lockedUntil": "2020-10-05T13:13:44.410Z",
+            "invalidLoginAttempts": 0,
+            "numberOfTimesLocked": 0
+        }
+    },
+    "role": {
+        "id": "string",
+        "name": "string",
+        "description": "string",
+        "permissions": [
+            "string"
+        ]
+    },
+    "roleId": "string",
+    "icon": {
+        "type": "create",
+        "color": "string",
+        "text": "string",
+        "contentType": "string",
+        "size": 0
+    },
+    "phones": [
+        {
+            "type": "string",
+            "number": "string"
+        }
+    ],
+    "recentEventIds": [
+        0
+    ]
+}

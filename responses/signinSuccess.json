@@ -1,4 +1,5 @@
 {
+    "token": "itsatoken",
     "user": {
         "username":"test",
         "active":true,
@@ -32,7 +33,7 @@
             ],
             "id":"2a"
         },
-        "avatarUrl":"https://magedemo.geointservices.io/api/users/1a/avatar",
-        "iconUrl":"https://magedemo.geointservices.io/api/users/1a/icon"
+        "avatarUrl":"https://magetest/api/users/1a/avatar",
+        "iconUrl":"https://magetest/api/users/1a/icon"
     }
 }

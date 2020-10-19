@@ -14,6 +14,9 @@
 #import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
+#import "FeedItem.h"
+
+@protocol FeedItemDelegate;
 
 @protocol UserTrackingModeChanged <NSObject>
 
@@ -34,20 +37,21 @@
 - (void) onCacheOverlayTapped:(NSString *) message;
 @end
 
-
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener, FeedItemDelegate>
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;
 @property (nonatomic, weak) id<CacheOverlayDelegate> cacheOverlayDelegate;
 
 @property (nonatomic, weak) IBOutlet id<MapCalloutTapped> mapCalloutDelegate;
-@property (nonatomic, strong) UIViewController<UIViewControllerPreviewingDelegate> *previewDelegate;
 @property (nonatomic, strong) Locations *locations;
 @property (nonatomic, strong) Observations *observations;
 @property (nonatomic) BOOL hideLocations;
 @property (nonatomic) BOOL hideObservations;
 @property (nonatomic) BOOL hideStaticLayers;
+@property (nonatomic) BOOL canShowUserCallout;
+@property (nonatomic) BOOL canShowObservationCallout;
+@property (nonatomic) BOOL canShowGpsLocationCallout;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
 @property (nonatomic, strong) MapObservations *mapObservations;
 

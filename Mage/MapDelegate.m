@@ -57,6 +57,8 @@
 #import "ImageryLayer.h"
 #import "BaseMapOverlay.h"
 #import "UIColor+Mage.h"
+#import <PureLayout.h>
+#import "MAGE-Swift.h"
 
 @interface MapDelegate ()
     @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -74,12 +76,10 @@
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
     @property (nonatomic, strong) NSMutableDictionary *onlineLayers;
+    @property (nonatomic, strong) NSMutableArray *currentFeeds;
     @property (nonatomic, strong) AreaAnnotation *areaAnnotation;
 
     @property (nonatomic) BOOL isTrackingAnimation;
-    @property (nonatomic) BOOL canShowUserCallout;
-    @property (nonatomic) BOOL canShowObservationCallout;
-    @property (nonatomic) BOOL canShowGpsLocationCallout;
 
     @property (nonatomic) BOOL darkMode;
 
@@ -115,14 +115,17 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
         
+        [defaults addObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]] options:NSKeyValueObservingOptionNew context:NULL];
+        
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
         self.darkMode = false;
     }
-    
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    if (!self.mapCacheOverlays) {
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    }
     [[CacheOverlays getInstance] registerListener:self];
     self.cacheOverlayUpdate = nil;
     self.cacheOverlayUpdateLock = [[NSObject alloc] init];
@@ -130,6 +133,7 @@
     self.waitingCacheOverlaysUpdate = false;
     GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
     self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
+    [self addFeeds];
 }
 
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate {
@@ -298,6 +302,7 @@
         [defaults removeObserver:self forKeyPath:@"mapType"];
         [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
         [defaults removeObserver:self forKeyPath:@"selectedOnlineLayers"];
+        [defaults removeObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
         [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
     }
     @catch (id exception) {
@@ -318,6 +323,32 @@
     self.locations = nil;
 }
 
+- (void) addFeeds {
+    NSArray *feedIdsInEvent = [[NSUserDefaults standardUserDefaults] arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
+    
+    // remove any feeds that are no longer selected
+    [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
+    for (NSNumber *feedId in self.currentFeeds) {
+        NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId];
+        for (FeedItem *item in items) {
+            if (item.isMappable) {
+                [self.mapView removeAnnotation:item];
+            }
+        }
+    }
+    
+    for (NSString *feedId in feedIdsInEvent) {
+        FeedItemRetriever *retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
+        NSArray<FeedItem*> *items = [retriever startRetriever];
+        for (FeedItem *item in items) {
+            if (item.isMappable) {
+                [self.mapView addAnnotation:item];
+            }
+        }
+    }
+    [self.currentFeeds addObjectsFromArray:feedIdsInEvent];
+}
+
 - (NSMutableDictionary *) staticLayers {
     if (_staticLayers == nil) {
         _staticLayers = [[NSMutableDictionary alloc] init];
@@ -331,6 +362,13 @@
         _onlineLayers = [[NSMutableDictionary alloc] init];
     }
     return _onlineLayers;
+}
+
+- (NSMutableArray *) currentFeeds {
+    if (_currentFeeds == nil) {
+        _currentFeeds = [[NSMutableArray alloc] init];
+    }
+    return _currentFeeds;
 }
 
 - (void) setLocations:(Locations *) locations {
@@ -455,7 +493,9 @@
 }
 
 - (void) ensureMapLayout {
-    self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    if (!self.mapCacheOverlays) {
+        self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
+    }
 
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -482,6 +522,8 @@
         [self updateOnlineLayers: [object objectForKey:keyPath]];
     } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
         [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
+    } else if ([@"selectedFeeds" isEqualToString:keyPath] && self.mapView) {
+        
     }
 }
 
@@ -528,7 +570,7 @@
  *  @param cacheOverlays cache overlays
  */
 - (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
-    
+    NSLog(@"Update Cache Overlays Synchronized %@", cacheOverlays);
     @synchronized(self.cacheOverlayUpdateLock){
         
         // Set the cache overlays to update, including wiping out an update that hasn't processed
@@ -650,8 +692,9 @@
         struct GPKGBoundingBoxSize size = [self.addedCacheBoundingBox sizeInMeters];
         CLLocationCoordinate2D center = [self.addedCacheBoundingBox center];
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(center, size.height, size.width);
-        
-        [self.mapView setRegion:region animated:true];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.mapView setRegion:region animated:true];
+        });
     }
 }
 
@@ -692,6 +735,7 @@
         tileOverlay.maximumZ = xyzDirectoryCacheOverlay.maxZoom;
         [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
         dispatch_sync(dispatch_get_main_queue(), ^{
+            NSLog(@"Adding xyz cache");
             [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveRoads];
         });
         
@@ -777,6 +821,10 @@
             // If the existing cache overlay is being replaced, create a new cache overlay
             if(tileTableCacheOverlay.parent.replacedCacheOverlay != nil){
                 cacheOverlay = nil;
+            } else {
+                // remove the old one and it will be re-added to preserve layer order
+                [self.mapView removeOverlay:tileTableCacheOverlay.tileOverlay];
+                cacheOverlay = nil;
             }
         }
         if(cacheOverlay == nil){
@@ -832,32 +880,34 @@
     if (self.backgroundOverlay) return;
     GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
     GPKGGeoPackage * geoPackage = [manager open:@"countries"];
+    if (geoPackage) {
+        GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+        
+        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+        [self.backgroundOverlay setMinZoom:0];
+        self.backgroundOverlay.darkTheme = NO;
 
-    GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-    [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
-    
-    self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-    [self.backgroundOverlay setMinZoom:0];
-    self.backgroundOverlay.darkTheme = NO;
-
-    self.backgroundOverlay.canReplaceMapContent = true;
+        self.backgroundOverlay.canReplaceMapContent = true;
+    }
     
     GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
+    if (darkGeoPackage) {
+        GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
+        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+        
+        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+        [self.darkBackgroundOverlay setMinZoom:0];
+        self.darkBackgroundOverlay.darkTheme = YES;
 
-    GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
-    [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
-    
-    self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-    [self.darkBackgroundOverlay setMinZoom:0];
-    self.darkBackgroundOverlay.darkTheme = YES;
-
-    self.darkBackgroundOverlay.canReplaceMapContent = true;
+        self.darkBackgroundOverlay.canReplaceMapContent = true;
+    }
 }
 
 - (void) addBackgroundMap {
@@ -866,6 +916,7 @@
         [self.mapView removeOverlay:self.backgroundOverlay];
         [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
+        NSLog(@"Adding the background map");
         [self.mapView removeOverlay:self.darkBackgroundOverlay];
         [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveRoads];
     }
@@ -940,6 +991,7 @@
                 [featureTableCacheOverlay setTileOverlay:featureOverlay];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSLog(@"Adding feature overlay");
                     [self.mapView addOverlay:featureOverlay level:MKOverlayLevelAboveLabels];
                 });
                 
@@ -1206,9 +1258,6 @@
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
         annotationView.enabled = !self.hideLocations;
-        if (self.previewDelegate) {
-            [self.previewDelegate registerForPreviewingWithDelegate:self.previewDelegate sourceView:annotationView];
-        }
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -1242,6 +1291,19 @@
             
             return mapPointImageView;
         }
+    } else if ([annotation isKindOfClass:[FeedItem class]]) {
+        FeedItem *item = (FeedItem *)annotation;
+        MKAnnotationView *annotationView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"feedItem"];
+        if (!annotationView) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"feedItem"];
+            annotationView.canShowCallout = YES;
+        }
+        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        rightButton.tintColor = [UIColor mageBlue];
+        annotationView.rightCalloutAccessoryView = rightButton;
+        [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
+        annotationView.annotation = annotation;
+        return annotationView;
     }
     
     return nil;
@@ -1267,6 +1329,8 @@
     } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = view.annotation;
         Observation *observation = annotation.observation;
+        
+        [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
         
         id accuracyProperty = [observation.properties valueForKeyPath:@"accuracy"];
         if (accuracyProperty != nil) {
@@ -1317,7 +1381,11 @@
             ObservationAnnotation *annotation = view.annotation;
             [self.mapCalloutDelegate calloutTapped:annotation.observation];
         }
-	}
+    } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
+        if (self.mapCalloutDelegate) {
+            [self.mapCalloutDelegate calloutTapped:view.annotation];
+        }
+    }
 }
 
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
@@ -1571,6 +1639,14 @@
     if (!self.hideStaticLayers) {
         [self mapTap:point];
     }
+}
+
+- (void) addFeedItem:(FeedItem *)feedItem {
+    [self.mapView addAnnotation:feedItem];
+}
+
+- (void) removeFeedItem:(FeedItem *)feedItem {
+    [self.mapView removeAnnotation:feedItem];
 }
 
 @end

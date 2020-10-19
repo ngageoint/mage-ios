@@ -14,18 +14,16 @@
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
-#import <GoogleSignIn/GoogleSignIn.h>
 #import "Theme+UIResponder.h"
-#import "OAuthLoginView.h"
+#import "IDPLoginView.h"
 #import "LocalLoginView.h"
 #import "LdapLoginView.h"
 #import "OrView.h"
 
-@interface LoginViewController () <UITextFieldDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate>
+@interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *serverURL;
-@property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
@@ -34,8 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loginFailure;
-@property (strong, nonatomic) id<LoginDelegate, OAuthButtonDelegate> delegate;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
+@property (strong, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
 @property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 
@@ -43,7 +40,7 @@
 
 @implementation LoginViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, OAuthButtonDelegate>) delegate {
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPButtonDelegate>) delegate {
     self = [super initWithNibName:@"LoginView" bundle:nil];
     if (!self) return nil;
     
@@ -92,15 +89,8 @@
     self.wandLabel.text = @"\U0000f0d0";
 }
 
-- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (touch.view == self.googleSignInButton) return false;
-    return true;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
-    self.googleSignInButton.colorScheme = kGIDSignInButtonColorSchemeDark;
     if (self.server) {
         self.statusView.hidden = YES;
     } else {
@@ -116,10 +106,6 @@
     [self.serverURL setTitle:[url absoluteString] forState:UIControlStateNormal];
 }
 
-- (IBAction)googleSignInTapped:(id)sender {
-    
-}
-
 - (IBAction)serverURLTapped:(id)sender {
     [self.delegate changeServerURL];
 }
@@ -129,11 +115,6 @@
 }
 
 - (void) setupAuthentication {
-    BOOL googleAuthentication = [self.server serverHasGoogleAuthenticationStrategy];
-    
-    if (googleAuthentication) {
-        [GIDSignIn sharedInstance].uiDelegate = self;
-    }
     NSArray *strategies = [self.server getStrategies];
     
     for (UIView *subview in [self.loginsStackView subviews]) {
@@ -155,7 +136,7 @@
             view.delegate = self.delegate;
             [self.loginsStackView addArrangedSubview:view];
         } else {
-            OAuthLoginView *view = [[[UINib nibWithNibName:@"oauth-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
+            IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
             [self.loginsStackView addArrangedSubview:view];

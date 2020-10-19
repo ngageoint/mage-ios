@@ -1,0 +1,74 @@
+{
+  "lastUpdated": "2020-07-08T21:22:45.992Z",
+  "createdAt": "2020-06-05T17:20:14.847Z",
+  "username": "userabc",
+  "displayName": "User ABC",
+  "active": true,
+  "email": "userabc@test.com",
+  "authentication": {
+    "type": "local",
+    "security": {
+      "numberOfTimesLocked": 0,
+      "invalidLoginAttempts": 0
+    }
+  },
+  "recentEventIds": [
+    1,
+    2
+  ],
+  "enabled": true,
+  "icon": {
+    "color": "#30b767",
+    "contentType": "image/png",
+    "size": 1754,
+    "text": "UA",
+    "type": "create"
+  },
+  "phones": [{
+    "number": "303-555-5555"
+  }],
+  "id": "userabc",
+  "role": {
+    "name": "ADMIN_ROLE",
+    "description": "Administrative role, full acces to entire MAGE API.",
+    "permissions": [
+      "READ_SETTINGS",
+      "UPDATE_SETTINGS",
+      "CREATE_DEVICE",
+      "READ_DEVICE",
+      "UPDATE_DEVICE",
+      "DELETE_DEVICE",
+      "CREATE_USER",
+      "READ_USER",
+      "UPDATE_USER",
+      "DELETE_USER",
+      "CREATE_ROLE",
+      "READ_ROLE",
+      "UPDATE_ROLE",
+      "DELETE_ROLE",
+      "CREATE_EVENT",
+      "READ_EVENT_ALL",
+      "UPDATE_EVENT",
+      "DELETE_EVENT",
+      "CREATE_LAYER",
+      "READ_LAYER_ALL",
+      "UPDATE_LAYER",
+      "DELETE_LAYER",
+      "CREATE_OBSERVATION",
+      "READ_OBSERVATION_ALL",
+      "UPDATE_OBSERVATION_ALL",
+      "DELETE_OBSERVATION",
+      "CREATE_LOCATION",
+      "READ_LOCATION_ALL",
+      "UPDATE_LOCATION_ALL",
+      "DELETE_LOCATION",
+      "CREATE_TEAM",
+      "READ_TEAM",
+      "UPDATE_TEAM",
+      "DELETE_TEAM",
+      "UPDATE_USER_ROLE"
+    ],
+    "id": "roleabc"
+  },
+  "iconUrl": "https://magetest/api/users/userabc/icon"
+}

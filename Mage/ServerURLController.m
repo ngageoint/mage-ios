@@ -63,7 +63,7 @@
     self.serverURL.placeholderColor = [UIColor secondaryText];
     self.serverURL.lineColor = [UIColor secondaryText];
     self.serverURL.titleColor = [UIColor secondaryText];
-    self.serverURL.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.serverURL.errorColor = [UIColor secondaryText];
     self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.serverURL.iconText = @"\U0000f0ac";
 }
@@ -96,9 +96,15 @@
 
 - (IBAction)onOk:(id)sender {
     NSURL *url = [NSURL URLWithString:self.serverURL.text];
-
-    [self.activityIndicator startAnimating];
-    [self.delegate setServerURL: url];
+    
+    if (url && [url scheme] && [url host]) {
+        [self.activityIndicator startAnimating];
+        self.errorStatus.hidden = YES;
+        self.errorButton.hidden = YES;
+        [self.delegate setServerURL: url];
+    } else {
+        [self showError:@"Invalid URL"];
+    }
 }
 
 - (IBAction)onCancel:(id)sender {

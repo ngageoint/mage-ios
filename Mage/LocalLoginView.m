@@ -61,6 +61,17 @@
     self.showPassword.onTintColor = [UIColor themedButton];
 }
 
+- (id) init {
+    self = [self viewFromNib];
+    return self;
+}
+
+- (id)viewFromNib {
+    NSArray *nibViews = [[NSBundle mainBundle] loadNibNamed:@"local-authView" owner:self options:nil];
+    UIView *view = [nibViews objectAtIndex:0];
+    return view;
+}
+
 - (void) didMoveToSuperview {
     self.passwordFont = self.passwordField.font;
     [self.usernameField setEnabled:YES];
@@ -172,7 +183,7 @@
                                 uidString, @"uid",
                                 [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber], @"appVersion",
                                 nil];
-    
+    NSLog(@"login parameters %@", parameters);
     __weak __typeof__(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters withAuthenticationType: SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {

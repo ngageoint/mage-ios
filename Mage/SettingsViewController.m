@@ -23,6 +23,8 @@
 #import "ObservationServicesSettingsTableViewController.h"
 #import "Server.h"
 #import "AppDelegate.h"
+#import "Theme+UIResponder.h"
+#import "MAGE-swift.h"
 
 @interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
@@ -34,17 +36,29 @@
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.childCoordinators = [NSMutableArray array];
-        
-        self.settingsTableViewController = [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
-        self.settingsTableViewController.dataSource.delegate = self;
-        UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
-        
-        UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
-        self.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
+        [self initialize];
     }
     
     return self;
+}
+
+- (instancetype) init {
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void) initialize {
+    self.childCoordinators = [NSMutableArray array];
+    
+    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
+    self.settingsTableViewController.dataSource.delegate = self;
+    UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
+    
+    UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
+    self.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
 }
 
 -(void) viewDidLoad {
@@ -66,6 +80,14 @@
                                              selector:@selector(userDefaultsChanged:)
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
+    
+    [self registerForThemeChanges];
+}
+
+- (void) themeDidChange:(MageTheme)theme {
+    self.navigationController.view.backgroundColor = [UIColor tableBackground];
+    self.view.backgroundColor = [UIColor tableBackground];
+    
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
@@ -227,12 +249,10 @@
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    NSString *storyboardName = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? @"Main_iPad" : @"Main_iPhone";
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
-    UIViewController *initialViewController = [storyboard instantiateInitialViewController];
-    initialViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    initialViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:initialViewController animated:YES completion:NULL];
+    MageRootViewController *vc = [[MageRootViewController alloc] init];
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:vc animated:YES completion:NULL];
 }
 
 - (void) onLogout {

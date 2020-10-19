@@ -9,7 +9,6 @@
 #import "TimeFilter.h"
 #import "ObservationTableViewCell.h"
 #import "Observation.h"
-#import "MageRootViewController.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
 #import "User.h"
@@ -25,9 +24,8 @@
 #import "ObservationTableViewCell.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationTableViewController() <ObservationEditDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
+@interface ObservationTableViewController() <ObservationEditDelegate, AttachmentViewDelegate, AttachmentSelectionDelegate>
 
-@property (nonatomic, strong) id previewingContext;
 @property (nonatomic, strong) NSTimer* updateTimer;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
@@ -38,16 +36,40 @@
 
 - (void) themeDidChange:(MageTheme)theme {
     self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor background];
-    self.refreshControl.backgroundColor = [UIColor background];
+    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.refreshControl.backgroundColor = [UIColor primary];
     self.refreshControl.tintColor = [UIColor brand];
     self.navigationController.navigationBar.barTintColor = [UIColor primary];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
     [self setNavBarTitle];
+}
+
+- (instancetype) init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
+    
+    if (!self.observationDataStore) {
+        self.observationDataStore = [[ObservationDataStore alloc] init];
+        self.tableView.dataSource = self.observationDataStore;
+        self.tableView.delegate = self.observationDataStore;
+        self.observationDataStore.tableView = self.tableView;
+        if (self.attachmentDelegate) {
+            self.observationDataStore.attachmentSelectionDelegate = self.attachmentDelegate;
+        } else {
+            self.observationDataStore.attachmentSelectionDelegate = self;
+        }
+        if (self.observationSelectionDelegate) {
+            self.observationDataStore.observationSelectionDelegate = self.observationSelectionDelegate;
+        }
+    }
     
     self.tableView.backgroundView = nil;
     
@@ -98,10 +120,32 @@
     self.tableView.refreshControl = self.refreshControl;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 64;
+}
+
+- (IBAction)createNewObservation:(id)sender {
+    CLLocation *location = [[LocationService singleton] location];
+    [self startCreateNewObservationAtLocation:location andProvider:@"gps"];
+}
+
+- (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
+    ObservationEditCoordinator *edit;
+    SFPoint *point;
     
-    if ([self isForceTouchAvailable]) {
-        self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    CLLocationAccuracy accuracy = 0;
+    double delta = 0;
+    if (location) {
+        if (location.altitude != 0) {
+            point = [[SFPoint alloc] initWithHasZ:YES andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble: location.coordinate.longitude] andY:[[NSDecimalNumber alloc] initWithDouble:location.coordinate.latitude]];
+            [point setZValue:location.altitude];
+        } else {
+            point = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
+        }
+        accuracy = location.horizontalAccuracy;
+        delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    [self.childCoordinators addObject:edit];
+    [edit start];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -118,6 +162,27 @@
     [self startUpdateTimer];
     
     [self registerForThemeChanges];
+    [self updateFilterButtonPosition];
+}
+
+- (void) updateFilterButtonPosition {
+    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
+    if (self != self.navigationController.viewControllers[0]) {
+        if (self.navigationItem.rightBarButtonItems.count != 2) {
+            NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+            [rightItems addObject:self.navigationItem.leftBarButtonItem];
+            self.navigationItem.rightBarButtonItems = rightItems;
+            self.navigationItem.leftBarButtonItems = nil;
+        }
+    } else if (self.navigationItem.rightBarButtonItems.count == 2) {
+        // if the view was in the more controller and is now it's own tab
+        UIBarButtonItem *filterButton = [self.navigationItem.rightBarButtonItems lastObject];
+        
+        NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+        [rightItems removeLastObject];
+        self.navigationItem.rightBarButtonItems = rightItems;
+        self.navigationItem.leftBarButtonItem = filterButton;
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -130,48 +195,10 @@
     self.observationDataStore.observations.delegate = nil;
 }
 
-- (BOOL)isForceTouchAvailable {
-    BOOL isForceTouchAvailable = NO;
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-        isForceTouchAvailable = self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
-    }
-    return isForceTouchAvailable;
-}
-
-- (UIViewController *)previewingContext:(id )previewingContext viewControllerForLocation:(CGPoint)location{
-    if ([self.presentedViewController isKindOfClass:[ObservationViewController class]]) {
-        return nil;
-    }
-    
-    CGPoint cellPostion = [self.tableView convertPoint:location fromView:self.view];
-    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:cellPostion];
-    
-    if (path) {
-        ObservationTableViewCell *tableCell = (ObservationTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
-
-        ObservationViewController *previewController = [self.storyboard instantiateViewControllerWithIdentifier:@"observationViewerViewController"];
-        previewController.observation = tableCell.observation;
-        return previewController;
-    }
-    return nil;
-}
-
-- (void)previewingContext:(id )previewingContext commitViewController: (UIViewController *)viewControllerToCommit {
-    [self.navigationController showViewController:viewControllerToCommit sender:nil];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    if ([self isForceTouchAvailable]) {
-        if (!self.previewingContext) {
-            self.previewingContext = [self registerForPreviewingWithDelegate:self sourceView:self.view];
-        }
-    } else {
-        if (self.previewingContext) {
-            [self unregisterForPreviewingWithContext:self.previewingContext];
-            self.previewingContext = nil;
-        }
-    }
+- (void) filterButtonPressed {
+    UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
+    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"observationFilter"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) applicationWillResignActive {
@@ -202,27 +229,25 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
-}
-
-- (void) prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:@"DisplayObservationSegue"]) {
-        id destination = [segue destinationViewController];
-		Observation *observation = (Observation *) sender;
-		[destination setObservation:observation];
-    }
+    [self.navigationItem setTitle:@"Observations" subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
 }
 
 - (void) selectedObservation:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-    [self performSegueWithIdentifier:@"DisplayObservationSegue" sender:observation];
+    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+    ovc.observation = observation;
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (IBAction)newButtonTapped:(id)sender {
@@ -258,7 +283,7 @@
         [self.refreshControl endRefreshing];
     }];
     
-    [[MageSessionManager manager] addTask:observationFetchTask];
+    [[MageSessionManager sharedManager] addTask:observationFetchTask];
 }
 
 - (void) selectedAttachment:(Attachment *)attachment {

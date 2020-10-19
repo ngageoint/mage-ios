@@ -12,4 +12,7 @@
 
 @interface TestingAppDelegate : NSObject
 @property (nonatomic, strong) UIWindow *window;
+@property (nonatomic) BOOL logoutCalled;
+
+- (void) logout;
 @end

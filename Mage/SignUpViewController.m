@@ -13,11 +13,9 @@
 #import "UINextField.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
-#import "OAuthViewController.h"
 #import "IdpAuthentication.h"
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"
-#import <GoogleSignIn/GoogleSignIn.h>
 #import "Theme+UIResponder.h"
 #import "DBZxcvbn.h"
 
@@ -29,13 +27,10 @@
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
-@property (weak, nonatomic) IBOutlet UIView *googleView;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
-@property (weak, nonatomic) IBOutlet UIView *googleDividerView;
 @property (strong, nonatomic) MageServer *server;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (strong, nonatomic) id<SignUpDelegate> delegate;
@@ -102,9 +97,8 @@
     self.displayName.iconText = @"\U0000f2bc";
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
-        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
 }
 
@@ -123,12 +117,9 @@
     
     self.password.delegate = self;
     
-    self.googleSignInButton.style = kGIDSignInButtonStyleWide;
-
     if ([self.server serverHasLocalAuthenticationStrategy]) {
-        ServerAuthentication *server = [self.server.authenticationModules objectForKey:@"server"];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password (minimum %@ characters) *", [server.parameters valueForKey:@"passwordMinLength"]] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
     }
     
 }
@@ -155,9 +146,7 @@
     if (textField == _phone) {
         NSString *textFieldString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
         
-        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@" " withString:@""];
-        rawString = [rawString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        
+        NSString *rawString = [textFieldString stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [textFieldString length])];
         NBAsYouTypeFormatter *aFormatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:[[NSLocale currentLocale] countryCode]];
         NSString *formattedString = [aFormatter inputString:rawString];
         
@@ -183,7 +172,6 @@
                 // fair
                 self.passwordStrengthLabel.text = @"Fair";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
-                
                 break;
             case 2:
                 // good
@@ -191,19 +179,16 @@
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
                 
                 break;
-                
             case 3:
                 // strong
                 self.passwordStrengthLabel.text = @"Strong";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
                 
                 break;
-                
             case 4:
                 // excell
                 self.passwordStrengthLabel.text = @"Excellent";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
-                
                 break;
         }
     }
@@ -245,7 +230,7 @@
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
                                      preferredStyle:UIAlertControllerStyleAlert];
-        
+        alert.accessibilityLabel = @"Passwords Do Not Match";
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
@@ -298,18 +283,14 @@
                                  alertControllerWithTitle:[NSString stringWithFormat:@"Missing Required Fields"]
                                  message:[NSString stringWithFormat:@"Please fill out the required fields: '%@'", [fields componentsJoinedByString:@", "]]
                                  preferredStyle:UIAlertControllerStyleAlert];
-    
+    alert.accessibilityLabel = @"Missing Required Fields";
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) setupAuthentication {
     BOOL localAuthentication = [self.server serverHasLocalAuthenticationStrategy];
-    BOOL googleAuthentication = [self.server serverHasGoogleAuthenticationStrategy];
-    
-    self.googleView.hidden = self.googleDividerView.hidden = !googleAuthentication;
     self.signupView.hidden = !localAuthentication;
-    self.dividerView.hidden = !(googleAuthentication && localAuthentication);
 }
 
 

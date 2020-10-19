@@ -11,5 +11,6 @@
 @interface SettingsTableViewController : UITableViewController
 
 @property (strong, nonatomic) SettingsDataSource *dataSource;
+@property (nonatomic, assign) BOOL dismissable;
 
 @end
