@@ -72,7 +72,7 @@ class FeedServiceTests: KIFSpec {
                 };
 
                 FeedService.shared.start();
-                expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: 10, pollInterval: 0.5, description: "Feed Items Pulled");
+                expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "Feed Items Pulled");
             }
             
             it("should request feed items for a new feed") {
@@ -92,7 +92,7 @@ class FeedServiceTests: KIFSpec {
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
                     print("Added the feed");
                 }
-                expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: 10, pollInterval: 1, description: "Feed Items Pulled");
+                expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Feed Items Pulled");
             }
         }
     }

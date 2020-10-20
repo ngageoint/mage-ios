@@ -28,8 +28,8 @@ target 'MAGE' do
         pod 'OHHTTPStubs'
         pod 'OHHTTPStubs/Swift'
         pod 'Quick'
-        pod 'Nimble'
-        pod 'Nimble-Snapshots'
+        pod 'Nimble', '~> 9'
+        pod 'Nimble-Snapshots', '~> 8'
         pod 'KIF'
     end
 end

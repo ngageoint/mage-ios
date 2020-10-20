@@ -12,8 +12,6 @@ import Nimble
 import PureLayout
 import MagicalRecord
 
-@testable import MAGE
-
 @available(iOS 13.0, *)
 class FeedTests: KIFSpec {
     
@@ -126,7 +124,7 @@ class FeedTests: KIFSpec {
                 }
                 
                 UserDefaults.standard.set(["1","2"], forKey: "selectedFeeds-1");
-                waitUntil(timeout: 100000) { done in
+                waitUntil(timeout: DispatchTimeInterval.seconds(10000)) { done in
                     let feeds = loadFeedsJson();
                     MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                         let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)

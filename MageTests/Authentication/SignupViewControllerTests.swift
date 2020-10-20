@@ -97,7 +97,7 @@ class SignUpViewControllerTests: KIFSpec {
                 view = SignUpViewController(server: mageServer, andDelegate: delegate);
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: 10, pollInterval: 1, description: "API request did not happened")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request did not happened")
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(SignUpViewController.self));
                 expect(viewTester().usingLabel("Username")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Display Name")?.view).toEventuallyNot(beNil());

@@ -13,13 +13,60 @@ import MaterialComponents.MaterialCards
 import PureLayout
 
 class CommonFieldsView: MDCCard {
-
-    override init(frame: CGRect) {
-        super.init(frame: frame);
-        self.translatesAutoresizingMaskIntoConstraints = false;
-    }
+    var observation: Observation;
+    var eventForms: [NSDictionary]?;
     
+    lazy var dateField: [String: Any] = {
+        let dateField: [String: Any] =
+            [FieldKey.title.key: "Date",
+             FieldKey.required.key: true,
+             FieldKey.name.key: "timestamp"
+        ];
+        return dateField;
+    }()
+    
+    lazy var locationField: [String: Any] = {
+        let locationField: [String: Any] =
+            [FieldKey.title.key: "Location",
+             FieldKey.required.key: true,
+             FieldKey.name.key: "geometry"
+        ];
+        return locationField;
+    }()
+    
+    lazy var dateView: EditDateView = {
+        let dateView = EditDateView(field: dateField);
+        return dateView;
+    }()
+    
+    lazy var geometryView: EditGeometryView = {
+        let geometryView = EditGeometryView(field: locationField, observation: observation, eventForms: eventForms);
+        return geometryView;
+    }()
+    
+    init(observation: Observation) {
+        self.observation = observation;
+        super.init(frame: CGRect.zero);
+        self.configureForAutoLayout();
+        buildView();
+    }
+
     required init?(coder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+    
+    func buildView() {
+        let wrapper = UIView(forAutoLayout: ());
+        self.addSubview(wrapper);
+        wrapper.autoPinEdgesToSuperviewEdges();
+        wrapper.addSubview(dateView);
+        dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+        wrapper.addSubview(geometryView);
+        geometryView.autoPinEdge(.top, to: .bottom, of: dateView, withOffset: 8);
+        geometryView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 24, right: 0), excludingEdge: .top);
+        
+        if let observationProperties: NSDictionary = observation.properties as? NSDictionary {
+            dateView.setValue(observationProperties.object(forKey: dateField[FieldKey.name.key] as! String) as? String);
+        }
     }
 }

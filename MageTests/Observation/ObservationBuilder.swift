@@ -8,10 +8,8 @@
 
 import Foundation
 
-@testable import MAGE
-
 class ObservationBuilder {
-    static func createBaseObservation(_ eventId: NSNumber = 0) -> Observation {
+    static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
         let observation: Observation = Observation(context: NSManagedObjectContext.mr_default());
         observation.eventId = eventId;
         let observationProperties: [String:Any] = [:]
@@ -40,14 +38,14 @@ class ObservationBuilder {
             fatalError("Unable to convert jsonFileName to JSON dictionary")
         }
         
-        let observation = createBaseObservation(eventId);
+        let observation = createBlankObservation(eventId);
         observation.populateObject(fromJson: jsonDictionaryObservation);
         return observation;
     }
     
     static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry) -> Observation {
         var observation: Observation;
-        observation = createBaseObservation(eventId);
+        observation = createBlankObservation(eventId);
         if (jsonFileName != nil) {
             observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId);
         }
@@ -84,5 +82,12 @@ class ObservationBuilder {
         
         observationProperties.updateValue(value, forKey: key);
         observation.properties = observationProperties;
+    }
+    
+    static func setObservationDate(observation: Observation, date: Date) {
+        let formatter = DateFormatter();
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+        formatter.locale = Locale(identifier: "en_US_POSIX");
+        ObservationBuilder.addObservationProperty(observation: observation, key: "timestamp", value: formatter.string(from: date));
     }
 }

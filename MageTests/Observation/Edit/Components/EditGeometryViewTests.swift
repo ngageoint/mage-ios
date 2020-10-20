@@ -13,14 +13,6 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class ContainingUIViewController: UIViewController {
-    var viewDidLoadClosure: (() -> Void)?
-    
-    override func viewWillAppear(_ animated: Bool) {
-        viewDidLoadClosure?();
-    }
-}
-
 class EditGeometryViewTests: QuickSpec {
     
     override func spec() {
@@ -51,6 +43,8 @@ class EditGeometryViewTests: QuickSpec {
             }
             
             beforeEach {
+                TestHelpers.clearAndSetUpStack();
+
                 window = UIWindow(forAutoLayout: ());
                 window.autoSetDimension(.width, toSize: 300);
 
@@ -64,6 +58,10 @@ class EditGeometryViewTests: QuickSpec {
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
+            }
+            
+            afterEach {
+                TestHelpers.clearAndSetUpStack();
             }
             
             it("no initial value") {
@@ -87,9 +85,9 @@ class EditGeometryViewTests: QuickSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 
@@ -101,8 +99,8 @@ class EditGeometryViewTests: QuickSpec {
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -116,9 +114,9 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -132,8 +130,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -147,24 +145,21 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
-            it("initial value set wtih observation") {
+            it("initial value set wtih observation without geometry") {
                 var completeTest = false;
-                let observation: Observation = ObservationBuilder.createPointObservation();
+                let observation: Observation = ObservationBuilder.createBlankObservation()
                 let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
-
+                
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
                         completeTest = true;
                     })
                 }
@@ -178,9 +173,40 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("initial value set wtih observation") {
+                var completeTest = false;
+                let observation: Observation = ObservationBuilder.createPointObservation();
+                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        let point: SFPoint = observation.getGeometry().centroid();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        completeTest = true;
+                    })
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -195,8 +221,8 @@ class EditGeometryViewTests: QuickSpec {
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -210,9 +236,9 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -228,8 +254,8 @@ class EditGeometryViewTests: QuickSpec {
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -243,9 +269,9 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -260,8 +286,8 @@ class EditGeometryViewTests: QuickSpec {
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -275,9 +301,9 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -293,8 +319,8 @@ class EditGeometryViewTests: QuickSpec {
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -308,9 +334,9 @@ class EditGeometryViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 
@@ -323,8 +349,8 @@ class EditGeometryViewTests: QuickSpec {
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -341,9 +367,9 @@ class EditGeometryViewTests: QuickSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -356,8 +382,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -373,9 +399,9 @@ class EditGeometryViewTests: QuickSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -388,8 +414,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
                         completeTest = true;
                     })
                 }
@@ -405,9 +431,9 @@ class EditGeometryViewTests: QuickSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 
@@ -433,9 +459,9 @@ class EditGeometryViewTests: QuickSpec {
                 controller.view.addSubview(view);
                 
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 
@@ -462,9 +488,9 @@ class EditGeometryViewTests: QuickSpec {
                 controller.view.addSubview(view);
                 
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 
@@ -509,9 +535,9 @@ class EditGeometryViewTests: QuickSpec {
                 controller.view.addSubview(view);
                 
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
 //

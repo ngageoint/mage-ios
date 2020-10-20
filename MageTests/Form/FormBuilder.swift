@@ -8,8 +8,6 @@
 
 import Foundation
 
-@testable import MAGE
-
 class FormBuilder {
     
     static func createFormWithAllFieldTypes() -> [String:Any] {

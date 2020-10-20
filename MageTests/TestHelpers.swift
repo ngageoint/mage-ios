@@ -8,6 +8,8 @@
 
 import Foundation
 import MagicalRecord
+import Nimble
+import Nimble_Snapshots
 
 class TestHelpers {
 
@@ -44,5 +46,4 @@ class TestHelpers {
         MagicalRecord.cleanUp();
         MagicalRecord.setupCoreDataStackWithInMemoryStore();
     }
-
 }

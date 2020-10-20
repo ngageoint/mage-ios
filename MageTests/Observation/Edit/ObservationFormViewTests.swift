@@ -32,7 +32,7 @@ class ObservationFormViewTests: QuickSpec {
     
     override func spec() {
         
-        describe("ObservationFormView") {
+        xdescribe("ObservationFormView") {
             let recordSnapshots = true;
             var completeTest = false;
 
@@ -74,7 +74,7 @@ class ObservationFormViewTests: QuickSpec {
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 
-                observation = ObservationBuilder.createBaseObservation();
+                observation = ObservationBuilder.createBlankObservation();
                 form = NSMutableDictionary();
             }
             
@@ -90,9 +90,9 @@ class ObservationFormViewTests: QuickSpec {
                     completeTest = true;
                 })
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
         }

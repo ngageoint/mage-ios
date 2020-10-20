@@ -88,9 +88,11 @@ class EditGeometryView : BaseFieldView {
     }
     
     func addToMapAsObservation() {
-        self.mapObservation = self.observationManager.addToMap(with: self.observation);
-        guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView) else { return };
-        self.mapView.setRegion(viewRegion, animated: true);
+        if (self.observation?.getGeometry() != nil) {
+            self.mapObservation = self.observationManager.addToMap(with: self.observation);
+            guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView) else { return };
+            self.mapView.setRegion(viewRegion, animated: true);
+        }
     }
     
     func addToMap() {
