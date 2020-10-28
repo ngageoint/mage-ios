@@ -126,6 +126,111 @@ class EditCheckboxFieldViewTests: QuickSpec {
                 }
             }
             
+            it("required") {
+                field["required"] = true;
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                checkboxFieldView.setValue(true);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("set valid false") {
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                checkboxFieldView.setValid(false);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("set valid true after being invalid") {
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                checkboxFieldView.setValid(false);
+                checkboxFieldView.setValid(true);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("required field is invalid if false") {
+                field[FieldKey.required.key] = true;
+                
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                expect(checkboxFieldView.isEmpty()) == true;
+                expect(checkboxFieldView.isValid(enforceRequired: true)) == false;
+                checkboxFieldView.setValid(checkboxFieldView.isValid());
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("required field is valid if true") {
+                field[FieldKey.required.key] = true;
+                
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                checkboxFieldView.setValue(true);
+                expect(checkboxFieldView.isEmpty()) == false;
+                expect(checkboxFieldView.isValid(enforceRequired: true)) == true;
+                checkboxFieldView.setValid(checkboxFieldView.isValid());
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
             it("test delegate false value") {
                 let delegate = MockFieldDelegate();
                 checkboxFieldView = EditCheckboxFieldView(field: field, delegate: delegate);

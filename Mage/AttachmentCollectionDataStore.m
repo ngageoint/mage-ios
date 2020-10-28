@@ -5,7 +5,6 @@
 //
 
 #import "AttachmentCollectionDataStore.h"
-#import "AppDelegate.h"
 #import "MAGE-Swift.h"
 
 @implementation AttachmentCollectionDataStore
@@ -19,7 +18,7 @@
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger) section {
-    return self.observation.attachments.count + self.observation.transientAttachments.count;
+    return self.attachments.count;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -31,8 +30,10 @@
 }
 
 - (Attachment *) attachmentAtIndex:(NSUInteger) index {
-    NSMutableArray *attachments = [[self.observation.attachments sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
-    [attachments addObjectsFromArray:self.observation.transientAttachments];
+    NSMutableArray *attachments = [[self.attachments sortedArrayUsingDescriptors:@[
+        [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES],
+        [NSSortDescriptor sortDescriptorWithKey:@"remoteId" ascending:NO]
+    ]] mutableCopy];
     
     return [attachments objectAtIndex:index];
 }

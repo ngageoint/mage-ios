@@ -8,7 +8,7 @@
 #import <MapKit/MapKit.h>
 #import "Attachment.h"
 
-@protocol AttachmentSelectionDelegate <NSObject>
+@protocol AttachmentSelectionDelegate
 
 @required
 

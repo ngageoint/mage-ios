@@ -11,17 +11,13 @@ import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 
-import MaterialComponents.MaterialColorScheme
-import MaterialComponents.MaterialContainerScheme
-import MaterialComponents.MaterialTypographyScheme
-
 @objc protocol ObservationEditCardDelegate {
     @objc func addVoiceAttachment();
     @objc func addVideoAttachment();
     @objc func addCameraAttachment();
     @objc func addGalleryAttachment();
     @objc func deleteObservation();
-    @objc func fieldSelected(field: NSDictionary);
+    @objc func fieldSelected(field: [String: Any]);
     @objc func attachmentSelected(attachment: Attachment);
     @objc func addForm();
 }
@@ -38,10 +34,10 @@ import MaterialComponents.MaterialTypographyScheme
     
     var delegate: ObservationEditCardDelegate?;
     var observation: Observation?;
-    var newObservation: Bool?;
+    var newObservation: Bool = false;
     
     private lazy var eventForms: NSArray = {
-        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as! NSArray;
+        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? NSArray ?? [];
         return eventForms;
     }()
     
@@ -62,6 +58,17 @@ import MaterialComponents.MaterialTypographyScheme
         stackView.isLayoutMarginsRelativeArrangement = true;
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         return stackView;
+    }()
+    
+    private lazy var addFormFAB: MDCFloatingButton = {
+        let fab = MDCFloatingButton(shape: .default);
+        fab.accessibilityLabel = "Add Form";
+        fab.mode = .expanded;
+        fab.setImage(UIImage(named: "form")?.withRenderingMode(.alwaysTemplate), for: .normal);
+        fab.setTitle("Add Form", for: .normal);
+        fab.applySecondaryTheme(withScheme: globalContainerScheme());
+        fab.addTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside);
+        return fab;
     }()
     
     private func addStackViewConstraints() {
@@ -95,8 +102,21 @@ import MaterialComponents.MaterialTypographyScheme
         addStackViewConstraints();
         
         addCommonFields(stackView: stackView);
-        
         addFormViews(stackView: stackView);
+        
+        if (eventForms.count != 0) {
+            self.view.addSubview(addFormFAB);
+            addFormFAB.autoPinEdge(toSuperviewMargin: .bottom);
+            addFormFAB.autoPinEdge(toSuperviewMargin: .right);
+        }
+        
+        // If there are forms and this is a new observation call addForm
+        // It is expected that the delegate will add the form if only one exists
+        // and prompt the user if more than one exists
+        if (newObservation && eventForms.count != 0) {
+            self.delegate?.addForm();
+        }
+        
         self.registerForThemeChanges();
     }
     
@@ -116,48 +136,94 @@ import MaterialComponents.MaterialTypographyScheme
     }
     
     func addCommonFields(stackView: UIStackView) {
-        
-//        if ([indexPath row] == 0) {
-//            [field setObject:@"Date" forKey:@"title"];
-//            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
-//            [field setObject:@"timestamp" forKey:@"name"];
-//            [field setObject:@"date" forKey:@"type"];
-//        } else if ([indexPath row] == 1) {
-//            [field setObject:@"Location" forKey:@"title"];
-//            [field setObject:[NSNumber numberWithBool:YES] forKey:@"required"];
-//            [field setObject:@"geometry" forKey:@"name"];
-//            [field setObject:@"geometry" forKey:@"type"];
-//        }
-        var dateField: [String: Any] = [:];
-        dateField[FieldKey.required.key] = true;
-        
-        let dateFieldView = EditDateView(field: dateField);
+         if let safeObservation = observation {
+             let commonFieldView: CommonFieldsView = CommonFieldsView(observation: safeObservation);
+             commonFieldView.applyTheme(withScheme: globalContainerScheme());
+             stackView.addArrangedSubview(commonFieldView);
+         }
     }
     
     func addFormViews(stackView: UIStackView) {
-      
-        let forms: NSArray = ((self.observation?.properties as! NSDictionary).object(forKey: "forms") as! NSArray);
-
-        for (index, form) in forms.enumerated() {
-            let observationForm = form as! NSDictionary;
-            let predicate: NSPredicate = NSPredicate(format: "SELF.id = %@", argumentArray: [observationForm.object(forKey: "formId")!]);
-            let eventForm: NSDictionary = self.eventForms.filtered(using: predicate).first as! NSDictionary;
-            var formPrimaryValue = "";
-            var formSecondaryValue = "";
-            if let primaryField = eventForm.object(forKey: "primaryFeedField") as! NSString? {
-                if let obsfield = observationForm.object(forKey: primaryField) as! String? {
-                    formPrimaryValue = obsfield;
+        for (index, form) in getObservationForms().enumerated() {
+            let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
+            card.setExpanded(expanded: newObservation);
+        }
+    }
+    
+    func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
+        let predicate: NSPredicate = NSPredicate(format: "SELF.id = %@", argumentArray: [observationForm["formId"]!]);
+        let eventForm: [String: Any] = self.eventForms.filtered(using: predicate).first as! [String : Any];
+        var formPrimaryValue: String? = nil;
+        var formSecondaryValue: String? = nil;
+        if let primaryField = eventForm["primaryField"] as! String? {
+            if let obsfield = observationForm[primaryField] as! String? {
+                formPrimaryValue = obsfield;
+            }
+        }
+        if let secondaryField = eventForm["variantField"] as! String? {
+            if let obsfield = observationForm[secondaryField] as! String? {
+                formSecondaryValue = obsfield;
+            }
+        }
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index);
+        let card = ExpandableCard(forAutoLayout: ());
+        card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm["name"] as! String?, expandedView: formView, cell: nil);
+        stackView.addArrangedSubview(card);
+        return card;
+    }
+    
+    @objc func addForm(sender: UIButton) {
+        self.delegate?.addForm();
+    }
+    
+    public func formAdded(form: [String: Any]) {
+        var newProperties: [String: Any] = self.observation?.properties as? [String: Any] ?? [:];
+        var observationForms: [Any] = newProperties["forms"] as? [Any] ?? [];
+        
+        var newForm: [String: Any] = ["formId": form["id"]!];
+        let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: form["id"] as! Int);
+        let formDefaults: [String: [String: Any]] = defaults.getDefaults() as! [String : [String: Any]];
+        
+        let fields: [[String : Any?]] = form["fields"] as! [[String : Any]];
+        if (formDefaults.count > 0) { // user defaults
+            for (_, field) in fields.enumerated() {
+                var value: Any? = nil;
+                if let defaultField: [String:Any] = formDefaults[field["id"] as! String] {
+                    value = defaultField
+                }
+                
+                if (value != nil) {
+                    newForm[field["name"] as! String] = value;
                 }
             }
-            if let secondaryField = eventForm.object(forKey: "secondaryFeedField") as! NSString? {
-                if let obsfield = observationForm.object(forKey: secondaryField) as! String? {
-                    formSecondaryValue = obsfield;
+        } else { // server defaults
+            for (_, field) in fields.enumerated() {
+                // grab the server default from the form fields value property
+                if let value: Any = field["value"] {
+                    newForm[field["name"] as! String] = value;
                 }
             }
-            let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm as! [String: Any], formIndex: index);
-            let card = ExpandableCard(forAutoLayout: ());
-            card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: nil);
-            stackView.addArrangedSubview(card);
+        }
+        
+        observationForms.append(newForm);
+        newProperties["forms"] = observationForms;
+        self.observation?.properties = newProperties;
+        addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
+    }
+    
+    private func getObservationForms() -> [[String : Any]] {
+        
+        if var properties = self.observation?.properties as? [String : Any] {
+            print("Properties is a thing");
+            if let observationForms = properties["forms"] as? [[String : Any]] {
+                print("forms is a thing")
+            } else {
+                properties["forms"] = [];
+            }
+            return properties["forms"] as! [[String : Any]];
+        } else {
+            self.observation?.properties = ["forms": []];
+            return (self.observation?.properties as! [String : Any])["forms"] as! [[String : Any]];
         }
     }
 }

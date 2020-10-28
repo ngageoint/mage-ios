@@ -686,9 +686,9 @@ PODS:
     - MotionInterchange (~> 1.6)
   - MotionInterchange (1.6.0)
   - Nimble (9.0.0)
-  - Nimble-Snapshots (8.3.0):
-    - Nimble-Snapshots/Core (= 8.3.0)
-  - Nimble-Snapshots/Core (8.3.0):
+  - Nimble-Snapshots (9.0.0):
+    - Nimble-Snapshots/Core (= 9.0.0)
+  - Nimble-Snapshots/Core (9.0.0):
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
   - OCMock (3.7.1)
@@ -738,7 +738,7 @@ DEPENDENCIES:
   - MaterialComponents
   - mgrs (~> 0.1.0)
   - Nimble (~> 9)
-  - Nimble-Snapshots (~> 8)
+  - Nimble-Snapshots (~> 9)
   - OCMock
   - OHHTTPStubs
   - OHHTTPStubs/Swift
@@ -809,7 +809,7 @@ SPEC CHECKSUMS:
   MotionAnimator: ee16aa30567c5bae0fb2750c132915829cfaaf8a
   MotionInterchange: ead0e3ae1f3a5fb539e289debbc7ae036160a10d
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
-  Nimble-Snapshots: e4a2f67f05e3a22f71fb9d89801af93eb91df6de
+  Nimble-Snapshots: 36b027fd637b3e405ddc8362203d9dad3f5405fd
   OCMock: 75fbeaa46a9b11f8c182bbb1d1f7e9a35ccc9955
   ogc-api-features-json-ios: 2f733b450d22a73517a5e86fd9241747e039ccb0
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
@@ -826,6 +826,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 9deba846cfe5d3cbffecfc9599a7cd961e86678e
+PODFILE CHECKSUM: 8732465b402ebe1ce1936f0b23a6946329191539
 
 COCOAPODS: 1.8.4

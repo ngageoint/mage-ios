@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MagicalRecord
 
 class ObservationBuilder {
     static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
@@ -89,5 +90,81 @@ class ObservationBuilder {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
         formatter.locale = Locale(identifier: "en_US_POSIX");
         ObservationBuilder.addObservationProperty(observation: observation, key: "timestamp", value: formatter.string(from: date));
+    }
+    
+    static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment {
+        let attachment: Attachment = Attachment(context: NSManagedObjectContext.mr_default());
+        attachment.localPath = "";
+        attachment.name = name;
+        attachment.dirty = false;
+        attachment.eventId = eventId;
+        attachment.contentType = "image/png";
+        attachment.observationRemoteId = observationRemoteId;
+        attachment.remoteId = remoteId;
+        if (observationRemoteId != nil && remoteId != nil) {
+            attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
+        }
+        return attachment;
+    }
+    
+    static func addAttachmentToObservation(observation: Observation) -> Attachment{
+        let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId);
+        
+        observation.addAttachmentsObject(attachment);
+        return attachment;
+    }
+    
+    static func addFormToObservation(observation: Observation, form: [String : Any], values: [String: Any]? = nil) {
+        var newProperties: [String: Any] = observation.properties as? [String: Any] ?? [:];
+        var observationForms: [Any] = newProperties["forms"] as? [Any] ?? [];
+        
+        var newForm: [String: Any] = ["formId": form["id"]!];
+        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: form["id"] as! Int);
+        let formDefaults: [String: [String: Any]] = defaults.getDefaults() as! [String : [String: Any]];
+        
+        let fields: [[String : Any?]] = form["fields"] as! [[String : Any]];
+        if (formDefaults.count > 0) { // user defaults
+            for (_, field) in fields.enumerated() {
+                var value: Any? = nil;
+                if let defaultField: [String:Any] = formDefaults[field["id"] as! String] {
+                    value = defaultField
+                }
+                // override with the values set
+                if let safeValues = values {
+                    if ((safeValues.keys.contains(field["name"] as! Dictionary<String, Any>.Keys.Element))) {
+                        value = safeValues[field["name"] as! String];
+                    }
+                }
+                
+                if (value != nil) {
+                    newForm[field["name"] as! String] = value;
+                }
+            }
+        } else { // server defaults
+            for (_, field) in fields.enumerated() {
+                var value: Any? = nil;
+                // grab the server default from the form fields value property
+                if let defaultField: Any = field["value"] {
+                    value = defaultField;
+                }
+                
+                // override with the values set
+                if let safeValues = values {
+                    print("\(safeValues.keys)")
+                    print("\(field)")
+                    if ((safeValues.keys.contains(field["name"] as! Dictionary<String, Any>.Keys.Element))) {
+                        value = safeValues[field["name"] as! String];
+                    }
+                }
+                
+                if (value != nil) {
+                    newForm[field["name"] as! String] = value;
+                }
+            }
+        }
+        
+        observationForms.append(newForm);
+        newProperties["forms"] = observationForms;
+        observation.properties = newProperties;
     }
 }

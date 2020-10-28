@@ -1,0 +1,492 @@
+
+[{
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "variantField": "field7",
+    "name": "All The Things",
+    "color": "#5278A2",
+    "primaryField": "type",
+    "primaryFeedField": "type",
+    "secondaryFeedField": "field7",
+    "fields": [
+        {
+            "value": "At Venue",
+            "name": "type",
+            "required": true,
+            "type": "dropdown",
+            "title": "Incident Type",
+            "id": 3,
+            "choices": [
+                {
+                    "value": 0,
+                    "id": 0,
+                    "title": "At Venue"
+                },
+                {
+                    "value": 1,
+                    "id": 1,
+                    "title": "Protest"
+                },
+                {
+                    "value": 2,
+                    "id": 2,
+                    "title": "Other Event"
+                },
+                {
+                    "value": 3,
+                    "id": 3,
+                    "title": "Parade Event"
+                },
+                {
+                    "value": 4,
+                    "id": 4,
+                    "title": "CBRN Hazard"
+                },
+                {
+                    "value": 5,
+                    "id": 5,
+                    "title": "Crowd"
+                },
+                {
+                    "value": 6,
+                    "id": 6,
+                    "title": "Explosion"
+                },
+                {
+                    "value": 7,
+                    "id": 7,
+                    "title": "Fire"
+                },
+                {
+                    "value": 8,
+                    "id": 8,
+                    "title": "Medical Incident"
+                },
+                {
+                    "value": 9,
+                    "id": 9,
+                    "title": "Transportation Incident"
+                },
+                {
+                    "value": 10,
+                    "id": 10,
+                    "title": "Other Activity"
+                },
+                {
+                    "value": 11,
+                    "id": 11,
+                    "title": "Shots Fired"
+                },
+                {
+                    "value": 12,
+                    "id": 12,
+                    "title": "Significant Incident"
+                },
+                {
+                    "value": 13,
+                    "id": 13,
+                    "title": "Suspicious Individual"
+                },
+                {
+                    "value": 14,
+                    "id": 14,
+                    "title": "Suspicious Vehicle"
+                },
+                {
+                    "value": 15,
+                    "id": 15,
+                    "title": "Unattended-Suspicious Package"
+                },
+                {
+                    "value": 16,
+                    "id": 16,
+                    "title": "Violent Activity"
+                },
+                {
+                    "value": 17,
+                    "id": 17,
+                    "title": "Remain Overnight (RON)"
+                },
+                {
+                    "value": 18,
+                    "id": 18,
+                    "title": "Arrival"
+                },
+                {
+                    "value": 19,
+                    "id": 19,
+                    "title": "Departure"
+                },
+                {
+                    "value": 20,
+                    "id": 20,
+                    "title": "Aeronautical Incident"
+                },
+                {
+                    "value": 21,
+                    "id": 21,
+                    "title": "Maritime Incident"
+                },
+                {
+                    "value": 22,
+                    "id": 22,
+                    "title": "Evacuation"
+                },
+                {
+                    "value": 23,
+                    "id": 23,
+                    "title": "Hostage"
+                },
+                {
+                    "value": 24,
+                    "id": 24,
+                    "title": "Kidnapping"
+                },
+                {
+                    "value": 25,
+                    "id": 25,
+                    "title": "VIP"
+                }
+            ]
+        },
+        {
+            "archived": true,
+            "name": "field4",
+            "id": 4,
+            "required": true,
+            "value": "",
+            "type": "textfield",
+            "title": "New field",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "name": "field5",
+            "id": 5,
+            "required": false,
+            "value": "",
+            "type": "textfield",
+            "title": "Description",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "name": "field6",
+            "id": 6,
+            "required": false,
+            "value": "",
+            "type": "textarea",
+            "title": "Description",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "name": "field7",
+            "id": 7,
+            "required": true,
+            "value": "None",
+            "type": "dropdown",
+            "title": "Level",
+            "choices": [
+                {
+                    "value": 0,
+                    "id": 0,
+                    "title": "None"
+                },
+                {
+                    "value": 1,
+                    "id": 1,
+                    "title": "Low"
+                },
+                {
+                    "value": 2,
+                    "id": 2,
+                    "title": "Medium"
+                },
+                {
+                    "value": 3,
+                    "id": 3,
+                    "title": "High"
+                }
+            ]
+        },
+        {
+            "name": "field8",
+            "id": 8,
+            "required": true,
+            "value": "",
+            "type": "textarea",
+            "title": "Description",
+            "choices": []
+        },
+        {
+            "name": "field9",
+            "id": 9,
+            "required": true,
+            "type": "textfield",
+            "title": "Text Field",
+            "archived": true,
+            "choices": []
+        },
+        {
+            "name": "field10",
+            "id": 10,
+            "required": true,
+            "type": "checkbox",
+            "title": "Checkbox",
+            "archived": true,
+            "choices": []
+        },
+        {
+            "name": "field11",
+            "id": 11,
+            "required": true,
+            "type": "date",
+            "title": "Date Field",
+            "value": "2017-02-10T10:20:30.111Z",
+            "choices": []
+        },
+        {
+            "name": "field12",
+            "id": 12,
+            "required": true,
+            "type": "email",
+            "title": "Email Field",
+            "archived": true,
+            "choices": []
+        },
+        {
+            "name": "field13",
+            "id": 15,
+            "max": 8,
+            "min": 2,
+            "required": true,
+            "type": "numberfield",
+            "title": "Number Field",
+            "choices": []
+        },
+        {
+            "name": "field14",
+            "id": 14,
+            "required": true,
+            "type": "password",
+            "title": "Password field",
+            "archived": true,
+            "choices": []
+        },
+        {
+            "name": "field15",
+            "id": 17,
+            "required": true,
+            "type": "radio",
+            "title": "Radio Buttons",
+            "choices": [
+                {
+                    "value": 0,
+                    "id": 0,
+                    "title": "red"
+                },
+                {
+                    "value": 1,
+                    "id": 1,
+                    "title": "greed"
+                },
+                {
+                    "value": 2,
+                    "id": 2,
+                    "title": "blue"
+                }
+            ]
+        },
+        {
+            "name": "field16",
+            "id": 16,
+            "required": true,
+            "type": "multiselectdropdown",
+            "title": "MultiSelect Field",
+            "archived": true,
+            "choices": [
+                {
+                    "value": 0,
+                    "id": 0,
+                    "title": "Foo"
+                },
+                {
+                    "value": 1,
+                    "id": 1,
+                    "title": "Bar"
+                }
+            ]
+        },
+        {
+            "name": "field17",
+            "id": 18,
+            "required": true,
+            "type": "password",
+            "title": "Password field",
+            "choices": []
+        },
+        {
+            "name": "field18",
+            "id": 19,
+            "required": true,
+            "type": "textfield",
+            "title": "Text field",
+            "choices": []
+        },
+        {
+            "title": "Checkbox field",
+            "type": "checkbox",
+            "required": true,
+            "id": 20,
+            "name": "field19",
+            "choices": []
+        },
+        {
+            "name": "field20",
+            "id": 21,
+            "required": true,
+            "type": "email",
+            "title": "Email field",
+            "choices": []
+        },
+        {
+            "value": [
+                "Purple",
+                "foo"
+            ],
+            "title": "Multi field",
+            "type": "multiselectdropdown",
+            "required": true,
+            "id": 22,
+            "name": "field21",
+            "choices": [
+                {
+                    "value": 2,
+                    "id": 2,
+                    "title": "Purple"
+                },
+                {
+                    "id": 1,
+                    "value": 1,
+                    "title": "bar"
+                },
+                {
+                    "value": 3,
+                    "id": 3,
+                    "title": "Blue"
+                },
+                {
+                    "value": 4,
+                    "id": 4,
+                    "title": "Green"
+                },
+                {
+                    "value": 5,
+                    "id": 5,
+                    "title": "Red"
+                },
+                {
+                    "value": 6,
+                    "id": 6,
+                    "title": "Orange"
+                },
+                {
+                    "value": 7,
+                    "id": 7,
+                    "title": "Yellow"
+                },
+                {
+                    "value": 8,
+                    "id": 8,
+                    "title": "White"
+                },
+                {
+                    "value": 9,
+                    "id": 9,
+                    "title": "Brown"
+                },
+                {
+                    "value": 10,
+                    "id": 10,
+                    "title": "Black"
+                },
+                {
+                    "value": 11,
+                    "id": 11,
+                    "title": "Gold"
+                },
+                {
+                    "value": 12,
+                    "id": 12,
+                    "title": "Silver"
+                },
+                {
+                    "id": 13,
+                    "value": 13,
+                    "title": "Copper"
+                },
+                {
+                    "id": 14,
+                    "value": 14,
+                    "title": "Bronze"
+                },
+                {
+                    "id": 15,
+                    "value": 15,
+                    "title": "Pink"
+                },
+                {
+                    "id": 16,
+                    "value": 16,
+                    "title": "Teal"
+                },
+                {
+                    "id": 17,
+                    "value": 17,
+                    "title": "Magenta"
+                },
+                {
+                    "id": 18,
+                    "value": 18,
+                    "title": "Sky Blue"
+                },
+                {
+                    "id": 19,
+                    "value": 19,
+                    "title": "Lime"
+                },
+                {
+                    "id": 20,
+                    "value": 20,
+                    "title": "Kiwi"
+                },
+                {
+                    "id": 21,
+                    "value": 21,
+                    "title": "Carrot"
+                },
+                {
+                    "id": 22,
+                    "value": 22,
+                    "title": "Potato"
+                },
+                {
+                    "id": 23,
+                    "value": 23,
+                    "title": "Lemon"
+                }
+            ]
+        },
+        {
+            "name": "field22",
+            "id": 13,
+            "required": false,
+            "type": "geometry",
+            "title": "Other Location Field",
+            "choices": []
+        }
+    ],
+    "userFields": [],
+    "archived": false,
+    "id": 26
+}]

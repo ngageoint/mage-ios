@@ -10,6 +10,7 @@
 
 #import "DarkTheme.h"
 #import "UIColor+Mage.h"
+#import <MaterialComponents/MDCPalettes.h>
 
 @implementation DarkTheme
 
@@ -39,7 +40,7 @@
 }
 
 - (UIColor *) tableBackground {
-    return [UIColor colorWithHexString:@"212121"];
+    return MDCPalette.greyPalette.tint900;
 }
 
 - (UIColor *) tableSeparator {
@@ -51,15 +52,15 @@
 }
 
 - (UIColor *) dialog {
-    return [UIColor colorWithHexString:@"424242"];
+    return MDCPalette.greyPalette.tint800;
 }
 
 - (UIColor *) primary {
-    return [UIColor colorWithHexString:@"455A64"];
+    return MDCPalette.blueGreyPalette.tint700;
 }
 
 - (UIColor *) secondary {
-    return [UIColor colorWithHexString:@"263238"];
+    return MDCPalette.blueGreyPalette.tint900;
 }
 
 - (UIColor *) brand {

@@ -15,10 +15,8 @@ class ObservationFormView: UIStackView {
     
     private var observation: Observation?;
     private var eventForm: [String:Any]?;
-    private var form: NSDictionary?;
+    private var form: [String: Any]?;
     private var formIndex: Int!;
-    private let containerScheme = MDCContainerScheme()
-    
     private let nameController = MDCTextInputControllerUnderline();
 
     private lazy var formFields: NSArray = {
@@ -37,7 +35,7 @@ class ObservationFormView: UIStackView {
         self.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
     }
     
-    convenience init(observation: Observation, form: NSDictionary, eventForm: [String:Any], formIndex: Int) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any], formIndex: Int) {
         self.init(frame: CGRect.zero)
         self.observation = observation;
         self.form = form;
@@ -52,12 +50,13 @@ class ObservationFormView: UIStackView {
     func constructView() {
         for field in self.formFields {
             let fieldDictionary = (field as! [String: Any]);
-            let value = self.form?.object(forKey: fieldDictionary[FieldKey.name.key] as! String)
+            let value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
             
             var type = fieldDictionary[FieldKey.type.key] as! String;
             if (type == "radio" || type == "multiselectdropdown") {
                 type = "dropdown";
             }
+            print("the field is a \(type)")
             var fieldView: UIView;
             switch type {
             case "numberfield":
@@ -73,7 +72,7 @@ class ObservationFormView: UIStackView {
             case "date":
                 fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
             case "checkbox":
-                fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
+                fieldView = EditCheckboxFieldView(field: fieldDictionary, delegate: self, value: value as? Bool ?? false);
             case "dropdown":
                 if let stringValue = value as? String {
                     fieldView = EditDropdownFieldView(field: fieldDictionary, delegate: self, value: stringValue)

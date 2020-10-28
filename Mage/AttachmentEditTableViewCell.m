@@ -30,7 +30,8 @@
         self.ads.attachmentCollection = self.attachmentCollection;
         self.attachmentCollection.delegate = self.ads;
         self.attachmentCollection.dataSource = self.ads;
-        self.ads.observation = value;
+        Observation *observation = (Observation *)value;
+        self.ads.attachments = [observation.attachments setByAddingObjectsFromArray: observation.transientAttachments];
     } else {
         [self.ads.attachmentCollection reloadData];
     }

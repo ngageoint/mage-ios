@@ -29,24 +29,20 @@ extension UIImage {
 
     public var attachment: Attachment? = nil;
     var url: URL? = nil;
-    var imageSize: Int!
     var largeSizeCached: Bool = false;
     public var placeholderIsRealImage: Bool = false;
     public var useDownloadPlaceholder: Bool = true;
     
     override init(image: UIImage?) {
         super.init(image: image)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     public func isFullSizeCached() -> Bool {
@@ -54,7 +50,7 @@ extension UIImage {
     }
     
     public func isLargeSizeCached() -> Bool {
-        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: self.imageSize).absoluteString));
+        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: getImageSize()).absoluteString));
     }
     
     public func isThumbnailCached() -> Bool {
@@ -65,10 +61,14 @@ extension UIImage {
         return isThumbnailCached() || isLargeSizeCached();
     }
     
+    func getImageSize() -> Int {
+        return Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale)
+    }
+    
     public func showThumbnail(indicator: Indicator? = nil,
                               progressBlock: DownloadProgressBlock? = nil,
                               completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        self.setImage(url: self.getAttachmentUrl(size: self.imageSize), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     public func setAttachment(attachment: Attachment) {
@@ -87,7 +87,7 @@ extension UIImage {
                           indicator: Indicator? = nil,
                           progressBlock: DownloadProgressBlock? = nil,
                           completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        let url = self.url != nil ? self.url! : self.getAttachmentUrl(size: self.imageSize);
+        let url = self.url != nil ? self.url! : self.getAttachmentUrl(size: getImageSize());
         self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, thumbnail: thumbnail, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
@@ -160,7 +160,7 @@ extension UIImage {
         // else if they had a large sized image downloaded
         else if (self.isLargeSizeCached()) {
             self.placeholderIsRealImage = true;
-            placeholder.kf.setImage(with: self.getAttachmentUrl(size: self.imageSize), options: options)
+            placeholder.kf.setImage(with: self.getAttachmentUrl(size: getImageSize()), options: options)
         }
         // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
         else if (ImageCache.default.isCached(forKey: thumbUrl.absoluteString)) {
@@ -169,8 +169,7 @@ extension UIImage {
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator
         DispatchQueue.main.async {
-            self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock,
-                                        completionHandler: completionHandler);
+            self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
         }
     }
 }

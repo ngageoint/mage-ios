@@ -141,21 +141,21 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
-    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", completion: MRSaveCompletionHandler?) {
+    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", completion: MRSaveCompletionHandler?) {
         
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "forms", ofType: "json") else {
-            fatalError("forms.json not found")
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
+            fatalError("\(formsJsonFile).json not found")
         }
         guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert forms.json to String")
+            fatalError("Unable to convert \(formsJsonFile).json to String")
         }
         
         guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert forms.json to Data")
+            fatalError("Unable to convert \(formsJsonFile).json to Data")
         }
         
         guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
-            fatalError("Unable to convert forms.json to JSON dictionary")
+            fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
         }
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in

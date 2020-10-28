@@ -35,6 +35,7 @@ class ExpandableCard: MDCCard {
         stackView.alignment = UIStackView.Alignment.fill;
         stackView.distribution = UIStackView.Distribution.equalSpacing;
         stackView.axis = NSLayoutConstraint.Axis.vertical;
+        stackView.spacing = 0;
         return stackView;
     }()
     
@@ -43,12 +44,27 @@ class ExpandableCard: MDCCard {
         return headerArea;
     }()
     
+    private lazy var titleArea: UIView = {
+        let titleArea = UIView(forAutoLayout: ());
+        return titleArea;
+    }();
+    
     private lazy var thumbnail: UIImageView = {
         let imageView = UIImageView(forAutoLayout: ());
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.tintColor = UIColor.blue;
+        imageView.tintColor = globalContainerScheme().colorScheme.primaryColor;
         return imageView
+    }()
+    
+    private lazy var titleText: UILabel = {
+        let label = UILabel(forAutoLayout: ());
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        label.lineBreakMode = .byTruncatingTail
+        label.font = globalContainerScheme().typographyScheme.overline
+        label.textColor = .systemGray;
+        return label
     }()
 
     private lazy var headerText: UILabel = {
@@ -56,14 +72,18 @@ class ExpandableCard: MDCCard {
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
+        label.font = globalContainerScheme().typographyScheme.headline6
+        label.textColor = globalContainerScheme().colorScheme.primaryColor
         return label
     }()
-    
+
     private lazy var subhead: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
+        label.font = globalContainerScheme().typographyScheme.subtitle2
+        label.textColor = .systemGray
         return label
     }()
     
@@ -81,10 +101,7 @@ class ExpandableCard: MDCCard {
     }()
     
     @objc func expandButtonPressed() {
-        self.showExpanded = !self.showExpanded;
-        self.expandableView.isHidden = !self.showExpanded;
-        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
-        cell?.somethingChanged();
+        setExpanded(expanded: !self.showExpanded);
     }
     
     var cellWidthConstraint: NSLayoutConstraint?;
@@ -96,10 +113,13 @@ class ExpandableCard: MDCCard {
         cellWidthConstraint = NSLayoutConstraint(item: container, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0);
     }
     
-    func configure(header: String, subheader: String, imageName: String, expandedView: UIView?, cell: ObservationFormCardCell?) {
+    func configure(header: String?, subheader: String?, imageName: String, title: String? = nil, expandedView: UIView?, cell: ObservationFormCardCell?) {
         self.thumbnail.image  = UIImage(named: imageName)
         self.headerText.text = header
         self.subhead.text = subheader;
+        if let safeTitle = title {
+            self.titleText.text = safeTitle.uppercased();
+        }
         self.expandedView = expandedView;
         self.cell = cell;
         
@@ -117,16 +137,29 @@ class ExpandableCard: MDCCard {
         self.applyTheme(withScheme: containerScheme)
         self.headerText.font = typographyScheme.headline6
         self.subhead.font = typographyScheme.subtitle2
+        self.titleText.font = typographyScheme.overline;
     }
     
     private func constructCard() {
         self.container?.addSubview(self);
         self.addSubview(stackView);
-        stackView.addArrangedSubview(headerArea);
-        headerArea.addSubview(thumbnail)
-        headerArea.addSubview(headerText)
-        headerArea.addSubview(subhead);
-        headerArea.addSubview(expandAction);
+        if (self.titleText.text != nil) {
+            stackView.addArrangedSubview(titleArea);
+            titleArea.addSubview(thumbnail);
+            setThumbnailConstraints();
+            titleArea.addSubview(titleText);
+            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 20, left: 56, bottom: 16, right: 16));
+            titleArea.addSubview(expandAction);
+        }
+        if (headerText.text != nil || subhead.text != nil) {
+            stackView.addArrangedSubview(headerArea);
+            headerArea.addSubview(headerText)
+            headerArea.addSubview(subhead);
+            
+            setHeaderAreaConstraints();
+            setHeaderTextConstraints();
+            setSubheadConstraints();
+        }
         
         if expandedView != nil {
             expandableView.addSubview(expandedView!);
@@ -141,29 +174,27 @@ class ExpandableCard: MDCCard {
     private func setHeaderAreaConstraints() {
         headerArea.autoPinEdge(toSuperviewEdge: .left);
         headerArea.autoPinEdge(toSuperviewEdge: .right);
-        headerArea.autoSetDimension(.height, toSize: 56).priority = UILayoutPriority.defaultHigh;
+//        headerArea.autoSetDimension(.height, toSize: 56).priority = UILayoutPriority.defaultHigh;
     }
     
     private func setThumbnailConstraints() {
         thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-        thumbnail.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
     }
     
     private func setHeaderTextConstraints() {
         headerText.autoPinEdge(.bottom, to: .top, of: headerArea, withOffset: 34);
-        headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 72);
+        headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
         headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
     }
     
     private func setSubheadConstraints() {
         subhead.autoPinEdge(.bottom, to: .bottom, of: headerText, withOffset: 22);
-        subhead.autoPinEdge(toSuperviewEdge: .left, withInset: 72);
-        subhead.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
     }
     
     private func setExpandActionConstraints() {
-        expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        expandAction.autoAlignAxis(toSuperviewAxis: .horizontal);
+        expandAction.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 16), excludingEdge: .left);
         expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
     }
     
@@ -174,14 +205,16 @@ class ExpandableCard: MDCCard {
     }
     
     private func addConstraints() {
-//        self.autoPinEdgesToSuperviewEdges();
         setStackViewConstraints();
-        setHeaderAreaConstraints();
-        setThumbnailConstraints();
-        setHeaderTextConstraints();
-        setSubheadConstraints();
         setExpandActionConstraints();
         setExpandableViewConstraints();
+    }
+    
+    public func setExpanded(expanded: Bool = true) {
+        self.showExpanded = expanded;
+        self.expandableView.isHidden = !self.showExpanded;
+        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
+        cell?.somethingChanged();
     }
     
 }

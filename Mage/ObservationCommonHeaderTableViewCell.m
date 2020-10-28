@@ -97,7 +97,7 @@
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
-    self.ads.observation = observation;
+    self.ads.attachments = [observation.attachments setByAddingObjectsFromArray: observation.transientAttachments];
 }
 
 - (void) setAttachmentSelectionDelegate:(NSObject<AttachmentSelectionDelegate> *)attachmentSelectionDelegate {

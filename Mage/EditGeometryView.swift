@@ -8,6 +8,27 @@
 
 import Foundation
 import MaterialComponents.MDCTextField;
+import MaterialComponents.MDCButton;
+
+extension UIButton {
+    func setInsets(
+        forContentPadding contentPadding: UIEdgeInsets,
+        imageTitlePadding: CGFloat
+    ) {
+        self.contentEdgeInsets = UIEdgeInsets(
+            top: contentPadding.top,
+            left: contentPadding.left,
+            bottom: contentPadding.bottom,
+            right: contentPadding.right + imageTitlePadding
+        )
+        self.titleEdgeInsets = UIEdgeInsets(
+            top: 0,
+            left: imageTitlePadding,
+            bottom: 0,
+            right: -imageTitlePadding
+        )
+    }
+}
 
 class EditGeometryView : BaseFieldView {
     private var accuracy: Double?;
@@ -16,7 +37,7 @@ class EditGeometryView : BaseFieldView {
     
     private var mapDelegate: MapDelegate = MapDelegate();
     private var observation: Observation?;
-    private var eventForms: [NSDictionary]?;
+    private var eventForms: [[String: Any]]?;
     
     private var mapObservation: MapObservation?;
     
@@ -24,6 +45,35 @@ class EditGeometryView : BaseFieldView {
         let textField = MDCTextField(forAutoLayout: ());
         controller.textInput = textField;
         return textField;
+    }()
+    
+    private lazy var fieldNameLabel: UILabel = {
+        let containerScheme = globalContainerScheme();
+        let label = UILabel(forAutoLayout: ());
+        label.textColor = .systemGray;
+        var font = containerScheme.typographyScheme.body1;
+        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
+        label.font = font;
+        
+        return label;
+    }()
+    
+    private lazy var latitudeLongitudeButton: MDCButton = {
+        let containerScheme = globalContainerScheme();
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "location";
+        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.applyTextTheme(withScheme: containerScheme);
+        return button;
+    }()
+    
+    private lazy var accuracyLabel: UILabel = {
+        let containerScheme = globalContainerScheme();
+        let label = UILabel(forAutoLayout: ());
+        label.textColor = .systemGray;
+        label.font = containerScheme.typographyScheme.caption;
+        return label;
     }()
     
     lazy var mapView: MKMapView = {
@@ -50,13 +100,13 @@ class EditGeometryView : BaseFieldView {
         self.init(field: field, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, observation: Observation?, eventForms: [NSDictionary]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
         let accuracy = ((observation?.properties as? NSDictionary)?.value(forKey: "accuracy") as? Double);
         let provider = ((observation?.properties as? NSDictionary)?.value(forKey: "provider") as? String);
         self.init(field: field, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [NSDictionary]? = nil) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.observation = observation;
         self.eventForms = eventForms;
@@ -73,13 +123,13 @@ class EditGeometryView : BaseFieldView {
 
         setupController();
         if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
+            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
         } else {
-            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
+            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
         }
         
         if ((field[FieldKey.required.key] as? Bool) == true) {
-            controller.placeholderText = (controller.placeholderText ?? "") + " *"
+            fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
         }
     }
     
@@ -112,7 +162,12 @@ class EditGeometryView : BaseFieldView {
 
     func setMapRegion() {
         if let centroid = (self.value as? SFGeometry)?.centroid() {
-            let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), span: MKCoordinateSpan(latitudeDelta: 0.03125, longitudeDelta: 0.03125));
+            var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), span: MKCoordinateSpan(latitudeDelta: 0.03125, longitudeDelta: 0.03125));
+            if (accuracy != nil) {
+                let coordinate = CLLocationCoordinate2DMake(centroid.y as! CLLocationDegrees, centroid.x as! CLLocationDegrees);
+                region = MKCoordinateRegion(center: coordinate, latitudinalMeters: (accuracy ?? 1000) * 2.5, longitudinalMeters: (accuracy ?? 1000) * 2.5);
+            }
+            
             let viewRegion = self.mapView.regionThatFits(region);
             self.mapView.setRegion(viewRegion, animated: false);
         }
@@ -134,12 +189,23 @@ class EditGeometryView : BaseFieldView {
         let wrapper = UIView(forAutoLayout: ());
         self.addSubview(wrapper);
         wrapper.autoPinEdgesToSuperviewEdges();
-        wrapper.addSubview(textField);
-        textField.sizeToFit();
-        textField.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+        
         wrapper.addSubview(mapView);
-        mapView.autoPinEdge(.top, to: .bottom, of: textField, withOffset: 8);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 24, right: 0), excludingEdge: .top);
+        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+        
+        wrapper.addSubview(fieldNameLabel);
+        fieldNameLabel.autoPinEdge(toSuperviewEdge: .top);
+        fieldNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+        
+        wrapper.addSubview(latitudeLongitudeButton);
+        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left);
+        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .bottom);
+        latitudeLongitudeButton.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: 8);
+        
+        wrapper.addSubview(accuracyLabel);
+        accuracyLabel.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton);
+        accuracyLabel.autoPinEdge(.top, to: .top, of: latitudeLongitudeButton);
+        accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
         
         mapDelegate.ensureMapLayout();
         
@@ -162,7 +228,7 @@ class EditGeometryView : BaseFieldView {
                     formattedProvider = provider!.capitalized;
                 }
                 
-                controller.helperText = String(format: "%@ Location Accuracy +/- %.02fm", formattedProvider, accuracy!);
+                accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy!);
                 if let centroid = (self.value as? SFGeometry)!.centroid() {
                     let overlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
                         self.mapView.addOverlay(overlay);
@@ -176,23 +242,26 @@ class EditGeometryView : BaseFieldView {
         if (value != nil) {
             if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
                 if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-                    textField.text = MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees));
+                    latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
                 } else {
-                    textField.text = String(format: "%.6f, %.6f", point.y.doubleValue, point.x.doubleValue);
+                    latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
                 }
+                latitudeLongitudeButton.sizeToFit();
             }
             setAccuracy(accuracy, provider: provider);
             addToMap();
         } else {
-            textField.text = nil;
+            latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
         }
     }
     
     override func setValid(_ valid: Bool) {
         if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
+            latitudeLongitudeButton.applyTextTheme(withScheme: globalContainerScheme());
+            fieldNameLabel.textColor = .systemGray;
         } else {
-            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
+            latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
+            fieldNameLabel.textColor = .systemRed;
         }
     }
 }

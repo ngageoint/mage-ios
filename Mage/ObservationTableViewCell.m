@@ -116,7 +116,7 @@
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
     [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
-    self.ads.observation = observation;
+    self.ads.attachments = [observation.attachments setByAddingObjectsFromArray: observation.transientAttachments];
     self.ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
     
     if ([observation.attachments count]) {

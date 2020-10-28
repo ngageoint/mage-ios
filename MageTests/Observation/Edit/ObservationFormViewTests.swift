@@ -32,7 +32,7 @@ class ObservationFormViewTests: QuickSpec {
     
     override func spec() {
         
-        xdescribe("ObservationFormView") {
+        describe("ObservationFormView") {
             let recordSnapshots = true;
             var completeTest = false;
 
@@ -43,7 +43,7 @@ class ObservationFormViewTests: QuickSpec {
             var formView: ObservationFormView!
             var view: UIView!
             var eventForm: [String:Any]!
-            var form: NSMutableDictionary!
+            var form: [String : Any]!
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
                 if (recordSnapshots || recordThisSnapshot) {
@@ -60,6 +60,7 @@ class ObservationFormViewTests: QuickSpec {
             }
             
             beforeEach {
+                TestHelpers.clearAndSetUpStack();
                 completeTest = false;
                 window = UIWindow(forAutoLayout: ());
                 window.autoSetDimension(.width, toSize: 300);
@@ -67,20 +68,41 @@ class ObservationFormViewTests: QuickSpec {
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                view.backgroundColor = .white;
                 window.makeKeyAndVisible();
                 
                 eventForm = FormBuilder.createFormWithAllFieldTypes();
-//                print("event form from builder", eventForm);
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
                 
-                observation = ObservationBuilder.createBlankObservation();
-                form = NSMutableDictionary();
+                form = [ : ];
             }
             
-            it("no initial value") {
+            afterEach {
+                TestHelpers.clearAndSetUpStack();
+            }
+            
+            it("no initial values in the observation") {
+                observation = ObservationBuilder.createBlankObservation();
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1);
 
+                view.addSubview(formView)
+                formView.autoPinEdgesToSuperviewEdges();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("observation filled in completely") {
+                observation = ObservationBuilder.createPointObservation();
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1);
+                
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
                 

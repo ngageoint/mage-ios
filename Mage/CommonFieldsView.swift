@@ -14,7 +14,7 @@ import PureLayout
 
 class CommonFieldsView: MDCCard {
     var observation: Observation;
-    var eventForms: [NSDictionary]?;
+    var eventForms: [[String:Any]]?;
     
     lazy var dateField: [String: Any] = {
         let dateField: [String: Any] =
@@ -60,10 +60,10 @@ class CommonFieldsView: MDCCard {
         self.addSubview(wrapper);
         wrapper.autoPinEdgesToSuperviewEdges();
         wrapper.addSubview(dateView);
-        dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+        dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);
         wrapper.addSubview(geometryView);
-        geometryView.autoPinEdge(.top, to: .bottom, of: dateView, withOffset: 8);
-        geometryView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 24, right: 0), excludingEdge: .top);
+        geometryView.autoPinEdge(.top, to: .bottom, of: dateView);
+        geometryView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8), excludingEdge: .top);
         
         if let observationProperties: NSDictionary = observation.properties as? NSDictionary {
             dateView.setValue(observationProperties.object(forKey: dateField[FieldKey.name.key] as! String) as? String);

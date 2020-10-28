@@ -51,6 +51,8 @@
 #import "LocalLoginView.h"
 #import "DeviceUUID.h"
 #import "Authentication.h"
+#import "FormDefaults.h"
+#import "AttachmentCollectionDataStore.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

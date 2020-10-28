@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditGeometryViewTests: QuickSpec {
+class EditGeometryViewTests: KIFSpec {
     
     override func spec() {
         
@@ -51,6 +51,7 @@ class EditGeometryViewTests: QuickSpec {
                 controller = ContainingUIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                view.backgroundColor = .systemBackground;
                 window.makeKeyAndVisible();
 
                 field = ["title": "Field Title"];
@@ -99,8 +100,9 @@ class EditGeometryViewTests: QuickSpec {
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        tester().waitForAnimationsToFinish();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -130,8 +132,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -154,7 +156,7 @@ class EditGeometryViewTests: QuickSpec {
             it("initial value set wtih observation without geometry") {
                 var completeTest = false;
                 let observation: Observation = ObservationBuilder.createBlankObservation()
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -182,15 +184,15 @@ class EditGeometryViewTests: QuickSpec {
             it("initial value set wtih observation") {
                 var completeTest = false;
                 let observation: Observation = ObservationBuilder.createPointObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -214,15 +216,15 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()]
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -247,15 +249,16 @@ class EditGeometryViewTests: QuickSpec {
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
                 ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
+                        tester().waitForAnimationsToFinish();
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -279,15 +282,15 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createLineObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -311,7 +314,7 @@ class EditGeometryViewTests: QuickSpec {
                 var completeTest = false;
                 
                 let observation: Observation = ObservationBuilder.createPolygonObservation();
-                let eventForms: [NSDictionary] = [FormBuilder.createEmptyForm()] as [NSDictionary];
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 print("EventFOrms", eventForms);
 
                 let mockMapDelegate = MockMapViewDelegate()
@@ -319,8 +322,8 @@ class EditGeometryViewTests: QuickSpec {
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
                         let point: SFPoint = observation.getGeometry().centroid();
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -349,8 +352,8 @@ class EditGeometryViewTests: QuickSpec {
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -382,8 +385,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }
@@ -414,8 +417,8 @@ class EditGeometryViewTests: QuickSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees));
-                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees));
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
                     })
                 }

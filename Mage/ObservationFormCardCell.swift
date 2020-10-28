@@ -59,17 +59,17 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
         return card;
     }()
 
-    func configure(observationForm: NSDictionary, eventForm: NSDictionary, width: CGFloat, observation: Observation, formIndex: Int) {
+    func configure(observationForm: [String: Any], eventForm: [String: Any], width: CGFloat, observation: Observation, formIndex: Int) {
         self.formIndex = formIndex;
         var formPrimaryValue = "";
         var formSecondaryValue = "";
-        if let primaryField = eventForm.object(forKey: "primaryFeedField") as! NSString? {
-            if let obsfield = observationForm.object(forKey: primaryField) as! String? {
+        if let primaryField = eventForm["primaryFeedField"] as! String? {
+            if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm.object(forKey: "secondaryFeedField") as! NSString? {
-            if let obsfield = observationForm.object(forKey: secondaryField) as! String? {
+        if let secondaryField = eventForm["secondaryFeedField"] as! String? {
+            if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
         }
@@ -80,7 +80,7 @@ class ObservationFormCardCell: MDCCardCollectionCell, ObservationEditViewControl
 //        NSLog("Event form secondary key %@", secondaryField);
         
         card.setWidth(width: width);
-        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm as! [String : Any], formIndex: formIndex);
+        let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm, formIndex: formIndex);
         
         card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", expandedView: formView, cell: self);
     }
