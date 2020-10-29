@@ -142,6 +142,7 @@
 		F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E432F19C3A1B10066E808 /* ObservationDataStore.m */; };
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
+		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
@@ -178,7 +179,6 @@
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
-		F73968312460B06F0017D481 /* ObservationFormCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73968302460B06F0017D481 /* ObservationFormCardCell.swift */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
 		F73E29DB20597737001B9307 /* Pods_MAGE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73E29DC20597737001B9307 /* Pods_MAGE.framework */; };
@@ -308,7 +308,7 @@
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
 		F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */; };
-		F7B5772C245CABE600879C9C /* ExpandableCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5772B245CABE600879C9C /* ExpandableCardCell.swift */; };
+		F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5772B245CABE600879C9C /* ExpandableCard.swift */; };
 		F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
@@ -651,6 +651,7 @@
 		F70E6EE8197815B4002D66F6 /* ObservationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationTableViewCell.h; sourceTree = "<group>"; };
 		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
@@ -703,7 +704,6 @@
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
-		F73968302460B06F0017D481 /* ObservationFormCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormCardCell.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
 		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
@@ -891,7 +891,7 @@
 		F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerViewController.h; sourceTree = "<group>"; };
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
 		F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewController.swift; sourceTree = "<group>"; };
-		F7B5772B245CABE600879C9C /* ExpandableCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardCell.swift; sourceTree = "<group>"; };
+		F7B5772B245CABE600879C9C /* ExpandableCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCard.swift; sourceTree = "<group>"; };
 		F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextFieldViewTests.swift; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
@@ -1463,6 +1463,14 @@
 			name = Observation;
 			sourceTree = "<group>";
 		};
+		F710D8AC2549B34E00798D56 /* MaterialComponents */ = {
+			isa = PBXGroup;
+			children = (
+				F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */,
+			);
+			path = MaterialComponents;
+			sourceTree = "<group>";
+		};
 		F714D5ED1A5C831B00B096A7 /* AudioRecorder */ = {
 			isa = PBXGroup;
 			children = (
@@ -1520,7 +1528,7 @@
 		F739682F2460B0290017D481 /* MaterialComponents */ = {
 			isa = PBXGroup;
 			children = (
-				F7B5772B245CABE600879C9C /* ExpandableCardCell.swift */,
+				F7B5772B245CABE600879C9C /* ExpandableCard.swift */,
 				F723D608253F66AC00C6BE34 /* MAGEScheme.swift */,
 			);
 			path = MaterialComponents;
@@ -1576,7 +1584,6 @@
 				F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */,
 				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
 				F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */,
-				F73968302460B06F0017D481 /* ObservationFormCardCell.swift */,
 				F7813A8024621237003666ED /* ObservationFormView.swift */,
 			);
 			name = Edit;
@@ -1975,6 +1982,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F710D8AC2549B34E00798D56 /* MaterialComponents */,
 				F77B7D7C24797B0400C51953 /* Form */,
 				F7BE036A2466093700D2F7C3 /* Observation */,
 				F72C16AF25239B9B00682052 /* Authentication */,
@@ -2795,8 +2803,7 @@
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
-				F73968312460B06F0017D481 /* ObservationFormCardCell.swift in Sources */,
-				F7B5772C245CABE600879C9C /* ExpandableCardCell.swift in Sources */,
+				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
 				F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */,
@@ -2825,6 +2832,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
+				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */,

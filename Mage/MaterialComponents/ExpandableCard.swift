@@ -17,24 +17,19 @@ class ExpandableCard: MDCCard {
     
     private var container: UIView?;
     private var expandedView: UIView?;
-    private var showExpanded: Bool = true;
-    private var cell: ObservationFormCardCell?;
+    var showExpanded: Bool = true;
     
-    override init(frame: CGRect) {
-        super.init(frame: frame);
-        self.translatesAutoresizingMaskIntoConstraints = false;
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder);
-        self.translatesAutoresizingMaskIntoConstraints = false;
+    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, expandedView: UIView? = nil) {
+        self.init(frame: CGRect.zero);
+        self.configureForAutoLayout();
+        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, expandedView: expandedView);
     }
     
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(forAutoLayout: ());
-        stackView.alignment = UIStackView.Alignment.fill;
-        stackView.distribution = UIStackView.Distribution.equalSpacing;
-        stackView.axis = NSLayoutConstraint.Axis.vertical;
+        stackView.alignment = .fill;
+        stackView.distribution = .fill;
+        stackView.axis = .vertical;
         stackView.spacing = 0;
         return stackView;
     }()
@@ -89,6 +84,7 @@ class ExpandableCard: MDCCard {
     
     private lazy var expandAction: UIButton = {
         let expandAction = UIButton(type: .custom);
+        expandAction.accessibilityLabel = "expand";
         expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
         expandAction.addTarget(self, action: #selector(expandButtonPressed), for: .touchUpInside)
         return expandAction;
@@ -104,117 +100,75 @@ class ExpandableCard: MDCCard {
         setExpanded(expanded: !self.showExpanded);
     }
     
-    var cellWidthConstraint: NSLayoutConstraint?;
-    
-    func set(container: UIView) {
-        self.container = container;
-        self.container?.addSubview(self);
-        self.autoPinEdgesToSuperviewEdges();
-        cellWidthConstraint = NSLayoutConstraint(item: container, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0);
-    }
-    
-    func configure(header: String?, subheader: String?, imageName: String, title: String? = nil, expandedView: UIView?, cell: ObservationFormCardCell?) {
-        self.thumbnail.image  = UIImage(named: imageName)
+    func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, expandedView: UIView?) {
+        if let safeImageName = imageName {
+            self.thumbnail.image  = UIImage(named: safeImageName)
+        }
         self.headerText.text = header
         self.subhead.text = subheader;
         if let safeTitle = title {
             self.titleText.text = safeTitle.uppercased();
         }
         self.expandedView = expandedView;
-        self.cell = cell;
         
         constructCard();
-        addConstraints()
-    }
-    
-    func setWidth(width: CGFloat) {
-        cellWidthConstraint?.constant = width;
-        cellWidthConstraint?.isActive = true;
-        NSLog("Setting constraint width to %f", width);
-    }
-    
-    func apply(containerScheme: MDCContainerScheming, typographyScheme: MDCTypographyScheming) {
-        self.applyTheme(withScheme: containerScheme)
-        self.headerText.font = typographyScheme.headline6
-        self.subhead.font = typographyScheme.subtitle2
-        self.titleText.font = typographyScheme.overline;
     }
     
     private func constructCard() {
         self.container?.addSubview(self);
         self.addSubview(stackView);
-        if (self.titleText.text != nil) {
-            stackView.addArrangedSubview(titleArea);
+
+        self.addSubview(expandAction);
+        expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
+        expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
+        
+        stackView.addArrangedSubview(titleArea);
+        if (self.thumbnail.image != nil || self.titleText.text != nil) {
             titleArea.addSubview(thumbnail);
-            setThumbnailConstraints();
+            thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
+            thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        }
+        
+        if (self.titleText.text != nil) {
+            titleArea.addSubview(thumbnail);
+            thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
+            thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            
             titleArea.addSubview(titleText);
-            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 20, left: 56, bottom: 16, right: 16));
-            titleArea.addSubview(expandAction);
+            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 4, right: 16));
         }
         if (headerText.text != nil || subhead.text != nil) {
-            stackView.addArrangedSubview(headerArea);
             headerArea.addSubview(headerText)
-            headerArea.addSubview(subhead);
+            headerText.autoPinEdge(.top, to: .top, of: headerArea, withOffset: 0);
+            headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+            headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
             
-            setHeaderAreaConstraints();
-            setHeaderTextConstraints();
-            setSubheadConstraints();
+            if (subhead.text != nil) {
+                headerArea.addSubview(subhead);
+                subhead.autoPinEdge(.bottom, to: .bottom, of: headerText, withOffset: 22);
+                subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
+            } else {
+                headerText.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16);
+            }
+            
+            stackView.addArrangedSubview(headerArea);
+            headerArea.autoPinEdge(toSuperviewEdge: .left);
+            headerArea.autoPinEdge(toSuperviewEdge: .right);
         }
         
         if expandedView != nil {
             expandableView.addSubview(expandedView!);
+            expandedView?.autoPinEdgesToSuperviewEdges();
             stackView.addArrangedSubview(expandableView);
         }
-    }
-    
-    private func setStackViewConstraints() {
-        stackView.autoPinEdgesToSuperviewEdges();
-    }
-    
-    private func setHeaderAreaConstraints() {
-        headerArea.autoPinEdge(toSuperviewEdge: .left);
-        headerArea.autoPinEdge(toSuperviewEdge: .right);
-//        headerArea.autoSetDimension(.height, toSize: 56).priority = UILayoutPriority.defaultHigh;
-    }
-    
-    private func setThumbnailConstraints() {
-        thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-        thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
-    }
-    
-    private func setHeaderTextConstraints() {
-        headerText.autoPinEdge(.bottom, to: .top, of: headerArea, withOffset: 34);
-        headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-        headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-    }
-    
-    private func setSubheadConstraints() {
-        subhead.autoPinEdge(.bottom, to: .bottom, of: headerText, withOffset: 22);
-        subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
-    }
-    
-    private func setExpandActionConstraints() {
-        expandAction.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 16), excludingEdge: .left);
-        expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
-    }
-    
-    private func setExpandableViewConstraints() {
-        if expandedView != nil {
-            expandedView?.autoPinEdgesToSuperviewEdges();
-        }
-    }
-    
-    private func addConstraints() {
-        setStackViewConstraints();
-        setExpandActionConstraints();
-        setExpandableViewConstraints();
     }
     
     public func setExpanded(expanded: Bool = true) {
         self.showExpanded = expanded;
         self.expandableView.isHidden = !self.showExpanded;
         expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
-        cell?.somethingChanged();
     }
     
 }

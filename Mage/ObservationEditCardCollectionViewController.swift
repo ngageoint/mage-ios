@@ -166,8 +166,7 @@ import MaterialComponents.MDCCard
             }
         }
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index);
-        let card = ExpandableCard(forAutoLayout: ());
-        card.configure(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm["name"] as! String?, expandedView: formView, cell: nil);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm["name"] as? String, expandedView: formView)
         stackView.addArrangedSubview(card);
         return card;
     }
