@@ -118,10 +118,6 @@ class ExpandableCard: MDCCard {
         self.container?.addSubview(self);
         self.addSubview(stackView);
 
-        self.addSubview(expandAction);
-        expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
-        expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
         
         stackView.addArrangedSubview(titleArea);
@@ -148,9 +144,9 @@ class ExpandableCard: MDCCard {
             if (subhead.text != nil) {
                 headerArea.addSubview(subhead);
                 subhead.autoPinEdge(.bottom, to: .bottom, of: headerText, withOffset: 22);
-                subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16), excludingEdge: .top);
+                subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .top);
             } else {
-                headerText.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16);
+                headerText.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0);
             }
             
             stackView.addArrangedSubview(headerArea);
@@ -158,7 +154,16 @@ class ExpandableCard: MDCCard {
             headerArea.autoPinEdge(toSuperviewEdge: .right);
         }
         
+        let spacerView = UIView(forAutoLayout: ());
+        spacerView.autoSetDimension(.height, toSize: 8);
+        stackView.addArrangedSubview(spacerView);
+        
         if expandedView != nil {
+            self.addSubview(expandAction);
+            expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
+            expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+            expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            
             expandableView.addSubview(expandedView!);
             expandedView?.autoPinEdgesToSuperviewEdges();
             stackView.addArrangedSubview(expandableView);
