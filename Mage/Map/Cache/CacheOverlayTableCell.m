@@ -12,7 +12,6 @@
 #import "MageConstants.h"
 
 @interface CacheOverlayTableCell()<UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
 @end
 
 @implementation CacheOverlayTableCell
