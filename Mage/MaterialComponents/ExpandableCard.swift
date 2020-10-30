@@ -19,12 +19,6 @@ class ExpandableCard: MDCCard {
     private var expandedView: UIView?;
     var showExpanded: Bool = true;
     
-    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, expandedView: UIView? = nil) {
-        self.init(frame: CGRect.zero);
-        self.configureForAutoLayout();
-        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, expandedView: expandedView);
-    }
-    
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(forAutoLayout: ());
         stackView.alignment = .fill;
@@ -32,11 +26,6 @@ class ExpandableCard: MDCCard {
         stackView.axis = .vertical;
         stackView.spacing = 0;
         return stackView;
-    }()
-    
-    private lazy var headerArea: UIView = {
-        let headerArea = UIView(forAutoLayout: ());
-        return headerArea;
     }()
     
     private lazy var titleArea: UIView = {
@@ -97,18 +86,63 @@ class ExpandableCard: MDCCard {
     }()
     
     @objc func expandButtonPressed() {
-        setExpanded(expanded: !self.showExpanded);
+        expanded = !self.expanded;
+    }
+    
+    var title: String? {
+        get {
+            return titleText.text
+        }
+        set(title) {
+            titleText.isHidden = title == nil
+            titleText.text = title?.uppercased()
+        }
+    }
+    
+    var header: String? {
+        get {
+            return headerText.text
+        }
+        set(header) {
+            headerText.isHidden = header == nil
+            headerText.text = header
+        }
+    }
+    
+    var subheader: String? {
+        get {
+            return subhead.text
+        }
+        set(subheader) {
+            subhead.isHidden = subheader == nil
+            subhead.text = subheader
+        }
+    }
+    
+    var expanded: Bool {
+        get {
+            return self.showExpanded
+        }
+        set(expanded) {
+            self.showExpanded = expanded;
+            self.expandableView.isHidden = !self.showExpanded;
+            expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
+        }
+    }
+    
+    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, expandedView: UIView? = nil) {
+        self.init(frame: CGRect.zero);
+        self.configureForAutoLayout();
+        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, expandedView: expandedView);
     }
     
     func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, expandedView: UIView?) {
         if let safeImageName = imageName {
             self.thumbnail.image  = UIImage(named: safeImageName)
         }
-        self.headerText.text = header
-        self.subhead.text = subheader;
-        if let safeTitle = title {
-            self.titleText.text = safeTitle.uppercased();
-        }
+        self.header = header;
+        self.subheader = subheader;
+        self.title = title;
         self.expandedView = expandedView;
         
         constructCard();
@@ -121,39 +155,25 @@ class ExpandableCard: MDCCard {
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
         
         stackView.addArrangedSubview(titleArea);
-        if (self.thumbnail.image != nil || self.titleText.text != nil) {
+        titleArea.autoPinEdge(toSuperviewEdge: .left);
+        titleArea.autoPinEdge(toSuperviewEdge: .right);
+        if (self.thumbnail.image != nil) {
             titleArea.addSubview(thumbnail);
             thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
             thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
         }
         
-        if (self.titleText.text != nil) {
-            titleArea.addSubview(thumbnail);
-            thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
-            thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            
-            titleArea.addSubview(titleText);
-            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 4, right: 16));
-        }
-        if (headerText.text != nil || subhead.text != nil) {
-            headerArea.addSubview(headerText)
-            headerText.autoPinEdge(.top, to: .top, of: headerArea, withOffset: 0);
-            headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-            headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            
-            if (subhead.text != nil) {
-                headerArea.addSubview(subhead);
-                subhead.autoPinEdge(.bottom, to: .bottom, of: headerText, withOffset: 22);
-                subhead.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .top);
-            } else {
-                headerText.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0);
-            }
-            
-            stackView.addArrangedSubview(headerArea);
-            headerArea.autoPinEdge(toSuperviewEdge: .left);
-            headerArea.autoPinEdge(toSuperviewEdge: .right);
-        }
+        titleArea.addSubview(titleText);
+        titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 16));
         
+        stackView.addArrangedSubview(headerText)
+        headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+        headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        
+        stackView.addArrangedSubview(subhead);
+        subhead.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+        subhead.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+                    
         let spacerView = UIView(forAutoLayout: ());
         spacerView.autoSetDimension(.height, toSize: 8);
         stackView.addArrangedSubview(spacerView);
@@ -169,11 +189,4 @@ class ExpandableCard: MDCCard {
             stackView.addArrangedSubview(expandableView);
         }
     }
-    
-    public func setExpanded(expanded: Bool = true) {
-        self.showExpanded = expanded;
-        self.expandableView.isHidden = !self.showExpanded;
-        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
-    }
-    
 }

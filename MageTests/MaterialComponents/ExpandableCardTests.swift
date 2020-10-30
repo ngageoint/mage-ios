@@ -63,7 +63,8 @@ class ExpandableCardTests: KIFSpec {
                 var completeTest = false;
                 
                 expandableCard = ExpandableCard(header: "Header");
-                
+                expect(expandableCard.header).to(equal("Header"));
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(expandableCard);
@@ -84,6 +85,7 @@ class ExpandableCardTests: KIFSpec {
                 var completeTest = false;
                 
                 expandableCard = ExpandableCard(subheader: "Subheader");
+                expect(expandableCard.subheader).to(equal("Subheader"));
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
@@ -105,7 +107,8 @@ class ExpandableCardTests: KIFSpec {
                 var completeTest = false;
                 
                 expandableCard = ExpandableCard(title: "Title");
-                
+                expect(expandableCard.title).to(equal("TITLE"));
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(expandableCard);
@@ -174,6 +177,75 @@ class ExpandableCardTests: KIFSpec {
                 controller.view.addSubview(view);
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("header field set later") {
+                var completeTest = false;
+                
+                expandableCard = ExpandableCard(subheader: "Subheader", imageName: "form", title: "Title");
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                view.addSubview(expandableCard);
+                expandableCard.autoPinEdgesToSuperviewEdges();
+                
+                expandableCard.header = "Header Later"
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("subheader field set later") {
+                var completeTest = false;
+                
+                expandableCard = ExpandableCard(header: "Header", imageName: "form", title: "Title");
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                view.addSubview(expandableCard);
+                expandableCard.autoPinEdgesToSuperviewEdges();
+                
+                expandableCard.subheader = "Subheader Later"
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("title field set later") {
+                var completeTest = false;
+                
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form");
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                view.addSubview(expandableCard);
+                expandableCard.autoPinEdgesToSuperviewEdges();
+                
+                expandableCard.title = "Title Later"
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -277,9 +349,9 @@ class ExpandableCardTests: KIFSpec {
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
-                expandableCard.setExpanded(expanded: false);
+                expandableCard.expanded = false;
                 expandableCard.configure(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
-                expandableCard.setExpanded(expanded: true);
+                expandableCard.expanded = true;
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -300,7 +372,7 @@ class ExpandableCardTests: KIFSpec {
                 expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
                 
                 expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
-                expandableCard.setExpanded(expanded: false);
+                expandableCard.expanded = false;
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
