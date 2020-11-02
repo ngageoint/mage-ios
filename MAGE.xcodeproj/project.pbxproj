@@ -128,6 +128,7 @@
 		F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7012B9B248E96E8002BBDE8 /* FeedService.swift */; };
 		F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
 		F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */; };
+		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
 		F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */; };
 		F7098F262492C36700313703 /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F27249401E500313703 /* FeedItemTableViewCell.swift */; };
@@ -243,6 +244,7 @@
 		F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */; };
 		F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77B7D7924797AD500C51953 /* FormBuilder.swift */; };
 		F77B7D7E24797B9900C51953 /* allFieldTypesForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */; };
+		F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77C21A5254C6E7000D9257F /* HexColor.swift */; };
 		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F7813A8124621237003666ED /* ObservationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8024621237003666ED /* ObservationFormView.swift */; };
@@ -389,7 +391,7 @@
 		F7F9122524803F5500C068B6 /* EditCheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */; };
 		F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
-		F7FC59251F3CEBF80010351A /* FormPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.m */; };
+		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
 		F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
@@ -633,6 +635,7 @@
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		F7059AB320446B1D00A6B7CC /* registrationSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = registrationSuccess.json; sourceTree = "<group>"; };
 		F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisconnectedLogin.m; sourceTree = "<group>"; };
+		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
 		F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsViewControllerTests.swift; sourceTree = "<group>"; };
 		F7098F252492C36700313703 /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F7098F27249401E500313703 /* FeedItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -798,6 +801,7 @@
 		F77AF8DD24DC5AF9003997D8 /* FeedItemSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemSelectionDelegate.h; sourceTree = "<group>"; };
 		F77B7D7924797AD500C51953 /* FormBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormBuilder.swift; sourceTree = "<group>"; };
 		F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allFieldTypesForm.json; sourceTree = "<group>"; };
+		F77C21A5254C6E7000D9257F /* HexColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
 		F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoImageProvider.swift; sourceTree = "<group>"; };
 		F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
@@ -1005,8 +1009,7 @@
 		F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldView.swift; sourceTree = "<group>"; };
 		F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
-		F7FC59231F3CEBF80010351A /* FormPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormPickerViewController.h; sourceTree = "<group>"; };
-		F7FC59241F3CEBF80010351A /* FormPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormPickerViewController.m; sourceTree = "<group>"; };
+		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
 		F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditCoordinator.h; sourceTree = "<group>"; };
 		F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditCoordinator.m; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
@@ -1538,6 +1541,7 @@
 			isa = PBXGroup;
 			children = (
 				F743008B254775AB00DCE050 /* SplitLayout.swift */,
+				F77C21A5254C6E7000D9257F /* HexColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1778,6 +1782,7 @@
 				F77B7D7924797AD500C51953 /* FormBuilder.swift */,
 				F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */,
 				F7F9122824819D5D00C068B6 /* emptyForm.json */,
+				F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -2155,8 +2160,7 @@
 		F7FC59281F3CEDEB0010351A /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				F7FC59231F3CEBF80010351A /* FormPickerViewController.h */,
-				F7FC59241F3CEBF80010351A /* FormPickerViewController.m */,
+				F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -2782,7 +2786,7 @@
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
-				F7FC59251F3CEBF80010351A /* FormPickerViewController.m in Sources */,
+				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
@@ -2802,6 +2806,7 @@
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
+				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
@@ -2868,6 +2873,7 @@
 				F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */,
 				F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */,
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
+				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F795ED0E24B8FDE20028FBFC /* MockMapViewDelegate.swift in Sources */,
