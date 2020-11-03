@@ -47,6 +47,11 @@
     self.canceled = NO;
     
     self.datePicker = [[UIDatePicker alloc] init];
+    if (@available(iOS 13.4, *)) {
+        [self.datePicker setPreferredDatePickerStyle: UIDatePickerStyleWheels];
+    } else {
+        // Fallback on earlier versions
+    }
     if (![NSDate isDisplayGMT]) {
         self.datePicker.timeZone = [NSTimeZone localTimeZone];
     } else {
