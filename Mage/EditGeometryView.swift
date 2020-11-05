@@ -212,7 +212,7 @@ class EditGeometryView : BaseFieldView {
         
         wrapper.addSubview(latitudeLongitudeButton);
         latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left);
-        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .bottom);
+        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
         latitudeLongitudeButton.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: 8);
         
         wrapper.addSubview(accuracyLabel);
