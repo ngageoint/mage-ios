@@ -54,7 +54,11 @@ class EditGeometryViewTests: KIFSpec {
                 view.backgroundColor = .systemBackground;
                 window.makeKeyAndVisible();
 
-                field = ["title": "Field Title"];
+                field = [
+                    "title": "Field Title",
+                    "name": "field8",
+                    "id": 8
+                ];
                 
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
@@ -543,20 +547,23 @@ class EditGeometryViewTests: KIFSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-//
-//            it("test delegate") {
-//                let delegate = MockTextFieldDelegate();
-//                textFieldView = EditTextFieldView(field: field, delegate: delegate);
-//                view.addSubview(textFieldView)
-//                textFieldView.autoPinEdgesToSuperviewEdges();
-//
-//                textFieldView.textField.text = "new value";
-//                textFieldView.textFieldDidEndEditing(textFieldView.textField);
-//                expect(delegate.fieldChangedCalled) == true;
-//                expect(delegate.newValue) == "new value";
-//                expect(view) == snapshot();
-//            }
+            
+            it("set value via input") {
+                let delegate = MockFieldDelegate();
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, delegate: delegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view = view;
+                tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
+                geometryFieldView.handleTap(sender: UITapGestureRecognizer());
+                expect(delegate.fieldSelectedCalled).to(beTrue());
+                expect(delegate.selectedField).toNot(beNil());
+            }
         }
-      
     }
 }

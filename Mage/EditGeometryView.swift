@@ -87,6 +87,15 @@ class EditGeometryView : BaseFieldView {
         return mapView;
     }()
     
+    lazy var editFab: MDCFloatingButton = {
+        let fab = MDCFloatingButton(shape: .mini);
+        fab.accessibilityLabel = field[FieldKey.name.key] as? String;
+        fab.setImage(UIImage(named: "edit")?.withRenderingMode(.alwaysTemplate), for: .normal);
+        fab.applySecondaryTheme(withScheme: globalContainerScheme());
+        fab.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside);
+        return fab;
+    }()
+    
     lazy var observationManager: MapObservationManager = {
         let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView, andEventForms: eventForms);
         return observationManager;
@@ -193,6 +202,10 @@ class EditGeometryView : BaseFieldView {
         wrapper.addSubview(mapView);
         mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
         
+        wrapper.addSubview(editFab);
+        editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
+        editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
+        
         wrapper.addSubview(fieldNameLabel);
         fieldNameLabel.autoPinEdge(toSuperviewEdge: .top);
         fieldNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
@@ -208,12 +221,14 @@ class EditGeometryView : BaseFieldView {
         accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
         
         mapDelegate.ensureMapLayout();
-        
-        addTapRecognizer();
     }
     
     override func isEmpty() -> Bool{
         return self.value == nil;
+    }
+    
+    @objc func editButtonTapped() {
+        delegate?.fieldSelected?(field);
     }
     
     func setAccuracy(_ accuracy: Double?, provider: String?) {
