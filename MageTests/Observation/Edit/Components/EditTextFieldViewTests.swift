@@ -13,20 +13,47 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditTextFieldViewTests: QuickSpec {
+class EditTextFieldViewTests: KIFSpec {
     
     override func spec() {
+        
+        let recordSnapshots = false;
         
         describe("EditTextFieldView Single Line") {
             
             var textFieldView: EditTextFieldView!
-            var view: UIView!
             var field: [String: Any]!
             
+            var view: UIView!
+            var controller: UIViewController!
+            var window: UIWindow!;
+            
+            func maybeSnapshot() -> Snapshot {
+                if (recordSnapshots) {
+                    return recordSnapshot()
+                } else {
+                    return snapshot()
+                }
+            }
+            
             beforeEach {
-                field = ["title": "Field Title"];
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 300);
+                
+                controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                view.backgroundColor = .white;
+                window.makeKeyAndVisible();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+
+                field = [
+                    "title": "Field Title",
+                    "name": "field8",
+                    "id": 8
+                ];
             }
             
             it("email field") {
@@ -39,7 +66,10 @@ class EditTextFieldViewTests: QuickSpec {
  
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+
+                expect(view) == maybeSnapshot();
             }
             
             it("initial value set") {
@@ -47,7 +77,7 @@ class EditTextFieldViewTests: QuickSpec {
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set value later") {
@@ -57,7 +87,24 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValue("Hi")
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
+            }
+            
+            it("set value via input") {
+                let delegate = MockFieldDelegate();
+
+                textFieldView = EditTextFieldView(field: field, delegate: delegate);
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                tester().enterText("new text", intoViewWithAccessibilityLabel: field["name"] as? String);
+                tester().tapView(withAccessibilityLabel: "Done");
+                
+                expect(delegate.fieldChangedCalled).to(beTrue());
+                
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid false") {
@@ -67,7 +114,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValid(false);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid true after being invalid") {
@@ -78,7 +125,7 @@ class EditTextFieldViewTests: QuickSpec {
                 
                 textFieldView.setValid(false);
                 textFieldView.setValid(true);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("required field is invalid if empty") {
@@ -104,7 +151,7 @@ class EditTextFieldViewTests: QuickSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("test delegate") {
@@ -117,7 +164,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.textFieldDidEndEditing(textFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == "new value";
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("done button should change text") {
@@ -147,13 +194,37 @@ class EditTextFieldViewTests: QuickSpec {
         describe("EditTextFieldView Multi Line") {
             
             var textFieldView: EditTextFieldView!
-            var view: UIView!
             var field: [String: Any]!
+                        
+            var view: UIView!
+            var controller: UIViewController!
+            var window: UIWindow!;
+            
+            func maybeSnapshot() -> Snapshot {
+                if (recordSnapshots) {
+                    return recordSnapshot()
+                } else {
+                    return snapshot()
+                }
+            }
             
             beforeEach {
-                field = ["title": "Multi Line Field Title"];
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 300);
+                
+                controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                view.backgroundColor = .white;
+                window.makeKeyAndVisible();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+
+                field = ["title": "Multi Line Field Title",
+                         "name": "field8",
+                         "id": 8
+                ];
             }
             
             it("no initial value") {
@@ -161,7 +232,7 @@ class EditTextFieldViewTests: QuickSpec {
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("initial value set") {
@@ -169,7 +240,7 @@ class EditTextFieldViewTests: QuickSpec {
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set value later") {
@@ -179,7 +250,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValue("Hi")
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set multi line value later") {
@@ -190,7 +261,24 @@ class EditTextFieldViewTests: QuickSpec {
                 view.autoPinEdge(.bottom, to: .bottom, of: textFieldView);
                 textFieldView.setValue("Hi\nHello")
                 
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
+            }
+            
+            it("set value via input") {
+                let delegate = MockFieldDelegate();
+                
+                textFieldView = EditTextFieldView(field: field, delegate: delegate, multiline: true);
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                tester().enterText("new\ntext", intoViewWithAccessibilityLabel: field["name"] as? String);
+                tester().tapView(withAccessibilityLabel: "Done");
+                
+                expect(delegate.fieldChangedCalled).to(beTrue());
+                
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid false") {
@@ -200,7 +288,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValid(false);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid true after being invalid") {
@@ -211,7 +299,7 @@ class EditTextFieldViewTests: QuickSpec {
                 
                 textFieldView.setValid(false);
                 textFieldView.setValid(true);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("required field is invalid if empty") {
@@ -237,7 +325,7 @@ class EditTextFieldViewTests: QuickSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("test delegate") {
@@ -249,7 +337,7 @@ class EditTextFieldViewTests: QuickSpec {
                 textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == "this is a new value";
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("done button should change text") {

@@ -128,6 +128,8 @@
 		F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7012B9B248E96E8002BBDE8 /* FeedService.swift */; };
 		F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
 		F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */; };
+		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
+		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
 		F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */; };
 		F7098F262492C36700313703 /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
@@ -263,7 +265,7 @@
 		F79116262491414B0043A529 /* MageInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.m */; };
 		F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
 		F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */; };
-		F791E22D2485486E00CCC6BA /* MockFIeldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */; };
+		F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */; };
 		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
 		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
@@ -635,6 +637,8 @@
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		F7059AB320446B1D00A6B7CC /* registrationSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = registrationSuccess.json; sourceTree = "<group>"; };
 		F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisconnectedLogin.m; sourceTree = "<group>"; };
+		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
+		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
 		F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsViewControllerTests.swift; sourceTree = "<group>"; };
 		F7098F252492C36700313703 /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
@@ -830,7 +834,7 @@
 		F79116252491414B0043A529 /* MageInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageInitializer.m; sourceTree = "<group>"; };
 		F7911627249154130043A529 /* MageCoreDataFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataFixtures.swift; sourceTree = "<group>"; };
 		F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsViewTests.swift; sourceTree = "<group>"; };
-		F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFIeldDelegate.swift; sourceTree = "<group>"; };
+		F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFieldDelegate.swift; sourceTree = "<group>"; };
 		F7929C6F23C4E69600396D11 /* countries.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries.gpkg; sourceTree = "<group>"; };
 		F7929C7423C66CD000396D11 /* BaseMapOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseMapOverlay.h; sourceTree = "<group>"; };
 		F7929C7523C66CD000396D11 /* BaseMapOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseMapOverlay.m; sourceTree = "<group>"; };
@@ -1423,6 +1427,16 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
+		F706B2152554365900C19BA7 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */,
+				F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */,
+				F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		F7098F2024928E6300313703 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
@@ -1987,6 +2001,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F706B2152554365900C19BA7 /* Mocks */,
 				F710D8AC2549B34E00798D56 /* MaterialComponents */,
 				F77B7D7C24797B0400C51953 /* Form */,
 				F7BE036A2466093700D2F7C3 /* Observation */,
@@ -2038,7 +2053,6 @@
 			children = (
 				F7BE036C2466095500D2F7C3 /* Components */,
 				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
-				F791E22C2485486E00CCC6BA /* MockFIeldDelegate.swift */,
 				F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */,
 			);
 			path = Edit;
@@ -2849,6 +2863,7 @@
 				F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */,
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
+				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */,
@@ -2861,13 +2876,14 @@
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
 				F7911623249125230043A529 /* MageRootViewTests.swift in Sources */,
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
+				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
-				F791E22D2485486E00CCC6BA /* MockFIeldDelegate.swift in Sources */,
+				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,
 				F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
 				F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */,
@@ -2943,7 +2959,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2983,7 +2999,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

@@ -54,6 +54,7 @@ class EditNumberFieldView : BaseFieldView {
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
         textField.delegate = self;
+        textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         controller.textInput = textField;
         self.addSubview(textField);
         textField.sizeToFit();
@@ -129,7 +130,6 @@ class EditNumberFieldView : BaseFieldView {
             if (helperText != nil) {
                 controller.setErrorText(helperText, errorAccessibilityValue: nil);
             } else {
-                print("MUST BE A NUMBER")
                 controller.setErrorText("Must be a number", errorAccessibilityValue: nil);
             }
         }

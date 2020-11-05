@@ -7,3 +7,28 @@
 //
 
 import Foundation
+
+@testable import MAGE
+
+class MockAttachmentCreationDelegate: AttachmentCreationDelegate {
+    var addVoiceAttachmentCalled = false;
+    var addVideoAttachmentCalled = false;
+    var addCameraAttachmentCalled = false;
+    var addGalleryAttachmentCalled = false;
+    
+    func addVoiceAttachment() {
+        addVoiceAttachmentCalled = true;
+    }
+    
+    func addVideoAttachment() {
+        addVideoAttachmentCalled = true;
+    }
+    
+    func addCameraAttachment() {
+        addCameraAttachmentCalled = true;
+    }
+    
+    func addGalleryAttachment() {
+        addGalleryAttachmentCalled = true;
+    }
+}

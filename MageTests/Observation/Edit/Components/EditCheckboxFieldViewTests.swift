@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditCheckboxFieldViewTests: QuickSpec {
+class EditCheckboxFieldViewTests: KIFSpec {
     
     override func spec() {
         
@@ -52,9 +52,13 @@ class EditCheckboxFieldViewTests: QuickSpec {
                 view.autoSetDimension(.width, toSize: 300);
                 window.makeKeyAndVisible();
                 
-                field = ["title": "Field Title"];
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
+                window.rootViewController = controller;
+                
+                field = [
+                    "title": "Field Title",
+                    "name": "field8",
+                    "id": 8
+                ];
             }
             
             it("no initial value") {
@@ -116,6 +120,27 @@ class EditCheckboxFieldViewTests: QuickSpec {
                 
                 controller.view.addSubview(view);
                 checkboxFieldView.setValue(true);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("set value simulated touch") {
+                checkboxFieldView = EditCheckboxFieldView(field: field);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                tester().setOn(true, forSwitchWithAccessibilityLabel: field["name"] as? String);
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })

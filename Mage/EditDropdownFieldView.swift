@@ -40,7 +40,8 @@ class EditDropdownFieldView : BaseFieldView {
     func addFieldView() {
         self.addSubview(textField);
         textField.autoPinEdgesToSuperviewEdges();
-        addTapRecognizer();
+        let tapView = addTapRecognizer();
+        tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
     }
     
     func setValue(_ value: String) {

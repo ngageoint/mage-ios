@@ -18,6 +18,8 @@ class EditTextFieldView : BaseFieldView {
         multilineTextField.textView?.delegate = self;
         multilineTextField.textView?.inputAccessoryView = accessoryView;
         multilineTextField.textView?.keyboardType = keyboardType;
+        multilineTextField.textView?.autocapitalizationType = .none;
+        multilineTextField.textView?.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         controller.textInput = multilineTextField;
         if (value != nil) {
             multilineTextField.text = value as? String;
@@ -30,6 +32,8 @@ class EditTextFieldView : BaseFieldView {
         textField.delegate = self;
         textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
+        textField.autocapitalizationType = .none;
+        textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         controller.textInput = textField;
         if (value != nil) {
             textField.text = value as? String;
@@ -42,7 +46,9 @@ class EditTextFieldView : BaseFieldView {
         toolbar.autoSetDimension(.height, toSize: 44);
         
         let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
+        doneBarButton.accessibilityLabel = "Done";
         let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
+        cancelBarButton.accessibilityLabel = "Cancel";
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
         
         toolbar.items = [cancelBarButton, flexSpace, doneBarButton];

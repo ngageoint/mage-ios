@@ -14,6 +14,11 @@ class EditDateView : BaseFieldView {
     
     internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker();
+        datePicker.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Date Picker";
+        datePicker.datePickerMode = .dateAndTime;
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
         if (NSDate.isDisplayGMT()) {
             datePicker.timeZone = TimeZone(secondsFromGMT: 0);
         } else {
@@ -38,7 +43,8 @@ class EditDateView : BaseFieldView {
     }()
     
     private lazy var dateAccessoryView: UIToolbar = {
-        let toolbar = UIToolbar(forAutoLayout: ());
+        // this frame is to prevent breaking constraints
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
         toolbar.autoSetDimension(.height, toSize: 44);
         
         let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
@@ -52,6 +58,10 @@ class EditDateView : BaseFieldView {
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
         textField.delegate = self;
+        textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
+        textField.inputView = datePicker;
+        textField.inputAccessoryView = dateAccessoryView;
+        
         controller.textInput = textField;
         self.addSubview(textField);
         textField.sizeToFit();
@@ -71,13 +81,7 @@ class EditDateView : BaseFieldView {
         super.init(field: field, delegate: delegate, value: value);
         date = nil;
         setValue(value);
-        setupInputView(textField: textField);
         setupController();
-    }
-    
-    func setupInputView(textField: MDCTextField) {
-        textField.inputView = datePicker;
-        textField.inputAccessoryView = dateAccessoryView;
     }
     
     func setTextFieldValue() {
@@ -99,6 +103,9 @@ class EditDateView : BaseFieldView {
     
     @objc func cancelButtonPressed() {
         date = value as? Date;
+        if let safeDate = date {
+            datePicker.date = safeDate;
+        }
         setTextFieldValue();
         textField.resignFirstResponder();
     }
@@ -113,8 +120,8 @@ class EditDateView : BaseFieldView {
             datePicker.date = (self.value as? Date)!;
             textField.text = (datePicker.date as NSDate).formattedDisplay();
         } else {
-            self.value = nil;
             datePicker.date = Date();
+            textField.text = nil;
         }
     }
     
@@ -130,11 +137,21 @@ class EditDateView : BaseFieldView {
 extension EditDateView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
+        self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
         return true;
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         date = datePicker.date;
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if (range.length == textField.text?.count && string == "") {
+            self.date = nil;
+            textField.text = "";
+            self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
+        }
+        return false;
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

@@ -25,20 +25,47 @@ extension UITextField {
     }
 }
 
-class EditNumberFieldViewTests: QuickSpec {
+class EditNumberFieldViewTests: KIFSpec {
     
     override func spec() {
         
         describe("EditNumberFieldView") {
             
             var numberFieldView: EditNumberFieldView!
-            var view: UIView!
             var field: [String: Any]!
             
+            let recordSnapshots = false;
+            
+            var view: UIView!
+            var controller: UIViewController!
+            var window: UIWindow!;
+            
+            func maybeSnapshot() -> Snapshot {
+                if (recordSnapshots) {
+                    return recordSnapshot()
+                } else {
+                    return snapshot()
+                }
+            }
+            
             beforeEach {
-                field = ["title": "Number Field"];
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 300);
+                
+                controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
+                view.backgroundColor = .white;
+                window.makeKeyAndVisible();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+            
+                field = [
+                    "title": "Number Field",
+                    "name": "field8",
+                    "id": 8
+                ];
             }
             
             it("no initial value") {
@@ -46,7 +73,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot()
             }
             
             it("initial value set") {
@@ -54,7 +81,24 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
+            }
+            
+            it("set value via input") {
+                let delegate = MockFieldDelegate();
+                
+                numberFieldView = EditNumberFieldView(field: field, delegate: delegate);
+                
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                tester().enterText("2", intoViewWithAccessibilityLabel: field["name"] as? String);
+                tester().tapView(withAccessibilityLabel: "Done");
+                
+                expect(delegate.fieldChangedCalled).to(beTrue());
+                
+                expect(view) == maybeSnapshot();
             }
             
             it("initial value set with min") {
@@ -63,7 +107,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("initial value set with max") {
@@ -72,7 +116,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("initial value set with min and max") {
@@ -82,7 +126,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set value later") {
@@ -92,7 +136,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
                 numberFieldView.setValue( "2")
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid false") {
@@ -102,7 +146,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
                 numberFieldView.setValid(false);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("set valid true after being invalid") {
@@ -113,7 +157,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 numberFieldView.setValid(false);
                 numberFieldView.setValid(true);
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("required field is invalid if empty") {
@@ -167,7 +211,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("field is not valid if value is below min") {
@@ -216,7 +260,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "a")) == false;
                 expect(delegate.fieldChangedCalled) == false;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("verify if a non number is set it will be invalid") {
@@ -230,7 +274,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("verify if number below min is set it will be invalid") {
@@ -246,7 +290,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("verify if number above max is set it will be invalid") {
@@ -262,7 +306,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "3";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("verify if number too low is set it will be invalid") {
@@ -279,7 +323,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("verify if number too high is set it will be invalid") {
@@ -296,7 +340,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "9";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("test delegate") {
@@ -309,7 +353,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? NSNumber) == 5;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("allow canceling") {
@@ -323,7 +367,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.getValue() as? NSNumber) == 2;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
             
             it("done button should change value") {
@@ -337,7 +381,7 @@ class EditNumberFieldViewTests: QuickSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(numberFieldView.textField.text) == "4";
                 expect(numberFieldView.getValue() as? NSNumber) == 4;
-                expect(view) == snapshot();
+                expect(view) == maybeSnapshot();
             }
         }
     }

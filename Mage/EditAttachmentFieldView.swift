@@ -10,10 +10,17 @@ import Foundation
 import MaterialComponents.MDCTextField;
 import MaterialComponents.MDCButton;
 
+@objc protocol AttachmentCreationDelegate {
+    @objc func addVoiceAttachment();
+    @objc func addVideoAttachment();
+    @objc func addCameraAttachment();
+    @objc func addGalleryAttachment();
+}
+
 class EditAttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var currentAttachmentIndex = 0;
+    private var attachmentCreationDelegate: AttachmentCreationDelegate?;
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = AttachmentCollectionDataStore();
@@ -91,25 +98,31 @@ class EditAttachmentFieldView : BaseFieldView {
     
     private lazy var cameraButton: UIButton = {
         let button = UIButton(forAutoLayout: ());
+        button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
         button.setImage(UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
         button.tintColor = .systemGray;
+        button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside);
         return button;
     }()
     
     private lazy var galleryButton: UIButton = {
         let button = UIButton(forAutoLayout: ());
+        button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery";
         button.setImage(UIImage(named: "gallery")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
         button.tintColor = .systemGray;
+        button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside);
         return button;
     }()
     
     private lazy var videoButton: UIButton = {
         let button = UIButton(forAutoLayout: ());
+        button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Video";
         button.setImage(UIImage(named: "video")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
         button.tintColor = .systemGray;
+        button.addTarget(self, action: #selector(addVideoAttachment), for: .touchUpInside);
         return button;
     }()
     
@@ -117,9 +130,10 @@ class EditAttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationDelegate: AttachmentCreationDelegate? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
+        self.attachmentCreationDelegate = attachmentCreationDelegate;
         buildView();
         
         setValue(value);
@@ -132,18 +146,21 @@ class EditAttachmentFieldView : BaseFieldView {
     func buildView() {
         self.addSubview(wrapperStack);
         wrapperStack.autoPinEdgesToSuperviewEdges();
-
-        wrapperStack.addArrangedSubview(fieldNameLabel);
+        
+        let fieldNameSpacerView = UIView(forAutoLayout: ());
+        fieldNameSpacerView.addSubview(fieldNameLabel);
+        
+        let actionSpacerView = UIView(forAutoLayout: ());
+        actionSpacerView.addSubview(actionsHolderView);
+        
+        wrapperStack.addArrangedSubview(fieldNameSpacerView);
         wrapperStack.addArrangedSubview(attachmentHolderView);
         wrapperStack.addArrangedSubview(errorLabel);
-        wrapperStack.addArrangedSubview(actionsHolderView);
+        wrapperStack.addArrangedSubview(actionSpacerView);
         
-        attachmentHolderView.autoPinEdge(toSuperviewEdge: .left);
-        attachmentHolderView.autoPinEdge(toSuperviewEdge: .right);
-        
-        fieldNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-        actionsHolderView.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        
+        fieldNameLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+        actionsHolderView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+
         actionsHolderView.addArrangedSubview(cameraButton);
         actionsHolderView.addArrangedSubview(galleryButton);
         actionsHolderView.addArrangedSubview(videoButton);
@@ -199,5 +216,17 @@ class EditAttachmentFieldView : BaseFieldView {
             fieldNameLabel.textColor = .systemRed;
         }
         setNeedsUpdateConstraints();
+    }
+    
+    @objc func addCameraAttachment() {
+        attachmentCreationDelegate?.addCameraAttachment();
+    }
+    
+    @objc func addGalleryAttachment() {
+        attachmentCreationDelegate?.addGalleryAttachment();
+    }
+    
+    @objc func addVideoAttachment() {
+        attachmentCreationDelegate?.addVideoAttachment();
     }
 }

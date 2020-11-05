@@ -13,12 +13,14 @@ import Foundation
 class MockFieldDelegate: NSObject, ObservationEditListener {
     var fieldChangedCalled = false;
     var newValue: Any? = nil;
-    var fieldSelected = false;
+    var fieldSelectedCalled = false;
+    var selectedField: Any? = nil;
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
         fieldChangedCalled = true;
         newValue = value;
     }
     func fieldSelected(_ field: Any!) {
-        fieldSelected = true;
+        fieldSelectedCalled = true;
+        selectedField = field;
     }
 }

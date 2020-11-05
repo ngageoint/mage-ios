@@ -111,6 +111,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
+            
             it("one attachment set from observation") {
                 var completeTest = false;
                 
@@ -711,6 +712,48 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());
                 expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment));
+            }
+            
+            it("should tap camera button to add attachment") {
+                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Camera");
+                tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Camera");
+                expect(attachmentCreationDelegate.addCameraAttachmentCalled).to(beTrue());
+            }
+            
+            it("should tap video button to add attachment") {
+                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Video");
+                tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Video");
+                expect(attachmentCreationDelegate.addVideoAttachmentCalled).to(beTrue());
+            }
+            
+            it("should tap gallery button to add attachment") {
+                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
+                tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
+                expect(attachmentCreationDelegate.addGalleryAttachmentCalled).to(beTrue());
             }
             
             it("set one attachment that is synced and one that is not") {

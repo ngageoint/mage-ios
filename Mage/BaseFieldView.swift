@@ -59,12 +59,13 @@ class BaseFieldView : UIView {
         return true;
     }
     
-    func addTapRecognizer() {
+    func addTapRecognizer() -> UIView {
         let tapView = UIView(forAutoLayout: ());
         self.addSubview(tapView);
         tapView.autoPinEdgesToSuperviewEdges();
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
         tapView.addGestureRecognizer(tapGesture)
+        return tapView;
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {

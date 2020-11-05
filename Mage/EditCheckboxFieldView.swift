@@ -12,6 +12,7 @@ import MaterialComponents.MDCTextField
 class EditCheckboxFieldView : BaseFieldView {
     lazy var checkboxSwitch: UISwitch = {
         let checkboxSwitch = UISwitch(forAutoLayout: ());
+        checkboxSwitch.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         checkboxSwitch.isOn = value as? Bool ?? false;
         checkboxSwitch.addTarget(self, action: #selector(switchValueChanged(theSwitch:)), for: .valueChanged)
         return checkboxSwitch;

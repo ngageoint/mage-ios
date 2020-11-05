@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditDropdownFieldViewTests: QuickSpec {
+class EditDropdownFieldViewTests: KIFSpec {
     
     override func spec() {
         
@@ -46,15 +46,20 @@ class EditDropdownFieldViewTests: QuickSpec {
                 completeTest = false;
                 window = UIWindow(forAutoLayout: ());
                 window.autoSetDimension(.width, toSize: 300);
+                window.backgroundColor = .systemBackground;
                 
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 window.makeKeyAndVisible();
                 
-                field = ["title": "Field Title"];
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
+                field = [
+                    "title": "Field Title",
+                    "name": "field8",
+                    "id": 8
+                ];
+                
+                window.rootViewController = controller;
             }
             
             it("no initial value") {
@@ -92,6 +97,20 @@ class EditDropdownFieldViewTests: QuickSpec {
                 } else {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
+            }
+            
+            it("set value via input") {
+                let delegate = MockFieldDelegate();
+                dropdownFieldView = EditDropdownFieldView(field: field, delegate: delegate);
+                
+                view.addSubview(dropdownFieldView)
+                dropdownFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view = view;
+                tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
+                dropdownFieldView.handleTap(sender: UITapGestureRecognizer());
+                expect(delegate.fieldSelectedCalled).to(beTrue());
+                expect(delegate.selectedField).toNot(beNil());
             }
             
             it("initial value set with multiple values") {
@@ -175,18 +194,6 @@ class EditDropdownFieldViewTests: QuickSpec {
                 } else {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
-            }
-            
-            it("handle tap") {
-                let delegate = MockFieldDelegate();
-                dropdownFieldView = EditDropdownFieldView(field: field, delegate: delegate);
-                
-                view.addSubview(dropdownFieldView)
-                dropdownFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-                dropdownFieldView.handleTap(sender: UITapGestureRecognizer());
-                expect(delegate.fieldSelected) == true;
             }
         }
     }
