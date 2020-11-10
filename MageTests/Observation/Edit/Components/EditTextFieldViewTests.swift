@@ -167,6 +167,22 @@ class EditTextFieldViewTests: KIFSpec {
                 expect(view) == maybeSnapshot();
             }
             
+            it("done button should send nil as new value") {
+                let delegate = MockFieldDelegate();
+
+                textFieldView = EditTextFieldView(field: field, delegate: delegate, value: "old value");
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.textField.text = nil;
+                textFieldView.doneButtonPressed();
+                textFieldView.textFieldDidEndEditing(textFieldView.textField);
+                expect(delegate.fieldChangedCalled).to(beTrue());
+                expect(delegate.newValue).to(beNil());
+                expect(textFieldView.textField.text).to(equal(""));
+                expect(textFieldView.value as? String).to(beNil());
+            }
+            
             it("done button should change text") {
                 textFieldView = EditTextFieldView(field: field, value: "old value");
                 view.addSubview(textFieldView)
@@ -338,6 +354,22 @@ class EditTextFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == "this is a new value";
                 expect(view) == maybeSnapshot();
+            }
+            
+            it("done button should send nil as new value") {
+                let delegate = MockFieldDelegate();
+                
+                textFieldView = EditTextFieldView(field: field, delegate: delegate, value: "old value");
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                
+                textFieldView.multilineTextField.text = nil;
+                textFieldView.doneButtonPressed();
+                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
+                expect(delegate.fieldChangedCalled).to(beTrue());
+                expect(delegate.newValue).to(beNil());
+                expect(textFieldView.multilineTextField.text).to(equal(""));
+                expect(textFieldView.value as? String).to(beNil());
             }
             
             it("done button should change text") {

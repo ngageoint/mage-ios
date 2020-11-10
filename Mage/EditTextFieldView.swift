@@ -85,6 +85,10 @@ class EditTextFieldView : BaseFieldView {
         }
     }
     
+    override func setValue(_ value: Any) {
+        self.setValue(value as? String);
+    }
+    
     func setValue(_ value: String?) {
         if (self.multiline) {
             multilineTextField.text = value;
@@ -134,7 +138,11 @@ extension EditTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if (value as? String != textField.text) {
-            value = textField.text;
+            if (textField.text == "") {
+                value = nil;
+            } else {
+                value = textField.text;
+            }
             self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
         }
     }
@@ -144,7 +152,11 @@ extension EditTextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if (value as? String != textView.text) {
-            value = textView.text;
+            if (textView.text == "") {
+                value = nil;
+            } else {
+                value = textView.text;
+            }
             self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
         }
     }

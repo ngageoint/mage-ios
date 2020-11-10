@@ -114,14 +114,16 @@ class EditDateView : BaseFieldView {
         return (textField.text ?? "").count == 0
     }
     
-    func setValue(_ value: String?) {
-        if (value != nil) {
-            self.value = formatter.date(from: value!);
-            datePicker.date = (self.value as? Date)!;
-            textField.text = (datePicker.date as NSDate).formattedDisplay();
-        } else {
-            datePicker.date = Date();
-            textField.text = nil;
+    override func setValue(_ value: Any) {
+        datePicker.date = Date();
+        textField.text = nil;
+        
+        if let safeValue = value as? String {
+            self.value = formatter.date(from: safeValue);
+            if let safeDate = self.value as? Date {
+                datePicker.date = safeDate;
+                textField.text = (datePicker.date as NSDate).formattedDisplay();
+            }
         }
     }
     
@@ -137,6 +139,7 @@ class EditDateView : BaseFieldView {
 extension EditDateView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
+        self.value = nil;
         self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
         return true;
     }
@@ -149,6 +152,7 @@ extension EditDateView: UITextFieldDelegate {
         if (range.length == textField.text?.count && string == "") {
             self.date = nil;
             textField.text = "";
+            self.value = nil;
             self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
         }
         return false;

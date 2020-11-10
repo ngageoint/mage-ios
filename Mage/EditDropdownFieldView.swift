@@ -44,14 +44,12 @@ class EditDropdownFieldView : BaseFieldView {
         tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
     }
     
-    func setValue(_ value: String) {
-        setValue([value]);
-    }
-    
-    func setValue(_ value: [String]?) {
+    override func setValue(_ value: Any) {
         self.value = value;
-        if (value != nil) {
-            textField.text = value?.joined(separator: ", ");
+        if let stringValue = value as? String {
+            textField.text = stringValue;
+        } else if let stringArray = value as? [String] {
+            textField.text = stringArray.joined(separator: ", ");
         }
     }
     

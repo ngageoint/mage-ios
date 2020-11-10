@@ -36,6 +36,10 @@ class BaseFieldView : UIView {
         }
     }
     
+    func setValue(_ value: Any) {
+        preconditionFailure("This method must be overridden");
+    }
+    
     func getValue() -> Any? {
         return value;
     }

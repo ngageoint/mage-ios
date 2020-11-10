@@ -252,6 +252,10 @@ class EditGeometryView : BaseFieldView {
         }
     }
     
+    override func setValue(_ value: Any) {
+        self.setValue(value as? SFGeometry);
+    }
+    
     func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
         self.value = value;
         if (value != nil) {

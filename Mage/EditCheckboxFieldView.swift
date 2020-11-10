@@ -64,6 +64,12 @@ class EditCheckboxFieldView : BaseFieldView {
         errorLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top);
     }
     
+    override func setValue(_ value: Any) {
+        if let boolValue = value as? Bool {
+            setValue(boolValue);
+        }
+    }
+    
     func setValue(_ value: Bool = false) {
         self.value = value;
         checkboxSwitch.isOn = value;

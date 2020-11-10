@@ -19,6 +19,8 @@ public enum FieldKey : String {
     case value
     case min
     case max
+    case archived
+    case hidden
     
     var key: String {
         return self.rawValue

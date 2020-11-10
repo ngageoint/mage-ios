@@ -91,6 +91,10 @@ class EditNumberFieldView : BaseFieldView {
         return number;
     }
     
+    override func setValue(_ value: Any) {
+        setValue(value as? String);
+    }
+    
     func setValue(_ value: String?) {
         number = nil;
         if (value != nil) {
@@ -166,18 +170,12 @@ extension EditNumberFieldView: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let text: String = textField.text {
             let number = formatter.number(from: text);
-            if (number == nil) {
-                if (self.number != nil) {
-                    textField.text = formatter.string(from: self.number!);
-                }
-                return;
-            }
             let valid = isValid(enforceRequired: true, number: number);
             setValid(valid);
-            if (valid && self.number?.stringValue != textField.text) {
-                self.number = number;
-                self.delegate?.observationField(field, valueChangedTo: self.number, reloadCell: false);
+            if (valid && (number == nil || (self.number?.stringValue != textField.text))) {
+                self.delegate?.observationField(field, valueChangedTo: number, reloadCell: false);
             }
+            self.number = number;
         }
     }
     

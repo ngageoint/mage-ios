@@ -265,6 +265,22 @@ class EditDateViewTests: KIFSpec {
                 expect(delegate.newValue as? String) == formatter.string(from: newDate);
                 expect(view) == maybeSnapshot();
             }
+            
+            it("done button should send nil as new value") {
+                let formatter = DateFormatter();
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+                formatter.locale = Locale(identifier: "en_US_POSIX");
+                
+                let delegate = MockFieldDelegate()
+                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
+                view.addSubview(dateFieldView)
+                dateFieldView.autoPinEdgesToSuperviewEdges();
+                dateFieldView.textField.text = "";
+                dateFieldView.textFieldShouldClear(dateFieldView.textField);
+                expect(delegate.fieldChangedCalled) == true;
+                expect(dateFieldView.textField.text) == "";
+                expect(dateFieldView.getValue()).to(beNil());
+            }
         }
     }
 }
