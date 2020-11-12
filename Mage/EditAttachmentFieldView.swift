@@ -178,6 +178,10 @@ class EditAttachmentFieldView : BaseFieldView {
         return self.attachments == nil || self.attachments?.count == 0;
     }
     
+    override func setValue(_ value: Any) {
+        setValue(value as? Set<Attachment>);
+    }
+    
     func setValue(_ value: Set<Attachment>? = nil) {
         self.attachments = value;
         attachmentCollectionDataStore.attachments = self.attachments;

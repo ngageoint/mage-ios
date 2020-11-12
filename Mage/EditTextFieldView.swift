@@ -114,7 +114,6 @@ class EditTextFieldView : BaseFieldView {
     }
 }
 
-// Toolbar methods
 extension EditTextFieldView {
     func resignFieldFirstResponder() {
         if (self.multiline) {

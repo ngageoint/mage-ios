@@ -360,6 +360,9 @@
 		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
 		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
+		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
+		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
+		F7D9B81E255C69A300A76E2C /* twoOneFieldForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */; };
 		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
 		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
@@ -960,6 +963,9 @@
 		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
+		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
+		F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
+		F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoOneFieldForms.json; sourceTree = "<group>"; };
 		F7D9B82A248E7FB4008DC568 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
@@ -1556,6 +1562,7 @@
 			children = (
 				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F77C21A5254C6E7000D9257F /* HexColor.swift */,
+				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1742,6 +1749,8 @@
 				F7CE22C52540DF7600D710DE /* zeroForms.json */,
 				F7CE22FF254368B000D710DE /* allTheThings.json */,
 				F7CE2303254369BD00D710DE /* checkboxForm.json */,
+				F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */,
+				F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2375,6 +2384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
+				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */,
@@ -2385,6 +2395,7 @@
 				F7CE22C02540DF2D00D710DE /* twoForms.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
 				F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */,
+				F7D9B81E255C69A300A76E2C /* twoOneFieldForms.json in Resources */,
 				F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */,
@@ -2533,23 +2544,23 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/mage-ios-sdk.momd",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model10To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model11To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model12To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model13To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model15To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model1To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model2To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model3To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model4To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model5To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model6To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model7To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model8To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model9To15.cdm",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -2634,6 +2645,7 @@
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
 				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
+				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,

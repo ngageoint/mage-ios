@@ -1,0 +1,110 @@
+
+[
+    {
+        "name": "Test",
+        "color": "#355332",
+        "primaryField": "field0",
+        "variantField": "field1",
+        "fields": [
+            {
+                "name": "field0",
+                "required": false,
+                "type": "textfield",
+                "title": "Title",
+                "id": 0,
+                "choices": [
+                ]
+            },
+            {
+                "name": "field1",
+                "id": 1,
+                "required": true,
+                "value": "None",
+                "type": "textfield",
+                "title": "text",
+                "choices": [
+                ]
+            },
+            {
+                "name": "field2",
+                "id": 2,
+                "required": false,
+                "value": "",
+                "type": "textarea",
+                "title": "Description",
+                "choices": []
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "id": 1
+    }, {
+        "variantField": "field1",
+        "name": "Second Form",
+        "color": "#355332",
+        "primaryField": "field0",
+        "fields": [
+            {
+                "name": "field0",
+                "required": false,
+                "type": "dropdown",
+                "title": "Incident Type",
+                "id": 0,
+                "choices": [
+                    {
+                        "id": 0,
+                        "value": 0,
+                        "title": "At Venue"
+                    },
+                    {
+                        "id": 1,
+                        "value": 1,
+                        "title": "Protest"
+                    }
+                ]
+            },
+            {
+                "name": "field1",
+                "id": 1,
+                "required": true,
+                "value": "None",
+                "type": "dropdown",
+                "title": "Level",
+                "choices": [
+                    {
+                        "id": 0,
+                        "value": 0,
+                        "title": "None"
+                    },
+                    {
+                        "id": 1,
+                        "value": 1,
+                        "title": "Low"
+                    },
+                    {
+                        "id": 2,
+                        "value": 2,
+                        "title": "Medium"
+                    },
+                    {
+                        "id": 3,
+                        "value": 3,
+                        "title": "High"
+                    }
+                ]
+            },
+            {
+                "name": "field2",
+                "id": 2,
+                "required": false,
+                "value": "",
+                "type": "textarea",
+                "title": "Description",
+                "choices": []
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "id": 2
+    }
+]

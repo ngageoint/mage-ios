@@ -263,7 +263,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard(imageName: "form", title: "Title", expandedView: expandView);
                 
@@ -288,7 +288,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
                 
@@ -313,7 +313,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard();
                 
@@ -340,7 +340,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard();
                 
@@ -369,7 +369,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
                 expandableCard.expanded = false;
@@ -397,7 +397,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 let expandView = UIView(forAutoLayout: ());
                 expandView.backgroundColor = .blue;
-                expandView.autoSetDimensions(to: CGSize(width: 200, height: 300));
+                expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
                 expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
 

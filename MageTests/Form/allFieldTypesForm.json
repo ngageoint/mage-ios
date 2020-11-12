@@ -79,12 +79,20 @@
             "choices": []
         },
         {
+            "title": "Attachment Field",
+            "type": "attachment",
+            "required": false,
+            "id": 12,
+            "name": "field12",
+            "choices": []
+        },
+        {
             "archived": true,
             "title": "Email Field",
             "type": "email",
             "required": true,
-            "id": 12,
-            "name": "field12",
+            "id": 23,
+            "name": "field23",
             "choices": []
         },
         {

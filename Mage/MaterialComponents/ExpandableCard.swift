@@ -14,7 +14,7 @@ import MaterialComponents.MaterialCards
 import PureLayout
 
 class ExpandableCard: MDCCard {
-    
+    private var didSetUpConstraints = false;
     private var container: UIView?;
     private var expandedView: UIView?;
     var showExpanded: Bool = true;
@@ -52,7 +52,7 @@ class ExpandableCard: MDCCard {
     }()
 
     private lazy var headerText: UILabel = {
-        let label = UILabel(forAutoLayout: ());
+        let label = UILabelPadding(padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
@@ -62,7 +62,7 @@ class ExpandableCard: MDCCard {
     }()
 
     private lazy var subhead: UILabel = {
-        let label = UILabel(forAutoLayout: ());
+        let label = UILabelPadding(padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
@@ -131,7 +131,7 @@ class ExpandableCard: MDCCard {
     }
     
     convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, expandedView: UIView? = nil) {
-        self.init(frame: CGRect.zero);
+        self.init(frame: .zero);
         self.configureForAutoLayout();
         self.configure(header: header, subheader: subheader, imageName: imageName, title: title, expandedView: expandedView);
     }
@@ -148,44 +148,46 @@ class ExpandableCard: MDCCard {
         constructCard();
     }
     
+    override func updateConstraints() {
+        if (!didSetUpConstraints) {
+            stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
+            if (thumbnail.superview != nil) {
+                thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
+                thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            }
+            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 16));
+            
+            if expandedView != nil {
+                expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
+                expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+                expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
+                expandedView?.autoPinEdgesToSuperviewEdges();
+            }
+        }
+        super.updateConstraints();
+    }
+    
     private func constructCard() {
         self.container?.addSubview(self);
         self.addSubview(stackView);
 
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
-        
-        stackView.addArrangedSubview(titleArea);
-        titleArea.autoPinEdge(toSuperviewEdge: .left);
-        titleArea.autoPinEdge(toSuperviewEdge: .right);
         if (self.thumbnail.image != nil) {
             titleArea.addSubview(thumbnail);
-            thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
-            thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
         }
         
         titleArea.addSubview(titleText);
-        titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 16));
         
+        stackView.addArrangedSubview(titleArea);
         stackView.addArrangedSubview(headerText)
-        headerText.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-        headerText.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        
         stackView.addArrangedSubview(subhead);
-        subhead.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-        subhead.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-                    
+
         let spacerView = UIView(forAutoLayout: ());
         spacerView.autoSetDimension(.height, toSize: 8);
         stackView.addArrangedSubview(spacerView);
-        
         if expandedView != nil {
             self.addSubview(expandAction);
-            expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
-            expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
             
             expandableView.addSubview(expandedView!);
-            expandedView?.autoPinEdgesToSuperviewEdges();
             stackView.addArrangedSubview(expandableView);
         }
     }

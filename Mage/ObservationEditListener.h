@@ -14,4 +14,7 @@
 @optional
 - (void) fieldSelected: (id) field;
 
+@optional
+- (void) formUpdated: (id) form eventForm: (id) eventForm formIndex: (NSInteger) index;
+
 @end

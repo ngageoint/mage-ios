@@ -36,8 +36,10 @@ import MaterialComponents.MDCCard
     var observation: Observation?;
     var newObservation: Bool = false;
     
-    private lazy var eventForms: NSArray = {
-        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? NSArray ?? [];
+    var cards: [ExpandableCard] = [];
+    
+    private lazy var eventForms: [[String: Any]] = {
+        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -54,7 +56,7 @@ import MaterialComponents.MDCCard
         stackView.alignment = .fill
         stackView.spacing = 8
         stackView.distribution = .fill
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = true;
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         return stackView;
@@ -78,7 +80,7 @@ import MaterialComponents.MDCCard
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            
+
             // Satisfying size constraints
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
@@ -146,29 +148,56 @@ import MaterialComponents.MDCCard
     func addFormViews(stackView: UIStackView) {
         for (index, form) in getObservationForms().enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
-            card.setExpanded(expanded: newObservation);
+            card.expanded = newObservation;
         }
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let predicate: NSPredicate = NSPredicate(format: "SELF.id = %@", argumentArray: [observationForm["formId"]!]);
-        let eventForm: [String: Any] = self.eventForms.filtered(using: predicate).first as! [String : Any];
+        let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
+            return form["id"] as? Int == observationForm["formId"] as? Int
+        }
+        
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm["primaryField"] as! String? {
+        if let primaryField = eventForm?["primaryField"] as! String? {
             if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm["variantField"] as! String? {
+        if let secondaryField = eventForm?["variantField"] as! String? {
             if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index);
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm["name"] as? String, expandedView: formView)
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, delegate: self);
+        let formSpacerView = UIView(forAutoLayout: ());
+        formSpacerView.addSubview(formView);
+        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView)
         stackView.addArrangedSubview(card);
+        cards.append(card);
         return card;
+    }
+    
+    func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
+        let eventForm: [String: Any]? = self.eventForms.first { (eventForm) -> Bool in
+            return eventForm["id"] as? Int == form["formId"] as? Int
+        }
+        var formPrimaryValue: String? = nil;
+        var formSecondaryValue: String? = nil;
+        if let primaryField = eventForm?["primaryField"] as! String? {
+            if let obsfield = form[primaryField] as! String? {
+                formPrimaryValue = obsfield;
+            }
+        }
+        if let secondaryField = eventForm?["variantField"] as! String? {
+            if let obsfield = form[secondaryField] as! String? {
+                formSecondaryValue = obsfield;
+            }
+        }
+        cards[index].header = formPrimaryValue;
+        cards[index].subheader = formSecondaryValue;
     }
     
     @objc func addForm(sender: UIButton) {
@@ -207,7 +236,8 @@ import MaterialComponents.MDCCard
         observationForms.append(newForm);
         newProperties["forms"] = observationForms;
         self.observation?.properties = newProperties;
-        addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
+        let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
+        card.expanded = true;
     }
     
     private func getObservationForms() -> [[String : Any]] {
@@ -224,5 +254,19 @@ import MaterialComponents.MDCCard
             self.observation?.properties = ["forms": []];
             return (self.observation?.properties as! [String : Any])["forms"] as! [[String : Any]];
         }
+    }
+}
+
+extension ObservationEditCardCollectionViewController: ObservationEditListener {
+    func fieldSelected(_ field: Any!) {
+
+    }
+    
+    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
+
+    }
+    
+    func formUpdated(_ form: Any!, eventForm: Any!, form index: Int) {
+        setExpandableCardHeaderInformation(form: form as! [String: Any], index: index);
     }
 }

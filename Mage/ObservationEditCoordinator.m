@@ -14,7 +14,7 @@
 #import "FormDefaults.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate>
+@interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate, FormPickedDelegate>
 
 @property (strong, nonatomic) UIViewController *rootViewController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -147,7 +147,7 @@
 }
 
 - (void) startFormPicker {
-    self.formController = [[FormPickerViewController alloc] initWithDelegate:self andForms:self.event.nonArchivedForms];
+    self.formController = [[FormPickerViewController alloc] initWithDelegate:self forms:self.event.nonArchivedForms];
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.formController];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
@@ -202,11 +202,10 @@
 }
 
 #pragma mark - FormPickedDelegate methods
-- (void) formPicked:(NSDictionary *)form {
+- (void)formPickedWithForm:(NSDictionary<NSString *,id> * _Nonnull)form {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"Form Picked %@", [form objectForKey:@"name"]);
     [self addFormToObservation:form];
-//    [self startEditObservationFields];
 }
 
 - (void) cancelSelection {
@@ -214,6 +213,7 @@
         NSLog(@"root view dismissed");
     }];
 }
+
 
 #pragma
 

@@ -10,6 +10,8 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class EditDropdownFieldView : BaseFieldView {
+    var didSetUpConstraints = false;
+    
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
         controller.textInput = textField;
@@ -39,17 +41,24 @@ class EditDropdownFieldView : BaseFieldView {
     
     func addFieldView() {
         self.addSubview(textField);
-        textField.autoPinEdgesToSuperviewEdges();
         let tapView = addTapRecognizer();
         tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
     }
     
+    override func updateConstraints() {
+        if (!didSetUpConstraints) {
+            textField.autoPinEdgesToSuperviewEdges();
+        }
+        super.updateConstraints();
+    }
+    
     override func setValue(_ value: Any) {
-        self.value = value;
         if let stringValue = value as? String {
             textField.text = stringValue;
+            self.value = [value];
         } else if let stringArray = value as? [String] {
             textField.text = stringArray.joined(separator: ", ");
+            self.value = value;
         }
     }
     
