@@ -13,6 +13,7 @@ import MaterialComponents.MaterialCards
 import PureLayout
 
 class CommonFieldsView: MDCCard {
+    var didSetupConstraints = false;
     var observation: Observation;
     var eventForms: [[String:Any]]?;
     
@@ -55,16 +56,22 @@ class CommonFieldsView: MDCCard {
         fatalError("This class does not support NSCoding")
     }
     
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+    //        wrapper.autoPinEdgesToSuperviewEdges();
+            dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);
+            geometryView.autoPinEdge(.top, to: .bottom, of: dateView);
+            geometryView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8), excludingEdge: .top);
+            didSetupConstraints = true;
+        }
+        super.updateConstraints();
+    }
+    
     func buildView() {
-        let wrapper = UIView(forAutoLayout: ());
-        self.addSubview(wrapper);
-        wrapper.autoPinEdgesToSuperviewEdges();
-        wrapper.addSubview(dateView);
-        dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);
-        wrapper.addSubview(geometryView);
-        geometryView.autoPinEdge(.top, to: .bottom, of: dateView);
-        geometryView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8), excludingEdge: .top);
-        
+//        let wrapper = UIView(forAutoLayout: ());
+//        self.addSubview(wrapper);
+        self.addSubview(dateView);
+        self.addSubview(geometryView);
         if let observationProperties: NSDictionary = observation.properties as? NSDictionary {
             dateView.setValue(observationProperties.object(forKey: dateField[FieldKey.name.key] as! String) as? String);
         }

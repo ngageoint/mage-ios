@@ -18,7 +18,6 @@ class CommonFieldsViewTests: QuickSpec {
     override func spec() {
         
         describe("CommonFieldsView") {
-            var field: [String: Any]!
             let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
@@ -51,9 +50,7 @@ class CommonFieldsViewTests: QuickSpec {
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 window.makeKeyAndVisible();
-                
-                field = ["title": "Field Title"];
-                
+                                
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
@@ -65,14 +62,6 @@ class CommonFieldsViewTests: QuickSpec {
             
             it("empty observation") {
                 var completeTest = false;
-                
-//                let mockMapDelegate = MockMapViewDelegate()
-                
-//                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(view, doneClosure: {
-//                        completeTest = true;
-//                    })
-//                }
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
