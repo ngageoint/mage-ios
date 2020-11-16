@@ -3,14 +3,23 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 2.0.20
+## 2.0.21
 
 ##### Release Notes
 
 ##### Features
 
 ##### Bug Fixes
-* Duplicate locally shared GeoPackages now prompt the user asking if the old GeoPackage should be overwritten or the new GeoPackage should be also imported
+
+## 2.0.20 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.)
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Fix iOS 14 bug causing GeoPackage layers to be unselectable.
+* Fix iOS 14 date/time picker.
 
 ## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
 
