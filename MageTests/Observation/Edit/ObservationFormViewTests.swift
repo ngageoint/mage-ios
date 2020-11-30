@@ -64,6 +64,8 @@ class ObservationFormViewTests: KIFSpec {
             afterEach {
                 tester().waitForAnimationsToFinish();
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
@@ -71,7 +73,7 @@ class ObservationFormViewTests: KIFSpec {
             
             it("no initial values in the observation") {
                 observation = ObservationBuilder.createBlankObservation();
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1);
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller);
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -90,7 +92,7 @@ class ObservationFormViewTests: KIFSpec {
             
             it("observation filled in completely") {
                 observation = ObservationBuilder.createPointObservation();
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1);
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller);
                 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -133,7 +135,7 @@ class ObservationFormViewTests: KIFSpec {
                 ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, delegate: delegate);
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
                 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -162,7 +164,7 @@ class ObservationFormViewTests: KIFSpec {
                 ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, delegate: delegate);
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
                 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -200,7 +202,7 @@ class ObservationFormViewTests: KIFSpec {
                 ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, delegate: delegate);
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
                 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();

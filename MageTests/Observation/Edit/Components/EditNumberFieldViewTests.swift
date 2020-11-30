@@ -68,6 +68,12 @@ class EditNumberFieldViewTests: KIFSpec {
                 ];
             }
             
+            afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+            }
+            
             it("no initial value") {
                 numberFieldView = EditNumberFieldView(field: field);
                 

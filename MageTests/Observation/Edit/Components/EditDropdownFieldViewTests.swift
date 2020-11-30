@@ -62,6 +62,12 @@ class EditDropdownFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
             }
             
+            afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+            }
+            
             it("no initial value") {
                 dropdownFieldView = EditDropdownFieldView(field: field);
                 

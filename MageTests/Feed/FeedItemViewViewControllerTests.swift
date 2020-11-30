@@ -89,6 +89,9 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
                 HTTPStubs.removeAllStubs();
                 clearAndSetUpStack();
             }

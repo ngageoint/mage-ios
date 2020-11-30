@@ -67,6 +67,9 @@ class FormPickerTests: KIFSpec {
             }
             
             afterEach {
+                formPicker.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                formPicker = nil;
             }
             
             it("initialized") {

@@ -72,6 +72,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             afterEach {
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
                 navigationController = nil;
                 coordinator = nil;
                 delegate = nil;
@@ -224,7 +225,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Loss of Unsaved Data"));
                 tester().tapView(withAccessibilityLabel: "Continue");
                 
@@ -273,7 +274,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Loss of Unsaved Data"));
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
@@ -312,7 +313,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "MAGE Account Created");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("MAGE Account Created"));
                 expect(alert.message).to(equal("Account created, please contact your MAGE administrator to activate your account."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -358,7 +359,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Login Failed");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Login Failed"));
                 expect(alert.message).to(equal("Failed to get a token"));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -399,7 +400,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Unable to Login");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Unable to Login"));
                 expect(alert.message).to(equal("We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -445,7 +446,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Disconnected Login"));
                 expect(alert.message).to(equal("We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"));
                 tester().tapView(withAccessibilityLabel: "OK, Work Offline");
@@ -495,7 +496,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Disconnected Login"));
                 expect(alert.message).to(equal("We are still unable to connect to the server to log you in. You will continue to work offline."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -559,7 +560,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Registration Sent");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Registration Sent"));
                 expect(alert.message).to(contain("Your device has been registered.  \nAn administrator has been notified to approve this device."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -627,7 +628,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
 
                 tester().waitForTappableView(withAccessibilityLabel: "Account Created");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Account Created"));
                 expect(alert.message).to(contain("Your account is now active."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -664,7 +665,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Account Created");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Account Created"));
                 expect(alert.message).to(contain("An administrator must approve your account before you can login"));
                 tester().tapView(withAccessibilityLabel: "OK");

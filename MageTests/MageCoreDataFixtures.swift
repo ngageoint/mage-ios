@@ -159,12 +159,14 @@ class MageCoreDataFixtures {
         }
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            print("save the event")
             if let e: Event = Event.mr_createEntity(in: localContext) {
                 e.name = name;
                 e.remoteId = remoteId;
                 e.eventDescription = "Test event description";
                 e.forms = jsonDictionary;
             }
+            print("created entity")
         }, completion: completion)
     }
     

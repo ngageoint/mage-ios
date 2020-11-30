@@ -56,6 +56,12 @@ class EditTextFieldViewTests: KIFSpec {
                 ];
             }
             
+            afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+            }
+            
             it("email field") {
                 textFieldView = EditTextFieldView(field: field, keyboardType: .emailAddress);
                 expect(textFieldView.textField.keyboardType) == .emailAddress;

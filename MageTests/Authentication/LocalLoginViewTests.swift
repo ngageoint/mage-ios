@@ -94,6 +94,8 @@ class LocalLoginViewTests: KIFSpec {
             
             afterEach {
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
+                controller = nil;
                 view = nil;
                 window?.resignKey();
                 window = nil;

@@ -32,3 +32,26 @@ class MockAttachmentCreationDelegate: AttachmentCreationDelegate {
         addGalleryAttachmentCalled = true;
     }
 }
+
+class MockAttachmentCreationCoordinator: AttachmentCreationCoordinator {
+    var addVoiceAttachmentCalled = false;
+    var addVideoAttachmentCalled = false;
+    var addCameraAttachmentCalled = false;
+    var addGalleryAttachmentCalled = false;
+    
+    override func addVoiceAttachment() {
+        addVoiceAttachmentCalled = true;
+    }
+    
+    override func addVideoAttachment() {
+        addVideoAttachmentCalled = true;
+    }
+    
+    override func addCameraAttachment() {
+        addCameraAttachmentCalled = true;
+    }
+    
+    override func addGalleryAttachment() {
+        addGalleryAttachmentCalled = true;
+    }
+}

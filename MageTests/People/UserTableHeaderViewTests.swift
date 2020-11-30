@@ -76,6 +76,9 @@ class UserTableHeaderViewTests: QuickSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
                 clearAndSetUpStack();
             }
             

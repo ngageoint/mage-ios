@@ -28,8 +28,8 @@ class TestHelpers {
 
     public static func getAllAccessibilityLabelsInWindows() -> [String]! {
         var labelArray = [String]()
-        for  window in UIApplication.shared.windows {
-            labelArray += getAllAccessibilityLabels(window)
+        for  window in UIApplication.shared.windowsWithKeyWindow() {
+            labelArray += getAllAccessibilityLabels(window as! UIWindow )
         }
         
         return labelArray
@@ -45,5 +45,11 @@ class TestHelpers {
         MageInitializer.initializePreferences();
         MagicalRecord.cleanUp();
         MagicalRecord.setupCoreDataStackWithInMemoryStore();
+    }
+    
+    public static func cleanUpStack() {
+        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
+        MageInitializer.initializePreferences();
+        MagicalRecord.cleanUp();
     }
 }

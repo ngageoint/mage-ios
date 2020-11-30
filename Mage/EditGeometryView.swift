@@ -35,11 +35,14 @@ class EditGeometryView : BaseFieldView {
     private var provider: String?;
     private var mapEventDelegate: MKMapViewDelegate?;
     
-    private var mapDelegate: MapDelegate = MapDelegate();
     private var observation: Observation?;
     private var eventForms: [[String: Any]]?;
     
     private var mapObservation: MapObservation?;
+    
+    private lazy var mapDelegate: MapDelegate = {
+        return MapDelegate();
+    }()
     
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
@@ -143,6 +146,7 @@ class EditGeometryView : BaseFieldView {
     }
     
     deinit {
+        print("Cleaning up the map delegate");
         self.mapDelegate.cleanup();
     }
     

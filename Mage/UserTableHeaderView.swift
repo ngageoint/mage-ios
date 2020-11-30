@@ -249,8 +249,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         }
         
         if (currentUserIsMe) {
-            if let locations: [GPSLocation?] = GPSLocation.fetchLastXGPSLocations(1) {
-                if locations.count != 0, let location: GPSLocation = locations[0] {
+            let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
+                if locations.count != 0 {
+                    let location: GPSLocation = locations[0]
                     let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
                     let dictionary: [String : Any] = location.properties as! [String : Any];
                     userLastLocation = CLLocation(
@@ -263,7 +264,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                         timestamp: location.timestamp!);
                     self.mapDelegate.update(location, for: user);
                 }
-            }
+            
         }
         if (userLastLocation == nil) {
             if let locations = mapDelegate.locations.fetchedResultsController.fetchedObjects {

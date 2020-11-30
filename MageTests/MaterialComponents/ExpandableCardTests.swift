@@ -57,6 +57,9 @@ class ExpandableCardTests: KIFSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
             }
             
             it("header set") {

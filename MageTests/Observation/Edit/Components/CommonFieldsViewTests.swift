@@ -57,6 +57,9 @@ class CommonFieldsViewTests: QuickSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                window = nil;
                 TestHelpers.clearAndSetUpStack();
             }
             

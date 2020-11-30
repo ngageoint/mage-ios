@@ -66,6 +66,17 @@ class EditGeometryViewTests: KIFSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+//                geometryFieldView.removeFromSuperview();
+                
+                controller = nil;
+                view = nil;
+                window = nil;
+                
+                geometryFieldView = nil;
+                
+//                tester().wait(forTimeInterval: 2.0);
                 TestHelpers.clearAndSetUpStack();
             }
             

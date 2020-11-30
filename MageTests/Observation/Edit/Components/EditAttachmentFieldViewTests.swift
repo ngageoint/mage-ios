@@ -84,6 +84,9 @@ class EditAttachmentFieldViewTests: KIFSpec {
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
                 HTTPStubs.removeAllStubs();
 //                TestHelpers.clearAndSetUpStack();
             }
@@ -715,45 +718,101 @@ class EditAttachmentFieldViewTests: KIFSpec {
             }
             
             it("should tap camera button to add attachment") {
-                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
-                
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Camera");
                 tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Camera");
-                expect(attachmentCreationDelegate.addCameraAttachmentCalled).to(beTrue());
+                expect(coordinator.addCameraAttachmentCalled).to(beTrue());
             }
             
             it("should tap video button to add attachment") {
-                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
-                
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Video");
                 tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Video");
-                expect(attachmentCreationDelegate.addVideoAttachmentCalled).to(beTrue());
+                expect(coordinator.addVideoAttachmentCalled).to(beTrue());
             }
             
             it("should tap gallery button to add attachment") {
-                let attachmentCreationDelegate = MockAttachmentCreationDelegate();
-                
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationDelegate: attachmentCreationDelegate);
+                let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
                 tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
-                expect(attachmentCreationDelegate.addGalleryAttachmentCalled).to(beTrue());
+                expect(coordinator.addGalleryAttachmentCalled).to(beTrue());
+            }
+            
+            it("should add an attachment via the delegate") {
+                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!;
+                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_20201101_120000.jpeg");
+                
+                if FileManager.default.fileExists(atPath: fileToWriteTo.path) {
+                    do {
+                        try FileManager.default.removeItem(at: fileToWriteTo);
+                    } catch {
+                        print("Error \(error)")
+                    }
+                }
+                
+                var completeTest = false;
+
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
+                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
+                tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Gallery");
+                expect(coordinator.addGalleryAttachmentCalled).to(beTrue());
+                
+                let newImage = createGradientImage(startColor: .purple, endColor: .blue, size: CGSize(width: 200, height: 200));
+                do {
+                    try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil);
+                } catch {
+                    print("Error creating directory \(error)")
+                }
+                do {
+                    try newImage.jpegData(compressionQuality: 1.0)?.write(to: fileToWriteTo);
+                } catch {
+                    print("Error making jpeg \(error)")
+                }
+                let attachmentJson: [String: Any] = [
+                    "contentType": "image/jpeg",
+                    "localPath": fileToWriteTo.path,
+                    "name": "MAGE_20201101_120000.jpeg",
+                    "dirty": 1
+                ]
+                                
+                let attachment = Attachment(forJson: attachmentJson, in: NSManagedObjectContext.mr_default());
+                coordinator.delegate?.attachmentCreated(attachment: attachment);
+                
+                tester().waitForAnimationsToFinish();
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
             }
             
             it("set one attachment that is synced and one that is not") {

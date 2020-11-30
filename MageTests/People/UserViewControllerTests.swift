@@ -64,7 +64,10 @@ class UserViewControllerTests: QuickSpec {
             }
             
             afterEach {
-//                clearAndSetUpStack();
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+                TestHelpers.cleanUpStack();
             }
             
             it("user view") {

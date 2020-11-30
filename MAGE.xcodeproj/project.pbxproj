@@ -363,6 +363,10 @@
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
 		F7D9B81E255C69A300A76E2C /* twoOneFieldForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */; };
+		F7D9B822255D6D9500A76E2C /* attachmentForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B821255D6D9500A76E2C /* attachmentForm.json */; };
+		F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B825255DC65C00A76E2C /* MageImage.swift */; };
+		F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */; };
+		F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B82E2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift */; };
 		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
 		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
@@ -375,6 +379,7 @@
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */; };
+		F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
 		F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */; };
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
@@ -390,6 +395,7 @@
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
+		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
 		F7F91220247EFA4100C068B6 /* EditDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */; };
@@ -966,7 +972,11 @@
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
 		F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
 		F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoOneFieldForms.json; sourceTree = "<group>"; };
+		F7D9B821255D6D9500A76E2C /* attachmentForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentForm.json; sourceTree = "<group>"; };
+		F7D9B825255DC65C00A76E2C /* MageImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageImage.swift; sourceTree = "<group>"; };
+		F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCreationCoordinator.swift; sourceTree = "<group>"; };
 		F7D9B82A248E7FB4008DC568 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		F7D9B82E2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCreationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedWiFiTableViewController.h; sourceTree = "<group>"; };
@@ -988,6 +998,7 @@
 		F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+IB.m"; sourceTree = "<group>"; };
 		F7E297131A8E7634000F62C6 /* PopAndGoSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAndGoSegue.h; sourceTree = "<group>"; };
 		F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopAndGoSegue.m; sourceTree = "<group>"; };
+		F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTopController.swift; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
 		F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisclaimerConsent.xib; sourceTree = "<group>"; };
@@ -1013,6 +1024,7 @@
 		F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFilterTableViewController.m; sourceTree = "<group>"; };
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
+		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
 		F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldViewTests.swift; sourceTree = "<group>"; };
@@ -1563,6 +1575,8 @@
 				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F77C21A5254C6E7000D9257F /* HexColor.swift */,
 				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
+				F7D9B825255DC65C00A76E2C /* MageImage.swift */,
+				F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1725,6 +1739,7 @@
 		F7614DA820068FF300676366 /* responses */ = {
 			isa = PBXGroup;
 			children = (
+				F7F7532A2565862F00EF51FF /* testmovie.MOV */,
 				F70B47B324B5F7AF00D0BFE5 /* feeds.json */,
 				F71446F0249BB5BC005A5EC1 /* icon27.png */,
 				F7098F252492C36700313703 /* test_marker.png */,
@@ -1751,6 +1766,7 @@
 				F7CE2303254369BD00D710DE /* checkboxForm.json */,
 				F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */,
 				F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */,
+				F7D9B821255D6D9500A76E2C /* attachmentForm.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1863,6 +1879,7 @@
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F7CC45D52440DC690054C8E1 /* MediaLoader.h */,
 				F7CC45D62440DC690054C8E1 /* MediaLoader.m */,
+				F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */,
 			);
 			name = Attachment;
 			sourceTree = "<group>";
@@ -2051,6 +2068,7 @@
 		F7BE036A2466093700D2F7C3 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7D9B82D2562EFE900A76E2C /* Attachment */,
 				F7BE036B2466095100D2F7C3 /* Edit */,
 				F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */,
 			);
@@ -2120,6 +2138,14 @@
 				F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */,
 			);
 			name = Geometry;
+			sourceTree = "<group>";
+		};
+		F7D9B82D2562EFE900A76E2C /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F7D9B82E2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift */,
+			);
+			path = Attachment;
 			sourceTree = "<group>";
 		};
 		F7DB714B2486D79C00A7CD00 /* Feed */ = {
@@ -2383,6 +2409,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7D9B822255D6D9500A76E2C /* attachmentForm.json in Resources */,
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
@@ -2404,6 +2431,7 @@
 				F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,
+				F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
@@ -2772,6 +2800,7 @@
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
+				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
@@ -2785,6 +2814,7 @@
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
+				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
@@ -2849,6 +2879,7 @@
 				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
+				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
@@ -2876,6 +2907,7 @@
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
+				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */,

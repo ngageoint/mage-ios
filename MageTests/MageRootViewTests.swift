@@ -116,8 +116,11 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
             }
-            
+
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }

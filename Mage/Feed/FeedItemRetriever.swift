@@ -147,8 +147,10 @@ extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
         case .insert:
             delegate.addFeedItem(feedItem: anObject as! FeedItem);
         case .delete:
+            print("delete item")
             delegate.removeFeedItem(feedItem: anObject as! FeedItem)
         case .update:
+            print("Update item")
             delegate.removeFeedItem(feedItem: anObject as! FeedItem)
             delegate.addFeedItem(feedItem: anObject as! FeedItem);
         case .move:

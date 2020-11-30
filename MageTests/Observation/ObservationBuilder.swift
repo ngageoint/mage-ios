@@ -11,7 +11,7 @@ import MagicalRecord
 
 class ObservationBuilder {
     static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
-        let observation: Observation = Observation(context: NSManagedObjectContext.mr_default());
+        let observation: Observation = Observation.mr_createEntity()!;
         observation.eventId = eventId;
         let observationProperties: [String:Any] = [:]
         observation.properties = observationProperties;
@@ -150,8 +150,8 @@ class ObservationBuilder {
                 
                 // override with the values set
                 if let safeValues = values {
-                    print("\(safeValues.keys)")
-                    print("\(field)")
+//                    print("\(safeValues.keys)")
+//                    print("\(field)")
                     if ((safeValues.keys.contains(field["name"] as! Dictionary<String, Any>.Keys.Element))) {
                         value = safeValues[field["name"] as! String];
                     }

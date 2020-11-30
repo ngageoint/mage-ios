@@ -20,6 +20,8 @@ import MaterialComponents.MDCCard
     @objc func fieldSelected(field: [String: Any]);
     @objc func attachmentSelected(attachment: Attachment);
     @objc func addForm();
+    @objc func saveObservation(observation: Observation);
+    @objc func cancelEdit();
 }
 
 @objc class ObservationEditCardCollectionViewController: UIViewController { //}: MDCCollectionViewController {
@@ -34,6 +36,8 @@ import MaterialComponents.MDCCard
     
     var delegate: ObservationEditCardDelegate?;
     var observation: Observation?;
+    var observationForms: [[String: Any]] = [];
+    var observationProperties: [String: Any] = [ : ];
     var newObservation: Bool = false;
     
     var cards: [ExpandableCard] = [];
@@ -98,6 +102,11 @@ import MaterialComponents.MDCCard
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.accessibilityIdentifier = "ObservationEditCardCollection"
+        self.view.accessibilityLabel = "ObservationEditCardCollection"
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveObservation(sender:)));
+        
         self.view.addSubview(scrollView)
         addScrollViewConstraints();
         scrollView.addSubview(stackView)
@@ -122,6 +131,18 @@ import MaterialComponents.MDCCard
         self.registerForThemeChanges();
     }
     
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated);
+//        
+//        self.addFormFAB.removeTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside);
+//        self.navigationItem.rightBarButtonItem = nil;
+//        
+//        
+//        
+//        self.cards.removeAll();
+//        print("disappear ran");
+//    }
+    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
@@ -130,6 +151,15 @@ import MaterialComponents.MDCCard
         self.init(frame: CGRect.zero);
         self.delegate = delegate;
         self.observation = observation;
+        if let safeProperties = self.observation?.properties as? [String: Any] {
+            if (safeProperties.keys.contains("forms")) {
+                observationForms = safeProperties["forms"] as! [[String: Any]];
+            }
+            self.observationProperties = safeProperties;
+        } else {
+            self.observationProperties = ["forms":[]];
+            observationForms = [];
+        }
         self.newObservation = newObservation;
     }
     
@@ -146,7 +176,7 @@ import MaterialComponents.MDCCard
     }
     
     func addFormViews(stackView: UIStackView) {
-        for (index, form) in getObservationForms().enumerated() {
+        for (index, form) in self.observationForms.enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
             card.expanded = newObservation;
         }
@@ -169,7 +199,7 @@ import MaterialComponents.MDCCard
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, delegate: self);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, delegate: self);
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
@@ -204,10 +234,12 @@ import MaterialComponents.MDCCard
         self.delegate?.addForm();
     }
     
+    @objc func saveObservation(sender: UIBarButtonItem) {
+        guard let safeObservation = self.observation else { return }
+        self.delegate?.saveObservation(observation: safeObservation);
+    }
+    
     public func formAdded(form: [String: Any]) {
-        var newProperties: [String: Any] = self.observation?.properties as? [String: Any] ?? [:];
-        var observationForms: [Any] = newProperties["forms"] as? [Any] ?? [];
-        
         var newForm: [String: Any] = ["formId": form["id"]!];
         let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: form["id"] as! Int);
         let formDefaults: [String: [String: Any]] = defaults.getDefaults() as! [String : [String: Any]];
@@ -234,26 +266,10 @@ import MaterialComponents.MDCCard
         }
         
         observationForms.append(newForm);
-        newProperties["forms"] = observationForms;
-        self.observation?.properties = newProperties;
+        observationProperties["forms"] = observationForms;
+        self.observation?.properties = observationProperties;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
         card.expanded = true;
-    }
-    
-    private func getObservationForms() -> [[String : Any]] {
-        
-        if var properties = self.observation?.properties as? [String : Any] {
-            print("Properties is a thing");
-            if let observationForms = properties["forms"] as? [[String : Any]] {
-                print("forms is a thing")
-            } else {
-                properties["forms"] = [];
-            }
-            return properties["forms"] as! [[String : Any]];
-        } else {
-            self.observation?.properties = ["forms": []];
-            return (self.observation?.properties as! [String : Any])["forms"] as! [[String : Any]];
-        }
     }
 }
 
@@ -263,10 +279,13 @@ extension ObservationEditCardCollectionViewController: ObservationEditListener {
     }
     
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-
+        print("field changed \(field) value \(value)")
     }
     
     func formUpdated(_ form: Any!, eventForm: Any!, form index: Int) {
+        observationForms[index] = form as! [String: Any];
+        observationProperties["forms"] = observationForms;
+        observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form as! [String: Any], index: index);
     }
 }

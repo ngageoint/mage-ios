@@ -1,0 +1,23 @@
+
+[
+    {
+        "name": "Test",
+        "color": "#355332",
+        "primaryField": "field0",
+        "variantField": "field1",
+        "fields": [
+            {
+                "title": "Attachment Field",
+                "type": "attachment",
+                "required": false,
+                "id": 23,
+                "name": "field23",
+                "choices": []
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "id": 1
+    }
+]
+

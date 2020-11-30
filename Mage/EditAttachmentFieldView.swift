@@ -20,7 +20,7 @@ import MaterialComponents.MDCButton;
 class EditAttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var attachmentCreationDelegate: AttachmentCreationDelegate?;
+    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = AttachmentCollectionDataStore();
@@ -130,10 +130,11 @@ class EditAttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationDelegate: AttachmentCreationDelegate? = nil) {
+    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
-        self.attachmentCreationDelegate = attachmentCreationDelegate;
+        self.attachmentCreationCoordinator = attachmentCreationCoordinator;
+        self.attachmentCreationCoordinator?.delegate = self;
         buildView();
         
         setValue(value);
@@ -184,27 +185,28 @@ class EditAttachmentFieldView : BaseFieldView {
     
     func setValue(_ value: Set<Attachment>? = nil) {
         self.attachments = value;
-        attachmentCollectionDataStore.attachments = self.attachments;
-        setNeedsUpdateConstraints();
+        setCollectionData(attachments: self.attachments);
     }
     
     func addAttachment(_ attachment: Attachment) {
         var safeAttachments = self.attachments ?? Set(minimumCapacity: 0);
         safeAttachments.insert(attachment);
         self.attachments = safeAttachments
-        attachmentCollectionDataStore.attachments = safeAttachments;
-        
-        setNeedsUpdateConstraints();
+        setCollectionData(attachments: safeAttachments);
     }
     
     func removeAttachment(_ attachment: Attachment) {
         if var safeAttachments = self.attachments {
             safeAttachments.remove(attachment);
             self.attachments = safeAttachments
-            attachmentCollectionDataStore.attachments = safeAttachments;
-            
-            setNeedsUpdateConstraints();
+            setCollectionData(attachments: safeAttachments);
         }
+    }
+    
+    func setCollectionData(attachments: Set<Attachment>?) {
+        attachmentCollectionDataStore.attachments = attachments;
+        attachmentCollectionView.reloadData();
+        setNeedsUpdateConstraints();
     }
     
     override func updateConstraints() {
@@ -223,14 +225,26 @@ class EditAttachmentFieldView : BaseFieldView {
     }
     
     @objc func addCameraAttachment() {
-        attachmentCreationDelegate?.addCameraAttachment();
+        attachmentCreationCoordinator?.addCameraAttachment();
     }
     
     @objc func addGalleryAttachment() {
-        attachmentCreationDelegate?.addGalleryAttachment();
+        attachmentCreationCoordinator?.addGalleryAttachment();
     }
     
     @objc func addVideoAttachment() {
-        attachmentCreationDelegate?.addVideoAttachment();
+        attachmentCreationCoordinator?.addVideoAttachment();
+    }
+}
+
+extension EditAttachmentFieldView : AttachmentCreationCoordinatorDelegate {
+    func attachmentCreated(attachment: Attachment) {
+        print("attachment was created \(attachment)")
+        self.addAttachment(attachment);
+        self.delegate?.observationField(field, valueChangedTo: self.attachments, reloadCell: false);
+    }
+    
+    func attachmentCreationCancelled() {
+        print("Cancelled")
     }
 }

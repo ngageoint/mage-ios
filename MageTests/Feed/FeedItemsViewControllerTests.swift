@@ -45,13 +45,16 @@ class FeedItemsViewControllerTests: KIFSpec {
                     MageInitializer.clearAndSetupCoreData();
                 }
                 
+                var controller: FeedItemsViewController!
+                var window: UIWindow!;
+            
                 afterEach {
+                    controller.dismiss(animated: false, completion: nil);
+                    window.rootViewController = nil;
+                    controller = nil;
                     HTTPStubs.removeAllStubs();
                     clearAndSetUpStack();
                 }
-                
-                var controller: FeedItemsViewController!
-                var window: UIWindow!;
             
                 beforeEach {
                     ImageCache.default.clearMemoryCache();

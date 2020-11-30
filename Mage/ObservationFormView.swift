@@ -13,15 +13,14 @@ import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
 
 class ObservationFormView: UIStackView {
     
-    var observation: Observation?;
+    var observation: Observation!;
     private var eventForm: [String:Any]?;
     private var form: [String: Any]!;
     private var formIndex: Int!;
-    private let nameController = MDCTextInputControllerUnderline();
     private var fieldViews: [String: BaseFieldView] = [ : ];
     private var delegate: ObservationEditListener?;
-    private var attachmentCreationDelegate: AttachmentCreationDelegate?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private var viewController: UIViewController!;
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
@@ -44,13 +43,13 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, delegate: ObservationEditListener? = nil, attachmentCreationDelegate: AttachmentCreationDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, viewController: UIViewController, delegate: ObservationEditListener? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
         self.init(frame: .zero)
         self.observation = observation;
         self.form = form;
         self.eventForm = eventForm;
         self.delegate = delegate;
-        self.attachmentCreationDelegate = attachmentCreationDelegate;
+        self.viewController = viewController;
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.formIndex = formIndex;
         constructView();
@@ -71,7 +70,8 @@ class ObservationFormView: UIStackView {
             var fieldView: UIView;
             switch type {
             case "attachment":
-                fieldView = EditAttachmentFieldView(field: fieldDictionary, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationDelegate: attachmentCreationDelegate);
+                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
+                fieldView = EditAttachmentFieldView(field: fieldDictionary, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
             case "numberfield":
                 fieldView = EditNumberFieldView(field: fieldDictionary, delegate: self, value: value as? String);
             case "textfield":
@@ -124,7 +124,7 @@ extension ObservationFormView: ObservationEditListener {
     func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
         let fieldDictionary = field as! [String: Any];
         
-        var newProperties = self.observation?.properties as? [String: [[String: Any]]];
+        var newProperties = self.observation.properties as? [String: [[String: Any]]];
         if (value == nil) {
             form.removeValue(forKey: fieldDictionary["name"] as? String ?? "");
         } else {
@@ -132,7 +132,7 @@ extension ObservationFormView: ObservationEditListener {
         }
         
         newProperties?["forms"]?[0] = form;
-        self.observation?.properties = newProperties;
+        self.observation.properties = newProperties;
         
         self.delegate?.formUpdated?(form, eventForm: eventForm, form: formIndex);
         

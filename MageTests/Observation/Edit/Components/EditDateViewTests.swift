@@ -65,6 +65,12 @@ class EditDateViewTests: KIFSpec {
                 ];
             }
             
+            afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+            }
+            
             it("no initial value") {
                 dateFieldView = EditDateView(field: field);
                 

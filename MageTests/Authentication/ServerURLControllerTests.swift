@@ -56,6 +56,7 @@ class ServerURLControllerTests: KIFSpec {
             afterEach {
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
                 navigationController = nil;
                 view = nil;
                 delegate = nil;
@@ -70,8 +71,10 @@ class ServerURLControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
+                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "Server URL");
                 expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Cancel");
                 expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
             }

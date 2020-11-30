@@ -11,6 +11,7 @@ import Foundation
 @testable import MAGE
 
 class MockObservationEditCardDelegate: ObservationEditCardDelegate {
+   
     var addVoiceAttachmentCalled = false;
     var addVideoAttachmentCalled = false;
     var addCameraAttachmentCalled = false;
@@ -19,9 +20,12 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate {
     var fieldSelectedCalled = false;
     var attachmentSelectedCalled = false;
     var addFormCalled = false;
+    var saveObservationCalled = false;
+    var cancelEditCalled = false;
     
     var selectedAttachment: Attachment?;
     var selectedField: [String : Any]?;
+    var observationSaved: Observation?;
     
     func addVoiceAttachment() {
         addVoiceAttachmentCalled = true;
@@ -55,5 +59,14 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate {
     
     func addForm() {
         addFormCalled = true;
+    }
+    
+    func saveObservation(observation: Observation) {
+        saveObservationCalled = true;
+        observationSaved = observation;
+    }
+    
+    func cancelEdit() {
+        cancelEditCalled = true;
     }
 }
