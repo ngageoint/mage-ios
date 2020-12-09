@@ -12,7 +12,7 @@
 #import "AudioRecordingDelegate.h"
 #import "SFGeometry.h"
 
-@protocol PropertyEditDelegate <NSObject>
+@protocol PropertyEditDelegate
 - (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
 - (void) invalidValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
 @end

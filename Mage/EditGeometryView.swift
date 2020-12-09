@@ -95,7 +95,7 @@ class EditGeometryView : BaseFieldView {
         fab.accessibilityLabel = field[FieldKey.name.key] as? String;
         fab.setImage(UIImage(named: "edit")?.withRenderingMode(.alwaysTemplate), for: .normal);
         fab.applySecondaryTheme(withScheme: globalContainerScheme());
-        fab.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside);
+        fab.addTarget(self, action: #selector(handleTap), for: .touchUpInside);
         return fab;
     }()
     
@@ -108,17 +108,17 @@ class EditGeometryView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
         self.init(field: field, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
         let accuracy = ((observation?.properties as? NSDictionary)?.value(forKey: "accuracy") as? Double);
         let provider = ((observation?.properties as? NSDictionary)?.value(forKey: "provider") as? String);
         self.init(field: field, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.observation = observation;
         self.eventForms = eventForms;
@@ -229,10 +229,6 @@ class EditGeometryView : BaseFieldView {
     
     override func isEmpty() -> Bool{
         return self.value == nil;
-    }
-    
-    @objc func editButtonTapped() {
-        delegate?.fieldSelected?(field);
     }
     
     func setAccuracy(_ accuracy: Double?, provider: String?) {

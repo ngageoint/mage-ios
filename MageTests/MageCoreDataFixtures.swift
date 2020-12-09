@@ -83,6 +83,14 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
+    public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler?) {
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
+            let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
+            event?.teams?.first?.addUsersObject(user!);
+        }, completion: completion);
+    }
+    
     public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler?) {
         guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
             fatalError("observations.json not found")
@@ -165,6 +173,14 @@ class MageCoreDataFixtures {
                 e.remoteId = remoteId;
                 e.eventDescription = "Test event description";
                 e.forms = jsonDictionary;
+                let teamJson: [String: Any] = [
+                    "id": "teamid",
+                    "name": "Team Name",
+                    "description": "Team Description"
+                ]
+                let team = Team.insert(forJson: teamJson, in: localContext);
+                e.addTeamsObject(team);
+                print("creating this \(e)")
             }
             print("created entity")
         }, completion: completion)

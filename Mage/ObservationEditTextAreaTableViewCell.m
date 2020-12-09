@@ -123,9 +123,9 @@
     [self themeDidChange:TheCurrentTheme];
     if (![self.value isEqualToString:self.textArea.text]) {
         self.value = self.textArea.text;
-        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
-        }
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+//            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+//        }
     }
 }
 

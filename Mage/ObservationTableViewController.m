@@ -18,7 +18,7 @@
 #import "Filter.h"
 #import "Observations.h"
 #import "SFPoint.h"
-#import "ObservationEditCoordinator.h"
+#import "ObservationEditCoordinator_legacy.h"
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
@@ -128,7 +128,7 @@
 }
 
 - (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
-    ObservationEditCoordinator *edit;
+    ObservationEditCoordinator_legacy *edit;
     SFPoint *point;
     
     CLLocationAccuracy accuracy = 0;
@@ -143,7 +143,7 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
     [self.childCoordinators addObject:edit];
     [edit start];
 }
@@ -253,7 +253,7 @@
 - (IBAction)newButtonTapped:(id)sender {
     CLLocation *location = [[LocationService singleton] location];
 
-    ObservationEditCoordinator *edit;
+    ObservationEditCoordinator_legacy *edit;
     
     SFPoint *point;
     CLLocationAccuracy accuracy = 0;
@@ -268,7 +268,7 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andLocation:point andAccuracy:accuracy andProvider:@"gps" andDelta:delta];
+    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andLocation:point andAccuracy:accuracy andProvider:@"gps" andDelta:delta];
 
     [self.childCoordinators addObject:edit];
     [edit start];

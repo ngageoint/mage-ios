@@ -151,9 +151,9 @@
         id value = self.date ? [formatter stringFromDate:self.date] : nil;
         self.value = self.date;
 
-        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-            [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
-        }
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+//            [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
+//        }
     }
     self.datePicker.date = self.date ? self.date : [[NSDate alloc] init];
 }

@@ -82,12 +82,7 @@ class MageRootViewTests: KIFSpec {
                 
                 return jsonDictionary;
             }
-            
-//            func clearAndSetUpStack() {
-//                MageInitializer.initializePreferences();
-//                MageInitializer.clearAndSetupCoreData();
-//            }
-            
+
             beforeEach {
                 waitUntil { done in
                     TestHelpers.clearAndSetUpStack();
@@ -96,8 +91,6 @@ class MageRootViewTests: KIFSpec {
                     stub(condition: isHost("magetest")) { (request) -> HTTPStubsResponse in
                         return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil);
                     };
-
-//                    clearAndSetUpStack();
                     
                     MockMageServer.initializeHttpStubs();
                     window = UIWindow(forAutoLayout: ());

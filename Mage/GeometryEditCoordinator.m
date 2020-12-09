@@ -30,26 +30,34 @@
         
         if (self.currentGeometry == nil) {
             CLLocation *location = [[LocationService singleton] location];
-
+            
             if (location) {
                 self.currentGeometry = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
             } else {
                 // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
                 self.currentGeometry = [[SFPoint alloc] initWithXValue:1.0 andYValue:1.0];
             }
+            
+            NSLog(@"Location %@", self.currentGeometry);
         }
     }
     
     return self;
 }
 
-- (void) start {
+- (UIViewController *) createViewController {
     self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
+    doneButton.accessibilityLabel = @"Done";
     [self.geometryEditViewController.navigationItem setLeftBarButtonItem:backButton];
     [self.geometryEditViewController.navigationItem setRightBarButtonItem:doneButton];
+    return self.geometryEditViewController;
+}
+
+- (void) start {
+    [self createViewController];
     [self.navigationController pushViewController:self.geometryEditViewController animated:YES];
 }
 
@@ -59,6 +67,7 @@
 }
 
 - (void) fieldEditDone {
+    NSLog(@"Done geometry coordinator");
     // Validate the geometry
     NSError *error;
     if (![self.geometryEditViewController validate:&error]) {
@@ -74,9 +83,10 @@
         
         return;
     }
-    
     [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void) updateGeometry: (SFGeometry *) geometry {

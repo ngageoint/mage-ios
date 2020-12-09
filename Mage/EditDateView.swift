@@ -19,6 +19,7 @@ class EditDateView : BaseFieldView {
         if #available(iOS 13.4, *) {
             datePicker.preferredDatePickerStyle = .wheels
         }
+        print("is display gmt \(NSDate.isDisplayGMT())")
         if (NSDate.isDisplayGMT()) {
             datePicker.timeZone = TimeZone(secondsFromGMT: 0);
         } else {
@@ -73,11 +74,11 @@ class EditDateView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
         super.init(field: field, delegate: delegate, value: value);
         date = nil;
         setValue(value);
@@ -94,6 +95,7 @@ class EditDateView : BaseFieldView {
     
     @objc func dateChanged() {
         date = datePicker.date;
+        print("date changed to \(date)")
         textField.text = (datePicker.date as NSDate).formattedDisplay();
     }
     
@@ -140,7 +142,7 @@ extension EditDateView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
         self.value = nil;
-        self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
+        delegate?.fieldValueChanged(field, value: nil);
         return true;
     }
     
@@ -153,7 +155,7 @@ extension EditDateView: UITextFieldDelegate {
             self.date = nil;
             textField.text = "";
             self.value = nil;
-            self.delegate?.observationField(self.field, valueChangedTo: nil, reloadCell: false);
+            delegate?.fieldValueChanged(field, value: nil);
         }
         return false;
     }
@@ -163,7 +165,7 @@ extension EditDateView: UITextFieldDelegate {
             if (self.value as? Date != newDate) {
                 self.value = newDate;
                 self.dateChanged();
-                self.delegate?.observationField(self.field, valueChangedTo: formatter.string(from: newDate), reloadCell: false);
+                delegate?.fieldValueChanged(field, value: formatter.string(from: newDate));
             }
             datePicker.date = newDate;
         } else {

@@ -49,15 +49,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
                 UserDefaults.standard.synchronize();
-//                do {
-//                    try tester().tryFindingView(withAccessibilityLabel: "field0")
-//                    print("field0 each \(viewTester().usingLabel("field0"))");
-//
-//                } catch {
-//                    print("whatever")
-//                }
-//                TestHelpers.printAllAccessibilityLabelsInWindows();
-//                tester().waitForAbsenceOfView(withAccessibilityLabel: "ObservationEditCardCollection");
             }
             
             afterEach {

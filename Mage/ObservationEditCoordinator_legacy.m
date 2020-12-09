@@ -6,7 +6,7 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "ObservationEditCoordinator.h"
+#import "ObservationEditCoordinator_legacy.h"
 #import "Event.h"
 #import "User.h"
 #import "Attachment.h"
@@ -14,7 +14,7 @@
 #import "FormDefaults.h"
 #import "MAGE-Swift.h"
 
-@interface ObservationEditCoordinator() <ObservationPropertiesEditDelegate, FormPickedDelegate>
+@interface ObservationEditCoordinator_legacy() <ObservationPropertiesEditDelegate, FormPickedDelegate>
 
 @property (strong, nonatomic) UIViewController *rootViewController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -36,7 +36,7 @@
 
 @end
 
-@implementation ObservationEditCoordinator
+@implementation ObservationEditCoordinator_legacy
 
 - (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (SFGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta {
     self = [super init];

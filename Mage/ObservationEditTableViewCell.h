@@ -8,6 +8,7 @@
 #import "Observation.h"
 #import "ObservationEditListener.h"
 #import "AttachmentSelectionDelegate.h"
+#import "MAGE-Swift.h"
 
 @protocol ValidObservationProperty
 - (void) populateCellWithFormField: (id) field andValue: (id) value;
@@ -24,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *requiredIndicator;
 
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
-@property (nonatomic, weak) id<ObservationEditListener> delegate;
+//@property (nonatomic, weak) id<ObservationEditListener> delegate;
 
 @property (nonatomic) BOOL fieldValueValid;
 

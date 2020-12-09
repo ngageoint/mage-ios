@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 
 - (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController;
+- (UIViewController *) createViewController;
 - (void) start;
 - (void) updateGeometry: (SFGeometry *) geometry;
 - (NSString *) fieldName;

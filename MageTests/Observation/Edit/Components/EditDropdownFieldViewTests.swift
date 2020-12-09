@@ -56,6 +56,7 @@ class EditDropdownFieldViewTests: KIFSpec {
                 field = [
                     "title": "Field Title",
                     "name": "field8",
+                    "type": "dropdown",
                     "id": 8
                 ];
                 
@@ -114,9 +115,9 @@ class EditDropdownFieldViewTests: KIFSpec {
                 
                 controller.view = view;
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
-                dropdownFieldView.handleTap(sender: UITapGestureRecognizer());
-                expect(delegate.fieldSelectedCalled).to(beTrue());
-                expect(delegate.selectedField).toNot(beNil());
+                dropdownFieldView.handleTap();
+                expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
+                expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(SelectEditViewController.self));
             }
             
             it("initial value set with multiple values") {

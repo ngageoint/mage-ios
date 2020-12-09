@@ -127,9 +127,9 @@
     
     if (![[self.value stringValue] isEqualToString:self.textField.text]) {
         self.value = [formatter numberFromString:self.textField.text];
-        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
-            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
-        }
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(observationField:valueChangedTo:reloadCell:)]) {
+//            [self.delegate observationField:self.fieldDefinition valueChangedTo:self.value reloadCell:NO];
+//        }
     }
 }
 

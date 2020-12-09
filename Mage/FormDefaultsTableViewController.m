@@ -126,7 +126,7 @@
     cell.fieldDefinition = field;
     
     if ([cell respondsToSelector:@selector(setDelegate:)]) {
-        [cell setDelegate:self];
+//        [cell setDelegate:self];
     }
     
     if ([cell respondsToSelector:@selector(populateCellWithFormField:andValue:)]) {

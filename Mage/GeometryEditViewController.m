@@ -153,49 +153,63 @@ static float paddingPercentage = .1;
 
 - (void) addBackgroundMap {
     if ([UIColor darkMap]) {
-        [self.map removeOverlay:self.backgroundOverlay];
-        [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+        if (self.backgroundOverlay) {
+            [self.map removeOverlay:self.backgroundOverlay];
+        }
+        if (self.darkBackgroundOverlay) {
+            [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+        }
     } else {
-        [self.map removeOverlay:self.darkBackgroundOverlay];
-        [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+        if (self.darkBackgroundOverlay) {
+            [self.map removeOverlay:self.darkBackgroundOverlay];
+        }
+        if (self.backgroundOverlay) {
+            [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+        }
     }
 }
 
 - (void) removeBackgroundMap {
-    [self.map removeOverlay: self.backgroundOverlay];
-    [self.map removeOverlay: self.darkBackgroundOverlay];
+    if (self.backgroundOverlay) {
+        [self.map removeOverlay: self.backgroundOverlay];
+    }
+    if (self.darkBackgroundOverlay) {
+        [self.map removeOverlay: self.darkBackgroundOverlay];
+    }
 }
 
 - (void) createBackgroundOverlay {
     if (self.backgroundOverlay) return;
     GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
     GPKGGeoPackage * geoPackage = [manager open:@"countries"];
+    if (geoPackage) {
+        GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+        
+        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+        [self.backgroundOverlay setMinZoom:0];
+        self.backgroundOverlay.darkTheme = NO;
 
-    GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-    [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
-    
-    self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-    [self.backgroundOverlay setMinZoom:0];
-    self.backgroundOverlay.darkTheme = NO;
-
-    self.backgroundOverlay.canReplaceMapContent = true;
+        self.backgroundOverlay.canReplaceMapContent = true;
+    }
     
     GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
+    if (darkGeoPackage) {
+        GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
+        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+        
+        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+        [self.darkBackgroundOverlay setMinZoom:0];
+        self.darkBackgroundOverlay.darkTheme = YES;
 
-    GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
-    [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
-    
-    self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-    [self.darkBackgroundOverlay setMinZoom:0];
-    self.darkBackgroundOverlay.darkTheme = YES;
-
-    self.darkBackgroundOverlay.canReplaceMapContent = true;
+        self.darkBackgroundOverlay.canReplaceMapContent = true;
+    }
 }
 
 - (void) viewDidLoad {
@@ -473,8 +487,8 @@ static float paddingPercentage = .1;
     if (self.textFieldChangedTimer.isValid) {
         [self.textFieldChangedTimer invalidate];
     }
-    
-    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
+    // TODO: fix this to not require a half second wait
+    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
 }
 
 - (void) onLatLonTextChanged {

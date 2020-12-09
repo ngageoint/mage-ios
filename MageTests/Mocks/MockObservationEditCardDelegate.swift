@@ -10,8 +10,15 @@ import Foundation
 
 @testable import MAGE
 
-class MockObservationEditCardDelegate: ObservationEditCardDelegate {
-   
+class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelectionDelegate, ObservationEditListener {
+    func fieldValueChanged(_ field: [String : Any], value: Any?) {
+        
+    }
+    
+    func launchFieldSelectionViewController(viewController: UIViewController) {
+        
+    }
+    
     var addVoiceAttachmentCalled = false;
     var addVideoAttachmentCalled = false;
     var addCameraAttachmentCalled = false;
@@ -25,6 +32,7 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate {
     
     var selectedAttachment: Attachment?;
     var selectedField: [String : Any]?;
+    var selectedFieldCurrentValue: Any?;
     var observationSaved: Observation?;
     
     func addVoiceAttachment() {
@@ -47,7 +55,7 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate {
         deleteObservationCalled = true;
     }
     
-    func fieldSelected(field: [String : Any]) {
+    func fieldSelected(field: [String : Any], currentValue: Any?) {
         fieldSelectedCalled = true;
         selectedField = field;
     }

@@ -74,6 +74,10 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    self.tableView.accessibilityLabel = @"choices";
+    self.tableView.accessibilityIdentifier = @"choices";
+    self.tableView.isAccessibilityElement = true;
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 50;
 
@@ -82,7 +86,7 @@
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
@@ -104,11 +108,7 @@
     self.multiselect = [@"multiselectdropdown" isEqualToString:[self.fieldDefinition objectForKey:@"type"]];
     
     if (self.value) {
-        if (self.multiselect) {
-            self.selectedChoices = [NSMutableArray arrayWithArray:self.value];
-        } else {
-            self.selectedChoices = [NSMutableArray arrayWithObject:self.value];
-        }
+        self.selectedChoices = [NSMutableArray arrayWithArray:self.value];
     } else {
         self.selectedChoices = [NSMutableArray array];
     }

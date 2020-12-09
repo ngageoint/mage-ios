@@ -345,6 +345,8 @@
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
+		F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */; };
+		F7C640FF257EB29100C02335 /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
 		F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CC45D62440DC690054C8E1 /* MediaLoader.m */; };
 		F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */; };
 		F7CE22C02540DF2D00D710DE /* twoForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22BF2540DF2D00D710DE /* twoForms.json */; };
@@ -380,6 +382,10 @@
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */; };
 		F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */; };
+		F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */; };
+		F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */; };
+		F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */; };
+		F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
 		F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */; };
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
@@ -403,7 +409,7 @@
 		F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
-		F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */; };
+		F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
@@ -947,6 +953,8 @@
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
 		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormListener.swift; sourceTree = "<group>"; };
+		F7C640FE257EB29100C02335 /* geometryField.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryField.json; sourceTree = "<group>"; };
 		F7CC45D52440DC690054C8E1 /* MediaLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaLoader.h; sourceTree = "<group>"; };
 		F7CC45D62440DC690054C8E1 /* MediaLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaLoader.m; sourceTree = "<group>"; };
 		F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
@@ -999,6 +1007,10 @@
 		F7E297131A8E7634000F62C6 /* PopAndGoSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAndGoSegue.h; sourceTree = "<group>"; };
 		F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopAndGoSegue.m; sourceTree = "<group>"; };
 		F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTopController.swift; sourceTree = "<group>"; };
+		F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCoordinatorTests.swift; sourceTree = "<group>"; };
+		F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCoordinator.swift; sourceTree = "<group>"; };
+		F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditDelegate.swift; sourceTree = "<group>"; };
+		F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldSelectionDelegate.swift; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
 		F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisclaimerConsent.xib; sourceTree = "<group>"; };
@@ -1032,8 +1044,8 @@
 		F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
-		F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditCoordinator.h; sourceTree = "<group>"; };
-		F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditCoordinator.m; sourceTree = "<group>"; };
+		F7FC59291F3CF68F0010351A /* ObservationEditCoordinator_legacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditCoordinator_legacy.h; sourceTree = "<group>"; };
+		F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditCoordinator_legacy.m; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
 		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolygon.m; sourceTree = "<group>"; };
 		F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolyline.h; sourceTree = "<group>"; };
@@ -1451,6 +1463,8 @@
 				F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */,
 				F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */,
 				F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */,
+				F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */,
+				F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1611,8 +1625,8 @@
 				F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */,
 				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
 				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
-				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator.h */,
-				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator.m */,
+				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator_legacy.h */,
+				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */,
 				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
 				F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */,
 				F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */,
@@ -1624,6 +1638,8 @@
 				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
 				F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */,
 				F7813A8024621237003666ED /* ObservationFormView.swift */,
+				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
+				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -1767,6 +1783,7 @@
 				F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */,
 				F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */,
 				F7D9B821255D6D9500A76E2C /* attachmentForm.json */,
+				F7C640FE257EB29100C02335 /* geometryField.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2081,6 +2098,7 @@
 				F7BE036C2466095500D2F7C3 /* Components */,
 				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
 				F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */,
+				F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -2412,6 +2430,7 @@
 				F7D9B822255D6D9500A76E2C /* attachmentForm.json in Resources */,
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
+				F7C640FF257EB29100C02335 /* geometryField.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */,
@@ -2742,6 +2761,7 @@
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
 				2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */,
+				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
@@ -2853,7 +2873,7 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.m in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
-				F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator.m in Sources */,
+				F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
@@ -2875,6 +2895,7 @@
 				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
+				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
@@ -2903,6 +2924,7 @@
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */,
 				F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */,
+				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */,
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
@@ -2912,6 +2934,7 @@
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
+				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
@@ -2921,6 +2944,7 @@
 				F7911623249125230043A529 /* MageRootViewTests.swift in Sources */,
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
 				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
+				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,

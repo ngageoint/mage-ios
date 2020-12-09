@@ -21,7 +21,7 @@
 #import "MapDelegate.h"
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
-#import "ObservationEditCoordinator.h"
+#import "ObservationEditCoordinator_legacy.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
@@ -404,7 +404,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (IBAction)editObservationTapped:(id)sender {
-    ObservationEditCoordinator *edit  = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation];
+    ObservationEditCoordinator_legacy *edit  = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation];
 
     [self.childCoordinators addObject:edit];
     [edit start];

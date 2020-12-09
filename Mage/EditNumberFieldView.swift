@@ -66,11 +66,11 @@ class EditNumberFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
         super.init(field: field, delegate: delegate, value: value);
         
         self.min = self.field[FieldKey.min.key] as? NSNumber;
@@ -173,7 +173,7 @@ extension EditNumberFieldView: UITextFieldDelegate {
             let valid = isValid(enforceRequired: true, number: number);
             setValid(valid);
             if (valid && (number == nil || (self.number?.stringValue != textField.text))) {
-                self.delegate?.observationField(field, valueChangedTo: number, reloadCell: false);
+                delegate?.fieldValueChanged(field, value: number);
             }
             self.number = number;
         }

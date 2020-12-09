@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,7 +32,7 @@
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="t0n-5z-kcQ">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </mapView>
-                <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibt-jy-fWg" userLabel="Point Button">
+                <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibt-jy-fWg" userLabel="Point Button">
                     <rect key="frame" x="16" y="16" width="35" height="35"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Point"/>
@@ -67,7 +65,7 @@
                         <action selector="pointButtonClick:" destination="-1" eventType="touchUpInside" id="dCj-HC-ZPM"/>
                     </connections>
                 </button>
-                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMU-AT-4g8" userLabel="Line Button">
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMU-AT-4g8" userLabel="Line Button">
                     <rect key="frame" x="16" y="59" width="35" height="35"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Line"/>
@@ -100,7 +98,7 @@
                         <action selector="lineButtonClick:" destination="-1" eventType="touchUpInside" id="Pgu-6g-hLo"/>
                     </connections>
                 </button>
-                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9e-OG-1sz" userLabel="Rectangle Button">
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9e-OG-1sz" userLabel="Rectangle Button">
                     <rect key="frame" x="16" y="102" width="35" height="35"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Rectangle"/>
@@ -133,7 +131,7 @@
                         <action selector="rectangleButtonClick:" destination="-1" eventType="touchUpInside" id="TA0-ck-pcM"/>
                     </connections>
                 </button>
-                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-Qj-cTB" userLabel="Polygon Button">
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-Qj-cTB" userLabel="Polygon Button">
                     <rect key="frame" x="16" y="145" width="35" height="35"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Polygon"/>
@@ -167,13 +165,13 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5DP-yW-LoB">
-                    <rect key="frame" x="0.0" y="452" width="375" height="215"/>
+                    <rect key="frame" x="0.0" y="449" width="375" height="218"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="1i8-an-FUd">
-                            <rect key="frame" x="20" y="20" width="335" height="175"/>
+                            <rect key="frame" x="20" y="20" width="335" height="178"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8yS-pW-2YX">
-                                    <rect key="frame" x="0.0" y="0.0" width="335" height="29"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="335" height="32"/>
                                     <segments>
                                         <segment title="Lat/Lng"/>
                                         <segment title="MGRS"/>
@@ -183,8 +181,9 @@
                                     </connections>
                                 </segmentedControl>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l11-wK-EQI" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                    <rect key="frame" x="0.0" y="32" width="335" height="45"/>
+                                    <rect key="frame" x="0.0" y="35" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <accessibility key="accessibilityConfiguration" label="Latitude"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="18i-3G-RMv"/>
                                     </constraints>
@@ -195,8 +194,9 @@
                                     </userDefinedRuntimeAttributes>
                                 </textField>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mBQ-mB-CtT" userLabel="Longitude Field" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                    <rect key="frame" x="0.0" y="81" width="335" height="45"/>
+                                    <rect key="frame" x="0.0" y="84" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <accessibility key="accessibilityConfiguration" label="Longitude"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="EVM-kN-h9f"/>
                                     </constraints>
@@ -207,12 +207,12 @@
                                     </userDefinedRuntimeAttributes>
                                 </textField>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rj2-0x-yis" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                    <rect key="frame" x="0.0" y="130" width="335" height="45"/>
+                                    <rect key="frame" x="0.0" y="133" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <accessibility key="accessibilityConfiguration" label="MGRS"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="l7T-e9-XQM"/>
                                     </constraints>
-                                    <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <userDefinedRuntimeAttributes>
@@ -253,10 +253,21 @@
             <point key="canvasLocation" x="34.5" y="53.5"/>
         </view>
     </objects>
+    <designables>
+        <designable name="Rj2-0x-yis">
+            <size key="intrinsicContentSize" width="40.5" height="18.5"/>
+        </designable>
+        <designable name="l11-wK-EQI">
+            <size key="intrinsicContentSize" width="53" height="18.5"/>
+        </designable>
+        <designable name="mBQ-mB-CtT">
+            <size key="intrinsicContentSize" width="65" height="18.5"/>
+        </designable>
+    </designables>
     <resources>
-        <image name="line_string" width="36" height="36"/>
+        <image name="line_string" width="36.5" height="36.5"/>
         <image name="observations" width="24" height="24"/>
-        <image name="polygon" width="36" height="36"/>
-        <image name="rectangle" width="36" height="36"/>
+        <image name="polygon" width="36.5" height="36.5"/>
+        <image name="rectangle" width="36.5" height="36.5"/>
     </resources>
 </document>

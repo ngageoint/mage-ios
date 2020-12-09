@@ -12,19 +12,16 @@ import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 
 @objc protocol ObservationEditCardDelegate {
-    @objc func addVoiceAttachment();
-    @objc func addVideoAttachment();
-    @objc func addCameraAttachment();
-    @objc func addGalleryAttachment();
-    @objc func deleteObservation();
-    @objc func fieldSelected(field: [String: Any]);
-    @objc func attachmentSelected(attachment: Attachment);
     @objc func addForm();
     @objc func saveObservation(observation: Observation);
     @objc func cancelEdit();
 }
 
-@objc class ObservationEditCardCollectionViewController: UIViewController { //}: MDCCollectionViewController {
+@objc protocol ObservationFormListener {
+    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int);
+}
+
+@objc class ObservationEditCardCollectionViewController: UIViewController {
     
     override func themeDidChange(_ theme: MageTheme) {
         self.navigationController?.navigationBar.isTranslucent = false;
@@ -34,7 +31,7 @@ import MaterialComponents.MDCCard
         self.view.backgroundColor = .tableBackground();
     }
     
-    var delegate: ObservationEditCardDelegate?;
+    var delegate: (ObservationEditCardDelegate & FieldSelectionDelegate)?;
     var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var observationProperties: [String: Any] = [ : ];
@@ -106,6 +103,12 @@ import MaterialComponents.MDCCard
         self.view.accessibilityLabel = "ObservationEditCardCollection"
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveObservation(sender:)));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancel(sender:)));
+        if (self.newObservation) {
+            self.navigationItem.title = "Create Observation";
+        } else {
+            self.navigationItem.title = "Edit Observation";
+        }
         
         self.view.addSubview(scrollView)
         addScrollViewConstraints();
@@ -131,23 +134,11 @@ import MaterialComponents.MDCCard
         self.registerForThemeChanges();
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated);
-//        
-//        self.addFormFAB.removeTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside);
-//        self.navigationItem.rightBarButtonItem = nil;
-//        
-//        
-//        
-//        self.cards.removeAll();
-//        print("disappear ran");
-//    }
-    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(delegate: ObservationEditCardDelegate, observation: Observation, newObservation: Bool) {
+    @objc convenience public init(delegate: ObservationEditCardDelegate & FieldSelectionDelegate, observation: Observation, newObservation: Bool) {
         self.init(frame: CGRect.zero);
         self.delegate = delegate;
         self.observation = observation;
@@ -169,7 +160,7 @@ import MaterialComponents.MDCCard
     
     func addCommonFields(stackView: UIStackView) {
          if let safeObservation = observation {
-             let commonFieldView: CommonFieldsView = CommonFieldsView(observation: safeObservation);
+            let commonFieldView: CommonFieldsView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate);
              commonFieldView.applyTheme(withScheme: globalContainerScheme());
              stackView.addArrangedSubview(commonFieldView);
          }
@@ -199,7 +190,7 @@ import MaterialComponents.MDCCard
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, delegate: self);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate);
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
@@ -222,6 +213,8 @@ import MaterialComponents.MDCCard
             }
         }
         if let secondaryField = eventForm?["variantField"] as! String? {
+            print("secondary field \(secondaryField)");
+            // TODO: handle non strings
             if let obsfield = form[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
@@ -232,6 +225,11 @@ import MaterialComponents.MDCCard
     
     @objc func addForm(sender: UIButton) {
         self.delegate?.addForm();
+    }
+    
+    @objc func cancel(sender: UIBarButtonItem) {
+        print("Cancelling")
+        self.delegate?.cancelEdit();
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
@@ -273,19 +271,11 @@ import MaterialComponents.MDCCard
     }
 }
 
-extension ObservationEditCardCollectionViewController: ObservationEditListener {
-    func fieldSelected(_ field: Any!) {
-
-    }
-    
-    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-        print("field changed \(field) value \(value)")
-    }
-    
-    func formUpdated(_ form: Any!, eventForm: Any!, form index: Int) {
-        observationForms[index] = form as! [String: Any];
+extension ObservationEditCardCollectionViewController: ObservationFormListener {
+    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int) {
+        observationForms[index] = form
         observationProperties["forms"] = observationForms;
         observation?.properties = observationProperties;
-        setExpandableCardHeaderInformation(form: form as! [String: Any], index: index);
+        setExpandableCardHeaderInformation(form: form, index: index);
     }
 }

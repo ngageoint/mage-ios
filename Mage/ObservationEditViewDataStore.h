@@ -17,7 +17,7 @@
 
 @end
 
-@interface ObservationEditViewDataStore : NSObject <UITableViewDelegate, UITableViewDataSource, ObservationEditListener>
+@interface ObservationEditViewDataStore : NSObject <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) Observation *observation;
 

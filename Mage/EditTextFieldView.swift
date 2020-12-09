@@ -59,15 +59,15 @@ class EditTextFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, keyboardType: UIKeyboardType = .default) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType);
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, delegate: delegate, value: nil, multiline: multiline);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
         super.init(field: field, delegate: delegate, value: value);
         self.multiline = multiline;
         self.keyboardType = keyboardType;
@@ -124,6 +124,7 @@ extension EditTextFieldView {
     }
     
     @objc func doneButtonPressed() {
+        print("done button \(self.multiline)")
         self.resignFieldFirstResponder();
     }
     
@@ -136,13 +137,14 @@ extension EditTextFieldView {
 extension EditTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        print("did end editing value \(value)")
         if (value as? String != textField.text) {
             if (textField.text == "") {
                 value = nil;
             } else {
                 value = textField.text;
             }
-            self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
+            delegate?.fieldValueChanged(field, value: value);
         }
     }
 }
@@ -150,13 +152,17 @@ extension EditTextFieldView: UITextFieldDelegate {
 extension EditTextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
+        print("did end editing multi value \(value)")
+        print("textview.text \(textView.text)")
+
         if (value as? String != textView.text) {
             if (textView.text == "") {
                 value = nil;
             } else {
                 value = textView.text;
             }
-            self.delegate?.observationField(self.field, valueChangedTo: value, reloadCell: false);
+            print("field value changed to \(value)")
+            delegate?.fieldValueChanged(field, value: value);
         }
     }
 }

@@ -25,15 +25,15 @@ class EditDropdownFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil, value: String) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String) {
         self.init(field: field, delegate: delegate, value: [value]);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: [String]?) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [String]?) {
         super.init(field: field, delegate: delegate, value: value);
         self.addFieldView();
         setupController();

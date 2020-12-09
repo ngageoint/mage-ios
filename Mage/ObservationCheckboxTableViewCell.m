@@ -29,7 +29,7 @@
     
     if (value != nil) {
         [self.checkboxSwitch setOn:[value boolValue]];
-        [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
+//        [self.delegate observationField:self.fieldDefinition valueChangedTo:value reloadCell:NO];
     } else {
         [self.checkboxSwitch setOn:NO];
     }
@@ -41,7 +41,7 @@
 }
 
 - (void) switchValueChanged:(UISwitch *) theSwitch {
-    [self.delegate observationField:self.fieldDefinition valueChangedTo:[NSNumber numberWithBool:theSwitch.on] reloadCell:NO];
+//    [self.delegate observationField:self.fieldDefinition valueChangedTo:[NSNumber numberWithBool:theSwitch.on] reloadCell:NO];
 }
 
 - (CGFloat) getCellHeightForValue: (id) value {

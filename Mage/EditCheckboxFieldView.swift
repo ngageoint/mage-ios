@@ -42,11 +42,11 @@ class EditCheckboxFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: ObservationEditListener? = nil) {
+    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: false);
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Bool) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Bool) {
         super.init(field: field, delegate: delegate, value: value);
         self.addFieldView();
     }
@@ -76,7 +76,7 @@ class EditCheckboxFieldView : BaseFieldView {
     }
     
     @objc func switchValueChanged(theSwitch: UISwitch) {
-        delegate?.observationField(field, valueChangedTo: theSwitch.isOn, reloadCell: false);
+        delegate?.fieldValueChanged(field, value: theSwitch.isOn);
     }
     
     override func setValid(_ valid: Bool) {

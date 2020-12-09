@@ -11,6 +11,10 @@ import Foundation
 import MaterialComponents.MaterialTextFields
 import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
 
+@objc protocol ObservationFormFieldListener {
+    @objc func fieldValueChanged(_ field: [String : Any], value: Any?);
+}
+
 class ObservationFormView: UIStackView {
     
     var observation: Observation!;
@@ -18,9 +22,10 @@ class ObservationFormView: UIStackView {
     private var form: [String: Any]!;
     private var formIndex: Int!;
     private var fieldViews: [String: BaseFieldView] = [ : ];
-    private var delegate: ObservationEditListener?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var viewController: UIViewController!;
+    private var fieldSelectionDelegate: FieldSelectionDelegate?;
+    private var observationFormListener: ObservationFormListener?;
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
@@ -43,15 +48,18 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, viewController: UIViewController, delegate: ObservationEditListener? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
         self.init(frame: .zero)
+        print("listener \(observationFormListener)")
         self.observation = observation;
         self.form = form;
         self.eventForm = eventForm;
-        self.delegate = delegate;
         self.viewController = viewController;
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.formIndex = formIndex;
+        self.fieldSelectionDelegate = delegate;
+        self.observationFormListener = observationFormListener;
+        print("observation form listener \(self.observationFormListener)")
         constructView();
     }
     
@@ -116,26 +124,24 @@ class ObservationFormView: UIStackView {
     }
 }
 
-extension ObservationFormView: ObservationEditListener {
-    func fieldSelected(_ field: Any!) {
-        delegate?.fieldSelected?(field);
+extension ObservationFormView: FieldSelectionDelegate {
+    func launchFieldSelectionViewController(viewController: UIViewController) {
+        fieldSelectionDelegate?.launchFieldSelectionViewController(viewController: viewController);
     }
-    
-    func observationField(_ field: Any!, valueChangedTo value: Any!, reloadCell reload: Bool) {
-        let fieldDictionary = field as! [String: Any];
-        
-        var newProperties = self.observation.properties as? [String: [[String: Any]]];
+}
+
+extension ObservationFormView: ObservationFormFieldListener {
+    func fieldValueChanged(_ field: [String : Any], value: Any?) {
+        var newProperties = self.observation.properties as? [String: Any];
         if (value == nil) {
-            form.removeValue(forKey: fieldDictionary["name"] as? String ?? "");
+            form.removeValue(forKey: field["name"] as? String ?? "");
         } else {
-            form[fieldDictionary["name"] as? String ?? ""] = value;
+            form[field["name"] as? String ?? ""] = value;
         }
-        
-        newProperties?["forms"]?[0] = form;
+        var forms: [[String: Any]] = newProperties?["forms"] as! [[String: Any]];
+        forms[0] = form;
+        newProperties!["forms"] = forms;
         self.observation.properties = newProperties;
-        
-        self.delegate?.formUpdated?(form, eventForm: eventForm, form: formIndex);
-        
-        delegate?.observationField(field, valueChangedTo: value, reloadCell: reload);
+        self.observationFormListener?.formUpdated(form, eventForm: eventForm!, form: formIndex);
     }
 }

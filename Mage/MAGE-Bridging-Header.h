@@ -9,7 +9,7 @@
 #import "ObservationEditViewController.h"
 #import "ObservationFields.h"
 #import "ObservationEditListener.h"
-#import "ObservationEditGeometryTableViewCell.h"
+//#import "ObservationEditGeometryTableViewCell.h"
 #import "ObservationAccuracy.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
@@ -54,6 +54,9 @@
 #import "FormDefaults.h"
 #import "AttachmentCollectionDataStore.h"
 #import "AudioRecorderViewController.h"
+#import "SelectEditViewController.h"
+#import "GeometryEditCoordinator.h"
+#import "GeometryEditViewController.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"
@@ -64,3 +67,4 @@
 #import "Form.h"
 #import "Location.h"
 #import "GPSLocation.h"
+#import "Team.h"

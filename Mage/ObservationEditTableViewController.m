@@ -118,7 +118,7 @@
 }
 
 - (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition {
-    [self.editDataStore observationField:fieldDefinition valueChangedTo:value reloadCell:YES];
+//    [self.editDataStore observationField:fieldDefinition valueChangedTo:value reloadCell:YES];
 }
 
 - (void)invalidValue:(id)value forFieldDefinition:(NSDictionary *)fieldDefinition {

@@ -77,7 +77,7 @@ class ObservationFormViewTests: KIFSpec {
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
-                
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 maybeRecordSnapshot(view, doneClosure: {
@@ -89,19 +89,19 @@ class ObservationFormViewTests: KIFSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-            
+
             it("observation filled in completely") {
                 observation = ObservationBuilder.createPointObservation();
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller);
-                
+
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
-                
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                
+
                 let fields = eventForm["fields"] as! [[String: Any]];
-                
+
                 for field in fields {
                     if let baseFieldView: BaseFieldView = formView.fieldViewForField(field: field) {
                         if let geometryField = baseFieldView as? EditGeometryView {
@@ -117,7 +117,7 @@ class ObservationFormViewTests: KIFSpec {
                         }
                     }
                 }
-                
+
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -127,74 +127,77 @@ class ObservationFormViewTests: KIFSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-            
+
             it("delegate called when field changes and new value is sent") {
                 let fieldId = "field8";
-                let delegate = MockFieldDelegate();
+                let delegate = MockObservationFormListener();
                 observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
-                
+                print("")
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, observationFormListener: delegate);
+
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
-                
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                                
+
                 tester().waitForView(withAccessibilityLabel: fieldId);
                 tester().enterText("new text", intoViewWithAccessibilityLabel: fieldId);
                 tester().tapView(withAccessibilityLabel: "Done");
-                
-                expect(delegate.fieldChangedCalled).to(beTrue());
-                expect(delegate.newValue as? String).to(equal("new text"));
-                
+
+                tester().waitForAnimationsToFinish();
+                expect(delegate.formUpdatedCalled).to(beTrue());
+                expect(delegate.formUpdatedForm?[fieldId] as? String).to(equal("new text"));
+
                 let newProperties = observation.properties as? [String: [[String: Any]]];
                 let newForm: [String: Any] = newProperties?["forms"]?[0] ?? [ : ];
                 let field8Value: String = newForm[fieldId] as? String ?? "";
-                
+
                 expect(field8Value).to(equal("new text"));
             }
-            
+
             it("delegate called when field is cleared") {
                 let fieldId = "field8";
-                let delegate = MockFieldDelegate();
+                let delegate = MockObservationFormListener();
                 observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
-                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
-                
+                formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, observationFormListener: delegate);
+
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
-                
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                
+
                 tester().waitForView(withAccessibilityLabel: fieldId);
                 tester().enterText("not empty", intoViewWithAccessibilityLabel: fieldId);
                 tester().waitForTappableView(withAccessibilityLabel: "Done");
                 tester().tapView(withAccessibilityLabel: "Done");
+                tester().waitForAbsenceOfSoftwareKeyboard();
                 
-                expect(delegate.fieldChangedCalled).toEventually(beTrue());
-                expect(delegate.newValue as? String).to(equal("not empty"));
+                expect(delegate.formUpdatedCalled).to(beTrue());
+                expect(delegate.formUpdatedForm?[fieldId] as? String).to(equal("not empty"));
                 
-                delegate.fieldChangedCalled = false;
-                
+                delegate.formUpdatedCalled = false;
+
                 tester().waitForView(withAccessibilityLabel: fieldId);
                 tester().clearTextFromView(withAccessibilityLabel: fieldId);
                 tester().waitForTappableView(withAccessibilityLabel: "Done");
                 tester().tapView(withAccessibilityLabel: "Done");
+
+                expect(delegate.formUpdatedCalled).toEventually(beTrue());
+                expect(delegate.formUpdatedForm?.index(forKey: fieldId)).to(beNil());
                 
-                expect(delegate.fieldChangedCalled).toEventually(beTrue());
-                expect(delegate.newValue as? String).to(beNil());
-                                
                 let newProperties = observation.properties as? [String: [[String: Any]]];
                 let newForm: [String: Any] = newProperties?["forms"]?[0] ?? [ : ];
                 expect(newForm[fieldId]).to(beNil());
             }
-            
+
             it("delegate called when geometry field is selected") {
                 let fieldId = "field22";
                 let delegate = MockFieldDelegate();
@@ -203,19 +206,18 @@ class ObservationFormViewTests: KIFSpec {
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
-                
+
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
-                
+
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                
+
                 tester().waitForView(withAccessibilityLabel: fieldId);
                 tester().tapView(withAccessibilityLabel: fieldId);
-                
-                expect(delegate.fieldSelectedCalled).toEventually(beTrue());
-                let selectedField = delegate.selectedField as? [String: Any];
-                expect(selectedField?["name"] as? String).to(equal(fieldId));
+
+                expect(delegate.launchFieldSelectionViewControllerCalled).toEventually(beTrue());
+                expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
             }
         }
     }

@@ -12,15 +12,23 @@ import MaterialComponents.MDCTextField;
 class BaseFieldView : UIView {
     internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var field: [String: Any]!;
-    internal var delegate: ObservationEditListener?;
+    internal var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
     internal var fieldValueValid: Bool! = false;
     internal var value: Any?;
+    
+    private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
+        var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil;
+        if let safeDelegate: FieldSelectionDelegate = delegate {
+            fieldSelectionCoordinator = FieldSelectionCoordinator(field: field, formField: self, delegate: safeDelegate);
+        }
+        return fieldSelectionCoordinator;
+    }();
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener?, value: Any?) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?, value: Any?) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         
@@ -64,15 +72,16 @@ class BaseFieldView : UIView {
     }
     
     func addTapRecognizer() -> UIView {
+        
         let tapView = UIView(forAutoLayout: ());
         self.addSubview(tapView);
         tapView.autoPinEdgesToSuperviewEdges();
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapView.addGestureRecognizer(tapGesture)
         return tapView;
     }
     
-    @objc func handleTap(sender: UITapGestureRecognizer) {
-        delegate?.fieldSelected?(field);
+    @objc func handleTap() {
+        fieldSelectionCoordinator?.fieldSelected();
     }
 }

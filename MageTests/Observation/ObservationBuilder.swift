@@ -10,15 +10,20 @@ import Foundation
 import MagicalRecord
 
 class ObservationBuilder {
-    static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
-        let observation: Observation = Observation.mr_createEntity()!;
+    static func createBlankObservation(_ eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
+        var observation: Observation!;
+        if let safeContext = context {
+            observation = Observation.mr_createEntity(in: safeContext);
+        } else {
+            observation = Observation.mr_createEntity()!;
+        }
         observation.eventId = eventId;
         let observationProperties: [String:Any] = [:]
         observation.properties = observationProperties;
         return observation
     }
     
-    static func createObservation(jsonFileName: String, eventId: NSNumber = 0) -> Observation {
+    static func createObservation(jsonFileName: String, eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
         guard let pathString = Bundle(for: ObservationBuilder.self).path(forResource: jsonFileName, ofType: "json") else {
             fatalError("jsonFileName not found")
         }
@@ -44,33 +49,33 @@ class ObservationBuilder {
         return observation;
     }
     
-    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry) -> Observation {
+    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry, context: NSManagedObjectContext? = nil) -> Observation {
         var observation: Observation;
-        observation = createBlankObservation(eventId);
+        observation = createBlankObservation(eventId, context: context);
         if (jsonFileName != nil) {
-            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId);
+            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId, context: context);
         }
         observation.setGeometry(geometry);
         return observation;
     }
     
-    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-        return createGeometryObservation(jsonFileName: jsonFileName, geometry: point);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: point, context: context);
     }
     
-    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any]
         
         let line: SFLineString = SFLineString(points: points);
-        return createGeometryObservation(jsonFileName: jsonFileName, geometry: line);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: line, context: context);
     }
     
-    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0102) as Any, SFPoint(x: -105.2678, andY: 40.0102) as Any]
         let line: SFLineString = SFLineString(points: points);
         let poly: SFPolygon = SFPolygon(ring: line);
-        return createGeometryObservation(jsonFileName: jsonFileName, geometry: poly);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: poly, context: context);
     }
     
     static func addObservationProperty(observation: Observation, key: String, value: Any) {

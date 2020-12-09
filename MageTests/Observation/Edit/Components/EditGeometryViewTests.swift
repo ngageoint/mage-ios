@@ -57,6 +57,7 @@ class EditGeometryViewTests: KIFSpec {
                 field = [
                     "title": "Field Title",
                     "name": "field8",
+                    "type": "geometry",
                     "id": 8
                 ];
                 
@@ -571,9 +572,10 @@ class EditGeometryViewTests: KIFSpec {
                 
                 controller.view = view;
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
-                geometryFieldView.handleTap(sender: UITapGestureRecognizer());
-                expect(delegate.fieldSelectedCalled).to(beTrue());
-                expect(delegate.selectedField).toNot(beNil());
+                geometryFieldView.handleTap();
+                expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
+                expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
+
             }
         }
     }

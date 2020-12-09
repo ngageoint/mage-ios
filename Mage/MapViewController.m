@@ -35,7 +35,7 @@
 #import "MAGE-Swift.h"
 #import <PureLayout.h>
 
-#import "ObservationEditCoordinator.h"
+#import "ObservationEditCoordinator_legacy.h"
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
@@ -420,7 +420,7 @@
 }
 
 - (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
-    ObservationEditCoordinator *edit;
+    ObservationEditCoordinator_legacy *edit;
     SFPoint *point;
     
     CLLocationAccuracy accuracy = 0;
@@ -435,7 +435,7 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
     [self.childCoordinators addObject:edit];
     [edit start];
 }

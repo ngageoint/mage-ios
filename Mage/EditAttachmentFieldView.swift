@@ -130,7 +130,7 @@ class EditAttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: ObservationEditListener? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.attachmentCreationCoordinator = attachmentCreationCoordinator;
@@ -241,7 +241,7 @@ extension EditAttachmentFieldView : AttachmentCreationCoordinatorDelegate {
     func attachmentCreated(attachment: Attachment) {
         print("attachment was created \(attachment)")
         self.addAttachment(attachment);
-        self.delegate?.observationField(field, valueChangedTo: self.attachments, reloadCell: false);
+        delegate?.fieldValueChanged(field, value: self.attachments);
     }
     
     func attachmentCreationCancelled() {
