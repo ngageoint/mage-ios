@@ -137,7 +137,7 @@
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSMutableArray *feedRemoteIds = [Feed populateFeedsFromJson:responseObject inEventId:eventId inContext:localContext];
+            [Feed populateFeedsFromJson:responseObject inEventId:eventId inContext:localContext];
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {
                 if (failure) {
@@ -170,7 +170,7 @@
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSArray *features = [responseObject mutableArrayValueForKeyPath:@"items.features"];
-            NSMutableArray *feedRemoteIds = [Feed populateFeedItemsFromJson:features inFeedId:feedId inContext:localContext];
+            [Feed populateFeedItemsFromJson:features inFeedId:feedId inContext:localContext];
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {
                 if (failure) {

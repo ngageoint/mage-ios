@@ -74,10 +74,11 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 }
 
 - (void) stop {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_attachmentPushTimer isValid]) {
-            [_attachmentPushTimer invalidate];
-            _attachmentPushTimer = nil;
+        if ([weakSelf.attachmentPushTimer isValid]) {
+            [weakSelf.attachmentPushTimer invalidate];
+            weakSelf.attachmentPushTimer = nil;
         }
     });
     

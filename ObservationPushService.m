@@ -320,10 +320,11 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
 -(void) stop {
     NSLog(@"stop pushing observations");
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_observationPushTimer isValid]) {
-            [_observationPushTimer invalidate];
-            _observationPushTimer = nil;
+        if ([weakSelf.observationPushTimer isValid]) {
+            [weakSelf.observationPushTimer invalidate];
+            weakSelf.observationPushTimer = nil;
         }
     });
 

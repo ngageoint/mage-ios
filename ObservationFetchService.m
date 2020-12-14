@@ -57,7 +57,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 - (void) scheduleTimer {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:_interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+        weakSelf.observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:NO];
     });
 }
 

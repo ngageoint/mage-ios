@@ -20,9 +20,7 @@
 #import "MageServer.h"
 #import "GeometryDeserializer.h"
 #import "SFGeometry.h"
-#import "GeometryUtility.h"
 #import "GeometrySerializer.h"
-#import "GeometryUtility.h"
 #import "SFPolygon.h"
 #import "SFLineString.h"
 #import "SFGeometryUtils.h"
@@ -338,14 +336,14 @@ Event *_event;
 
 - (CLLocation *) location {
     SFGeometry *geometry = [self getGeometry];
-    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    SFPoint *point = [SFGeometryUtils centroidOfGeometry:geometry];
     return [[CLLocation alloc] initWithLatitude:[point.y doubleValue] longitude:[point.x doubleValue]];
 }
 
 - (SFGeometry *) getGeometry{
     SFGeometry *geometry = nil;
     if(self.geometryData != nil){
-        geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+        geometry = [SFGeometryUtils decodeGeometry:self.geometryData];
     }
     return geometry;
 }
@@ -353,7 +351,7 @@ Event *_event;
 - (void) setGeometry: (SFGeometry *) geometry{
     NSData *data = nil;
     if(geometry != nil){
-        data = [GeometryUtility toGeometryDataFromGeometry:geometry];
+        data = [SFGeometryUtils encodeGeometry:geometry];
     }
     [self setGeometryData:data];
 }
@@ -893,7 +891,7 @@ Event *_event;
 
     // geometry
     SFGeometry *geometry = [self getGeometry];
-    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    SFPoint *point = [SFGeometryUtils centroidOfGeometry:geometry];
     [text appendFormat:@"Latitude, Longitude:\n%f, %f\n\n", [point.y doubleValue], [point.x doubleValue]];
 
     // type

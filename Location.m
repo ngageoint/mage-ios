@@ -15,14 +15,13 @@
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import "SFGeometryUtils.h"
-#import "GeometryUtility.h"
 
 @implementation Location
 
 - (SFGeometry *) getGeometry {
     SFGeometry *geometry = nil;
     if (self.geometryData != nil){
-        geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+        geometry = [SFGeometryUtils decodeGeometry:self.geometryData];
     }
     return geometry;
 }
@@ -30,7 +29,7 @@
 - (void) setGeometry: (SFGeometry *) geometry {
     NSData *data = nil;
     if (geometry != nil){
-        data = [GeometryUtility toGeometryDataFromGeometry:geometry];
+        data = [SFGeometryUtils encodeGeometry:geometry];
     }
     [self setGeometryData:data];
 }
