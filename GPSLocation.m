@@ -14,7 +14,6 @@
 #import "Server.h"
 #import "SFPoint.h"
 #import "SFGeometryUtils.h"
-#import "GeometryUtility.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation GPSLocation
@@ -22,7 +21,7 @@
 - (SFGeometry *) getGeometry {
     SFGeometry *geometry = nil;
     if (self.geometryData != nil){
-        geometry = [GeometryUtility toGeometryFromGeometryData:self.geometryData];
+        geometry = [SFGeometryUtils decodeGeometry:self.geometryData];
     }
     return geometry;
 }
@@ -30,7 +29,7 @@
 - (void) setGeometry: (SFGeometry *) geometry {
     NSData *data = nil;
     if (geometry != nil){
-        data = [GeometryUtility toGeometryDataFromGeometry:geometry];
+        data = [SFGeometryUtils encodeGeometry:geometry];
     }
     [self setGeometryData:data];
 }
@@ -77,7 +76,7 @@
                                @"timestamp": [location.timestamp iso8601String],
                                @"battery_level": [NSNumber numberWithDouble:device.batteryLevel*100],
                                @"battery_state": batteryState,
-                               @"telephone_network": telephonyInfo.currentRadioAccessTechnology != nil ? telephonyInfo.currentRadioAccessTechnology : @"Unknown",
+                               @"telephone_network": telephonyInfo.serviceCurrentRadioAccessTechnology != nil ? telephonyInfo.serviceCurrentRadioAccessTechnology : @"Unknown",
                                @"network": manager.localizedNetworkReachabilityStatusString,
                                @"mage_version": [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber],
                                @"provider": @"gps",

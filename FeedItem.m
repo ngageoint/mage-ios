@@ -8,7 +8,7 @@
 //
 
 #import "FeedItem.h"
-#import "GeometryUtility.h"
+#import "SFGeometryUtils.h"
 #import "GeometryDeserializer.h"
 
 @implementation FeedItem
@@ -42,11 +42,11 @@
 }
 
 - (SFGeometry *) simpleFeature {
-    return [GeometryUtility toGeometryFromGeometryData:self.geometry];
+    return [SFGeometryUtils decodeGeometry:self.geometry];
 }
 
 - (void) setSimpleFeature:(SFGeometry *)simpleFeature {
-    self.geometry = [GeometryUtility toGeometryDataFromGeometry:simpleFeature];
+    self.geometry = [SFGeometryUtils encodeGeometry:simpleFeature];
 }
 
 - (nullable NSString *) primaryValue {
