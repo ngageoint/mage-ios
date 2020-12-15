@@ -12,7 +12,6 @@
 #import "ObservationImage.h"
 #import "LocationService.h"
 #import "SFPoint.h"
-#import "GeometryUtility.h"
 #import "SFGeometryUtils.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
@@ -237,7 +236,7 @@ static float paddingPercentage = .1;
     [self addMapShape:geometry];
     
     if (self.shapeType == SF_POINT) {
-        SFPoint *centroid = [GeometryUtility centroidOfGeometry:geometry];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
         MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
         [self.map setRegion:viewRegion animated:NO];

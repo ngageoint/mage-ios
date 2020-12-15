@@ -13,7 +13,6 @@
 #import "Server.h"
 #import "AttachmentSelectionDelegate.h"
 #import "Event.h"
-#import "GeometryUtility.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 

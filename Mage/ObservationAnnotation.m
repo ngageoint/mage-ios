@@ -8,9 +8,9 @@
 
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
-#import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
+#import "SFGeometryUtils.h"
 #import "Theme+UIResponder.h"
 
 @interface ObservationAnnotation ()
@@ -28,7 +28,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
 }
 
 -(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (SFGeometry *) geometry {
-    SFPoint *point = [GeometryUtility centroidOfGeometry:geometry];
+    SFPoint *point = [SFGeometryUtils centroidOfGeometry:geometry];
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]);
     self.point = YES;
     return [self initWithObservation:observation andEventForms: forms andLocation:location];

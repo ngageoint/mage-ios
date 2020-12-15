@@ -19,7 +19,6 @@
 #import "ObservationEditViewController.h"
 #import "UserTableViewController.h"
 #import "MapDelegate.h"
-#import "GeometryUtility.h"
 #import "ObservationPushService.h"
 #import "ObservationEditCoordinator.h"
 #import <MobileCoreServices/MobileCoreServices.h>

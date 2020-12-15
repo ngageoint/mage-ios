@@ -9,7 +9,7 @@
 #import "FormPickerViewController.h"
 #import "FormCollectionViewCell.h"
 #import <MapKit/MapKit.h>
-#import "GeometryUtility.h"
+#import "SFGeometryUtils.h"
 #import "KTCenterFlowLayout.h"
 #import "Theme+UIResponder.h"
 
@@ -139,7 +139,7 @@ static NSString *CellIdentifier = @"FormCell";
 
 - (void) setupMapBackground {
     if (self.location != nil) {
-        SFPoint *point = [GeometryUtility centroidOfGeometry:self.location];
+        SFPoint *point = [SFGeometryUtils centroidOfGeometry:self.location];
         MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
         MKCoordinateRegion viewRegion = [self.mapView regionThatFits:region];
         [self.mapView setRegion:viewRegion animated:NO];

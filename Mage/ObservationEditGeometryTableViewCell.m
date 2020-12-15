@@ -10,7 +10,6 @@
 #import "MapDelegate.h"
 #import "ObservationAnnotation.h"
 #import "ObservationAccuracy.h"
-#import "GeometryUtility.h"
 #import "MapObservationManager.h"
 #import "MapAnnotationObservation.h"
 #import "GPKGMapShapeConverter.h"
@@ -141,7 +140,7 @@
 
         }
         
-        SFPoint *point = [GeometryUtility centroidOfGeometry:self.geometry];
+        SFPoint *point = [SFGeometryUtils centroidOfGeometry:self.geometry];
         self.locationField.text = [CoordinateDisplay displayFromCoordinateWithCoordinate:CLLocationCoordinate2DMake([point.y doubleValue], [point.x doubleValue])];
         if (!self.isGeometryField) {
             GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
