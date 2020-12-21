@@ -1,5 +1,5 @@
 //
-//  EditDropdownFieldView.swift
+//  DropdownFieldView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 5/27/20.
@@ -9,7 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditDropdownFieldView : BaseFieldView {
+class DropdownFieldView : BaseFieldView {
     
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());

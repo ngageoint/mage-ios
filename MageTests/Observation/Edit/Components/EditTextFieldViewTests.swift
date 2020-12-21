@@ -19,9 +19,9 @@ class EditTextFieldViewTests: KIFSpec {
         
         let recordSnapshots = false;
         
-        describe("EditTextFieldView Single Line") {
+        describe("TextFieldView Single Line") {
             
-            var textFieldView: EditTextFieldView!
+            var textFieldView: TextFieldView!
             var field: [String: Any]!
             
             var view: UIView!
@@ -63,7 +63,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                textFieldView = EditTextFieldView(field: field, editMode: false, value: "Hello");
+                textFieldView = TextFieldView(field: field, editMode: false, value: "Hello");
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -71,12 +71,12 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("email field") {
-                textFieldView = EditTextFieldView(field: field, keyboardType: .emailAddress);
+                textFieldView = TextFieldView(field: field, keyboardType: .emailAddress);
                 expect(textFieldView.textField.keyboardType) == .emailAddress;
             }
             
             it("no initial value") {
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
  
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -87,7 +87,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("initial value set") {
-                textFieldView = EditTextFieldView(field: field, value: "Hello");
+                textFieldView = TextFieldView(field: field, value: "Hello");
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -95,7 +95,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set value later") {
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -107,7 +107,7 @@ class EditTextFieldViewTests: KIFSpec {
             it("set value via input") {
                 let delegate = MockFieldDelegate();
 
-                textFieldView = EditTextFieldView(field: field, delegate: delegate);
+                textFieldView = TextFieldView(field: field, delegate: delegate);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -122,7 +122,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set valid false") {
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -132,7 +132,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set valid true after being invalid") {
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -144,7 +144,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
                 
                 expect(textFieldView.isEmpty()) == true;
                 expect(textFieldView.isValid(enforceRequired: true)) == false;
@@ -152,7 +152,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field is valid if not empty") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field, value: "valid");
+                textFieldView = TextFieldView(field: field, value: "valid");
                 
                 expect(textFieldView.isEmpty()) == false;
                 expect(textFieldView.isValid(enforceRequired: true)) == true;
@@ -160,7 +160,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field has title which indicates required") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field);
+                textFieldView = TextFieldView(field: field);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -170,7 +170,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("test delegate") {
                 let delegate = MockFieldDelegate();
-                textFieldView = EditTextFieldView(field: field, delegate: delegate);
+                textFieldView = TextFieldView(field: field, delegate: delegate);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -184,7 +184,7 @@ class EditTextFieldViewTests: KIFSpec {
             it("done button should send nil as new value") {
                 let delegate = MockFieldDelegate();
 
-                textFieldView = EditTextFieldView(field: field, delegate: delegate, value: "old value");
+                textFieldView = TextFieldView(field: field, delegate: delegate, value: "old value");
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -198,7 +198,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("done button should change text") {
-                textFieldView = EditTextFieldView(field: field, value: "old value");
+                textFieldView = TextFieldView(field: field, value: "old value");
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -210,7 +210,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("cancel button should not change text") {
-                textFieldView = EditTextFieldView(field: field, value: "old value");
+                textFieldView = TextFieldView(field: field, value: "old value");
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -221,9 +221,9 @@ class EditTextFieldViewTests: KIFSpec {
             }
         }
         
-        describe("EditTextFieldView Multi Line") {
+        describe("TextFieldView Multi Line") {
             
-            var textFieldView: EditTextFieldView!
+            var textFieldView: TextFieldView!
             var field: [String: Any]!
                         
             var view: UIView!
@@ -258,7 +258,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                textFieldView = EditTextFieldView(field: field, editMode: false, value: "Hi\nHello");
+                textFieldView = TextFieldView(field: field, editMode: false, value: "Hi\nHello");
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -266,7 +266,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -274,7 +274,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("initial value set") {
-                textFieldView = EditTextFieldView(field: field, value: "Hello", multiline: true);
+                textFieldView = TextFieldView(field: field, value: "Hello", multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -282,7 +282,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set value later") {
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -292,7 +292,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set multi line value later") {
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -305,7 +305,7 @@ class EditTextFieldViewTests: KIFSpec {
             it("set value via input") {
                 let delegate = MockFieldDelegate();
                 
-                textFieldView = EditTextFieldView(field: field, delegate: delegate, multiline: true);
+                textFieldView = TextFieldView(field: field, delegate: delegate, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -320,7 +320,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set valid false") {
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -330,7 +330,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("set valid true after being invalid") {
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -342,7 +342,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 expect(textFieldView.isEmpty()) == true;
                 expect(textFieldView.isValid(enforceRequired: true)) == false;
@@ -350,7 +350,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field is valid if not empty") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field, value: "valid", multiline: true);
+                textFieldView = TextFieldView(field: field, value: "valid", multiline: true);
                 
                 expect(textFieldView.isEmpty()) == false;
                 expect(textFieldView.isValid(enforceRequired: true)) == true;
@@ -358,7 +358,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("required field has title which indicates required") {
                 field[FieldKey.required.key] = true;
-                textFieldView = EditTextFieldView(field: field, multiline: true);
+                textFieldView = TextFieldView(field: field, multiline: true);
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
@@ -368,7 +368,7 @@ class EditTextFieldViewTests: KIFSpec {
             
             it("test delegate") {
                 let delegate = MockFieldDelegate();
-                textFieldView = EditTextFieldView(field: field, delegate: delegate, multiline: true);
+                textFieldView = TextFieldView(field: field, delegate: delegate, multiline: true);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 textFieldView.multilineTextField.text = "this is a new value";
@@ -381,7 +381,7 @@ class EditTextFieldViewTests: KIFSpec {
             it("done button should send nil as new value") {
                 let delegate = MockFieldDelegate();
                 
-                textFieldView = EditTextFieldView(field: field, delegate: delegate, value: "old value");
+                textFieldView = TextFieldView(field: field, delegate: delegate, value: "old value");
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -395,7 +395,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("done button should change text") {
-                textFieldView = EditTextFieldView(field: field, value: "old value", multiline: true);
+                textFieldView = TextFieldView(field: field, value: "old value", multiline: true);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -407,7 +407,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
             
             it("cancel button should not change text") {
-                textFieldView = EditTextFieldView(field: field, value: "old value", multiline: true);
+                textFieldView = TextFieldView(field: field, value: "old value", multiline: true);
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 

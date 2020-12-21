@@ -1,5 +1,5 @@
 //
-//  EditDateView.swift
+//  DateView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 5/7/20.
@@ -9,7 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditDateView : BaseFieldView {
+class DateView : BaseFieldView {
     private var date: Date?;
     
     internal lazy var datePicker: UIDatePicker = {
@@ -143,7 +143,7 @@ class EditDateView : BaseFieldView {
     }
 }
 
-extension EditDateView: UITextFieldDelegate {
+extension DateView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
         self.value = nil;

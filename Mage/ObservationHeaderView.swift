@@ -79,8 +79,8 @@ class ObservationHeaderView : MDCCard {
         return locationField;
     }()
     
-    private lazy var geometryView: EditGeometryView = {
-        let geometryView = EditGeometryView(field: locationField, editMode: false, delegate: nil, observation: self.observation, eventForms: nil, mapEventDelegate: nil);
+    private lazy var geometryView: GeometryView = {
+        let geometryView = GeometryView(field: locationField, editMode: false, delegate: nil, observation: self.observation, eventForms: nil, mapEventDelegate: nil);
         
         return geometryView;
     }()

@@ -1,8 +1,8 @@
 //
-//  ObservationGeometryView.swift
+//  GeometryView.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 12/17/20.
+//  Created by Daniel Barela on 5/8/20.
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -10,14 +10,11 @@ import Foundation
 import MaterialComponents.MDCTextField;
 import MaterialComponents.MDCButton;
 
-class ObservationGeometryView : UIView {
-    internal var field: [String: Any]!;
-    private var value: SFGeometry?;
+class GeometryView : BaseFieldView {
     private var accuracy: Double?;
     private var provider: String?;
     private var mapEventDelegate: MKMapViewDelegate?;
     
-    private var showFieldName = false;
     private var observation: Observation?;
     private var eventForms: [[String: Any]]?;
     
@@ -25,17 +22,6 @@ class ObservationGeometryView : UIView {
     
     private lazy var mapDelegate: MapDelegate = {
         return MapDelegate();
-    }()
-    
-    private lazy var fieldNameLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
-        let label = UILabel(forAutoLayout: ());
-        label.textColor = .systemGray;
-        var font = containerScheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
-        label.font = font;
-        
-        return label;
     }()
     
     private lazy var latitudeLongitudeButton: MDCButton = {
@@ -59,7 +45,7 @@ class ObservationGeometryView : UIView {
     lazy var mapView: MKMapView = {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.mapType = .standard;
-        mapView.autoSetDimension(.height, toSize: 200);
+        mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
         mapDelegate.setMapView(mapView);
         mapView.delegate = mapDelegate;
         mapDelegate.setupListeners();
@@ -85,23 +71,20 @@ class ObservationGeometryView : UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
-        self.init(field: field, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil, showFieldName: Bool = false) {
-        let accuracy = observation?.properties?["accuracy"] as? Double;
-        let provider = observation?.properties?["provider"] as? String;
-        self.init(field: field, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms, showFieldName: showFieldName);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+        let accuracy = (observation?.properties?["accuracy"]) as? Double;
+        let provider = (observation?.properties?["provider"]) as? String;
+        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil, showFieldName: Bool = false) {
-        super.init(frame: .zero);
-        super.configureForAutoLayout();
-        self.field = field;
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.observation = observation;
         self.eventForms = eventForms;
-        self.showFieldName = showFieldName;
         
         mapDelegate.setMapEventDelegte(mapEventDelegate);
         buildView();
@@ -113,14 +96,16 @@ class ObservationGeometryView : UIView {
             addToMapAsObservation();
         }
         
-        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
-        } else {
-            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
-        }
-        
-        if ((field[FieldKey.required.key] as? Bool) == true) {
-            fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
+        if (field[FieldKey.title.key] != nil) {
+            if (UserDefaults.standard.showMGRS ?? false) {
+                fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
+            } else {
+                fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
+            }
+            
+            if ((field[FieldKey.required.key] as? Bool) == true) {
+                fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
+            }
         }
     }
     
@@ -140,9 +125,9 @@ class ObservationGeometryView : UIView {
     func addToMap() {
         if (self.value != nil) {
             let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter();
-            let shape: GPKGMapShape = shapeConverter.toShape(with: (self.value));
+            let shape: GPKGMapShape = shapeConverter.toShape(with: (self.value as? SFGeometry));
             var options: GPKGMapPointOptions? = nil;
-            if ((self.value)?.geometryType != SF_POINT) {
+            if ((self.value as? SFGeometry)?.geometryType != SF_POINT) {
                 options = GPKGMapPointOptions();
                 options!.image = UIImage();
             }
@@ -151,9 +136,9 @@ class ObservationGeometryView : UIView {
             setMapRegion();
         }
     }
-    
+
     func setMapRegion() {
-        if let centroid = (self.value)?.centroid() {
+        if let centroid = (self.value as? SFGeometry)?.centroid() {
             var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), span: MKCoordinateSpan(latitudeDelta: 0.03125, longitudeDelta: 0.03125));
             if (accuracy != nil) {
                 let coordinate = CLLocationCoordinate2DMake(centroid.y as! CLLocationDegrees, centroid.x as! CLLocationDegrees);
@@ -166,39 +151,40 @@ class ObservationGeometryView : UIView {
     }
     
     func buildView() {
-        let wrapper = UIView(forAutoLayout: ());
-        self.addSubview(wrapper);
-        wrapper.autoPinEdgesToSuperviewEdges();
+        if (field[FieldKey.title.key] != nil) {
+            if (editMode) {
+                viewStack.addArrangedSubview(fieldNameSpacerView);
+                viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
+            } else {
+                viewStack.addArrangedSubview(fieldNameLabel);
+                viewStack.setCustomSpacing(4, after: fieldNameLabel);
+            }
+        }
+        viewStack.addArrangedSubview(mapView);
         
-        wrapper.addSubview(mapView);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: showFieldName ? 16 : 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
-        
-//        wrapper.addSubview(editFab);
-//        editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
-//        editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
-        
-        if (showFieldName) {
-            wrapper.addSubview(fieldNameLabel);
-            fieldNameLabel.autoPinEdge(toSuperviewEdge: .top);
-            fieldNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+        if (editMode) {
+            self.addSubview(editFab);
+            editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
+            editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
         }
         
+        let wrapper = UIView(forAutoLayout: ());
         wrapper.addSubview(latitudeLongitudeButton);
-        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left);
-        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
-        latitudeLongitudeButton.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: 8);
+        latitudeLongitudeButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), excludingEdge: .right);
         
         wrapper.addSubview(accuracyLabel);
         accuracyLabel.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton);
         accuracyLabel.autoPinEdge(.top, to: .top, of: latitudeLongitudeButton);
         accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
         
+        viewStack.addArrangedSubview(wrapper);
+        
         mapDelegate.ensureMapLayout();
     }
     
-//    override func isEmpty() -> Bool{
-//        return self.value == nil;
-//    }
+    override func isEmpty() -> Bool{
+        return self.value == nil;
+    }
     
     func setAccuracy(_ accuracy: Double?, provider: String?) {
         self.accuracy = accuracy;
@@ -213,22 +199,22 @@ class ObservationGeometryView : UIView {
                 }
                 
                 accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy!);
-                if let centroid = (self.value)!.centroid() {
+                if let centroid = (self.value as? SFGeometry)!.centroid() {
                     let overlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
-                    self.mapView.addOverlay(overlay);
+                        self.mapView.addOverlay(overlay);
                 }
             }
         }
     }
     
-    func setValue(_ value: Any) {
+    override func setValue(_ value: Any) {
         self.setValue(value as? SFGeometry);
     }
     
     func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
         self.value = value;
         if (value != nil) {
-            if let point: SFPoint = (self.value)!.centroid() {
+            if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
                 if (UserDefaults.standard.bool(forKey: "showMGRS")) {
                     latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
                 } else {
@@ -243,7 +229,13 @@ class ObservationGeometryView : UIView {
         }
     }
     
-    @objc func handleTap() {
-//        fieldSelectionCoordinator?.fieldSelected();
+    override func setValid(_ valid: Bool) {
+        if (valid) {
+            latitudeLongitudeButton.applyTextTheme(withScheme: globalContainerScheme());
+            fieldNameLabel.textColor = .systemGray;
+        } else {
+            latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
+            fieldNameLabel.textColor = .systemRed;
+        }
     }
 }

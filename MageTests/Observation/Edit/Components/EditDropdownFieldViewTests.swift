@@ -17,14 +17,14 @@ class EditDropdownFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("EditDropdownFieldView Single selection") {
+        describe("DropdownFieldView Single selection") {
             let recordSnapshots = false;
             var completeTest = false;
             
             var controller: UIViewController!
             var window: UIWindow!;
             
-            var dropdownFieldView: EditDropdownFieldView!
+            var dropdownFieldView: DropdownFieldView!
             var view: UIView!
             var field: [String: Any]!
             
@@ -70,7 +70,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                dropdownFieldView = EditDropdownFieldView(field: field, editMode: false, value: "The Value");
+                dropdownFieldView = DropdownFieldView(field: field, editMode: false, value: "The Value");
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -87,7 +87,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                dropdownFieldView = EditDropdownFieldView(field: field);
+                dropdownFieldView = DropdownFieldView(field: field);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -105,7 +105,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("initial value set") {
-                dropdownFieldView = EditDropdownFieldView(field: field, value: "Hello");
+                dropdownFieldView = DropdownFieldView(field: field, value: "Hello");
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -125,7 +125,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("set value via input") {
                 let delegate = MockFieldDelegate();
-                dropdownFieldView = EditDropdownFieldView(field: field, delegate: delegate);
+                dropdownFieldView = DropdownFieldView(field: field, delegate: delegate);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -138,7 +138,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("initial value set with multiple values") {
-                dropdownFieldView = EditDropdownFieldView(field: field, value: ["Hello", "hi"]);
+                dropdownFieldView = DropdownFieldView(field: field, value: ["Hello", "hi"]);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -157,7 +157,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("set value later") {
-                dropdownFieldView = EditDropdownFieldView(field: field);
+                dropdownFieldView = DropdownFieldView(field: field);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -178,7 +178,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("required field should show status") {
                 field[FieldKey.required.key] = true;
-                dropdownFieldView = EditDropdownFieldView(field: field);
+                dropdownFieldView = DropdownFieldView(field: field);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -198,7 +198,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("required field should show status after value has been added") {
                 field[FieldKey.required.key] = true;
-                dropdownFieldView = EditDropdownFieldView(field: field);
+                dropdownFieldView = DropdownFieldView(field: field);
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();

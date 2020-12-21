@@ -17,12 +17,12 @@ class EditGeometryViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("EditGeometryView") {
+        describe("GeometryView") {
             var field: [String: Any]!
             let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
-            var geometryFieldView: EditGeometryView!
+            var geometryFieldView: GeometryView!
             var view: UIView!
             var controller: ContainingUIViewController!
             var window: UIWindow!;
@@ -93,7 +93,7 @@ class EditGeometryViewTests: KIFSpec {
                 }
 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
 
                     view.addSubview(geometryFieldView)
                     geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -125,7 +125,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -155,7 +155,7 @@ class EditGeometryViewTests: KIFSpec {
 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -186,7 +186,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -217,7 +217,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -245,7 +245,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -276,7 +276,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -308,7 +308,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -342,7 +342,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -374,7 +374,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -407,7 +407,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -436,7 +436,7 @@ class EditGeometryViewTests: KIFSpec {
                 }
 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
 
                     view.addSubview(geometryFieldView)
                     geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -469,7 +469,7 @@ class EditGeometryViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
                     geometryFieldView.setValue(point, accuracy: 100.487235, provider: "gps");
                     
                     view.addSubview(geometryFieldView)
@@ -501,7 +501,7 @@ class EditGeometryViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                    geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
                     geometryFieldView.setValue(point, accuracy: 100.487235);
                     
                     view.addSubview(geometryFieldView)
@@ -530,7 +530,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -558,7 +558,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -577,7 +577,7 @@ class EditGeometryViewTests: KIFSpec {
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
                 
-                geometryFieldView = EditGeometryView(field: field);
+                geometryFieldView = GeometryView(field: field);
 
                 expect(geometryFieldView.isEmpty()) == true;
                 expect(geometryFieldView.isValid(enforceRequired: true)) == false;
@@ -587,7 +587,7 @@ class EditGeometryViewTests: KIFSpec {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 field[FieldKey.required.key] = true;
                 
-                geometryFieldView = EditGeometryView(field: field, value: point);
+                geometryFieldView = GeometryView(field: field, value: point);
                 
                 expect(geometryFieldView.isEmpty()) == false;
                 expect(geometryFieldView.isValid(enforceRequired: true)) == true;
@@ -607,7 +607,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();
@@ -626,7 +626,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, delegate: delegate);
+                geometryFieldView = GeometryView(field: field, delegate: delegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();

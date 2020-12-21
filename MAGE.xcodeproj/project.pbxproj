@@ -187,7 +187,6 @@
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
 		F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738870E258A999100EDA036 /* ObservationHeaderView.swift */; };
 		F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388714258AABE800EDA036 /* ObservationImportantView.swift */; };
-		F7388719258BA1C400EDA036 /* ObservationGeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388718258BA1C400EDA036 /* ObservationGeometryView.swift */; };
 		F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738871C258BA22500EDA036 /* UIButtonInsets.swift */; };
 		F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388720258BB75A00EDA036 /* ObservationActionsView.swift */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
@@ -241,10 +240,9 @@
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76EB1DE247C0EAA0089F3AC /* FormKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DD247C0EAA0089F3AC /* FormKey.swift */; };
 		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
-		F76EB1E2247D83EC0089F3AC /* EditNumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */; };
+		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
-		F7708523258C155F008903BA /* ObservationAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7708522258C155F008903BA /* ObservationAttachmentView.swift */; };
 		F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
 		F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
@@ -260,10 +258,10 @@
 		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
 		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F7813A8124621237003666ED /* ObservationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8024621237003666ED /* ObservationFormView.swift */; };
-		F7813A8324632E9A003666ED /* EditTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8224632E9A003666ED /* EditTextFieldView.swift */; };
+		F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8224632E9A003666ED /* TextFieldView.swift */; };
 		F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8524647B10003666ED /* CommonFieldsView.swift */; };
-		F7813A8824647C62003666ED /* EditDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8724647C62003666ED /* EditDateView.swift */; };
-		F7813A8A2466037B003666ED /* EditGeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A892466037B003666ED /* EditGeometryView.swift */; };
+		F7813A8824647C62003666ED /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8724647C62003666ED /* DateView.swift */; };
+		F7813A8A2466037B003666ED /* GeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A892466037B003666ED /* GeometryView.swift */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */; };
 		F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */; };
@@ -365,7 +363,7 @@
 		F7CE22C62540DF7600D710DE /* zeroForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22C52540DF7600D710DE /* zeroForms.json */; };
 		F7CE2300254368B000D710DE /* allTheThings.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22FF254368B000D710DE /* allTheThings.json */; };
 		F7CE2304254369BD00D710DE /* checkboxForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2303254369BD00D710DE /* checkboxForm.json */; };
-		F7CE230A2544676800D710DE /* EditAttachmentFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE23092544676800D710DE /* EditAttachmentFieldView.swift */; };
+		F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE23092544676800D710DE /* AttachmentFieldView.swift */; };
 		F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE230D2544714900D710DE /* EditAttachmentFieldViewTests.swift */; };
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
@@ -415,9 +413,9 @@
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
-		F7F91220247EFA4100C068B6 /* EditDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */; };
+		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */; };
-		F7F9122524803F5500C068B6 /* EditCheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */; };
+		F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */; };
 		F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
@@ -744,7 +742,6 @@
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
 		F738870E258A999100EDA036 /* ObservationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationHeaderView.swift; sourceTree = "<group>"; };
 		F7388714258AABE800EDA036 /* ObservationImportantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantView.swift; sourceTree = "<group>"; };
-		F7388718258BA1C400EDA036 /* ObservationGeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationGeometryView.swift; sourceTree = "<group>"; };
 		F738871C258BA22500EDA036 /* UIButtonInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonInsets.swift; sourceTree = "<group>"; };
 		F7388720258BB75A00EDA036 /* ObservationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsView.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
@@ -824,10 +821,9 @@
 		F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderAttachmentTableViewCell.m; sourceTree = "<group>"; };
 		F76EB1DD247C0EAA0089F3AC /* FormKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormKey.swift; sourceTree = "<group>"; };
 		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
-		F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldView.swift; sourceTree = "<group>"; };
+		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		F7708522258C155F008903BA /* ObservationAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentView.swift; sourceTree = "<group>"; };
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
 		F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnlineMapTableViewController.h; sourceTree = "<group>"; };
 		F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlineMapTableViewController.m; sourceTree = "<group>"; };
@@ -848,10 +844,10 @@
 		F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoImageProvider.swift; sourceTree = "<group>"; };
 		F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F7813A8024621237003666ED /* ObservationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormView.swift; sourceTree = "<group>"; };
-		F7813A8224632E9A003666ED /* EditTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextFieldView.swift; sourceTree = "<group>"; };
+		F7813A8224632E9A003666ED /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
 		F7813A8524647B10003666ED /* CommonFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsView.swift; sourceTree = "<group>"; };
-		F7813A8724647C62003666ED /* EditDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDateView.swift; sourceTree = "<group>"; };
-		F7813A892466037B003666ED /* EditGeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeometryView.swift; sourceTree = "<group>"; };
+		F7813A8724647C62003666ED /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		F7813A892466037B003666ED /* GeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryView.swift; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		F785973A206A9F5400C68A23 /* ThemedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemedTableViewCell.h; sourceTree = "<group>"; };
@@ -987,7 +983,7 @@
 		F7CE22C52540DF7600D710DE /* zeroForms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zeroForms.json; sourceTree = "<group>"; };
 		F7CE22FF254368B000D710DE /* allTheThings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allTheThings.json; sourceTree = "<group>"; };
 		F7CE2303254369BD00D710DE /* checkboxForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = checkboxForm.json; sourceTree = "<group>"; };
-		F7CE23092544676800D710DE /* EditAttachmentFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentFieldView.swift; sourceTree = "<group>"; };
+		F7CE23092544676800D710DE /* AttachmentFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldView.swift; sourceTree = "<group>"; };
 		F7CE230D2544714900D710DE /* EditAttachmentFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentFieldViewTests.swift; sourceTree = "<group>"; };
 		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
@@ -1063,9 +1059,9 @@
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
-		F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldView.swift; sourceTree = "<group>"; };
+		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldViewTests.swift; sourceTree = "<group>"; };
-		F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldView.swift; sourceTree = "<group>"; };
+		F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldView.swift; sourceTree = "<group>"; };
 		F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
@@ -1511,6 +1507,7 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F770852E25915D61008903BA /* Fields */,
 				F796E4472417E146005CA09C /* Attachment */,
 				F75DD30D1A97AABD0007FA3F /* View */,
 				F7481F0219A663B100E9C56D /* Edit */,
@@ -1614,9 +1611,7 @@
 			children = (
 				F738870E258A999100EDA036 /* ObservationHeaderView.swift */,
 				F7388714258AABE800EDA036 /* ObservationImportantView.swift */,
-				F7388718258BA1C400EDA036 /* ObservationGeometryView.swift */,
 				F7388720258BB75A00EDA036 /* ObservationActionsView.swift */,
-				F7708522258C155F008903BA /* ObservationAttachmentView.swift */,
 				F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */,
 			);
 			name = Components;
@@ -1884,6 +1879,21 @@
 			name = Constraints;
 			sourceTree = "<group>";
 		};
+		F770852E25915D61008903BA /* Fields */ = {
+			isa = PBXGroup;
+			children = (
+				F7813A8224632E9A003666ED /* TextFieldView.swift */,
+				F7813A8724647C62003666ED /* DateView.swift */,
+				F7813A892466037B003666ED /* GeometryView.swift */,
+				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
+				F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */,
+				F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */,
+				F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */,
+				F7CE23092544676800D710DE /* AttachmentFieldView.swift */,
+			);
+			name = Fields;
+			sourceTree = "<group>";
+		};
 		F77B7D7C24797B0400C51953 /* Form */ = {
 			isa = PBXGroup;
 			children = (
@@ -1908,16 +1918,8 @@
 		F7813A842463337F003666ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F7813A8224632E9A003666ED /* EditTextFieldView.swift */,
-				F7813A8524647B10003666ED /* CommonFieldsView.swift */,
-				F7813A8724647C62003666ED /* EditDateView.swift */,
-				F7813A892466037B003666ED /* EditGeometryView.swift */,
-				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
-				F76EB1E1247D83EC0089F3AC /* EditNumberFieldView.swift */,
-				F7F9121F247EFA4100C068B6 /* EditDropdownFieldView.swift */,
-				F7F9122324803E2E00C068B6 /* EditCheckboxFieldView.swift */,
-				F7CE23092544676800D710DE /* EditAttachmentFieldView.swift */,
 				F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */,
+				F7813A8524647B10003666ED /* CommonFieldsView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -2736,7 +2738,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7F9122524803F5500C068B6 /* EditCheckboxFieldView.swift in Sources */,
+				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
@@ -2785,7 +2787,7 @@
 				F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */,
-				F7813A8824647C62003666ED /* EditDateView.swift in Sources */,
+				F7813A8824647C62003666ED /* DateView.swift in Sources */,
 				F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
@@ -2839,7 +2841,7 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
-				F76EB1E2247D83EC0089F3AC /* EditNumberFieldView.swift in Sources */,
+				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
@@ -2852,14 +2854,13 @@
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
-				F7813A8324632E9A003666ED /* EditTextFieldView.swift in Sources */,
+				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
-				F7388719258BA1C400EDA036 /* ObservationGeometryView.swift in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
@@ -2883,7 +2884,7 @@
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
-				F7CE230A2544676800D710DE /* EditAttachmentFieldView.swift in Sources */,
+				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
@@ -2953,7 +2954,6 @@
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
-				F7708523258C155F008903BA /* ObservationAttachmentView.swift in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
@@ -2961,7 +2961,7 @@
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
 				F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */,
-				F7F91220247EFA4100C068B6 /* EditDropdownFieldView.swift in Sources */,
+				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
@@ -2978,7 +2978,7 @@
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
-				F7813A8A2466037B003666ED /* EditGeometryView.swift in Sources */,
+				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

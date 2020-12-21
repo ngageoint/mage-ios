@@ -29,9 +29,9 @@ class EditNumberFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("EditNumberFieldView") {
+        describe("NumberFieldView") {
             
-            var numberFieldView: EditNumberFieldView!
+            var numberFieldView: NumberFieldView!
             var field: [String: Any]!
             
             let recordSnapshots = false;
@@ -75,7 +75,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                numberFieldView = EditNumberFieldView(field: field, editMode: false, value: "2");
+                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -83,7 +83,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -91,7 +91,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("initial value set") {
-                numberFieldView = EditNumberFieldView(field: field, value: "2");
+                numberFieldView = NumberFieldView(field: field, value: "2");
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -101,7 +101,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("set value via input") {
                 let delegate = MockFieldDelegate();
                 
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate);
+                numberFieldView = NumberFieldView(field: field, delegate: delegate);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -117,7 +117,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("initial value set with min") {
                 field[FieldKey.min.key] = 2;
-                numberFieldView = EditNumberFieldView(field: field, value: "2");
+                numberFieldView = NumberFieldView(field: field, value: "2");
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -126,7 +126,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("initial value set with max") {
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "2");
+                numberFieldView = NumberFieldView(field: field, value: "2");
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -136,7 +136,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("initial value set with min and max") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "2");
+                numberFieldView = NumberFieldView(field: field, value: "2");
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -144,7 +144,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("set value later") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -154,7 +154,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("set valid false") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -164,7 +164,7 @@ class EditNumberFieldViewTests: KIFSpec {
             }
             
             it("set valid true after being invalid") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -176,7 +176,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 expect(numberFieldView.isEmpty()) == true;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
@@ -184,35 +184,35 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("required field is invalid if text is nil") {
                 field[FieldKey.required.key] = true;
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 numberFieldView.textField.text = nil;
                 expect(numberFieldView.isEmpty()) == true;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
             }
             
             it("field is invalid if text is a letter") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 numberFieldView.textField.text = "a";
                 expect(numberFieldView.isEmpty()) == false;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
             }
             
             it("field should allow changing text to a valid number") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 numberFieldView.textField.text = "1";
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "2")) == true;
                 expect(numberFieldView.isEmpty()) == false;
             }
             
             it("field should allow changing text to a blank") {
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 numberFieldView.textField.text = "1";
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "")) == true;
             }
             
             it("required field is valid if not empty") {
                 field[FieldKey.required.key] = true;
-                numberFieldView = EditNumberFieldView(field: field, value: "2");
+                numberFieldView = NumberFieldView(field: field, value: "2");
                 
                 expect(numberFieldView.isEmpty()) == false;
                 expect(numberFieldView.isValid(enforceRequired: true)) == true;
@@ -220,7 +220,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("required field has title which indicates required") {
                 field[FieldKey.required.key] = true;
-                numberFieldView = EditNumberFieldView(field: field);
+                numberFieldView = NumberFieldView(field: field);
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
@@ -231,7 +231,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("field is not valid if value is below min") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "1");
+                numberFieldView = NumberFieldView(field: field, value: "1");
                 
                 expect(numberFieldView.isValid()) == false;
             }
@@ -239,7 +239,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("field is not valid if value is above max") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "9");
+                numberFieldView = NumberFieldView(field: field, value: "9");
                 
                 expect(numberFieldView.isValid()) == false;
             }
@@ -247,28 +247,28 @@ class EditNumberFieldViewTests: KIFSpec {
             it("field is valid if value is between min and max") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "5");
+                numberFieldView = NumberFieldView(field: field, value: "5");
                 
                 expect(numberFieldView.isValid()) == true;
             }
             
             it("field is valid if value is above min") {
                 field[FieldKey.min.key] = 2;
-                numberFieldView = EditNumberFieldView(field: field, value: "5");
+                numberFieldView = NumberFieldView(field: field, value: "5");
                 
                 expect(numberFieldView.isValid()) == true;
             }
             
             it("field is valid if value is below max") {
                 field[FieldKey.max.key] = 8;
-                numberFieldView = EditNumberFieldView(field: field, value: "5");
+                numberFieldView = NumberFieldView(field: field, value: "5");
                 
                 expect(numberFieldView.isValid()) == true;
             }
             
             it("verify only numbers are allowed") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -279,7 +279,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("verify if a non number is set it will be invalid") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -296,7 +296,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.min.key] = 2;
 
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -312,7 +312,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.max.key] = 2;
 
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -329,7 +329,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.max.key] = 8;
 
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -346,7 +346,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.max.key] = 8;
                 
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -360,7 +360,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("test delegate") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                
@@ -373,7 +373,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("allow canceling") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -387,7 +387,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("done button should change value") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 numberFieldView.textField.text = "4";
@@ -401,7 +401,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("done button should send nil as new value") {
                 let delegate = MockFieldDelegate()
-                numberFieldView = EditNumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 numberFieldView.textField.text = "";

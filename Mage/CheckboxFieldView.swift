@@ -1,5 +1,5 @@
 //
-//  EditCheckboxFieldView.swift
+//  CheckboxFieldView.swift
 //  MAGETests
 //
 //  Created by Daniel Barela on 5/28/20.
@@ -9,7 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField
 
-class EditCheckboxFieldView : BaseFieldView {
+class CheckboxFieldView : BaseFieldView {
     lazy var checkboxSwitch: UISwitch = {
         let checkboxSwitch = UISwitch(forAutoLayout: ());
         checkboxSwitch.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";

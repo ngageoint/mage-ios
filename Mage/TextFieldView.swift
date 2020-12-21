@@ -1,5 +1,5 @@
 //
-//  EditTextFieldView.swift
+//  TextFieldView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 5/6/20.
@@ -9,7 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditTextFieldView : BaseFieldView {
+class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
     
@@ -121,7 +121,7 @@ class EditTextFieldView : BaseFieldView {
     }
 }
 
-extension EditTextFieldView {
+extension TextFieldView {
     func resignFieldFirstResponder() {
         if (self.multiline) {
             multilineTextField.resignFirstResponder();
@@ -140,7 +140,7 @@ extension EditTextFieldView {
     }
 }
 
-extension EditTextFieldView: UITextFieldDelegate {
+extension TextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if (value as? String != textField.text) {
@@ -154,7 +154,7 @@ extension EditTextFieldView: UITextFieldDelegate {
     }
 }
 
-extension EditTextFieldView: UITextViewDelegate {
+extension TextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if (value as? String != textView.text) {

@@ -38,13 +38,13 @@ class CommonFieldsView: MDCCard {
         return locationField;
     }()
     
-    lazy var dateView: EditDateView = {
-        let dateView = EditDateView(field: dateField, delegate: self);
+    lazy var dateView: DateView = {
+        let dateView = DateView(field: dateField, delegate: self);
         return dateView;
     }()
     
-    lazy var geometryView: EditGeometryView = {
-        let geometryView = EditGeometryView(field: locationField, delegate: self, observation: observation, eventForms: eventForms);
+    lazy var geometryView: GeometryView = {
+        let geometryView = GeometryView(field: locationField, delegate: self, observation: observation, eventForms: eventForms);
         return geometryView;
     }()
     

@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-extension EditDateView {
+extension DateView {
     func getDatePicker() -> UIDatePicker {
         return datePicker;
     }
@@ -25,7 +25,7 @@ class EditDateViewTests: KIFSpec {
         
         describe("EditDateFieldView") {
             
-            var dateFieldView: EditDateView!
+            var dateFieldView: DateView!
             var field: [String: Any]!
 
             let recordSnapshots = false;
@@ -72,7 +72,7 @@ class EditDateViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                dateFieldView = EditDateView(field: field, editMode: false, value: "2013-06-22T08:18:20.000Z");
+                dateFieldView = DateView(field: field, editMode: false, value: "2013-06-22T08:18:20.000Z");
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -81,7 +81,7 @@ class EditDateViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -89,7 +89,7 @@ class EditDateViewTests: KIFSpec {
             }
             
             it("initial value set") {
-                dateFieldView = EditDateView(field: field, value: "2013-06-22T08:18:20.000Z");
+                dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -98,7 +98,7 @@ class EditDateViewTests: KIFSpec {
             }
             
             it("set value later") {
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -110,7 +110,7 @@ class EditDateViewTests: KIFSpec {
             it("set value with touch inputs") {
                 let delegate = MockFieldDelegate()
 
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
+                dateFieldView = DateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -138,7 +138,7 @@ class EditDateViewTests: KIFSpec {
                 NSDate.setDisplayGMT(true);
                 let delegate = MockFieldDelegate()
                 
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
+                dateFieldView = DateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -166,7 +166,7 @@ class EditDateViewTests: KIFSpec {
                 
                 let value = "2020-11-01T08:18:00.000Z";
                 
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: value);
+                dateFieldView = DateView(field: field, delegate: delegate, value: value);
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -193,7 +193,7 @@ class EditDateViewTests: KIFSpec {
                 
                 let value = "2020-11-01T08:18:00.000Z";
                 
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: value);
+                dateFieldView = DateView(field: field, delegate: delegate, value: value);
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -216,7 +216,7 @@ class EditDateViewTests: KIFSpec {
             }
 
             it("set valid false") {
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -226,7 +226,7 @@ class EditDateViewTests: KIFSpec {
             }
 
             it("set valid true after being invalid") {
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -238,7 +238,7 @@ class EditDateViewTests: KIFSpec {
 
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
 
                 expect(dateFieldView.isEmpty()) == true;
                 expect(dateFieldView.isValid(enforceRequired: true)) == false;
@@ -246,7 +246,7 @@ class EditDateViewTests: KIFSpec {
 
             it("required field is valid if not empty") {
                 field[FieldKey.required.key] = true;
-                dateFieldView = EditDateView(field: field, value: "2013-06-22T08:18:20.000Z");
+                dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
 
                 expect(dateFieldView.isEmpty()) == false;
                 expect(dateFieldView.isValid(enforceRequired: true)) == true;
@@ -254,7 +254,7 @@ class EditDateViewTests: KIFSpec {
 
             it("required field has title which indicates required") {
                 field[FieldKey.required.key] = true;
-                dateFieldView = EditDateView(field: field);
+                dateFieldView = DateView(field: field);
 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -268,7 +268,7 @@ class EditDateViewTests: KIFSpec {
                 formatter.locale = Locale(identifier: "en_US_POSIX");
                 
                 let delegate = MockFieldDelegate()
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
+                dateFieldView = DateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 let newDate = Date(timeIntervalSince1970: 10000000);
@@ -287,7 +287,7 @@ class EditDateViewTests: KIFSpec {
                 formatter.locale = Locale(identifier: "en_US_POSIX");
                 
                 let delegate = MockFieldDelegate()
-                dateFieldView = EditDateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
+                dateFieldView = DateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 dateFieldView.textField.text = "";

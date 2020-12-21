@@ -26,8 +26,8 @@ class ObservationAttachmentCard: MDCCard {
         return attachmentField;
     }()
     
-    lazy var attachmentView: ObservationAttachmentView = {
-        let attachmentView = ObservationAttachmentView(field: attachmentField, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate)
+    lazy var attachmentView: AttachmentFieldView = {
+        let attachmentView = AttachmentFieldView(field: attachmentField, editMode: false, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
         return attachmentView;
     }()
     

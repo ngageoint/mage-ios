@@ -1,5 +1,5 @@
 //
-//  EditNumberFieldView.swift
+//  NumberFieldView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 5/26/20.
@@ -9,7 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 
-class EditNumberFieldView : BaseFieldView {
+class NumberFieldView : BaseFieldView {
     private var number: NSNumber?;
     private var min: NSNumber?;
     private var max: NSNumber?;
@@ -168,7 +168,7 @@ class EditNumberFieldView : BaseFieldView {
     }
 }
 
-extension EditNumberFieldView: UITextFieldDelegate {
+extension NumberFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let text: String = textField.text {

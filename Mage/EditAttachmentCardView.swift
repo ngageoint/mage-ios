@@ -29,9 +29,9 @@ class EditAttachmentCardView: MDCCard {
         return attachmentField;
     }()
     
-    lazy var attachmentView: EditAttachmentFieldView = {
+    lazy var attachmentView: AttachmentFieldView = {
         let attachmentCreationCoordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
-        let attachmentView = EditAttachmentFieldView(field: attachmentField, delegate: self, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
+        let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
         return attachmentView;
     }()
     

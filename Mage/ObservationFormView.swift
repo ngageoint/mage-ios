@@ -83,32 +83,32 @@ class ObservationFormView: UIStackView {
             switch type {
             case "attachment":
                 let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
-                fieldView = EditAttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
             case "numberfield":
                 print("NUMBER FIELD VALUE \(value)")
-                fieldView = EditNumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
+                fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case "textfield":
-                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
+                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "textarea":
-                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
+                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
             case "email":
-                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
+                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case "password":
-                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
+                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "date":
-                fieldView = EditDateView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
+                fieldView = DateView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "checkbox":
-                fieldView = EditCheckboxFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? Bool ?? false);
+                fieldView = CheckboxFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? Bool ?? false);
             case "dropdown":
                 if let stringValue = value as? String {
-                    fieldView = EditDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: stringValue)
+                    fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: stringValue)
                 }
                 else {
-                    fieldView = EditDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
+                    fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
                 }
             case "geometry":
-                fieldView = EditGeometryView(field: fieldDictionary, editMode: editMode, delegate: self);
-                (fieldView as! EditGeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")
+                fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self);
+                (fieldView as! GeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")
             default:
                 let label = UILabel(forAutoLayout: ());
                 label.text = type;

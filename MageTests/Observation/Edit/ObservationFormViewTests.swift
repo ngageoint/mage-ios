@@ -104,13 +104,13 @@ class ObservationFormViewTests: KIFSpec {
 
                 for field in fields {
                     if let baseFieldView: BaseFieldView = formView.fieldViewForField(field: field) {
-                        if let geometryField = baseFieldView as? EditGeometryView {
+                        if let geometryField = baseFieldView as? GeometryView {
                             geometryField.setValue(SFPoint(x: -104.3678, andY: 40.1085));
-                        } else if let checkboxField = baseFieldView as? EditCheckboxFieldView {
+                        } else if let checkboxField = baseFieldView as? CheckboxFieldView {
                             checkboxField.setValue(true);
-                        } else if let numberField = baseFieldView as? EditNumberFieldView {
+                        } else if let numberField = baseFieldView as? NumberFieldView {
                             numberField.setValue("2")
-                        } else if let dateField = baseFieldView as? EditDateView {
+                        } else if let dateField = baseFieldView as? DateView {
                             dateField.setValue("2020-11-01T12:00:00.000Z")
                         } else {
                             baseFieldView.setValue("value");

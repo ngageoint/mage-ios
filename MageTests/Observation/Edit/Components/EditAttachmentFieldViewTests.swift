@@ -32,7 +32,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
             var field: [String: Any]!
             let recordSnapshots = false;
             
-            var attachmentFieldView: EditAttachmentFieldView!
+            var attachmentFieldView: AttachmentFieldView!
             var view: UIView!
             var controller: ContainingUIViewController!
             var window: UIWindow!;
@@ -108,7 +108,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -141,7 +141,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -165,7 +165,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 var completeTest = false;
 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: nil);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: nil);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -198,7 +198,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -243,7 +243,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -294,7 +294,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -351,7 +351,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -384,7 +384,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -425,7 +425,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -460,7 +460,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -495,7 +495,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                            
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -538,7 +538,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -589,7 +589,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -642,7 +642,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -688,7 +688,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 field[FieldKey.required.key] = true;
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field);
+                    attachmentFieldView = AttachmentFieldView(field: field);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -726,7 +726,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 }
                 
                 controller.viewDidLoadClosure = {
-                    attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -776,7 +776,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = EditAttachmentFieldView(field: field, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -791,7 +791,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -804,7 +804,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -817,7 +817,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -844,7 +844,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -901,7 +901,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 FileManager.default.createFile(atPath: attachment2.localPath!, contents: image.pngData()!, attributes: nil);
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
 
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(attachmentFieldView)
@@ -953,7 +953,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 FileManager.default.createFile(atPath: attachment2.localPath!, contents: image.pngData()!, attributes: nil);
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
                 
-                attachmentFieldView = EditAttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(attachmentFieldView)

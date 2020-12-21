@@ -1,5 +1,5 @@
 //
-//  EditAttachmentFieldView.swift
+//  AttachmentFieldView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 10/24/20.
@@ -16,7 +16,7 @@ import MaterialComponents.MDCButton;
     @objc func addGalleryAttachment();
 }
 
-class EditAttachmentFieldView : BaseFieldView {
+class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
@@ -214,7 +214,7 @@ class EditAttachmentFieldView : BaseFieldView {
     }
 }
 
-extension EditAttachmentFieldView : AttachmentCreationCoordinatorDelegate {
+extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
     func attachmentCreated(attachment: Attachment) {
         print("attachment was created \(attachment)")
         self.addAttachment(attachment);

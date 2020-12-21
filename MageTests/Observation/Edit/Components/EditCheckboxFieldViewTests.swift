@@ -17,14 +17,14 @@ class EditCheckboxFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("EditCheckboxFieldView Single selection") {
+        describe("CheckboxFieldView Single selection") {
             let recordSnapshots = false;
             var completeTest = false;
             
             var controller: UIViewController!
             var window: UIWindow!;
             
-            var checkboxFieldView: EditCheckboxFieldView!
+            var checkboxFieldView: CheckboxFieldView!
             var view: UIView!
             var field: [String: Any]!
             
@@ -68,7 +68,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("non edit mode") {
-                checkboxFieldView = EditCheckboxFieldView(field: field, editMode: false, value: true);
+                checkboxFieldView = CheckboxFieldView(field: field, editMode: false, value: true);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -89,7 +89,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -106,7 +106,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("initial value true") {
-                checkboxFieldView = EditCheckboxFieldView(field: field, value: true);
+                checkboxFieldView = CheckboxFieldView(field: field, value: true);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -123,7 +123,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("initial value false") {
-                checkboxFieldView = EditCheckboxFieldView(field: field, value: false);
+                checkboxFieldView = CheckboxFieldView(field: field, value: false);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -140,7 +140,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("set value later") {
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -158,7 +158,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("set value simulated touch") {
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -180,7 +180,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             
             it("required") {
                 field["required"] = true;
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -198,7 +198,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("set valid false") {
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -217,7 +217,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             }
             
             it("set valid true after being invalid") {
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -239,7 +239,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             it("required field is invalid if false") {
                 field[FieldKey.required.key] = true;
                 
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -262,7 +262,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             it("required field is valid if true") {
                 field[FieldKey.required.key] = true;
                 
-                checkboxFieldView = EditCheckboxFieldView(field: field);
+                checkboxFieldView = CheckboxFieldView(field: field);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -285,7 +285,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             
             it("test delegate false value") {
                 let delegate = MockFieldDelegate();
-                checkboxFieldView = EditCheckboxFieldView(field: field, delegate: delegate);
+                checkboxFieldView = CheckboxFieldView(field: field, delegate: delegate);
 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
@@ -298,7 +298,7 @@ class EditCheckboxFieldViewTests: KIFSpec {
             
             it("test delegate true value") {
                 let delegate = MockFieldDelegate();
-                checkboxFieldView = EditCheckboxFieldView(field: field, delegate: delegate);
+                checkboxFieldView = CheckboxFieldView(field: field, delegate: delegate);
                 
                 view.addSubview(checkboxFieldView)
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
