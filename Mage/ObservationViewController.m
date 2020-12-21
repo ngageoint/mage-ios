@@ -21,7 +21,6 @@
 #import "MapDelegate.h"
 #import "GeometryUtility.h"
 #import "ObservationPushService.h"
-#import "ObservationEditCoordinator_legacy.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
@@ -57,6 +56,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (void) editComplete: (Observation *) observation coordinator:(NSObject *)coordinator {
+    NSLog(@"edit complete in the view controller");
     [self.childCoordinators removeObject:coordinator];
     self.observation = [observation MR_inContext:[NSManagedObjectContext MR_defaultContext]];
     _formFields = nil;
@@ -404,7 +404,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (IBAction)editObservationTapped:(id)sender {
-    ObservationEditCoordinator_legacy *edit  = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andObservation:self.observation];
+    ObservationEditCoordinator *edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self observation:self.observation];
 
     [self.childCoordinators addObject:edit];
     [edit start];
@@ -450,6 +450,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 }
 
 - (BOOL) userHasEditPermissions:(User *) user {
+    NSLog(@"user role permissions %@", user.role.permissions);
     return [user.role.permissions containsObject:@"UPDATE_OBSERVATION_ALL"] || [user.role.permissions containsObject:@"UPDATE_OBSERVATION_EVENT"];
 }
 

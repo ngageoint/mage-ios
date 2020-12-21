@@ -38,6 +38,7 @@ import MaterialComponents.MDCCard
     var newObservation: Bool = false;
     
     var cards: [ExpandableCard] = [];
+    private var keyboardHelper: KeyboardHelper?;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -116,6 +117,7 @@ import MaterialComponents.MDCCard
         addStackViewConstraints();
         
         addCommonFields(stackView: stackView);
+        addLegacyAttachmentCard(stackView: stackView);
         addFormViews(stackView: stackView);
         
         if (eventForms.count != 0) {
@@ -132,6 +134,15 @@ import MaterialComponents.MDCCard
         }
         
         self.registerForThemeChanges();
+        
+        keyboardHelper = KeyboardHelper { animation, keyboardFrame, duration in
+            switch animation {
+            case .keyboardWillShow:
+                self.navigationItem.rightBarButtonItem?.isEnabled = false;
+            case .keyboardWillHide:
+                self.navigationItem.rightBarButtonItem?.isEnabled = true;
+            }
+        }
     }
     
     init(frame: CGRect) {
@@ -164,6 +175,17 @@ import MaterialComponents.MDCCard
              commonFieldView.applyTheme(withScheme: globalContainerScheme());
              stackView.addArrangedSubview(commonFieldView);
          }
+    }
+    
+    // for legacy servers add the attachment field to common
+    // TODO: Verify the correct version of the server and this can be removed once all servers are upgraded
+    func addLegacyAttachmentCard(stackView: UIStackView) {
+        if (UserDefaults.standard.integer(forKey: "serverMajorVersion") < 6) {
+            if let safeObservation = observation {
+                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation,  viewController: self);
+                stackView.addArrangedSubview(attachmentCard);
+            }
+        }
     }
     
     func addFormViews(stackView: UIStackView) {
@@ -233,6 +255,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
+        print("save observation in the edit card collection controller \(self.observation)")
         guard let safeObservation = self.observation else { return }
         self.delegate?.saveObservation(observation: safeObservation);
     }

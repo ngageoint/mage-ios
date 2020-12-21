@@ -35,7 +35,6 @@
 #import "MAGE-Swift.h"
 #import <PureLayout.h>
 
-#import "ObservationEditCoordinator_legacy.h"
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
@@ -52,6 +51,12 @@
 @end
 
 @implementation MapViewController
+
+- (LocationService *) getLocationService {
+    if (self.locationService) return self.locationService;
+    self.locationService = [LocationService singleton];
+    return self.locationService;
+}
 
 - (IBAction)mapLongPress:(id)sender {
     UIGestureRecognizer *gestureRecognizer = (UIGestureRecognizer *)sender;
@@ -79,9 +84,11 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
+    NSLog(@"creating the map view!");
     self.mapView = [[MKMapView alloc] initForAutoLayout];
+    self.mapView.accessibilityLabel = @"map";
     [self.view addSubview:self.mapView];
+    NSLog(@"Created it.");
     [self.mapView autoPinEdgesToSuperviewEdges];
     
     [self addMapButtons];
@@ -148,70 +155,70 @@
     
     [self setNavBarTitle];
     
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterUnitKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterNumberKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kImportantFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kFavortiesFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
+//    [defaults addObserver:self
+//               forKeyPath:kObservationTimeFilterKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kObservationTimeFilterUnitKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kObservationTimeFilterNumberKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kImportantFilterKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//    
+//    [defaults addObserver:self
+//               forKeyPath:kFavortiesFilterKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
     
     Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
-    [defaults addObserver:self
-               forKeyPath:@"hideObservations"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:@"hidePeople"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kReportLocationKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterUnitKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterNumberKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:GeoPackageImported
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
+//    [defaults addObserver:self
+//               forKeyPath:@"hideObservations"
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:@"hidePeople"
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kReportLocationKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kLocationTimeFilterKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kLocationTimeFilterUnitKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:kLocationTimeFilterNumberKey
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
+//    [defaults addObserver:self
+//               forKeyPath:GeoPackageImported
+//                  options:NSKeyValueObservingOptionNew
+//                  context:NULL];
+//
     // Start the timer for updating the circles
     [self startMapAnnotationsUpdateTimer];
     
@@ -331,18 +338,18 @@
     
     @try {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults removeObserver:self forKeyPath:@"hideObservations"];
-        [defaults removeObserver:self forKeyPath:@"hidePeople"];
-        [defaults removeObserver:self forKeyPath:kReportLocationKey];
-        [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
-        [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
-        [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
-        [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
-        [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
-        [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
-        [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
-        [defaults removeObserver:self forKeyPath:kImportantFilterKey];
-        [defaults removeObserver:self forKeyPath:GeoPackageImported];
+//        [defaults removeObserver:self forKeyPath:@"hideObservations"];
+//        [defaults removeObserver:self forKeyPath:@"hidePeople"];
+//        [defaults removeObserver:self forKeyPath:kReportLocationKey];
+//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
+//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
+//        [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
+//        [defaults removeObserver:self forKeyPath:kImportantFilterKey];
+//        [defaults removeObserver:self forKeyPath:GeoPackageImported];
     }
     @catch (id exception) {
         NSLog(@"Exception removing observers %@", exception);
@@ -351,7 +358,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
     [self stopMapAnnotationsUpdateTimer];
-    
+    NSLog(@"CLEANING UP THE MAP DELEGATE");
     [self.mapDelegate cleanup];
 }
 
@@ -408,7 +415,7 @@
 }
 
 - (IBAction)createNewObservation:(id)sender {
-    CLLocation *location = [[LocationService singleton] location];
+    CLLocation *location = [[self getLocationService] location];
     [self startCreateNewObservationAtLocation:location andProvider:@"gps"];
 }
 
@@ -420,7 +427,7 @@
 }
 
 - (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
-    ObservationEditCoordinator_legacy *edit;
+    ObservationEditCoordinator *edit;
     SFPoint *point;
     
     CLLocationAccuracy accuracy = 0;
@@ -435,7 +442,9 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self location:point accuracy:accuracy provider:provider delta:delta];
+    
     [self.childCoordinators addObject:edit];
     [edit start];
 }

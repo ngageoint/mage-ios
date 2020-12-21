@@ -15,6 +15,7 @@ class BaseFieldView : UIView {
     internal var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
     internal var fieldValueValid: Bool! = false;
     internal var value: Any?;
+    internal var editMode: Bool = true;
     
     private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
         var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil;
@@ -24,17 +25,61 @@ class BaseFieldView : UIView {
         return fieldSelectionCoordinator;
     }();
     
+    lazy var fieldNameSpacerView: UIView = {
+        let fieldNameSpacerView = UIView(forAutoLayout: ());
+        fieldNameSpacerView.addSubview(fieldNameLabel);
+        fieldNameLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+        return fieldNameSpacerView;
+    }()
+    
+    lazy var fieldNameLabel: UILabel = {
+        let containerScheme = globalContainerScheme();
+        let label = UILabel(forAutoLayout: ());
+        label.textColor = UIColor.label.withAlphaComponent(0.6);
+        var font = containerScheme.typographyScheme.body1;
+        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
+        label.font = font;
+        label.autoSetDimension(.height, toSize: 16);
+        label.text = (field[FieldKey.title.key] as? String ?? "");
+        label.accessibilityLabel = "\((field[FieldKey.name.key] as? String ?? "")) Label";
+        return label;
+    }()
+    
+    lazy var fieldValue: UILabel = {
+        let containerScheme = globalContainerScheme();
+        let label = UILabel(forAutoLayout: ());
+        label.textColor = .label;
+        var font = containerScheme.typographyScheme.body1;
+        label.font = font;
+        label.numberOfLines = 0;
+        return label;
+    }()
+    
+    lazy var viewStack: UIStackView = {
+        let stackView = UIStackView(forAutoLayout: ());
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 8
+        stackView.distribution = .fill
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
+        stackView.isLayoutMarginsRelativeArrangement = false;
+        stackView.translatesAutoresizingMaskIntoConstraints = true;
+        return stackView;
+    }()
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?, value: Any?) {
+    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?, value: Any?, editMode: Bool = true) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
-        
+        self.editMode = editMode;
         self.field = field;
         self.delegate = delegate;
         self.value = value;
+        self.addSubview(viewStack);
+        viewStack.autoPinEdgesToSuperviewEdges();
     }
     
     func setupController() {
@@ -48,6 +93,10 @@ class BaseFieldView : UIView {
         preconditionFailure("This method must be overridden");
     }
     
+    func getErrorMessage() -> String {
+        preconditionFailure("This method must be overridden");
+    }
+    
     func getValue() -> Any? {
         return value;
     }
@@ -58,6 +107,11 @@ class BaseFieldView : UIView {
 
     func setValid(_ valid: Bool) {
         fieldValueValid = valid;
+        if (valid) {
+            controller.setErrorText(nil, errorAccessibilityValue: nil);
+        } else {
+            controller.setErrorText(getErrorMessage(), errorAccessibilityValue: nil);
+        }
     }
 
     func isValid() -> Bool {

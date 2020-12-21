@@ -69,6 +69,23 @@ class EditDropdownFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
+            it("non edit mode") {
+                dropdownFieldView = EditDropdownFieldView(field: field, editMode: false, value: "The Value");
+                
+                view.addSubview(dropdownFieldView)
+                dropdownFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
             it("no initial value") {
                 dropdownFieldView = EditDropdownFieldView(field: field);
                 
@@ -190,7 +207,7 @@ class EditDropdownFieldViewTests: KIFSpec {
                 expect(dropdownFieldView.isEmpty()) == true;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
                 dropdownFieldView.setValue("purple");
-                expect(dropdownFieldView.getValue() as? [String]?) == ["purple"];
+                expect(dropdownFieldView.getValue()) == ["purple"];
                 expect(dropdownFieldView.isEmpty()) == false;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
                 maybeRecordSnapshot(view, doneClosure: {

@@ -56,9 +56,6 @@ class EditNumberFieldView : BaseFieldView {
         textField.delegate = self;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         controller.textInput = textField;
-        self.addSubview(textField);
-        textField.sizeToFit();
-        textField.autoPinEdgesToSuperviewEdges();
         return textField;
     }()
     
@@ -66,28 +63,39 @@ class EditNumberFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         
         self.min = self.field[FieldKey.min.key] as? NSNumber;
         self.max = self.field[FieldKey.max.key] as? NSNumber;
         
+        setupInputView();
         setValue(value);
-        setupInputView(textField: textField);
-        setupController();
-        controller.helperText = helperText;
     }
     
-    func setupInputView(textField: MDCTextField) {
-        textField.inputAccessoryView = accessoryView;
-        textField.keyboardType = .decimalPad;
+    func setupInputView() {
+        if (editMode) {
+            viewStack.addArrangedSubview(textField);
+            setupController();
+            controller.helperText = helperText;
+            textField.inputAccessoryView = accessoryView;
+            textField.keyboardType = .decimalPad;
+        } else {
+            viewStack.addArrangedSubview(fieldNameLabel);
+            viewStack.addArrangedSubview(fieldValue);
+            fieldValue.text = getValue()?.stringValue;
+        }
     }
     
     override func getValue() -> Any? {
+        return number;
+    }
+    
+    func getValue() -> NSNumber? {
         return number;
     }
     
@@ -100,15 +108,15 @@ class EditNumberFieldView : BaseFieldView {
         if (value != nil) {
             number = formatter.number(from: value!);
         }
-        setTextFieldValue();
+        if (editMode) {
+            setTextFieldValue();
+        } else {
+            fieldValue.text = number?.stringValue;
+        }
     }
     
     func setTextFieldValue() {
-        if (self.number != nil) {
-            textField.text = number?.stringValue
-        } else {
-            textField.text = nil;
-        }
+        textField.text = number?.stringValue
     }
     
     @objc func doneButtonPressed() {
@@ -127,16 +135,11 @@ class EditNumberFieldView : BaseFieldView {
         return true;
     }
     
-    override func setValid(_ valid: Bool) {
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            if (helperText != nil) {
-                controller.setErrorText(helperText, errorAccessibilityValue: nil);
-            } else {
-                controller.setErrorText("Must be a number", errorAccessibilityValue: nil);
-            }
+    override func getErrorMessage() -> String {
+        if let safeHelp = helperText {
+            return safeHelp
         }
+        return "Must be a number";
     }
     
     override func isValid(enforceRequired: Bool = false) -> Bool {

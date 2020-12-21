@@ -107,6 +107,36 @@ class EditGeometryViewTests: KIFSpec {
                     expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
+            
+            it("non edit mode initial value set as a point") {
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        tester().waitForAnimationsToFinish();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                        completeTest = true;
+                    })
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
 
             it("initial value set as a point") {
                 var completeTest = false;
@@ -123,6 +153,37 @@ class EditGeometryViewTests: KIFSpec {
                     })
                 }
 
+                window.rootViewController = controller;
+                
+                geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("initial value set as a point no title") {
+                field[FieldKey.title.key] = nil;
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    maybeRecordSnapshot(view, doneClosure: {
+                        tester().waitForAnimationsToFinish();
+                        expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                        expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                        completeTest = true;
+                    })
+                }
+                
                 window.rootViewController = controller;
                 
                 geometryFieldView = EditGeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
@@ -247,7 +308,7 @@ class EditGeometryViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 
-                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = EditGeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
                 
                 view.addSubview(geometryFieldView)
                 geometryFieldView.autoPinEdgesToSuperviewEdges();

@@ -71,6 +71,15 @@ class EditDateViewTests: KIFSpec {
                 controller = nil;
             }
             
+            it("non edit mode") {
+                dateFieldView = EditDateView(field: field, editMode: false, value: "2013-06-22T08:18:20.000Z");
+                
+                view.addSubview(dateFieldView)
+                dateFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: "\(field["name"] as? String ?? "") Label");
+                expect(view) == maybeSnapshot();
+            }
+            
             it("no initial value") {
                 dateFieldView = EditDateView(field: field);
                 

@@ -10,26 +10,6 @@ import Foundation
 import MaterialComponents.MDCTextField;
 import MaterialComponents.MDCButton;
 
-extension UIButton {
-    func setInsets(
-        forContentPadding contentPadding: UIEdgeInsets,
-        imageTitlePadding: CGFloat
-    ) {
-        self.contentEdgeInsets = UIEdgeInsets(
-            top: contentPadding.top,
-            left: contentPadding.left,
-            bottom: contentPadding.bottom,
-            right: contentPadding.right + imageTitlePadding
-        )
-        self.titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: imageTitlePadding,
-            bottom: 0,
-            right: -imageTitlePadding
-        )
-    }
-}
-
 class EditGeometryView : BaseFieldView {
     private var accuracy: Double?;
     private var provider: String?;
@@ -42,23 +22,6 @@ class EditGeometryView : BaseFieldView {
     
     private lazy var mapDelegate: MapDelegate = {
         return MapDelegate();
-    }()
-    
-    lazy var textField: MDCTextField = {
-        let textField = MDCTextField(forAutoLayout: ());
-        controller.textInput = textField;
-        return textField;
-    }()
-    
-    private lazy var fieldNameLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
-        let label = UILabel(forAutoLayout: ());
-        label.textColor = .systemGray;
-        var font = containerScheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
-        label.font = font;
-        
-        return label;
     }()
     
     private lazy var latitudeLongitudeButton: MDCButton = {
@@ -82,7 +45,7 @@ class EditGeometryView : BaseFieldView {
     lazy var mapView: MKMapView = {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.mapType = .standard;
-        mapView.autoSetDimension(.height, toSize: 95);
+        mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
         mapDelegate.setMapView(mapView);
         mapView.delegate = mapDelegate;
         mapDelegate.setupListeners();
@@ -108,18 +71,18 @@ class EditGeometryView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
-        self.init(field: field, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
-        let accuracy = ((observation?.properties as? NSDictionary)?.value(forKey: "accuracy") as? Double);
-        let provider = ((observation?.properties as? NSDictionary)?.value(forKey: "provider") as? String);
-        self.init(field: field, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+        let accuracy = (observation?.properties?["accuracy"]) as? Double;
+        let provider = (observation?.properties?["provider"]) as? String;
+        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.observation = observation;
         self.eventForms = eventForms;
         
@@ -132,16 +95,17 @@ class EditGeometryView : BaseFieldView {
         } else {
             addToMapAsObservation();
         }
-
-        setupController();
-        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
-        } else {
-            fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
-        }
         
-        if ((field[FieldKey.required.key] as? Bool) == true) {
-            fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
+        if (field[FieldKey.title.key] != nil) {
+            if (UserDefaults.standard.showMGRS ?? false) {
+                fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
+            } else {
+                fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
+            }
+            
+            if ((field[FieldKey.required.key] as? Bool) == true) {
+                fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
+            }
         }
     }
     
@@ -186,43 +150,34 @@ class EditGeometryView : BaseFieldView {
         }
     }
     
-    override func setupController() {
-        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
-            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
-        } else {
-            controller.placeholderText = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
-        }
-        
-        if ((field[FieldKey.required.key] as? Bool) == true) {
-            controller.placeholderText = (controller.placeholderText ?? "") + " *"
-        }
-    }
-    
     func buildView() {
+        if (field[FieldKey.title.key] != nil) {
+            if (editMode) {
+                viewStack.addArrangedSubview(fieldNameSpacerView);
+                viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
+            } else {
+                viewStack.addArrangedSubview(fieldNameLabel);
+                viewStack.setCustomSpacing(4, after: fieldNameLabel);
+            }
+        }
+        viewStack.addArrangedSubview(mapView);
+        
+        if (editMode) {
+            self.addSubview(editFab);
+            editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
+            editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
+        }
+        
         let wrapper = UIView(forAutoLayout: ());
-        self.addSubview(wrapper);
-        wrapper.autoPinEdgesToSuperviewEdges();
-        
-        wrapper.addSubview(mapView);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
-        
-        wrapper.addSubview(editFab);
-        editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
-        editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
-        
-        wrapper.addSubview(fieldNameLabel);
-        fieldNameLabel.autoPinEdge(toSuperviewEdge: .top);
-        fieldNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-        
         wrapper.addSubview(latitudeLongitudeButton);
-        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left);
-        latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
-        latitudeLongitudeButton.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: 8);
+        latitudeLongitudeButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), excludingEdge: .right);
         
         wrapper.addSubview(accuracyLabel);
         accuracyLabel.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton);
         accuracyLabel.autoPinEdge(.top, to: .top, of: latitudeLongitudeButton);
         accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
+        
+        viewStack.addArrangedSubview(wrapper);
         
         mapDelegate.ensureMapLayout();
     }

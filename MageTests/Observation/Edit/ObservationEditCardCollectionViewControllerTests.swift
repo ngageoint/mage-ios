@@ -48,6 +48,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                                 
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
+                UserDefaults.standard.set(6, forKey: "serverMajorVersion");
+                UserDefaults.standard.set(0, forKey: "serverMinorVersion");
                 UserDefaults.standard.synchronize();
             }
             
@@ -64,6 +66,78 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 view = nil;
                 window = nil;
                 TestHelpers.cleanUpStack();
+            }
+            
+            describe("Legacy") {
+                beforeEach {
+                    print("Legacy set the mage server version");
+                    UserDefaults.standard.set(5, forKey: "serverMajorVersion");
+                    UserDefaults.standard.set(4, forKey: "serverMinorVersion");
+                    UserDefaults.standard.synchronize();
+                }
+                
+                it("empty observation") {
+                    var completeTest = false;
+                    
+                    waitUntil { done in
+                        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
+                            done();
+                        }
+                    }
+                    
+                    let observation = ObservationBuilder.createBlankObservation(1);
+                    ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                    
+                    let delegate = MockObservationEditCardDelegate();
+                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                    
+                    window.rootViewController = observationEditController;
+                    view = observationEditController.view;
+                    
+                    maybeRecordSnapshot(view, usesDrawRect: true, doneClosure: {
+                        completeTest = true;
+                    })
+                    
+                    if (recordSnapshots) {
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    } else {
+                        expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    }
+                }
+                
+                it("launch gallery") {
+                    var completeTest = false;
+
+                    waitUntil { done in
+                        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
+                            done();
+                        }
+                    }
+                    
+                    let observation = ObservationBuilder.createBlankObservation(1);
+                    ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                    
+                    let delegate = MockObservationEditCardDelegate();
+                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                    
+                    window.rootViewController = observationEditController;
+                    view = observationEditController.view;
+                    
+                    tester().waitForView(withAccessibilityLabel: "attachments Gallery");
+                    tester().tapView(withAccessibilityLabel: "attachments Gallery");
+                    tester().waitForAnimationsToFinish();
+                    tester().wait(forTimeInterval: 1.0);
+
+                    maybeRecordSnapshot(window, usesDrawRect: true, doneClosure: {
+                        completeTest = true;
+                    })
+
+                    if (recordSnapshots) {
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    } else {
+                        expect(window).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    }
+                }
             }
             
             it("empty observation not new") {
@@ -83,6 +157,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
+                
+                tester().waitForAnimationsToFinish();
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -112,6 +188,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
+                
+                tester().waitForAnimationsToFinish();
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -144,6 +222,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
+                tester().waitForAnimationsToFinish();
                 expect(delegate.addFormCalled).to(beTrue());
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -176,6 +255,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
+                tester().waitForAnimationsToFinish();
                 expect(delegate.addFormCalled).to(beTrue());
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -205,7 +285,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -232,7 +312,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                
+                tester().waitForAnimationsToFinish();
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 expect(delegate.addFormCalled).to(beTrue());
             }
@@ -257,7 +337,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 expect(delegate.addFormCalled).to(beTrue());
-                
+                tester().waitForAnimationsToFinish();
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -310,7 +390,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -362,7 +442,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "expand");
                 tester().tapView(withAccessibilityLabel: "expand");
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -416,7 +496,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -465,7 +545,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -501,7 +581,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -533,7 +613,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 expect(delegate.addFormCalled).to(beTrue());
-                
+                tester().waitForAnimationsToFinish();
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -636,7 +716,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().clearTextFromView(withAccessibilityLabel: "field1")
                 tester().tapView(withAccessibilityLabel: "Done");
-                
+                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -677,7 +757,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: fieldId + " Gallery");
                 tester().waitForAnimationsToFinish();
                 tester().wait(forTimeInterval: 1.0);
-                
                 // use draw rect to capture the gallery view as well
                 maybeRecordSnapshot(window, usesDrawRect: true, doneClosure: {
                     completeTest = true;

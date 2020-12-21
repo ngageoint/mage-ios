@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
+@property (nonatomic) BOOL valueChanged;
 
 @end
 
@@ -27,6 +28,7 @@
         self.pinImage = pinImage;
         self.fieldDefinition = fieldDefinition;
         self.currentGeometry = geometry;
+        self.valueChanged = false;
         
         if (self.currentGeometry == nil) {
             CLLocation *location = [[LocationService singleton] location];
@@ -83,13 +85,14 @@
         
         return;
     }
-    [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self];
+    [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self wasValueChanged:self.valueChanged];
     if (self.navigationController) {
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 - (void) updateGeometry: (SFGeometry *) geometry {
+    self.valueChanged = true;
     self.currentGeometry = geometry;
 }
 

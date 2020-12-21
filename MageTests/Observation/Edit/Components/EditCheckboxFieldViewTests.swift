@@ -67,6 +67,27 @@ class EditCheckboxFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
+            it("non edit mode") {
+                checkboxFieldView = EditCheckboxFieldView(field: field, editMode: false, value: true);
+                
+                view.addSubview(checkboxFieldView)
+                checkboxFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isEnabled).to(beFalse());
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
             it("no initial value") {
                 checkboxFieldView = EditCheckboxFieldView(field: field);
                 

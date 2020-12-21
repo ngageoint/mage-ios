@@ -13,6 +13,7 @@
 #import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
 #import "Theme+UIResponder.h"
+#import "MAGE-Swift.h"
 #import <mgrs/MGRS.h>
 
 @interface ObservationCommonHeaderTableViewCell ()
@@ -91,7 +92,7 @@
         return;
     }
     
-    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
+    [self.attachmentCollection registerClass:[AttachmentCell class] forCellWithReuseIdentifier:@"AttachmentCell"];
 
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentCollection = self.attachmentCollection;

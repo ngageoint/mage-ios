@@ -106,7 +106,6 @@ import Kingfisher
         if (indicator != nil) {
             self.kf.indicatorType = .custom(indicator: indicator!);
         }
-        
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
@@ -119,6 +118,8 @@ import Kingfisher
                 
         let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
+        self.contentMode = .scaleAspectFill;
+        self.clipsToBounds = true;
         
         if (self.useDownloadPlaceholder && thumbnail) {
             placeholder.image = UIImage.init(named: "download_thumbnail");

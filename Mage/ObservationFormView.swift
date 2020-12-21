@@ -26,6 +26,7 @@ class ObservationFormView: UIStackView {
     private var viewController: UIViewController!;
     private var fieldSelectionDelegate: FieldSelectionDelegate?;
     private var observationFormListener: ObservationFormListener?;
+    private var editMode: Bool = true;
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
@@ -48,18 +49,17 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
         self.init(frame: .zero)
-        print("listener \(observationFormListener)")
         self.observation = observation;
         self.form = form;
         self.eventForm = eventForm;
+        self.editMode = editMode;
         self.viewController = viewController;
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.formIndex = formIndex;
         self.fieldSelectionDelegate = delegate;
         self.observationFormListener = observationFormListener;
-        print("observation form listener \(self.observationFormListener)")
         constructView();
     }
     
@@ -71,6 +71,10 @@ class ObservationFormView: UIStackView {
         for fieldDictionary in self.formFields {
             let value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
             
+            if (!editMode && value == nil) {
+                continue;
+            }
+            
             var type = fieldDictionary[FieldKey.type.key] as! String;
             if (type == "radio" || type == "multiselectdropdown") {
                 type = "dropdown";
@@ -79,30 +83,31 @@ class ObservationFormView: UIStackView {
             switch type {
             case "attachment":
                 let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
-                fieldView = EditAttachmentFieldView(field: fieldDictionary, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                fieldView = EditAttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
             case "numberfield":
-                fieldView = EditNumberFieldView(field: fieldDictionary, delegate: self, value: value as? String);
+                print("NUMBER FIELD VALUE \(value)")
+                fieldView = EditNumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case "textfield":
-                fieldView = EditTextFieldView(field: fieldDictionary, delegate: self, value: value as? String);
+                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "textarea":
-                fieldView = EditTextFieldView(field: fieldDictionary, delegate: self, value: value as? String, multiline: true);
+                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
             case "email":
-                fieldView = EditTextFieldView(field: fieldDictionary, delegate: self, value: value as? String, keyboardType: .emailAddress);
+                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case "password":
-                fieldView = EditTextFieldView(field: fieldDictionary, delegate: self, value: value as? String);
+                fieldView = EditTextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "date":
-                fieldView = EditDateView(field: fieldDictionary, delegate: self, value: value as? String);
+                fieldView = EditDateView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case "checkbox":
-                fieldView = EditCheckboxFieldView(field: fieldDictionary, delegate: self, value: value as? Bool ?? false);
+                fieldView = EditCheckboxFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? Bool ?? false);
             case "dropdown":
                 if let stringValue = value as? String {
-                    fieldView = EditDropdownFieldView(field: fieldDictionary, delegate: self, value: stringValue)
+                    fieldView = EditDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: stringValue)
                 }
                 else {
-                    fieldView = EditDropdownFieldView(field: fieldDictionary, delegate: self, value: value as? [String])
+                    fieldView = EditDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
                 }
             case "geometry":
-                fieldView = EditGeometryView(field: fieldDictionary, delegate: self);
+                fieldView = EditGeometryView(field: fieldDictionary, editMode: editMode, delegate: self);
                 (fieldView as! EditGeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")
             default:
                 let label = UILabel(forAutoLayout: ());

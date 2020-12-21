@@ -40,6 +40,8 @@
     self.mapDelegate.hideStaticLayers = YES;
     
     __weak __typeof__(self) weakSelf = self;
+    NSLog(@"observations in configure cell for observaition %@", observations);
+    observations.fetchedResultsController.fetchRequest.fetchBatchSize = 0;
     [self.mapDelegate setObservations:observations withCompletion:^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             MapObservation *mapObservation = [weakSelf.mapDelegate.mapObservations observationOfId:observation.objectID];
@@ -63,7 +65,7 @@
 
 - (void)removeFromSuperview {
     [super removeFromSuperview];
-
+    
     if (self.mapDelegate) {
         [self.mapDelegate cleanup];
         self.mapDelegate = nil;

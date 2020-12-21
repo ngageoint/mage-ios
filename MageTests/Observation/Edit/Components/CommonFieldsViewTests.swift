@@ -13,7 +13,7 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class CommonFieldsViewTests: QuickSpec {
+class CommonFieldsViewTests: KIFSpec {
     
     override func spec() {
         
@@ -22,8 +22,7 @@ class CommonFieldsViewTests: QuickSpec {
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var commonFieldsView: CommonFieldsView!
-            var view: UIView!
-            var controller: ContainingUIViewController!
+            var controller: UIViewController!
             var window: UIWindow!;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
@@ -32,7 +31,7 @@ class CommonFieldsViewTests: QuickSpec {
                     DispatchQueue.global(qos: .userInitiated).async {
                         Thread.sleep(forTimeInterval: 5.0);
                         DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
+                            expect(view) == recordSnapshot(usesDrawRect: true);
                             doneClosure?();
                         }
                     }
@@ -43,13 +42,11 @@ class CommonFieldsViewTests: QuickSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                
-                controller = ContainingUIViewController();
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
+                window = UIWindow(frame: UIScreen.main.bounds);
                 window.makeKeyAndVisible();
+                
+                controller = UIViewController();
+                window.rootViewController = controller;
                                 
                 UserDefaults.standard.set(0, forKey: "mapType");
                 UserDefaults.standard.set(false, forKey: "showMGRS");
@@ -57,109 +54,101 @@ class CommonFieldsViewTests: QuickSpec {
             }
             
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
+                tester().waitForAnimationsToFinish();
+                waitUntil { done in
+                    controller.dismiss(animated: false, completion: {
+                        done();
+                    });
+                }
+                controller = nil;
+                window.resignKey();
                 window.rootViewController = nil;
                 window = nil;
-                TestHelpers.clearAndSetUpStack();
+                TestHelpers.cleanUpStack();
             }
             
             it("empty observation") {
                 var completeTest = false;
-                
+
                 let observation = ObservationBuilder.createBlankObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+
+                commonFieldsView = CommonFieldsView(observation: observation);
+
+                controller.view.addSubview(commonFieldsView)
+                commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 
-                controller.viewDidLoadClosure = {
-                    commonFieldsView = CommonFieldsView(observation: observation);
-                    
-                    view.addSubview(commonFieldsView)
-                    commonFieldsView.autoPinEdgesToSuperviewEdges();
-                    maybeRecordSnapshot(view, doneClosure: {
-                        completeTest = true;
-                    })
-                }
-                
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
+                maybeRecordSnapshot(commonFieldsView, doneClosure: {
+                    completeTest = true;
+                })
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-            
+
             it("point observation") {
                 var completeTest = false;
-                
+
                 let observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-                
-                controller.viewDidLoadClosure = {
-                    commonFieldsView = CommonFieldsView(observation: observation);
-                    
-                    view.addSubview(commonFieldsView)
-                    commonFieldsView.autoPinEdgesToSuperviewEdges();
-                    maybeRecordSnapshot(view, doneClosure: {
-                        completeTest = true;
-                    })
-                }
-                
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
+
+                commonFieldsView = CommonFieldsView(observation: observation);
+
+                controller.view.addSubview(commonFieldsView)
+                commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                maybeRecordSnapshot(commonFieldsView, doneClosure: {
+                    completeTest = true;
+                })
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-            
+
             it("line observation") {
                 var completeTest = false;
-                
+
                 let observation = ObservationBuilder.createLineObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-                
-                controller.viewDidLoadClosure = {
-                    commonFieldsView = CommonFieldsView(observation: observation);
-                    
-                    view.addSubview(commonFieldsView)
-                    commonFieldsView.autoPinEdgesToSuperviewEdges();
-                    maybeRecordSnapshot(view, doneClosure: {
-                        completeTest = true;
-                    })
-                }
-                
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
+
+                commonFieldsView = CommonFieldsView(observation: observation);
+
+                controller.view.addSubview(commonFieldsView)
+                commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                maybeRecordSnapshot(commonFieldsView, doneClosure: {
+                    completeTest = true;
+                })
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
-            
+
             it("polygon observation") {
                 var completeTest = false;
-                
+
                 let observation = ObservationBuilder.createPolygonObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-                
-                controller.viewDidLoadClosure = {
-                    commonFieldsView = CommonFieldsView(observation: observation);
-                    
-                    view.addSubview(commonFieldsView)
-                    commonFieldsView.autoPinEdgesToSuperviewEdges();
-                    maybeRecordSnapshot(view, doneClosure: {
-                        completeTest = true;
-                    })
-                }
-                
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
+
+                commonFieldsView = CommonFieldsView(observation: observation);
+
+                controller.view.addSubview(commonFieldsView)
+                commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                maybeRecordSnapshot(commonFieldsView, doneClosure: {
+                    completeTest = true;
+                })
+
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
         }

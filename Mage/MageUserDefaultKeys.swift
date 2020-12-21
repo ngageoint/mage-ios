@@ -10,6 +10,33 @@ import Foundation
 
 extension UserDefaults {
     
+    var mapType: Int? {
+        get {
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var currentUserId: String? {
+        get {
+            return string(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
+    var showMGRS: Bool? {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     struct MageServerDefaults: MageServerDefaultable {
         private init() { }
         

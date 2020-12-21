@@ -72,15 +72,36 @@ class MageCoreDataFixtures {
             fatalError("Unable to convert userabc.json to Data")
         }
         
-        guard let jsonDictionary: NSDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSDictionary else {
+        guard let jsonDictionary: [AnyHashable : Any] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [AnyHashable : Any] else {
             fatalError("Unable to convert userabc.json to JSON dictionary")
         }
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-            let u: User = User.insert(forJson: jsonDictionary as! [AnyHashable : Any], in: localContext)
-            u.remoteId = userId;
+            let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
+            var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
+            if (existingRole == nil) {
+                existingRole = Role.insert(forJson: roleJson, in: localContext);
+                print("inserting a role");
+            } else {
+                print("role already existed")
+            }
             
-        }, completion: completion)
+//            let u: User = User.insert(forJson: jsonDictionary, in: localContext)
+//            u.remoteId = userId;
+//            u.role = existingRole;
+            
+        }) { (success, error) in
+            print("role was inserted")
+            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+                print("inserting a user")
+                let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
+
+                let existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
+                let u: User = User.insert(forJson: jsonDictionary, in: localContext)
+                u.remoteId = userId;
+                u.role = existingRole;
+            }, completion: completion);
+        }
     }
     
     public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler?) {
@@ -89,6 +110,30 @@ class MageCoreDataFixtures {
             let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
             event?.teams?.first?.addUsersObject(user!);
         }, completion: completion);
+    }
+    
+    public static func addObservationToCurrentEvent(observationJson: [AnyHashable : Any], completion: MRSaveCompletionHandler?) {
+        MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+            Observation.createObservation(observationJson, in: localContext);
+        }, completion: completion)
+    }
+    
+    public static func loadObservationsJson() -> [AnyHashable : Any] {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
+            fatalError("observations.json not found")
+        }
+        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+            fatalError("Unable to convert observations.json to String")
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            fatalError("Unable to convert observations.json to Data")
+        }
+        
+        guard let jsonDictionary: [[AnyHashable : Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[AnyHashable : Any]] else {
+            fatalError("Unable to convert observations.json to JSON dictionary")
+        }
+        return jsonDictionary[0];
     }
     
     public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler?) {
@@ -110,9 +155,8 @@ class MageCoreDataFixtures {
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
             if let o: Observation = Observation.mr_createEntity(in: localContext) {
-                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
                 o.eventId = eventId;
-                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: o.userId, in: localContext)!;
+                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
                 o.user = user;
             }
         }, completion: completion)
@@ -137,13 +181,12 @@ class MageCoreDataFixtures {
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
             if let o: Observation = Observation.mr_createEntity(in: localContext) {
-                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
                 o.eventId = eventId;
+                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
                 o.error = [
                     "errorStatusCode" : 503,
                     "errorMessage": "failed"
                 ];
-                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: o.userId, in: localContext)!;
                 o.user = user;
             }
         }, completion: completion)
@@ -167,7 +210,6 @@ class MageCoreDataFixtures {
         }
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-            print("save the event")
             if let e: Event = Event.mr_createEntity(in: localContext) {
                 e.name = name;
                 e.remoteId = remoteId;
@@ -180,9 +222,7 @@ class MageCoreDataFixtures {
                 ]
                 let team = Team.insert(forJson: teamJson, in: localContext);
                 e.addTeamsObject(team);
-                print("creating this \(e)")
             }
-            print("created entity")
         }, completion: completion)
     }
     

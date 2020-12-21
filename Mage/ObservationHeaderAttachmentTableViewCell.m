@@ -6,6 +6,7 @@
 
 #import "ObservationHeaderAttachmentTableViewCell.h"
 #import "AttachmentCollectionDataStore.h"
+#import "MAGE-Swift.h"
 #import "Theme+UIResponder.h"
 
 @interface ObservationHeaderAttachmentTableViewCell()
@@ -20,7 +21,7 @@
 }
 
 - (void) configureCellForObservation:(Observation *)observation withForms:(NSArray *)forms {
-    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
+    [self.attachmentCollection registerClass:[AttachmentCell class] forCellWithReuseIdentifier:@"AttachmentCell"];
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;

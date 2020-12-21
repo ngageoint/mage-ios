@@ -100,12 +100,17 @@ extension FieldSelectionCoordinator: PropertyEditDelegate {
 }
 
 extension FieldSelectionCoordinator: GeometryEditDelegate {
-    func geometryEditComplete(_ geometry: SFGeometry!, fieldDefintion field: [AnyHashable : Any]!, coordinator: Any!) {
-        let point: SFPoint = geometry as! SFPoint;
-        print("Field selection delegate latitude \(point.y) ");
-        self.formField.setValue(geometry);
-        if (self.formField.isValid()) {
-            self.formField.delegate?.fieldValueChanged(self.field, value: geometry);
+    
+    func geometryEditComplete(_ geometry: SFGeometry!, fieldDefintion field: [AnyHashable : Any]!, coordinator: Any!, wasValueChanged changed: Bool) {
+        if (changed) {
+            let point: SFPoint = geometry as! SFPoint;
+            print("Field selection delegate latitude \(point.y) ");
+            self.formField.setValue(geometry);
+            if (self.formField.isValid()) {
+                self.formField.delegate?.fieldValueChanged(self.field, value: geometry);
+                geometryEdit.navigationController?.popViewController(animated: true);
+            }
+        } else {
             geometryEdit.navigationController?.popViewController(animated: true);
         }
     }

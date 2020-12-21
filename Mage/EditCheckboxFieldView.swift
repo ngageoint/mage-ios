@@ -33,35 +33,45 @@ class EditCheckboxFieldView : BaseFieldView {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
         label.font = globalContainerScheme().typographyScheme.caption;
-        label.text = "\(field[FieldKey.title.key] as? String ?? "") is required";
-        label.isHidden = true;
+        label.text = "";
+        label.autoSetDimension(.height, toSize: 14.5);
         return label;
+    }()
+    
+    lazy var containerView: UIView = {
+        let containerView: UIView = UIView(forAutoLayout: ());
+        containerView.addSubview(checkboxSwitch);
+        containerView.addSubview(label);
+        checkboxSwitch.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
+        label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
+        label.autoPinEdge(toSuperviewEdge: .trailing);
+        label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
+        return containerView;
     }()
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.init(field: field, delegate: delegate, value: false);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: false);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Bool) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Bool) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.addFieldView();
     }
     
     func addFieldView() {
-        self.addSubview(checkboxSwitch);
-        self.addSubview(label);
-        checkboxSwitch.autoPinEdge(toSuperviewEdge: .left);
-        checkboxSwitch.autoPinEdge(toSuperviewEdge: .top);
-        label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
-        label.autoPinEdge(toSuperviewEdge: .trailing);
-        label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
-        self.addSubview(errorLabel);
-        errorLabel.autoPinEdge(.top, to: .bottom, of: checkboxSwitch, withOffset: 4);
-        errorLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top);
+        if (editMode) {
+            viewStack.addArrangedSubview(containerView);
+            viewStack.addArrangedSubview(errorLabel);
+            viewStack.setCustomSpacing(3.5, after: containerView);
+        } else {
+            viewStack.addArrangedSubview(fieldNameLabel);
+            viewStack.addArrangedSubview(checkboxSwitch);
+            checkboxSwitch.isUserInteractionEnabled = false;
+        }
     }
     
     override func setValue(_ value: Any) {
@@ -80,7 +90,7 @@ class EditCheckboxFieldView : BaseFieldView {
     }
     
     override func setValid(_ valid: Bool) {
-        errorLabel.isHidden = valid;
+        valid ? (errorLabel.text = "") : (errorLabel.text = getErrorMessage());
         if (valid) {
             label.textColor = .label;
         } else {
@@ -90,5 +100,9 @@ class EditCheckboxFieldView : BaseFieldView {
     
     override func isEmpty() -> Bool {
         return !(self.value as? Bool ?? false);
+    }
+    
+    override func getErrorMessage() -> String {
+        return "\(field[FieldKey.title.key] as? String ?? "") is required";
     }
 }

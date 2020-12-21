@@ -4,6 +4,8 @@
     "name": "Test",
     "color": "#355332",
     "primaryField": "field0",
+    "primaryFeedField": "field0",
+    "secondaryFeedField": "field1",
     "fields": [
       {
         "name": "field0",

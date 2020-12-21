@@ -18,7 +18,6 @@
 #import "Filter.h"
 #import "Observations.h"
 #import "SFPoint.h"
-#import "ObservationEditCoordinator_legacy.h"
 #import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
@@ -128,7 +127,7 @@
 }
 
 - (void) startCreateNewObservationAtLocation: (CLLocation *) location andProvider: (NSString *) provider {
-    ObservationEditCoordinator_legacy *edit;
+    ObservationEditCoordinator *edit;
     SFPoint *point;
     
     CLLocationAccuracy accuracy = 0;
@@ -143,7 +142,7 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:self andLocation:point andAccuracy: accuracy andProvider: provider andDelta: delta];
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self location:point accuracy:accuracy provider:provider delta:delta];
     [self.childCoordinators addObject:edit];
     [edit start];
 }
@@ -233,27 +232,30 @@
 }
 
 - (void) selectedObservation:(Observation *)observation {
-    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-    ovc.observation = observation;
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
+//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+//    ovc.observation = observation;
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-    ovc.observation = observation;
+//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+//    ovc.observation = observation;
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-    ovc.observation = observation;
+//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
+//    ovc.observation = observation;
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (IBAction)newButtonTapped:(id)sender {
     CLLocation *location = [[LocationService singleton] location];
 
-    ObservationEditCoordinator_legacy *edit;
+    ObservationEditCoordinator *edit;
     
     SFPoint *point;
     CLLocationAccuracy accuracy = 0;
@@ -268,7 +270,7 @@
         accuracy = location.horizontalAccuracy;
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
-    edit = [[ObservationEditCoordinator_legacy alloc] initWithRootViewController:self andDelegate:(id<ObservationEditDelegate>)self andLocation:point andAccuracy:accuracy andProvider:@"gps" andDelta:delta];
+    edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self location:point accuracy:accuracy provider:@"gps" delta:delta];
 
     [self.childCoordinators addObject:edit];
     [edit start];

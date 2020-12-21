@@ -22,7 +22,7 @@ class MageRootViewTests: KIFSpec {
     override func spec() {
         
         describe("MageRootView") {
-            let recordSnapshots = false;
+            let recordSnapshots = true;
             Nimble_Snapshots.setNimbleTolerance(0.01);
             
             var controller: MageRootViewController!

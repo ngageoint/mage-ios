@@ -11,7 +11,7 @@
 #import "ObservationEditViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
-@protocol ObservationEditDelegate
+@protocol ObservationEditDelegate_legacy
 
 - (void) editCancel: (NSObject *) coordinator;
 - (void) editComplete: (Observation *) observation coordinator: (NSObject *) coordinator;
@@ -21,8 +21,8 @@
 
 @interface ObservationEditCoordinator_legacy : NSObject
 
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andLocation: (SFGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta;
-- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate>) delegate andObservation: (Observation *) observation;
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate_legacy>) delegate andLocation: (SFGeometry *) location andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta;
+- (instancetype) initWithRootViewController: (UIViewController *) rootViewController andDelegate: (id<ObservationEditDelegate_legacy>) delegate andObservation: (Observation *) observation;
 - (void) start;
 
 @end

@@ -81,7 +81,6 @@ class CommonFieldsView: MDCCard {
 
 extension CommonFieldsView: FieldSelectionDelegate {
     func launchFieldSelectionViewController(viewController: UIViewController) {
-        print("launch field seelection view controller \(viewController)");
         fieldSelectionDelegate?.launchFieldSelectionViewController(viewController: viewController);
     }
 }
@@ -98,17 +97,11 @@ extension CommonFieldsView: ObservationFormFieldListener {
                 self.observation.timestamp = nil;
             } else {
                 newProperties?[dateField[FieldKey.name.key] as! String] = value as! String;
-                self.observation.timestamp = dateView.value as! Date;
+                self.observation.timestamp = dateView.value as? Date;
             }
         } else if (field[FieldKey.name.key] as! String == locationField[FieldKey.name.key] as! String) {
-            let point: SFPoint = value as! SFPoint;
-            print("latitude \(point.y) ");
-            
             self.observation.setGeometry(value as! SFGeometry);
         }
         self.observation.properties = newProperties;
-        print("new properties are \(newProperties)")
-        print("self.observation in common fields view \(self.observation)")
-//        self.observationFormListener?.formUpdated(form, eventForm: eventForm!, form: formIndex);
     }
 }

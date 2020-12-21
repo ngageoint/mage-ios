@@ -85,6 +85,7 @@
 
     @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
+@property (strong, nonatomic) NSMutableArray *listenersRegistered;
 @property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 @end
 
@@ -92,31 +93,19 @@
 
 - (void) setupListeners {
     if (self.mapView) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults addObserver:self
-                   forKeyPath:@"mapType"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
-        [defaults addObserver:self
-                   forKeyPath:kCurrentEventIdKey
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
+        self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
         if (!self.hideStaticLayers) {
+            [self.listenersRegistered addObject:@"selectedStaticLayers"];
+        }
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        for (NSString *keyPath in self.listenersRegistered) {
             [defaults addObserver:self
-                       forKeyPath:@"selectedStaticLayers"
+                       forKeyPath:keyPath
                           options:NSKeyValueObservingOptionNew
                           context:NULL];
         }
-        
-        [defaults addObserver:self
-                   forKeyPath:@"selectedOnlineLayers"
-                      options:NSKeyValueObservingOptionNew
-                      context:NULL];
-        
-        [defaults addObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]] options:NSKeyValueObservingOptionNew context:NULL];
-        
+
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
@@ -299,11 +288,9 @@
 - (void) cleanup {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     @try {
-        [defaults removeObserver:self forKeyPath:@"mapType"];
-        [defaults removeObserver:self forKeyPath:@"selectedStaticLayers"];
-        [defaults removeObserver:self forKeyPath:@"selectedOnlineLayers"];
-        [defaults removeObserver:self forKeyPath:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
-        [defaults removeObserver:self forKeyPath:kCurrentEventIdKey];
+        for (NSString *keyPath in self.listenersRegistered) {
+            [defaults removeObserver:self forKeyPath:keyPath];
+        }
     }
     @catch (id exception) {
         NSLog(@"Failed to remove observer from user defaults: %@", exception);
@@ -400,6 +387,7 @@
     [self.observationAnnotations clear];
     
     NSError *error;
+    self.observations.fetchedResultsController.fetchRequest.fetchBatchSize = 0;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
         NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
         return;
@@ -1266,6 +1254,7 @@
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
+        annotationView.accessibilityLabel = [NSString stringWithFormat:@"Observation %@", observationAnnotation.observation.objectID];
         return annotationView;
     }
     else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
@@ -1507,7 +1496,6 @@
 
 - (void) updateObservations:(NSArray *)observations {
     __weak typeof(self) weakSelf = self;
-
     for (Observation *observation in observations) {
         if (!self.observations) return;
         dispatch_sync(dispatch_get_main_queue(), ^{

@@ -25,7 +25,7 @@
 
 - (void) populateCellWithFormField: (id) field andValue: (id) value {
     if (self.ads == nil) {
-        [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
+        [self.attachmentCollection registerClass:[AttachmentCell class] forCellWithReuseIdentifier:@"AttachmentCell"];
         self.ads = [[AttachmentCollectionDataStore alloc] init];
         self.ads.attachmentCollection = self.attachmentCollection;
         self.attachmentCollection.delegate = self.ads;

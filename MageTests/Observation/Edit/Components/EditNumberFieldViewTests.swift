@@ -74,6 +74,14 @@ class EditNumberFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
+            it("non edit mode") {
+                numberFieldView = EditNumberFieldView(field: field, editMode: false, value: "2");
+                
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                expect(view) == maybeSnapshot();
+            }
+            
             it("no initial value") {
                 numberFieldView = EditNumberFieldView(field: field);
                 
@@ -296,7 +304,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
-                expect(numberFieldView.getValue() as? NSNumber) == 1;
+                expect(numberFieldView.getValue()) == 1;
                 expect(view) == maybeSnapshot();
             }
             
@@ -312,7 +320,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "3";
-                expect(numberFieldView.getValue() as? NSNumber) == 3;
+                expect(numberFieldView.getValue()) == 3;
                 expect(view) == maybeSnapshot();
             }
             
@@ -329,7 +337,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
-                expect(numberFieldView.getValue() as? NSNumber) == 1;
+                expect(numberFieldView.getValue()) == 1;
                 expect(view) == maybeSnapshot();
             }
             
@@ -346,7 +354,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "9";
-                expect(numberFieldView.getValue() as? NSNumber) == 9;
+                expect(numberFieldView.getValue()) == 9;
                 expect(view) == maybeSnapshot();
             }
             
@@ -373,7 +381,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.cancelButtonPressed();
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "2";
-                expect(numberFieldView.getValue() as? NSNumber) == 2;
+                expect(numberFieldView.getValue()) == 2;
                 expect(view) == maybeSnapshot();
             }
             
@@ -387,7 +395,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(numberFieldView.textField.text) == "4";
-                expect(numberFieldView.getValue() as? NSNumber) == 4;
+                expect(numberFieldView.getValue()) == 4;
                 expect(view) == maybeSnapshot();
             }
             

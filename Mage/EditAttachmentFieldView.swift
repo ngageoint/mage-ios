@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents.MDCTextField;
 import MaterialComponents.MDCButton;
 
 @objc protocol AttachmentCreationDelegate {
@@ -54,18 +53,6 @@ class EditAttachmentFieldView : BaseFieldView {
         return holder;
     }()
     
-    private lazy var fieldNameLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
-        let label = UILabel(forAutoLayout: ());
-        label.textColor = .systemGray;
-        var font = containerScheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
-        label.font = font;
-        label.autoSetDimension(.height, toSize: 16);
-        
-        return label;
-    }()
-    
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
@@ -73,14 +60,6 @@ class EditAttachmentFieldView : BaseFieldView {
         label.text = "At least one attachment must be added";
         label.isHidden = true;
         return label;
-    }()
-    
-    private lazy var wrapperStack: UIStackView = {
-        let stackView = UIStackView(forAutoLayout: ());
-        stackView.alignment = .fill;
-        stackView.distribution = .fill;
-        stackView.axis = .vertical;
-        return stackView;
     }()
     
     private lazy var actionsHolderView: UIStackView = {
@@ -130,47 +109,46 @@ class EditAttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.attachmentCreationCoordinator = attachmentCreationCoordinator;
         self.attachmentCreationCoordinator?.delegate = self;
         buildView();
         
         setValue(value);
-        fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "");
-        if ((field[FieldKey.required.key] as? Bool) == true) {
-            fieldNameLabel.text = (fieldNameLabel.text ?? "") + " *"
-        }
     }
     
     func buildView() {
-        self.addSubview(wrapperStack);
-        wrapperStack.autoPinEdgesToSuperviewEdges();
+        if (field[FieldKey.title.key] != nil) {
+            viewStack.addArrangedSubview(fieldNameSpacerView);
+            viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
+        }
         
-        let fieldNameSpacerView = UIView(forAutoLayout: ());
-        fieldNameSpacerView.addSubview(fieldNameLabel);
+        viewStack.addArrangedSubview(attachmentHolderView);
+        viewStack.setCustomSpacing(0, after: attachmentHolderView);
         
-        let actionSpacerView = UIView(forAutoLayout: ());
-        actionSpacerView.addSubview(actionsHolderView);
-        
-        wrapperStack.addArrangedSubview(fieldNameSpacerView);
-        wrapperStack.addArrangedSubview(attachmentHolderView);
-        wrapperStack.addArrangedSubview(errorLabel);
-        wrapperStack.addArrangedSubview(actionSpacerView);
-        
-        fieldNameLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
-        actionsHolderView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
-
-        actionsHolderView.addArrangedSubview(cameraButton);
-        actionsHolderView.addArrangedSubview(galleryButton);
-        actionsHolderView.addArrangedSubview(videoButton);
+        if (editMode) {
+            viewStack.addArrangedSubview(errorLabel);
+            viewStack.setCustomSpacing(0, after: errorLabel);
+            
+            let actionSpacerView = UIView(forAutoLayout: ());
+            actionSpacerView.addSubview(actionsHolderView);
+            viewStack.addArrangedSubview(actionSpacerView);
+            actionsHolderView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+            
+            actionsHolderView.addArrangedSubview(cameraButton);
+            actionsHolderView.addArrangedSubview(galleryButton);
+            actionsHolderView.addArrangedSubview(videoButton);
+        }
     }
     
     func setAttachmentHolderHeight() {
         var attachmentHolderHeight: CGFloat = 100.0;
         if let attachmentCount = attachments?.count {
-            attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
+            if (attachmentCount != 0) {
+                attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
+            }
         }
         attachmentHolderView.autoSetDimension(.height, toSize: attachmentHolderHeight);
     }
@@ -221,7 +199,6 @@ class EditAttachmentFieldView : BaseFieldView {
         } else {
             fieldNameLabel.textColor = .systemRed;
         }
-        setNeedsUpdateConstraints();
     }
     
     @objc func addCameraAttachment() {
@@ -241,7 +218,7 @@ extension EditAttachmentFieldView : AttachmentCreationCoordinatorDelegate {
     func attachmentCreated(attachment: Attachment) {
         print("attachment was created \(attachment)")
         self.addAttachment(attachment);
-        delegate?.fieldValueChanged(field, value: self.attachments);
+        delegate?.fieldValueChanged(field, value: [attachment] as Set<Attachment>);
     }
     
     func attachmentCreationCancelled() {

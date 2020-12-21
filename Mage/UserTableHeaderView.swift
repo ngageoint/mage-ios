@@ -89,7 +89,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     private lazy var nameField: UILabel = {
         let nameField = UILabel(forAutoLayout: ());
         nameField.font = UIFont.systemFont(ofSize: 18.0, weight: .bold);
-        nameField.textColor = UIColor.black.withAlphaComponent(0.87);
+        nameField.textColor = UIColor.label.withAlphaComponent(0.87);
         nameField.autoSetDimension(.height, toSize: 24);
         return nameField;
     }()

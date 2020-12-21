@@ -19,7 +19,6 @@ class EditDateView : BaseFieldView {
         if #available(iOS 13.4, *) {
             datePicker.preferredDatePickerStyle = .wheels
         }
-        print("is display gmt \(NSDate.isDisplayGMT())")
         if (NSDate.isDisplayGMT()) {
             datePicker.timeZone = TimeZone(secondsFromGMT: 0);
         } else {
@@ -64,9 +63,6 @@ class EditDateView : BaseFieldView {
         textField.inputAccessoryView = dateAccessoryView;
         
         controller.textInput = textField;
-        self.addSubview(textField);
-        textField.sizeToFit();
-        textField.autoPinEdgesToSuperviewEdges();
         return textField;
     }()
     
@@ -74,15 +70,25 @@ class EditDateView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.init(field: field, delegate: delegate, value: nil);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         date = nil;
+        addFieldView();
         setValue(value);
-        setupController();
+    }
+    
+    func addFieldView() {
+        if (editMode) {
+            viewStack.addArrangedSubview(textField);
+            setupController();
+        } else {
+            viewStack.addArrangedSubview(fieldNameLabel);
+            viewStack.addArrangedSubview(fieldValue);
+        }
     }
     
     func setTextFieldValue() {
@@ -95,7 +101,6 @@ class EditDateView : BaseFieldView {
     
     @objc func dateChanged() {
         date = datePicker.date;
-        print("date changed to \(date)")
         textField.text = (datePicker.date as NSDate).formattedDisplay();
     }
     
@@ -117,24 +122,24 @@ class EditDateView : BaseFieldView {
     }
     
     override func setValue(_ value: Any) {
+        self.setValue(value as? String)
+    }
+    
+    func setValue(_ value: String?) {
         datePicker.date = Date();
-        textField.text = nil;
+        editMode ? (textField.text = nil) : (fieldValue.text = nil);
         
-        if let safeValue = value as? String {
+        if let safeValue = value {
             self.value = formatter.date(from: safeValue);
             if let safeDate = self.value as? Date {
                 datePicker.date = safeDate;
-                textField.text = (datePicker.date as NSDate).formattedDisplay();
+                editMode ? (textField.text = (datePicker.date as NSDate).formattedDisplay()) : (fieldValue.text = (datePicker.date as NSDate).formattedDisplay());
             }
         }
     }
     
-    override func setValid(_ valid: Bool) {
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
-        }
+    override func getErrorMessage() -> String {
+        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
 }
 

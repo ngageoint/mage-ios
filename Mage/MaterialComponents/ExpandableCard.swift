@@ -67,7 +67,7 @@ class ExpandableCard: MDCCard {
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
         label.font = globalContainerScheme().typographyScheme.subtitle2
-        label.textColor = .systemGray
+        label.textColor = UIColor.label.withAlphaComponent(0.6);
         return label
     }()
     

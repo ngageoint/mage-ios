@@ -7,6 +7,7 @@
 //
 
 #import "Theme+UIResponder.h"
+#import "MAGE-Swift.h"
 
 @import ObjectiveC;
 
@@ -77,7 +78,7 @@
         UINavigationController *navigationController = [self performSelector:@selector(navigationController)];
         if (navigationController) {
             navigationController.navigationBar.translucent = NO;
-            navigationController.navigationBar.barTintColor = [UIColor primary];
+            navigationController.navigationBar.barTintColor = [UIColor colorNamed:@"primary"];
             navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
             navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
             navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
@@ -86,17 +87,17 @@
                 [appearance configureWithOpaqueBackground];
                 appearance.titleTextAttributes = @{
                     NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-                    NSBackgroundColorAttributeName: [UIColor primary]
+                    NSBackgroundColorAttributeName: [UIColor colorNamed:@"primary"]
                 };
                 appearance.largeTitleTextAttributes = @{
                     NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-                    NSBackgroundColorAttributeName: [UIColor primary]
+                    NSBackgroundColorAttributeName: [UIColor colorNamed:@"primary"]
                 };
                 
                 navigationController.navigationBar.standardAppearance = appearance;
                 navigationController.navigationBar.scrollEdgeAppearance = appearance;
-                navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor primary];
-                navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor primary];
+                navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor colorNamed:@"primary"];
+                navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor colorNamed:@"primary"];
             } else {
                 // Fallback on earlier versions
             }

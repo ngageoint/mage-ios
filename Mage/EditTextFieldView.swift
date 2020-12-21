@@ -59,29 +59,35 @@ class EditTextFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
-        self.init(field: field, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType);
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
-        self.init(field: field, delegate: delegate, value: nil, multiline: multiline);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: multiline);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.multiline = multiline;
         self.keyboardType = keyboardType;
         self.addFieldView();
-        setupController();
     }
     
     func addFieldView() {
-        if (multiline) {
-            self.addSubview(multilineTextField);
-            multilineTextField.autoPinEdgesToSuperviewEdges();
+        if (editMode) {
+            if (multiline) {
+                self.addSubview(multilineTextField);
+                multilineTextField.autoPinEdgesToSuperviewEdges();
+            } else {
+                self.addSubview(textField);
+                textField.autoPinEdgesToSuperviewEdges();
+            }
+            setupController();
         } else {
-            self.addSubview(textField);
-            textField.autoPinEdgesToSuperviewEdges();
+            viewStack.addArrangedSubview(fieldNameLabel);
+            viewStack.addArrangedSubview(fieldValue);
+            fieldValue.text = getValue();
         }
     }
     
@@ -90,11 +96,16 @@ class EditTextFieldView : BaseFieldView {
     }
     
     func setValue(_ value: String?) {
+        self.value = value;
         if (self.multiline) {
-            multilineTextField.text = value;
+            self.editMode ? (multilineTextField.text = value) : (fieldValue.text = value);
         } else {
-            textField.text = value;
+            self.editMode ? (textField.text = value) : (fieldValue.text = value);
         }
+    }
+    
+    func getValue() -> String? {
+        return value as? String;
     }
     
     override func isEmpty() -> Bool {
@@ -105,12 +116,8 @@ class EditTextFieldView : BaseFieldView {
         }
     }
     
-    override func setValid(_ valid: Bool) {
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
-        }
+    override func getErrorMessage() -> String {
+        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
 }
 
@@ -124,7 +131,6 @@ extension EditTextFieldView {
     }
     
     @objc func doneButtonPressed() {
-        print("done button \(self.multiline)")
         self.resignFieldFirstResponder();
     }
     
@@ -137,7 +143,6 @@ extension EditTextFieldView {
 extension EditTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("did end editing value \(value)")
         if (value as? String != textField.text) {
             if (textField.text == "") {
                 value = nil;
@@ -152,16 +157,12 @@ extension EditTextFieldView: UITextFieldDelegate {
 extension EditTextFieldView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        print("did end editing multi value \(value)")
-        print("textview.text \(textView.text)")
-
         if (value as? String != textView.text) {
             if (textView.text == "") {
                 value = nil;
             } else {
                 value = textView.text;
             }
-            print("field value changed to \(value)")
             delegate?.fieldValueChanged(field, value: value);
         }
     }

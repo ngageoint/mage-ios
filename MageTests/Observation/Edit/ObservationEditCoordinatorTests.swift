@@ -315,7 +315,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 }
             }
             
-            it("should show form chooser with new observation and pick a form and select a geometry field") {
+            it("should show form chooser with new observation and pick a form and select the observation geometry field") {
                 var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
@@ -350,6 +350,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Latitude");
                 tester().clearText(fromAndThenEnterText: "40.1", intoViewWithAccessibilityLabel: "Latitude");
+                tester().clearText(fromAndThenEnterText: "-105.26", intoViewWithAccessibilityLabel: "Longitude");
                 // need to wait so that the text field can change the geometry.
                 // TODO: Fix that
                 tester().wait(forTimeInterval: 1.0);
@@ -359,6 +360,71 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().waitForAnimationsToFinish();
                 
+                let obsPoint: SFPoint = coordinator.observation?.getGeometry() as! SFPoint;
+                expect(obsPoint.y).to(beCloseTo(40.1));
+                expect(obsPoint.x).to(beCloseTo(-105.26));
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                }
+            }
+            
+            it("should show form chooser with new observation and pick a form and select a geometry field") {
+                var completeTest = false;
+                waitUntil { done in
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
+                        Server.setCurrentEventId(1);
+                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
+                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
+                
+                let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                
+                coordinator.start();
+                
+                view = window;
+                
+                tester().waitForView(withAccessibilityLabel: "Test");
+                tester().tapView(withAccessibilityLabel: "Test");
+                
+                tester().waitForAnimationsToFinish();
+                tester().waitForTappableView(withAccessibilityLabel: "field1");
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().tapView(withAccessibilityLabel: "field1");
+                
+                tester().waitForAnimationsToFinish();
+                
+                tester().waitForView(withAccessibilityLabel: "Latitude");
+                tester().clearText(fromAndThenEnterText: "40.0", intoViewWithAccessibilityLabel: "Latitude");
+                tester().clearText(fromAndThenEnterText: "-105.26", intoViewWithAccessibilityLabel: "Longitude");
+                // need to wait so that the text field can change the geometry.
+                // TODO: Fix that
+                tester().wait(forTimeInterval: 1.0);
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Done");
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().tapView(withAccessibilityLabel: "Done");
+                tester().waitForAnimationsToFinish();
+                
+                let forms = (coordinator.observation?.properties!["forms"])! as! [[String: Any]];
+                let fieldPoint: SFPoint = forms[0]["field1"] as! SFPoint;
+                expect(fieldPoint.y).to(beCloseTo(40.0));
+                expect(fieldPoint.x).to(beCloseTo(-105.26));
+                                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -398,7 +464,6 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 tester().waitForAnimationsToFinish();
                 tester().waitForTappableView(withAccessibilityLabel: "timestamp");
-                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().tapView(withAccessibilityLabel: "timestamp");
                 tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "timestamp Date Picker");

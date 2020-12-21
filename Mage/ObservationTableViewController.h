@@ -7,7 +7,6 @@
 #import <UIKit/UIKit.h>
 #import "ObservationDataStore.h"
 #import "AttachmentSelectionDelegate.h"
-#import "ObservationEditCoordinator_legacy.h"
 
 @interface ObservationTableViewController : UITableViewController <ObservationSelectionDelegate>
 

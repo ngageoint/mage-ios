@@ -10,7 +10,6 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class EditDropdownFieldView : BaseFieldView {
-    var didSetUpConstraints = false;
     
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
@@ -25,52 +24,51 @@ class EditDropdownFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.init(field: field, delegate: delegate, value: nil);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil);
     }
     
-    convenience init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String) {
-        self.init(field: field, delegate: delegate, value: [value]);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: [value]);
     }
     
-    init(field: [String: Any], delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [String]?) {
-        super.init(field: field, delegate: delegate, value: value);
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [String]?) {
+        super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.addFieldView();
-        setupController();
     }
     
     func addFieldView() {
-        self.addSubview(textField);
-        let tapView = addTapRecognizer();
-        tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
-    }
-    
-    override func updateConstraints() {
-        if (!didSetUpConstraints) {
-            textField.autoPinEdgesToSuperviewEdges();
+        if (self.editMode) {
+            viewStack.addArrangedSubview(textField);
+            let tapView = addTapRecognizer();
+            tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
+            setupController();
+        } else {
+            viewStack.addArrangedSubview(fieldNameLabel);
+            viewStack.addArrangedSubview(fieldValue);
+            fieldValue.text = getValue()?.joined(separator: ", ");
         }
-        super.updateConstraints();
     }
     
     override func setValue(_ value: Any) {
-        if let stringValue = value as? String {
-            textField.text = stringValue;
+        if (value is String) {
             self.value = [value];
-        } else if let stringArray = value as? [String] {
-            textField.text = stringArray.joined(separator: ", ");
+        } else if (value is [String]) {
             self.value = value;
         }
+        
+        self.editMode ? (textField.text = getValue()?.joined(separator: ", ")) : (fieldValue.text = getValue()?.joined(separator: ", "));
+    }
+    
+    func getValue() -> [String]? {
+        return value as? [String];
     }
     
     override func isEmpty() -> Bool {
         return (textField.text ?? "").count == 0;
     }
     
-    override func setValid(_ valid: Bool) {
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            controller.setErrorText(((field[FieldKey.title.key] as? String) ?? "Field ") + " is required", errorAccessibilityValue: nil);
-        }
+    override func getErrorMessage() -> String {
+        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
 }

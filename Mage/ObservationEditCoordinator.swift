@@ -15,7 +15,13 @@ import MaterialComponents.MaterialBottomSheet
     @objc optional func formUpdated(_ form: [String: Any], eventForm: [String: Any], form index: Int);
 }
 
-class ObservationEditCoordinator {
+@objc protocol ObservationEditDelegate {
+    @objc func editCancel(_ coordinator: NSObject);
+    @objc func editComplete(_ observation: Observation, coordinator: NSObject);
+    @objc func observationDeleted(_ observation: Observation, coordinator: NSObject);
+}
+
+@objc class ObservationEditCoordinator: NSObject {
     
     var newObservation = false;
     var observation: Observation?;
@@ -43,21 +49,19 @@ class ObservationEditCoordinator {
         return User.fetchCurrentUser(in: self.managedObjectContext);
     }()
     
-    private init() {
-        
-    }
-    
     @objc public init(rootViewController: UIViewController!, delegate: ObservationEditDelegate, location: SFGeometry, accuracy: CLLocationAccuracy, provider: String, delta: Double) {
+        super.init();
         observation = createObservation(location: location, accuracy: accuracy, provider: provider, delta: delta);
         setupCoordinator(rootViewController: rootViewController, delegate: delegate);
     }
     
     @objc public init(rootViewController: UIViewController!, delegate: ObservationEditDelegate, observation: Observation) {
+        super.init();
         self.observation = setupObservation(observation: observation);
         setupCoordinator(rootViewController: rootViewController, delegate: delegate);
     }
     
-    public func start() {
+    @objc public func start() {
         if (!self.event.isUser(inEvent: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create observations for an event you are not part of.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
@@ -126,6 +130,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func saveObservation(observation: Observation) {
+        print("Save observation");
         self.observation!.user = user;
         self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
             if (!contextDidSave) {
@@ -137,7 +142,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             }
             
             print("Saved the observation \(observation.remoteId)");
-            delegate?.editComplete(observation, coordinator: self as? NSObject);
+            delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
         }
     }
@@ -148,7 +153,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
         alert.addAction(UIAlertAction(title: "Yes, Discard", style: .destructive, handler: { [self] (action) in
             self.navigationController?.dismiss(animated: true, completion: nil);
             self.managedObjectContext.reset();
-            delegate?.editCancel(self as? NSObject);
+            delegate?.editCancel(self as NSObject);
         }));
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
         self.navigationController?.present(alert, animated: true, completion: nil);

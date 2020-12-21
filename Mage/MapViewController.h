@@ -13,6 +13,7 @@
 #import "UserSelectionDelegate.h"
 #import "ObservationSelectionDelegate.h"
 #import "FeedItemSelectionDelegate.h"
+#import "LocationService.h"
 //#import "MAGE-Swift.h"
 
 @interface MapViewController : UIViewController <MapCalloutTapped, ObservationSelectionDelegate, UserSelectionDelegate, FeedItemSelectionDelegate>
@@ -20,6 +21,7 @@
 @property (nonatomic, strong) MapDelegate *mapDelegate;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (nonatomic) LocationService *locationService;
 -(void) filterTapped:(id) sender;
 -(void) createNewObservation:(id) sender;
 

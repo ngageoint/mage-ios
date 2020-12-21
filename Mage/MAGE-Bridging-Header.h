@@ -13,6 +13,7 @@
 #import "ObservationAccuracy.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
+#import "ObservationViewController.h"
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
@@ -24,6 +25,7 @@
 #import "Server.h"
 #import <MGRS.h>
 #import "UIColor+Mage.h"
+#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "SettingsTableViewController.h"
 #import "Theme+UIResponder.h"
@@ -57,6 +59,9 @@
 #import "SelectEditViewController.h"
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
+#import "MapViewController.h"
+#import "TimeFilter.h"
+#import "ObservationImage.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"
@@ -64,7 +69,11 @@
 #import "Attachment.h"
 #import "Event.h"
 #import "Observation.h"
+#import "ObservationImportant.h"
+#import "ObservationFavorite.h"
+
 #import "Form.h"
 #import "Location.h"
 #import "GPSLocation.h"
 #import "Team.h"
+#import "Role.h"

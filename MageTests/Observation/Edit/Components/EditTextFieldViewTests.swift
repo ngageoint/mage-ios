@@ -62,6 +62,14 @@ class EditTextFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
+            it("non edit mode") {
+                textFieldView = EditTextFieldView(field: field, editMode: false, value: "Hello");
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                expect(view) == maybeSnapshot();
+            }
+            
             it("email field") {
                 textFieldView = EditTextFieldView(field: field, keyboardType: .emailAddress);
                 expect(textFieldView.textField.keyboardType) == .emailAddress;
@@ -247,6 +255,14 @@ class EditTextFieldViewTests: KIFSpec {
                          "name": "field8",
                          "id": 8
                 ];
+            }
+            
+            it("non edit mode") {
+                textFieldView = EditTextFieldView(field: field, editMode: false, value: "Hi\nHello");
+                
+                view.addSubview(textFieldView)
+                textFieldView.autoPinEdgesToSuperviewEdges();
+                expect(view) == maybeSnapshot();
             }
             
             it("no initial value") {

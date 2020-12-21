@@ -78,7 +78,11 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 view.backgroundColor = .systemBackground;
                 window.makeKeyAndVisible();
                 
-                field = ["title": "Field Title"];
+                field = [
+                    "title": "Field Title",
+                    "type": "attachment",
+                    "name": "field0"
+                ];
                 
                 UserDefaults.standard.synchronize();
             }
@@ -88,7 +92,73 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = nil;
                 controller = nil;
                 HTTPStubs.removeAllStubs();
-//                TestHelpers.clearAndSetUpStack();
+            }
+            
+            it("non edit mode with no field title") {
+                field["title"] = nil;
+                var completeTest = false;
+                
+                let observation = ObservationBuilder.createBlankObservation();
+                observation.remoteId = "remoteobservationid";
+                let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
+                let attachmentURL: URL = URL(string: attachment.url!)!;
+                stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
+                }
+                
+                controller.viewDidLoadClosure = {
+                    attachmentFieldView = EditAttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    
+                    view.addSubview(attachmentFieldView)
+                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                }
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
+            }
+            
+            it("non edit mode with field title") {
+                var completeTest = false;
+                
+                let observation = ObservationBuilder.createBlankObservation();
+                observation.remoteId = "remoteobservationid";
+                let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
+                let attachmentURL: URL = URL(string: attachment.url!)!;
+                stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
+                }
+                
+                controller.viewDidLoadClosure = {
+                    attachmentFieldView = EditAttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    
+                    view.addSubview(attachmentFieldView)
+                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                }
+                
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                }
             }
             
             it("no initial value") {
