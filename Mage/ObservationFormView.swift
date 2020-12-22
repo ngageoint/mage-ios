@@ -85,7 +85,6 @@ class ObservationFormView: UIStackView {
                 let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
                 fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
             case "numberfield":
-                print("NUMBER FIELD VALUE \(value)")
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case "textfield":
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
