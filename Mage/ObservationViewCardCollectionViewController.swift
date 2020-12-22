@@ -24,6 +24,7 @@ import MaterialComponents.MDCCard
     var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
+    var attachmentViewCoordinator: AttachmentViewCoordinator?;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -131,7 +132,7 @@ import MaterialComponents.MDCCard
         if (UserDefaults.standard.integer(forKey: "serverMajorVersion") < 6) {
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
-                    let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation,  viewController: self);
+                    let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
                     stackView.addArrangedSubview(attachmentCard);
                 }
             }
@@ -162,7 +163,7 @@ import MaterialComponents.MDCCard
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self, attachmentSelectionDelegate: self);
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
@@ -183,5 +184,18 @@ extension ObservationViewCardCollectionViewController: ObservationFormListener {
 //        observationProperties["forms"] = observationForms;
 //        observation?.properties = observationProperties;
 //        setExpandableCardHeaderInformation(form: form, index: index);
+    }
+}
+
+extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
+    func selectedAttachment(_ attachment: Attachment!) {
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+        attachmentViewCoordinator?.start();
+    }
+}
+
+extension ObservationViewCardCollectionViewController: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }
