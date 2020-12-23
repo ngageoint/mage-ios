@@ -12,6 +12,8 @@ import Nimble
 import PureLayout
 import MagicalRecord
 
+@testable import MAGE
+
 @available(iOS 13.0, *)
 class FeedTests: KIFSpec {
     

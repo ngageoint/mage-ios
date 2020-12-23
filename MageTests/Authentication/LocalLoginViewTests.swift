@@ -79,7 +79,7 @@ class LocalLoginViewTests: KIFSpec {
                 window?.autoSetDimension(.width, toSize: 414);
                 window?.makeKeyAndVisible();
                 
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                                 
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);

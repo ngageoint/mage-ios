@@ -49,9 +49,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 window?.autoSetDimension(.width, toSize: 414);
                 window?.autoSetDimension(.height, toSize: 896);
                 
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
-                UserDefaults.Display.set(0, forKey: .mapType);
-                UserDefaults.Display.set(false, forKey: .showMGRS);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent { (_, _) in
@@ -86,7 +86,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             it("should load the LoginViewController") {
                 MageSessionManager.shared()?.setToken("oldToken");
                 StoredPassword.persistToken(toKeyChain: "oldToken");
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.standard.deviceRegistered = true;
 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
@@ -99,7 +99,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login with registered device") {
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
@@ -130,7 +130,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login with an inactive user") {
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
@@ -161,7 +161,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login with registered device and skip the disclaimer screen") {
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccessNoDisclaimer.json", type(of: self))
@@ -197,8 +197,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
@@ -246,8 +246,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
@@ -288,8 +288,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -326,8 +326,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -372,8 +372,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
@@ -413,12 +413,12 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
-                UserDefaults.MageServerDefaults.set([
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
+                UserDefaults.standard.loginParameters = [
                     "serverUrl": "https://magetest",
                     "username": "username"
-                ], forKey: .loginParameters);
+                ];
                 StoredPassword.persistPassword(toKeyChain: "password");
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
@@ -463,13 +463,13 @@ class AuthenticationCoordinatorTests: KIFSpec {
                         done();
                     }
                 }
-                UserDefaults.MageServerDefaults.set("local", forKey: .loginType);
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
-                UserDefaults.MageServerDefaults.set([
+                UserDefaults.standard.loginType = "local";
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
+                UserDefaults.standard.loginParameters = [
                     "serverUrl": "https://magetest",
                     "username": "username"
-                ], forKey: .loginParameters);
+                ];
                 StoredPassword.persistPassword(toKeyChain: "password");
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
@@ -511,8 +511,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
-                UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                UserDefaults.standard.deviceRegistered = true;
+                UserDefaults.standard.currentUserId = "userabc";
                                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
@@ -569,7 +569,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login with registered device and disagree to the disclaimer") {
-                UserDefaults.Authentication.set(true, forKey: .deviceRegistered);
+                UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
                     let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
@@ -753,7 +753,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "OK");
 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request not made")
-                expect(UserDefaults.MageServerDefaults.string(forKey: .baseServerUrl)).toEventually(equal("https://magetest"));
+                expect(UserDefaults.standard.baseServerUrl).toEventually(equal("https://magetest"));
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
             
@@ -772,7 +772,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("https://magetestcancel", intoViewWithAccessibilityLabel: "Server URL");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
-                expect(UserDefaults.MageServerDefaults.string(forKey: .baseServerUrl)).to(equal("https://magetest"));
+                expect(UserDefaults.standard.baseServerUrl).to(equal("https://magetest"));
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
         }

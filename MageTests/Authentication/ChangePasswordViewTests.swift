@@ -33,7 +33,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 window?.autoSetDimension(.width, toSize: 414);
                 window?.autoSetDimension(.height, toSize: 896);
                 
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 navigationController = UINavigationController();
                 window?.rootViewController = navigationController;
@@ -351,7 +351,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
             it("should set the currently logged in user") {
                 waitUntil { done in
                     MageCoreDataFixtures.addUser { (_, _) in
-                        UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
+                        UserDefaults.standard.currentUserId = "userabc";
                         done();
                     }
                 }

@@ -50,7 +50,7 @@ class SignUpViewControllerTests: KIFSpec {
                 window?.autoSetDimension(.width, toSize: 414);
                 window?.autoSetDimension(.height, toSize: 896);
                 
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent { (_, _) in

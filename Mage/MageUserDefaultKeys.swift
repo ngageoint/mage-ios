@@ -82,6 +82,15 @@ extension UserDefaults {
         }
     }
     
+    var deviceRegistered: Bool {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var imageUploadSizes: [String: Any]? {
         get {
             return dictionary(forKey: #function);
@@ -92,6 +101,15 @@ extension UserDefaults {
     }
     
     var videoUploadQualities: [String: Any]? {
+        get {
+            return dictionary(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
+    var loginParameters: [String: Any]? {
         get {
             return dictionary(forKey: #function);
         }

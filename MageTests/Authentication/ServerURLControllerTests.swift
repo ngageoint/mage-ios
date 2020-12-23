@@ -125,7 +125,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should load current URL into the ServerURLController") {
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 view = ServerURLController(delegate: delegate);
                 navigationController?.pushViewController(view!, animated: false);
@@ -139,7 +139,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should load current URL into the ServerURLController with an error") {
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 view = ServerURLController(delegate: delegate, andError: "Something wrong");
                 navigationController?.pushViewController(view!, animated: false);
@@ -156,7 +156,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should cancel the ServerURLController") {
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 view = ServerURLController(delegate: delegate);
                 navigationController?.pushViewController(view!, animated: false);
