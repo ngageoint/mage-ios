@@ -83,8 +83,6 @@ class EditAttachmentFieldViewTests: KIFSpec {
                     "type": "attachment",
                     "name": "field0"
                 ];
-                
-                UserDefaults.standard.synchronize();
             }
             
             afterEach {

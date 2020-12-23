@@ -53,7 +53,6 @@ class ExpandableCardTests: KIFSpec {
                 view.backgroundColor = .systemBackground;
                 window.makeKeyAndVisible();
                 
-                UserDefaults.standard.synchronize();
             }
             
             afterEach {

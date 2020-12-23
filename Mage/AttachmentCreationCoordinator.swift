@@ -248,7 +248,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     }
     
     func videoUploadQuality() -> String {
-        let videoDefaults = UserDefaults.standard.dictionary(forKey: UserDefaults.Preferences.PreferencesDefaultKey.videoUploadQualities.rawValue);
+        let videoDefaults = UserDefaults.standard.videoUploadQualities;
         let videoUploadQualityPreference: String = UserDefaults.standard.string(forKey: videoDefaults?["preferenceKey"] as? String ?? "videoUploadSize") ?? AVAssetExportPresetHighestQuality;
         
         if (videoUploadQualityPreference == AVAssetExportPresetLowQuality) {

@@ -55,7 +55,7 @@ class ObservationAttachmentCard: MDCCard {
     func buildView() {
         // for legacy servers add the attachment field to common
         // TODO: Verify the correct version of the server and this can be removed once all servers are upgraded
-        if (UserDefaults.standard.integer(forKey: "serverMajorVersion") < 6) {
+        if (UserDefaults.standard.serverMajorVersion < 6) {
             self.addSubview(attachmentView);
         }
     }

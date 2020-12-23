@@ -239,7 +239,6 @@ class MageRootViewTests: KIFSpec {
                 }
                                 
                 UserDefaults.standard.set(["0"], forKey: "selectedFeeds-1");
-                UserDefaults.standard.synchronize();
                 
                 controller = MageRootViewController()
                 window.rootViewController = controller;
@@ -296,7 +295,6 @@ class MageRootViewTests: KIFSpec {
                 
 
                 UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
-                UserDefaults.standard.synchronize();
 
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");

@@ -47,9 +47,8 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 window = UIWindow(frame: UIScreen.main.bounds);
                 window.makeKeyAndVisible();
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 
                 controller = UINavigationController();
                 window.rootViewController = controller;
@@ -126,7 +125,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             done();
                         }
                     }
@@ -162,7 +161,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -203,7 +202,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -237,7 +236,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -274,7 +273,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -321,7 +320,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -381,7 +380,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -442,7 +441,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -501,7 +500,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }
@@ -538,7 +537,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                            UserDefaults.standard.currentUserId = "user";
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
                                 done();
                             }

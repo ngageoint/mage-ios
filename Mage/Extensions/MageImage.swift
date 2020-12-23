@@ -33,7 +33,7 @@ extension UIImage {
         let kImageMaxDimensionMedium: CGFloat = 640.0;
         let kImageMaxDimensionLarge: CGFloat = 2048.0;
 
-        let imageDefaults = UserDefaults.standard.dictionary(forKey: "imageUploadSizes");
+        let imageDefaults = UserDefaults.standard.imageUploadSizes;
         let imageUploadQuality: Int = UserDefaults.standard.integer(forKey: imageDefaults?["preferenceKey"] as? String ?? "imageUploadSize");
         
         let largestDimension: CGFloat = max(self.size.width, self.size.height);

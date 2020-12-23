@@ -30,8 +30,7 @@ class FeedTests: KIFSpec {
                     clearAndSetUpStack();
                     MageCoreDataFixtures.quietLogging();
                     UserDefaults.standard.set(nil, forKey: "selectedFeeds-1");
-                    UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.baseServerUrl = "https://magetest";
                     
                     Server.setCurrentEventId(1);
                     

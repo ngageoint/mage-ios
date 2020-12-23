@@ -54,9 +54,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                     return request.url == URL(string: "https://magetest/icon.png");
@@ -74,9 +73,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     
                     window.makeKeyAndVisible();
                     
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.mapType = 0;
+                    UserDefaults.standard.showMGRS = false;
                     
                     Server.setCurrentEventId(1);
                     
@@ -147,8 +145,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with no value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value"]) { (success: Bool, error: Error?) in
                         done();
@@ -224,8 +221,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
                         done();
@@ -301,8 +297,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with secondary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
@@ -378,8 +373,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
                         done();
@@ -459,8 +453,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
                         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"]) { (success: Bool, error: Error?) in
@@ -548,9 +541,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                     return request.url == URL(string: "https://magetest/icon.png");
@@ -568,9 +560,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     
                     window.makeKeyAndVisible();
                     
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.mapType = 0;
+                    UserDefaults.standard.showMGRS = false;
                     
                     Server.setCurrentEventId(1);
                     
@@ -638,8 +629,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with no value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
@@ -715,8 +705,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
@@ -792,8 +781,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with secondary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
@@ -869,8 +857,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
                         done();
@@ -950,8 +937,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
-                UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.showMGRS = true;
                 waitUntil { done in
                     MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
                         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in

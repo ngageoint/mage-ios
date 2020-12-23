@@ -97,7 +97,7 @@ class GeometryView : BaseFieldView {
         }
         
         if (field[FieldKey.title.key] != nil) {
-            if (UserDefaults.standard.showMGRS ?? false) {
+            if (UserDefaults.standard.showMGRS) {
                 fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (MGRS)";
             } else {
                 fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "") + " (Lat, Long)";
@@ -215,7 +215,7 @@ class GeometryView : BaseFieldView {
         self.value = value;
         if (value != nil) {
             if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
-                if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+                if (UserDefaults.standard.showMGRS) {
                     latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
                 } else {
                     latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);

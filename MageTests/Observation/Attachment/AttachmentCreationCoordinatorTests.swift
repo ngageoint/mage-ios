@@ -83,8 +83,6 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 view.autoSetDimension(.height, toSize: window.bounds.size.height);
                 view.backgroundColor = .systemBackground;
                 controller.view.addSubview(view);
-                                
-                UserDefaults.standard.synchronize();
             }
             
             afterEach {

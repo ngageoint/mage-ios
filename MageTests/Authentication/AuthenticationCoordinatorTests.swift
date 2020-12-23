@@ -739,7 +739,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should show the change server url view") {
-                UserDefaults.standard.removeObject(forKey: UserDefaults.MageServerDefaults.MageServerDefaultKey.baseServerUrl.rawValue);
+                UserDefaults.standard.baseServerUrl = nil;
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
 

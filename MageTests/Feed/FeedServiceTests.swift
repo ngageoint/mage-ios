@@ -35,10 +35,9 @@ class FeedServiceTests: KIFSpec {
                     clearAndSetUpStack();
                     MageCoreDataFixtures.quietLogging();
 
-                    UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl");
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.baseServerUrl = "https://magetest";
+                    UserDefaults.standard.mapType = 0;
+                    UserDefaults.standard.showMGRS = false;
                     
                     Server.setCurrentEventId(1);
                     

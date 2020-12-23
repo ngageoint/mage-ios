@@ -46,11 +46,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window.autoSetDimension(.width, toSize: 300);
                 window.makeKeyAndVisible();
                                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.set(6, forKey: "serverMajorVersion");
-                UserDefaults.standard.set(0, forKey: "serverMinorVersion");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.serverMajorVersion = 6;
+                UserDefaults.standard.serverMinorVersion = 0;
             }
             
             afterEach {
@@ -71,9 +70,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             describe("Legacy") {
                 beforeEach {
                     print("Legacy set the mage server version");
-                    UserDefaults.standard.set(5, forKey: "serverMajorVersion");
-                    UserDefaults.standard.set(4, forKey: "serverMinorVersion");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.serverMajorVersion = 5;
+                    UserDefaults.standard.serverMinorVersion = 4;
                 }
                 
                 it("empty observation") {

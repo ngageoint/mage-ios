@@ -145,7 +145,7 @@ import MaterialComponents.MDCCard
     // for legacy servers add the attachment field to common
     // TODO: Verify the correct version of the server and this can be removed once all servers are upgraded
     func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (UserDefaults.standard.integer(forKey: "serverMajorVersion") < 6) {
+        if (UserDefaults.standard.serverMajorVersion < 6) {
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
                     let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);

@@ -75,9 +75,8 @@ class FeedItemsViewControllerTests: KIFSpec {
                     
                     clearAndSetUpStack();
                     
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.mapType = 0;
+                    UserDefaults.standard.showMGRS = false;
                     Server.setCurrentEventId(1);
                     
                     waitUntil { done in
@@ -274,9 +273,8 @@ class FeedItemsViewControllerTests: KIFSpec {
                 
                 clearAndSetUpStack();
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 Server.setCurrentEventId(1);
                 
                 waitUntil { done in

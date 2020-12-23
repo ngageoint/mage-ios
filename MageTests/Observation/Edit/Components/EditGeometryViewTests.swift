@@ -61,9 +61,8 @@ class EditGeometryViewTests: KIFSpec {
                     "id": 8
                 ];
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
             }
             
             afterEach {
@@ -201,7 +200,6 @@ class EditGeometryViewTests: KIFSpec {
             
             it("initial value set as a point MGRS") {
                 UserDefaults.standard.set(true, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
                 var completeTest = false;
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);

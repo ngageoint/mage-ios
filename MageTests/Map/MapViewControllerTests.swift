@@ -57,7 +57,7 @@ class MapViewControllerTests: KIFSpec {
                 window.makeKeyAndVisible();
                 UserDefaults.standard.mapType = 0;
 //                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
+                UserDefaults.standard.showMGRS = false;
                 UserDefaults.standard.synchronize();
                 
                 Server.setCurrentEventId(1);
@@ -93,7 +93,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
 
                 let mapViewController: MapViewController = MapViewController();
                 controller.pushViewController(mapViewController, animated: true);
@@ -122,7 +122,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
 
                 let mapViewController: MapViewController = MapViewController();
                 let mockedLocationService = MockLocationService();
@@ -157,7 +157,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
 
                 let mapViewController: MapViewController = MapViewController();
                 let mockedLocationService = MockLocationService();
@@ -192,7 +192,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
 
                 let mapViewController: MapViewController = MapViewController();
                 let mockedLocationService = MockLocationService();
@@ -253,7 +253,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
                 
                 let mapViewController: MapViewController = MapViewController();
                 let mockedLocationService = MockLocationService();
@@ -317,7 +317,7 @@ class MapViewControllerTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.standard.setValue("user", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "user";
                 
                 let mapViewController: MapViewController = MapViewController();
                 let mockedLocationService = MockLocationService();
@@ -399,7 +399,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("userabc", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let mapViewController: MapViewController = MapViewController();
@@ -448,7 +448,7 @@ class MapViewControllerTests: KIFSpec {
                         }
                     }
                 }
-                UserDefaults.standard.setValue("userabc", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let mapViewController: MapViewController = MapViewController();
@@ -506,7 +506,7 @@ class MapViewControllerTests: KIFSpec {
                     }
                 }
                 
-                UserDefaults.standard.setValue("userabc", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let mapViewController: MapViewController = MapViewController();

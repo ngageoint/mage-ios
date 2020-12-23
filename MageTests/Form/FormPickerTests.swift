@@ -63,7 +63,6 @@ class FormPickerTests: KIFSpec {
                 
                 window.makeKeyAndVisible();
                 
-                UserDefaults.standard.synchronize();
             }
             
             afterEach {

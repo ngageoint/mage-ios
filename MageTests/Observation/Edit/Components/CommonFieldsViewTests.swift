@@ -48,9 +48,8 @@ class CommonFieldsViewTests: KIFSpec {
                 controller = UIViewController();
                 window.rootViewController = controller;
                                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
             }
             
             afterEach {

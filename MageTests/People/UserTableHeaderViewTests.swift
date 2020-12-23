@@ -69,10 +69,9 @@ class UserTableHeaderViewTests: QuickSpec {
                 window.makeKeyAndVisible();
                 
                 Server.setCurrentEventId(1);
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.set(nil, forKey: "currentUserId");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.currentUserId = nil;
             }
             
             afterEach {
@@ -117,7 +116,7 @@ class UserTableHeaderViewTests: QuickSpec {
             it("current user view") {
                 var completeTest = false;
                 
-                UserDefaults.standard.set("userabc", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
