@@ -229,11 +229,24 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
 
 extension ObservationViewCardCollectionViewController: ObservationActionsDelegate {
     func showFavorites(_ observation: Observation) {
-        
+        var userIds: [String] = [];
+        if let favorites = observation.favorites {
+            for favorite in favorites {
+                if let userId = favorite.userId {
+                    userIds.append(userId)
+                }
+            }
+        }
+        if (userIds.count != 0) {
+            let userViewController = UserTableViewController();
+            userViewController.userIds = userIds;
+            userViewController.title = "Favorited By";
+            self.navigationController?.pushViewController(userViewController, animated: true);
+        }
     }
     
     func favorite(_ observation: Observation) {
-        
+        observation.toggleFavorite(completion: nil);
     }
     
     func getDirections(_ observation: Observation) {
@@ -259,6 +272,28 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     }
     
     func makeImportant(_ observation: Observation) {
+        let alertController = UIAlertController(title: nil, message: "Description (optional)", preferredStyle: .alert);
+        alertController.addTextField { (textField) in
+            textField.placeholder = "description";
+            textField.clearButtonMode = .whileEditing;
+            textField.borderStyle = .none;
+            textField.backgroundColor = .clear;
+            
+            if let important = observation.observationImportant {
+                if (important.important == NSNumber(booleanLiteral: true)) {
+                    textField.text = important.reason;
+                }
+            }
+        }
         
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            if let textField = alertController.textFields?[0] {
+                observation.flagImportant(withDescription: textField.text ?? "", completion: nil);
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
+        present(alertController, animated: true, completion: nil);
+        alertController.addAction(UIAlertAction(title: "Remove Important", style: .destructive, handler: nil));
+        present(alertController, animated: true, completion: nil);
     }
 }

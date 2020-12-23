@@ -62,6 +62,7 @@
 #import "MapViewController.h"
 #import "TimeFilter.h"
 #import "ObservationImage.h"
+#import "UserTableViewController.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"
