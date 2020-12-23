@@ -10,9 +10,17 @@ import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
 
+protocol ObservationActionsDelegate {
+    func showFavorites(_ observation: Observation);
+    func favorite(_ observation: Observation);
+    func getDirections(_ observation: Observation);
+    func makeImportant(_ observation: Observation);
+}
+
 class ObservationActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
+    var observationActionsDelegate: ObservationActionsDelegate?;
     
     var favoriteCountText: NSAttributedString {
         get {
@@ -26,7 +34,8 @@ class ObservationActionsView: UIView {
     }
     
     private lazy var favoriteCountButton: UIButton = {
-        let button = UIButton(type: .custom)
+        let button = UIButton(type: .custom);
+        button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
         return button;
     }()
     
@@ -49,6 +58,7 @@ class ObservationActionsView: UIView {
     private lazy var favoriteButton: UIButton = {
         let favoriteButton = UIButton(type: .custom);
         favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+        favoriteButton.addTarget(self, action: #selector(favorite), for: .touchUpInside);
         return favoriteButton;
     }()
     
@@ -56,21 +66,24 @@ class ObservationActionsView: UIView {
         let directionsButton = UIButton(type: .custom);
         directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
         directionsButton.tintColor = UIColor.label.withAlphaComponent(0.6);
+        directionsButton.addTarget(self, action: #selector(getDirections), for: .touchUpInside);
         return directionsButton;
     }()
     
     private lazy var importantButton: UIButton = {
         let importantButton = UIButton(type: .custom);
         importantButton.setImage(UIImage(named: "flag"), for: .normal);
+        importantButton.addTarget(self, action: #selector(makeImportant), for: .touchUpInside);
         return importantButton;
     }()
     
     override func themeDidChange(_ theme: MageTheme) {
     }
     
-    public convenience init(observation: Observation) {
+    public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
+        self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation);
@@ -112,5 +125,21 @@ class ObservationActionsView: UIView {
             }
             favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : UIColor.label.withAlphaComponent(0.6);
         }
+    }
+    
+    @objc func showFavorites() {
+        observationActionsDelegate?.showFavorites(observation!);
+    }
+    
+    @objc func favorite() {
+        observationActionsDelegate?.favorite(observation!);
+    }
+    
+    @objc func getDirections() {
+        observationActionsDelegate?.getDirections(observation!);
+    }
+    
+    @objc func makeImportant() {
+        observationActionsDelegate?.makeImportant(observation!);
     }
 }

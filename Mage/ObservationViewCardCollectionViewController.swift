@@ -11,7 +11,10 @@ import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 
+
 @objc class ObservationViewCardCollectionViewController: UIViewController {
+    
+    var didSetupConstraints = false;
     
     override func themeDidChange(_ theme: MageTheme) {
         self.navigationController?.navigationBar.isTranslucent = false;
@@ -32,44 +35,50 @@ import MaterialComponents.MDCCard
     }()
     
     private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return scrollView;
+        return UIScrollView.newAutoLayout();
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(forAutoLayout: ());
+        let stackView = UIStackView.newAutoLayout();
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = 8
         stackView.distribution = .fill
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = true;
-        stackView.translatesAutoresizingMaskIntoConstraints = false;
         return stackView;
     }()
     
-    private func addStackViewConstraints() {
-        NSLayoutConstraint.activate([
-            // Attaching the content's edges to the scroll view's edges
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            
-            // Satisfying size constraints
-            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
+    private lazy var syncStatusView: ObservationSyncStatus = {
+        let syncStatusView = ObservationSyncStatus(observation: observation);
+        return syncStatusView;
+    }()
+    
+    override func loadView() {
+        view = UIView();
+        
+        view.addSubview(scrollView);
+        view.addSubview(syncStatusView);
+        scrollView.addSubview(stackView);
+        
+        view.setNeedsUpdateConstraints();
     }
     
-    private func addScrollViewConstraints() {
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        ])
+    override func updateViewConstraints() {
+        if (!didSetupConstraints) {
+            syncStatusView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+            if (syncStatusView.isHidden) {
+                scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
+            } else {
+                scrollView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
+                scrollView.autoPinEdge(.top, to: .bottom, of: syncStatusView);
+            }
+            stackView.autoPinEdgesToSuperviewEdges();
+            stackView.autoMatch(.width, to: .width, of: view);
+            didSetupConstraints = true;
+        }
+        
+        super.updateViewConstraints();
     }
     
     override func viewDidLoad() {
@@ -77,25 +86,25 @@ import MaterialComponents.MDCCard
         
         self.view.accessibilityIdentifier = "ObservationViewCardCollection"
         self.view.accessibilityLabel = "ObservationViewCardCollection"
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.editObservation(sender:)));
-        
-        self.view.addSubview(scrollView)
-        addScrollViewConstraints();
-        scrollView.addSubview(stackView)
-        addStackViewConstraints();
-        
-        addHeaderCard(stackView: stackView);
-        
-        addLegacyAttachmentCard(stackView: stackView);
-        addFormViews(stackView: stackView);
-        
+
         self.registerForThemeChanges();
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         self.title = observation?.primaryFeedFieldText();
+        ObservationPushService.singleton()?.add(self);
+        for v in stackView.arrangedSubviews {
+            v.removeFromSuperview();
+        }
+        addHeaderCard(stackView: stackView);
+        addLegacyAttachmentCard(stackView: stackView);
+        addFormViews(stackView: stackView);
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        ObservationPushService.singleton()?.remove(self);
     }
     
     init(frame: CGRect) {
@@ -119,9 +128,16 @@ import MaterialComponents.MDCCard
         fatalError("This class does not support NSCoding")
     }
     
+    func setupEditButton() {
+        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
+        if (user.hasEditPermission()) {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.editObservation(sender:)));
+        }
+    }
+    
     func addHeaderCard(stackView: UIStackView) {
         if let safeObservation = observation {
-            let headerCard: ObservationHeaderView = ObservationHeaderView(observation: safeObservation);
+            let headerCard: ObservationHeaderView = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
             stackView.addArrangedSubview(headerCard);
         }
     }
@@ -175,6 +191,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func editObservation(sender: UIBarButtonItem) {
+        
     }
 }
 
@@ -197,5 +214,51 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
 extension ObservationViewCardCollectionViewController: AttachmentViewDelegate {
     func doneViewing(coordinator: NSObject) {
         attachmentViewCoordinator = nil;
+    }
+}
+
+extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
+    func didPush(_ observation: Observation!, success: Bool, error: Error!) {
+        if (observation.objectID != self.observation?.objectID) {
+            return;
+        }
+        syncStatusView.updateObservationStatus();
+        view.setNeedsUpdateConstraints();
+    }
+}
+
+extension ObservationViewCardCollectionViewController: ObservationActionsDelegate {
+    func showFavorites(_ observation: Observation) {
+        
+    }
+    
+    func favorite(_ observation: Observation) {
+        
+    }
+    
+    func getDirections(_ observation: Observation) {
+        let appleMapsQueryString = "daddr=\(observation.location().coordinate.latitude),\(observation.location().coordinate.longitude)&ll=\(observation.location().coordinate.latitude),\(observation.location().coordinate.longitude)&q=\(observation.primaryFeedFieldText())".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
+        let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
+        
+        let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
+        
+        let alert = UIAlertController(title: "Get Directions With...", message: nil, preferredStyle: .actionSheet);
+        alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
+            UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
+                print("opened? \(success)")
+            }
+        }))
+        alert.addAction(UIAlertAction(title:"Google Maps", style: .default, handler: { (action) in
+            UIApplication.shared.open(googleMapsUrl!, options: [:]) { (success) in
+                print("opened? \(success)")
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
+        self.present(alert, animated: true, completion: nil);
+    }
+    
+    func makeImportant(_ observation: Observation) {
+        
     }
 }

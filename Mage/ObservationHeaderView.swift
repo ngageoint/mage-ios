@@ -15,6 +15,7 @@ import MaterialComponents.MaterialCards
 class ObservationHeaderView : MDCCard {
     var didSetupConstraints = false;
     var observation: Observation!;
+    var observationActionsDelegate: ObservationActionsDelegate?;
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
@@ -86,7 +87,7 @@ class ObservationHeaderView : MDCCard {
     }()
     
     private lazy var observationActionsView: ObservationActionsView = {
-        let observationActionsView = ObservationActionsView(observation: self.observation!);
+        let observationActionsView = ObservationActionsView(observation: self.observation!, observationActionsDelegate: observationActionsDelegate);
         return observationActionsView;
     }()
     
@@ -124,9 +125,10 @@ class ObservationHeaderView : MDCCard {
         return importantView;
     }()
     
-    @objc public convenience init(observation: Observation) {
+    public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
+        self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation);

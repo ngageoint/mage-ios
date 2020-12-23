@@ -20,7 +20,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("ObservationViewCardCollectionViewControllerTests") {
-            let recordSnapshots = true;
+            let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var controller: UINavigationController!
@@ -108,7 +108,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
                                 print("user added to event")
                                 
-                                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
                                     print("observation added")
                                     done();
@@ -140,7 +140,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 }
             }
             
-            fit("initialize the ObservationViewCardCollectionViewController") {
+            it("initialize the ObservationViewCardCollectionViewController") {
                 var completeTest = false;
                 waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
@@ -148,7 +148,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                             print("user added")
                             MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
                                 print("user added to event")
-                                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
                                     print("observation added")
                                     done();
@@ -179,6 +179,89 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 }
             }
             
+            it("observation needs syncing") {
+                var completeTest = false;
+                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
+                            print("user added")
+                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
+                                print("user added to event")
+                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
+                                    print("observation added")
+                                    done();
+                                }
+                            }
+                        }
+                    }
+                }
+                UserDefaults.standard.currentUserId = "userabc";
+                
+                let observations = Observation.mr_findAll();
+                expect(observations?.count).to(equal(1));
+                let observation: Observation = observations![0] as! Observation;
+                observation.dirty = true;
+                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
+                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation);
+                controller.pushViewController(observationViewController, animated: true);
+                
+                view = window;
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                }
+            }
+            
+            it("observation needs syncing and then gets pushed") {
+                var completeTest = false;
+                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
+                            print("user added")
+                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
+                                print("user added to event")
+                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
+                                    print("observation added")
+                                    done();
+                                }
+                            }
+                        }
+                    }
+                }
+                UserDefaults.standard.currentUserId = "userabc";
+                
+                let observations = Observation.mr_findAll();
+                expect(observations?.count).to(equal(1));
+                let observation: Observation = observations![0] as! Observation;
+                observation.dirty = true;
+                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
+                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation);
+                controller.pushViewController(observationViewController, animated: true);
+                tester().waitForAnimationsToFinish();
+                view = window;
+                
+                observation.dirty = false;
+                observationViewController.didPush(observation, success: true, error: nil);
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                }
+            }
+            
             // tests to write
             
             // observation which does not have important set
@@ -191,11 +274,21 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
             
             // observation which is not favorited by the current user
             
-            // clicking favorite button should favorite the observation
+            // observation actions - important, favorite, directions
             
             // click the favorite count button should show the users who favorited it
             
             // need to figure out what to do when a form exists but there are no fields filled out
+            
+            // edit button only shows up if user can edit
+            
+            // observation not synced
+            
+            // observation manual sync
+            
+            // obsrvation failed to sync
+            
+            // observation push delegate
         }
     }
 }
