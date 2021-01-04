@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ObservationHeaderTableViewCell.h"
-#import "ObservationActionsDelegate.h"
+#import "ObservationActionsDelegate_legacy.h"
 
 @class ObservationActionsTableViewCell;
 
 @interface ObservationActionsTableViewCell : ObservationHeaderTableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
-@property (weak, nonatomic) id<ObservationActionsDelegate> observationActionsDelegate;
+@property (weak, nonatomic) id<ObservationActionsDelegate_legacy> observationActionsDelegate;
 @end
