@@ -10,7 +10,7 @@
 #import "ObservationSelectionDelegate.h"
 #import "Event.h"
 
-@interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, ObservationActionsDelegate>
+@interface ObservationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, ObservationActionsDelegate_legacy>
 
 @property (strong, nonatomic) Observations *observations;
 @property (strong, nonatomic) Event *event;

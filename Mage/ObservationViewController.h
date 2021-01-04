@@ -13,7 +13,7 @@
 #import "AttachmentSelectionDelegate.h"
 #import "AttachmentCollectionDataStore.h"
 
-@interface ObservationViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, ObservationActionsDelegate, ObservationImportantDelegate, AttachmentSelectionDelegate>
+@interface ObservationViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, ObservationActionsDelegate_legacy, ObservationImportantDelegate, AttachmentSelectionDelegate>
 @property (strong, nonatomic) NSMutableArray *tableLayout;
 @property (weak, nonatomic) IBOutlet UITableView *propertyTable;
 @property (strong, nonatomic) IBOutlet AttachmentCollectionDataStore *attachmentCollectionDataStore;

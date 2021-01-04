@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "Observation.h"
 #import "AttachmentSelectionDelegate.h"
-#import "ObservationActionsDelegate.h"
+#import "ObservationActionsDelegate_legacy.h"
 
 @class ObservationTableViewCell;
 
@@ -22,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteNumber;
 @property (weak, nonatomic) IBOutlet UIImageView *importantBadge;
-@property (weak, nonatomic) IBOutlet NSObject<ObservationActionsDelegate> *observationActionsDelegate;
+@property (weak, nonatomic) IBOutlet NSObject<ObservationActionsDelegate_legacy> *observationActionsDelegate;
 @property (weak, nonatomic) IBOutlet NSObject<AttachmentSelectionDelegate> *attachmentSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
 @property (weak, nonatomic) IBOutlet UIImageView *observationShapeImage;

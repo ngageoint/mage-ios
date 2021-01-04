@@ -246,6 +246,8 @@
 		F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */; };
 		F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770853F25927E1C008903BA /* ObservationSyncStatus.swift */; };
 		F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */; };
+		F77085482593F85F008903BA /* ObservationHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77085472593F85F008903BA /* ObservationHeaderViewTests.swift */; };
+		F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */; };
 		F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */; };
 		F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
 		F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF9252B541A00B88BD4 /* signupSuccess.json */; };
@@ -502,7 +504,7 @@
 		2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ObservationLocationTableViewCell.xib; sourceTree = "<group>"; };
 		2F0323B42466017900D2866B /* ObservationLocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationLocationTableViewCell.h; sourceTree = "<group>"; };
 		2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationLocationTableViewCell.m; sourceTree = "<group>"; };
-		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate.h; sourceTree = "<group>"; };
+		2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate_legacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationActionsDelegate_legacy.h; sourceTree = "<group>"; };
 		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
 		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
 		2F1069DB221C9005009F661A /* SettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsCoordinator.h; sourceTree = "<group>"; };
@@ -829,6 +831,8 @@
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
 		F770853F25927E1C008903BA /* ObservationSyncStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSyncStatus.swift; sourceTree = "<group>"; };
 		F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSyncStatusTests.swift; sourceTree = "<group>"; };
+		F77085472593F85F008903BA /* ObservationHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationHeaderViewTests.swift; sourceTree = "<group>"; };
+		F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnlineMapTableViewController.h; sourceTree = "<group>"; };
 		F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlineMapTableViewController.m; sourceTree = "<group>"; };
 		F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGEMasterSelectionDelegate.h; sourceTree = "<group>"; };
@@ -1492,6 +1496,7 @@
 				F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */,
 				F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */,
 				F7C6410925817BC000C02335 /* MockLocationService.swift */,
+				F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1521,7 +1526,7 @@
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
-				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate.h */,
+				2F083BBE1ED72ADA002AE34A /* ObservationActionsDelegate_legacy.h */,
 				F70E432E19C3A1B10066E808 /* ObservationDataStore.h */,
 				F70E432F19C3A1B10066E808 /* ObservationDataStore.m */,
 				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
@@ -1607,6 +1612,7 @@
 			children = (
 				F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */,
 				F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */,
+				F77085472593F85F008903BA /* ObservationHeaderViewTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3021,6 +3027,7 @@
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
+				F77085482593F85F008903BA /* ObservationHeaderViewTests.swift in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */,
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
@@ -3030,6 +3037,7 @@
 				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
+				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,

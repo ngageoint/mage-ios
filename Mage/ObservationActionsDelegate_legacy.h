@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ObservationActionsDelegate <NSObject>
+@protocol ObservationActionsDelegate_legacy <NSObject>
 
 @required
 - (void) observationFavoriteTapped:(id) sender;
