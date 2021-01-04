@@ -28,6 +28,7 @@ import MaterialComponents.MDCCard
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
+    var headerCard: ObservationHeaderView!;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -137,7 +138,7 @@ import MaterialComponents.MDCCard
     
     func addHeaderCard(stackView: UIStackView) {
         if let safeObservation = observation {
-            let headerCard: ObservationHeaderView = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
+            headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
             stackView.addArrangedSubview(headerCard);
         }
     }
@@ -180,9 +181,12 @@ import MaterialComponents.MDCCard
             }
         }
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self, attachmentSelectionDelegate: self);
-        let formSpacerView = UIView(forAutoLayout: ());
-        formSpacerView.addSubview(formView);
-        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
+        var formSpacerView: UIView?;
+        if (!formView.isEmpty()) {
+            formSpacerView = UIView(forAutoLayout: ());
+            formSpacerView?.addSubview(formView);
+            formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
+        }
         
         let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView)
         stackView.addArrangedSubview(card);
@@ -246,7 +250,10 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     }
     
     func favorite(_ observation: Observation) {
-        observation.toggleFavorite(completion: nil);
+        observation.toggleFavorite() { success, error in
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            self.headerCard.populate(observation: observation);
+        }
     }
     
     func getDirections(_ observation: Observation) {
@@ -271,29 +278,19 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         self.present(alert, animated: true, completion: nil);
     }
     
-    func makeImportant(_ observation: Observation) {
-        let alertController = UIAlertController(title: nil, message: "Description (optional)", preferredStyle: .alert);
-        alertController.addTextField { (textField) in
-            textField.placeholder = "description";
-            textField.clearButtonMode = .whileEditing;
-            textField.borderStyle = .none;
-            textField.backgroundColor = .clear;
-            
-            if let important = observation.observationImportant {
-                if (important.important == NSNumber(booleanLiteral: true)) {
-                    textField.text = important.reason;
-                }
-            }
+    func makeImportant(_ observation: Observation, reason: String) {
+        observation.flagImportant(withDescription: reason) { success, error in
+            // update the view
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            self.headerCard.populate(observation: observation);
         }
-        
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            if let textField = alertController.textFields?[0] {
-                observation.flagImportant(withDescription: textField.text ?? "", completion: nil);
-            }
-        }))
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
-        present(alertController, animated: true, completion: nil);
-        alertController.addAction(UIAlertAction(title: "Remove Important", style: .destructive, handler: nil));
-        present(alertController, animated: true, completion: nil);
+    }
+    
+    func removeImportant(_ observation: Observation) {
+        observation.removeImportant() { success, error in
+            // update the view
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            self.headerCard.populate(observation: observation);
+        }
     }
 }

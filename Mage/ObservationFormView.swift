@@ -27,6 +27,7 @@ class ObservationFormView: UIStackView {
     private var fieldSelectionDelegate: FieldSelectionDelegate?;
     private var observationFormListener: ObservationFormListener?;
     private var editMode: Bool = true;
+    private var formFieldAdded: Bool = false;
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
@@ -68,6 +69,7 @@ class ObservationFormView: UIStackView {
     }
     
     func constructView() {
+        formFieldAdded = false;
         for fieldDictionary in self.formFields {
             let value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
             
@@ -116,6 +118,7 @@ class ObservationFormView: UIStackView {
             if let baseFieldView = fieldView as? BaseFieldView, let safeKey = fieldDictionary[FieldKey.name.key] as? String {
                 fieldViews[safeKey] = baseFieldView;
             }
+            formFieldAdded = true;
             self.addArrangedSubview(fieldView);
         }
     }
@@ -125,6 +128,10 @@ class ObservationFormView: UIStackView {
             return fieldViews[safeKey]
         }
         return nil;
+    }
+    
+    public func isEmpty() -> Bool {
+        return !formFieldAdded;
     }
 }
 

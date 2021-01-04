@@ -31,8 +31,6 @@ class ObservationHeaderView : MDCCard {
         stack.addArrangedSubview(geometryView);
         stack.addArrangedSubview(divider);
         stack.addArrangedSubview(observationActionsView);
-        
-        importantView.isHidden = !observation.isImportant()
         return stack;
     }()
     
@@ -131,7 +129,7 @@ class ObservationHeaderView : MDCCard {
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        populate(observation: observation);
+        populate(observation: observation, animate: false);
     }
     
     override func updateConstraints() {
@@ -150,9 +148,19 @@ class ObservationHeaderView : MDCCard {
         self.backgroundColor = UIColor.background();
     }
     
-    @objc public func populate(observation: Observation) {
+    @objc public func populate(observation: Observation, animate: Bool = true) {
         primaryField.text = observation.primaryFeedFieldText();
         secondaryField.text = observation.secondaryFeedFieldText();
+        
+        if (animate) {
+            UIView.animate(withDuration: 0.2) {
+                self.importantView.isHidden = !observation.isImportant()
+            }
+        } else {
+            self.importantView.isHidden = !observation.isImportant()
+        }
+        
+        importantView.populate(observation: observation);
         
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
         var timeText = "";
@@ -160,6 +168,8 @@ class ObservationHeaderView : MDCCard {
             timeText = itemDate.formattedDisplayDate(withDateStyle: .medium, andTime: .short)?.uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ?? "";
         }
         timestamp.text = "\(observation.user?.name?.uppercased() ?? "") \u{2022} \(timeText)";
+        
+        observationActionsView.populate(observation: observation);
 
         self.registerForThemeChanges()
     }
