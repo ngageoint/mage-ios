@@ -266,6 +266,8 @@
 		F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8524647B10003666ED /* CommonFieldsView.swift */; };
 		F7813A8824647C62003666ED /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8724647C62003666ED /* DateView.swift */; };
 		F7813A8A2466037B003666ED /* GeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A892466037B003666ED /* GeometryView.swift */; };
+		F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */; };
+		F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
 		F785973C206A9F5400C68A23 /* ThemedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973B206A9F5400C68A23 /* ThemedTableViewCell.m */; };
 		F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F785973F206AEBFB00C68A23 /* ThemeSettingsTableViewController.m */; };
@@ -856,6 +858,8 @@
 		F7813A8524647B10003666ED /* CommonFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsView.swift; sourceTree = "<group>"; };
 		F7813A8724647C62003666ED /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		F7813A892466037B003666ED /* GeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryView.swift; sourceTree = "<group>"; };
+		F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsSheetController.swift; sourceTree = "<group>"; };
+		F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		F785973A206A9F5400C68A23 /* ThemedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemedTableViewCell.h; sourceTree = "<group>"; };
@@ -1541,6 +1545,7 @@
 				F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */,
 				F7531EFB191010A600CA084C /* ObservationTableViewController.h */,
 				F7531EFC191010A600CA084C /* ObservationTableViewController.m */,
+				F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1767,6 +1772,7 @@
 				2F124A181DCA35F300FFA770 /* ObservationViewController.h */,
 				2F124A191DCA35F300FFA770 /* ObservationViewController.m */,
 				F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */,
+				F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2778,6 +2784,7 @@
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
+				F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */,
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */,
@@ -2792,6 +2799,7 @@
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */,
+				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,

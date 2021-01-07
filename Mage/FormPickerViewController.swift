@@ -6,7 +6,7 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 import Foundation
-import UIKit
+import MaterialComponents.MDCButton;
 
 @objc protocol FormPickedDelegate {
     @objc func formPicked (form: [String: Any]);
@@ -14,7 +14,7 @@ import UIKit
 }
 
 @objc class FormPickerViewController: UIViewController {
-    
+
     var delegate: FormPickedDelegate?;
     var forms: [[String: Any]]?;
     
@@ -23,33 +23,17 @@ import UIKit
         tableView.accessibilityLabel = "Add A Form Table";
         tableView.estimatedRowHeight = 100;
         tableView.rowHeight = UITableView.automaticDimension;
+        tableView.insetsContentViewsToSafeArea = false;
         return tableView;
     }()
     
-    var navBar: UINavigationBar = {
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: #selector(closeButtonTapped(_:)))
-        cancelItem.accessibilityLabel = "Cancel"
-        
-        let navItem = UINavigationItem(title: "Add A Form")
-        
-        navItem.rightBarButtonItem = cancelItem;
-        
-        let navBar = UINavigationBar(forAutoLayout: ());
-        navBar.titleTextAttributes = [.foregroundColor: globalContainerScheme().colorScheme.onPrimaryColor];
-        navBar.isTranslucent = false;
-        navBar.barTintColor = globalContainerScheme().colorScheme.primaryColor;
-        navBar.tintColor = globalContainerScheme().colorScheme.onPrimaryColor;
-        navBar.setItems([navItem], animated: false);
-        
-        return navBar;
-    }()
-    
     override func themeDidChange(_ theme: MageTheme) {
-        self.tableView.backgroundColor = .tableBackground();
+        view.backgroundColor = .systemGroupedBackground;
+        self.tableView.backgroundColor = .systemGroupedBackground;
         self.tableView.reloadData();
     }
     
-    @objc func closeButtonTapped(_ sender: UIButton) {
+    @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.cancelSelection();
     }
     
@@ -75,32 +59,27 @@ import UIKit
     override func loadView() {
         super.loadView();
         view.addSubview(tableView);
-        tableView.autoPinEdgesToSuperviewEdges();
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
-        
-        self.title = "Add A Form";
-        self.navigationItem.largeTitleDisplayMode = .never;
-        self.view.addSubview(navBar);
-        navBar.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom);
+        tableView.autoPinEdgesToSuperviewEdges();
+        tableView.contentInsetAdjustmentBehavior = .never;
     }
 }
     
 extension FormPickerViewController: UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1;
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.forms?.count ?? 0;
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "formCell") else {
@@ -109,7 +88,7 @@ extension FormPickerViewController: UITableViewDataSource {
             }
             return cell
         }()
-        
+
         if let safeForm = self.forms?[indexPath.row] {
             cell.accessibilityLabel = safeForm["name"] as? String;
             cell.textLabel?.text = safeForm["name"] as? String;
@@ -124,20 +103,32 @@ extension FormPickerViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = .secondaryLabel;
             cell.backgroundColor = .systemBackground;
         }
-        
+
         return cell;
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView();
     }
 }
 
 extension FormPickerViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let safeForm = self.forms?[indexPath.row] {
             delegate?.formPicked(form: safeForm);
         }
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView(frame: .zero);
+        footerView.backgroundColor = UIColor.systemGroupedBackground;
+
+        let cancelButton = MDCButton(forAutoLayout: ());
+        cancelButton.applyTextTheme(withScheme: globalContainerScheme());
+        cancelButton.accessibilityLabel = "Cancel";
+        cancelButton.setTitle("Cancel", for: .normal);
+        cancelButton.clipsToBounds = true;
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
+        
+        footerView.addSubview(cancelButton);
+        cancelButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 32, bottom: 20, right: 32));
+        return footerView;
     }
 }

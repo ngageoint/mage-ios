@@ -10,14 +10,6 @@ import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
 
-protocol ObservationActionsDelegate {
-    func showFavorites(_ observation: Observation);
-    func favorite(_ observation: Observation);
-    func getDirections(_ observation: Observation);
-    func makeImportant(_ observation: Observation, reason: String);
-    func removeImportant(_ observation: Observation);
-}
-
 class ObservationActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
@@ -237,15 +229,15 @@ class ObservationActionsView: UIView {
     }
     
     @objc func showFavorites() {
-        observationActionsDelegate?.showFavorites(observation!);
+        observationActionsDelegate?.showFavorites?(observation!);
     }
     
     @objc func favorite() {
-        observationActionsDelegate?.favorite(observation!);
+        observationActionsDelegate?.favorite?(observation!);
     }
     
     @objc func getDirections() {
-        observationActionsDelegate?.getDirections(observation!);
+        observationActionsDelegate?.getDirections?(observation!);
     }
     
     @objc func toggleImportant() {
@@ -255,13 +247,13 @@ class ObservationActionsView: UIView {
     }
     
     @objc func makeImportant() {
-        observationActionsDelegate?.makeImportant(observation!, reason: self.importantInputView.text ?? "");
+        observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "");
         toggleImportant();
     }
     
     @objc func removeImportant() {
         if (observation?.isImportant() == true) {
-            observationActionsDelegate?.removeImportant(observation!);
+            observationActionsDelegate?.removeImportant?(observation!);
         }
         
         toggleImportant();
