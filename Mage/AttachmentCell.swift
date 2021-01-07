@@ -64,7 +64,8 @@ import Kingfisher
                 localPath = attachment.localPath;
             }
             let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
-            self.imageView.kf.setImage(with: provider, placeholder: UIImage.init(named: "play_overlay"), options: [
+            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                 .transition(.fade(0.2)),
                 .scaleFactor(UIScreen.main.scale),
@@ -74,9 +75,11 @@ import Kingfisher
                 { result in
                     switch result {
                     case .success(_):
-                        let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
+                        self.imageView.contentMode = .scaleAspectFill;
+                        let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
                         overlay.contentMode = .scaleAspectFit;
                         self.imageView.addSubview(overlay);
+                        overlay.autoCenterInSuperview();
                     case .failure(let error):
                         print(error);
                         self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
@@ -94,9 +97,9 @@ import Kingfisher
                 });
             
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
-            self.imageView.image = UIImage.init(named: "audio_thumbnail");
+            self.imageView.image = UIImage(named: "audio_thumbnail");
         } else {
-            self.imageView.image = UIImage.init(named: "paperclip_thumbnail");
+            self.imageView.image = UIImage(named: "paperclip_thumbnail");
         }
     }
 }
