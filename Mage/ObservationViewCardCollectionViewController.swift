@@ -29,6 +29,8 @@ import MaterialComponents.MDCCard
     var cards: [ExpandableCard] = [];
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
     var headerCard: ObservationHeaderView!;
+    var observationEditCoordinator: ObservationEditCoordinator?;
+    var bottomSheet: MDCBottomSheetController?;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -82,32 +84,6 @@ import MaterialComponents.MDCCard
         super.updateViewConstraints();
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.accessibilityIdentifier = "ObservationViewCardCollection"
-        self.view.accessibilityLabel = "ObservationViewCardCollection"
-
-        self.registerForThemeChanges();
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        self.title = observation?.primaryFeedFieldText();
-        ObservationPushService.singleton()?.add(self);
-        for v in stackView.arrangedSubviews {
-            v.removeFromSuperview();
-        }
-        addHeaderCard(stackView: stackView);
-        addLegacyAttachmentCard(stackView: stackView);
-        addFormViews(stackView: stackView);
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated);
-        ObservationPushService.singleton()?.remove(self);
-    }
-    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
@@ -116,6 +92,36 @@ import MaterialComponents.MDCCard
         self.init(frame: CGRect.zero);
 //        self.delegate = delegate;
         self.observation = observation;
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.accessibilityIdentifier = "ObservationViewCardCollection"
+        self.view.accessibilityLabel = "ObservationViewCardCollection"
+        
+        self.registerForThemeChanges();
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        setupEditButton();
+        ObservationPushService.singleton()?.add(self);
+        setupObservation();
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        ObservationPushService.singleton()?.remove(self);
+    }
+    
+    func setupObservation() {
+        self.title = observation?.primaryFeedFieldText();
+
         if let safeProperties = self.observation?.properties as? [String: Any] {
             if (safeProperties.keys.contains("forms")) {
                 observationForms = safeProperties["forms"] as! [[String: Any]];
@@ -123,16 +129,19 @@ import MaterialComponents.MDCCard
         } else {
             observationForms = [];
         }
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
+        for v in stackView.arrangedSubviews {
+            v.removeFromSuperview();
+        }
+        addHeaderCard(stackView: stackView);
+        addLegacyAttachmentCard(stackView: stackView);
+        addFormViews(stackView: stackView);
     }
     
     func setupEditButton() {
         let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
         if (user.hasEditPermission()) {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.editObservation(sender:)));
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(self.showActionsSheet(sender:)));
+            self.navigationItem.rightBarButtonItem?.accessibilityLabel = "actions";
         }
     }
     
@@ -194,8 +203,16 @@ import MaterialComponents.MDCCard
         return card;
     }
     
-    @objc func editObservation(sender: UIBarButtonItem) {
+    @objc func showActionsSheet(sender: UIBarButtonItem) {
+        let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation!, delegate: self);
+        bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+        self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
         
+    }
+    
+    @objc func editObservation(sender: UIBarButtonItem) {
+        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator!.start();
     }
 }
 
@@ -293,4 +310,48 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
             self.headerCard.populate(observation: observation);
         }
     }
+    
+    func editObservation(_ observation: Observation) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator!.start();
+    }
+    
+    func deleteObservation(_ observation: Observation) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        
+        let alert = UIAlertController(title: "Delete Observation", message: "Are you sure you want to delete this observation?", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes, Delete", style: .destructive , handler:{ (UIAlertAction) in
+            observation.delete { (success, error) in
+                self.navigationController?.popViewController(animated: true);
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func cancelAction() {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+    }
 }
+
+extension ObservationViewCardCollectionViewController: ObservationEditDelegate {
+    func editCancel(_ coordinator: NSObject) {
+        observationEditCoordinator = nil;
+    }
+    
+    func editComplete(_ observation: Observation, coordinator: NSObject) {
+        observationEditCoordinator = nil;
+        self.observation!.managedObjectContext?.refresh(self.observation!, mergeChanges: false);
+        // reload the observation
+        setupObservation();
+    }
+    
+    func observationDeleted(_ observation: Observation, coordinator: NSObject) {
+        observationEditCoordinator = nil;
+        self.navigationController?.popViewController(animated: false);
+    }
+}
+
