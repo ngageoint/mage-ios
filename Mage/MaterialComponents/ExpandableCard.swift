@@ -155,7 +155,7 @@ class ExpandableCard: MDCCard {
                 thumbnail.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 4, right: 0), excludingEdge: .right);
                 thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
             }
-            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 16));
+            titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 32));
             
             if expandedView != nil {
                 expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
