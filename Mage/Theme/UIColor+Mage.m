@@ -10,18 +10,12 @@
 #import "ThemeManager.h"
 #import "DayTheme.h"
 #import "DarkTheme.h"
-
-// This is a private API.  We have submitted Apple Bugs 38149636, 38151251, 38151240, 38150133, 38150851
-// 38149636 was closed because it is a duplicate of 31187460
-// Until this API is public, this will remain commented out. (2018-14-16)
-// @interface MKMapView ()
-// -(void) _setShowsNightMode:(BOOL)yesOrNo;
-// @end
+#import <MaterialComponents/MDCPalettes.h>
 
 @implementation UIColor (Mage)
 
 + (UIColor *) mageBlue {
-    return [UIColor colorWithRed:17.0/255.0 green:84.0/255.0 blue:164.0/255.0 alpha:1.0];
+    return MDCPalette.bluePalette.tint600;
 }
 
 + (void) themeMap: (MKMapView *) map {
