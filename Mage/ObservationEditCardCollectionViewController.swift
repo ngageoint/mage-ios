@@ -191,7 +191,7 @@ import MaterialComponents.MDCCard
     func addFormViews(stackView: UIStackView) {
         for (index, form) in self.observationForms.enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
-            card.expanded = newObservation;
+            card.expanded = newObservation || self.observationForms.count == 1;
         }
     }
     
