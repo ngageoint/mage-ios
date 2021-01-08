@@ -47,7 +47,6 @@ class AttachmentFieldView : BaseFieldView {
     lazy var attachmentHolderView: UIView = {
         let holder = UIView(forAutoLayout: ());
         holder.autoSetDimension(.height, toSize: 100, relation: .greaterThanOrEqual);
-        holder.backgroundColor = .systemFill;
         holder.addSubview(attachmentCollectionView);
         attachmentCollectionView.autoPinEdgesToSuperviewEdges();
         return holder;
@@ -55,8 +54,6 @@ class AttachmentFieldView : BaseFieldView {
     
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
-        label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
-        label.font = globalContainerScheme().typographyScheme.caption;
         label.text = "At least one attachment must be added";
         label.isHidden = true;
         return label;
@@ -80,7 +77,6 @@ class AttachmentFieldView : BaseFieldView {
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
         button.setImage(UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        button.tintColor = .systemGray;
         button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside);
         return button;
     }()
@@ -90,7 +86,6 @@ class AttachmentFieldView : BaseFieldView {
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery";
         button.setImage(UIImage(named: "gallery")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        button.tintColor = .systemGray;
         button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside);
         return button;
     }()
@@ -100,10 +95,19 @@ class AttachmentFieldView : BaseFieldView {
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Video";
         button.setImage(UIImage(named: "video")?.withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        button.tintColor = .systemGray;
         button.addTarget(self, action: #selector(addVideoAttachment), for: .touchUpInside);
         return button;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        videoButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        galleryButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        cameraButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        errorLabel.font = scheme.typographyScheme.caption;
+        errorLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
+        attachmentHolderView.backgroundColor = scheme.colorScheme.surfaceColor;
+    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -195,9 +199,9 @@ class AttachmentFieldView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         errorLabel.isHidden = valid;
         if (valid) {
-            fieldNameLabel.textColor = .systemGray;
+            applyTheme(withScheme: scheme ?? globalContainerScheme());
         } else {
-            fieldNameLabel.textColor = .systemRed;
+            fieldNameLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
         }
     }
     

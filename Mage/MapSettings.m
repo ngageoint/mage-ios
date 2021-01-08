@@ -10,6 +10,7 @@
 #import "ObservationTableHeaderView.h"
 #import "Feed.h"
 #import "Server.h"
+#import "MAGE-Swift.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
@@ -253,7 +254,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 }
 
 - (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section] andScheme:[MAGEScheme scheme]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

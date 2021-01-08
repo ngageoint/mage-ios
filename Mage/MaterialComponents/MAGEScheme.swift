@@ -11,9 +11,17 @@ import MaterialComponents
 
 func globalContainerScheme() -> MDCContainerScheming {
     let containerScheme = MDCContainerScheme();
-    containerScheme.colorScheme.primaryColor = MDCPalette.blue.tint600;// UIColor(named: "primary") ?? .systemFill;
-    containerScheme.colorScheme.secondaryColor = MDCPalette.orange.accent400 ?? .label;// UIColor(named: "secondary") ?? .label;
-    containerScheme.colorScheme.onSecondaryColor = UIColor.label;
+    // this will be used for the navbar
+    containerScheme.colorScheme.primaryColorVariant = UIColor(named: "primaryVariant") ?? MDCPalette.blue.tint600;
+    containerScheme.colorScheme.primaryColor = UIColor(named: "primary") ?? MDCPalette.blue.tint600;
+    containerScheme.colorScheme.secondaryColor = UIColor(named: "secondary") ?? (MDCPalette.orange.accent400 ?? .systemFill);
+    containerScheme.colorScheme.onSecondaryColor = UIColor(named: "onSecondary") ?? .label;
+    containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
+    containerScheme.colorScheme.onSurfaceColor = UIColor.label;
+    containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
+    containerScheme.colorScheme.errorColor = .systemRed;
+    containerScheme.colorScheme.onPrimaryColor = .white;
+    
     return containerScheme;
 }
 
@@ -21,4 +29,9 @@ func globalErrorContainerScheme() -> MDCContainerScheming {
     let containerScheme = MDCContainerScheme();
     containerScheme.colorScheme.primaryColor = .systemRed;
     return containerScheme;
+}
+
+// This is for access in Objective-c land
+@objc class MAGEScheme: NSObject {
+    @objc class func scheme() -> MDCContainerScheming { return globalContainerScheme() }
 }

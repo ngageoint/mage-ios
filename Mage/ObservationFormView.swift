@@ -28,6 +28,7 @@ class ObservationFormView: UIStackView {
     private var observationFormListener: ObservationFormListener?;
     private var editMode: Bool = true;
     private var formFieldAdded: Bool = false;
+    private var scheme: MDCContainerScheming?;
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
@@ -62,6 +63,10 @@ class ObservationFormView: UIStackView {
         self.fieldSelectionDelegate = delegate;
         self.observationFormListener = observationFormListener;
         constructView();
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -116,6 +121,7 @@ class ObservationFormView: UIStackView {
                 fieldView = label;
             }
             if let baseFieldView = fieldView as? BaseFieldView, let safeKey = fieldDictionary[FieldKey.name.key] as? String {
+                baseFieldView.applyTheme(withScheme: scheme ?? globalContainerScheme())
                 fieldViews[safeKey] = baseFieldView;
             }
             formFieldAdded = true;

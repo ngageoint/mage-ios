@@ -25,20 +25,15 @@ class GeometryView : BaseFieldView {
     }()
     
     private lazy var latitudeLongitudeButton: MDCButton = {
-        let containerScheme = globalContainerScheme();
         let button = MDCButton(forAutoLayout: ());
         button.accessibilityLabel = "location";
         button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.applyTextTheme(withScheme: containerScheme);
         return button;
     }()
     
     private lazy var accuracyLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
         let label = UILabel(forAutoLayout: ());
-        label.textColor = .systemGray;
-        label.font = containerScheme.typographyScheme.caption;
         return label;
     }()
     
@@ -57,7 +52,6 @@ class GeometryView : BaseFieldView {
         let fab = MDCFloatingButton(shape: .mini);
         fab.accessibilityLabel = field[FieldKey.name.key] as? String;
         fab.setImage(UIImage(named: "edit")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        fab.applySecondaryTheme(withScheme: globalContainerScheme());
         fab.addTarget(self, action: #selector(handleTap), for: .touchUpInside);
         return fab;
     }()
@@ -66,6 +60,14 @@ class GeometryView : BaseFieldView {
         let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView, andEventForms: eventForms);
         return observationManager;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        accuracyLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        accuracyLabel.font = scheme.typographyScheme.caption;
+        editFab.applySecondaryTheme(withScheme: scheme);
+        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -220,7 +222,6 @@ class GeometryView : BaseFieldView {
                 } else {
                     latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
                 }
-                latitudeLongitudeButton.sizeToFit();
             }
             setAccuracy(accuracy, provider: provider);
             addToMap();
@@ -231,11 +232,10 @@ class GeometryView : BaseFieldView {
     
     override func setValid(_ valid: Bool) {
         if (valid) {
-            latitudeLongitudeButton.applyTextTheme(withScheme: globalContainerScheme());
-            fieldNameLabel.textColor = .systemGray;
+            applyTheme(withScheme: scheme ?? globalContainerScheme());
         } else {
             latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
-            fieldNameLabel.textColor = .systemRed;
+            fieldNameLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
         }
     }
 }

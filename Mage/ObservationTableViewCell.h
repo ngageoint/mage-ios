@@ -8,6 +8,7 @@
 #import "Observation.h"
 #import "AttachmentSelectionDelegate.h"
 #import "ObservationActionsDelegate_legacy.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @class ObservationTableViewCell;
 
@@ -31,5 +32,6 @@
 
 - (void) populateCellWithObservation:(Observation *) observation;
 - (void) displayFavoriteForObservation: (Observation *) observation;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme;
 
 @end

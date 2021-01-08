@@ -22,30 +22,53 @@
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
 #import "MAGE-Swift.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface ObservationTableViewController() <ObservationEditDelegate, AttachmentViewDelegate, AttachmentSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation ObservationTableViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    self.refreshControl.backgroundColor = [UIColor primary];
-    self.refreshControl.tintColor = [UIColor brand];
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (self.scheme) {
+        self.scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.refreshControl.backgroundColor = self.scheme.colorScheme.primaryColor;
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor colorNamed:@"primaryVariant"];
     self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
+        NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
+        NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+    };
+    
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
     self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
     [self setNavBarTitle];
 }
 
 - (instancetype) init {
     self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = [MAGEScheme scheme];
     return self;
 }
 
@@ -56,7 +79,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
     
     if (!self.observationDataStore) {
-        self.observationDataStore = [[ObservationDataStore alloc] init];
+        self.observationDataStore = [[ObservationDataStore alloc] initWithScheme:self.scheme];
         self.tableView.dataSource = self.observationDataStore;
         self.tableView.delegate = self.observationDataStore;
         self.observationDataStore.tableView = self.tableView;
@@ -160,8 +183,8 @@
     
     [self startUpdateTimer];
     
-    [self registerForThemeChanges];
     [self updateFilterButtonPosition];
+    [self applyThemeWithContainerScheme:nil];
 }
 
 - (void) updateFilterButtonPosition {
@@ -233,8 +256,7 @@
 
 - (void) selectedObservation:(Observation *)observation {
     ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
-//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-//    ovc.observation = observation;
+    [ovc applyThemeWithScheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
@@ -242,6 +264,7 @@
 //    ObservationViewController *ovc = [[ObservationViewController alloc] init];
 //    ovc.observation = observation;
     ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
+    [ovc applyThemeWithScheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
@@ -249,6 +272,7 @@
 //    ObservationViewController *ovc = [[ObservationViewController alloc] init];
 //    ovc.observation = observation;
     ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
+    [ovc applyThemeWithScheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
@@ -271,7 +295,7 @@
         delta = [location.timestamp timeIntervalSinceNow] * -1000;
     }
     edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self location:point accuracy:accuracy provider:@"gps" delta:delta];
-
+    
     [self.childCoordinators addObject:edit];
     [edit start];
 }

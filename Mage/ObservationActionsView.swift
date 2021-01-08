@@ -15,6 +15,9 @@ class ObservationActionsView: UIView {
     var observation: Observation?;
     var observationActionsDelegate: ObservationActionsDelegate?;
     internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
+    internal var currentUserFavorited: Bool = false;
+    internal var isImportant: Bool = false;
+    internal var scheme: MDCContainerScheming?;
     
     var favoriteCountText: NSAttributedString {
         get {
@@ -71,7 +74,7 @@ class ObservationActionsView: UIView {
     private lazy var favoriteCountAttributes: [NSAttributedString.Key: Any] = {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: globalContainerScheme().typographyScheme.overline,
-            .foregroundColor: UIColor.label.withAlphaComponent(0.87)
+            .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? globalContainerScheme().colorScheme.onSurfaceColor.withAlphaComponent(0.87)
         ];
         return attributes;
     }()
@@ -79,7 +82,7 @@ class ObservationActionsView: UIView {
     private lazy var favoriteLabelAttributes: [NSAttributedString.Key: Any] = {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: globalContainerScheme().typographyScheme.overline,
-            .foregroundColor: UIColor.label.withAlphaComponent(0.6)
+            .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? globalContainerScheme().colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         ];
         return attributes;
     }()
@@ -96,7 +99,6 @@ class ObservationActionsView: UIView {
         let directionsButton = UIButton(type: .custom);
         directionsButton.accessibilityLabel = "directions";
         directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
-        directionsButton.tintColor = UIColor.label.withAlphaComponent(0.6);
         directionsButton.addTarget(self, action: #selector(getDirections), for: .touchUpInside);
         return directionsButton;
     }()
@@ -119,7 +121,6 @@ class ObservationActionsView: UIView {
     
     private lazy var setImportantButton: MDCButton = {
         let setImportantButton = MDCButton(forAutoLayout: ());
-        setImportantButton.applyContainedTheme(withScheme: globalContainerScheme());
         setImportantButton.accessibilityLabel = "Flag as important";
         setImportantButton.setTitle("Flag as important", for: .normal);
         setImportantButton.addTarget(self, action: #selector(makeImportant), for: .touchUpInside);
@@ -129,7 +130,6 @@ class ObservationActionsView: UIView {
     
     private lazy var cancelOrRemoveButton: MDCButton = {
         let cancelOrRemoveButton = MDCButton(forAutoLayout: ());
-        cancelOrRemoveButton.applyTextTheme(withScheme: globalContainerScheme());
         cancelOrRemoveButton.accessibilityLabel = "Cancel";
         cancelOrRemoveButton.setTitle("Cancel", for: .normal);
         cancelOrRemoveButton.addTarget(self, action: #selector(removeImportant), for: .touchUpInside);
@@ -164,7 +164,13 @@ class ObservationActionsView: UIView {
         return importantWrapperView;
     }()
     
-    override func themeDidChange(_ theme: MageTheme) {
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        importantButton.tintColor = isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
+        setImportantButton.applyContainedTheme(withScheme: scheme);
+        directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+
     }
     
     public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?) {
@@ -174,8 +180,6 @@ class ObservationActionsView: UIView {
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation);
-        
-        registerForThemeChanges();
     }
     
     func layoutView() {
@@ -205,20 +209,19 @@ class ObservationActionsView: UIView {
         favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal);
         importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant() ?? false);
         
-        favoriteButton.tintColor = UIColor.label.withAlphaComponent(0.6);
+        currentUserFavorited = false;
         if let favorites = observation.favorites {
             let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-            let currentUserFavorited = favorites.contains { (favorite) -> Bool in
+            currentUserFavorited = favorites.contains { (favorite) -> Bool in
                 return favorite.userId == user.remoteId && favorite.favorite;
             }
-            favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : UIColor.label.withAlphaComponent(0.6);
         }
         
-        importantButton.tintColor = UIColor.label.withAlphaComponent(0.6);
+        isImportant = false;
         importantInputView.text = nil;
         if let important = observation.observationImportant {
             if (important.important == NSNumber(booleanLiteral: true)) {
-                importantButton.tintColor = MDCPalette.orange.accent400;
+                isImportant = true;
                 importantInputView.text = important.reason;
                 setImportantButton.accessibilityLabel = "Update Important";
                 setImportantButton.setTitle("Update", for: .normal);
@@ -226,6 +229,8 @@ class ObservationActionsView: UIView {
                 cancelOrRemoveButton.setTitle("Remove", for: .normal);
             }
         }
+        
+        applyTheme(withScheme: scheme ?? globalContainerScheme());
     }
     
     @objc func showFavorites() {

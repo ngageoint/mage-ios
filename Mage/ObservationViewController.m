@@ -379,7 +379,7 @@ static NSInteger const IMPORTANT_SECTION = 4;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *name = [self tableView:tableView titleForHeaderInSection:section];
     
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[ObservationTableHeaderView alloc] initWithName:name andScheme:[MAGEScheme scheme]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

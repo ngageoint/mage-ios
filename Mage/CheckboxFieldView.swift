@@ -21,7 +21,6 @@ class CheckboxFieldView : BaseFieldView {
     lazy var label: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.textColor = .label;
-        label.font = globalContainerScheme().typographyScheme.body1;
         label.text = field[FieldKey.title.key] as? String ?? "";
         if ((field[FieldKey.required.key] as? Bool) == true) {
             label.text = (label.text ?? "") + " *"
@@ -32,7 +31,6 @@ class CheckboxFieldView : BaseFieldView {
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
-        label.font = globalContainerScheme().typographyScheme.caption;
         label.text = "";
         label.autoSetDimension(.height, toSize: 14.5);
         return label;
@@ -48,6 +46,14 @@ class CheckboxFieldView : BaseFieldView {
         label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
         return containerView;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        label.font = scheme.typographyScheme.body1;
+        label.textColor = scheme.colorScheme.onSurfaceColor;
+        errorLabel.font = scheme.typographyScheme.caption;
+        checkboxSwitch.onTintColor = scheme.colorScheme.primaryColorVariant;
+    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -92,9 +98,9 @@ class CheckboxFieldView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         valid ? (errorLabel.text = "") : (errorLabel.text = getErrorMessage());
         if (valid) {
-            label.textColor = .label;
+            applyTheme(withScheme: scheme ?? globalContainerScheme());
         } else {
-            label.textColor = .systemRed;
+            label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
         }
     }
     

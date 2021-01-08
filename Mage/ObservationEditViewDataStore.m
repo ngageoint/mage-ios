@@ -14,6 +14,7 @@
 #import "Server.h"
 #import "Event.h"
 #import "FormDefaults.h"
+#import "MAGE-Swift.h"
 
 static NSInteger const ATTACHMENT_SECTION = 0;
 static NSInteger const COMMON_SECTION = 1;
@@ -336,7 +337,7 @@ static NSInteger const FIRST_FORM_SECTION = 2;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *name = [self tableView:tableView titleForHeaderInSection:section];
     
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[ObservationTableHeaderView alloc] initWithName:name andScheme:[MAGEScheme scheme]];
 }
 
 @end

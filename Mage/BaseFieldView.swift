@@ -16,6 +16,7 @@ class BaseFieldView : UIView {
     internal var fieldValueValid: Bool! = false;
     internal var value: Any?;
     internal var editMode: Bool = true;
+    internal var scheme: MDCContainerScheming?;
     
     private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
         var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil;
@@ -33,12 +34,7 @@ class BaseFieldView : UIView {
     }()
     
     lazy var fieldNameLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
         let label = UILabel(forAutoLayout: ());
-        label.textColor = UIColor.label.withAlphaComponent(0.6);
-        var font = containerScheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
-        label.font = font;
         label.autoSetDimension(.height, toSize: 16);
         label.text = (field[FieldKey.title.key] as? String ?? "");
         label.accessibilityLabel = "\((field[FieldKey.name.key] as? String ?? "")) Label";
@@ -46,11 +42,7 @@ class BaseFieldView : UIView {
     }()
     
     lazy var fieldValue: UILabel = {
-        let containerScheme = globalContainerScheme();
         let label = UILabel(forAutoLayout: ());
-        label.textColor = .label;
-        var font = containerScheme.typographyScheme.body1;
-        label.font = font;
         label.numberOfLines = 0;
         return label;
     }()
@@ -80,6 +72,19 @@ class BaseFieldView : UIView {
         self.value = value;
         self.addSubview(viewStack);
         viewStack.autoPinEdgesToSuperviewEdges();
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
+        fieldValue.textColor = scheme.colorScheme.onSurfaceColor;
+        fieldValue.font = scheme.typographyScheme.body1;
+        fieldNameLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        var font = scheme.typographyScheme.body1;
+        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
+        fieldNameLabel.font = font;
+        if (controller.textInput != nil) {
+            controller.applyTheme(withScheme: scheme);
+        }
     }
     
     func setupController() {

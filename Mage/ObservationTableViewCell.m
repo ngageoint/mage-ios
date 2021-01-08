@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *errorBadge;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UIButton *directionsButton;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
@@ -43,30 +44,58 @@
     return self;
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.primaryField.textColor = [UIColor primaryText];
-    self.backgroundColor = [UIColor background];
-    self.variantField.textColor = [UIColor primaryText];
-    self.timeField.textColor = [UIColor secondaryText];
-    self.userField.textColor = [UIColor secondaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.primaryField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];// [UIColor primaryText];
+    self.backgroundColor = self.scheme.colorScheme.surfaceColor;// [UIColor background];
+    self.variantField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];// [UIColor primaryText];
+    self.timeField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.userField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:1];
     self.favoriteHighlightColor = [UIColor colorWithHexString:@"00C853" alpha:1.0];
-    self.directionsButton.tintColor = [UIColor inactiveIcon];
+    self.directionsButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     if (self.observation) {
         [self displayFavoriteForObservation:self.observation];
     }
-    self.importantBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.importantBadge.layer.borderColor = [self.scheme.colorScheme.surfaceColor CGColor];
     self.importantBadge.layer.borderWidth = 2.5;
     self.importantBadge.layer.cornerRadius = self.importantBadge.frame.size.width / 2.0f;
     
-    self.syncBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.syncBadge.layer.borderColor = [self.scheme.colorScheme.surfaceColor CGColor];
     self.syncBadge.layer.borderWidth = 2.5;
     self.syncBadge.layer.cornerRadius = self.syncBadge.frame.size.width / 2.0f;
     
-    self.errorBadge.layer.borderColor = [[UIColor background] CGColor];
+    self.errorBadge.layer.borderColor = [self.scheme.colorScheme.surfaceColor CGColor];
     self.errorBadge.layer.borderWidth = 2.5;
     self.errorBadge.layer.cornerRadius = self.errorBadge.frame.size.width / 2.0f;
 }
+
+//- (void) themeDidChange:(MageTheme)theme {
+//    self.primaryField.textColor = [UIColor primaryText];
+//    self.backgroundColor = [UIColor background];
+//    self.variantField.textColor = [UIColor primaryText];
+//    self.timeField.textColor = [UIColor secondaryText];
+//    self.userField.textColor = [UIColor secondaryText];
+//    self.favoriteDefaultColor = [UIColor colorWithWhite:0.0 alpha:1];
+//    self.favoriteHighlightColor = [UIColor colorWithHexString:@"00C853" alpha:1.0];
+//    self.directionsButton.tintColor = [UIColor inactiveIcon];
+//    if (self.observation) {
+//        [self displayFavoriteForObservation:self.observation];
+//    }
+//    self.importantBadge.layer.borderColor = [[UIColor background] CGColor];
+//    self.importantBadge.layer.borderWidth = 2.5;
+//    self.importantBadge.layer.cornerRadius = self.importantBadge.frame.size.width / 2.0f;
+//
+//    self.syncBadge.layer.borderColor = [[UIColor background] CGColor];
+//    self.syncBadge.layer.borderWidth = 2.5;
+//    self.syncBadge.layer.cornerRadius = self.syncBadge.frame.size.width / 2.0f;
+//
+//    self.errorBadge.layer.borderColor = [[UIColor background] CGColor];
+//    self.errorBadge.layer.borderWidth = 2.5;
+//    self.errorBadge.layer.cornerRadius = self.errorBadge.frame.size.width / 2.0f;
+//}
 
 - (void) populateCellWithObservation:(Observation *) observation {
     // TODO if we are reusing this cell, we should probably cancel all of the image cache requests
@@ -141,18 +170,18 @@
 }
 
 - (void) didMoveToSuperview {
-    [self registerForThemeChanges];
+//    [self registerForThemeChanges];
 }
 
 - (void) displayFavoriteForObservation: (Observation *) observation {
     NSDictionary *favoritesMap = [observation getFavoritesMap];
     ObservationFavorite *favorite = [favoritesMap objectForKey:self.currentUser.remoteId];
     if (favorite && favorite.favorite) {
-        self.favoriteButton.imageView.tintColor = self.favoriteHighlightColor;
-        self.favoriteNumber.textColor = [UIColor activeIconWithColor:self.favoriteHighlightColor];
+        self.favoriteButton.imageView.tintColor = MDCPalette.greenPalette.accent700;// self.favoriteHighlightColor;
+        self.favoriteNumber.textColor = MDCPalette.greenPalette.accent700;
     } else {
-        self.favoriteButton.imageView.tintColor = [UIColor inactiveIcon];
-        self.favoriteNumber.textColor = [UIColor inactiveIcon];
+        self.favoriteButton.imageView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        self.favoriteNumber.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     }
     NSSet *favorites = [observation.favorites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.favorite = %@", [NSNumber numberWithBool:YES]]];
     if ([favorites count]) {

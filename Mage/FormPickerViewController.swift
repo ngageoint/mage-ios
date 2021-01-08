@@ -17,6 +17,7 @@ import MaterialComponents.MDCButton;
 
     var delegate: FormPickedDelegate?;
     var forms: [[String: Any]]?;
+    var scheme: MDCContainerScheming = globalContainerScheme();
     
     var tableView: UITableView = {
         let tableView = UITableView(forAutoLayout: ());
@@ -27,14 +28,25 @@ import MaterialComponents.MDCButton;
         return tableView;
     }()
     
-    override func themeDidChange(_ theme: MageTheme) {
-        view.backgroundColor = .systemGroupedBackground;
-        self.tableView.backgroundColor = .systemGroupedBackground;
-        self.tableView.reloadData();
-    }
+    private lazy var cancelButton: MDCButton = {
+        let cancelButton = MDCButton(forAutoLayout: ());
+        cancelButton.accessibilityLabel = "Cancel";
+        cancelButton.setTitle("Cancel", for: .normal);
+        cancelButton.clipsToBounds = true;
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
+        return cancelButton;
+    }()
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.cancelSelection();
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if let safeScheme = scheme {
+            self.scheme = safeScheme;
+        }
+        self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        cancelButton.applyTextTheme(withScheme: self.scheme);
     }
     
     init(frame: CGRect) {
@@ -51,11 +63,6 @@ import MaterialComponents.MDCButton;
         self.forms = forms;
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        self.registerForThemeChanges();
-    }
-    
     override func loadView() {
         super.loadView();
         view.addSubview(tableView);
@@ -69,7 +76,7 @@ import MaterialComponents.MDCButton;
         tableView.contentInsetAdjustmentBehavior = .never;
     }
 }
-    
+
 extension FormPickerViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -88,6 +95,7 @@ extension FormPickerViewController: UITableViewDataSource {
             }
             return cell
         }()
+        cell.backgroundColor = scheme.colorScheme.surfaceColor;
 
         if let safeForm = self.forms?[indexPath.row] {
             cell.accessibilityLabel = safeForm["name"] as? String;
@@ -97,11 +105,11 @@ extension FormPickerViewController: UITableViewDataSource {
             if let safeColor = safeForm["color"] as? String {
                 cell.imageView?.tintColor = UIColor(hex: safeColor);
             } else {
-                cell.imageView?.tintColor = globalContainerScheme().colorScheme.primaryColor
+                cell.imageView?.tintColor = scheme.colorScheme.primaryColor
             }
-            cell.textLabel?.textColor = .label;
-            cell.detailTextLabel?.textColor = .secondaryLabel;
-            cell.backgroundColor = .systemBackground;
+            cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            cell.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            cell.backgroundColor = scheme.colorScheme.surfaceColor;
         }
 
         return cell;
@@ -118,15 +126,6 @@ extension FormPickerViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView(frame: .zero);
-        footerView.backgroundColor = UIColor.systemGroupedBackground;
-
-        let cancelButton = MDCButton(forAutoLayout: ());
-        cancelButton.applyTextTheme(withScheme: globalContainerScheme());
-        cancelButton.accessibilityLabel = "Cancel";
-        cancelButton.setTitle("Cancel", for: .normal);
-        cancelButton.clipsToBounds = true;
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
-        
         footerView.addSubview(cancelButton);
         cancelButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 32, bottom: 20, right: 32));
         return footerView;

@@ -60,6 +60,12 @@ class CommonFieldsView: MDCCard {
         fatalError("This class does not support NSCoding")
     }
     
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        geometryView.applyTheme(withScheme: scheme);
+        dateView.applyTheme(withScheme: scheme);
+    }
+    
     override func updateConstraints() {
         if (!didSetupConstraints) {
             dateView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);

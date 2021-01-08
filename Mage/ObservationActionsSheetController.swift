@@ -12,15 +12,20 @@ import MaterialComponents.MDCAppBar;
 class ObservationActionsSheetController: UITableViewController {
     var observation: Observation!;
     var delegate: ObservationActionsDelegate!;
+    var scheme: MDCContainerScheming = globalContainerScheme();
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.cancelAction?();
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.tableView.backgroundColor = .tableBackground();
-        self.tableView.reloadData();
-    }
+    private lazy var cancelButton: MDCButton = {
+        let cancelButton = MDCButton(forAutoLayout: ());
+        cancelButton.accessibilityLabel = "Cancel";
+        cancelButton.setTitle("Cancel", for: .normal);
+        cancelButton.clipsToBounds = true;
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
+        return cancelButton;
+    }()
     
     init(frame: CGRect) {
         super.init(style: .plain);
@@ -36,13 +41,12 @@ class ObservationActionsSheetController: UITableViewController {
         self.delegate = delegate;
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        self.registerForThemeChanges();
-    }
-    
-    override func loadView() {
-        super.loadView();
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if (scheme != nil) {
+            self.scheme = scheme!;
+        }
+        self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        cancelButton.applyTextTheme(withScheme: self.scheme);
     }
     
     override func viewDidLoad() {
@@ -54,14 +58,6 @@ class ObservationActionsSheetController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView(frame: .zero);
-        
-        let cancelButton = MDCButton(forAutoLayout: ());
-        cancelButton.applyTextTheme(withScheme: globalContainerScheme());
-        cancelButton.accessibilityLabel = "Cancel";
-        cancelButton.setTitle("Cancel", for: .normal);
-        cancelButton.clipsToBounds = true;
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
-        
         footerView.addSubview(cancelButton);
         cancelButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 32, bottom: -8, right: 32));
         return footerView;
@@ -85,18 +81,18 @@ class ObservationActionsSheetController: UITableViewController {
             return cell
         }()
         
-        cell.imageView?.tintColor = UIColor.label.withAlphaComponent(0.87);
-        cell.textLabel?.textColor = .label;
-        cell.backgroundColor = .systemBackground;
-        cell.textLabel?.font = globalContainerScheme().typographyScheme.subtitle1;
+        cell.imageView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor;
+        cell.backgroundColor = scheme.colorScheme.surfaceColor;
+        cell.textLabel?.font = scheme.typographyScheme.subtitle1;
         cell.accessoryType = .none;
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
             cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
-            cell.textLabel?.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
-            cell.imageView?.tintColor = globalErrorContainerScheme().colorScheme.primaryColor;
+            cell.textLabel?.textColor = scheme.colorScheme.errorColor;
+            cell.imageView?.tintColor = scheme.colorScheme.errorColor;
         }
         
         if (indexPath.row == 1) {

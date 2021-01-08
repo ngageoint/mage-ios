@@ -12,6 +12,7 @@
 #import "Layer.h"
 #import "Server.h"
 #import "ObservationTableHeaderView.h"
+#import "MAGE-Swift.h"
 
 @interface OnlineMapTableViewController () <NSFetchedResultsControllerDelegate>
     @property (nonatomic, strong) NSMutableSet *selectedOnlineLayers;
@@ -98,9 +99,9 @@
 
 - (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        return [[ObservationTableHeaderView alloc] initWithName:@"Nonsecure Layers"];
+        return [[ObservationTableHeaderView alloc] initWithName:@"Nonsecure Layers" andScheme:[MAGEScheme scheme]];
     }
-    return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers"];
+    return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers" andScheme:[MAGEScheme scheme]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

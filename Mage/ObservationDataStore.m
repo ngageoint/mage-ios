@@ -17,10 +17,12 @@
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 
+
 @interface ObservationDataStore ()
 
 @property (nonatomic) NSDateFormatter *dateFormatter;
 @property (nonatomic) NSDateFormatter *dateFormatterToDate;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation ObservationDataStore
@@ -48,8 +50,9 @@
     
 }
 
-- (id) init {
+- (id) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self.event = [Event MR_findFirstByAttribute:@"remoteId" withValue:[Server currentEventId]];
+    self.scheme = containerScheme;
     return self;
 }
 
@@ -107,7 +110,7 @@
 
 - (void) configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	ObservationTableViewCell *observationCell = (ObservationTableViewCell *) cell;
-	
+    [observationCell applyThemeWithContainerScheme:self.scheme];
 	Observation *observation = [self.observations.fetchedResultsController objectAtIndexPath:indexPath];
 	[observationCell populateCellWithObservation:observation];
     observationCell.observationActionsDelegate = self;
@@ -134,7 +137,7 @@
     id sectionInfo = [[self.observations.fetchedResultsController sections] objectAtIndex:section];
     NSString *name = [sectionInfo name];
     
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[ObservationTableHeaderView alloc] initWithName:name andScheme:self.scheme];
 }
 
 - (ObservationTableViewCell *) cellForObservationAtIndex: (NSIndexPath *) indexPath inTableView: (UITableView *) tableView {

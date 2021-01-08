@@ -20,6 +20,7 @@ class EditAttachmentCardView: MDCCard {
     var observation: Observation;
     var viewController: UIViewController;
     var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    var scheme: MDCContainerScheming?;
     
     lazy var attachmentField: [String: Any] = {
         let attachmentField: [String: Any] =
@@ -41,6 +42,12 @@ class EditAttachmentCardView: MDCCard {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         buildView();
+    }
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        self.scheme = scheme;
+        attachmentView.applyTheme(withScheme: scheme);
     }
     
     required init?(coder: NSCoder) {

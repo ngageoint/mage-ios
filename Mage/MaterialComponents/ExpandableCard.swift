@@ -37,7 +37,6 @@ class ExpandableCard: MDCCard {
         let imageView = UIImageView(forAutoLayout: ());
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.tintColor = globalContainerScheme().colorScheme.primaryColor;
         return imageView
     }()
     
@@ -47,7 +46,6 @@ class ExpandableCard: MDCCard {
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
         label.font = globalContainerScheme().typographyScheme.overline
-        label.textColor = .systemGray;
         return label
     }()
 
@@ -57,7 +55,6 @@ class ExpandableCard: MDCCard {
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
         label.font = globalContainerScheme().typographyScheme.headline6
-        label.textColor = globalContainerScheme().colorScheme.primaryColor
         return label
     }()
 
@@ -67,14 +64,13 @@ class ExpandableCard: MDCCard {
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
         label.font = globalContainerScheme().typographyScheme.subtitle2
-        label.textColor = UIColor.label.withAlphaComponent(0.6);
         return label
     }()
     
     private lazy var expandAction: UIButton = {
         let expandAction = UIButton(type: .custom);
         expandAction.accessibilityLabel = "expand";
-        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
+        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" )?.withRenderingMode(.alwaysTemplate), for: .normal);
         expandAction.addTarget(self, action: #selector(expandButtonPressed), for: .touchUpInside)
         return expandAction;
     }()
@@ -84,6 +80,15 @@ class ExpandableCard: MDCCard {
         expandableView.isHidden = !self.showExpanded;
         return expandableView;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        thumbnail.tintColor = scheme.colorScheme.primaryColor;
+        expandAction.tintColor = scheme.colorScheme.primaryColor;
+        titleText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        headerText.textColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        subhead.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+    }
     
     @objc func expandButtonPressed() {
         expanded = !self.expanded;
@@ -126,7 +131,7 @@ class ExpandableCard: MDCCard {
         set(expanded) {
             self.showExpanded = expanded;
             self.expandableView.isHidden = !self.showExpanded;
-            expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" ), for: .normal);
+            expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" )?.withRenderingMode(.alwaysTemplate), for: .normal);
         }
     }
     

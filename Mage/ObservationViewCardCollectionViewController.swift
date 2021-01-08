@@ -16,14 +16,6 @@ import MaterialComponents.MDCCard
     
     var didSetupConstraints = false;
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = globalContainerScheme().colorScheme.primaryColor;
-        self.navigationController?.navigationBar.tintColor = .white;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        self.view.backgroundColor = .tableBackground();
-    }
-    
     var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
@@ -31,6 +23,7 @@ import MaterialComponents.MDCCard
     var headerCard: ObservationHeaderView!;
     var observationEditCoordinator: ObservationEditCoordinator?;
     var bottomSheet: MDCBottomSheetController?;
+    var scheme: MDCContainerScheming = globalContainerScheme();
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -56,6 +49,33 @@ import MaterialComponents.MDCCard
         let syncStatusView = ObservationSyncStatus(observation: observation);
         return syncStatusView;
     }()
+    
+    @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if (scheme != nil) {
+            self.scheme = scheme!;
+        }
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+        ];
+        
+        self.navigationController?.navigationBar.standardAppearance = appearance;
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    }
     
     override func loadView() {
         view = UIView();
@@ -90,7 +110,6 @@ import MaterialComponents.MDCCard
     
     @objc convenience public init(observation: Observation) {
         self.init(frame: CGRect.zero);
-//        self.delegate = delegate;
         self.observation = observation;
     }
     
@@ -104,7 +123,7 @@ import MaterialComponents.MDCCard
         self.view.accessibilityIdentifier = "ObservationViewCardCollection"
         self.view.accessibilityLabel = "ObservationViewCardCollection"
         
-        self.registerForThemeChanges();
+        applyTheme();
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +167,7 @@ import MaterialComponents.MDCCard
     func addHeaderCard(stackView: UIStackView) {
         if let safeObservation = observation {
             headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
+            headerCard.applyTheme(withScheme: scheme);
             stackView.addArrangedSubview(headerCard);
         }
     }
@@ -159,6 +179,7 @@ import MaterialComponents.MDCCard
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
                     let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
+                    attachmentCard.applyTheme(withScheme: scheme);
                     stackView.addArrangedSubview(attachmentCard);
                 }
             }
@@ -190,6 +211,7 @@ import MaterialComponents.MDCCard
             }
         }
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self, attachmentSelectionDelegate: self);
+        formView.applyTheme(withScheme: scheme);
         var formSpacerView: UIView?;
         if (!formView.isEmpty()) {
             formSpacerView = UIView(forAutoLayout: ());
@@ -198,6 +220,7 @@ import MaterialComponents.MDCCard
         }
         
         let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView)
+        card.applyTheme(withScheme: scheme);
         stackView.addArrangedSubview(card);
         cards.append(card);
         return card;
@@ -205,6 +228,7 @@ import MaterialComponents.MDCCard
     
     @objc func showActionsSheet(sender: UIBarButtonItem) {
         let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation!, delegate: self);
+        actionsSheet.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
         
@@ -212,6 +236,7 @@ import MaterialComponents.MDCCard
     
     @objc func editObservation(sender: UIBarButtonItem) {
         observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator?.applyTheme(withScheme: scheme);
         observationEditCoordinator!.start();
     }
 }

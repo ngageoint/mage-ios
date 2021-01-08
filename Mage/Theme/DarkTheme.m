@@ -36,7 +36,7 @@
 }
 
 - (UIColor *) background {
-    return [UIColor colorWithHexString:@"303030"];
+    return [UIColor colorNamed:@"surface"];// [UIColor colorWithHexString:@"303030"];
 }
 
 - (UIColor *) tableBackground {

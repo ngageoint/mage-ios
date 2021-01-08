@@ -23,19 +23,12 @@ import MaterialComponents.MDCCard
 
 @objc class ObservationEditCardCollectionViewController: UIViewController {
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = .primary();
-        self.navigationController?.navigationBar.tintColor = .white;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        self.view.backgroundColor = .tableBackground();
-    }
-    
     var delegate: (ObservationEditCardDelegate & FieldSelectionDelegate)?;
     var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var observationProperties: [String: Any] = [ : ];
     var newObservation: Bool = false;
+    var scheme: MDCContainerScheming = globalContainerScheme();
     
     var cards: [ExpandableCard] = [];
     private var keyboardHelper: KeyboardHelper?;
@@ -70,7 +63,6 @@ import MaterialComponents.MDCCard
         fab.mode = .expanded;
         fab.setImage(UIImage(named: "form")?.withRenderingMode(.alwaysTemplate), for: .normal);
         fab.setTitle("Add Form", for: .normal);
-        fab.applySecondaryTheme(withScheme: globalContainerScheme());
         fab.addTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside);
         return fab;
     }()
@@ -97,18 +89,46 @@ import MaterialComponents.MDCCard
         ])
     }
     
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if (scheme != nil) {
+            self.scheme = scheme!;
+        }
+        addFormFAB.applySecondaryTheme(withScheme: self.scheme);
+        
+        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:  self.scheme.colorScheme.onPrimaryColor
+        ];
+        
+        self.navigationController?.navigationBar.standardAppearance = appearance;
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.accessibilityIdentifier = "ObservationEditCardCollection"
         self.view.accessibilityLabel = "ObservationEditCardCollection"
-        
+    
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveObservation(sender:)));
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancel(sender:)));
         if (self.newObservation) {
-            self.navigationItem.title = "Create Observation";
+            self.title = "Create Observation";
         } else {
-            self.navigationItem.title = "Edit Observation";
+            self.title = "Edit Observation";
         }
         
         self.view.addSubview(scrollView)
@@ -133,8 +153,6 @@ import MaterialComponents.MDCCard
             self.delegate?.addForm();
         }
         
-        self.registerForThemeChanges();
-        
         keyboardHelper = KeyboardHelper { animation, keyboardFrame, duration in
             switch animation {
             case .keyboardWillShow:
@@ -143,6 +161,11 @@ import MaterialComponents.MDCCard
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        applyTheme();
     }
     
     init(frame: CGRect) {
@@ -172,7 +195,7 @@ import MaterialComponents.MDCCard
     func addCommonFields(stackView: UIStackView) {
          if let safeObservation = observation {
             let commonFieldView: CommonFieldsView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate);
-             commonFieldView.applyTheme(withScheme: globalContainerScheme());
+             commonFieldView.applyTheme(withScheme: scheme);
              stackView.addArrangedSubview(commonFieldView);
          }
     }
@@ -183,6 +206,7 @@ import MaterialComponents.MDCCard
         if (UserDefaults.standard.serverMajorVersion < 6) {
             if let safeObservation = observation {
                 let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation,  viewController: self);
+                attachmentCard.applyTheme(withScheme: scheme);
                 stackView.addArrangedSubview(attachmentCard);
             }
         }
@@ -191,6 +215,7 @@ import MaterialComponents.MDCCard
     func addFormViews(stackView: UIStackView) {
         for (index, form) in self.observationForms.enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
+            card.applyTheme(withScheme: scheme);
             card.expanded = newObservation || self.observationForms.count == 1;
         }
     }
@@ -213,6 +238,7 @@ import MaterialComponents.MDCCard
             }
         }
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate);
+        formView.applyTheme(withScheme: scheme);
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
@@ -290,6 +316,7 @@ import MaterialComponents.MDCCard
         observationProperties["forms"] = observationForms;
         self.observation?.properties = observationProperties;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
+        card.applyTheme(withScheme: scheme);
         card.expanded = true;
     }
 }

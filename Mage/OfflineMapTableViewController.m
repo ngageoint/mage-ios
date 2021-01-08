@@ -19,6 +19,7 @@
 #import "Layer.h"
 #import "Server.h"
 #import "Event.h"
+#import "MAGE-Swift.h"
 
 @interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>
 
@@ -266,7 +267,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section] andScheme:[MAGEScheme scheme]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

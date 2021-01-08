@@ -92,7 +92,6 @@ class ObservationHeaderView : MDCCard {
     private lazy var timestamp: UILabel = {
         let timestamp = UILabel(forAutoLayout: ());
         timestamp.font = globalContainerScheme().typographyScheme.overline;
-        timestamp.textColor = UIColor.label.withAlphaComponent(0.6);
         timestamp.numberOfLines = 0;
         return timestamp;
     }()
@@ -107,14 +106,12 @@ class ObservationHeaderView : MDCCard {
     private lazy var primaryField: UILabel = {
         let primaryField = UILabel(forAutoLayout: ());
         primaryField.font = globalContainerScheme().typographyScheme.headline6;
-        primaryField.textColor = globalContainerScheme().colorScheme.primaryColor;
         return primaryField;
     }()
     
     private lazy var secondaryField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
         secondaryField.font = globalContainerScheme().typographyScheme.subtitle2;
-        secondaryField.textColor = UIColor.label.withAlphaComponent(0.60);
         return secondaryField;
     }()
     
@@ -140,12 +137,12 @@ class ObservationHeaderView : MDCCard {
         super.updateConstraints();
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.timestamp.textColor = UIColor.label.withAlphaComponent(0.6);
-        self.primaryField.textColor = globalContainerScheme().colorScheme.primaryColor;
-        self.secondaryField.textColor = UIColor.label.withAlphaComponent(0.60);
-        
-        self.backgroundColor = UIColor.background();
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super .applyTheme(withScheme: scheme);
+        self.timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        self.primaryField.textColor = scheme.colorScheme.primaryColor;
+        self.secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        self.geometryView.applyTheme(withScheme: scheme);
     }
     
     @objc public func populate(observation: Observation, animate: Bool = true) {
@@ -170,8 +167,6 @@ class ObservationHeaderView : MDCCard {
         timestamp.text = "\(observation.user?.name?.uppercased() ?? "") \u{2022} \(timeText)";
         
         observationActionsView.populate(observation: observation);
-
-        self.registerForThemeChanges()
     }
     
     func layoutView() {

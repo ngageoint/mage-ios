@@ -93,9 +93,8 @@
 }
 
 - (void) themeDidChange:(MageTheme)theme {
-    [self.window setTintColor:[UIColor primary]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor colorNamed:@"primary"]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorNamed:@"primaryVariant"]];
     [[UINavigationBar appearance] setOpaque:YES];
     [[UINavigationBar appearance] setTranslucent:NO];
 }

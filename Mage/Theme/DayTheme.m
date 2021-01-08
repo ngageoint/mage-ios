@@ -35,7 +35,7 @@
 }
 
 - (UIColor *) background {
-    return [UIColor whiteColor];
+    return [UIColor colorNamed:@"surface"];
 }
 
 - (UIColor *) tableBackground {

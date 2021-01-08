@@ -10,6 +10,7 @@
 #import "TimeFilter.h"
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "MAGE-Swift.h"
 
 @interface LocationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -91,7 +92,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *name = [self tableView:tableView titleForHeaderInSection:section];
     
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[ObservationTableHeaderView alloc] initWithName:name andScheme:[MAGEScheme scheme]];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
