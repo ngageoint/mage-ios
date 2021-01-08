@@ -25,17 +25,19 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation MageAppCoordinator
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super init];
     if (!self) return nil;
     
     _childCoordinators = [[NSMutableArray alloc] init];
     _navigationController = navigationController;
+    _scheme = containerScheme;
 
     [self setupPushNotificationsForApplication:application];
     self.imageCacheProvider = ImageCacheProvider.shared;
@@ -50,7 +52,7 @@
         [defaults removeObjectForKey:@"loginType"];
         [defaults synchronize];
         // start the authentication coordinator
-        AuthenticationCoordinator *authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self];
+        AuthenticationCoordinator *authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
         [_childCoordinators addObject:authCoordinator];
         [authCoordinator start];
     } else {

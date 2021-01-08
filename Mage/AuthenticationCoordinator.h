@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol AuthenticationDelegate
 
@@ -17,7 +18,7 @@
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate;
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) start;
 - (void) startLoginOnly;
 

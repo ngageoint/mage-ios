@@ -40,6 +40,7 @@
 #import "Layer.h"
 #import "MageConstants.h"
 #import "MageInitializer.h"
+#import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate, SSZipArchiveDelegate>
@@ -203,7 +204,7 @@
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         // error should be null and contextDidSave should be true
         if (contextDidSave && error == NULL) {
-            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
         } else {
             NSLog(@"Could not read or write from the database");

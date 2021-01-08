@@ -32,6 +32,7 @@
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) ServerURLController *urlController;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
@@ -39,10 +40,11 @@
 
 BOOL signingIn = YES;
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super init];
     if (!self) return nil;
     
+    _scheme = containerScheme;
     _navigationController = navigationController;
     _delegate = delegate;
     
@@ -156,13 +158,13 @@ BOOL signingIn = YES;
 }
 
 - (void) changeServerURLWithError: (NSString *) error {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) changeServerURL {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }

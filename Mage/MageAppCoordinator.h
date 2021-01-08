@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface MageAppCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application;
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) start;
 
 @end

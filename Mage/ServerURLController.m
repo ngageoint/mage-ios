@@ -26,20 +26,22 @@
 @property (strong, nonatomic) NSString *error;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation ServerURLController
 
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self initWithNibName:@"ServerURLView" bundle:nil]) {
         self.delegate = delegate;
+        self.scheme = containerScheme;
     }
     
     return self;
 }
 
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError:(NSString *)error {
-    if (self = [self initWithDelegate:delegate]) {
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError:(NSString *)error andScheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [self initWithDelegate:delegate andScheme:containerScheme]) {
         self.error = error;
     }
     
@@ -48,22 +50,22 @@
 
 #pragma mark - Theme Changes
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
+- (void) applyScheme {
+    self.view.backgroundColor = _scheme.colorScheme.surfaceColor; // [UIColor background];
     self.mageLabel.textColor = [UIColor brand];
     self.wandLabel.textColor = [UIColor brand];
     self.cancelButton.backgroundColor = [UIColor themedButton];
     self.okButton.backgroundColor = [UIColor themedButton];
-    self.errorStatus.textColor = [UIColor secondaryText];
-    self.setServerUrlText.textColor = [UIColor primaryText];
+    self.errorStatus.textColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.setServerUrlText.textColor = _scheme.colorScheme.primaryColor;
     
-    self.serverURL.textColor = [UIColor primaryText];
-    self.serverURL.selectedLineColor = [UIColor brand];
-    self.serverURL.selectedTitleColor = [UIColor brand];
-    self.serverURL.placeholderColor = [UIColor secondaryText];
-    self.serverURL.lineColor = [UIColor secondaryText];
-    self.serverURL.titleColor = [UIColor secondaryText];
-    self.serverURL.errorColor = [UIColor secondaryText];
+    self.serverURL.textColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.serverURL.selectedLineColor = _scheme.colorScheme.primaryColor;
+    self.serverURL.selectedTitleColor = _scheme.colorScheme.primaryColor;
+    self.serverURL.placeholderColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.lineColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.titleColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.errorColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.serverURL.iconText = @"\U0000f0ac";
 }
@@ -72,7 +74,8 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self registerForThemeChanges];
+    [self applyScheme];
+//    [self registerForThemeChanges];
     
     self.wandLabel.text = @"\U0000f0d0";
 }
