@@ -8,6 +8,7 @@
 
 #import "ThemeManager.h"
 #import "UIColor+Mage.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol UIResponderTheme <NSObject>
 
@@ -17,7 +18,9 @@
 
 
 @interface UIResponder (Theme) <UIResponderTheme>
+//@property (nonatomic, strong) id<MDCContainerScheming> scheme;
 
 - (void) registerForThemeChanges;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme;
 
 @end

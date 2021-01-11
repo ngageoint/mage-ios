@@ -139,7 +139,7 @@ BOOL signingIn = YES;
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
@@ -153,7 +153,7 @@ BOOL signingIn = YES;
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
 

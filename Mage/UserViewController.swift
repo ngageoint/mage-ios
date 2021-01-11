@@ -70,7 +70,7 @@ extension UITableView {
         tableView.estimatedRowHeight = 160;
         tableView.setAndLayoutTableHeaderView(header: userTableHeaderView);
         
-        self.registerForThemeChanges();
+//        self.registerForThemeChanges();
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
 #import "User.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol LoginDelegate
 
@@ -20,7 +21,7 @@
 
 @interface LoginViewController : UIViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate;
-- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate;
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 
 @end

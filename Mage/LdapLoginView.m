@@ -25,34 +25,36 @@
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @property (strong, nonatomic) UIFont *passwordFont;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
 @end
 
 @implementation LdapLoginView
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.usernameField.textColor = [UIColor primaryText];
-    self.usernameField.selectedLineColor = [UIColor brand];
-    self.usernameField.selectedTitleColor = [UIColor brand];
-    self.usernameField.placeholderColor = [UIColor secondaryText];
-    self.usernameField.disabledColor = [UIColor secondaryText];
-    self.usernameField.lineColor = [UIColor secondaryText];
-    self.usernameField.titleColor = [UIColor secondaryText];
-    self.usernameField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    self.usernameField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.usernameField.selectedLineColor = self.scheme.colorScheme.primaryColorVariant;
+    self.usernameField.selectedTitleColor = self.scheme.colorScheme.primaryColorVariant;
+    self.usernameField.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.errorColor = self.scheme.colorScheme.errorColor;
     self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.usernameField.iconText = @"\U0000f007";
     
-    self.passwordField.textColor = [UIColor primaryText];
-    self.passwordField.selectedLineColor = [UIColor brand];
-    self.passwordField.selectedTitleColor = [UIColor brand];
-    self.passwordField.placeholderColor = [UIColor secondaryText];
-    self.passwordField.disabledColor = [UIColor secondaryText];
-    self.passwordField.lineColor = [UIColor secondaryText];
-    self.passwordField.titleColor = [UIColor secondaryText];
-    self.passwordField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    self.passwordField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordField.selectedLineColor = self.scheme.colorScheme.primaryColorVariant;
+    self.passwordField.selectedTitleColor = self.scheme.colorScheme.primaryColorVariant;
+    self.passwordField.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.errorColor = self.scheme.colorScheme.errorColor;
     self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.passwordField.iconText = @"\U0000f084";
     
-    self.showPasswordLabel.textColor = [UIColor secondaryText];
+    self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 - (void) didMoveToSuperview {
@@ -74,8 +76,6 @@
     NSString *title = [strategy objectForKey:@"title"];
     self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
     self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
-    
-    [self registerForThemeChanges];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {

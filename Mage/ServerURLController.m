@@ -50,22 +50,25 @@
 
 #pragma mark - Theme Changes
 
-- (void) applyScheme {
-    self.view.backgroundColor = _scheme.colorScheme.surfaceColor; // [UIColor background];
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    self.cancelButton.backgroundColor = [UIColor themedButton];
-    self.okButton.backgroundColor = [UIColor themedButton];
-    self.errorStatus.textColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.setServerUrlText.textColor = _scheme.colorScheme.primaryColor;
+- (void) applyThemeWithContainerafScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme != nil) {
+        _scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor; // [UIColor background];
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.okButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.errorStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.setServerUrlText.textColor = self.scheme.colorScheme.primaryColor;
     
-    self.serverURL.textColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    self.serverURL.selectedLineColor = _scheme.colorScheme.primaryColor;
-    self.serverURL.selectedTitleColor = _scheme.colorScheme.primaryColor;
-    self.serverURL.placeholderColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.serverURL.lineColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.serverURL.titleColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.serverURL.errorColor = [_scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.serverURL.selectedLineColor = self.scheme.colorScheme.primaryColor;
+    self.serverURL.selectedTitleColor = self.scheme.colorScheme.primaryColor;
+    self.serverURL.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.serverURL.errorColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
     self.serverURL.iconText = @"\U0000f0ac";
 }
@@ -74,7 +77,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self applyScheme];
+    [self applyThemeWithContainerScheme:self.scheme];
     
     self.wandLabel.text = @"\U0000f0d0";
 }
