@@ -75,7 +75,6 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     [self applyScheme];
-//    [self registerForThemeChanges];
     
     self.wandLabel.text = @"\U0000f0d0";
 }

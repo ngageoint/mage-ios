@@ -49,15 +49,15 @@
 @implementation UIResponder (Theme)
 
 - (void)registerForThemeChanges {
-    NSAssert([self respondsToSelector:@selector(themeDidChange:)], @"%@ must implement %@", NSStringFromClass(self.class), NSStringFromSelector(@selector(themeDidChange:)));
-
-    __weak typeof(self) weakSelf = self;
-    self.themeChangedNotifier = [[ThemeNotifier alloc] initWithName:kThemeChangedKey object:nil block:^(NSNotification *notification) {
-        NSLog(@"Current theme: %ld", (long)TheCurrentTheme);
-        [weakSelf themeChanged];
-    }];
-    
-    [self themeChanged];
+//    NSAssert([self respondsToSelector:@selector(themeDidChange:)], @"%@ must implement %@", NSStringFromClass(self.class), NSStringFromSelector(@selector(themeDidChange:)));
+//
+//    __weak typeof(self) weakSelf = self;
+//    self.themeChangedNotifier = [[ThemeNotifier alloc] initWithName:kThemeChangedKey object:nil block:^(NSNotification *notification) {
+//        NSLog(@"Current theme: %ld", (long)TheCurrentTheme);
+//        [weakSelf themeChanged];
+//    }];
+//
+//    [self themeChanged];
 }
 
 - (ThemeNotifier *)themeChangedNotifier {
@@ -69,36 +69,36 @@
 }
 
 - (void) themeChanged {
-    [self navigationTheme];
-    [self themeDidChange:TheCurrentTheme];
+//    [self navigationTheme];
+//    [self themeDidChange:TheCurrentTheme];
 }
 
 - (void) navigationTheme {
-    if ([self respondsToSelector:@selector(navigationController)]) {
-        UINavigationController *navigationController = [self performSelector:@selector(navigationController)];
-        if (navigationController) {
-            navigationController.navigationBar.translucent = NO;
-            navigationController.navigationBar.barTintColor = [UIColor colorNamed:@"primaryVariant"];
-            navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
-            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
-            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
-            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-            [appearance configureWithOpaqueBackground];
-            appearance.titleTextAttributes = @{
-                NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-                NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
-            };
-            appearance.largeTitleTextAttributes = @{
-                NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-                NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
-            };
-            
-            navigationController.navigationBar.standardAppearance = appearance;
-            navigationController.navigationBar.scrollEdgeAppearance = appearance;
-            navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
-            navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
-        }
-    }
+//    if ([self respondsToSelector:@selector(navigationController)]) {
+//        UINavigationController *navigationController = [self performSelector:@selector(navigationController)];
+//        if (navigationController) {
+//            navigationController.navigationBar.translucent = NO;
+//            navigationController.navigationBar.barTintColor = [UIColor colorNamed:@"primaryVariant"];
+//            navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+//            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
+//            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
+//            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+//            [appearance configureWithOpaqueBackground];
+//            appearance.titleTextAttributes = @{
+//                NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
+//                NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+//            };
+//            appearance.largeTitleTextAttributes = @{
+//                NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
+//                NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+//            };
+//
+//            navigationController.navigationBar.standardAppearance = appearance;
+//            navigationController.navigationBar.scrollEdgeAppearance = appearance;
+//            navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
+//            navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
+//        }
+//    }
 }
 
 @end
