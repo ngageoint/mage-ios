@@ -16,9 +16,16 @@
 @interface EventTableDataSource()
 @property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
 @property (strong, nonatomic) NSString *currentFilter;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventTableDataSource
+
+- (id) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [self init];
+    self.scheme = containerScheme;
+    return self;
+}
 
 - (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
     if (!self.otherFetchedResultsController) {
@@ -185,6 +192,8 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+    cell.eventName.textColor = self.scheme.colorScheme.onSurfaceColor;
+    cell.eventDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.60];
     Event *event = nil;
     
     if (self.filteredFetchedResultsController != nil) {

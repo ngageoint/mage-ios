@@ -22,15 +22,17 @@
 @property (strong, nonatomic) EventChooserController<NSFetchedResultsControllerDelegate> *eventController;
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) Event *eventToSegueTo;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventChooserCoordinator
 
-- (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate {
+- (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
         self.delegate = delegate;
         self.viewController = viewController;
+        self.scheme = containerScheme;
     }
     return self;
 }
@@ -49,8 +51,8 @@
         }
     }
     
-    self.eventDataSource = [[EventTableDataSource alloc] init];
-    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self];
+    self.eventDataSource = [[EventTableDataSource alloc] initWithScheme:self.scheme];
+    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
     
     __weak typeof(self) weakSelf = self;

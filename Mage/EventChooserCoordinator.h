@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Event.h"
 #import "Form.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol EventChooserDelegate
 
@@ -18,7 +19,7 @@
 
 @interface EventChooserCoordinator : NSObject
 
-- (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate;
+- (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme;
 - (void) start;
 
 @end

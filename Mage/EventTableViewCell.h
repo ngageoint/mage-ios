@@ -10,6 +10,9 @@
 #import "Event.h"
 
 @interface EventTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *eventName;
+@property (weak, nonatomic) IBOutlet UILabel *eventDescription;
+@property (weak, nonatomic) IBOutlet UILabel *eventBadgeLabel;
 
 - (void) populateCellWithEvent:(Event *) event offlineObservationCount:(NSUInteger) count;
 

@@ -7,6 +7,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "Event.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol EventSelectionDelegate;
 
@@ -21,5 +22,6 @@
 - (void) startFetchController;
 - (void) setEventFilter: (NSString *) filter withDelegate:(id<NSFetchedResultsControllerDelegate>) delegate;
 - (void) refreshEventData;
+- (id) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 
 @end

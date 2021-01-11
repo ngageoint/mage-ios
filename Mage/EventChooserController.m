@@ -10,7 +10,6 @@
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
-#import "Theme+UIResponder.h"
 
 @interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
@@ -24,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *refreshingStatus;
 @property (weak, nonatomic) IBOutlet UILabel *eventInstructions;
 @property (strong, nonatomic) NSFetchedResultsController *allEventsController;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventChooserController {
@@ -34,13 +33,14 @@
     BOOL eventsChanged;
 }
 
-- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate {
+- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super initWithNibName:@"EventChooserView" bundle:nil];
     if (!self) return nil;
     
     self.modalPresentationStyle = UIModalPresentationFullScreen;
     
     self.delegate = delegate;
+    self.scheme = containerScheme;
     self.eventDataSource = eventDataSource;
     self.eventDataSource.tableView = self.tableView;
     self.eventDataSource.eventSelectionDelegate = self;
@@ -61,28 +61,30 @@
     return self;
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor primary];
-    self.loadingView.backgroundColor = [UIColor background];
-    self.chooseEventTitle.textColor = [UIColor navBarPrimaryText];
-    self.eventInstructions.textColor = [UIColor navBarSecondaryText];
-    self.actionButton.backgroundColor = [UIColor themedButton];
-    self.loadingLabel.textColor = [UIColor brand];
-    self.activityIndicator.color = [UIColor brand];
-    self.tableView.backgroundColor = [UIColor background];
-    self.refreshingButton.backgroundColor = [UIColor primary];
-    self.refreshingView.backgroundColor = [UIColor primary];
-    self.refreshingButton.tintColor = [UIColor navBarPrimaryText];
-    self.refreshingStatus.textColor = [UIColor navBarPrimaryText];
-    
-    self.searchController.searchBar.barTintColor = [UIColor primary];
-    self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
-    self.searchController.searchBar.backgroundColor = [UIColor primary];
-    self.searchContainer.backgroundColor = [UIColor primary];
-
-    if (@available(iOS 13.0, *)) {
-        self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
     }
+
+    self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.loadingView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.chooseEventTitle.textColor = self.scheme.colorScheme.onPrimaryColor;
+    self.eventInstructions.textColor = [self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.87];
+    self.actionButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.loadingLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.activityIndicator.color = self.scheme.colorScheme.primaryColorVariant;
+    self.tableView.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.refreshingButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.refreshingView.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.refreshingButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.refreshingStatus.textColor = self.scheme.colorScheme.onPrimaryColor;
+    
+    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.searchContainer.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+
+    self.searchController.searchBar.searchTextField.backgroundColor = self.scheme.colorScheme.surfaceColor;
 
     [self.tableView reloadData];
 }
@@ -119,7 +121,7 @@
     [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
     
     self.definesPresentationContext = YES;
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {
@@ -218,7 +220,7 @@
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.font = [UIFont systemFontOfSize:20];
-        messageLabel.textColor = [UIColor secondaryText];
+        messageLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         [messageLabel sizeToFit];
         
         UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];

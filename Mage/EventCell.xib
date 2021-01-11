@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,14 +13,14 @@
             <rect key="frame" x="0.0" y="0.0" width="343" height="72"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TSd-NR-Hm0" id="jCm-NZ-T1H">
-                <rect key="frame" x="0.0" y="0.0" width="309" height="71.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="316" height="72"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Q8r-ic-ttB">
-                        <rect key="frame" x="16" y="11" width="293" height="50"/>
+                        <rect key="frame" x="16" y="11" width="300" height="50"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="cGG-kv-NZi">
-                                <rect key="frame" x="0.0" y="6.5" width="273" height="37"/>
+                                <rect key="frame" x="0.0" y="6.5" width="280" height="37"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="natural" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dnf-zB-a4n">
                                         <rect key="frame" x="0.0" y="0.0" width="87.5" height="20"/>
@@ -43,7 +40,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UDd-jK-RJl">
-                                <rect key="frame" x="273" y="16.5" width="20" height="17"/>
+                                <rect key="frame" x="280" y="16.5" width="20" height="17"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" priority="999" constant="20" id="GN1-42-dLn"/>
@@ -76,9 +73,10 @@
                 <outlet property="eventBadgeLabel" destination="UDd-jK-RJl" id="gC7-s5-kOm"/>
                 <outlet property="eventBadgeLabelHeight" destination="vwR-Te-hNF" id="mMq-oX-ey0"/>
                 <outlet property="eventBadgeLabelWidth" destination="GN1-42-dLn" id="vrQ-BW-GP3"/>
-                <outlet property="eventDescription" destination="8FQ-lT-OCO" id="QX4-Oi-4GD"/>
-                <outlet property="eventName" destination="Dnf-zB-a4n" id="3rw-fQ-1dx"/>
+                <outlet property="eventDescription" destination="8FQ-lT-OCO" id="R9D-vo-0OM"/>
+                <outlet property="eventName" destination="Dnf-zB-a4n" id="h0v-Fd-XVl"/>
             </connections>
+            <point key="canvasLocation" x="7" y="155"/>
         </tableViewCell>
     </objects>
 </document>

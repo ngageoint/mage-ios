@@ -71,7 +71,7 @@
 }
 
 - (void) startEventChooser {
-    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController andDelegate:self];
+    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController andDelegate:self andScheme:_scheme];
     [_childCoordinators addObject:eventChooser];
     [eventChooser start];
 }

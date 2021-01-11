@@ -6,6 +6,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EventTableDataSource.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @class Event;
 
@@ -27,7 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) id<EventSelectionDelegate> delegate;
 
-- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate;
+- (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme;
 - (void) eventsFetched;
 - (void) initializeView;
 
