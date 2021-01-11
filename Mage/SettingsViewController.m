@@ -214,6 +214,7 @@
         }
         case kDisclaimer: {
             DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"Disclaimer" bundle:nil];
+            [viewController applyThemeWithContainerScheme:[MAGEScheme scheme]];
             [self showDetailViewController:viewController sender:nil];
             break;
         }

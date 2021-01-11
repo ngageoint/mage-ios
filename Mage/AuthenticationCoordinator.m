@@ -347,6 +347,7 @@ BOOL signingIn = YES;
                 NSLog(@"Segue to the disclaimer screen");
                 DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"DisclaimerConsent" bundle:nil];
                 viewController.delegate = self;
+                [viewController applyThemeWithContainerScheme:self.scheme];
                 [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
                 
                 [self.navigationController popToRootViewControllerAnimated:NO];
