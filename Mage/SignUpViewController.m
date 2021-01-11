@@ -7,7 +7,6 @@
 //
 
 @import SkyFloatingLabelTextField;
-@import HexColors;
 
 #import "SignUpViewController.h"
 #import "UINextField.h"
@@ -16,7 +15,6 @@
 #import "IdpAuthentication.h"
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"
-#import "Theme+UIResponder.h"
 #import "DBZxcvbn.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
@@ -44,43 +42,38 @@
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation SignUpViewController
 
-- (instancetype) initWithServer: (MageServer *) server andDelegate: (id<SignUpDelegate>) delegate {
+- (instancetype) initWithServer: (MageServer *) server andDelegate: (id<SignUpDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     if (self = [super initWithNibName:@"SignupView" bundle:nil]) {
         self.server = server;
         self.delegate = delegate;
+        self.scheme = containerScheme;
     }
     return self;
 }
 
 #pragma mark - Theme Changes
 
-- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
-    self.mageVersion.textColor = [UIColor secondaryText];
-    self.signupButton.backgroundColor = [UIColor themedButton];
-    self.cancelButton.backgroundColor = [UIColor themedButton];
-    self.showPassword.onTintColor = [UIColor themedButton];
-    self.passwordStrengthText.textColor = [UIColor secondaryText];
-    self.showPasswordText.textColor = [UIColor secondaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.signupButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.passwordStrengthText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.showPasswordText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
     [self themeTextField:self.username];
     [self themeTextField:self.displayName];
@@ -97,9 +90,20 @@
     self.displayName.iconText = @"\U0000f2bc";
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
+        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
     }
+}
+
+- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
+    field.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    field.selectedLineColor = self.scheme.colorScheme.primaryColor;
+    field.selectedTitleColor = self.scheme.colorScheme.primaryColor;
+    field.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.errorColor = self.scheme.colorScheme.errorColor;
+    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
 }
 
 #pragma mark -
@@ -107,21 +111,12 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self registerForThemeChanges];
-        
     [self setupAuthentication];
-    
     self.zxcvbn = [[DBZxcvbn alloc] init];
-
     self.wandLabel.text = @"\U0000f0d0";
-    
     self.password.delegate = self;
     
-    if ([self.server serverHasLocalAuthenticationStrategy]) {
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    }
-    
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {

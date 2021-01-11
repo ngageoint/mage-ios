@@ -54,7 +54,7 @@ BOOL signingIn = YES;
 - (void) createAccount {
     signingIn = NO;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
+    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self andScheme:self.scheme];
     [self.navigationController pushViewController:signupView animated:NO];
 }
 
