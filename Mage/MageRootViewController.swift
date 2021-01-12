@@ -11,35 +11,131 @@ import Kingfisher
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
     var moreTableViewDelegate: UITableViewDelegate?;
+    var scheme: MDCContainerScheming!;
+    var feedViewControllers: [UINavigationController] = [];
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
         let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
         return manager;
     }();
     
+    private lazy var settingsTabItem: UINavigationController = {
+        let svc = SettingsTableViewController(style: .grouped);
+        let nc = UINavigationController(rootViewController: svc);
+        nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);
+        return nc;
+    }();
+    
+    private lazy var locationsTab: UINavigationController = {
+        let locationTableViewController: LocationTableViewController = LocationTableViewController();
+        let nc = UINavigationController(rootViewController: locationTableViewController);
+        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(named: "people"), tag: 2);
+        return nc;
+    }()
+    
+    private lazy var observationsTab: UINavigationController = {
+        let observationTableViewController: ObservationTableViewController = ObservationTableViewController();
+        let nc = UINavigationController(rootViewController: observationTableViewController);
+        nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
+        return nc;
+    }()
+    
+    private lazy var mapTab: UINavigationController = {
+        let mapViewController: MapViewController = MapViewController();
+        let nc = UINavigationController(rootViewController: mapViewController);
+        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
+        return nc;
+    }()
+    
+    private lazy var meTab: UINavigationController = {
+        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
+        let uvc = UserViewController(user: user);
+        let nc = UINavigationController(rootViewController: uvc);
+        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
+        return nc;
+    }()
+    
+    @objc convenience public init(containerScheme: MDCContainerScheming) {
+        self.init();
+        print("set the scheme");
+        self.scheme = containerScheme;
+    }
+    
+    @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if (scheme != nil) {
+            self.scheme = scheme!;
+        }
+        self.tabBar.barTintColor = self.scheme.colorScheme.backgroundColor;
+        self.tabBar.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
+        self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
+        
+        setNavigationControllerAppearance(nc: self.moreNavigationController);
+        setNavigationControllerAppearance(nc: mapTab);
+        setNavigationControllerAppearance(nc: observationsTab);
+        setNavigationControllerAppearance(nc: locationsTab);
+        setNavigationControllerAppearance(nc: meTab);
+        setNavigationControllerAppearance(nc: settingsTabItem);
+        for navigationController in feedViewControllers {
+            setNavigationControllerAppearance(nc: navigationController);
+        }
+        
+        if let topViewController = self.moreNavigationController.topViewController {
+            if let tableView = topViewController.view as? UITableView {
+                tableView.tintColor = UIColor.activeIcon()
+                tableView.backgroundColor = UIColor.tableBackground()
+                tableView.separatorColor = UIColor.tableSeparator()
+            }
+        }
+        
+        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+
+    }
+    
+    func setNavigationControllerAppearance(nc: UINavigationController?) {
+        nc?.navigationBar.isTranslucent = false;
+        nc?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+        nc?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
+        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+        ];
+        
+        nc?.navigationBar.standardAppearance = appearance;
+        nc?.navigationBar.scrollEdgeAppearance = appearance;
+        nc?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        nc?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    }
+    
     override func viewDidLoad() {
         Mage.singleton()?.startServices(asInitial: true);
         super.viewDidLoad();
         
         createOrderedTabs();
-        registerForThemeChanges();
         
         self.delegate = self;
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        applyTheme();
         if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
             if let proxyDelegate = moreTableView.delegate {
                 moreTableViewDelegate = MoreTableViewDelegate.init(proxyDelegate: proxyDelegate)
                 moreTableView.delegate = moreTableViewDelegate
                 
-                moreTableView.tintColor = UIColor.activeIcon()
-                moreTableView.backgroundColor = UIColor.tableBackground()
-                moreTableView.separatorColor = UIColor.tableSeparator()
+                moreTableView.tintColor = self.scheme.colorScheme.primaryColor;
+                moreTableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+                moreTableView.separatorColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.6);
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
         offlineObservationManager.start()
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
@@ -47,14 +143,16 @@ import Kingfisher
     
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
-        allTabs.append(createMapTab());
-        allTabs.append(createSettingsTabItem());
-        allTabs.append(createMeTabItem());
-        allTabs.append(createLocationsTab());
-        allTabs.append(createObservationsTab());
+        allTabs.append(mapTab);
+        allTabs.append(settingsTabItem);
+        allTabs.append(meTab);
+        allTabs.append(locationsTab);
+        allTabs.append(observationsTab);
         
         for feed in Feed.mr_findAll()! as! [Feed] {
-            allTabs.append(createFeedViewController(feed: feed));
+            let nc = createFeedViewController(feed: feed);
+            allTabs.append(nc);
+            feedViewControllers.append(nc);
         }
         
         var orderedTabs: [UIViewController] = [];
@@ -74,49 +172,10 @@ import Kingfisher
         self.viewControllers = orderedTabs;
     }
     
-    func createSettingsTabItem() -> UINavigationController {
-        let svc = SettingsTableViewController(style: .grouped);
-        let nc = UINavigationController(rootViewController: svc);
-        setNavigationControllerAppearance(nc: nc);
-        nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);
-        return nc;
-    }
-    
-    func createLocationsTab() -> UINavigationController {
-        let locationTableViewController: LocationTableViewController = LocationTableViewController();
-        let nc = UINavigationController(rootViewController: locationTableViewController);
-        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(named: "people"), tag: 2);
-        return nc;
-    }
-    
-    func createObservationsTab() -> UINavigationController {
-        let observationTableViewController: ObservationTableViewController = ObservationTableViewController();
-        let nc = UINavigationController(rootViewController: observationTableViewController);
-        nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
-        return nc;
-    }
-    
-    func createMapTab() -> UINavigationController {
-        let mapViewController: MapViewController = MapViewController();
-        let nc = UINavigationController(rootViewController: mapViewController);
-        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
-        return nc;
-    }
-    
-    func createMeTabItem() -> UINavigationController {
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
-        let uvc = UserViewController(user: user);
-        let nc = UINavigationController(rootViewController: uvc);
-        setNavigationControllerAppearance(nc: nc);
-        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
-        return nc;
-    }
-    
     func createFeedViewController(feed: Feed) -> UINavigationController {
         let size = 24;
         let fvc = FeedItemsViewController(feed: feed);
         let nc = UINavigationController(rootViewController: fvc);
-        setNavigationControllerAppearance(nc: nc);
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
@@ -148,53 +207,6 @@ import Kingfisher
         } else {
             moreTabBarItem?.badgeValue = nil;
             moreTabBarItem?.badgeColor = nil;
-        }
-    }
-    
-    func setNavigationControllerAppearance(nc: UINavigationController) {
-        nc.navigationBar.isTranslucent = false;
-        nc.navigationBar.barTintColor = UIColor.primary();
-        nc.navigationBar.tintColor = UIColor.navBarPrimaryText();
-        nc.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText(),
-                                                                           NSAttributedString.Key.backgroundColor : UIColor.primary()];
-        nc.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.navBarPrimaryText(),
-                                                                                NSAttributedString.Key.backgroundColor : UIColor.primary()];
-        
-        if #available(iOS 13.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground();
-            appearance.titleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText(),
-                NSAttributedString.Key.backgroundColor: UIColor.primary()
-            ];
-            appearance.largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.navBarPrimaryText(),
-                NSAttributedString.Key.backgroundColor: UIColor.primary()
-            ];
-            
-            nc.navigationBar.standardAppearance = appearance;
-            nc.navigationBar.scrollEdgeAppearance = appearance;
-            nc.navigationBar.standardAppearance.backgroundColor = UIColor.primary();
-            nc.navigationBar.scrollEdgeAppearance?.backgroundColor = UIColor.primary();
-            nc.navigationBar.prefersLargeTitles = true;
-            
-            nc.navigationItem.largeTitleDisplayMode = .automatic;
-        }
-    }
-    
-    override func themeDidChange(_ theme: MageTheme) {
-        self.tabBar.barTintColor = UIColor.tabBarTint();
-        self.tabBar.tintColor = UIColor.activeTabIcon();
-        self.tabBar.unselectedItemTintColor = UIColor.inactiveTabIcon();
-        
-        setNavigationControllerAppearance(nc: self.moreNavigationController);
-        
-        if let topViewController = self.moreNavigationController.topViewController {
-            if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = UIColor.activeIcon()
-                tableView.backgroundColor = UIColor.tableBackground()
-                tableView.separatorColor = UIColor.tableSeparator()
-            }
         }
     }
     

@@ -86,7 +86,7 @@
         svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:svc animated:YES completion:NULL];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        MageRootViewController *vc = [[MageRootViewController alloc] init];
+        MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:_scheme];
         vc.modalPresentationStyle = UIModalPresentationFullScreen;
         vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:NO completion:^{

@@ -19,6 +19,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onSurfaceColor = UIColor.label;
     containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
+    containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
     containerScheme.colorScheme.onPrimaryColor = .white;
     
