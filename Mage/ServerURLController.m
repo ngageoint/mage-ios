@@ -50,7 +50,7 @@
 
 #pragma mark - Theme Changes
 
-- (void) applyThemeWithContainerafScheme:(id<MDCContainerScheming>) containerScheme {
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
     if (containerScheme != nil) {
         _scheme = containerScheme;
     }

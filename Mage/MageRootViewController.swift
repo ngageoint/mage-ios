@@ -41,7 +41,7 @@ import Kingfisher
     }()
     
     private lazy var mapTab: UINavigationController = {
-        let mapViewController: MapViewController = MapViewController();
+        let mapViewController: MapViewController = MapViewController(scheme: self.scheme);
         let nc = UINavigationController(rootViewController: mapViewController);
         nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
         return nc;
@@ -55,10 +55,17 @@ import Kingfisher
         return nc;
     }()
     
-    @objc convenience public init(containerScheme: MDCContainerScheming) {
-        self.init();
-        print("set the scheme");
+    init(frame: CGRect) {
+        super.init(nibName: nil, bundle: nil);
+    }
+    
+    @objc public init(containerScheme: MDCContainerScheming) {
         self.scheme = containerScheme;
+        super.init(nibName: nil, bundle: nil);
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
     }
     
     @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -68,6 +75,7 @@ import Kingfisher
         self.tabBar.barTintColor = self.scheme.colorScheme.backgroundColor;
         self.tabBar.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
+        self.view.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         
         setNavigationControllerAppearance(nc: self.moreNavigationController);
         setNavigationControllerAppearance(nc: mapTab);
@@ -81,9 +89,8 @@ import Kingfisher
         
         if let topViewController = self.moreNavigationController.topViewController {
             if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = UIColor.activeIcon()
-                tableView.backgroundColor = UIColor.tableBackground()
-                tableView.separatorColor = UIColor.tableSeparator()
+                tableView.tintColor = self.scheme.colorScheme.primaryColor
+                tableView.backgroundColor = self.scheme.colorScheme.backgroundColor
             }
         }
         
@@ -128,12 +135,8 @@ import Kingfisher
         applyTheme();
         if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
             if let proxyDelegate = moreTableView.delegate {
-                moreTableViewDelegate = MoreTableViewDelegate.init(proxyDelegate: proxyDelegate)
+                moreTableViewDelegate = MoreTableViewDelegate(proxyDelegate: proxyDelegate, containerScheme: scheme)
                 moreTableView.delegate = moreTableViewDelegate
-                
-                moreTableView.tintColor = self.scheme.colorScheme.primaryColor;
-                moreTableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-                moreTableView.separatorColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.6);
             }
         }
         offlineObservationManager.start()

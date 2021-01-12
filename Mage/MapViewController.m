@@ -28,7 +28,6 @@
 #import "Filter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
-#import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "Server.h"
 #import "MageConstants.h"
@@ -47,10 +46,18 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+    @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation MapViewController
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [self init]) {
+        self.scheme = containerScheme;
+    }
+    return self;
+}
 
 - (LocationService *) getLocationService {
     if (self.locationService) return self.locationService;
@@ -69,26 +76,24 @@
     }
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
-    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
-    self.trackingButton.backgroundColor = [UIColor dialog];
-    self.trackingButton.tintColor = [UIColor activeTabIcon];
-    self.reportLocationButton.backgroundColor = [UIColor dialog];
-    self.reportLocationButton.tintColor = [UIColor activeTabIcon];
-    self.mapSettingsButton.backgroundColor = [UIColor dialog];
-    self.mapSettingsButton.tintColor = [UIColor activeTabIcon];
-    [UIColor themeMap:self.mapView];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.trackingButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.trackingButton.tintColor = self.scheme.colorScheme.primaryColor;
+    self.reportLocationButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.reportLocationButton.tintColor = self.scheme.colorScheme.primaryColor;
+    self.mapSettingsButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.mapSettingsButton.tintColor = self.scheme.colorScheme.primaryColor;
     [self setNavBarTitle];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"creating the map view!");
     self.mapView = [[MKMapView alloc] initForAutoLayout];
     self.mapView.accessibilityLabel = @"map";
     [self.view addSubview:self.mapView];
-    NSLog(@"Created it.");
     [self.mapView autoPinEdgesToSuperviewEdges];
     
     [self addMapButtons];
@@ -123,7 +128,7 @@
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(mapLongPress:)];
     [self.mapView addGestureRecognizer:longPressGestureRecognizer];
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -155,70 +160,70 @@
     
     [self setNavBarTitle];
     
-//    [defaults addObserver:self
-//               forKeyPath:kObservationTimeFilterKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kObservationTimeFilterUnitKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kObservationTimeFilterNumberKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kImportantFilterKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//    
-//    [defaults addObserver:self
-//               forKeyPath:kFavortiesFilterKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kImportantFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kFavortiesFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
     
     Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
-//    [defaults addObserver:self
-//               forKeyPath:@"hideObservations"
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:@"hidePeople"
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kReportLocationKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kLocationTimeFilterKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kLocationTimeFilterUnitKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:kLocationTimeFilterNumberKey
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
-//    [defaults addObserver:self
-//               forKeyPath:GeoPackageImported
-//                  options:NSKeyValueObservingOptionNew
-//                  context:NULL];
-//
+    [defaults addObserver:self
+               forKeyPath:@"hideObservations"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:@"hidePeople"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kReportLocationKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
+    [defaults addObserver:self
+               forKeyPath:GeoPackageImported
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+
     // Start the timer for updating the circles
     [self startMapAnnotationsUpdateTimer];
     
@@ -338,18 +343,18 @@
     
     @try {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        [defaults removeObserver:self forKeyPath:@"hideObservations"];
-//        [defaults removeObserver:self forKeyPath:@"hidePeople"];
-//        [defaults removeObserver:self forKeyPath:kReportLocationKey];
-//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
-//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
-//        [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
-//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
-//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
-//        [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
-//        [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
-//        [defaults removeObserver:self forKeyPath:kImportantFilterKey];
-//        [defaults removeObserver:self forKeyPath:GeoPackageImported];
+        [defaults removeObserver:self forKeyPath:@"hideObservations"];
+        [defaults removeObserver:self forKeyPath:@"hidePeople"];
+        [defaults removeObserver:self forKeyPath:kReportLocationKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterUnitKey];
+        [defaults removeObserver:self forKeyPath:kObservationTimeFilterNumberKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterUnitKey];
+        [defaults removeObserver:self forKeyPath:kLocationTimeFilterNumberKey];
+        [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
+        [defaults removeObserver:self forKeyPath:kImportantFilterKey];
+        [defaults removeObserver:self forKeyPath:GeoPackageImported];
     }
     @catch (id exception) {
         NSLog(@"Exception removing observers %@", exception);
@@ -358,7 +363,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 
     [self stopMapAnnotationsUpdateTimer];
-    NSLog(@"CLEANING UP THE MAP DELEGATE");
     [self.mapDelegate cleanup];
 }
 
@@ -385,7 +389,6 @@
 }
 
 - (void) onMapAnnotationsUpdateTimerFire {
-    NSLog(@"Update the user location icon colors");
     [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
 }
 
@@ -512,11 +515,11 @@
         circle.tag = 998;
         circle.layer.cornerRadius = 10;
         circle.layer.borderWidth = .5;
-        circle.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-        [circle setBackgroundColor:[UIColor mageBlue]];
+        circle.layer.borderColor = [[self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.6] CGColor];
+        [circle setBackgroundColor:self.scheme.colorScheme.primaryColorVariant];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
         [imageView setFrame:CGRectMake(3, 2, 14, 15)];
-        [imageView setTintColor:[UIColor whiteColor]];
+        [imageView setTintColor:self.scheme.colorScheme.onPrimaryColor];
         [circle addSubview:imageView];
         [self.mapSettingsButton addSubview:circle];
     } else {
