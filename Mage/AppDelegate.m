@@ -189,6 +189,7 @@
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
     TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    [transitionView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     transitionView.modalPresentationStyle = UIModalPresentationFullScreen;
     [self.rootViewController pushViewController:transitionView animated:NO];
 }
@@ -249,6 +250,7 @@
     NSLog(@"applicationDidEnterBackground");
 
     self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    [self.splashView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     self.splashView.view.frame = [self.window frame];
     [self.window addSubview:self.splashView.view];
     

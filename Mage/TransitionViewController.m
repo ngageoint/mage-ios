@@ -7,30 +7,30 @@
 //
 
 #import "TransitionViewController.h"
-#import "Theme+UIResponder.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface TransitionViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation TransitionViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.wandLabel.textColor = [UIColor brand];
-    self.mageLabel.textColor = [UIColor brand];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.wandLabel.text = @"\U0000f0d0";
-    self.view.backgroundColor = [UIColor background];
-    self.wandLabel.textColor = [UIColor brand];
-    self.mageLabel.textColor = [UIColor brand];
-    [self registerForThemeChanges];
 }
 
 @end
