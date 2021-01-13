@@ -77,7 +77,7 @@
     
     [self createLoadingView];
     
-    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
     
     if (protectedDataAvailable) {
         [self setupMageApplication:application];
@@ -202,7 +202,9 @@
             canary = [Canary MR_createEntityInContext:localContext];
         }
         canary.launchDate = [NSDate date];
+        NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
         // error should be null and contextDidSave should be true
         if (contextDidSave && error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
@@ -272,10 +274,15 @@
 - (void) applicationDidBecomeActive:(UIApplication *) application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
+    if (_applicationStarted) {
+        NSLog(@"Already checking if DB can be saved to");
+        // the app was already started and is checking if it can save to the database, do not check again
+        return;
+    }
     
     BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
     
-    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    NSLog(@"Did Become Active Protected data is available? %d", protectedDataAvailable);
     
     if (protectedDataAvailable) {
         // do a canary save
@@ -285,7 +292,9 @@
                 canary = [Canary MR_createEntityInContext:localContext];
             }
             canary.launchDate = [NSDate date];
+            NSLog(@"applicationDidBecomeActive Canary launch date %@", canary.launchDate);
         } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+            NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
             // error should be null and contextDidSave should be true
             if (contextDidSave && error == NULL) {
                 if(self.splashView != nil) {
