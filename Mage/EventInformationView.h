@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MaterialComponents/MDCContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventInformationView : UIView
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 @end
 
 NS_ASSUME_NONNULL_END

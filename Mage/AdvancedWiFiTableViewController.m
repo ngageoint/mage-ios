@@ -16,7 +16,7 @@
 @property (assign, nonatomic) NSNumber *wifiNetworkRestrictionType;
 @property (strong, nonatomic) NSMutableArray *wifiWhitelist;
 @property (strong, nonatomic) NSMutableArray *wifiBlacklist;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation AdvancedWiFiTableViewController
@@ -28,9 +28,10 @@ static NSInteger NO_RESTRICTIONS_CELL_ROW = 0;
 static NSInteger ONLY_THESE_WIFI_NETWORKS_CELL_ROW = 1;
 static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Advanced WiFi";
+    self.scheme = containerScheme;
     return self;
 }
 
@@ -56,8 +57,11 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     [self.tableView reloadData];
 }
@@ -65,7 +69,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 #pragma mark - Table view data source
@@ -123,8 +127,8 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
         }
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         cell.textLabel.text = cellText;
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.backgroundColor = [UIColor background];
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
         cell.accessoryType = [self.wifiNetworkRestrictionType longValue] == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         return cell;
     } else if (indexPath.section == RESTRICTIONS_SECTION) {
@@ -132,28 +136,28 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
             if (indexPath.row == 0) {
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                 cell.textLabel.text = @"Add a WiFi SSID";
-                cell.textLabel.textColor = [UIColor brand];
-                cell.backgroundColor = [UIColor background];
+                cell.textLabel.textColor = self.scheme.colorScheme.primaryColor;
+                cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 return cell;
             } else {
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                 cell.textLabel.text = [self.wifiWhitelist objectAtIndex:indexPath.row - 1];
-                cell.textLabel.textColor = [UIColor primaryText];
-                cell.backgroundColor = [UIColor background];
+                cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+                cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 return cell;
             }
         } else if ([self.wifiNetworkRestrictionType longValue] == NOT_THESE_WIFI_NETWORKS_CELL_ROW) {
             if (indexPath.row == 0) {
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                 cell.textLabel.text = @"Add a WiFi SSID";
-                cell.textLabel.textColor = [UIColor brand];
-                cell.backgroundColor = [UIColor background];
+                cell.textLabel.textColor = self.scheme.colorScheme.primaryColor;
+                cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 return cell;
             } else {
                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                cell.textLabel.text = [self.wifiBlacklist objectAtIndex:indexPath.row - 1];
-               cell.textLabel.textColor = [UIColor primaryText];
-               cell.backgroundColor = [UIColor background];
+               cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+               cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                return cell;
            }
         }
@@ -237,7 +241,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
     }
 }
 

@@ -20,7 +20,7 @@ import Kingfisher
     }();
     
     private lazy var settingsTabItem: UINavigationController = {
-        let svc = SettingsTableViewController(style: .grouped);
+        let svc = SettingsTableViewController(scheme: scheme)!;
         let nc = UINavigationController(rootViewController: svc);
         nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);
         return nc;

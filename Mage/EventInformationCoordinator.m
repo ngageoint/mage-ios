@@ -14,24 +14,25 @@
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (weak, nonatomic) UINavigationController *viewController;
 @property (strong, nonatomic) EventInformationController *eventInfomationController;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventInformationCoordinator
 
-- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event {
+- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event scheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
+        self.scheme = containerScheme;
         self.childCoordinators = [[NSMutableArray alloc] init];
         self.viewController = viewController;
         self.viewController.delegate = self;
-        self.eventInfomationController = [[EventInformationController alloc] init];
-        self.eventInfomationController.delegate = self;
+        self.eventInfomationController = [[EventInformationController alloc] initWithScheme: self.scheme];
         self.eventInfomationController.event = event;
     }
     return self;
 }
 
 -(void) start {
+    self.eventInfomationController.delegate = self;
     [self.viewController showDetailViewController:self.eventInfomationController sender:self];
 }
 

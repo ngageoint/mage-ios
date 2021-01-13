@@ -7,17 +7,23 @@
 //
 
 #import "EventInformationView.h"
-#import "Theme+UIResponder.h"
+
+@interface EventInformationView ()
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@end
 
 @implementation EventInformationView
 
 - (void) didMoveToSuperview {
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.nameLabel.textColor = [UIColor primaryText];
-    self.descriptionLabel.textColor = [UIColor secondaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.nameLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.descriptionLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
 }
 
 @end

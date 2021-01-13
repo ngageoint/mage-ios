@@ -4,12 +4,19 @@
 //
 
 #import "ValuePickerTableViewController.h"
-#import "Theme+UIResponder.h"
+
+@interface ValuePickerTableViewController()
+
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
+@end
 
 @implementation ValuePickerTableViewController
 
-- (void) viewDidLoad {
-    [self registerForThemeChanges];
+- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = containerScheme;
+    return self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -19,8 +26,13 @@
     self.selected = [defaults objectForKey:self.preferenceKey];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -35,8 +47,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.backgroundColor = [UIColor background];
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     cell.textLabel.text = self.labels[indexPath.row];
     
@@ -72,7 +84,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
     }
 }
 

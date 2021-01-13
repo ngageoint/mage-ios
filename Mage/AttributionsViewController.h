@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface AttributionsViewController : UITableViewController
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme;
 
 @end

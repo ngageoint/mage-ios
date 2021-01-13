@@ -8,12 +8,14 @@
 
 #import "LocationDisplayTableViewController.h"
 #import "NSDate+display.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "DisplaySettingsHeader.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface LocationDisplayTableViewController ()
 @property (assign, nonatomic) BOOL showMGRS;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) DisplaySettingsHeader *header;
 @end
 
 @implementation LocationDisplayTableViewController
@@ -23,17 +25,24 @@ static NSString *LOCATION_DISPLAY_USER_DEFAULTS_KEY = @"showMGRS";
 static NSInteger WGS84_CELL_ROW = 0;
 static NSInteger MGRS_CELL_ROW = 1;
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.header.label.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.87];
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
 
-    DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
-    header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS." uppercaseString];
-    self.tableView.tableHeaderView = header;
+    self.header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
+    self.header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS." uppercaseString];
+    self.tableView.tableHeaderView = self.header;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.showMGRS = [defaults boolForKey:LOCATION_DISPLAY_USER_DEFAULTS_KEY];
-    
-    [self registerForThemeChanges];
 }
 
 - (void) viewDidLayoutSubviews {
@@ -48,11 +57,6 @@ static NSInteger MGRS_CELL_ROW = 1;
         self.tableView.tableHeaderView = header;
         [self.tableView layoutIfNeeded];
     }
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -83,10 +87,10 @@ static NSInteger MGRS_CELL_ROW = 1;
         cell.accessoryType = self.showMGRS ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     
-    cell.backgroundColor = [UIColor background];
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.tintColor = [UIColor flatButton];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.6];
+    cell.tintColor = self.scheme.colorScheme.primaryColor;
     
     return cell;
 }

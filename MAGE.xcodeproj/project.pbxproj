@@ -44,7 +44,6 @@
 		2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
-		2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1E4172221227CB00F082B5 /* ValuePicker.xib */; };
 		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
@@ -60,7 +59,6 @@
 		2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */; };
 		2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A6220DDC46001C9F12 /* FormDefaults.m */; };
 		2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10A8220E0C4A001C9F12 /* Themes.xib */; };
-		2F4E10AB220E0D51001C9F12 /* Attributions.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AA220E0D51001C9F12 /* Attributions.xib */; };
 		2F4E10AD220E1493001C9F12 /* LocationDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */; };
 		2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */; };
 		2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */; };
@@ -520,7 +518,6 @@
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
-		2F1E4172221227CB00F082B5 /* ValuePicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ValuePicker.xib; sourceTree = "<group>"; };
 		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
 		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -546,7 +543,6 @@
 		2F4E10A5220DDC46001C9F12 /* FormDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaults.h; sourceTree = "<group>"; };
 		2F4E10A6220DDC46001C9F12 /* FormDefaults.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaults.m; sourceTree = "<group>"; };
 		2F4E10A8220E0C4A001C9F12 /* Themes.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Themes.xib; sourceTree = "<group>"; };
-		2F4E10AA220E0D51001C9F12 /* Attributions.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Attributions.xib; sourceTree = "<group>"; };
 		2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationDisplay.xib; sourceTree = "<group>"; };
 		2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DisplaySettingsHeader.xib; sourceTree = "<group>"; };
 		2F4E10B0220E1A52001C9F12 /* DisplaySettingsHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplaySettingsHeader.h; sourceTree = "<group>"; };
@@ -2277,7 +2273,6 @@
 			isa = PBXGroup;
 			children = (
 				2F4E1099220CA195001C9F12 /* AttributionCell.xib */,
-				2F4E10AA220E0D51001C9F12 /* Attributions.xib */,
 				2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
@@ -2288,7 +2283,6 @@
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
 				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
 				2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */,
-				2F1E4172221227CB00F082B5 /* ValuePicker.xib */,
 				2F1069E0221C9547009F661A /* SettingsDetailView.xib */,
 			);
 			name = Settings;
@@ -2425,7 +2419,6 @@
 				F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */,
 				2F4E10AD220E1493001C9F12 /* LocationDisplay.xib in Resources */,
 				F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */,
-				2F4E10AB220E0D51001C9F12 /* Attributions.xib in Resources */,
 				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
 				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
@@ -2436,7 +2429,6 @@
 				F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */,
 				F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */,
 				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
-				2F1E4173221227CB00F082B5 /* ValuePicker.xib in Resources */,
 				2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,

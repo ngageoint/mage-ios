@@ -5,7 +5,6 @@
 //
 
 #import "DataSynchronizationSettingsTableViewController.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 #import "ValuePickerTableViewController.h"
@@ -23,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *observationsDescription;
 
 @property (assign, nonatomic) BOOL fetchEnabled;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation DataSynchronizationSettingsTableViewController
@@ -36,9 +35,10 @@ static NSInteger ADVANCED_WIFI_SETTINGS_SECTION = 3;
 static NSInteger FETCH_CELL_ROW = 0;
 static NSInteger PUSH_CELL_ROW = 1;
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Network Sync Settings";
+    self.scheme = containerScheme;
     return self;
 }
 
@@ -53,16 +53,18 @@ static NSInteger PUSH_CELL_ROW = 1;
     [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey {
@@ -118,8 +120,8 @@ static NSInteger PUSH_CELL_ROW = 1;
     if (indexPath.section == ADVANCED_WIFI_SETTINGS_SECTION) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         cell.textLabel.text =  @"Advanced Wi-Fi options";
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.backgroundColor = [UIColor background];
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
@@ -157,17 +159,17 @@ static NSInteger PUSH_CELL_ROW = 1;
        }
     }
     cell.subtitle.hidden = YES;
-    cell.title.textColor = [UIColor primaryText];
-    cell.subtitle.textColor = [UIColor secondaryText];
-    cell.detail.textColor = [UIColor primaryText];
-    cell.backgroundColor = [UIColor background];
+    cell.title.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.subtitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.detail.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == ADVANCED_WIFI_SETTINGS_SECTION) {
-        AdvancedWiFiTableViewController *viewController = [[AdvancedWiFiTableViewController alloc] init];
+        AdvancedWiFiTableViewController *viewController = [[AdvancedWiFiTableViewController alloc] initWithScheme:self.scheme];
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
@@ -179,8 +181,7 @@ static NSInteger PUSH_CELL_ROW = 1;
     NSString *key = [NSString stringWithFormat:@"%@%@NetworkOption", section, indexPath.row == FETCH_CELL_ROW ? @"Fetch" : @"Push"];
     
     
-    ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
-
+    ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: self.scheme];
     viewController.title = [fetchPreferences valueForKey:@"title"];
     viewController.section = [fetchPreferences valueForKey:@"section"];
     viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -212,7 +213,7 @@ static NSInteger PUSH_CELL_ROW = 1;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
     }
 }
 

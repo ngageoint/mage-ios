@@ -6,7 +6,6 @@
 
 #import "DisclaimerViewController.h"
 #import "UserUtility.h"
-#import "Theme+UIResponder.h"
 
 @interface DisclaimerViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *consentText;

@@ -8,6 +8,7 @@
 #import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
+#import "MAGE-Swift.h"
 
 @interface DataFetchSettingsTableViewController ()
 
@@ -144,7 +145,7 @@ static NSInteger OBSERVATION_FETCH_CELL_ROW = 1;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
     
-    ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+    ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: [MAGEScheme scheme]];
 
     viewController.title = [fetchPreferences valueForKey:@"title"];
     viewController.section = [fetchPreferences valueForKey:@"section"];

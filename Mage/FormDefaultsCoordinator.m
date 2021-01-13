@@ -54,8 +54,8 @@
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(save)];
     self.formDefaultsController.navigationItem.leftBarButtonItem = cancelButton;
     self.formDefaultsController.navigationItem.rightBarButtonItem = saveButton;
-    
-    [self.viewController presentViewController:navigationController animated:YES completion:nil];
+    [self.viewController pushViewController:navigationController animated:YES];
+//    [self.viewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)save {

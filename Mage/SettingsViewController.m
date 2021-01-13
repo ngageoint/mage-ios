@@ -24,7 +24,7 @@
 #import "Server.h"
 #import "AppDelegate.h"
 #import "Theme+UIResponder.h"
-#import "MAGE-swift.h"
+#import "MAGE-Swift.h"
 
 @interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
@@ -176,7 +176,7 @@
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSDictionary *fetchPreferences = [defaults dictionaryForKey:preferenceKey];
             
-            ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+            ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: [MAGEScheme scheme]];
             viewController.title = [fetchPreferences valueForKey:@"title"];
             viewController.section = [fetchPreferences valueForKey:@"section"];
             viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -240,7 +240,7 @@
 }
 
 - (void) onEventInfo:(Event *)event {
-    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:[self.viewControllers firstObject] event:event];
+    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:[self.viewControllers firstObject] event:event scheme:[MAGEScheme scheme]];
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
     [coordinator start];

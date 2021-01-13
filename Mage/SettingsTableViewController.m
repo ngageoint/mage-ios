@@ -5,7 +5,7 @@
 //
 
 #import "SettingsTableViewController.h"
-#import "MAGE-swift.h"
+#import "MAGE-Swift.h"
 #import "User.h"
 #import "LocationService.h"
 #import "Server.h"
@@ -18,7 +18,6 @@
 #import "ChangePasswordViewController.h"
 #import "AuthenticationCoordinator.h"
 #import "ObservationTableHeaderView.h"
-#import "Theme+UIResponder.h"
 
 #import "SettingsDataSource.h"
 #import "AuthenticationCoordinator.h"
@@ -37,16 +36,33 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (assign, nonatomic) NSInteger versionCellSelectionCount;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation SettingsTableViewController
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [self initWithStyle:UITableViewStyleGrouped]) {
+        self.scheme = containerScheme;
+    }
+    return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.navigationController.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
     self.title = @"Settings";
     
-    self.dataSource = [[SettingsDataSource alloc] init];
+    self.dataSource = [[SettingsDataSource alloc] initWithScheme:self.scheme];
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
     self.tableView.estimatedSectionFooterHeight = 45;
@@ -76,17 +92,6 @@
     
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
-
-    [self registerForThemeChanges];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.navigationController.view.backgroundColor = [UIColor tableBackground];
-    self.view.backgroundColor = [UIColor tableBackground];
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    self.tableView.separatorColor = [UIColor tableSeparator];
-
-    [self.tableView reloadData];
 }
 
 -(void) done:(UIBarButtonItem *) sender {
@@ -108,27 +113,29 @@
             break;
         }
         case kLocationServices: {
-            LocationServicesSettingsTableViewController *viewController = [[LocationServicesSettingsTableViewController alloc] init];
+            LocationServicesSettingsTableViewController *viewController = [[LocationServicesSettingsTableViewController alloc] initWithScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kObservationServices: {
-            ObservationServicesSettingsTableViewController *viewController = [[ObservationServicesSettingsTableViewController alloc] init];
+            ObservationServicesSettingsTableViewController *viewController = [[ObservationServicesSettingsTableViewController alloc] initWithScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kDataSynchronization: {
-            DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] init];
+            DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] initWithScheme: self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kLocationDisplay: {
             LocationDisplayTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationDisplay" owner:self options:nil][0];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kTimeDisplay: {
             TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
@@ -138,7 +145,8 @@
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSDictionary *fetchPreferences = [defaults dictionaryForKey:preferenceKey];
             
-            ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+            ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: self.scheme];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             viewController.title = [fetchPreferences valueForKey:@"title"];
             viewController.section = [fetchPreferences valueForKey:@"section"];
             viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -170,18 +178,24 @@
             break;
         }
         case kTheme: {
-            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
-            [self showSetting:viewController];
+            // prefs:root=DISPLAY this does not seem to work
+//            [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"prefs:root=DISPLAY"] options:@{} completionHandler:nil];
+//            UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
+//                print("opened? \(success)")
+//            }
+//            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
+//            [self showSetting:viewController];
             break;
         }
         case kDisclaimer: {
             DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"Disclaimer" bundle:nil];
-            [viewController applyThemeWithContainerScheme:[MAGEScheme scheme]];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kAttributions: {
-            AttributionsViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Attributions" owner:self options:nil][0];
+            AttributionsViewController *viewController = [[AttributionsViewController alloc] initWithScheme: self.scheme];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
@@ -202,7 +216,7 @@
 }
 
 - (void) onEventInfo:(Event *)event {
-    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:self event:event];
+    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:self.navigationController event:event scheme: self.scheme];
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
     [coordinator start];
