@@ -80,11 +80,11 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.trackingButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.trackingButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.trackingButton.tintColor = self.scheme.colorScheme.primaryColor;
-    self.reportLocationButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.reportLocationButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.reportLocationButton.tintColor = self.scheme.colorScheme.primaryColor;
-    self.mapSettingsButton.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.mapSettingsButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.mapSettingsButton.tintColor = self.scheme.colorScheme.primaryColor;
     [self setNavBarTitle];
 }
@@ -423,7 +423,7 @@
 }
 
 - (IBAction)mapSettingsButtonTapped:(id)sender {
-    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController];
+    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController scheme:self.scheme];
     settingsCoordinator.delegate = self;
     [self.childCoordinators addObject:settingsCoordinator];
     [settingsCoordinator start];

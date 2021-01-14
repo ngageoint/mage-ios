@@ -7,7 +7,6 @@
 //
 
 #import "OnlineMapTableViewController.h"
-#import "Theme+UIResponder.h"
 #import "ImageryLayer.h"
 #import "Layer.h"
 #import "Server.h"
@@ -20,19 +19,26 @@
     @property (nonatomic, strong) NSArray *insecureOnlineLayers;
     @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
 @property (strong, nonatomic) NSFetchedResultsController *onlineLayersFetchedResultsController;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation OnlineMapTableViewController
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = containerScheme;
+    return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     [self.tableView reloadData];
 }
 
-- (instancetype) init {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    return self;
-}
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
@@ -45,7 +51,7 @@
     self.onlineLayersFetchedResultsController = [ImageryLayer MR_fetchAllGroupedBy:@"isSecure" withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]] sortedBy:@"isSecure,name:YES" ascending:NO delegate:self];
     [self.onlineLayersFetchedResultsController performFetch:nil];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Refresh Layers" style:UIBarButtonItemStylePlain target:self action:@selector(refreshLayers:)];
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (IBAction)refreshLayers:(id)sender {
@@ -99,9 +105,9 @@
 
 - (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        return [[ObservationTableHeaderView alloc] initWithName:@"Nonsecure Layers" andScheme:[MAGEScheme scheme]];
+        return [[ObservationTableHeaderView alloc] initWithName:@"Nonsecure Layers" andScheme:self.scheme];
     }
-    return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers" andScheme:[MAGEScheme scheme]];
+    return [[ObservationTableHeaderView alloc] initWithName:@"Online Layers" andScheme:self.scheme];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -177,19 +183,19 @@
     cell.textLabel.text = layer.name;
     cell.detailTextLabel.text = layer.url;
     if (!layer.isSecure) {
-        cell.textLabel.textColor = [UIColor secondaryText];
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         cell.accessoryView = nil;
     } else {
-        cell.textLabel.textColor = [UIColor primaryText];
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
         UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         cacheSwitch.on = [self.selectedOnlineLayers containsObject:layer.remoteId];
-        cacheSwitch.onTintColor = [UIColor themedButton];
+        cacheSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
         cacheSwitch.tag = indexPath.row;
         [cacheSwitch addTarget:self action:@selector(layerToggled:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = cacheSwitch;
     }
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.backgroundColor = [UIColor dialog];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     return cell;
 }

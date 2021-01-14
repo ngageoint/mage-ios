@@ -74,7 +74,7 @@
 }
 
 - (IBAction) mapSettingsTapped:(id)sender {
-    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender];
+    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender scheme:[MAGEScheme scheme]];
     settingsCoordinator.delegate = self;
     [self.childCoordinators addObject:settingsCoordinator];
     [settingsCoordinator start];

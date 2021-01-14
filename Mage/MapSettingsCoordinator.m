@@ -10,7 +10,6 @@
 #import "MapSettings.h"
 #import "OfflineMapTableViewController.h"
 #import "OnlineMapTableViewController.h"
-#import "UIColor+Mage.h"
 #import "Layer.h"
 #import "Server.h"
 
@@ -19,26 +18,29 @@
 @property (strong, nonatomic) UINavigationController *rootViewController;
 @property (strong, nonatomic) UINavigationController *settingsNavController;
 @property (strong, nonatomic) UIView *sourceView;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation MapSettingsCoordinator
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
+    self.scheme = containerScheme;
     self.rootViewController = rootViewController;
     return self;
 }
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
+    self.scheme = containerScheme;
     self.rootViewController = rootViewController;
     self.sourceView = sourceView;
     return self;
 }
 
 - (void) start {
-    MapSettings *settings = [[MapSettings alloc] initWithDelegate: self];
+    MapSettings *settings = [[MapSettings alloc] initWithDelegate: self scheme: self.scheme];
     self.settingsNavController = [[UINavigationController alloc] initWithRootViewController:settings];
     self.settingsNavController.delegate = self;
     
@@ -47,7 +49,7 @@
     popoverPresentationController.sourceView = self.sourceView;
     popoverPresentationController.sourceRect = CGRectMake(0, -5, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
     popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    popoverPresentationController.backgroundColor = [UIColor primary];
+    popoverPresentationController.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(settingsComplete)];
     [settings.navigationItem setLeftBarButtonItem:doneButton];
@@ -65,12 +67,12 @@
 }
 
 - (void) offlineMapsCellTapped {
-    OfflineMapTableViewController *offlineMapController = [[OfflineMapTableViewController alloc] init];
+    OfflineMapTableViewController *offlineMapController = [[OfflineMapTableViewController alloc] initWithScheme: self.scheme];
     [self.settingsNavController pushViewController:offlineMapController animated:YES];
 }
 
 - (void) onlineMapsCellTapped {
-    OnlineMapTableViewController *onlineMapController = [[OnlineMapTableViewController alloc] init];
+    OnlineMapTableViewController *onlineMapController = [[OnlineMapTableViewController alloc] initWithScheme: self.scheme];
     [self.settingsNavController pushViewController:onlineMapController animated:YES];
 }
 
