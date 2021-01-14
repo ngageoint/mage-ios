@@ -14,7 +14,6 @@
 #import "AppDelegate.h"
 #import "User.h"
 #import "DBZxcvbn.h"
-#import "Theme+UIResponder.h"
 
 @import SkyFloatingLabelTextField;
 @import HexColors;
@@ -47,7 +46,7 @@
 @property (nonatomic) BOOL loggedIn;
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation ChangePasswordViewController
@@ -55,19 +54,23 @@
 #pragma mark - Theme Changes
 
 - (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.disabledColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    field.selectedLineColor = self.scheme.colorScheme.primaryColor;
+    field.selectedTitleColor = self.scheme.colorScheme.primaryColor;
+    field.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.errorColor = self.scheme.colorScheme.errorColor;
     field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     [self themeTextField:self.usernameField];
     [self themeTextField:self.currentPasswordField];
@@ -79,25 +82,29 @@
     self.passwordField.iconText = @"\U0000f084";
     self.confirmPasswordField.iconText = @"\U0000f084";
 
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    self.cancelButton.backgroundColor = [UIColor themedButton];
-    self.showCurrentPasswordLabel.textColor = [UIColor secondaryText];
-    self.showNewPasswordLabel.textColor = [UIColor secondaryText];
-    self.passwordStrengthNameLabel.textColor = [UIColor secondaryText];
-    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
-    self.mageVersion.textColor = [UIColor secondaryText];
-    self.showPasswordSwitch.onTintColor = [UIColor themedButton];
-    self.showCurrentPasswordSwitch.onTintColor = [UIColor themedButton];
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.changeButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.changeButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.showCurrentPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.showNewPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.showPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.showCurrentPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
 }
 
 #pragma mark -
 
-- (instancetype) initWithLoggedIn: (BOOL) loggedIn {
+- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme {
     if (self = [super initWithNibName:@"ChangePasswordView" bundle:nil]) {
         self.loggedIn = loggedIn;
         // modify this and the init method when coordinator pattern is implmeented
         self.delegate = self;
+        self.scheme = containerScheme;
     }
     return self;
 }
@@ -105,7 +112,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
         
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
     
