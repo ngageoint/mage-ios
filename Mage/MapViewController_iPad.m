@@ -69,7 +69,7 @@
 
 - (IBAction)profileButtonTapped:(id)sender {
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    UserViewController *uc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:[MAGEScheme scheme]];
     [self.navigationController pushViewController:uc animated:YES];
 }
 

@@ -255,24 +255,17 @@
 }
 
 - (void) selectedObservation:(Observation *)observation {
-    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
-    [ovc applyThemeWithScheme:self.scheme];
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
-//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-//    ovc.observation = observation;
-    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
-    [ovc applyThemeWithScheme:self.scheme];
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void) observationDetailSelected:(Observation *)observation {
-//    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-//    ovc.observation = observation;
-    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation];
-    [ovc applyThemeWithScheme:self.scheme];
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 

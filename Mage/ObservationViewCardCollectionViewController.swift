@@ -108,7 +108,7 @@ import MaterialComponents.MDCCard
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(observation: Observation) {
+    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
     }

@@ -184,17 +184,17 @@
 }
 
 - (void) userDetailSelected:(User *)user {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 

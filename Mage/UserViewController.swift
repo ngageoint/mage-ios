@@ -31,9 +31,10 @@ extension UITableView {
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
+    var scheme : MDCContainerScheming;
     
     private lazy var observationDataStore: ObservationDataStore = {
-        let observationDataStore: ObservationDataStore = ObservationDataStore();
+        let observationDataStore: ObservationDataStore = ObservationDataStore(scheme: self.scheme);
         observationDataStore.tableView = self.tableView;
         observationDataStore.observationSelectionDelegate = self;
         observationDataStore.attachmentSelectionDelegate = self;
@@ -41,9 +42,8 @@ extension UITableView {
     }();
     
     private lazy var userTableHeaderView: UserTableHeaderView = {
-        let userTableHeaderView: UserTableHeaderView = UserTableHeaderView();
+        let userTableHeaderView: UserTableHeaderView = UserTableHeaderView(user: user, scheme: self.scheme);
         userTableHeaderView.navigationController = self.navigationController;
-        userTableHeaderView.populate(user: user);
         return userTableHeaderView;
     }()
     
@@ -51,17 +51,19 @@ extension UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(user:User) {
+    @objc public init(user:User, scheme: MDCContainerScheming) {
         self.user = user
+        self.scheme = scheme;
         super.init(style: .grouped)
         self.title = user.name;
         tableView.register(UINib(nibName: "ObservationCell", bundle: nil), forCellReuseIdentifier: "obsCell");
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.navigationController?.navigationBar.barTintColor = UIColor.primary();
-        self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
-        self.view.backgroundColor = UIColor.tableBackground()
+    override func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     }
     
     override func viewDidLoad() {
@@ -69,33 +71,29 @@ extension UITableView {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 160;
         tableView.setAndLayoutTableHeaderView(header: userTableHeaderView);
-        
-//        self.registerForThemeChanges();
+        applyTheme(withContainerScheme: self.scheme);
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         userTableHeaderView.navigationController = self.navigationController;
-        observationDataStore.startFetchController(with: Observations.init(for: user));
+        observationDataStore.startFetchController(with: Observations(for: user));
     }
 }
 
 extension UserViewController : ObservationSelectionDelegate {
     func selectedObservation(_ observation: Observation!) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
+        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
     func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
+        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
     func observationDetailSelected(_ observation: Observation!) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
+        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
 }

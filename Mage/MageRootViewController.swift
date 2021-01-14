@@ -49,7 +49,7 @@ import Kingfisher
     
     private lazy var meTab: UINavigationController = {
         let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
-        let uvc = UserViewController(user: user);
+        let uvc = UserViewController(user: user, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: uvc);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
         return nc;

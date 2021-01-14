@@ -641,7 +641,7 @@
 
 - (void) userDetailSelected:(User *) user {
     [self.mapDelegate selectedUser:user];
-    UserViewController *uc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uc animated:YES];
 }
 

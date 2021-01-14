@@ -16,7 +16,7 @@
     if ([calloutItem isKindOfClass:[FeedItem class]]) {
         [self.viewController.navigationController pushViewController:[[FeedItemViewController alloc] initWithFeedItem:calloutItem] animated:true];
     } else if ([calloutItem isKindOfClass:[User class]]) {
-        UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem];
+        UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem scheme:[MAGEScheme scheme]];
         [self.viewController.navigationController pushViewController:uvc animated:YES];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
         ObservationViewController *ovc = [[ObservationViewController alloc] init];

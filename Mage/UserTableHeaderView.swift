@@ -16,25 +16,27 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var currentUserIsMe: Bool = false;
     var childCoordinators: [Any] = [];
     var navigationController: UINavigationController?;
+    var scheme: MDCContainerScheming!;
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.backgroundColor = UIColor.background();
+    override func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.backgroundColor = self.scheme.colorScheme.backgroundColor;
         
-        avatarBorder.backgroundColor = UIColor.background();
-        avatarImage.tintColor = UIColor.inactiveIcon();
-        nameField.textColor = UIColor.primaryText();
+        avatarBorder.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        avatarImage.tintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        nameField.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        locationIcon.textColor = UIColor.secondaryText();
-        locationLabel.textColor = UIColor.flatButton();
-        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
-
-        emailIcon.textColor = UIColor.secondaryText();
-        emailLabel.textColor = UIColor.flatButton();
-        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
-
-        phoneIcon.textColor = UIColor.secondaryText();
-        phoneLabel.textColor = UIColor.flatButton();
-        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
+        locationIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        locationLabel.textColor = self.scheme.colorScheme.primaryColor;
+        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        
+        emailIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        emailLabel.textColor = self.scheme.colorScheme.primaryColor;
+        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        
+        phoneIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        phoneLabel.textColor = self.scheme.colorScheme.primaryColor;
+        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
     }
     
     private lazy var mapDelegate: MapDelegate = {
@@ -200,11 +202,13 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return emailLabel;
     }()
     
-    @objc public convenience init() {
+    @objc public convenience init(user: User, scheme: MDCContainerScheming) {
         self.init(frame: CGRect.zero);
+        self.scheme = scheme;
         self.configureForAutoLayout();
         layoutView();
-        registerForThemeChanges();
+        applyTheme(withContainerScheme: self.scheme);
+        populate(user: user);
         NotificationCenter.default.addObserver(self, selector: #selector(updateUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: nil)
     }
     
