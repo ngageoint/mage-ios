@@ -66,9 +66,9 @@
     [self setNavBarTitle];
 }
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
-    self.scheme = [MAGEScheme scheme];
+    self.scheme = containerScheme;
     return self;
 }
 

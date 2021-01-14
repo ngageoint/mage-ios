@@ -34,7 +34,7 @@ import Kingfisher
     }()
     
     private lazy var observationsTab: UINavigationController = {
-        let observationTableViewController: ObservationTableViewController = ObservationTableViewController();
+        let observationTableViewController: ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
         let nc = UINavigationController(rootViewController: observationTableViewController);
         nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
         return nc;

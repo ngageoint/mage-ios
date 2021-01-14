@@ -169,7 +169,7 @@ class SidebarUIButton: UIButton {
     func createObservationsRailView() -> SidebarUIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController();
+        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: MAGEScheme.scheme());
         observationButton.viewController = observationViewController;
         observationViewController.observationSelectionDelegate = delegate;
         observationViewController.attachmentDelegate = delegate;

@@ -15,4 +15,6 @@
 @property (weak, nonatomic) id<ObservationSelectionDelegate> observationSelectionDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+
 @end
