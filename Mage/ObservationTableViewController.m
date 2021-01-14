@@ -18,7 +18,6 @@
 #import "Filter.h"
 #import "Observations.h"
 #import "SFPoint.h"
-#import "Theme+UIResponder.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
 #import "MAGE-Swift.h"
@@ -36,32 +35,33 @@
 @implementation ObservationTableViewController
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
-    if (self.scheme) {
+    if (containerScheme) {
         self.scheme = containerScheme;
     }
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.refreshControl.backgroundColor = self.scheme.colorScheme.primaryColor;
+    self.refreshControl.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.refreshControl.tintColor = self.scheme.colorScheme.onPrimaryColor;
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor colorNamed:@"primaryVariant"];
-    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-        NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: [UIColor navBarPrimaryText],
-        NSBackgroundColorAttributeName: [UIColor colorNamed:@"primaryVariant"]
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     
     self.navigationController.navigationBar.standardAppearance = appearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.standardAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
-    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = [UIColor colorNamed:@"primaryVariant"];
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
     [self setNavBarTitle];
 }
@@ -184,7 +184,7 @@
     [self startUpdateTimer];
     
     [self updateFilterButtonPosition];
-    [self applyThemeWithContainerScheme:nil];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) updateFilterButtonPosition {

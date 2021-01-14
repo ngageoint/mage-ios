@@ -15,6 +15,7 @@
     @property (weak, nonatomic) IBOutlet UIViewController *viewController;
     @property (nonatomic) NSDateFormatter *dateFormatter;
     @property (nonatomic) NSDateFormatter *dateFormatterToDate;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation LocationDataStore
@@ -39,6 +40,18 @@
     
     return _dateFormatterToDate;
     
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme) {
+        self.scheme = containerScheme;
+    }
+}
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [super init];
+    self.scheme = containerScheme;
+    return self;
 }
 
 - (void) startFetchController {
@@ -74,7 +87,10 @@
 
 - (void) configureCell:(UITableViewCell *) cell atIndexPath:(NSIndexPath *)indexPath {
 	PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
-	
+    personCell.name.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    personCell.timestamp.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    personCell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    personCell.icon.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 	Location *location = [self.locations.fetchedResultsController objectAtIndexPath:indexPath];
     [personCell populateCellWithUser:location.user];
     personCell.userActionsDelegate = self;

@@ -11,30 +11,52 @@
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
-#import "Theme+UIResponder.h"
 #import "MAGE-Swift.h"
 
 @interface LocationTableViewController() <UserSelectionDelegate>
 
 @property (nonatomic, strong) NSTimer* updateTimer;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation LocationTableViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    self.tableView.separatorColor = [UIColor tableSeparator];
-    self.refreshControl.backgroundColor = [UIColor background];
-    self.refreshControl.tintColor = [UIColor brand];
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
-    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme) {
+        self.scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.refreshControl.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.refreshControl.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
     [self setNavBarTitle];
 }
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStylePlain];
+    self.scheme = containerScheme;
     return self;
 }
 
@@ -44,7 +66,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
     
     if (!self.locationDataStore) {
-        self.locationDataStore = [[LocationDataStore alloc] init];
+        self.locationDataStore = [[LocationDataStore alloc] initWithScheme:self.scheme];
         self.tableView.dataSource = self.locationDataStore;
         self.tableView.delegate = self.locationDataStore;
         self.locationDataStore.tableView = self.tableView;
@@ -71,7 +93,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 72;
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
