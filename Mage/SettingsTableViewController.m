@@ -208,7 +208,7 @@
     
     [self presentViewController:navigationController animated:YES completion:nil];
     
-    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:[MAGEScheme scheme]];
+    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme];
     [self.childCoordinators addObject:coord];
     [coord startLoginOnly];
     navigationController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLogin:)];

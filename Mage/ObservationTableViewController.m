@@ -20,6 +20,7 @@
 #import "SFPoint.h"
 #import "ObservationViewController.h"
 #import "ObservationTableViewCell.h"
+#import "ObservationFilterTableViewController.h"
 #import "MAGE-Swift.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 
@@ -219,8 +220,9 @@
 
 - (void) filterButtonPressed {
     UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
-    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"observationFilter"];
-    [self.navigationController pushViewController:vc animated:YES];
+    ObservationFilterTableViewController *fvc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"observationFilter"];
+    [fvc applyThemeWithContainerScheme:self.scheme];
+    [self.navigationController pushViewController:fvc animated:YES];
 }
 
 - (void) applicationWillResignActive {

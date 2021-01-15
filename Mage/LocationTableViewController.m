@@ -11,6 +11,7 @@
 #import "TimeFilter.h"
 #import "Filter.h"
 #import "UINavigationItem+Subtitle.h"
+#import "LocationFilterTableViewController.h"
 #import "MAGE-Swift.h"
 
 @interface LocationTableViewController() <UserSelectionDelegate>
@@ -124,8 +125,9 @@
 
 - (void) filterButtonPressed {
     UIStoryboard *iphoneStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
-    UIViewController *vc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"locationFilter"];
-    [self.navigationController pushViewController:vc animated:YES];
+    LocationFilterTableViewController *fvc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"locationFilter"];
+    [fvc applyThemeWithContainerScheme:self.scheme];
+    [self.navigationController pushViewController:fvc animated:YES];
 }
 
 - (void) updateFilterButtonPosition {
