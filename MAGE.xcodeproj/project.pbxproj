@@ -390,7 +390,6 @@
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
 		F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
-		F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -1027,8 +1026,6 @@
 		F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertiesEditCoordinator.m; sourceTree = "<group>"; };
 		F7DCCC231F46366F00E4C616 /* ExternalDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDevice.h; sourceTree = "<group>"; };
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
-		F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFetchSettingsTableViewController.h; sourceTree = "<group>"; };
-		F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFetchSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -1453,8 +1450,6 @@
 				2F81C4231C692C30006897E7 /* AttributionsViewController.m */,
 				2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */,
 				2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */,
-				F7DEF919191293C20026B9D0 /* DataFetchSettingsTableViewController.h */,
-				F7DEF91A191293C20026B9D0 /* DataFetchSettingsTableViewController.m */,
 				2F4E10B0220E1A52001C9F12 /* DisplaySettingsHeader.h */,
 				2F4E10B1220E1A52001C9F12 /* DisplaySettingsHeader.m */,
 				F77822492146C8B400850815 /* LocationDisplayTableViewController.h */,
@@ -2859,7 +2854,6 @@
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
-				F7DEF91B191293C20026B9D0 /* DataFetchSettingsTableViewController.m in Sources */,
 				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,

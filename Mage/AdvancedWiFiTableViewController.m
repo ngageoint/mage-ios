@@ -1,5 +1,5 @@
 //
-//  DataFetchSettingsTableViewController.m
+//  AdvancedWiFiTableViewController.m
 //  Mage
 //
 //

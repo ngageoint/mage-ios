@@ -17,7 +17,6 @@
 #import "ThemeSettingsTableViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
-#import "DataFetchSettingsTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"

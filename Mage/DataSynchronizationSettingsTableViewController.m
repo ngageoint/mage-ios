@@ -1,5 +1,5 @@
 //
-//  DataFetchSettingsTableViewController.m
+//  DataSynchronizationSettingsTableViewController.m
 //  Mage
 //
 //
