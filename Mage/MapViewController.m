@@ -36,6 +36,7 @@
 
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
+#import "FilterTableViewController.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate>
     @property (strong, nonatomic) UIButton *trackingButton;
@@ -306,7 +307,9 @@
 
 - (IBAction)filterTapped:(id)sender {
     UIStoryboard *filterStoryboard = [UIStoryboard storyboardWithName:@"Filter" bundle:nil];
-    UIViewController *vc = [filterStoryboard instantiateInitialViewController];
+    UINavigationController *vc = (UINavigationController *)[filterStoryboard instantiateInitialViewController];
+    FilterTableViewController *fvc = (FilterTableViewController *)vc.topViewController;
+    [fvc applyThemeWithContainerScheme:self.scheme];
     vc.modalPresentationStyle = UIModalPresentationPopover;
     vc.popoverPresentationController.barButtonItem = sender;
     [self presentViewController:vc animated:YES completion:nil];

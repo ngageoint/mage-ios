@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MaterialComponents/MDCContainerScheme.h>
 
 @interface ObservationFilterTableViewController : UITableViewController
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

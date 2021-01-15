@@ -206,7 +206,7 @@ import Kingfisher
         if (Authentication.authenticationType(toString: .LOCAL) ==
                 UserDefaults.standard.loginType) {
             moreTabBarItem?.badgeValue = "!";
-            moreTabBarItem?.badgeColor = UIColor.orange;
+            moreTabBarItem?.badgeColor = UIColor.systemOrange;
         } else {
             moreTabBarItem?.badgeValue = nil;
             moreTabBarItem?.badgeColor = nil;
