@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "User.h"
 #import "LoginViewController.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface LdapLoginView : UIStackView
 
@@ -16,5 +17,7 @@
 @property (strong, nonatomic) User *user;
 
 @property (strong, nonatomic) id<LoginDelegate> delegate;
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

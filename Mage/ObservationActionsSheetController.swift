@@ -12,7 +12,7 @@ import MaterialComponents.MDCAppBar;
 class ObservationActionsSheetController: UITableViewController {
     var observation: Observation!;
     var delegate: ObservationActionsDelegate!;
-    var scheme: MDCContainerScheming = globalContainerScheme();
+    var scheme: MDCContainerScheming?;
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.cancelAction?();
@@ -41,12 +41,10 @@ class ObservationActionsSheetController: UITableViewController {
         self.delegate = delegate;
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if (scheme != nil) {
-            self.scheme = scheme!;
-        }
-        self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-        cancelButton.applyTextTheme(withScheme: self.scheme);
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        cancelButton.applyTextTheme(withScheme: containerScheme);
     }
     
     override func viewDidLoad() {
@@ -80,19 +78,22 @@ class ObservationActionsSheetController: UITableViewController {
             }
             return cell
         }()
-        
-        cell.imageView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor;
-        cell.backgroundColor = scheme.colorScheme.surfaceColor;
-        cell.textLabel?.font = scheme.typographyScheme.subtitle1;
+        if let safeScheme = scheme {
+            cell.imageView?.tintColor = safeScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            cell.textLabel?.textColor = safeScheme.colorScheme.onSurfaceColor;
+            cell.backgroundColor = safeScheme.colorScheme.surfaceColor;
+            cell.textLabel?.font = safeScheme.typographyScheme.subtitle1;
+        }
         cell.accessoryType = .none;
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
             cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
-            cell.textLabel?.textColor = scheme.colorScheme.errorColor;
-            cell.imageView?.tintColor = scheme.colorScheme.errorColor;
+            if let safeScheme = scheme {
+                cell.textLabel?.textColor = safeScheme.colorScheme.errorColor;
+                cell.imageView?.tintColor = safeScheme.colorScheme.errorColor;
+            }
         }
         
         if (indexPath.row == 1) {

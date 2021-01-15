@@ -32,7 +32,7 @@ import MaterialComponents.MaterialBottomSheet
     var bottomSheet: MDCBottomSheetController?;
     var currentEditField: [String: Any]?;
     var currentEditValue: Any?;
-    var scheme: MDCContainerScheming = globalContainerScheme();
+    var scheme: MDCContainerScheming?;
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
         var managedObjectContext: NSManagedObjectContext = .mr_newMainQueue();
@@ -50,10 +50,8 @@ import MaterialComponents.MaterialBottomSheet
         return User.fetchCurrentUser(in: self.managedObjectContext);
     }()
     
-    @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if let safeScheme = scheme {
-            self.scheme = safeScheme;
-        }
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
     }
     
     @objc public init(rootViewController: UIViewController!, delegate: ObservationEditDelegate, location: SFGeometry, accuracy: CLLocationAccuracy, provider: String, delta: Double) {
@@ -78,8 +76,10 @@ import MaterialComponents.MaterialBottomSheet
                 safeNav.modalPresentationStyle = .custom;
                 safeNav.modalTransitionStyle = .crossDissolve;
                 self.rootViewController?.present(safeNav, animated: true, completion: nil);
-                observationEditController = ObservationEditCardCollectionViewController(delegate: self, observation: observation!, newObservation: newObservation);
-                observationEditController?.applyTheme(withScheme: scheme);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: self, observation: observation!, newObservation: newObservation, containerScheme: self.scheme);
+                if let safeScheme = self.scheme {
+                    observationEditController?.applyTheme(withContainerScheme: safeScheme);
+                }
                 safeNav.pushViewController(observationEditController!, animated: true);
             }
         }
@@ -129,7 +129,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     
     func addForm() {
         let forms: [[String: AnyHashable]] = event.forms as! [[String : AnyHashable]];
-        let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms);
+        let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, scheme: self.scheme);
         formPicker.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: formPicker);
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);

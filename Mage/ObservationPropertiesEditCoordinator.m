@@ -67,7 +67,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(editCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(editComplete)];
     
-    self.editCardController = [[ObservationEditCardCollectionViewController alloc] initWithDelegate:self observation:self.observation newObservation:self.newObservation];
+    self.editCardController = [[ObservationEditCardCollectionViewController alloc] initWithDelegate:self observation:self.observation newObservation:self.newObservation containerScheme:[MAGEScheme scheme]];
 //    [self.editCardController setDelegateWithDelegate:self observation:self.observation newObservation:self.newObservation];
     [self.editController.navigationItem setLeftBarButtonItem:back];
     [self.editController.navigationItem setRightBarButtonItem:doneButton];

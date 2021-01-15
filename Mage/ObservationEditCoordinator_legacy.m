@@ -147,7 +147,7 @@
 }
 
 - (void) startFormPicker {
-    self.formController = [[FormPickerViewController alloc] initWithDelegate:self forms:self.event.nonArchivedForms];
+    self.formController = [[FormPickerViewController alloc] initWithDelegate:self forms:self.event.nonArchivedForms scheme: [MAGEScheme scheme]];
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.formController];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];

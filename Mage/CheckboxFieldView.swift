@@ -97,10 +97,12 @@ class CheckboxFieldView : BaseFieldView {
     
     override func setValid(_ valid: Bool) {
         valid ? (errorLabel.text = "") : (errorLabel.text = getErrorMessage());
-        if (valid) {
-            applyTheme(withScheme: scheme ?? globalContainerScheme());
-        } else {
-            label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
+        if let safeScheme = scheme {
+            if (valid) {
+                applyTheme(withScheme: safeScheme);
+            } else {
+                label.textColor = safeScheme.colorScheme.errorColor;
+            }
         }
     }
     

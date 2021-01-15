@@ -67,6 +67,9 @@ class ObservationFormView: UIStackView {
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
+        for (_, fieldView) in self.fieldViews {
+            fieldView.applyTheme(withScheme: scheme);
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -121,7 +124,9 @@ class ObservationFormView: UIStackView {
                 fieldView = label;
             }
             if let baseFieldView = fieldView as? BaseFieldView, let safeKey = fieldDictionary[FieldKey.name.key] as? String {
-                baseFieldView.applyTheme(withScheme: scheme ?? globalContainerScheme())
+                if let safeScheme = scheme {
+                    baseFieldView.applyTheme(withScheme: safeScheme)
+                }
                 fieldViews[safeKey] = baseFieldView;
             }
             formFieldAdded = true;

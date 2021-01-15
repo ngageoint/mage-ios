@@ -13,6 +13,7 @@
 @interface UserDataStore ()
 @property (nonatomic) NSDateFormatter *dateFormatter;
 @property (nonatomic) NSDateFormatter *dateFormatterToDate;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation UserDataStore
@@ -39,6 +40,19 @@
     
 }
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme) {
+        self.scheme = containerScheme;
+    }
+    
+}
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [super init];
+    self.scheme = containerScheme;
+    return self;
+}
+
 - (void) startFetchControllerForUserIds:(NSArray *) userIds {
     self.fetchedResultsController = [User MR_fetchAllSortedBy:@"name"
                                                         ascending:NO
@@ -63,7 +77,10 @@
 
 - (void) configureCell:(UITableViewCell *) cell atIndexPath:(NSIndexPath *)indexPath {
     PersonTableViewCell *personCell = (PersonTableViewCell *) cell;
-    
+    personCell.name.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    personCell.timestamp.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    personCell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    personCell.icon.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     User *user = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [personCell populateCellWithUser:user];
 }

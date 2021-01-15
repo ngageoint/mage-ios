@@ -11,44 +11,37 @@ import PureLayout
 
 class ObservationImportantView: UIView {
     var observation: Observation?;
-    
-    private lazy var flaggedByLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
-        let label = UILabel(forAutoLayout: ());
-        label.textColor = containerScheme.colorScheme.onSecondaryColor.withAlphaComponent(0.6);
-        label.font = containerScheme.typographyScheme.overline;
-        return label;
-    }()
-    
-    private lazy var reasonLabel: UILabel = {
-        let containerScheme = globalContainerScheme();
-        let label = UILabel(forAutoLayout: ());
-        label.textColor = containerScheme.colorScheme.onSecondaryColor.withAlphaComponent(0.87);
-        label.font = containerScheme.typographyScheme.body2;
-        return label;
-    }()
+    var scheme: MDCContainerScheming?;
+    var reasonLabel: UILabel = UILabel(forAutoLayout: ());
+    var flaggedByLabel: UILabel = UILabel(forAutoLayout: ());
     
     private lazy var flagImage: UIImageView = {
         let flag = UIImage(named: "flag");
         let flagView = UIImageView(image: flag);
-        flagView.tintColor = globalContainerScheme().colorScheme.onSecondaryColor;
         return flagView;
     }()
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.backgroundColor = globalContainerScheme().colorScheme.secondaryColor;
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.backgroundColor = MDCPalette.orange.accent400;
+        reasonLabel.textColor = UIColor.black.withAlphaComponent(0.87);
+        reasonLabel.font = scheme.typographyScheme.body2;
+        flaggedByLabel.textColor = UIColor.black.withAlphaComponent(0.6);
+        flaggedByLabel.font = scheme.typographyScheme.overline;
+        flagImage.tintColor = UIColor.black.withAlphaComponent(0.87);
     }
     
-    public convenience init(observation: Observation, cornerRadius: CGFloat) {
+    public convenience init(observation: Observation, cornerRadius: CGFloat, scheme: MDCContainerScheming? = nil) {
         self.init(frame: CGRect.zero);
         layer.cornerRadius = cornerRadius;
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner];
         self.observation = observation;
+        self.scheme = scheme;
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation);
-        
-        registerForThemeChanges();
+        if let safeScheme = scheme {
+            applyTheme(withScheme: safeScheme);
+        }
     }
     
     func layoutView() {

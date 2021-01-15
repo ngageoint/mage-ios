@@ -450,6 +450,7 @@
     }
     
     edit = [[ObservationEditCoordinator alloc] initWithRootViewController:self delegate:self location:point accuracy:accuracy provider:provider delta:delta];
+    [edit applyThemeWithContainerScheme:self.scheme];
     
     [self.childCoordinators addObject:edit];
     [edit start];

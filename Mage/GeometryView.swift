@@ -231,11 +231,13 @@ class GeometryView : BaseFieldView {
     }
     
     override func setValid(_ valid: Bool) {
-        if (valid) {
-            applyTheme(withScheme: scheme ?? globalContainerScheme());
-        } else {
-            latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
-            fieldNameLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
+        if let safeScheme = scheme {
+            if (valid) {
+                applyTheme(withScheme: safeScheme);
+            } else {
+                latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
+                fieldNameLabel.textColor = safeScheme.colorScheme.primaryColor;
+            }
         }
     }
 }

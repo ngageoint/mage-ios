@@ -29,6 +29,14 @@ class ObservationActionsView: UIView {
                     }
                     return result;
                 }
+                let favoriteLabelAttributes: [NSAttributedString.Key: Any] = [
+                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? UIColor.label.withAlphaComponent(0.6)
+                ];
+                let favoriteCountAttributes: [NSAttributedString.Key: Any] = [
+                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? UIColor.label.withAlphaComponent(0.87)
+                ];
                 favoriteCountText.append(NSAttributedString(string: "\(favoriteCount)", attributes: favoriteCountAttributes))
                 favoriteCountText.append(NSAttributedString(string: favoriteCount == 1 ? " FAVORITE" : " FAVORITES", attributes: favoriteLabelAttributes))
             }
@@ -69,22 +77,6 @@ class ObservationActionsView: UIView {
         let button = UIButton(type: .custom);
         button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
         return button;
-    }()
-    
-    private lazy var favoriteCountAttributes: [NSAttributedString.Key: Any] = {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: globalContainerScheme().typographyScheme.overline,
-            .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? globalContainerScheme().colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        ];
-        return attributes;
-    }()
-    
-    private lazy var favoriteLabelAttributes: [NSAttributedString.Key: Any] = {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: globalContainerScheme().typographyScheme.overline,
-            .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? globalContainerScheme().colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        ];
-        return attributes;
     }()
     
     private lazy var favoriteButton: UIButton = {
@@ -173,13 +165,17 @@ class ObservationActionsView: UIView {
 
     }
     
-    public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?) {
+    public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
+        self.scheme = scheme;
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation);
+        if let safeScheme = self.scheme {
+            applyTheme(withScheme: safeScheme);
+        }
     }
     
     func layoutView() {
@@ -229,8 +225,9 @@ class ObservationActionsView: UIView {
                 cancelOrRemoveButton.setTitle("Remove", for: .normal);
             }
         }
-        
-        applyTheme(withScheme: scheme ?? globalContainerScheme());
+        if let safeScheme = scheme {
+            applyTheme(withScheme: safeScheme);
+        }
     }
     
     @objc func showFavorites() {

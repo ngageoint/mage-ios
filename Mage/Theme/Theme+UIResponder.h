@@ -21,6 +21,6 @@
 //@property (nonatomic, strong) id<MDCContainerScheming> scheme;
 
 - (void) registerForThemeChanges;
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme;
+//- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme;
 
 @end

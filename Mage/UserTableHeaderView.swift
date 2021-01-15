@@ -18,7 +18,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var navigationController: UINavigationController?;
     var scheme: MDCContainerScheming!;
     
-    override func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
         self.backgroundColor = self.scheme.colorScheme.backgroundColor;
         

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
-
+import MaterialComponents.MDCContainerScheme;
 
 @objc class ObservationViewCardCollectionViewController: UIViewController {
     
@@ -20,10 +20,10 @@ import MaterialComponents.MDCCard
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
-    var headerCard: ObservationHeaderView!;
+    var headerCard: ObservationHeaderView?;
     var observationEditCoordinator: ObservationEditCoordinator?;
     var bottomSheet: MDCBottomSheetController?;
-    var scheme: MDCContainerScheming = globalContainerScheme();
+    var scheme: MDCContainerScheming?;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -50,31 +50,31 @@ import MaterialComponents.MDCCard
         return syncStatusView;
     }()
     
-    @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if (scheme != nil) {
-            self.scheme = scheme!;
-        }
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
         self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         
         self.navigationController?.navigationBar.standardAppearance = appearance;
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        self.syncStatusView.applyTheme(withScheme: containerScheme);
+        headerCard?.applyTheme(withScheme: containerScheme);
     }
     
     override func loadView() {
@@ -111,6 +111,7 @@ import MaterialComponents.MDCCard
     @objc convenience public init(observation: Observation, scheme: MDCContainerScheming) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
+        self.scheme = scheme;
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -122,8 +123,6 @@ import MaterialComponents.MDCCard
         
         self.view.accessibilityIdentifier = "ObservationViewCardCollection"
         self.view.accessibilityLabel = "ObservationViewCardCollection"
-        
-        applyTheme();
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,6 +130,9 @@ import MaterialComponents.MDCCard
         setupEditButton();
         ObservationPushService.singleton()?.add(self);
         setupObservation();
+        if let safeScheme = self.scheme {
+            applyTheme(withContainerScheme: safeScheme);
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -167,8 +169,10 @@ import MaterialComponents.MDCCard
     func addHeaderCard(stackView: UIStackView) {
         if let safeObservation = observation {
             headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
-            headerCard.applyTheme(withScheme: scheme);
-            stackView.addArrangedSubview(headerCard);
+            if let safeScheme = self.scheme {
+                headerCard!.applyTheme(withScheme: safeScheme);
+            }
+            stackView.addArrangedSubview(headerCard!);
         }
     }
     
@@ -179,7 +183,9 @@ import MaterialComponents.MDCCard
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
                     let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
-                    attachmentCard.applyTheme(withScheme: scheme);
+                    if let safeScheme = self.scheme {
+                        attachmentCard.applyTheme(withScheme: safeScheme);
+                    }
                     stackView.addArrangedSubview(attachmentCard);
                 }
             }
@@ -211,7 +217,9 @@ import MaterialComponents.MDCCard
             }
         }
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self, attachmentSelectionDelegate: self);
-        formView.applyTheme(withScheme: scheme);
+        if let safeScheme = self.scheme {
+            formView.applyTheme(withScheme: safeScheme);
+        }
         var formSpacerView: UIView?;
         if (!formView.isEmpty()) {
             formSpacerView = UIView(forAutoLayout: ());
@@ -219,8 +227,10 @@ import MaterialComponents.MDCCard
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
         
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView)
-        card.applyTheme(withScheme: scheme);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView);
+        if let safeScheme = self.scheme {
+            card.applyTheme(withScheme: safeScheme);
+        }
         stackView.addArrangedSubview(card);
         cards.append(card);
         return card;
@@ -228,7 +238,7 @@ import MaterialComponents.MDCCard
     
     @objc func showActionsSheet(sender: UIBarButtonItem) {
         let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation!, delegate: self);
-        actionsSheet.applyTheme(withScheme: scheme);
+        actionsSheet.applyTheme(withContainerScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
         
@@ -236,7 +246,7 @@ import MaterialComponents.MDCCard
     
     @objc func editObservation(sender: UIBarButtonItem) {
         observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
-        observationEditCoordinator?.applyTheme(withScheme: scheme);
+        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
         observationEditCoordinator!.start();
     }
 }
@@ -284,7 +294,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
             }
         }
         if (userIds.count != 0) {
-            let userViewController = UserTableViewController();
+            let userViewController = UserTableViewController(scheme: self.scheme)!;
             userViewController.userIds = userIds;
             userViewController.title = "Favorited By";
             self.navigationController?.pushViewController(userViewController, animated: true);
@@ -294,7 +304,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     func favorite(_ observation: Observation) {
         observation.toggleFavorite() { success, error in
             observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            self.headerCard.populate(observation: observation);
+            self.headerCard?.populate(observation: observation);
         }
     }
     
@@ -324,7 +334,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         observation.flagImportant(withDescription: reason) { success, error in
             // update the view
             observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            self.headerCard.populate(observation: observation);
+            self.headerCard?.populate(observation: observation);
         }
     }
     
@@ -332,13 +342,14 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         observation.removeImportant() { success, error in
             // update the view
             observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            self.headerCard.populate(observation: observation);
+            self.headerCard?.populate(observation: observation);
         }
     }
     
     func editObservation(_ observation: Observation) {
         bottomSheet?.dismiss(animated: true, completion: nil);
         observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
         observationEditCoordinator!.start();
     }
     

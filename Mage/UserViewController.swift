@@ -59,7 +59,7 @@ extension UITableView {
         tableView.register(UINib(nibName: "ObservationCell", bundle: nil), forCellReuseIdentifier: "obsCell");
     }
     
-    override func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
         self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
         self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;

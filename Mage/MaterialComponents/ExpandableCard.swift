@@ -45,7 +45,6 @@ class ExpandableCard: MDCCard {
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
-        label.font = globalContainerScheme().typographyScheme.overline
         return label
     }()
 
@@ -54,7 +53,6 @@ class ExpandableCard: MDCCard {
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
-        label.font = globalContainerScheme().typographyScheme.headline6
         return label
     }()
 
@@ -63,7 +61,6 @@ class ExpandableCard: MDCCard {
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
-        label.font = globalContainerScheme().typographyScheme.subtitle2
         return label
     }()
     
@@ -86,8 +83,11 @@ class ExpandableCard: MDCCard {
         thumbnail.tintColor = scheme.colorScheme.primaryColor;
         expandAction.tintColor = scheme.colorScheme.primaryColor;
         titleText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        headerText.textColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        titleText.font = scheme.typographyScheme.overline;
+        headerText.textColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
+        headerText.font = scheme.typographyScheme.headline6;
         subhead.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        subhead.font = scheme.typographyScheme.subtitle2;
     }
     
     @objc func expandButtonPressed() {

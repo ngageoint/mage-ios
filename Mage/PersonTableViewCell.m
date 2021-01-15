@@ -24,7 +24,9 @@
     }
     
     self.name.text = user.name;
-    self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
+    if (user.location) {
+        self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
+    }
         
     return self;
 }

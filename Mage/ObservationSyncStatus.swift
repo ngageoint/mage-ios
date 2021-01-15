@@ -15,6 +15,29 @@ class ObservationSyncStatus: UIView {
     private var observation: Observation?;
     private var manualSync: Bool = false;
     private var syncStatusView: MDCBannerView?;
+    private var scheme: MDCContainerScheming?;
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
+        if let safeSyncStatusView = syncStatusView {
+            safeSyncStatusView.applyTheme(withScheme: scheme);
+            if (observation?.hasValidationError() ?? false) {
+                safeSyncStatusView.textView.textColor = scheme.colorScheme.errorColor;
+                safeSyncStatusView.imageView.tintColor = scheme.colorScheme.errorColor;
+            } else if (!(observation?.isDirty() ?? false) && observation?.error == nil) {
+                safeSyncStatusView.textView.textColor = MDCPalette.green.accent700;
+                safeSyncStatusView.imageView.tintColor = MDCPalette.green.accent700;
+            } else if (manualSync) {
+                safeSyncStatusView.textView.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+                safeSyncStatusView.imageView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            } else {
+                safeSyncStatusView.textView.textColor = scheme.colorScheme.secondaryColor;
+                safeSyncStatusView.imageView.tintColor = scheme.colorScheme.secondaryColor;
+
+            }
+        }
+    }
 
     public convenience init(observation: Observation?) {
         self.init(frame: .zero);
@@ -51,17 +74,15 @@ class ObservationSyncStatus: UIView {
         if (observation?.hasValidationError() ?? false) {
             let syncStatusView = MDCBannerView(forAutoLayout: ());
             syncStatusView.bannerViewLayoutStyle = .singleRow;
-            syncStatusView.applyTheme(withScheme: globalContainerScheme());
             syncStatusView.textView.text = "Error Pushing Changes\n\(observation?.errorMessage() ?? "")";
-            syncStatusView.textView.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
             syncStatusView.imageView.image = UIImage(named: "error_outline");
-            syncStatusView.imageView.tintColor = globalErrorContainerScheme().colorScheme.primaryColor;
             syncStatusView.imageView.isHidden = false;
             syncStatusView.trailingButton.isHidden = true;
             syncStatusView.leadingButton.isHidden = true;
             
             addSubview(syncStatusView);
             syncStatusView.autoPinEdgesToSuperviewEdges();
+            self.syncStatusView = syncStatusView;
             return;
         }
         
@@ -69,7 +90,6 @@ class ObservationSyncStatus: UIView {
         if (!(observation?.isDirty() ?? false) && observation?.error == nil) {
             let syncStatusView = MDCBannerView(forAutoLayout: ());
             syncStatusView.bannerViewLayoutStyle = .singleRow;
-            syncStatusView.applyTheme(withScheme: globalContainerScheme());
             if let pushedDate: NSDate = observation?.lastModified as NSDate? {
                 syncStatusView.textView.text = "Pushed on \(pushedDate.formattedDisplay() ?? "")";
             }
@@ -82,6 +102,7 @@ class ObservationSyncStatus: UIView {
             
             addSubview(syncStatusView);
             syncStatusView.autoPinEdgesToSuperviewEdges();
+            self.syncStatusView = syncStatusView;
             return;
         }
         
@@ -89,29 +110,24 @@ class ObservationSyncStatus: UIView {
         if (manualSync) {
             let syncStatusView = MDCBannerView(forAutoLayout: ());
             syncStatusView.bannerViewLayoutStyle = .singleRow;
-            syncStatusView.applyTheme(withScheme: globalContainerScheme());
             // if the observation is dirty and needs synced
             syncStatusView.textView.text = "Force Pushing Changes...";
-            syncStatusView.textView.textColor = UIColor.label.withAlphaComponent(0.6);
             syncStatusView.imageView.image = UIImage(named: "cached");
-            syncStatusView.imageView.tintColor = UIColor.label.withAlphaComponent(0.6);
             syncStatusView.imageView.isHidden = false;
             syncStatusView.trailingButton.isHidden = true;
             syncStatusView.leadingButton.isHidden = true;
             
             addSubview(syncStatusView);
             syncStatusView.autoPinEdgesToSuperviewEdges();
+            self.syncStatusView = syncStatusView;
             return;
         }
         
         // if the observation is dirty and needs synced
         let syncStatusView = MDCBannerView(forAutoLayout: ());
         syncStatusView.bannerViewLayoutStyle = .singleRow;
-        syncStatusView.applyTheme(withScheme: globalContainerScheme());
         syncStatusView.textView.text = "Changes Queued";
-        syncStatusView.textView.textColor = globalContainerScheme().colorScheme.secondaryColor;
         syncStatusView.imageView.image = UIImage(named: "cached");
-        syncStatusView.imageView.tintColor = globalContainerScheme().colorScheme.secondaryColor;
         syncStatusView.imageView.isHidden = false;
         syncStatusView.leadingButton.setTitle("Sync Now", for: .normal);
         syncStatusView.leadingButton.accessibilityLabel = "Sync Now";
@@ -119,6 +135,7 @@ class ObservationSyncStatus: UIView {
         syncStatusView.trailingButton.isHidden = true;
         addSubview(syncStatusView);
         syncStatusView.autoPinEdgesToSuperviewEdges();
+        self.syncStatusView = syncStatusView;
     }
     
 }

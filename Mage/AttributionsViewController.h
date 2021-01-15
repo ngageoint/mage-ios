@@ -12,5 +12,6 @@
 @interface AttributionsViewController : UITableViewController
 
 - (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

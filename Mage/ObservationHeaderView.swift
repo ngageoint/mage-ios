@@ -16,6 +16,7 @@ class ObservationHeaderView : MDCCard {
     var didSetupConstraints = false;
     var observation: Observation!;
     var observationActionsDelegate: ObservationActionsDelegate?;
+    var scheme: MDCContainerScheming?;
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
@@ -85,13 +86,12 @@ class ObservationHeaderView : MDCCard {
     }()
     
     private lazy var observationActionsView: ObservationActionsView = {
-        let observationActionsView = ObservationActionsView(observation: self.observation!, observationActionsDelegate: observationActionsDelegate);
+        let observationActionsView = ObservationActionsView(observation: self.observation!, observationActionsDelegate: observationActionsDelegate, scheme: self.scheme);
         return observationActionsView;
     }()
     
     private lazy var timestamp: UILabel = {
         let timestamp = UILabel(forAutoLayout: ());
-        timestamp.font = globalContainerScheme().typographyScheme.overline;
         timestamp.numberOfLines = 0;
         return timestamp;
     }()
@@ -105,18 +105,16 @@ class ObservationHeaderView : MDCCard {
     
     private lazy var primaryField: UILabel = {
         let primaryField = UILabel(forAutoLayout: ());
-        primaryField.font = globalContainerScheme().typographyScheme.headline6;
         return primaryField;
     }()
     
     private lazy var secondaryField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
-        secondaryField.font = globalContainerScheme().typographyScheme.subtitle2;
         return secondaryField;
     }()
     
     private lazy var importantView: ObservationImportantView = {
-        let importantView = ObservationImportantView(observation: self.observation, cornerRadius: self.cornerRadius);
+        let importantView = ObservationImportantView(observation: self.observation, cornerRadius: self.cornerRadius, scheme: self.scheme);
         return importantView;
     }()
     
@@ -140,9 +138,14 @@ class ObservationHeaderView : MDCCard {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super .applyTheme(withScheme: scheme);
         self.timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        self.timestamp.font = scheme.typographyScheme.overline;
         self.primaryField.textColor = scheme.colorScheme.primaryColor;
+        self.primaryField.font = scheme.typographyScheme.headline6;
         self.secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        self.secondaryField.font = scheme.typographyScheme.subtitle2;
         self.geometryView.applyTheme(withScheme: scheme);
+        self.importantView.applyTheme(withScheme: scheme);
+        self.observationActionsView.applyTheme(withScheme: scheme);
     }
     
     @objc public func populate(observation: Observation, animate: Bool = true) {

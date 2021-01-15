@@ -17,7 +17,7 @@ import MaterialComponents.MDCButton;
 
     var delegate: FormPickedDelegate?;
     var forms: [[String: Any]]?;
-    var scheme: MDCContainerScheming = globalContainerScheme();
+    var scheme: MDCContainerScheming?;
     
     var tableView: UITableView = {
         let tableView = UITableView(forAutoLayout: ());
@@ -45,8 +45,10 @@ import MaterialComponents.MDCButton;
         if let safeScheme = scheme {
             self.scheme = safeScheme;
         }
-        self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-        cancelButton.applyTextTheme(withScheme: self.scheme);
+        if let safeScheme = self.scheme {
+            self.tableView.backgroundColor = safeScheme.colorScheme.backgroundColor;
+            cancelButton.applyTextTheme(withScheme: safeScheme);
+        }
     }
     
     init(frame: CGRect) {
@@ -57,10 +59,11 @@ import MaterialComponents.MDCButton;
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [[String: Any]]? = nil) {
+    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [[String: Any]]? = nil, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.delegate = delegate;
         self.forms = forms;
+        self.scheme = scheme;
     }
     
     override func loadView() {
@@ -95,7 +98,7 @@ extension FormPickerViewController: UITableViewDataSource {
             }
             return cell
         }()
-        cell.backgroundColor = scheme.colorScheme.surfaceColor;
+        cell.backgroundColor = scheme?.colorScheme.surfaceColor;
 
         if let safeForm = self.forms?[indexPath.row] {
             cell.accessibilityLabel = safeForm["name"] as? String;
@@ -105,11 +108,11 @@ extension FormPickerViewController: UITableViewDataSource {
             if let safeColor = safeForm["color"] as? String {
                 cell.imageView?.tintColor = UIColor(hex: safeColor);
             } else {
-                cell.imageView?.tintColor = scheme.colorScheme.primaryColor
+                cell.imageView?.tintColor = scheme?.colorScheme.primaryColor
             }
-            cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-            cell.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-            cell.backgroundColor = scheme.colorScheme.surfaceColor;
+            cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            cell.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            cell.backgroundColor = scheme?.colorScheme.surfaceColor;
         }
 
         return cell;

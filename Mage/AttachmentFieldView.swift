@@ -105,8 +105,8 @@ class AttachmentFieldView : BaseFieldView {
         galleryButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         cameraButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         errorLabel.font = scheme.typographyScheme.caption;
-        errorLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
-        attachmentHolderView.backgroundColor = scheme.colorScheme.surfaceColor;
+        errorLabel.textColor = scheme.colorScheme.errorColor;
+        attachmentHolderView.backgroundColor = scheme.colorScheme.backgroundColor;
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -198,10 +198,12 @@ class AttachmentFieldView : BaseFieldView {
 
     override func setValid(_ valid: Bool) {
         errorLabel.isHidden = valid;
-        if (valid) {
-            applyTheme(withScheme: scheme ?? globalContainerScheme());
-        } else {
-            fieldNameLabel.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
+        if let safeScheme = scheme {
+            if (valid) {
+                applyTheme(withScheme: safeScheme);
+            } else {
+                fieldNameLabel.textColor = safeScheme.colorScheme.errorColor;
+            }
         }
     }
     
