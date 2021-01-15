@@ -11,7 +11,6 @@
 #import "ObservationTableViewController.h"
 #import "FeedItemSelectionDelegate.h"
 #import "LocationTableViewController.h"
-#import "MapCalloutTappedSegueDelegate.h"
 #import "MAGE-Swift.h"
 #import "Mage.h"
 #import "MAGE-Swift.h"

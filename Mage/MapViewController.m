@@ -651,8 +651,7 @@
 
 - (void)observationDetailSelected:(Observation *)observation {
     [self.mapDelegate observationDetailSelected:observation];
-    ObservationViewController *ovc = [[ObservationViewController alloc] init];
-    ovc.observation = observation;
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }
 

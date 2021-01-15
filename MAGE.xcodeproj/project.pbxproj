@@ -67,8 +67,6 @@
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
 		2F52827224732B740023E974 /* IDPCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F52827124732B740023E974 /* IDPCoordinator.m */; };
 		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
-		2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */; };
-		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
@@ -555,11 +553,7 @@
 		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
 		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotationView.m; sourceTree = "<group>"; };
 		2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationChangedDelegate.h; sourceTree = "<group>"; };
-		2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedSegueDelegate.h; sourceTree = "<group>"; };
-		2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedSegueDelegate.m; sourceTree = "<group>"; };
 		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
-		2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTappedDelegate_iPhone.h; sourceTree = "<group>"; };
-		2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCalloutTappedDelegate_iPhone.m; sourceTree = "<group>"; };
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
@@ -1232,15 +1226,6 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
-		2F5F2E9819DDE87D005BA157 /* iPhone */ = {
-			isa = PBXGroup;
-			children = (
-				2F5F2E9919DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.h */,
-				2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */,
-			);
-			name = iPhone;
-			sourceTree = "<group>";
-		};
 		2FB41CE11DC79C5D005C18F9 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1379,7 +1364,6 @@
 				2F0323A5246364C500D2866B /* Overlays */,
 				2F2287D921F0EADE0058E527 /* Feature */,
 				043FF11D1C22F571000CA07F /* Cache */,
-				2F5F2E9819DDE87D005BA157 /* iPhone */,
 				2FFBCA0E19DB43C80033132F /* iPad */,
 				F7531EF819100E7D00CA084C /* MapViewController.h */,
 				F7531EF919100E7D00CA084C /* MapViewController.m */,
@@ -1392,8 +1376,6 @@
 				F727516819C87B27006C63CB /* MapDelegate.h */,
 				F727516919C87B27006C63CB /* MapDelegate.m */,
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
-				2F5F2E9219DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.h */,
-				2F5F2E9319DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m */,
 				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
@@ -2823,7 +2805,6 @@
 				F70E433019C3A1B10066E808 /* ObservationDataStore.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
-				2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
@@ -2892,7 +2873,6 @@
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
-				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,

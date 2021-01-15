@@ -8,7 +8,6 @@
 #import <MapKit/MapKit.h>
 #import "ObservationSelectionDelegate.h"
 #import "UserSelectionDelegate.h"
-#import "MapCalloutTappedSegueDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
 #import "GPSLocation.h"

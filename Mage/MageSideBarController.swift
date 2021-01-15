@@ -21,8 +21,6 @@ class SidebarUIButton: UIButton {
 }
 
 @objc class MageSideBarController : UIViewController {
-    @IBOutlet var userMapCalloutTappedDelegate: MapCalloutTappedSegueDelegate!
-    @IBOutlet var observationMapCalloutTappedDelegate: MapCalloutTappedSegueDelegate!
     
     var activeButton: SidebarUIButton?;
     

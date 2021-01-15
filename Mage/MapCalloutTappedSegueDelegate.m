@@ -19,8 +19,7 @@
         UserViewController *uvc = [[UserViewController alloc] initWithUser:calloutItem scheme:[MAGEScheme scheme]];
         [self.viewController.navigationController pushViewController:uvc animated:YES];
     } else if ([calloutItem isKindOfClass:[Observation class]]) {
-        ObservationViewController *ovc = [[ObservationViewController alloc] init];
-        ovc.observation = calloutItem;
+        ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:calloutItem scheme:self.scheme];
         [self.viewController.navigationController pushViewController:ovc animated:YES];
     }
 }
