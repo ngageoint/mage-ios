@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 #import "SFGeometry.h"
 
 @protocol GeometryEditDelegate
@@ -25,7 +26,8 @@
 @property (strong, nonatomic) UIImage *pinImage;
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController scheme: (id<MDCContainerScheming>) containerScheme;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 - (UIViewController *) createViewController;
 - (void) start;
 - (void) updateGeometry: (SFGeometry *) geometry;

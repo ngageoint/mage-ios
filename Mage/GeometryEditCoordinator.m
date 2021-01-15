@@ -16,13 +16,20 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
 @property (nonatomic) BOOL valueChanged;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation GeometryEditCoordinator
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController {
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+}
+
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController scheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
+        self.scheme = containerScheme;
         self.delegate = delegate;
         self.navigationController = navigationController;
         self.pinImage = pinImage;
@@ -48,7 +55,7 @@
 }
 
 - (UIViewController *) createViewController {
-    self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self];
+    self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme:self.scheme];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
@@ -65,7 +72,6 @@
 
 - (void) fieldEditCanceled {
     [self.delegate geometryEditCancel:self];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) fieldEditDone {
@@ -86,9 +92,6 @@
         return;
     }
     [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self wasValueChanged:self.valueChanged];
-    if (self.navigationController) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
 }
 
 - (void) updateGeometry: (SFGeometry *) geometry {

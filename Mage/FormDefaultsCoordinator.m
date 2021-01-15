@@ -14,6 +14,7 @@
 #import "GeometrySerializer.h"
 #import "GeometryDeserializer.h"
 #import "FormDefaults.h"
+#import "MAGE-Swift.h"
 
 @interface FormDefaultsCoordinator()<FormDefaultsControllerDelegate, PropertyEditDelegate, GeometryEditDelegate>
 
@@ -118,7 +119,7 @@
     self.selectedValue = [field objectForKey:@"value"];
     NSString *type = [field objectForKey:@"type"];
     if ([type isEqualToString:@"dropdown"] || [type isEqualToString:@"multiselectdropdown"] || [type isEqualToString:@"radio"]) {
-        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue:self.selectedValue andDelegate:self];
+        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue:self.selectedValue andDelegate:self scheme:[MAGEScheme scheme]];
         editSelect.title = [field valueForKey:@"title"];
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(selectFieldEditCanceled)];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(selectFieldEditDone)];
@@ -126,7 +127,7 @@
         [editSelect.navigationItem setRightBarButtonItem:doneButton];
         [self.formDefaultsController.navigationController pushViewController:editSelect animated:YES];
     } else if ([type isEqualToString:@"geometry"]) {
-        GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry:self.selectedValue andPinImage:nil andDelegate:self andNavigationController:self.formDefaultsController.navigationController];
+        GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry:self.selectedValue andPinImage:nil andDelegate:self andNavigationController:self.formDefaultsController.navigationController scheme:[MAGEScheme scheme]];
         [self.childCoordinators addObject:editCoordinator];
         [editCoordinator start];
     }

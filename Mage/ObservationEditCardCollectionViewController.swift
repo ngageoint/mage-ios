@@ -167,7 +167,7 @@ import MaterialComponents.MDCCard
         // If there are forms and this is a new observation call addForm
         // It is expected that the delegate will add the form if only one exists
         // and prompt the user if more than one exists
-        if (newObservation && eventForms.count != 0) {
+        if (newObservation && eventForms.count != 0 && observationForms.isEmpty) {
             self.delegate?.addForm();
         }
     }

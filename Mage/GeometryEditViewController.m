@@ -72,6 +72,7 @@ static float paddingPercentage = .1;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *locationEntryMethod;
 @property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
 @property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation GeometryEditViewController
@@ -80,25 +81,26 @@ static float paddingPercentage = .1;
 #define radiansToDegrees(x) (x * 180.0 / M_PI)
 
 - (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
+    field.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    field.selectedLineColor = self.scheme.colorScheme.primaryColor;
+    field.selectedTitleColor = self.scheme.colorScheme.primaryColor;
+    field.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    field.errorColor = self.scheme.colorScheme.errorColor;
     field.iconText = @"\U0000f0ac";
     field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.fieldEntryBackground.backgroundColor = [UIColor dialog];
-    [UIColor themeMap:self.map];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    self.scheme = containerScheme;
+    self.fieldEntryBackground.backgroundColor = containerScheme.colorScheme.surfaceColor;
     [self setShapeTypeSelection];
     [self themeTextField:self.latitudeField];
     [self themeTextField:self.longitudeField];
     [self themeTextField:self.mgrsField];
-    [self.locationEntryMethod setTintColor:[UIColor brand]];
+    [self.locationEntryMethod setTintColor:containerScheme.colorScheme.primaryColor];
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
@@ -113,18 +115,19 @@ static float paddingPercentage = .1;
 
 - (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
     if (selected) {
-        [button setTintColor:[UIColor activeTabIcon]];
-        [button setBackgroundColor:[UIColor dialog]];
+        [button setTintColor:self.scheme.colorScheme.primaryColor];
+        [button setBackgroundColor:self.scheme.colorScheme.surfaceColor];
     } else {
-        [button setTintColor:[UIColor inactiveTabIcon]];
-        [button setBackgroundColor:[UIColor dialog]];
+        [button setTintColor:[UIColor.systemGrayColor colorWithAlphaComponent:0.6]];
+        [button setBackgroundColor:self.scheme.colorScheme.surfaceColor];
     }
 }
 
-- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator {
+- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
         _mapDelegate = [[GeometryEditMapDelegate alloc] initWithDragCallback:self andEditDelegate:self];
         _coordinator = coordinator;
+        _scheme = containerScheme;
     }
     return self;
 }
@@ -272,7 +275,7 @@ static float paddingPercentage = .1;
                                     initWithTarget:self action:@selector(longPressGesture:)]];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {

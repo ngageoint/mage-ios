@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -255,13 +255,13 @@
     </objects>
     <designables>
         <designable name="Rj2-0x-yis">
-            <size key="intrinsicContentSize" width="40.5" height="18.5"/>
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
         </designable>
         <designable name="l11-wK-EQI">
-            <size key="intrinsicContentSize" width="53" height="18.5"/>
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
         </designable>
         <designable name="mBQ-mB-CtT">
-            <size key="intrinsicContentSize" width="65" height="18.5"/>
+            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
         </designable>
     </designables>
     <resources>

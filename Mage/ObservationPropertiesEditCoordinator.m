@@ -139,7 +139,7 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     id name = [field valueForKey:@"name"];
     id value = self.currentEditValue = formIndex ? [[obsForms objectAtIndex:[formIndex integerValue]] objectForKey:name] : nil;
     if ([[field objectForKey:@"type"] isEqualToString:@"dropdown"] || [[field objectForKey:@"type"] isEqualToString:@"multiselectdropdown"] || [[field objectForKey:@"type"] isEqualToString:@"radio"]) {
-        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue: value andDelegate: self];
+        SelectEditViewController *editSelect = [[SelectEditViewController alloc] initWithFieldDefinition:field andValue: value andDelegate: self scheme:[MAGEScheme scheme]];
         editSelect.title = [field valueForKey:@"title"];
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
@@ -149,11 +149,11 @@ static const NSInteger kImageMaxDimensionLarge = 2048;
     } else if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
         if ([[field objectForKey:@"name"] isEqualToString:@"geometry"]) {
             SFGeometry *geometry = [self.observation getGeometry];
-            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage imageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController];
+            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: geometry andPinImage:[ObservationImage imageForObservation:self.observation] andDelegate:self andNavigationController:self.navigationController scheme:[MAGEScheme scheme]];
             [self.childCoordinators addObject:editCoordinator];
             [editCoordinator start];
         } else {
-            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: value andPinImage:nil andDelegate:self andNavigationController:self.navigationController];
+            GeometryEditCoordinator *editCoordinator = [[GeometryEditCoordinator alloc] initWithFieldDefinition:field andGeometry: value andPinImage:nil andDelegate:self andNavigationController:self.navigationController scheme:[MAGEScheme scheme]];
             [self.childCoordinators addObject:editCoordinator];
             [editCoordinator start];
         }

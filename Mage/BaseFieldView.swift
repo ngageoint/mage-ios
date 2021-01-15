@@ -21,7 +21,7 @@ class BaseFieldView : UIView {
     private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
         var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil;
         if let safeDelegate: FieldSelectionDelegate = delegate {
-            fieldSelectionCoordinator = FieldSelectionCoordinator(field: field, formField: self, delegate: safeDelegate);
+            fieldSelectionCoordinator = FieldSelectionCoordinator(field: field, formField: self, delegate: safeDelegate, scheme: self.scheme);
         }
         return fieldSelectionCoordinator;
     }();
@@ -76,6 +76,7 @@ class BaseFieldView : UIView {
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
+        fieldSelectionCoordinator?.applyTheme(withScheme: scheme)
         fieldValue.textColor = scheme.colorScheme.onSurfaceColor;
         fieldValue.font = scheme.typographyScheme.body1;
         fieldNameLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
