@@ -13,6 +13,7 @@
 #import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
+#import "MapCalloutTapped.h"
 #import "FeedItem.h"
 
 @protocol FeedItemDelegate;

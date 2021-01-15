@@ -14,6 +14,7 @@
 #import "ObservationSelectionDelegate.h"
 #import "FeedItemSelectionDelegate.h"
 #import "LocationService.h"
+#import "MapCalloutTapped.h"
 #import <MaterialComponents/MDCContainerScheme.h>
 //#import "MAGE-Swift.h"
 
