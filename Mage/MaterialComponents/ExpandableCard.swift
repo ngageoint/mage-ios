@@ -17,6 +17,7 @@ class ExpandableCard: MDCCard {
     private var didSetUpConstraints = false;
     private var container: UIView?;
     private var expandedView: UIView?;
+    private var imageTint: UIColor?;
     var showExpanded: Bool = true;
     
     private lazy var stackView: UIStackView = {
@@ -80,7 +81,7 @@ class ExpandableCard: MDCCard {
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
-        thumbnail.tintColor = scheme.colorScheme.primaryColor;
+        thumbnail.tintColor = self.imageTint ?? scheme.colorScheme.primaryColor;
         expandAction.tintColor = scheme.colorScheme.primaryColor;
         titleText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         titleText.font = scheme.typographyScheme.overline;
@@ -135,13 +136,13 @@ class ExpandableCard: MDCCard {
         }
     }
     
-    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, expandedView: UIView? = nil) {
+    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView? = nil) {
         self.init(frame: .zero);
         self.configureForAutoLayout();
-        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, expandedView: expandedView);
+        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, imageTint: imageTint, expandedView: expandedView);
     }
     
-    func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, expandedView: UIView?) {
+    func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView?) {
         if let safeImageName = imageName {
             self.thumbnail.image  = UIImage(named: safeImageName)
         }
@@ -149,7 +150,7 @@ class ExpandableCard: MDCCard {
         self.subheader = subheader;
         self.title = title;
         self.expandedView = expandedView;
-        
+        self.imageTint = imageTint;
         constructCard();
     }
     

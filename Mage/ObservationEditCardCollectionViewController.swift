@@ -90,7 +90,6 @@ import MaterialComponents.MDCCard
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
-        print("Apply the scheme")
         self.scheme = containerScheme;
         addFormFAB.applySecondaryTheme(withScheme: containerScheme);
         
@@ -256,7 +255,13 @@ import MaterialComponents.MDCCard
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
 
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView)
+        var tintColor: UIColor? = nil;
+        if let safeColor = eventForm?["color"] as? String {
+            tintColor = UIColor(hex: safeColor);
+        } else {
+            tintColor = scheme?.colorScheme.primaryColor
+        }
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView)
         stackView.addArrangedSubview(card);
         cards.append(card);
         return card;

@@ -226,8 +226,13 @@ import MaterialComponents.MDCContainerScheme;
             formSpacerView?.addSubview(formView);
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
-        
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, expandedView: formSpacerView);
+        var tintColor: UIColor? = nil;
+        if let safeColor = eventForm?["color"] as? String {
+            tintColor = UIColor(hex: safeColor);
+        } else {
+            tintColor = scheme?.colorScheme.primaryColor
+        }
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView);
         if let safeScheme = self.scheme {
             card.applyTheme(withScheme: safeScheme);
         }
