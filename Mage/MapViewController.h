@@ -24,6 +24,7 @@
 // this property should exist in this view coordinator when we get to that
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (nonatomic) LocationService *locationService;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 -(void) filterTapped:(id) sender;

@@ -36,9 +36,18 @@
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (assign, nonatomic) NSInteger versionCellSelectionCount;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (weak, nonatomic) id<SettingsDelegate> delegate;
 @end
 
 @implementation SettingsTableViewController
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate {
+    if (self = [self initWithStyle:UITableViewStyleGrouped]) {
+        self.scheme = containerScheme;
+        self.delegate = delegate;
+    }
+    return self;
+}
 
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
@@ -69,7 +78,7 @@
     
     self.dataSource.showDisclosureIndicator = YES;
     
-    self.dataSource.delegate = self;
+    self.dataSource.delegate = self.delegate ? self.delegate : self;
     
     self.versionCellSelectionCount = 0;
     
@@ -225,7 +234,7 @@
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    MageRootViewController *vc = [[MageRootViewController alloc] init];
+    MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:self.scheme];
     vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:vc animated:YES completion:NULL];

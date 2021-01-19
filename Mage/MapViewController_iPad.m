@@ -11,7 +11,7 @@
 #import "MapSettingsCoordinator.h"
 #import "ObservationViewController.h"
 #import <PureLayout.h>
-#import "Mage-Swift.h"
+#import "MAGE-Swift.h"
 
 @interface MapViewController_iPad ()<OfflineObservationDelegate, MapSettingsCoordinatorDelegate>
 @property (strong, nonatomic) UIButton *profileButton;
@@ -69,12 +69,12 @@
 
 - (IBAction)profileButtonTapped:(id)sender {
     User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:[MAGEScheme scheme]];
+    UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uc animated:YES];
 }
 
 - (IBAction) mapSettingsTapped:(id)sender {
-    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender scheme:[MAGEScheme scheme]];
+    MapSettingsCoordinator *settingsCoordinator = [[MapSettingsCoordinator alloc] initWithRootViewController:self.navigationController andSourceView:sender scheme:self.scheme];
     settingsCoordinator.delegate = self;
     [self.childCoordinators addObject:settingsCoordinator];
     [settingsCoordinator start];
@@ -88,7 +88,7 @@
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
 
     [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        SettingsViewController *settingsViewController = [[SettingsViewController alloc] init] ;
+        SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithScheme:self.scheme] ;
         settingsViewController.dismissable = YES;
         [weakSelf presentViewController:settingsViewController animated:YES completion:nil];
     }]];

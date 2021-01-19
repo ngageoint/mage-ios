@@ -39,7 +39,6 @@
 		2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */; };
 		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
 		2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1069DC221C9005009F661A /* SettingsCoordinator.m */; };
-		2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F1069E0221C9547009F661A /* SettingsDetailView.xib */; };
 		2F124A1A1DCA35F300FFA770 /* ObservationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F124A191DCA35F300FFA770 /* ObservationViewController.m */; };
 		2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
@@ -506,7 +505,6 @@
 		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
 		2F1069DB221C9005009F661A /* SettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsCoordinator.h; sourceTree = "<group>"; };
 		2F1069DC221C9005009F661A /* SettingsCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsCoordinator.m; sourceTree = "<group>"; };
-		2F1069E0221C9547009F661A /* SettingsDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsDetailView.xib; sourceTree = "<group>"; };
 		2F124A181DCA35F300FFA770 /* ObservationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationViewController.h; sourceTree = "<group>"; };
 		2F124A191DCA35F300FFA770 /* ObservationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationViewController.m; sourceTree = "<group>"; };
 		2F142431220A6B610070EB46 /* LocationServicesHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationServicesHeaderView.h; sourceTree = "<group>"; };
@@ -2260,7 +2258,6 @@
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
 				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
 				2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */,
-				2F1069E0221C9547009F661A /* SettingsDetailView.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2465,7 +2462,6 @@
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
-				2F1069E1221C9547009F661A /* SettingsDetailView.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,

@@ -47,7 +47,6 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-    @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 

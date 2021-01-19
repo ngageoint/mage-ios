@@ -81,7 +81,7 @@
     [Event sendRecentEvent];
     [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        MageSplitViewController *svc = [[MageSplitViewController alloc] init];
+        MageSplitViewController *svc = [[MageSplitViewController alloc] initWithScheme:_scheme];
         svc.modalPresentationStyle = UIModalPresentationFullScreen;
         svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:svc animated:YES completion:NULL];

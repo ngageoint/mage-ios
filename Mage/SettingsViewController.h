@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface SettingsViewController : UISplitViewController
 
 @property (nonatomic, assign) BOOL dismissable;
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 
 @end
