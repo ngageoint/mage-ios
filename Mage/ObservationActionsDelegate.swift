@@ -9,6 +9,7 @@
 import Foundation
 
 @objc protocol ObservationActionsDelegate {
+    @objc optional func moreActionsTapped(_ observation: Observation);
     @objc optional func showFavorites(_ observation: Observation);
     @objc optional func favorite(_ observation: Observation);
     @objc optional func getDirections(_ observation: Observation);
@@ -17,4 +18,5 @@ import Foundation
     @objc optional func editObservation(_ observation: Observation);
     @objc optional func deleteObservation(_ observation: Observation);
     @objc optional func cancelAction();
+    @objc optional func reorderForms(_ observation: Observation);
 }

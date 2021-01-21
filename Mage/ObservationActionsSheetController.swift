@@ -13,6 +13,7 @@ class ObservationActionsSheetController: UITableViewController {
     var observation: Observation!;
     var delegate: ObservationActionsDelegate!;
     var scheme: MDCContainerScheming?;
+    var userHasEditPermissions: Bool = false;
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.cancelAction?();
@@ -39,6 +40,8 @@ class ObservationActionsSheetController: UITableViewController {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.delegate = delegate;
+        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
+        self.userHasEditPermissions = user.hasEditPermission();
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
@@ -67,7 +70,7 @@ class ObservationActionsSheetController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3;
+        return userHasEditPermissions ? 4 : 1;
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,7 +89,9 @@ class ObservationActionsSheetController: UITableViewController {
         }
         cell.accessoryType = .none;
         
-        if (indexPath.row == 0) {
+        let correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);
+        
+        if (correctedRow == 0) {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
             cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
@@ -96,15 +101,22 @@ class ObservationActionsSheetController: UITableViewController {
             }
         }
         
-        if (indexPath.row == 1) {
+        if (correctedRow == 1) {
             cell.textLabel?.text = "Edit Observation";
             cell.accessibilityLabel = "Edit Observation";
             cell.imageView?.image = UIImage(named: "edit")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
         }
         
-        if (indexPath.row == 2) {
+        if (correctedRow == 2) {
+            cell.textLabel?.text = "Reorder Forms";
+            cell.accessibilityLabel = "Reorder Forms";
+            cell.imageView?.image = UIImage(named: "form")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.accessoryType = .disclosureIndicator;
+        }
+        
+        if (correctedRow == 3) {
             cell.textLabel?.text = "View \(observation.user?.name ?? "")'s Observations";
-            cell.accessibilityLabel = "Edit Observation";
+            cell.accessibilityLabel = "View Other Observations";
             cell.imageView?.image = UIImage(named: "observations")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
         }
@@ -117,14 +129,18 @@ class ObservationActionsSheetController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("row selected \(indexPath)")
+        let correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 2);
         tableView.deselectRow(at: indexPath, animated: true);
-        if (indexPath.row == 0) {
+        if (correctedRow == 0) {
             delegate.deleteObservation?(observation);
         }
-        if (indexPath.row == 1) {
+        if (correctedRow == 1) {
             delegate.editObservation?(observation);
         }
+        if (correctedRow == 2) {
+            delegate.reorderForms?(observation);
+        }
+        
     }
     
 }

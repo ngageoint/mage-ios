@@ -17,6 +17,7 @@ class ObservationActionsView: UIView {
     internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;
+    var bottomSheet: MDCBottomSheetController?;
     internal var scheme: MDCContainerScheming?;
     
     var favoriteCountText: NSAttributedString {
@@ -70,6 +71,7 @@ class ObservationActionsView: UIView {
         actionButtonView.addSubview(importantButton);
         actionButtonView.addSubview(directionsButton);
         actionButtonView.addSubview(favoriteButton);
+        actionButtonView.addSubview(moreButton);
         return actionButtonView;
     }()
     
@@ -77,6 +79,14 @@ class ObservationActionsView: UIView {
         let button = UIButton(type: .custom);
         button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
         return button;
+    }()
+    
+    private lazy var moreButton: UIButton = {
+        let moreButton = UIButton(type: .custom);
+        moreButton.accessibilityLabel = "more";
+        moreButton.setImage(UIImage(named: "more"), for: .normal);
+        moreButton.addTarget(self, action: #selector(moreTapped), for: .touchUpInside);
+        return moreButton;
     }()
     
     private lazy var favoriteButton: UIButton = {
@@ -161,8 +171,8 @@ class ObservationActionsView: UIView {
         importantButton.tintColor = isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
         setImportantButton.applyContainedTheme(withScheme: scheme);
-        directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-
+        directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        moreButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -187,11 +197,18 @@ class ObservationActionsView: UIView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 32), excludingEdge: .left);
+            moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left);
+            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -32);
+            directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton);
             favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -32);
             favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
             importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -32);
             importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
+            
+            moreButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            directionsButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            favoriteButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
+            importantButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
             
             favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal);
             favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
@@ -232,6 +249,10 @@ class ObservationActionsView: UIView {
     
     @objc func showFavorites() {
         observationActionsDelegate?.showFavorites?(observation!);
+    }
+    
+    @objc func moreTapped() {
+        observationActionsDelegate?.moreActionsTapped?(observation!);
     }
     
     @objc func favorite() {

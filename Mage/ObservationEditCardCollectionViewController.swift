@@ -15,6 +15,7 @@ import MaterialComponents.MDCCard
     @objc func addForm();
     @objc func saveObservation(observation: Observation);
     @objc func cancelEdit();
+    @objc func reorderForms(observation: Observation);
 }
 
 @objc protocol ObservationFormListener {
@@ -55,6 +56,11 @@ import MaterialComponents.MDCCard
         stackView.isLayoutMarginsRelativeArrangement = true;
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         return stackView;
+    }()
+    
+    private lazy var formsHeader: FormsHeader = {
+        let formsHeader = FormsHeader(forAutoLayout: ());
+        return formsHeader;
     }()
     
     private lazy var addFormFAB: MDCFloatingButton = {
@@ -113,6 +119,8 @@ import MaterialComponents.MDCCard
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
         self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
         self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        
+        formsHeader.applyTheme(withScheme: containerScheme);
     }
     
     override func viewDidLoad() {
@@ -133,10 +141,7 @@ import MaterialComponents.MDCCard
         addScrollViewConstraints();
         scrollView.addSubview(stackView)
         addStackViewConstraints();
-        
-        addCommonFields(stackView: stackView);
-        addLegacyAttachmentCard(stackView: stackView);
-        addFormViews(stackView: stackView);
+        setupStackView(stackView: stackView);
         
         if (eventForms.count != 0) {
             self.view.addSubview(addFormFAB);
@@ -179,6 +184,15 @@ import MaterialComponents.MDCCard
         self.init(frame: CGRect.zero);
         self.scheme = containerScheme;
         self.delegate = delegate;
+        setupObservation(observation: observation);
+        self.newObservation = newObservation;
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+    
+    func setupObservation(observation: Observation) {
         self.observation = observation;
         if let safeProperties = self.observation?.properties as? [String: Any] {
             if (safeProperties.keys.contains("forms")) {
@@ -189,11 +203,13 @@ import MaterialComponents.MDCCard
             self.observationProperties = ["forms":[]];
             observationForms = [];
         }
-        self.newObservation = newObservation;
     }
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
+    func setupStackView(stackView: UIStackView) {
+        addCommonFields(stackView: stackView);
+        addLegacyAttachmentCard(stackView: stackView);
+        addFormsHeader(stackView: stackView);
+        addFormViews(stackView: stackView);
     }
     
     func addCommonFields(stackView: UIStackView) {
@@ -204,6 +220,11 @@ import MaterialComponents.MDCCard
             }
             stackView.addArrangedSubview(commonFieldView);
          }
+    }
+    
+    func addFormsHeader(stackView: UIStackView) {
+        stackView.addArrangedSubview(formsHeader);
+        formsHeader.reorderButton.addTarget(self, action: #selector(reorderForms), for: .touchUpInside);
     }
     
     // for legacy servers add the attachment field to common
@@ -261,7 +282,7 @@ import MaterialComponents.MDCCard
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView)
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView)
         stackView.addArrangedSubview(card);
         cards.append(card);
         return card;
@@ -289,17 +310,20 @@ import MaterialComponents.MDCCard
         cards[index].subheader = formSecondaryValue;
     }
     
+    @objc func reorderForms() {
+        guard let safeObservation = self.observation else { return }
+        self.delegate?.reorderForms(observation: safeObservation);
+    }
+    
     @objc func addForm(sender: UIButton) {
         self.delegate?.addForm();
     }
     
     @objc func cancel(sender: UIBarButtonItem) {
-        print("Cancelling")
         self.delegate?.cancelEdit();
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
-        print("save observation in the edit card collection controller \(self.observation)")
         guard let safeObservation = self.observation else { return }
         self.delegate?.saveObservation(observation: safeObservation);
     }
@@ -338,6 +362,15 @@ import MaterialComponents.MDCCard
             card.applyTheme(withScheme: safeScheme);
         }
         card.expanded = true;
+    }
+    
+    func formsReordered(observation: Observation) {
+        for card in cards {
+            card.removeFromSuperview();
+        }
+        cards = [];
+        setupObservation(observation: observation);
+        addFormViews(stackView: stackView);
     }
 }
 

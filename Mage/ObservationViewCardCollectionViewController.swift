@@ -127,7 +127,6 @@ import MaterialComponents.MDCContainerScheme;
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        setupEditButton();
         ObservationPushService.singleton()?.add(self);
         setupObservation();
         if let safeScheme = self.scheme {
@@ -156,14 +155,6 @@ import MaterialComponents.MDCContainerScheme;
         addHeaderCard(stackView: stackView);
         addLegacyAttachmentCard(stackView: stackView);
         addFormViews(stackView: stackView);
-    }
-    
-    func setupEditButton() {
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-        if (user.hasEditPermission()) {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(self.showActionsSheet(sender:)));
-            self.navigationItem.rightBarButtonItem?.accessibilityLabel = "actions";
-        }
     }
     
     func addHeaderCard(stackView: UIStackView) {
@@ -232,7 +223,7 @@ import MaterialComponents.MDCContainerScheme;
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "form", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView);
         if let safeScheme = self.scheme {
             card.applyTheme(withScheme: safeScheme);
         }
@@ -241,18 +232,10 @@ import MaterialComponents.MDCContainerScheme;
         return card;
     }
     
-    @objc func showActionsSheet(sender: UIBarButtonItem) {
-        let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation!, delegate: self);
-        actionsSheet.applyTheme(withContainerScheme: scheme);
-        bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-        self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
-        
-    }
-    
     @objc func editObservation(sender: UIBarButtonItem) {
         observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
         observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator!.start();
+        observationEditCoordinator?.start();
     }
 }
 
@@ -289,6 +272,14 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
 }
 
 extension ObservationViewCardCollectionViewController: ObservationActionsDelegate {
+    
+    func moreActionsTapped(_ observation: Observation) {
+        let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
+        actionsSheet.applyTheme(withContainerScheme: scheme);
+        bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+        self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
+    }
+    
     func showFavorites(_ observation: Observation) {
         var userIds: [String] = [];
         if let favorites = observation.favorites {
@@ -358,6 +349,13 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         observationEditCoordinator!.start();
     }
     
+    func reorderForms(_ observation: Observation) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
+        observationEditCoordinator!.startFormReorder();
+    }
+    
     func deleteObservation(_ observation: Observation) {
         bottomSheet?.dismiss(animated: true, completion: nil);
         
@@ -395,4 +393,3 @@ extension ObservationViewCardCollectionViewController: ObservationEditDelegate {
         self.navigationController?.popViewController(animated: false);
     }
 }
-

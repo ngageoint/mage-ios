@@ -29,6 +29,7 @@ import MaterialComponents.MaterialBottomSheet
     var navigationController: UINavigationController?;
     var delegate: ObservationEditDelegate?;
     var observationEditController: ObservationEditCardCollectionViewController?;
+    var observationFormReorder: ObservationFormReorder?;
     var bottomSheet: MDCBottomSheetController?;
     var currentEditField: [String: Any]?;
     var currentEditValue: Any?;
@@ -68,7 +69,7 @@ import MaterialComponents.MaterialBottomSheet
     
     @objc public func start() {
         if (!self.event.isUser(inEvent: user)) {
-            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create observations for an event you are not part of.", preferredStyle: .alert);
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
         } else {
@@ -77,10 +78,29 @@ import MaterialComponents.MaterialBottomSheet
                 safeNav.modalTransitionStyle = .crossDissolve;
                 self.rootViewController?.present(safeNav, animated: true, completion: nil);
                 observationEditController = ObservationEditCardCollectionViewController(delegate: self, observation: observation!, newObservation: newObservation, containerScheme: self.scheme);
+                safeNav.pushViewController(observationEditController!, animated: true);
                 if let safeScheme = self.scheme {
                     observationEditController?.applyTheme(withContainerScheme: safeScheme);
                 }
-                safeNav.pushViewController(observationEditController!, animated: true);
+            }
+        }
+    }
+    
+    @objc public func startFormReorder() {
+        if (!self.event.isUser(inEvent: user)) {
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot edit this observation.", preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
+            self.rootViewController?.present(alert, animated: true, completion: nil);
+        } else {
+            if let safeNav = navigationController {
+                safeNav.modalPresentationStyle = .custom;
+                safeNav.modalTransitionStyle = .crossDissolve;
+                self.rootViewController?.present(safeNav, animated: true, completion: nil);
+                observationFormReorder = ObservationFormReorder(observation: observation!, delegate: self, containerScheme: self.scheme);
+                safeNav.pushViewController(self.observationFormReorder!, animated: true);
+                if let safeScheme = self.scheme {
+                    self.observationFormReorder!.applyTheme(withContainerScheme: safeScheme);
+                }
             }
         }
     }
@@ -122,10 +142,47 @@ extension ObservationEditCoordinator: FieldSelectionDelegate {
     }
 }
 
-extension ObservationEditCoordinator: ObservationEditCardDelegate {
+extension ObservationEditCoordinator: ObservationFormReorderDelegate {
+    func formsReordered(observation: Observation) {
+        self.observation = observation;
+        self.observation!.userId = user.remoteId;
+
+        if let safeObservationEditController = self.observationEditController {
+            safeObservationEditController.formsReordered(observation: self.observation!);
+            self.navigationController?.popViewController(animated: true);
+
+        } else {
+            self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
+                if (!contextDidSave) {
+                    print("Error saving observation to persistent store, context did not save");
+                }
+                
+                if let safeError = error {
+                    print("Error saving observation to persistent store \(safeError)");
+                }
+                
+                delegate?.editComplete(self.observation!, coordinator: self as NSObject);
+
+                self.navigationController?.dismiss(animated: true, completion: nil);
+            }
+        }
+    }
     
-    
-//    figure out what of this protocol we really want
+    func cancelReorder() {
+        if (self.observationEditController != nil) {
+            self.navigationController?.popViewController(animated: true);
+        } else {
+            self.managedObjectContext.reset();
+            self.navigationController?.dismiss(animated: true, completion: nil);
+        }
+    }
+}
+
+extension ObservationEditCoordinator: ObservationEditCardDelegate {    
+    func reorderForms(observation: Observation) {
+        self.observationFormReorder = ObservationFormReorder(observation: observation, delegate: self, containerScheme: self.scheme);
+        self.navigationController?.pushViewController(self.observationFormReorder!, animated: true);
+    }
     
     func addForm() {
         let forms: [[String: AnyHashable]] = event.forms as! [[String : AnyHashable]];
@@ -137,17 +194,17 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     
     func saveObservation(observation: Observation) {
         print("Save observation");
-        self.observation!.user = user;
+        self.observation!.userId = user.remoteId;
         self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
             if (!contextDidSave) {
                 print("Error saving observation to persistent store, context did not save");
             }
             
-            if (error != nil) {
-                print("Error saving observation to persistent store \(error)");
+            if let safeError = error {
+                print("Error saving observation to persistent store \(safeError)");
             }
             
-            print("Saved the observation \(observation.remoteId)");
+            print("Saved the observation \(observation.remoteId ?? "")");
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
         }

@@ -8,25 +8,6 @@
 
 import Foundation
 
-extension UITableView {
-
-    func setAndLayoutTableHeaderView(header: UIView) {
-        self.tableHeaderView = header
-        header.setNeedsLayout()
-        header.layoutIfNeeded()
-        let height = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        var frame = header.frame
-        frame.size.height = height
-        header.frame = frame
-        self.tableHeaderView = header
-        if #available(iOS 14, *) {
-            self.tableHeaderView?.autoMatch(.width, to: .width, of: self);
-        } else {
-            header.autoSetDimension(.width, toSize: bounds.size.width)
-        }
-    }
-}
-
 @objc class UserViewController : UITableViewController {
     let user : User
     let cellReuseIdentifier = "cell";

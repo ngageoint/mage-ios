@@ -410,6 +410,10 @@
 		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
+		F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753025B73C3E006634F7 /* FormsHeader.swift */; };
+		F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753425B764A8006634F7 /* ObservationFormReorder.swift */; };
+		F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753A25B76925006634F7 /* ObservationFormTableViewCell.swift */; };
+		F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
@@ -1052,6 +1056,10 @@
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFilterTableViewController.m; sourceTree = "<group>"; };
+		F7F4753025B73C3E006634F7 /* FormsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormsHeader.swift; sourceTree = "<group>"; };
+		F7F4753425B764A8006634F7 /* ObservationFormReorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorder.swift; sourceTree = "<group>"; };
+		F7F4753A25B76925006634F7 /* ObservationFormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormTableViewCell.swift; sourceTree = "<group>"; };
+		F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtensions.swift; sourceTree = "<group>"; };
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
@@ -1624,6 +1632,7 @@
 				F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */,
 				F73886C625894CEA00EDA036 /* KeyboardHelper.swift */,
 				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
+				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1673,6 +1682,7 @@
 				F7813A8024621237003666ED /* ObservationFormView.swift */,
 				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
 				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
+				F7F4753025B73C3E006634F7 /* FormsHeader.swift */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -2278,7 +2288,9 @@
 		F7FC59281F3CEDEB0010351A /* Form */ = {
 			isa = PBXGroup;
 			children = (
+				F7F4753425B764A8006634F7 /* ObservationFormReorder.swift */,
 				F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */,
+				F7F4753A25B76925006634F7 /* ObservationFormTableViewCell.swift */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -2783,6 +2795,7 @@
 				2F4E10B2220E1A52001C9F12 /* DisplaySettingsHeader.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
+				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
@@ -2807,10 +2820,12 @@
 				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
+				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
 				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
+				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
 				2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
@@ -2958,6 +2973,7 @@
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
+				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
