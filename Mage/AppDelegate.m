@@ -277,6 +277,10 @@
     if (_applicationStarted) {
         NSLog(@"Already checking if DB can be saved to");
         // the app was already started and is checking if it can save to the database, do not check again
+        if(self.splashView != nil) {
+            [self.splashView.view removeFromSuperview];
+            self.splashView = nil;
+        }
         return;
     }
     
