@@ -22,7 +22,6 @@
 #import "ObservationEditViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import "ObservationViewController.h"
 #import "Event.h"
 #import "GPSLocation.h"
 #import "Filter.h"

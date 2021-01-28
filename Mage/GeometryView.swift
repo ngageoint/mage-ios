@@ -14,7 +14,7 @@ class GeometryView : BaseFieldView {
     private var accuracy: Double?;
     private var provider: String?;
     private var mapEventDelegate: MKMapViewDelegate?;
-    
+    private var observationActionsDelegate: ObservationActionsDelegate?;
     private var observation: Observation?;
     private var eventForms: [[String: Any]]?;
     
@@ -29,6 +29,7 @@ class GeometryView : BaseFieldView {
         button.accessibilityLabel = "location";
         button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.addTarget(self, action: #selector(locationTapped), for: .touchUpInside);
         return button;
     }()
     
@@ -73,21 +74,21 @@ class GeometryView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil) {
-        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate);
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil) {
+        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate, observationActionsDelegate: observationActionsDelegate);
     }
     
-    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil) {
         let accuracy = (observation?.properties?["accuracy"]) as? Double;
         let provider = (observation?.properties?["provider"]) as? String;
-        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms);
+        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms, observationActionsDelegate: observationActionsDelegate);
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.observation = observation;
         self.eventForms = eventForms;
-        
+        self.observationActionsDelegate = observationActionsDelegate;
         mapDelegate.setMapEventDelegte(mapEventDelegate);
         buildView();
         
@@ -114,6 +115,10 @@ class GeometryView : BaseFieldView {
     deinit {
         print("Cleaning up the map delegate");
         self.mapDelegate.cleanup();
+    }
+    
+    @objc func locationTapped() {
+        observationActionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "");
     }
     
     func addToMapAsObservation() {

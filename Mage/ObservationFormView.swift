@@ -26,6 +26,7 @@ class ObservationFormView: UIStackView {
     private var viewController: UIViewController!;
     private var fieldSelectionDelegate: FieldSelectionDelegate?;
     private var observationFormListener: ObservationFormListener?;
+    private var observationActionsDelegate: ObservationActionsDelegate?;
     private var editMode: Bool = true;
     private var formFieldAdded: Bool = false;
     private var scheme: MDCContainerScheming?;
@@ -51,7 +52,7 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil) {
         self.init(frame: .zero)
         self.observation = observation;
         self.form = form;
@@ -62,6 +63,7 @@ class ObservationFormView: UIStackView {
         self.formIndex = formIndex;
         self.fieldSelectionDelegate = delegate;
         self.observationFormListener = observationFormListener;
+        self.observationActionsDelegate = observationActionsDelegate;
         constructView();
     }
     
@@ -116,7 +118,7 @@ class ObservationFormView: UIStackView {
                     fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
                 }
             case "geometry":
-                fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self);
+                fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
                 (fieldView as! GeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")
             default:
                 let label = UILabel(forAutoLayout: ());

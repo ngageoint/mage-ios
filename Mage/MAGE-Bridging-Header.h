@@ -13,7 +13,6 @@
 #import "ObservationAccuracy.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
-#import "ObservationViewController.h"
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
@@ -32,11 +31,8 @@
 #import "NSDate+display.h"
 #import "MapDelegate.h"
 #import "Locations.h"
-#import "ObservationDataStore.h"
 #import "Observations.h"
 #import "SFGeometryUtils.h"
-#import "ObservationTableViewController.h"
-#import "ObservationViewController.h"
 #import "ExternalDevice.h"
 #import "MageSessionManager.h"
 #import "LocationTableViewController.h"
@@ -56,6 +52,7 @@
 #import "FormDefaults.h"
 #import "AttachmentCollectionDataStore.h"
 #import "AudioRecorderViewController.h"
+//#import "ObservationSelectionDelegate.h"
 #import "SelectEditViewController.h"
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
@@ -63,6 +60,10 @@
 #import "TimeFilter.h"
 #import "ObservationImage.h"
 #import "UserTableViewController.h"
+#import "Filter.h"
+#import "UINavigationItem+Subtitle.h"
+#import "ObservationFilterTableViewController.h"
+#import "ObservationTableHeaderView.h"
 
 #pragma mark - Core Data Entities
 #import "Feed.h"

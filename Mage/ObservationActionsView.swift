@@ -167,6 +167,7 @@ class ObservationActionsView: UIView {
     }()
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
         favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         importantButton.tintColor = isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
@@ -175,14 +176,16 @@ class ObservationActionsView: UIView {
         moreButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
-    public convenience init(observation: Observation, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
+    public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        populate(observation: observation);
+        if let safeObservation = observation {
+            populate(observation: safeObservation);
+        }
         if let safeScheme = self.scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -217,7 +220,7 @@ class ObservationActionsView: UIView {
         super.updateConstraints();
     }
     
-    public func populate(observation: Observation) {
+    public func populate(observation: Observation!) {
         self.observation = observation;
         favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal);
         importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant() ?? false);

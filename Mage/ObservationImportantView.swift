@@ -30,7 +30,7 @@ class ObservationImportantView: UIView {
         flagImage.tintColor = UIColor.black.withAlphaComponent(0.87);
     }
     
-    public convenience init(observation: Observation, cornerRadius: CGFloat, scheme: MDCContainerScheming? = nil) {
+    public convenience init(observation: Observation?, cornerRadius: CGFloat, scheme: MDCContainerScheming? = nil) {
         self.init(frame: CGRect.zero);
         layer.cornerRadius = cornerRadius;
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner];
@@ -38,7 +38,9 @@ class ObservationImportantView: UIView {
         self.scheme = scheme;
         self.configureForAutoLayout();
         layoutView();
-        populate(observation: observation);
+        if let safeObservation = observation {
+            populate(observation: safeObservation);
+        }
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -57,6 +59,7 @@ class ObservationImportantView: UIView {
     }
     
     public func populate(observation: Observation) {
+        self.observation = observation;
         let important: ObservationImportant? = observation.observationImportant;
         if let userId = important?.userId {
             let user = User.mr_findFirst(byAttribute: "remoteId", withValue: userId);

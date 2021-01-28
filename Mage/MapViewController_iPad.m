@@ -9,7 +9,6 @@
 #import "MageOfflineObservationManager.h"
 #import "AppDelegate.h"
 #import "MapSettingsCoordinator.h"
-#import "ObservationViewController.h"
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 

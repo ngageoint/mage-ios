@@ -8,7 +8,6 @@
 #import "UserUtility.h"
 #import "MageSessionManager.h"
 #import "MapViewController_iPad.h"
-#import "ObservationTableViewController.h"
 #import "FeedItemSelectionDelegate.h"
 #import "LocationTableViewController.h"
 #import "Mage.h"

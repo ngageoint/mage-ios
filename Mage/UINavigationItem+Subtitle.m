@@ -8,44 +8,61 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "Theme+UIResponder.h"
+#import <objc/runtime.h>
 
 @implementation UINavigationItem (Subtitle)
 
-- (void) setTitle:(NSString *) title subtitle:(NSString *) subtitle {
+- (UILabel *) subtitleLabel {
+    return objc_getAssociatedObject(self, @selector(subtitleLabel));
+}
+
+- (void) setSubtitleLabel:(UILabel *)subtitleLabel {
+    objc_setAssociatedObject(self, @selector(subtitleLabel), subtitleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UILabel *) titleLabel {
+    return objc_getAssociatedObject(self, @selector(titleLabel));
+}
+
+- (void) setTitleLabel:(UILabel *)titleLabel {
+    objc_setAssociatedObject(self, @selector(titleLabel), titleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle {
     if ([subtitle length] == 0) {
         self.title = title;
         self.titleView = nil;
         return;
     }
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor navBarPrimaryText];
-    titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
-    titleLabel.text = title;
-    [titleLabel sizeToFit];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.titleLabel.backgroundColor = [UIColor clearColor];
+    self.titleLabel.textColor = [UIColor navBarPrimaryText];
+    self.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
+    self.titleLabel.text = title;
+    [self.titleLabel sizeToFit];
     
-    UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
-    subtitleLabel.backgroundColor = [UIColor clearColor];
-    subtitleLabel.textColor = [UIColor navBarSecondaryText];
+    self.subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
+    self.subtitleLabel.backgroundColor = [UIColor clearColor];
+    self.subtitleLabel.textColor = [UIColor navBarSecondaryText];
     
-    subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
-    subtitleLabel.text = subtitle;
-    [subtitleLabel sizeToFit];
+    self.subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
+    self.subtitleLabel.text = subtitle;
+    [self.subtitleLabel sizeToFit];
     
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX(titleLabel.frame.size.width, subtitleLabel.frame.size.width), 30)];
-    [titleView addSubview:titleLabel];
-    [titleView addSubview:subtitleLabel];
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX(self.titleLabel.frame.size.width, self.subtitleLabel.frame.size.width), 30)];
+    [titleView addSubview:self.titleLabel];
+    [titleView addSubview:self.subtitleLabel];
     
     // Center title or subtitle on screen (depending on which is larger)
-    if (titleLabel.frame.size.width >= subtitleLabel.frame.size.width) {
-        CGRect adjustment = subtitleLabel.frame;
-        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (subtitleLabel.frame.size.width/2);
-        subtitleLabel.frame = adjustment;
+    if (self.titleLabel.frame.size.width >= self.subtitleLabel.frame.size.width) {
+        CGRect adjustment = self.subtitleLabel.frame;
+        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (self.subtitleLabel.frame.size.width/2);
+        self.subtitleLabel.frame = adjustment;
     } else {
-        CGRect adjustment = titleLabel.frame;
-        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (titleLabel.frame.size.width/2);
-        titleLabel.frame = adjustment;
+        CGRect adjustment = self.titleLabel.frame;
+        adjustment.origin.x = titleView.frame.origin.x + (titleView.frame.size.width/2) - (self.titleLabel.frame.size.width/2);
+        self.titleLabel.frame = adjustment;
     }
     
     self.titleView = titleView;

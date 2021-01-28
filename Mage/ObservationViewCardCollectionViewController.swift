@@ -304,26 +304,14 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         }
     }
     
+    func copyLocation(_ locationString: String) {
+        UIPasteboard.general.string = locationString;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+    }
+    
+    
     func getDirections(_ observation: Observation) {
-        let appleMapsQueryString = "daddr=\(observation.location().coordinate.latitude),\(observation.location().coordinate.longitude)&ll=\(observation.location().coordinate.latitude),\(observation.location().coordinate.longitude)&q=\(observation.primaryFeedFieldText())".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
-        let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
-        
-        let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
-        
-        let alert = UIAlertController(title: "Get Directions With...", message: nil, preferredStyle: .actionSheet);
-        alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
-            UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
-                print("opened? \(success)")
-            }
-        }))
-        alert.addAction(UIAlertAction(title:"Google Maps", style: .default, handler: { (action) in
-            UIApplication.shared.open(googleMapsUrl!, options: [:]) { (success) in
-                print("opened? \(success)")
-            }
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
-        self.present(alert, animated: true, completion: nil);
+        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
     
     func makeImportant(_ observation: Observation, reason: String) {
@@ -358,17 +346,9 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func deleteObservation(_ observation: Observation) {
         bottomSheet?.dismiss(animated: true, completion: nil);
-        
-        let alert = UIAlertController(title: "Delete Observation", message: "Are you sure you want to delete this observation?", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Yes, Delete", style: .destructive , handler:{ (UIAlertAction) in
-            observation.delete { (success, error) in
-                self.navigationController?.popViewController(animated: true);
-            }
-        }))
-        
-        alert.addAction(UIAlertAction(title: "No", style: .cancel))
-        self.present(alert, animated: true, completion: nil)
+        ObservationActionHandler.deleteObservation(observation: observation, viewController: self) { (success, error) in
+            self.navigationController?.popViewController(animated: true);
+        }
     }
     
     func cancelAction() {

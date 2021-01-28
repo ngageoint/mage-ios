@@ -55,7 +55,7 @@ import MaterialComponents.MaterialBottomSheet
         self.scheme = containerScheme;
     }
     
-    @objc public init(rootViewController: UIViewController!, delegate: ObservationEditDelegate, location: SFGeometry, accuracy: CLLocationAccuracy, provider: String, delta: Double) {
+    @objc public init(rootViewController: UIViewController!, delegate: ObservationEditDelegate, location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) {
         super.init();
         observation = createObservation(location: location, accuracy: accuracy, provider: provider, delta: delta);
         setupCoordinator(rootViewController: rootViewController, delegate: delegate);
@@ -111,7 +111,7 @@ import MaterialComponents.MaterialBottomSheet
         self.navigationController = UINavigationController();
     }
     
-    func createObservation(location: SFGeometry, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation {
+    func createObservation(location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation {
         newObservation = true;
         let observation = Observation(geometry: location, andAccuracy: accuracy, andProvider: provider, andDelta: delta, in: managedObjectContext);
         observation.dirty = 1;

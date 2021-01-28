@@ -25,7 +25,7 @@ class SidebarUIButton: UIButton {
     var activeButton: SidebarUIButton?;
     var scheme: MDCContainerScheming?;
     
-    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate
+    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     @objc public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
@@ -186,10 +186,8 @@ class SidebarUIButton: UIButton {
     func createObservationsRailView() -> SidebarUIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
+        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
         observationButton.viewController = observationViewController;
-        observationViewController.observationSelectionDelegate = delegate;
-        observationViewController.attachmentDelegate = delegate;
         return observationButton;
     }
     

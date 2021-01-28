@@ -10,9 +10,7 @@
 #import "Event.h"
 #import "NSDate+display.h"
 #import "MapDelegate.h"
-#import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
-#import "Theme+UIResponder.h"
 #import "MAGE-Swift.h"
 #import <mgrs/MGRS.h>
 

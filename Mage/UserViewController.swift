@@ -15,10 +15,7 @@ import Foundation
     var scheme : MDCContainerScheming;
     
     private lazy var observationDataStore: ObservationDataStore = {
-        let observationDataStore: ObservationDataStore = ObservationDataStore(scheme: self.scheme);
-        observationDataStore.tableView = self.tableView;
-        observationDataStore.observationSelectionDelegate = self;
-        observationDataStore.attachmentSelectionDelegate = self;
+        let observationDataStore: ObservationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self, attachmentSelectionDelegate: self, scheme: self.scheme);
         return observationDataStore;
     }();
     
@@ -37,7 +34,7 @@ import Foundation
         self.scheme = scheme;
         super.init(style: .grouped)
         self.title = user.name;
-        tableView.register(UINib(nibName: "ObservationCell", bundle: nil), forCellReuseIdentifier: "obsCell");
+        self.tableView.register(cellClass: ObservationListCardCell.self);
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
@@ -58,24 +55,29 @@ import Foundation
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         userTableHeaderView.navigationController = self.navigationController;
-        observationDataStore.startFetchController(with: Observations(for: user));
+        observationDataStore.startFetchController(observations: Observations(for: user));
     }
 }
 
-extension UserViewController : ObservationSelectionDelegate {
-    func selectedObservation(_ observation: Observation!) {
-        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
+extension UserViewController : ObservationActionsDelegate {
+    func viewObservation(_ observation: Observation) {
+        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
-        self.navigationController?.pushViewController(ovc, animated: true);
+    func favorite(_ observation: Observation) {
+        observation.toggleFavorite { (_, _) in
+            self.tableView.reloadData();
+        }
     }
     
-    func observationDetailSelected(_ observation: Observation!) {
-        let ovc: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
-        self.navigationController?.pushViewController(ovc, animated: true);
+    func copyLocation(_ locationString: String) {
+        UIPasteboard.general.string = locationString;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+    }
+    
+    func getDirections(_ observation: Observation) {
+        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
 }
 
