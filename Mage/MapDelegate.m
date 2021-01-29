@@ -1552,8 +1552,10 @@
 
 - (void) updateObservation: (Observation *) observation withAnimation: (BOOL) animateDrop {
     [self.mapObservations removeById:observation.objectID];
-    MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation andAnimateDrop:animateDrop];
-    [self.mapObservations addMapObservation:mapObservation];
+    if ([observation getGeometry] != nil) {
+        MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation andAnimateDrop:animateDrop];
+        [self.mapObservations addMapObservation:mapObservation];
+    }
 }
 
 - (void) deleteObservation: (Observation *) observation {

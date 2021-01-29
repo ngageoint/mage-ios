@@ -267,6 +267,9 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
             return;
         }
         syncStatusView.updateObservationStatus();
+        if let safeScheme = self.scheme {
+            syncStatusView.applyTheme(withScheme: safeScheme);
+        }
         view.setNeedsUpdateConstraints();
     }
 }

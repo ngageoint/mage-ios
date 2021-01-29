@@ -63,10 +63,10 @@ class ObservationSyncStatus: UIView {
         }
         
         // if this is not the current users observation, don't show anything
-        if (observation?.userId != UserDefaults.standard.currentUserId){
-            self.isHidden = true;
-            return;
-        }
+//        if (observation?.userId != UserDefaults.standard.currentUserId){
+//            self.isHidden = true;
+//            return;
+//        }
         
         self.isHidden = false;
         

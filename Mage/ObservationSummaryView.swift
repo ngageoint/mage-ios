@@ -170,7 +170,7 @@ class ObservationSummaryView: UIView {
         
         if (observation.error != nil) {
             self.syncBadge.isHidden = observation.hasValidationError();
-            self.errorBadge.isHidden = observation.hasValidationError();
+            self.errorBadge.isHidden = !observation.hasValidationError();
         } else {
             self.syncBadge.isHidden = true;
             self.errorBadge.isHidden = true;
