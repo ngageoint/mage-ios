@@ -75,13 +75,11 @@ import MaterialComponents.MDCCard
     
     private func addStackViewConstraints() {
         NSLayoutConstraint.activate([
-            // Attaching the content's edges to the scroll view's edges
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-
-            // Satisfying size constraints
+            // Add room for the "Add Form" FAB
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -60),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
@@ -224,6 +222,7 @@ import MaterialComponents.MDCCard
     
     func addFormsHeader(stackView: UIStackView) {
         stackView.addArrangedSubview(formsHeader);
+        formsHeader.reorderButton.isHidden = self.observationForms.count <= 1;
         formsHeader.reorderButton.addTarget(self, action: #selector(reorderForms), for: .touchUpInside);
     }
     
@@ -362,6 +361,8 @@ import MaterialComponents.MDCCard
             card.applyTheme(withScheme: safeScheme);
         }
         card.expanded = true;
+        
+        formsHeader.reorderButton.isHidden = self.observationForms.count <= 1;
     }
     
     func formsReordered(observation: Observation) {
