@@ -83,6 +83,13 @@ class CommonFieldsView: MDCCard {
             dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String] as? String?);
         }
     }
+    
+    public func checkValidity() -> Bool {
+        let valid = geometryView.isValid() && dateView.isValid();
+        geometryView.setValid(geometryView.isValid());
+        dateView.setValid(dateView.isValid());
+        return valid;
+    }
 }
 
 extension CommonFieldsView: FieldSelectionDelegate {

@@ -32,6 +32,8 @@ import MaterialComponents.MDCCard
     var scheme: MDCContainerScheming?;
     
     var cards: [ExpandableCard] = [];
+    var formViews: [ObservationFormView] = [];
+    var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
     
     private lazy var eventForms: [[String: Any]] = {
@@ -212,11 +214,11 @@ import MaterialComponents.MDCCard
     
     func addCommonFields(stackView: UIStackView) {
          if let safeObservation = observation {
-            let commonFieldView: CommonFieldsView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate);
+            commonFieldView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate);
             if let safeScheme = scheme {
-                commonFieldView.applyTheme(withScheme: safeScheme);
+                commonFieldView!.applyTheme(withScheme: safeScheme);
             }
-            stackView.addArrangedSubview(commonFieldView);
+            stackView.addArrangedSubview(commonFieldView!);
          }
     }
     
@@ -282,8 +284,10 @@ import MaterialComponents.MDCCard
             tintColor = scheme?.colorScheme.primaryColor
         }
         let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView)
+        formView.containingCard = card;
         stackView.addArrangedSubview(card);
         cards.append(card);
+        formViews.append(formView);
         return card;
     }
     
@@ -324,7 +328,18 @@ import MaterialComponents.MDCCard
     
     @objc func saveObservation(sender: UIBarButtonItem) {
         guard let safeObservation = self.observation else { return }
-        self.delegate?.saveObservation(observation: safeObservation);
+        if (checkObservationValidity()) {
+            self.delegate?.saveObservation(observation: safeObservation);
+        }
+    }
+    
+    func checkObservationValidity() -> Bool {
+        var valid: Bool = commonFieldView?.checkValidity() ?? true;
+        for formView in formViews {
+            let formValid = formView.checkValidity();
+            valid = valid && formValid;
+        }
+        return valid;
     }
     
     public func formAdded(form: [String: Any]) {

@@ -18,6 +18,7 @@ import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
 class ObservationFormView: UIStackView {
     
     var observation: Observation!;
+    public var containingCard: ExpandableCard?;
     private var eventForm: [String:Any]?;
     private var form: [String: Any]!;
     private var formIndex: Int!;
@@ -145,6 +146,17 @@ class ObservationFormView: UIStackView {
     
     public func isEmpty() -> Bool {
         return !formFieldAdded;
+    }
+    
+    public func checkValidity() -> Bool {
+        var valid = true;
+        for (_, fieldView) in self.fieldViews {
+            let formValid = fieldView.isValid();
+            fieldView.setValid(formValid);
+            valid = valid && formValid;
+        }
+        containingCard?.markValid(valid);
+        return valid;
     }
 }
 

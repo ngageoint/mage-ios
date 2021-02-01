@@ -20,6 +20,33 @@ class ExpandableCard: MDCCard {
     private var imageTint: UIColor?;
     var showExpanded: Bool = true;
     
+    private let exclamation = UIImageView(image: UIImage(named: "exclamation"));
+    
+    private lazy var errorShapeLayer: CAShapeLayer = {
+        let path = CGMutablePath()
+        let heightWidth = 25
+        
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x:0, y: heightWidth))
+        path.addLine(to: CGPoint(x:heightWidth, y:0))
+        path.addLine(to: CGPoint(x:0, y:0))
+        
+        let shape = CAShapeLayer()
+        shape.path = path
+        
+        return shape;
+    }()
+    
+    private lazy var errorBadge: UIView = {
+        let errorBadge = UIView(forAutoLayout: ());
+        let heightWidth = 25
+        
+        errorBadge.layer.insertSublayer(errorShapeLayer, at: 0)
+        errorBadge.addSubview(exclamation);
+        
+        return errorBadge;
+    }()
+    
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(forAutoLayout: ());
         stackView.alignment = .fill;
@@ -89,6 +116,9 @@ class ExpandableCard: MDCCard {
         headerText.font = scheme.typographyScheme.headline6;
         subhead.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         subhead.font = scheme.typographyScheme.subtitle2;
+        
+        errorShapeLayer.fillColor = scheme.colorScheme.errorColor.cgColor
+        exclamation.tintColor = UIColor.white;
     }
     
     @objc func expandButtonPressed() {
@@ -163,6 +193,14 @@ class ExpandableCard: MDCCard {
             }
             titleText.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 32));
             
+            errorBadge.autoSetDimensions(to: CGSize(width: 25, height: 25));
+            errorBadge.autoPinEdge(toSuperviewEdge: .top);
+            errorBadge.autoPinEdge(toSuperviewEdge: .left);
+            
+            exclamation.autoSetDimensions(to: CGSize(width: 14, height: 14));
+            exclamation.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
+            exclamation.autoPinEdge(toSuperviewEdge: .left);
+            
             if expandedView != nil {
                 expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
                 expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
@@ -196,5 +234,12 @@ class ExpandableCard: MDCCard {
             expandableView.addSubview(expandedView!);
             stackView.addArrangedSubview(expandableView);
         }
+        
+        self.addSubview(errorBadge);
+        errorBadge.isHidden = true;
+    }
+    
+    public func markValid(_ valid: Bool = true) {
+        errorBadge.isHidden = valid;
     }
 }

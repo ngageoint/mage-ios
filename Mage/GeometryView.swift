@@ -241,7 +241,7 @@ class GeometryView : BaseFieldView {
                 applyTheme(withScheme: safeScheme);
             } else {
                 latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
-                fieldNameLabel.textColor = safeScheme.colorScheme.primaryColor;
+                fieldNameLabel.textColor = safeScheme.colorScheme.errorColor;
             }
         }
     }
