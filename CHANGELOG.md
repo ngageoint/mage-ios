@@ -16,6 +16,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 * Fix GeoPackage layer selection on iOS 14.
+* Support for iOS 14 date picker.
 
 ## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
 
