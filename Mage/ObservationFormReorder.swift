@@ -51,7 +51,7 @@ class ObservationFormReorder: UITableViewController {
         self.observation = observation
         self.delegate = delegate;
         self.scheme = containerScheme;
-        super.init(style: .grouped)
+        super.init(style: .plain)
         self.title = "Reorder Forms";
         tableView.register(cellClass: ObservationFormTableViewCell.self)
         if let safeProperties = self.observation.properties as? [String: Any] {
@@ -105,14 +105,17 @@ class ObservationFormReorder: UITableViewController {
         self.tableView.isEditing = true;
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 60;
-        self.tableView.tableHeaderView = headerView;
+        self.view.addSubview(headerView);
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        tableView.updateHeaderViewHeight()
+        let newSize = headerView.systemLayoutSizeFitting(CGSize(width: self.tableView.bounds.width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        headerView.autoSetDimensions(to: newSize);
+        tableView.contentInset = UIEdgeInsets(top: headerView.frame.size.height, left: 0, bottom: 0, right: 0);
+        headerView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: -1 * newSize.height, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+
     }
- 
 
     @objc func cancel(sender: UIBarButtonItem) {
         delegate.cancelReorder();
@@ -140,14 +143,6 @@ class ObservationFormReorder: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return observationForms.count;
-    }
-    
-    override func numberOfSections(in: UITableView) -> Int {
-        return 1;
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView();
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
