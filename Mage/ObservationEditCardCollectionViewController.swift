@@ -205,6 +205,7 @@ import MaterialComponents.MDCCard
             self.observationProperties = ["forms":[]];
             observationForms = [];
         }
+        commonFieldView?.setObservation(observation: observation);
     }
     
     func setupStackView(stackView: UIStackView) {
@@ -455,5 +456,8 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
         observationProperties["forms"] = observationForms;
         observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form, index: index);
+        if let safeObservation = self.observation {
+            commonFieldView?.setObservation(observation: safeObservation);
+        }
     }
 }

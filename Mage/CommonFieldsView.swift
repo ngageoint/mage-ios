@@ -79,9 +79,6 @@ class CommonFieldsView: MDCCard {
     func buildView() {
         self.addSubview(dateView);
         self.addSubview(geometryView);
-        if let observationProperties: [String : Any] = observation.properties as? [String : Any] {
-            dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String] as? String?);
-        }
     }
     
     public func checkValidity() -> Bool {
@@ -89,6 +86,18 @@ class CommonFieldsView: MDCCard {
         geometryView.setValid(geometryView.isValid());
         dateView.setValid(dateView.isValid());
         return valid;
+    }
+    
+    func setDateValue() {
+        if let observationProperties: [String : Any] = observation.properties as? [String : Any] {
+            dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String] as? String?);
+        }
+    }
+    
+    func setObservation(observation: Observation) {
+        self.observation = observation;
+        setDateValue();
+        geometryView.setObservation(observation: self.observation);
     }
 }
 

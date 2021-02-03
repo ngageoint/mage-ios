@@ -93,11 +93,7 @@ class GeometryView : BaseFieldView {
         buildView();
         
         setValue(value, accuracy: accuracy, provider: provider);
-        if (self.observation == nil) {
-            addToMap();
-        } else {
-            addToMapAsObservation();
-        }
+        
         
         if (field[FieldKey.title.key] != nil) {
             if (UserDefaults.standard.showMGRS) {
@@ -121,8 +117,18 @@ class GeometryView : BaseFieldView {
         observationActionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "");
     }
     
+    func setObservation(observation: Observation) {
+        self.observation = observation;
+        let accuracy = (observation.properties?["accuracy"]) as? Double;
+        let provider = (observation.properties?["provider"]) as? String;
+     
+        setValue(observation.getGeometry(), accuracy: accuracy, provider: provider);
+        addToMapAsObservation();
+    }
+    
     func addToMapAsObservation() {
         if (self.observation?.getGeometry() != nil) {
+            self.mapObservation?.remove(from: self.mapView);
             self.mapObservation = self.observationManager.addToMap(with: self.observation);
             guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView) else { return };
             self.mapView.setRegion(viewRegion, animated: true);
@@ -230,7 +236,11 @@ class GeometryView : BaseFieldView {
             }
             latitudeLongitudeButton.isEnabled = true;
             setAccuracy(accuracy, provider: provider);
-            addToMap();
+            if (self.observation == nil) {
+                addToMap();
+            } else {
+                addToMapAsObservation();
+            }
         } else {
             latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
             latitudeLongitudeButton.isEnabled = false;
