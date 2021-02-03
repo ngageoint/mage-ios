@@ -228,10 +228,12 @@ class GeometryView : BaseFieldView {
                     latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
                 }
             }
+            latitudeLongitudeButton.isEnabled = true;
             setAccuracy(accuracy, provider: provider);
             addToMap();
         } else {
             latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
+            latitudeLongitudeButton.isEnabled = false;
         }
     }
     
