@@ -36,6 +36,8 @@ import MaterialComponents.MDCCard
     var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
     
+    private var formsToBeDeleted: IndexSet = IndexSet();
+    
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
         return eventForms;
@@ -275,8 +277,27 @@ import MaterialComponents.MDCCard
         }
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
-        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .bottom);
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "delete form";
+        button.setTitle("Delete Form", for: .normal);
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.addTarget(self, action: #selector(deleteForm(sender:)), for: .touchUpInside);
+        button.tag = index;
 
+        let divider = UIView(forAutoLayout: ());
+        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+        divider.autoSetDimension(.height, toSize: 1);
+        formSpacerView.addSubview(divider);
+        divider.autoPinEdge(toSuperviewEdge: .left);
+        divider.autoPinEdge(toSuperviewEdge: .right);
+        divider.autoPinEdge(.top, to: .bottom, of: formView);
+        formSpacerView.addSubview(button);
+        button.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16);
+        button.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+        button.autoPinEdge(.top, to: .bottom, of: divider, withOffset: 16);
+        button.applyTextTheme(withScheme: globalErrorContainerScheme())
+        
         var tintColor: UIColor? = nil;
         if let safeColor = eventForm?["color"] as? String {
             tintColor = UIColor(hex: safeColor);
@@ -289,6 +310,29 @@ import MaterialComponents.MDCCard
         cards.append(card);
         formViews.append(formView);
         return card;
+    }
+    
+    @objc func deleteForm(sender: UIView) {
+        cards[sender.tag].isHidden = true;
+        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed");
+        let messageAction = MDCSnackbarMessageAction();
+        messageAction.title = "UNDO";
+        var undoCalled = false;
+        let actionHandler = {() in
+            undoCalled = true;
+        }
+        messageAction.handler = actionHandler;
+        message.action = messageAction;
+        message.completionHandler = {(success) in
+            if (undoCalled) {
+                self.cards[sender.tag].isHidden = false;
+            } else {
+                // save the index of the deleted form and then next time we either save
+                // or reorder remove the form so the user is not distracted with a refresh
+                self.formsToBeDeleted.insert(sender.tag);
+            }
+        }
+        MDCSnackbarManager.default.show(message);
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
@@ -314,6 +358,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func reorderForms() {
+        removeDeletedForms();
         guard let safeObservation = self.observation else { return }
         self.delegate?.reorderForms(observation: safeObservation);
     }
@@ -327,6 +372,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
+        removeDeletedForms();
         guard let safeObservation = self.observation else { return }
         if (checkObservationValidity()) {
             self.delegate?.saveObservation(observation: safeObservation);
@@ -340,6 +386,19 @@ import MaterialComponents.MDCCard
             valid = valid && formValid;
         }
         return valid;
+    }
+    
+    func removeDeletedForms() {
+        observationForms.remove(atOffsets: formsToBeDeleted);
+        observationProperties["forms"] = observationForms;
+        self.observation?.properties = observationProperties;
+        for card in cards {
+            card.removeFromSuperview();
+        }
+        cards = [];
+        setupObservation(observation: self.observation!);
+        addFormViews(stackView: stackView);
+        formsToBeDeleted = IndexSet();
     }
     
     public func formAdded(form: [String: Any]) {
