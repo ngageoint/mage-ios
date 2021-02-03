@@ -39,7 +39,7 @@
         
         if (self.currentGeometry == nil) {
             CLLocation *location = [[LocationService singleton] location];
-            
+            self.valueChanged = true;
             if (location) {
                 self.currentGeometry = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
             } else {
