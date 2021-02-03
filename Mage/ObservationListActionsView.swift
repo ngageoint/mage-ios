@@ -120,9 +120,11 @@ class ObservationListActionsView: UIView {
                 } else {
                     latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
                 }
+                latitudeLongitudeButton.isEnabled = true;
             }
         } else {
             latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
+            latitudeLongitudeButton.isEnabled = false;
         }
         
         currentUserFavorited = false;
