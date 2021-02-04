@@ -36,7 +36,7 @@ import MaterialComponents.MDCCard
     var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
     
-    private var formsToBeDeleted: IndexSet = IndexSet();
+//    private var formsToBeDeleted: IndexSet = IndexSet();
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -316,15 +316,24 @@ import MaterialComponents.MDCCard
     @objc func deleteForm(sender: UIView) {
         // save the index of the deleted form and then next time we either save
         // or reorder remove the form so the user is not distracted with a refresh
-        self.formsToBeDeleted.insert(sender.tag);
+//        self.formsToBeDeleted.insert(sender.tag);
+        observation?.addForm(toBeDeleted: sender.tag);
         cards[sender.tag].isHidden = true;
+        if let safeObservation = self.observation {
+            self.commonFieldView?.setObservation(observation: safeObservation);
+        }
         
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed");
         let messageAction = MDCSnackbarMessageAction();
         messageAction.title = "UNDO";
         let actionHandler = {() in
             self.cards[sender.tag].isHidden = false;
-            self.formsToBeDeleted.remove(sender.tag)
+//            self.formsToBeDeleted.remove(sender.tag)
+            
+            self.observation?.removeForm(toBeDeleted: sender.tag);
+            if let safeObservation = self.observation {
+                self.commonFieldView?.setObservation(observation: safeObservation);
+            }
         }
         messageAction.handler = actionHandler;
         message.action = messageAction;
@@ -385,7 +394,9 @@ import MaterialComponents.MDCCard
     }
     
     func removeDeletedForms() {
-        observationForms.remove(atOffsets: formsToBeDeleted);
+        if let formsToBeDeleted = observation?.getFormsToBeDeleted() {
+            observationForms.remove(atOffsets: formsToBeDeleted);
+        }
         observationProperties["forms"] = observationForms;
         self.observation?.properties = observationProperties;
         for card in cards {
@@ -394,7 +405,8 @@ import MaterialComponents.MDCCard
         cards = [];
         setupObservation(observation: self.observation!);
         addFormViews(stackView: stackView);
-        formsToBeDeleted = IndexSet();
+        
+        observation?.clearFormsToBeDeleted();
     }
     
     public func formAdded(form: [String: Any]) {
