@@ -314,25 +314,20 @@ import MaterialComponents.MDCCard
     }
     
     @objc func deleteForm(sender: UIView) {
+        // save the index of the deleted form and then next time we either save
+        // or reorder remove the form so the user is not distracted with a refresh
+        self.formsToBeDeleted.insert(sender.tag);
         cards[sender.tag].isHidden = true;
+        
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed");
         let messageAction = MDCSnackbarMessageAction();
         messageAction.title = "UNDO";
-        var undoCalled = false;
         let actionHandler = {() in
-            undoCalled = true;
+            self.cards[sender.tag].isHidden = false;
+            self.formsToBeDeleted.remove(sender.tag)
         }
         messageAction.handler = actionHandler;
         message.action = messageAction;
-        message.completionHandler = {(success) in
-            if (undoCalled) {
-                self.cards[sender.tag].isHidden = false;
-            } else {
-                // save the index of the deleted form and then next time we either save
-                // or reorder remove the form so the user is not distracted with a refresh
-                self.formsToBeDeleted.insert(sender.tag);
-            }
-        }
         MDCSnackbarManager.default.show(message);
     }
     
