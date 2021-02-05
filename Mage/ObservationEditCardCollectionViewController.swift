@@ -36,10 +36,12 @@ import MaterialComponents.MDCCard
     var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
     
-//    private var formsToBeDeleted: IndexSet = IndexSet();
-    
+    private lazy var event: Event = {
+        return Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!);
+    }()
+        
     private lazy var eventForms: [[String: Any]] = {
-        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
+        let eventForms = event.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -144,12 +146,11 @@ import MaterialComponents.MDCCard
         scrollView.addSubview(stackView)
         addStackViewConstraints();
         setupStackView(stackView: stackView);
+        self.view.addSubview(addFormFAB);
+        addFormFAB.autoPinEdge(toSuperviewMargin: .bottom);
+        addFormFAB.autoPinEdge(toSuperviewMargin: .right);
         
-        if (eventForms.count != 0) {
-            self.view.addSubview(addFormFAB);
-            addFormFAB.autoPinEdge(toSuperviewMargin: .bottom);
-            addFormFAB.autoPinEdge(toSuperviewMargin: .right);
-        }
+        setupFormDependentButtons();
         
         keyboardHelper = KeyboardHelper { animation, keyboardFrame, duration in
             switch animation {
@@ -192,6 +193,22 @@ import MaterialComponents.MDCCard
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+    
+    func setupFormDependentButtons() {
+        addFormFAB.isEnabled = true;
+        if let safeScheme = self.scheme {
+            addFormFAB.applySecondaryTheme(withScheme: safeScheme);
+        }
+        
+        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+        if (eventForms.count == 0) {
+            addFormFAB.isHidden = true;
+        }
+        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+            addFormFAB.applySecondaryTheme(withScheme: globalDisabledScheme())
+        }
+        formsHeader.reorderButton.isHidden = realFormCount <= 1;
     }
     
     func setupObservation(observation: Observation) {
@@ -316,21 +333,21 @@ import MaterialComponents.MDCCard
     @objc func deleteForm(sender: UIView) {
         // save the index of the deleted form and then next time we either save
         // or reorder remove the form so the user is not distracted with a refresh
-//        self.formsToBeDeleted.insert(sender.tag);
         observation?.addForm(toBeDeleted: sender.tag);
         cards[sender.tag].isHidden = true;
         if let safeObservation = self.observation {
             self.commonFieldView?.setObservation(observation: safeObservation);
         }
         
+        setupFormDependentButtons();
+        
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed");
         let messageAction = MDCSnackbarMessageAction();
         messageAction.title = "UNDO";
         let actionHandler = {() in
             self.cards[sender.tag].isHidden = false;
-//            self.formsToBeDeleted.remove(sender.tag)
-            
             self.observation?.removeForm(toBeDeleted: sender.tag);
+            self.setupFormDependentButtons();
             if let safeObservation = self.observation {
                 self.commonFieldView?.setObservation(observation: safeObservation);
             }
@@ -369,7 +386,18 @@ import MaterialComponents.MDCCard
     }
     
     @objc func addForm(sender: UIButton) {
-        self.delegate?.addForm();
+        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+
+        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+            // max amount of forms for this event have been added
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let messageAction = MDCSnackbarMessageAction();
+            messageAction.title = "OK";
+            message.action = messageAction;
+            MDCSnackbarManager.default.show(message);
+        } else {
+            self.delegate?.addForm();
+        }
     }
     
     @objc func cancel(sender: UIBarButtonItem) {
@@ -390,6 +418,67 @@ import MaterialComponents.MDCCard
             let formValid = formView.checkValidity();
             valid = valid && formValid;
         }
+        
+        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+        
+        if (realFormCount > (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+            // too many forms
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let messageAction = MDCSnackbarMessageAction();
+            messageAction.title = "OK";
+            message.action = messageAction;
+            MDCSnackbarManager.default.show(message);
+            return false;
+        }
+        if (realFormCount < (event.minObservationForms ?? NSNumber(value: 0)) as! Int) {
+            // not enough forms
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least  \(event.minObservationForms ?? 0)");
+            let messageAction = MDCSnackbarMessageAction();
+            messageAction.title = "OK";
+            message.action = messageAction;
+            MDCSnackbarManager.default.show(message);
+            return false;
+        }
+        
+        // check each form for min max
+        var formIdCount: [Int : Int] = [ : ];
+        if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
+            if (safeProperties.keys.contains("forms")) {
+                let observationForms: [[String: Any]] = safeProperties["forms"] as! [[String: Any]];
+                let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
+                for (index, form) in observationForms.enumerated() {
+                    if (!formsToBeDeleted.contains(index)) {
+                        let formId = form["formId"] as! Int;
+                        formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
+                    }
+                }
+            }
+        }
+        
+        for eventForm in eventForms {
+            let eventFormMin: Int = (eventForm["min"] as? Int) ?? 0;
+            let eventFormMax: Int = (eventForm["max"] as? Int) ?? Int.max;
+            let formCount = formIdCount[eventForm["id"] as! Int] ?? 0;
+            if (formCount < eventFormMin) {
+                // not enough of this form
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm["name"] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
+                let messageAction = MDCSnackbarMessageAction();
+                messageAction.title = "OK";
+                message.action = messageAction;
+                MDCSnackbarManager.default.show(message);
+                return false;
+            }
+            if (formCount > eventFormMax) {
+                // too many of this form
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm["name"] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                let messageAction = MDCSnackbarMessageAction();
+                messageAction.title = "OK";
+                message.action = messageAction;
+                MDCSnackbarManager.default.show(message);
+                return false;
+            }
+        }
+        
         return valid;
     }
     
@@ -443,8 +532,10 @@ import MaterialComponents.MDCCard
             card.applyTheme(withScheme: safeScheme);
         }
         card.expanded = true;
-        
-        formsHeader.reorderButton.isHidden = self.observationForms.count <= 1;
+        // scroll the view down to the form they just added but not quite all the way down because then it looks like you
+        // transitioned to a new view
+        scrollView.setContentOffset(CGPoint(x: 0, y: stackView.bounds.size.height - 75), animated: true);
+        setupFormDependentButtons();
     }
     
     func formsReordered(observation: Observation) {

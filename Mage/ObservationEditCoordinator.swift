@@ -186,7 +186,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     
     func addForm() {
         let forms: [[String: AnyHashable]] = event.forms as! [[String : AnyHashable]];
-        let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, scheme: self.scheme);
+        let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);
         formPicker.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: formPicker);
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
