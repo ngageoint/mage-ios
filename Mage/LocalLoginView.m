@@ -174,7 +174,7 @@
                                 nil];
     
     __weak __typeof__(self) weakSelf = self;
-    [self.delegate loginWithParameters:parameters withAuthenticationType: SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    [self.delegate loginWithParameters:parameters withAuthenticationStrategy:[self.strategy objectForKey:@"identifier"] complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf resetLogin:YES];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {

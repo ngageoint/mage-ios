@@ -74,7 +74,7 @@
 
 - (void) setServerConnectionStatus {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+    if ([@"offline" isEqualToString:[defaults valueForKey:@"loginType"]]) {
         self.moreTabBarItem.badgeValue = @"!";
         self.moreTabBarItem.badgeColor = [UIColor orangeColor];
     } else {

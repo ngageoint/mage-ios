@@ -190,10 +190,10 @@ BOOL signingIn = YES;
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
-- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationType:(AuthenticationType)authenticationType complete:(void (^)(AuthenticationStatus, NSString *))complete {
-    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:authenticationType]];
+- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationStrategy:(NSString *) authenticationStrategy complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
     if (!authenticationModule) {
-        authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+        authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
     }
     
     __weak __typeof__(self) weakSelf = self;
@@ -266,7 +266,7 @@ BOOL signingIn = YES;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     // if the user has already logged in offline just tell them
-    if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+    if ([@"offline" isEqualToString:[defaults valueForKey:@"loginType"]]) {
         UIAlertController *alert = [UIAlertController
                                     alertControllerWithTitle:@"Disconnected Login"
                                     message:@"We are still unable to connect to the server to log you in. You will continue to work offline."
@@ -282,8 +282,8 @@ BOOL signingIn = YES;
     }
     
     // If there is a stored password do this
-    id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
-    if (localAuthenticationModel) {
+    id <Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    if (offlineAuthenticationModel) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
                                                                        message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
@@ -311,10 +311,10 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
 
     NSLog(@"work offline");
-    id<Authentication> localAuthenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
-    [localAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    id<Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    [offlineAuthenticationModel loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessfulWithModule:localAuthenticationModule];
+            [weakSelf authenticationWasSuccessfulWithModule:offlineAuthenticationModel];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
