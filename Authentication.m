@@ -2,7 +2,6 @@
 //  Authentication.m
 //  mage-ios-sdk
 //
-//
 
 #import "Authentication.h"
 #import "LocalAuthentication.h"
@@ -16,66 +15,37 @@
 
 @implementation Authentication
 
-+ (id) authenticationModuleForType: (AuthenticationType) type {
-	switch(type) {
-		case LOCAL: {
-			return [[LocalAuthentication alloc] init];
-		}
-        case SERVER: {
-            return [[ServerAuthentication alloc] init];
-        }
-        case IDP: {
-            return [[IdpAuthentication alloc] init];
-        }
-        case LDAP: {
-            return [[LdapAuthentication alloc] init];
-        }
-		default: {
-			return nil;
-		}
-	}
++ (id) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters {
+    if ([Authentication isLocalStrategy:strategy]) {
+        return [[ServerAuthentication alloc] initWithParameters:parameters];
+    } else if ([Authentication isLdapStrategy:strategy]) {
+        return [[LdapAuthentication alloc] initWithParameters:parameters];
+    } else if ([Authentication isOfflineStrategy:strategy]) {
+        return [[LocalAuthentication alloc] initWithParameters:parameters];
+    } else if ([Authentication isIdpStrategy:strategy]) {
+        return [[IdpAuthentication alloc] initWithParameters:parameters];
+    } else {
+        return nil;
+    }
 }
 
-+ (AuthenticationType) authenticationTypeFromString: (NSString *) value {
-    return  [[[Authentication stringToAuthenticationType] valueForKey:value] intValue];
++ (Boolean) isLocalStrategy:(NSString *) strategy {
+    return [@"local" isEqualToString:strategy];
 }
 
-+ (NSString *) authenticationTypeToString: (AuthenticationType) authenticationType {
-    return [[Authentication authenticationTypeToString] objectForKey:[NSNumber numberWithInteger:authenticationType]];
++ (Boolean) isLdapStrategy:(NSString *) strategy {
+    return [@"ldap" isEqualToString:strategy];
 }
 
-+ (NSDictionary *) stringToAuthenticationType {
-    static NSDictionary *dictionary = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                      [NSNumber numberWithInteger:LOCAL], @"local",
-                      [NSNumber numberWithInteger:SERVER], @"server",
-                      [NSNumber numberWithInteger:IDP], @"google",
-                      [NSNumber numberWithInteger:IDP], @"oauth2",
-                      [NSNumber numberWithInteger:IDP], @"saml",
-                      [NSNumber numberWithInteger:LDAP], @"ldap",
-                      nil];
-    });
-    
-    return dictionary;
++ (Boolean) isOfflineStrategy:(NSString *) strategy {
+    return [@"offline" isEqualToString:strategy];
 }
 
-+ (NSDictionary *) authenticationTypeToString {
-    static NSDictionary *dictionary = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                      @"local", [NSNumber numberWithInteger:LOCAL],
-                      @"server", [NSNumber numberWithInteger:SERVER],
-                      @"google", [NSNumber numberWithInteger:IDP],
-                      @"oauth2", [NSNumber numberWithInteger:IDP],
-                      @"saml", [NSNumber numberWithInteger:IDP],
-                      @"ldap", [NSNumber numberWithInteger:LDAP],
-                      nil];
-    });
-    
-    return dictionary;
++ (Boolean) isIdpStrategy:(NSString *) strategy {
+    return [@"saml" isEqualToString:strategy] ||
+        [@"google" isEqualToString:strategy] ||
+        [@"oauth" isEqualToString:strategy] ||
+        [@"geoaxis" isEqualToString:strategy];
 }
 
 @end

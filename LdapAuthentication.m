@@ -127,7 +127,8 @@
         NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
         [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
         [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:LDAP] forKey:@"loginType"];
+        NSDictionary *strategy = [loginParameters objectForKey:@"strategy"];
+        [defaults setValue:[strategy objectForKey:@"identifier"] forKey:@"loginType"];
         [defaults synchronize];
         [StoredPassword persistTokenToKeyChain:token];
         
