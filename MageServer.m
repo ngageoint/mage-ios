@@ -36,7 +36,9 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             for (NSString *authenticationStrategy in authenticationStrategies) {
                 NSDictionary *parameters = [authenticationStrategies objectForKey:authenticationStrategy];
                 id authenticationModule = [Authentication authenticationModuleForStrategy:authenticationStrategy parameters:parameters];
-                [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
+                if (authenticationModule) {
+                    [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
+                }
             }
             
             NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
@@ -140,7 +142,9 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         for (NSString *authenticationStrategy in authenticationStrategies) {
             NSDictionary *parameters = [authenticationStrategies objectForKey:authenticationStrategy];
             id authenticationModule = [Authentication authenticationModuleForStrategy:authenticationStrategy parameters:parameters];
-            [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
+            if (authenticationModule) {
+                [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
+            }
         }
         NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
         if (oldLoginParameters != nil) {
