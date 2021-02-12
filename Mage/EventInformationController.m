@@ -8,7 +8,7 @@
 
 #import "EventInformationController.h"
 #import "EventInformationView.h"
-#import "UIColor+Mage.h"
+#import <HexColor.h>
 
 @interface EventInformationController ()
 @property (strong, nonatomic) NSArray* forms;
@@ -80,12 +80,19 @@ static const NSInteger FORMS_SECTION = 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     NSDictionary* form = [self.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form valueForKey:@"name"];
-    cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
+    cell.detailTextLabel.text = [form valueForKey:@"description"];
+    cell.imageView.image = [UIImage imageNamed:@"form"];
+    if ([form valueForKey:@"color"] != nil) {
+        cell.imageView.tintColor = [UIColor colorWithHexString:[form valueForKey:@"color"]];
+    } else {
+        cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
+    }
     cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     return cell;
@@ -93,7 +100,7 @@ static const NSInteger FORMS_SECTION = 0;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == FORMS_SECTION) {
-        return @"Form Defaults";
+        return @"Forms";
     }
     
     return nil;

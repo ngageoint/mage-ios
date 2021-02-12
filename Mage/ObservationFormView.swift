@@ -33,13 +33,13 @@ class ObservationFormView: UIStackView {
     private var scheme: MDCContainerScheming?;
 
     private lazy var formFields: [[String: Any]] = {
-        let fields: [[String: Any]] = self.eventForm?["fields"] as? [[String: Any]] ?? [];
+        let fields: [[String: Any]] = self.eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
         
         return fields.filter { (field) -> Bool in
             let archived: Bool = field[FieldKey.archived.key] as? Bool ?? false;
             let hidden : Bool = field[FieldKey.hidden.key] as? Bool ?? false;
             let type : String = field[FieldKey.type.key] as? String ?? "";
-            return !archived && !hidden && (ObservationFields.fields() as? [String] ?? []).contains(type);
+            return !archived;
         }.sorted { (field0, field1) -> Bool in
             return (field0[FieldKey.id.key] as? Int ?? Int.max ) < (field1[FieldKey.id.key] as? Int ?? Int.max)
         }
@@ -89,51 +89,49 @@ class ObservationFormView: UIStackView {
             }
             
             var type = fieldDictionary[FieldKey.type.key] as! String;
-            if (type == "radio" || type == "multiselectdropdown") {
-                type = "dropdown";
+            if (type == FieldType.radio.key || type == FieldType.multiselectdropdown.key) {
+                type = FieldType.dropdown.key;
             }
-            var fieldView: UIView;
+            var fieldView: UIView?;
             switch type {
-            case "attachment":
+            case FieldType.attachment.key:
                 let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
                 fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
-            case "numberfield":
+            case FieldType.numberfield.key:
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
-            case "textfield":
+            case FieldType.textfield.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
-            case "textarea":
+            case FieldType.textarea.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
-            case "email":
+            case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
-            case "password":
+            case FieldType.password.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
-            case "date":
+            case FieldType.date.key:
                 fieldView = DateView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
-            case "checkbox":
+            case FieldType.checkbox.key:
                 fieldView = CheckboxFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? Bool ?? false);
-            case "dropdown":
+            case FieldType.dropdown.key:
                 if let stringValue = value as? String {
                     fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: stringValue)
                 }
                 else {
                     fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
                 }
-            case "geometry":
+            case FieldType.geometry.key:
                 fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
-                (fieldView as! GeometryView).setValue(value as? SFGeometry, accuracy: 100.487235, provider: "gps")
+                (fieldView as! GeometryView).setValue(value as? SFGeometry)
             default:
-                let label = UILabel(forAutoLayout: ());
-                label.text = type;
-                fieldView = label;
+                print("No view is configured for type \(type)")
             }
             if let baseFieldView = fieldView as? BaseFieldView, let safeKey = fieldDictionary[FieldKey.name.key] as? String {
                 if let safeScheme = scheme {
                     baseFieldView.applyTheme(withScheme: safeScheme)
                 }
                 fieldViews[safeKey] = baseFieldView;
+                formFieldAdded = true;
+                self.addArrangedSubview(baseFieldView);
             }
-            formFieldAdded = true;
-            self.addArrangedSubview(fieldView);
         }
     }
     
@@ -148,10 +146,10 @@ class ObservationFormView: UIStackView {
         return !formFieldAdded;
     }
     
-    public func checkValidity() -> Bool {
+    public func checkValidity(enforceRequired: Bool = false) -> Bool {
         var valid = true;
         for (_, fieldView) in self.fieldViews {
-            let formValid = fieldView.isValid();
+            let formValid = fieldView.isValid(enforceRequired: enforceRequired);
             fieldView.setValid(formValid);
             valid = valid && formValid;
         }
@@ -170,13 +168,13 @@ extension ObservationFormView: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
         var newProperties = self.observation.properties as? [String: Any];
         if (value == nil) {
-            form.removeValue(forKey: field["name"] as? String ?? "");
+            form.removeValue(forKey: field[FieldKey.name.key] as? String ?? "");
         } else {
-            form[field["name"] as? String ?? ""] = value;
+            form[field[FieldKey.name.key] as? String ?? ""] = value;
         }
-        var forms: [[String: Any]] = newProperties?["forms"] as! [[String: Any]];
+        var forms: [[String: Any]] = newProperties?[ObservationKey.forms.key] as! [[String: Any]];
         forms[0] = form;
-        newProperties!["forms"] = forms;
+        newProperties![ObservationKey.forms.key] = forms;
         self.observation.properties = newProperties;
         self.observationFormListener?.formUpdated(form, eventForm: eventForm!, form: formIndex);
     }

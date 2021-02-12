@@ -18,5 +18,6 @@
 - (NSURL *)applicationDocumentsDirectory;
 - (void) logout;
 - (void) chooseEvent;
+- (void) createRootView;
 
 @end

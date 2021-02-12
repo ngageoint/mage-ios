@@ -81,10 +81,10 @@ class CommonFieldsView: MDCCard {
         self.addSubview(geometryView);
     }
     
-    public func checkValidity() -> Bool {
-        let valid = geometryView.isValid() && dateView.isValid();
-        geometryView.setValid(geometryView.isValid());
-        dateView.setValid(dateView.isValid());
+    public func checkValidity(enforceRequired: Bool = false) -> Bool {
+        let valid = geometryView.isValid(enforceRequired: enforceRequired) && dateView.isValid(enforceRequired: enforceRequired);
+        geometryView.setValid(geometryView.isValid(enforceRequired: enforceRequired));
+        dateView.setValid(dateView.isValid(enforceRequired: enforceRequired));
         return valid;
     }
     

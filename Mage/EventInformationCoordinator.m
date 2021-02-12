@@ -7,7 +7,7 @@
 //
 
 #import "EventInformationCoordinator.h"
-#import "FormDefaultsCoordinator.h"
+#import "MAGE-Swift.h"
 
 @interface EventInformationCoordinator()<UINavigationControllerDelegate, FormDefaultsDelegate>
 
@@ -33,13 +33,19 @@
 
 -(void) start {
     self.eventInfomationController.delegate = self;
-    [self.viewController showDetailViewController:self.eventInfomationController sender:self];
+    self.eventInfomationController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self.viewController pushViewController:self.eventInfomationController animated:true];
+}
+
+- (void) startIpad {
+    self.eventInfomationController.delegate = self;
+    self.eventInfomationController.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.viewController showDetailViewController:self.eventInfomationController sender:self];
 }
 
 - (void)formSelected:(nonnull NSDictionary *)form {
-    FormDefaultsCoordinator* coordinator = [[FormDefaultsCoordinator alloc] initWithViewController:self.viewController event:self.eventInfomationController.event form:form];
+    FormDefaultsCoordinator* coordinator = [[FormDefaultsCoordinator alloc] initWithNavController:self.eventInfomationController.navigationController event:self.eventInfomationController.event form:form scheme: self.scheme delegate:self];
     [self.childCoordinators addObject:coordinator];
-    coordinator.delegate = self;
     [coordinator start];
 }
 
@@ -61,7 +67,7 @@
 
 # pragma mark - FormDefaultsCoordinator Delegate
 
-- (void) formDefaultsComplete:(id)coordinator {
+- (void) formDefaultsCompleteWithCoordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
 }
 

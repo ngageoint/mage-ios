@@ -22,8 +22,10 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.nameLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.nameLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
+    self.nameLabel.font = self.scheme.typographyScheme.headline6;
     self.descriptionLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
+    self.descriptionLabel.font = self.scheme.typographyScheme.subtitle2;
 }
 
 @end

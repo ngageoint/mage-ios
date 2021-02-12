@@ -72,9 +72,9 @@ import Kingfisher
         if (scheme != nil) {
             self.scheme = scheme!;
         }
-        self.tabBar.barTintColor = self.scheme.colorScheme.backgroundColor;
+        self.tabBar.barTintColor = self.scheme.colorScheme.surfaceColor;
         self.tabBar.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
+        self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         self.view.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         
         setNavigationControllerAppearance(nc: self.moreNavigationController);

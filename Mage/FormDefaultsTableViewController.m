@@ -11,7 +11,6 @@
 #import "Theme+UIResponder.h"
 #import "EventInformationView.h"
 #import "FormDefaultsSectionHeader.h"
-#import "UIColor+Mage.h"
 
 @interface FormDefaultsTableViewController ()<FormDefaultsSectionHeaderDelegate, ObservationEditListener>
 @end

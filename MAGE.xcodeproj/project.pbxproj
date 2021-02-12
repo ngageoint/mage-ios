@@ -74,7 +74,7 @@
 		2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C112200FD2F007FE473 /* EventInformationController.m */; };
 		2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1622012D1C007FE473 /* EventInformationView.m */; };
 		2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C182201305D007FE473 /* EventInformationView.xib */; };
-		2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.m */; };
+		2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */; };
 		2F8A2C27220235B2007FE473 /* FormDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C26220235B2007FE473 /* FormDefaults.xib */; };
 		2F8A2C2F2202590A007FE473 /* FormDefaultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */; };
 		2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */; };
@@ -226,7 +226,6 @@
 		F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */; };
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
 		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
-		F76EB1DE247C0EAA0089F3AC /* FormKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DD247C0EAA0089F3AC /* FormKey.swift */; };
 		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */; };
@@ -297,6 +296,8 @@
 		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
 		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
 		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
+		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
+		F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */; };
 		F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */; };
 		F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
@@ -570,8 +571,7 @@
 		2F8A2C1522012D1C007FE473 /* EventInformationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventInformationView.h; sourceTree = "<group>"; };
 		2F8A2C1622012D1C007FE473 /* EventInformationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventInformationView.m; sourceTree = "<group>"; };
 		2F8A2C182201305D007FE473 /* EventInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventInformationView.xib; sourceTree = "<group>"; };
-		2F8A2C1D220231E9007FE473 /* FormDefaultsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaultsCoordinator.h; sourceTree = "<group>"; };
-		2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaultsCoordinator.m; sourceTree = "<group>"; };
+		2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsCoordinator.swift; sourceTree = "<group>"; };
 		2F8A2C26220235B2007FE473 /* FormDefaults.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormDefaults.xib; sourceTree = "<group>"; };
 		2F8A2C2D2202590A007FE473 /* FormDefaultsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaultsTableViewController.h; sourceTree = "<group>"; };
 		2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaultsTableViewController.m; sourceTree = "<group>"; };
@@ -802,7 +802,6 @@
 		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
 		F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderAttachmentTableViewCell.h; sourceTree = "<group>"; };
 		F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderAttachmentTableViewCell.m; sourceTree = "<group>"; };
-		F76EB1DD247C0EAA0089F3AC /* FormKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormKey.swift; sourceTree = "<group>"; };
 		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldViewTests.swift; sourceTree = "<group>"; };
@@ -895,6 +894,8 @@
 		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
 		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
+		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
+		F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFPointSecure.swift; sourceTree = "<group>"; };
 		F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationTableHeaderView.h; sourceTree = "<group>"; };
 		F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationTableHeaderView.m; sourceTree = "<group>"; };
 		F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+Section.h"; sourceTree = "<group>"; };
@@ -1619,6 +1620,7 @@
 		F743008A2547759C00DCE050 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F7A7B6EA25D47DAD00DAB232 /* SFSecure */,
 				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F77C21A5254C6E7000D9257F /* HexColor.swift */,
 				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
@@ -1843,14 +1845,13 @@
 				2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */,
 				2F4E10A5220DDC46001C9F12 /* FormDefaults.h */,
 				2F4E10A6220DDC46001C9F12 /* FormDefaults.m */,
-				2F8A2C1D220231E9007FE473 /* FormDefaultsCoordinator.h */,
-				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.m */,
+				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */,
 				2F8A2C3D220895AC007FE473 /* FormDefaultsSectionHeader.h */,
 				2F8A2C3E220895AC007FE473 /* FormDefaultsSectionHeader.m */,
 				2F8A2C2D2202590A007FE473 /* FormDefaultsTableViewController.h */,
 				2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */,
-				F76EB1DD247C0EAA0089F3AC /* FormKey.swift */,
 				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
+				F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -1966,6 +1967,14 @@
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
+			sourceTree = "<group>";
+		};
+		F7A7B6EA25D47DAD00DAB232 /* SFSecure */ = {
+			isa = PBXGroup;
+			children = (
+				F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */,
+			);
+			path = SFSecure;
 			sourceTree = "<group>";
 		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
@@ -2611,7 +2620,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2900,8 +2909,8 @@
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
+				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
-				F76EB1DE247C0EAA0089F3AC /* FormKey.swift in Sources */,
 				2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
@@ -2924,12 +2933,13 @@
 				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
+				F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */,
 				F798FAB219A4E5200010B052 /* ObservationEditSelectTableViewCell.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
-				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.m in Sources */,
+				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
 				F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,

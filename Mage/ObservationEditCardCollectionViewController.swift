@@ -214,12 +214,12 @@ import MaterialComponents.MDCCard
     func setupObservation(observation: Observation) {
         self.observation = observation;
         if let safeProperties = self.observation?.properties as? [String: Any] {
-            if (safeProperties.keys.contains("forms")) {
-                observationForms = safeProperties["forms"] as! [[String: Any]];
+            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
             }
             self.observationProperties = safeProperties;
         } else {
-            self.observationProperties = ["forms":[]];
+            self.observationProperties = [ObservationKey.forms.key:[]];
             observationForms = [];
         }
         commonFieldView?.setObservation(observation: observation);
@@ -273,17 +273,17 @@ import MaterialComponents.MDCCard
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
         let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
-            return form["id"] as? Int == observationForm["formId"] as? Int
+            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?["primaryField"] as! String? {
+        if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
             if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm?["variantField"] as! String? {
+        if let secondaryField = eventForm?[FormKey.secondaryField.key] as! String? {
             if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
@@ -316,12 +316,12 @@ import MaterialComponents.MDCCard
         button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm?["color"] as? String {
+        if let safeColor = eventForm?[FormKey.color.key] as? String {
             tintColor = UIColor(hex: safeColor);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView)
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?[EventKey.name.key] as? String, imageTint: tintColor, expandedView: formSpacerView)
         formView.containingCard = card;
         stackView.addArrangedSubview(card);
         cards.append(card);
@@ -358,17 +358,16 @@ import MaterialComponents.MDCCard
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
         let eventForm: [String: Any]? = self.eventForms.first { (eventForm) -> Bool in
-            return eventForm["id"] as? Int == form["formId"] as? Int
+            return eventForm[FormKey.id.key] as? Int == form[EventKey.formId.key] as? Int
         }
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?["primaryField"] as! String? {
+        if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
             if let obsfield = form[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm?["variantField"] as! String? {
-            print("secondary field \(secondaryField)");
+        if let secondaryField = eventForm?[FormKey.secondaryField.key] as! String? {
             // TODO: handle non strings
             if let obsfield = form[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
@@ -412,9 +411,9 @@ import MaterialComponents.MDCCard
     }
     
     func checkObservationValidity() -> Bool {
-        var valid: Bool = commonFieldView?.checkValidity() ?? true;
+        var valid: Bool = commonFieldView?.checkValidity(enforceRequired: true) ?? true;
         for formView in formViews {
-            let formValid = formView.checkValidity();
+            let formValid = formView.checkValidity(enforceRequired: true);
             valid = valid && formValid;
         }
         
@@ -442,12 +441,12 @@ import MaterialComponents.MDCCard
         // check each form for min max
         var formIdCount: [Int : Int] = [ : ];
         if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
-            if (safeProperties.keys.contains("forms")) {
-                let observationForms: [[String: Any]] = safeProperties["forms"] as! [[String: Any]];
+            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
+                let observationForms: [[String: Any]] = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
                 let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
                 for (index, form) in observationForms.enumerated() {
                     if (!formsToBeDeleted.contains(index)) {
-                        let formId = form["formId"] as! Int;
+                        let formId = form[EventKey.formId.key] as! Int;
                         formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
                     }
                 }
@@ -455,12 +454,12 @@ import MaterialComponents.MDCCard
         }
         
         for eventForm in eventForms {
-            let eventFormMin: Int = (eventForm["min"] as? Int) ?? 0;
-            let eventFormMax: Int = (eventForm["max"] as? Int) ?? Int.max;
-            let formCount = formIdCount[eventForm["id"] as! Int] ?? 0;
+            let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
+            let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
+            let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
             if (formCount < eventFormMin) {
                 // not enough of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm["name"] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
                 message.action = messageAction;
@@ -469,7 +468,7 @@ import MaterialComponents.MDCCard
             }
             if (formCount > eventFormMax) {
                 // too many of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm["name"] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
                 message.action = messageAction;
@@ -485,7 +484,7 @@ import MaterialComponents.MDCCard
         if let formsToBeDeleted = observation?.getFormsToBeDeleted() {
             observationForms.remove(atOffsets: formsToBeDeleted);
         }
-        observationProperties["forms"] = observationForms;
+        observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation?.properties = observationProperties;
         for card in cards {
             card.removeFromSuperview();
@@ -498,33 +497,33 @@ import MaterialComponents.MDCCard
     }
     
     public func formAdded(form: [String: Any]) {
-        var newForm: [String: Any] = ["formId": form["id"]!];
-        let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: form["id"] as! Int);
-        let formDefaults: [String: [String: Any]] = defaults.getDefaults() as! [String : [String: Any]];
-        
-        let fields: [[String : Any?]] = form["fields"] as! [[String : Any]];
+        var newForm: [String: AnyHashable] = [EventKey.formId.key: form[FieldKey.id.key] as! Int];
+        let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: form[FieldKey.id.key] as! Int);
+        let formDefaults: [String: AnyHashable] = defaults.getDefaults() as! [String: AnyHashable];
+
+        let fields: [[String : AnyHashable]] = (form[FormKey.fields.key] as! [[String : AnyHashable]]).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
         if (formDefaults.count > 0) { // user defaults
             for (_, field) in fields.enumerated() {
-                var value: Any? = nil;
-                if let defaultField: [String:Any] = formDefaults[field["id"] as! String] {
+                var value: AnyHashable? = nil;
+                if let defaultField: AnyHashable = formDefaults[field[FieldKey.name.key] as! String] {
                     value = defaultField
                 }
                 
                 if (value != nil) {
-                    newForm[field["name"] as! String] = value;
+                    newForm[field[FieldKey.name.key] as! String] = value;
                 }
             }
         } else { // server defaults
             for (_, field) in fields.enumerated() {
                 // grab the server default from the form fields value property
-                if let value: Any = field["value"] {
-                    newForm[field["name"] as! String] = value;
+                if let value: AnyHashable = field[FieldKey.value.key] {
+                    newForm[field[FieldKey.name.key] as! String] = value;
                 }
             }
         }
         
         observationForms.append(newForm);
-        observationProperties["forms"] = observationForms;
+        observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation?.properties = observationProperties;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
         if let safeScheme = scheme {
@@ -550,7 +549,7 @@ import MaterialComponents.MDCCard
 extension ObservationEditCardCollectionViewController: ObservationFormListener {
     func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int) {
         observationForms[index] = form
-        observationProperties["forms"] = observationForms;
+        observationProperties[ObservationKey.forms.key] = observationForms;
         observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form, index: index);
         if let safeObservation = self.observation {
