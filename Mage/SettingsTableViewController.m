@@ -224,7 +224,9 @@
 }
 
 - (void) onEventInfo:(Event *)event {
-    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:self.navigationController event:event scheme: self.scheme];
+    UINavigationController *navigationController = self.navigationController;
+    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:navigationController event:event scheme: self.scheme];
+    
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
     [coordinator start];
@@ -234,10 +236,8 @@
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:self.scheme];
-    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:vc animated:YES completion:NULL];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate createRootView];
 }
 
 - (void) onLogout {

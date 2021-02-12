@@ -306,17 +306,15 @@
     EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:[self.viewControllers firstObject] event:event scheme:self.scheme];
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
-    [coordinator start];
+    [coordinator startIpad];
 }
 
 - (void) onChangeEvent:(Event *) event {
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:self.scheme];
-    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:vc animated:YES completion:NULL];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate createRootView];
 }
 
 - (void) onLogout {
