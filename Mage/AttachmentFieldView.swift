@@ -35,7 +35,6 @@ class AttachmentFieldView : BaseFieldView {
         
         var cv: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout);
         cv.configureForAutoLayout();
-        cv.backgroundColor = .none;
         cv.register(AttachmentCell.self, forCellWithReuseIdentifier: "AttachmentCell");
         cv.delegate = attachmentCollectionDataStore;
         cv.dataSource = attachmentCollectionDataStore;
@@ -72,6 +71,15 @@ class AttachmentFieldView : BaseFieldView {
         return stackView;
     }()
     
+    private lazy var audioButton: UIButton = {
+        let button = UIButton(forAutoLayout: ());
+        button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Audio";
+        button.setImage(UIImage(named: "voice")?.withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        button.addTarget(self, action: #selector(addAudioAttachment), for: .touchUpInside);
+        return button;
+    }()
+    
     private lazy var cameraButton: UIButton = {
         let button = UIButton(forAutoLayout: ());
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
@@ -101,12 +109,15 @@ class AttachmentFieldView : BaseFieldView {
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
+        audioButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         videoButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         galleryButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         cameraButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         errorLabel.font = scheme.typographyScheme.caption;
         errorLabel.textColor = scheme.colorScheme.errorColor;
         attachmentHolderView.backgroundColor = scheme.colorScheme.backgroundColor;
+        attachmentCollectionView.backgroundColor = scheme.colorScheme.backgroundColor;
+        attachmentCollectionDataStore.applyTheme(withContainerScheme: scheme);
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -141,6 +152,7 @@ class AttachmentFieldView : BaseFieldView {
             viewStack.addArrangedSubview(actionSpacerView);
             actionsHolderView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
             
+            actionsHolderView.addArrangedSubview(audioButton);
             actionsHolderView.addArrangedSubview(cameraButton);
             actionsHolderView.addArrangedSubview(galleryButton);
             actionsHolderView.addArrangedSubview(videoButton);
@@ -217,6 +229,10 @@ class AttachmentFieldView : BaseFieldView {
     
     @objc func addVideoAttachment() {
         attachmentCreationCoordinator?.addVideoAttachment();
+    }
+    
+    @objc func addAudioAttachment() {
+        attachmentCreationCoordinator?.addVoiceAttachment();
     }
 }
 

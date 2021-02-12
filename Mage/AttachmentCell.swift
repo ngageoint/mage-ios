@@ -42,7 +42,7 @@ import Kingfisher
         }
     }
     
-    @objc public func setImage(attachment: Attachment, formatName:NSString) {
+    @objc public func setImage(attachment: Attachment, formatName:NSString, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.imageView.kf.indicatorType = .activity;
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
@@ -98,8 +98,12 @@ import Kingfisher
             
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
             self.imageView.image = UIImage(named: "audio_thumbnail");
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
         } else {
             self.imageView.image = UIImage(named: "paperclip_thumbnail");
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
         }
     }
 }

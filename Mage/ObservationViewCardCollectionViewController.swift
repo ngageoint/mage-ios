@@ -24,6 +24,7 @@ import MaterialComponents.MDCContainerScheme;
     var observationEditCoordinator: ObservationEditCoordinator?;
     var bottomSheet: MDCBottomSheetController?;
     var scheme: MDCContainerScheming?;
+    var attachmentCard: ObservationAttachmentCard?;
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -75,6 +76,7 @@ import MaterialComponents.MDCContainerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.syncStatusView.applyTheme(withScheme: containerScheme);
         headerCard?.applyTheme(withScheme: containerScheme);
+        attachmentCard?.applyTheme(withScheme: containerScheme);
     }
     
     override func loadView() {
@@ -173,11 +175,11 @@ import MaterialComponents.MDCContainerScheme;
         if (UserDefaults.standard.serverMajorVersion == 5) {
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
-                    let attachmentCard: ObservationAttachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
+                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
                     if let safeScheme = self.scheme {
-                        attachmentCard.applyTheme(withScheme: safeScheme);
+                        attachmentCard!.applyTheme(withScheme: safeScheme);
                     }
-                    stackView.addArrangedSubview(attachmentCard);
+                    stackView.addArrangedSubview(attachmentCard!);
                 }
             }
         }

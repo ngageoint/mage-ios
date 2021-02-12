@@ -39,6 +39,7 @@ class EditAttachmentCardView: MDCCard {
     init(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, viewController: UIViewController) {
         self.observation = observation;
         self.viewController = viewController;
+        self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         buildView();

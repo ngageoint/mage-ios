@@ -52,6 +52,11 @@ class ObservationAttachmentCard: MDCCard {
         super.updateConstraints();
     }
     
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        attachmentView.applyTheme(withScheme: scheme);
+    }
+    
     func buildView() {
         // for legacy servers add the attachment field to common
         if (UserDefaults.standard.serverMajorVersion == 5) {

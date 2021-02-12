@@ -20,6 +20,7 @@ class AttachmentCreationCoordinator: NSObject {
     var observation: Observation;
     var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
+    var audioRecorderViewController: AudioRecorderViewController?;
     
     init(rootViewController: UIViewController, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
         self.rootViewController = rootViewController;
@@ -39,8 +40,8 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     func presentVoiceRecorder() {
         DispatchQueue.main.async {
             print("Present the voice recorder");
-            let recorder: AudioRecorderViewController = AudioRecorderViewController(delegate: self);
-            self.rootViewController.present(recorder, animated: true);
+            self.audioRecorderViewController = AudioRecorderViewController(delegate: self);
+            self.rootViewController.present(self.audioRecorderViewController!, animated: true);
         }
     }
     
@@ -278,6 +279,7 @@ extension AttachmentCreationCoordinator: AudioRecordingDelegate {
             attachment.observation = self.observation;
             
             self.delegate?.attachmentCreated(attachment: attachment);
+            self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
         }
     }
 }

@@ -25,6 +25,7 @@ import MaterialComponents.MDCCard
 @objc class ObservationEditCardCollectionViewController: UIViewController {
     
     var delegate: (ObservationEditCardDelegate & FieldSelectionDelegate)?;
+    var attachmentViewCoordinator: AttachmentViewCoordinator?;
     var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var observationProperties: [String: Any] = [ : ];
@@ -252,7 +253,7 @@ import MaterialComponents.MDCCard
     func addLegacyAttachmentCard(stackView: UIStackView) {
         if (UserDefaults.standard.serverMajorVersion == 5) {
             if let safeObservation = observation {
-                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation,  viewController: self);
+                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
                 if let safeScheme = self.scheme {
                     attachmentCard.applyTheme(withScheme: safeScheme);
                 }
@@ -555,5 +556,18 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
         if let safeObservation = self.observation {
             commonFieldView?.setObservation(observation: safeObservation);
         }
+    }
+}
+
+extension ObservationEditCardCollectionViewController: AttachmentSelectionDelegate {
+    func selectedAttachment(_ attachment: Attachment!) {
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+        attachmentViewCoordinator?.start();
+    }
+}
+
+extension ObservationEditCardCollectionViewController: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }

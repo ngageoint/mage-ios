@@ -9,10 +9,15 @@
 
 @implementation AttachmentCollectionDataStore
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    self.containerScheme = containerScheme;
+    [self.attachmentCollection reloadData];
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     AttachmentCell *cell = [self.attachmentCollection dequeueReusableCellWithReuseIdentifier:@"AttachmentCell" forIndexPath:indexPath];
     Attachment *attachment = [self attachmentAtIndex:[indexPath row]];
-    [cell setImageWithAttachment:attachment formatName:self.attachmentFormatName];
+    [cell setImageWithAttachment:attachment formatName:self.attachmentFormatName scheme: self.containerScheme];
 
     return cell;
 }

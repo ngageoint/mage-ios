@@ -14,6 +14,7 @@ class AttachmentSlideShow: UIView {
     private var didSetUpConstraints = false;
     private var height: CGFloat = 150.0;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private var scheme: MDCContainerScheming?;
     
     private lazy var slidescroll: UIScrollView = {
         let slidescroll = UIScrollView(forAutoLayout: ());
@@ -142,8 +143,18 @@ class AttachmentSlideShow: UIView {
                 
             } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
                 imageView.image = UIImage(named: "audio_thumbnail");
+                imageView.contentMode = .scaleAspectFit;
+                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
+                imageView.setAttachment(attachment: attachment);
+                if (attachmentSelectionDelegate != nil) {
+                    imageView.isUserInteractionEnabled = true;
+                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
+                    imageView.addGestureRecognizer(tapGesture);
+                }
             } else {
                 imageView.image = UIImage(named: "paperclip_thumbnail");
+                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
+                imageView.contentMode = .scaleAspectFit;
             }
             
         }
@@ -153,27 +164,31 @@ class AttachmentSlideShow: UIView {
     }
     
     @objc func imageViewTapped(sender: UITapGestureRecognizer) {
-        print("Image view tapped \(sender)")
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
         attachmentSelectionDelegate?.selectedAttachment(attachmentImageView.attachment);
     }
     
     override func updateConstraints() {
         if (!didSetUpConstraints) {
-            self.autoSetDimension(.height, toSize: height);
-            self.slidescroll.autoPinEdgesToSuperviewEdges();
+            autoSetDimension(.height, toSize: height);
+            slidescroll.autoPinEdgesToSuperviewEdges();
             stackView.autoPinEdgesToSuperviewEdges();
-            self.pageControl.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
-            self.pageControl.autoAlignAxis(toSuperviewAxis: .vertical);
+            stackView.autoMatch(.height, to: .height, of: slidescroll);
+            pageControl.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
+            pageControl.autoAlignAxis(toSuperviewAxis: .vertical);
             didSetUpConstraints = true;
         }
         super.updateConstraints();
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.backgroundColor;
         self.pageControl.pageIndicatorTintColor = scheme.colorScheme.onPrimaryColor.withAlphaComponent(0.6);
         self.pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColor;
+        for view in stackView.arrangedSubviews {
+            view.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4);
+        }
     }
     
     @objc func pageControlChangedValue() {
