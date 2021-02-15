@@ -28,7 +28,16 @@ func globalContainerScheme() -> MDCContainerScheming {
 
 func globalErrorContainerScheme() -> MDCContainerScheming {
     let containerScheme = MDCContainerScheme();
+    containerScheme.colorScheme.primaryColorVariant = .systemRed;
     containerScheme.colorScheme.primaryColor = .systemRed;
+    containerScheme.colorScheme.secondaryColor = .systemRed;
+    containerScheme.colorScheme.onSecondaryColor = .white;
+    containerScheme.colorScheme.surfaceColor = MDCPalette.grey.tint300;
+    containerScheme.colorScheme.onSurfaceColor = MDCPalette.grey.tint500;
+    containerScheme.colorScheme.backgroundColor = MDCPalette.grey.tint300;
+    containerScheme.colorScheme.onBackgroundColor = MDCPalette.grey.tint500;
+    containerScheme.colorScheme.errorColor = .systemRed;
+    containerScheme.colorScheme.onPrimaryColor = .white;
     return containerScheme;
 }
 
@@ -51,4 +60,9 @@ func globalDisabledScheme() -> MDCContainerScheming {
 // This is for access in Objective-c land
 @objc class MAGEScheme: NSObject {
     @objc class func scheme() -> MDCContainerScheming { return globalContainerScheme() }
+}
+
+// This is for access in Objective-c land
+@objc class MAGEErrorScheme: NSObject {
+    @objc class func scheme() -> MDCContainerScheming { return globalErrorContainerScheme() }
 }

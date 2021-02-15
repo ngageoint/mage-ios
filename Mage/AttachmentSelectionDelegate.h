@@ -14,4 +14,7 @@
 
 - (void) selectedAttachment:(Attachment *) attachment;
 
+@optional
+- (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
+
 @end

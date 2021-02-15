@@ -22,7 +22,7 @@ class AttachmentFieldView : BaseFieldView {
     private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
-        let ads: AttachmentCollectionDataStore = AttachmentCollectionDataStore();
+        let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash", useErrorColor: true) : AttachmentCollectionDataStore();
         ads.attachments = attachments;
         ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
         return ads;
@@ -238,7 +238,6 @@ class AttachmentFieldView : BaseFieldView {
 
 extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
     func attachmentCreated(attachment: Attachment) {
-        print("attachment was created \(attachment)")
         self.addAttachment(attachment);
         delegate?.fieldValueChanged(field, value: [attachment] as Set<Attachment>);
     }

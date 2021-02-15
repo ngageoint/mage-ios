@@ -8,6 +8,8 @@ import Kingfisher
 
 @objc class AttachmentCell: UICollectionViewCell {
     
+    private var button: MDCFloatingButton?;
+    
     private lazy var imageView: AttachmentUIImageView = {
         let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
         imageView.configureForAutoLayout();
@@ -32,6 +34,9 @@ import Kingfisher
         for view in self.imageView.subviews{
             view.removeFromSuperview()
         }
+        if let safeButton = button {
+            safeButton.removeFromSuperview();
+        }
     }
 
     func getAttachmentUrl(size: Int, attachment: Attachment) -> URL {
@@ -42,8 +47,9 @@ import Kingfisher
         }
     }
     
-    @objc public func setImage(attachment: Attachment, formatName:NSString, scheme: MDCContainerScheming? = nil) {
+    @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
+        self.button = button;
         self.imageView.kf.indicatorType = .activity;
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
@@ -83,13 +89,6 @@ import Kingfisher
                     case .failure(let error):
                         print(error);
                         self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                        //                    let rect = CGRect(origin: .zero, size: CGSize(width:150, height:150))
-                        //                    UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-                        //                    UIColor.init(white: 0, alpha: 0.06).setFill();
-                        //                    UIRectFill(rect)
-                        //                    let image = UIGraphicsGetImageFromCurrentImageContext()
-                        //                    UIGraphicsEndImageContext()
-                        //                    return handler(.success(Data.init((image?.cgImage?.png)!)));
                         let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
                         overlay.contentMode = .scaleAspectFit;
                         self.imageView.addSubview(overlay);
@@ -104,6 +103,12 @@ import Kingfisher
             self.imageView.image = UIImage(named: "paperclip_thumbnail");
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
+        }
+        
+        if let safeButton = button {
+            self.addSubview(safeButton);
+            safeButton.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+            safeButton.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
     }
 }

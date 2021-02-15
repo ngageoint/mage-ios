@@ -560,6 +560,23 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
 }
 
 extension ObservationEditCardCollectionViewController: AttachmentSelectionDelegate {
+    
+    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        // delete the attachment
+        attachment.markedForDeletion = true;
+        handler(true);
+        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted");
+        let messageAction = MDCSnackbarMessageAction();
+        messageAction.title = "UNDO";
+        let actionHandler = {() in
+            attachment.markedForDeletion = false;
+            handler(false);
+        }
+        messageAction.handler = actionHandler;
+        message.action = messageAction;
+        MDCSnackbarManager.default.show(message);
+    }
+    
     func selectedAttachment(_ attachment: Attachment!) {
         attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
         attachmentViewCoordinator?.start();

@@ -177,8 +177,8 @@ class GeometryView : BaseFieldView {
         
         if (editMode) {
             self.addSubview(editFab);
-            editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -16);
-            editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -16)
+            editFab.autoPinEdge(.bottom, to: .bottom, of: mapView, withOffset: -8);
+            editFab.autoPinEdge(.right, to: .right, of: mapView, withOffset: -8)
         }
         
         let wrapper = UIView(forAutoLayout: ());

@@ -16,5 +16,6 @@
 @property (nonatomic, strong) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
 @property (nonatomic, weak) id<MDCContainerScheming> containerScheme;
 
+- (id) initWithButtonImage: (NSString *) imageName useErrorColor: (BOOL) useErrorColor;
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 @end
