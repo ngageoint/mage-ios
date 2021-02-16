@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.1.1
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Update mage-ios-sdk dependency fixing issues with third party login.
+
 ## 2.1.0
 
 ##### Release Notes
