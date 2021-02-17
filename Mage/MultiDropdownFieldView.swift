@@ -1,15 +1,14 @@
 //
-//  DropdownFieldView.swift
+//  MultiDropdownFieldView.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 5/27/20.
-//  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
+//  Created by Daniel Barela on 2/17/21.
+//  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
-import MaterialComponents.MDCTextField;
 
-class DropdownFieldView : BaseFieldView {
+class MultiDropdownFieldView : BaseFieldView {
     
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
@@ -28,7 +27,7 @@ class DropdownFieldView : BaseFieldView {
         self.init(field: field, editMode: editMode, delegate: delegate, value: nil);
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [String]?) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.addFieldView();
     }
@@ -47,16 +46,17 @@ class DropdownFieldView : BaseFieldView {
     }
     
     func getDisplayValue() -> String? {
-        return getValue();
+        return getValue()?.joined(separator: ", ")
     }
     
     override func setValue(_ value: Any?) {
-        self.value = value
+        self.value = value;
+        
         self.editMode ? (textField.text = getDisplayValue()) : (fieldValue.text = getDisplayValue());
     }
     
-    func getValue() -> String? {
-        return value as? String;
+    func getValue() -> [String]? {
+        return value as? [String];
     }
     
     override func isEmpty() -> Bool {

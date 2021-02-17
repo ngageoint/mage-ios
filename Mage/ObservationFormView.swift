@@ -89,7 +89,7 @@ class ObservationFormView: UIStackView {
             }
             
             var type = fieldDictionary[FieldKey.type.key] as! String;
-            if (type == FieldType.radio.key || type == FieldType.multiselectdropdown.key) {
+            if (type == FieldType.radio.key) {
                 type = FieldType.dropdown.key;
             }
             var fieldView: UIView?;
@@ -112,12 +112,9 @@ class ObservationFormView: UIStackView {
             case FieldType.checkbox.key:
                 fieldView = CheckboxFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? Bool ?? false);
             case FieldType.dropdown.key:
-                if let stringValue = value as? String {
-                    fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: stringValue)
-                }
-                else {
-                    fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
-                }
+                fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
+            case FieldType.multiselectdropdown.key:
+                    fieldView = MultiDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
             case FieldType.geometry.key:
                 fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
                 (fieldView as! GeometryView).setValue(value as? SFGeometry)

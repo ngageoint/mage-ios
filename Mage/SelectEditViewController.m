@@ -110,7 +110,11 @@
     self.multiselect = [@"multiselectdropdown" isEqualToString:[self.fieldDefinition objectForKey:@"type"]];
     
     if (self.value) {
-        self.selectedChoices = [NSMutableArray arrayWithArray:self.value];
+        if (self.multiselect) {
+            self.selectedChoices = [NSMutableArray arrayWithArray:self.value];
+        } else {
+            self.selectedChoices = [NSMutableArray arrayWithObject:self.value];
+        }
     } else {
         self.selectedChoices = [NSMutableArray array];
     }

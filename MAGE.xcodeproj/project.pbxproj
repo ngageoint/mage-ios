@@ -298,6 +298,7 @@
 		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
 		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
 		F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */; };
+		F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */; };
 		F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */; };
 		F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */; };
 		F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94D6918AD9CB000CB9EE0 /* Foundation.framework */; };
@@ -896,6 +897,7 @@
 		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
 		F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFPointSecure.swift; sourceTree = "<group>"; };
+		F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldView.swift; sourceTree = "<group>"; };
 		F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationTableHeaderView.h; sourceTree = "<group>"; };
 		F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationTableHeaderView.m; sourceTree = "<group>"; };
 		F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+Section.h"; sourceTree = "<group>"; };
@@ -1876,6 +1878,7 @@
 				F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */,
 				F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */,
 				F7CE23092544676800D710DE /* AttachmentFieldView.swift */,
+				F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */,
 			);
 			name = Fields;
 			sourceTree = "<group>";
@@ -2880,6 +2883,7 @@
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
+				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,

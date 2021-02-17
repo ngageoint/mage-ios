@@ -364,7 +364,7 @@ import MaterialComponents.MDCCard
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
         if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
-            if let obsfield = form[primaryField] as! String? {
+            if let obsfield = form[primaryField] as? String {
                 formPrimaryValue = obsfield;
             }
         }
