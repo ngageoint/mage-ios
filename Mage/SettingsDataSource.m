@@ -90,6 +90,7 @@ static const NSInteger LEGAL_SECTION = 8;
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.type) {
         [self.delegate settingTapped:[cell.type integerValue] info:cell.info];
+        [tableView deselectRowAtIndexPath:indexPath animated:true];
     }
 }
 
